@@ -174,6 +174,39 @@ equal(determinant((0, 1 - q), (b, 0), (rr, 1 - vz)),
 assert 3 * 14**2 > 24**2  # (4 + 2 sqrt(3)) * (7/64) > 13/16.
 assert sp.Rational(13, 16) - (1 - ss)**2 == sp.Rational(79, 4096) > 0
 
+# Left mixed inner cell: Q in BRL and on the positive side of ES.
+aa, cc, kk, HH, hh, TT, alpha, beta_weight = sp.symbols(
+    "aa cc kk HH hh TT alpha beta_weight")
+point_b = (b, 0)
+point_r = (rr, uy)
+point_l = (ll, aa)
+point_e = (0, lam)
+point_s = (kk, cc)
+point_q = tuple(alpha * point_b[i] + beta_weight * point_r[i]
+                + (1 - alpha - beta_weight) * point_l[i] for i in (0, 1))
+equal(determinant(point_e, point_s, point_q),
+      alpha * determinant(point_e, point_s, point_b)
+      + beta_weight * determinant(point_e, point_s, point_r)
+      + (1 - alpha - beta_weight) * determinant(point_e, point_s, point_l))
+equal(determinant(point_b, point_r, point_l), (rr - b) * aa + uy * (b - ll))
+equal(determinant((0, 1), point_r, point_s)
+      + determinant(point_r, (1, 1), point_s), cc - uy)
+equal(determinant(point_e, point_s, point_l),
+      kk * aa - ll * cc - lam * (kk - ll))
+fb = (1 - b) * (1 - 2 * ss / b) + sp.Rational(3, 16) * (b - ss)
+equal(fb.subs(b, sp.Rational(1, 2)) - fb,
+      (sp.Rational(1, 2) - b) * (4 * ss / b - sp.Rational(13, 16)))
+H0 = sp.Rational(363, 1024)
+h0 = sp.Rational(35607, 77824)
+assert fb.subs(b, sp.Rational(1, 2)) == H0
+assert 1 - ss / (1 - ss) == sp.Rational(50, 57)
+assert sp.Rational(50, 57) * sp.Rational(9, 16) - 3 * ss**2 == h0
+phi = HH * hh - ss * (HH + 2 * hh + 2 * ss)
+equal(phi.subs({HH: H0, hh: h0}) - phi,
+      (H0 - HH) * (hh - ss) + (h0 - hh) * (H0 - 2 * ss))
+assert H0 - 2 * ss > 0
+assert phi.subs({HH: H0, hh: h0}) == -sp.Rational(47171, 79691776) < 0
+
 
 def by_four_subsets(intervals):
     return all(max(intervals[i][0] for i in subset)
@@ -204,4 +237,4 @@ assert by_four_subsets(examples[0])
 assert not by_four_subsets(examples[1])  # Four closed intervals meet at 3.
 assert by_four_subsets(examples[2])
 assert not by_four_subsets(examples[3])
-print("PASS: two-vertex capacity, swept tests, balanced right-quadrilateral, second-shear alternating, and upper inner-cell exclusions")
+print("PASS: two-vertex capacity, swept tests, balanced right-quadrilateral, second-shear alternating, upper and left mixed inner-cell exclusions")

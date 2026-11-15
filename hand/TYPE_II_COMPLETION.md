@@ -1117,19 +1117,180 @@ both signs. If \(Q\) is above \(ES\), (30) alone forces
 forces \(u>s\), or \(v<1-s\). The reflected statement holds if
 \(Q\) is above \(LR\).
 
-Thus the remaining balanced problem has precisely the following three
-inner-line sign alternatives. “Open” denotes a necessary case still to
-exclude, not an assertion that a competitive configuration exists.
+Thus the remaining balanced problem has precisely the following
+inner-line sign alternatives. The later results listed in the final
+column record their current status. “Open” denotes a necessary case still
+to exclude, not an assertion that a competitive configuration exists.
 
 | Side of \(ES\) | Side of \(LR\) | Consequence | Status |
 |---|---|---|---|
 | Above | Above | \(q,v>1-s\), contradicting \(\Delta EBR\ge s\) | Excluded |
-| Above | Below | \(q>1-s\), \(v<1-s\) | Open |
+| Above | Below | \(q>1-s\), \(v<1-s\) | Excluded by Section 10 below |
 | Below | Above | \(v>1-s\), \(q<1-s\) | Open |
-| Below | Below | Neither of the preceding one-sided conclusions is forced | Open |
+| Below | Below | Neither of the preceding one-sided conclusions is forced | Excluded by [BALANCED_BOTTOM_INNER_SECTOR.md](BALANCED_BOTTOM_INNER_SECTOR.md) |
 
 This exhausts all possibilities because neither line can contain \(Q\).
 The unbalanced Type-II row \((1,2,3)\) is not addressed by Theorem 9.
+
+## 10. The left mixed inner-diagonal cell is impossible
+
+**Theorem 10.** In the remaining balanced placement, \(Q\) cannot be
+above \(ES\) and below \(LR\).
+
+Write \(L=(l,a)\) and \(S=(k,c)\). The one-sided consequence of
+Section 9 gives
+
+\[
+q>1-s,\qquad v<1-s,\qquad u>s.
+\]
+
+Also \(v\ge Ks>13/16\), so \(u<3/16\). All the estimates
+below retain the original normalization \(0<b\le1/2\).
+
+### 10.1. A barycentric inequality from the triangle \(BRL\)
+
+The point \(Q\) lies inside \(BRL\). To see this, write
+\(Q=(x,y)\). Its centrality gives
+\(b(1-y)<x<b+(1-b)y\), and hence
+
+\[
+\begin{aligned}
+[LBQ]&=a(x-b)+(b-l)y
+ >y\{b(1-a)-l\}>0,\\
+[BRQ]&=(r-b)y-u(x-b)
+ >y\{r-b-(1-b)u\}>0.
+\end{aligned}
+\]
+
+The positive braces are the anchor areas \([BDL]\) and \([BRC]\).
+The assumed sign relative to \(LR\) supplies the third edge
+inequality. Thus the three positive determinants are
+
+\[
+[BRQ]>0,\qquad[RLQ]>0,\qquad[LBQ]>0,
+\]
+
+where \([XYZ]=\det(Y-X,Z-X)\). Therefore, with
+
+\[
+H=[BRL],\qquad h=[ESL],\qquad
+T=[EBS]+[ERS],
+\]
+
+one has \(H\ge3s\), \(h\ge s\), and \(T\ge2s\).
+Here \(L\) is above \(ES\) by Section 9.1, while \(B,R\)
+are below \(ES\). The latter follows for \(B\) from
+\(k>b\), \(c>0\), and \(\lambda>0\), and for \(R\)
+from \(S\in\operatorname{int}(ECR)\).
+
+Consider the affine function
+
+\[
+\eta(X)=\det(S-E,X-E).
+\]
+
+Its values at \(L,B,R\) are \(h,-[EBS],-[ERS]\), respectively.
+In the barycentric expression for \(Q\) in \(BRL\), the weights
+of \(B\) and \(R\) are both at least \(s/H\), because their
+opposite subtriangles are actual triangles. Since both corresponding
+values of \(\eta\) are negative, it follows that
+
+\[
+s\le\eta(Q)\le h-\frac{s}{H}(2h+T).
+\]
+
+Consequently a necessary inequality is
+
+\[
+0\le Hh-s(H+2h+T)
+\le Hh-s(H+2h+2s).                                    \tag{33}
+\]
+
+### 10.2. Uniform rational bounds on the two outer areas
+
+The endpoint triangles \(DEL\) and \(BDL\) give
+
+\[
+l\ge\frac{s}{q}\ge s,\qquad
+a\le1-\frac{s+l}{b}\le1-\frac{2s}{b}\le\frac9{16}.
+                                                               \tag{34}
+\]
+
+The area of \(RCS\), together with \(v<1-s\), gives
+
+\[
+k\le1-\frac{s}{v}\le1-\frac{s}{1-s}=\frac{50}{57}.
+                                                               \tag{35}
+\]
+
+Furthermore the two positive areas \([DRS]\) and \([RCS]\)
+sum exactly to \(c-u\). Hence
+
+\[
+c\ge u+2s>3s.                                         \tag{36}
+\]
+
+Since \(k>b>l\), the positive area \(h\) satisfies
+
+\[
+\begin{aligned}
+h&=k(a-\lambda)-l(c-\lambda)\\
+ &=ka-lc-\lambda(k-l)\\
+ &\le\frac{50}{57}\frac9{16}-3s^2
+ =\frac{35607}{77824}=:h_0.
+\end{aligned}                                             \tag{37}
+\]
+
+For \(H\), use \(r\le1\), \(u<3/16\), \(l\ge s\),
+and (34):
+
+\[
+\begin{aligned}
+H&=(r-b)a+u(b-l)\\
+ &\le(1-b)\left(1-\frac{2s}{b}\right)
+       +\frac3{16}(b-s)=:f(b).
+\end{aligned}
+\]
+
+The last replacement uses \(b-l>0\), which follows from
+\(L\in DBE\). The following factorization proves the required
+endpoint bound without any subdivision of the parameter interval:
+
+\[
+f(1/2)-f(b)
+=\left(\frac12-b\right)
+ \left(\frac{4s}{b}-\frac{13}{16}\right)\ge0.
+\]
+
+Indeed \(b\le1/2\), and \(4s/b\ge8s=7/8>13/16\). Thus
+
+\[
+H\le f(1/2)=\frac{363}{1024}=:H_0.                    \tag{38}
+\]
+
+### 10.3. The necessary inequality has a negative rational upper bound
+
+Put \(\Phi(H,h)=Hh-s(H+2h+2s)\). Because \(h\ge s\)
+and \(H_0>2s\), the replacements (37)--(38) increase this expression:
+
+\[
+\Phi(H_0,h_0)-\Phi(H,h)
+=(H_0-H)(h-s)+(h_0-h)(H_0-2s)\ge0.
+\]
+
+But exact rational arithmetic gives
+
+\[
+\Phi\left(\frac{363}{1024},\frac{35607}{77824}\right)
+=-\frac{47171}{79691776}<0,
+\]
+
+contradicting (33). This proves Theorem 10. \(\square\)
+
+The proof uses no assumption about the coordinates of \(P\), beyond
+the already established global reduction and the lower bound on \(v\).
+It excludes the whole left mixed cell, including every placement of the
+line through \(L,P\) relative to the anchors.
 
 ## Verification
 
@@ -1140,6 +1301,8 @@ tests, the empty-ear bound (7), and all identities and rational signs in
 the complete quadrilateral-right exclusion. It also checks the universal
 six-point root identities in Section 7, the second-shear identities and
 four-rectangle coefficient table in Section 8, and the area identities
-and exact rational gap used in Section 9. The global geometric
+and exact rational gap used in Section 9. It also verifies the
+barycentric affine identity, endpoint factorization, and negative
+rational upper bound in Section 10. The global geometric
 dependencies, containments, and hull alternatives are proved above; they
 are not conclusions of that diagnostic script.
