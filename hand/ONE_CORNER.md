@@ -667,6 +667,103 @@ exclusion of the entire upper-quadrilateral subcase where both diagonals
 separate its two interior points. The complementary same-side cases
 specified after (11) still require further work.
 
+## 8. Two more complete pentagonal subcase exclusions
+
+Continue with the pentagonal \(2+2\) case. The two upper points cannot
+both lie in \(HDF\), nor can they both lie in \(CDF\). Together with
+Section 7, this leaves only the possibilities that both lie in \(HCD\)
+or both lie in \(HCF\).
+
+Here is an area-only proof for \(HDF\); reflection across \(x=y\)
+then proves the \(CDF\) case. Put
+
+\[
+\sigma=7/64,\qquad R=13/16.
+\]
+
+If \(OHC\) and \(HDF\) each contain two further actual points, the
+two-interior-point theorem gives
+
+\[
+hc\ge R,\qquad E:=1-h+f(h-d)\ge R.                        \tag{18}
+\]
+
+The same strict lower estimate as in (11) in fact gives inequalities
+strictly above \(R\), but weak inequalities suffice below. The other
+two actual triangles \(OCD\) and \(CDF\) give
+
+\[
+cd\ge\sigma,\qquad 1-c+d(c-f)\ge\sigma.                   \tag{19}
+\]
+
+Set \(q=cd\), \(g=f/c\), so \(q\ge\sigma\) and \(0<g\le1\).
+Since \(f\le1\), the expression \(E=1-h(1-f)-fd\) cannot decrease
+when \(h\) is decreased to \(R/c\). This is a scalar relaxation of
+(18); it does not move any point in the configuration. After the
+substitution, (18) requires
+
+\[
+1-\frac Rc\ge q+(1-g)(R-q).                               \tag{20}
+\]
+
+Necessarily \(q<R\). Otherwise the right side of (20), a convex
+combination of \(q\) and \(R\), is at least \(R\), whereas its left
+side is at most \(1-R<R\).
+
+If \(c\le1-\sigma\), then (20) gives
+
+\[
+1-R/c\ge q\ge\sigma,
+\qquad R\le c(1-\sigma)\le(1-\sigma)^2<R,
+\]
+
+a contradiction.
+
+If \(c>1-\sigma\), put \(k=c+\sigma-1\in(0,\sigma]\).
+The second inequality in (19) says \(q(1-g)\ge k\). Since \(q<R\),
+substituting this lower bound into (20) yields
+
+\[
+c+\sigma-\frac Rc\ge q+\frac{Rk}{q}.                     \tag{21}
+\]
+
+The left side is smaller than \(\sigma+2k\), because
+
+\[
+\begin{aligned}
+c+\sigma-\frac Rc
+&<c+\sigma-\frac{(1-\sigma)^2}{c}\\
+&=\sigma+2k-\frac{k^2}{c}\le\sigma+2k.
+\end{aligned}
+\]
+
+The right side is larger than \(\sigma+2k\). To see this directly,
+write its excess as
+
+\[
+\begin{aligned}
+q+\frac{Rk}{q}-\sigma-2k
+={}&\left(1-\frac{k}{\sigma}\right)(q-\sigma)\\
+&+\frac{k}{\sigma}
+ \left(q+\frac{R\sigma}{q}-3\sigma\right).
+\end{aligned}
+\]
+
+The first term is nonnegative. By the arithmetic-geometric mean
+inequality, the parenthesis in the second term is at least
+\(2\sqrt{R\sigma}-3\sigma>0\), since \(R>9\sigma/4\).
+Both numerical comparisons used here are exact:
+
+\[
+R-(1-\sigma)^2=\frac{79}{4096}>0,
+\qquad R-\frac94\sigma=\frac{145}{256}>0.
+\]
+
+This contradicts (21), excluding the entire \(HDF\) subcase. The
+reflected proof excludes \(CDF\) as claimed. The configurations with
+both upper points in \(HCD\) or \(HCF\), and configurations with hulls
+larger than the five-anchor pentagon, remain open in this note.
+
 The optional checker [check_one_corner.py](check_one_corner.py) verifies
 the displaced-triangle formulas and the normalized identities connecting
 this argument to the two polynomial certificates already proved by hand.

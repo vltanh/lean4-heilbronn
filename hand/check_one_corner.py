@@ -120,9 +120,23 @@ assert cc.subs(dd, sp.Rational(1, 2)) == sp.Rational(103, 640) > sp.Rational(1, 
 assert cc.subs(dd, 1) == sp.Rational(1, 5) > sp.Rational(1, 8)
 assert sp.Rational(1, 8) - sp.Rational(5, 52) == sp.Rational(3, 104)
 
+# Area-only exclusion of the two high-side triangular subcases.
+rr_fixed = sp.Rational(13, 16)
+qq, kk, gg = sp.symbols("q k g", positive=True)
+assert rr_fixed - (1 - sigma)**2 == sp.Rational(79, 4096) > 0
+assert rr_fixed - sp.Rational(9, 4) * sigma == sp.Rational(145, 256) > 0
+assert sp.cancel((1 - h + f * (h - d)).subs({h: rr_fixed / c, f: c * gg, d: qq / c})
+                 - (1 - rr_fixed / c + gg * (rr_fixed - qq))) == 0
+assert sp.cancel((c + sigma - (1 - sigma)**2 / c
+                   - sigma - 2 * kk + kk**2 / c).subs(c, 1 - sigma + kk)) == 0
+assert sp.expand(qq + rr_fixed * kk / qq - sigma - 2 * kk
+                 - (1 - kk / sigma) * (qq - sigma)
+                 - kk / sigma * (qq + rr_fixed * sigma / qq - 3 * sigma)) == 0
+
 print("PASS: all three displaced-triangle determinants")
 print("PASS: coupled rectangle sign constants")
 print("PASS: exact reduction to both existing positive polynomials")
 print("PASS: all nine corner-cap determinant formulas")
 print("PASS: both upper-quadrilateral opposite-quadrant certificates")
+print("PASS: both high-side triangular subcase area certificates")
 print("The written geometric arguments remain to be reviewed by a reader.")
