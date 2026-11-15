@@ -345,7 +345,96 @@ again contradicting (9). The two intervals are exhaustive, so the
 same-side case is impossible. Combined with Theorem 1, this proves
 Theorem 2.
 
-## 3. Application to the remaining pentagonal C1 branch
+## 3. The mixed pair has a forced isolated hull vertex
+
+**Theorem 3 (mixed-pair line).** Use the same cyclic quadrilateral
+\(A,B,C,D\), and suppose its six-point minimum triangle area is at least
+\(7S/64\). Suppose both \(P,Q\) are inside \(ABC\), with \(P\) inside
+\(BCD\) and \(Q\) inside \(ABD\). Then the line \(PQ\) puts \(B\)
+on one side and all three of \(A,C,D\) on the other.
+
+Normalize the doubled quadrilateral area to one as before, put
+\(a=2\operatorname{area}(ABD)\), \(b=2\operatorname{area}(ABC)\), and
+use \(s=7/64\). This time
+
+\[
+b\ge Ks,\qquad a\ge3s,\qquad 1-a\ge3s,\qquad1-b\ge s.
+\]
+
+The first inequality uses the two points in \(ABC\); the next two use
+\(Q\) in \(ABD\) and \(P\) in \(BCD\). In particular
+\(a+b>(K+3)s>1\), so the canonical normalization (4) again exists.
+
+Since \(P,Q\) lie on opposite sides of the diagonal \(BD\), their
+segment crosses its relative interior. Orient \(PQ\) so that
+\(d_B<0<d_D\). The remaining signs \((d_C,d_A)\) are exactly
+
+\[
+(+,-),\qquad(-,+),\qquad(+,+).
+\]
+
+The absent fourth possibility would put all three vertices of the
+containing triangle \(ABC\) on the same strict side of \(PQ\).
+
+Use the canonical labeling
+\((A',E',H',F')=(B,A,C,D)\) in Section 5 of
+`OPPOSITE_CORNERS.md`. Its parameters are \(h=b/T\), \(\beta=a/T\),
+and \(\sigma=s/T\), where \(T=ab/(a+b-1)\).
+The point \(P\) is in its cell I and \(Q\) in cell II.
+
+If \(d_C>0>d_A\), the oriented edge tests put \(Q\) inside \(ADP\).
+The three elementary area bounds used in Section 5.1 of that note, before
+replacing any parameter by one, give
+
+\[
+h\beta(1-\beta)\ge\sigma(3h+\beta-2h\beta).
+\]
+
+Indeed the three bounds are
+\(\beta(1-y_P)\ge3\sigma\), \(h x_P\ge\sigma\), and
+\((1-\beta)y_P-x_P\ge\sigma\). Substitute the last two into the first
+and multiply by \(h\beta>0\). Converting back to the first normalization
+gives
+
+\[
+a(1-a)\ge s(2+b-a).
+\]
+
+Its quadratic in \(a\) would have to have nonnegative discriminant.
+But that discriminant is at most
+
+\[
+(1+s)^2-4s(2+Ks)=1-6s+(1-4K)s^2< -\frac1{1280}<0.          \tag{14}
+\]
+
+For the exact comparison, \(K>149/20\), because
+\(\sqrt3>69/40\), as verified by \(4800>4761\); substituting
+\(K=149/20\) in (14) gives exactly \(-1/1280\).
+
+If \(d_C<0<d_A\), the oriented edge tests instead put \(P\) inside
+\(CDQ\). Necessarily \(b>a\): otherwise \(1-b\ge1-a\ge3s\),
+contrary to \(b\ge Ks\) and \((K+3)s>1\). Thus \(h>\beta\).
+The general calculation (15)--(16) of the same note, stopping before its
+replacement \(h\le1\), gives
+
+\[
+h\beta(1-\beta)\ge\sigma(2h+2\beta-h\beta).
+\]
+
+Converting back gives
+
+\[
+a(1-a)\ge s(1+a+b).
+\]
+
+Its discriminant is bounded above by
+\((1-s)^2-4s(1+Ks)=1-6s+(1-4K)s^2\), the same strictly negative number
+as in (14). This case is also impossible.
+
+Only \(d_C,d_A>0\) remains. Together with \(d_D>0>d_B\), this is
+exactly the asserted isolated-vertex conclusion.
+
+## 4. Application to the remaining pentagonal C1 branch
 
 Use the C1 anchors
 
@@ -374,7 +463,11 @@ no lower-point or maximizing hypothesis is required for the theorem.
 This leaves only the mixed upper placements within the pentagonal branch:
 one upper point is in \(HCD\cap HCF\), and the other in \(CDF\), or the
 reflected placement with the other point in \(HDF\). C1 hulls larger than
-the five-anchor pentagon also remain open. In particular,
+the five-anchor pentagon also remain open. In the first mixed placement,
+Theorem 3 additionally forces the line through the upper pair to isolate
+\(C\) from \(H,D,F\). The reflected placement isolates \(H\).
+These are proved sign restrictions, not exclusions of the mixed classes.
+In particular,
 no boundary-saturation theorem or complete C1 exclusion is claimed.
 
 ## Verification

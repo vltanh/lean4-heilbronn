@@ -60,3 +60,16 @@ assert pair_bound(A,A,height_cap) == -S.Rational(58967,29491200)
 assert S.diff(pair_bound(A,A,v),v).subs(v,height_cap) == S.Rational(8477,61440)
 assert s0 > (1-B)**2
 print('PASS: opposite-edge height restriction and both exhaustive rational intervals')
+
+# The two mixed-pair orientations have the same negative discriminant.
+a, b, s, T = S.symbols('a b s T', positive=True)
+h, beta, sigma = b/T, a/T, s/T
+Tvalue = a*b/(a+b-1)
+case_one = h*beta*(1-beta)-sigma*(3*h+beta-2*h*beta)
+case_two = h*beta*(1-beta)-sigma*(2*h+2*beta-h*beta)
+assert S.factor((T**2*case_one).subs(T,Tvalue)-(a*(1-a)-s*(2+b-a))) == 0
+assert S.factor((T**2*case_two).subs(T,Tvalue)-(a*(1-a)-s*(1+a+b))) == 0
+k_lower = S.Rational(149,20)
+assert 1-6*s0+(1-4*k_lower)*s0**2 == -S.Rational(1,1280)
+assert 3*40**2 > 69**2
+print('PASS: both mixed-pair conversions and common negative discriminant')
