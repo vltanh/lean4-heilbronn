@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 7 — November 15, 2026.
+Checkpoint 8 — November 15, 2026.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -132,8 +132,15 @@ Only the distributed alternative of U3 remains unresolved in this family.
       points and three strictly interior points.
 - [ ] HP12-N8. Prove the sharp bound and candidate equality classification
       for the COMPLETE asymmetric eight-boundary domain, including every
-      orientation of the two interior points. HP10 closes only its stated
-      symmetric subchamber, not this parent item.
+      orientation of the two interior points. Its remaining issue is global
+      orientation coverage, not an assumed averaging step.
+  - [x] N8-CANDIDATE-SIGNS. Full asymmetric sharp bound and unique equality
+        under the eight signs ADO+,BGO-,CFP+,EHP+,AOP+,BOP-,EOP-,FOP+,
+        with O,P coordinatewise ordered. Twelve actual triangle inequalities
+        give a scalar envelope; equality forces all candidate symmetries.
+        Proof: ASYMMETRIC_SIGN_CHAMBER.md. No symmetry hypothesis is used.
+  - [ ] N8-OTHER-SIGNS. Establish an exhaustive orientation reduction and
+        bound every alternative not covered by the preceding theorem.
 
 There are now SIX named unresolved global obligations: the remaining
 exact-three-corner class U3, II, C1, N6, N7 and complete asymmetric N8. These
@@ -144,9 +151,11 @@ on the eventual number of smaller subcases is claimed.
 
 N6 and N7 are not closed sets and can approach the eight-boundary candidate.
 Do not demand a uniform rational gap below A* on those entire domains;
-excluding their attainment by a maximizer is sufficient. N8 may use HP10 only
-after a proved symmetry reduction, or may be bounded directly without one.
-Ordinary averaging is not a justified reduction.
+excluding their attainment by a maximizer is sufficient. The candidate sign
+chamber is now bounded directly without symmetry by ASYMMETRIC_SIGN_CHAMBER.md.
+The eight determinant signs are explicit hypotheses, not consequences of
+normalization. Ordinary averaging is not a justified reduction for the
+remaining orientations.
 
 ## Gate IV — assembly and final scrutiny
 
@@ -167,6 +176,7 @@ Ordinary averaging is not a justified reduction.
 | NORMALIZATION.md | Exhaustive reduction, boundary-count catalogue, occupancy cut, conditional equality transfer |
 | LOCAL_RIGIDITY.md | Strict local optimality without stored dual certificates; existential radius |
 | SYMMETRIC_CHAMBER.md | Sharp bound and equality throughout the stated symmetric family; both orientations |
+| ASYMMETRIC_SIGN_CHAMBER.md | Sharp bound and equality in the full asymmetric candidate sign chamber; no averaging assumption |
 | FOUR_CORNERS.md | Full four-corner exclusion with bound (sqrt(33)-5)/16 |
 | TRIANGLE_OCCUPANCY.md | Universal bound for a triangle containing four points; full U4 exclusion |
 | THREE_CORNERS.md | Seven-point endpoint theorem; full U0, U1 and U2 exclusions |
@@ -184,7 +194,8 @@ Ordinary averaging is not a justified reduction.
 ## Next attack and stopping rules
 
 The next targets are the distributed U3 alternative and the adjacent-corner
-and one-corner families II and C1. The stronger occupancy,
+and one-corner families II and C1, together with the remaining N8 signs.
+The stronger occupancy,
 clustered-triangle and complete opposite-corner theorems also apply
 in the other families. The exact diagnostic in
 `../discovery/ENDPOINT_COVER_LIMIT.md` rules out a threshold-free shortcut;

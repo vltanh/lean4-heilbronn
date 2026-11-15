@@ -3,7 +3,7 @@
 
 This script checks polynomial identities and rational comparisons printed in
 TRIANGLE_OCCUPANCY.md, THREE_CORNERS.md, CLUSTERED_TRIANGLE.md and
-SYMMETRIC_CHAMBER.md, plus the opposite-corner notes.
+SYMMETRIC_CHAMBER.md, ASYMMETRIC_SIGN_CHAMBER.md, plus the opposite-corner notes.
 It does not enumerate configurations
 or prove geometric coverage. The written arguments supply those deductions.
 Run locally with: python3 n10/hand/check_global_geometry.py
@@ -379,6 +379,48 @@ def opposite_mixed_complete():
     print("PASS: opposite-mixed containment identity, both orientations, final cubic contradiction")
 
 
+def asymmetric_sign_chamber():
+    a1, a2, a3, a4, b1, b2, b3, b4 = sp.symbols("a1 a2 a3 a4 b1 b2 b3 b4")
+    x, y, U, V, s, M, m, k, t = sp.symbols("x y U V s M m k t")
+    A, B, C, D, E, F, G, H, O, P = (sp.Matrix(p) for p in [
+        (0,a1), (a2,0), (1-b1,0), (1,b2), (1,1-a3),
+        (1-a4,1), (b3,1), (0,1-b4), (x,y), (x+U,y+V)])
+    r = x*V-y*U
+    identities = [
+        (A,O,P,1,r+a1*U), (B,O,P,-1,a2*V-r),
+        (E,O,P,-1,V-U+a3*U-r), (F,O,P,1,U-V+a4*V+r),
+        (A,D,O,1,y-b2*x-a1*(1-x)),
+        (B,G,O,-1,x-b3*y-a2*(1-y)),
+        (C,F,P,1,1-x-U-b1*(1-y-V)-a4*(y+V)),
+        (E,H,P,1,1-y-V-b4*(1-x-U)-a3*(x+U)),
+        (A,G,H,1,b3*(1-a1-b4)), (B,C,D,1,b2*(1-a2-b1)),
+        (C,D,E,1,b1*(1-a3-b2)), (F,G,H,1,b4*(1-a4-b3)),
+    ]
+    for p0,p1,p2,sign,formula in identities:
+        zero(sign*2*area(p0,p1,p2)-formula)
+    zero(U*y-U*b2*x-(s-r)*(1-x)-(x*(V-r-U*b2)-s*(1-x)))
+    zero((1-x-U)*V-(1-y-V)*U-(V-U-r))
+    qbound = (U+V)/(2*U)-s*(1+3*U)/(U*(1-U))
+    zero(((U+V+2*s)/U-4*s*(1+U)/(U*(1-U)))/2-qbound)
+    HH = (1+3*M)/(1-M)
+    k0 = (1-M)/(4*M)
+    DD = (M+m)/2
+    first = k*(DD-k*M*m)/(1+k)
+    zero(sp.diff(first,k)-(DD-M*m*k*(k+2))/(1+k)**2)
+    zero(1-M*k0*(k0+2)-(7*M*M+10*M-1)/(16*M))
+    psi = (1-M)*(2*M+m*(1+M))/(4*(1+3*M))
+    zero(first.subs(k,k0)-psi)
+    zero((DD-k0*M*m)/HH-psi)
+    phi = t*(1-t/2)*(1-2*t)/(2-3*t)
+    zero(psi.subs(m,M)-phi.subs(t,(1-M)/2))
+    f = 12*t**3-27*t*t+20*t-4
+    zero(sp.diff(phi,t)+f/(2*(2-3*t)**2))
+    zero(sp.diff(f,t)-36*(t-sp.Rational(2,3))*(t-sp.Rational(5,6)))
+    assert Q(9,130) < Q(1,11)
+    assert 7*Q(1,10)**2+10*Q(1,10)-1 == Q(7,100) > 0
+    print("PASS: asymmetric twelve-triangle formulas, reciprocal bounds, sharp scalar envelope")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -392,3 +434,4 @@ if __name__ == "__main__":
     mixed_central_placement()
     opposite_mixed_complete()
     symmetric_opposite_orientation()
+    asymmetric_sign_chamber()

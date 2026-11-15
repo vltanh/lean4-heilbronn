@@ -146,8 +146,8 @@ within this chamber is complete.
 ## Remaining global dependency
 
 This theorem covers the complete stated symmetric three-parameter family,
-including both ADO orientations. It still does not close the asymmetric
-eight-boundary domain.
-To use it as the terminal step of a global hand proof, one must prove that
-a maximizer belongs to this chamber up to symmetry and relabeling, or prove
-the full asymmetric bound by another argument. That step remains open.
+including both ADO orientations. ASYMMETRIC_SIGN_CHAMBER.md now proves the
+sharp bound directly throughout the full asymmetric candidate sign chamber;
+equality in its inequalities forces the candidate symmetries. Its eight sign
+hypotheses still need a global orientation reduction, so the unrestricted
+eight-boundary theorem remains open.
