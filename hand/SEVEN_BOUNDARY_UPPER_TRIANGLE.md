@@ -7,7 +7,7 @@ D=(1,d),\ E=(1,e),\ F=(f,1),
 \]
 with
 \[
-0<a<h<1,\quad0<b<c<1,\quad0<d<e<1,\qquad
+0<a<h<1,\quad0<b<c<1,\quad0<d<e\le1,\qquad
 b\le f\le c,\quad f\le\tfrac12.
 \]
 Write \([XYZ]=\det(Y-X,Z-X)\), and put
@@ -25,6 +25,11 @@ It does not require a location for the ninth point. In particular, in
 the mixed placement of
 [SEVEN_BOUNDARY_MIXED_PAIR.md](SEVEN_BOUNDARY_MIXED_PAIR.md), both free
 points are below \(HE\).
+
+The endpoint \(e=1\) is included: the proof only uses \(e\le1\),
+and still has \(R=e-d<1\) because \(d>0\). The outer-sector
+argument and its reflection also allow the corresponding upper contact
+height to equal one.
 
 The anchor costs give
 \[
