@@ -87,4 +87,24 @@ for tau, numerator, row in zip(tau_bounds, numerators, table):
     assert (leading, linear, constant, discriminant) == row
     assert leading > 0 and discriminant < 0
 
-print("C1 ordinary mixed-pentagon identities and exact certificates verified.")
+p, height_p = sp.symbols("p height_p", real=True)
+P = sp.Matrix([p, height_p])
+V = h * x + c * t - h * c
+assert sp.expand(area(H, C, Q) - V) == 0
+assert sp.expand(area(H, C, P) - (h * p + c * height_p - h * c)) == 0
+assert sp.expand(area(H, P, Q) - (x * (h - height_p) - (h - t) * p)) == 0
+p_lower = c * (h - height_p) / h + s / h
+assert sp.factor(
+    area(H, P, Q).subs(p, p_lower)
+    - ((h - height_p) * V - s * (h - t)) / h
+) == 0
+v_upper = h * (1 - c) + c * d - s * h / d - 2 * c * s
+assert sp.factor(V.subs(t, d * x - s).subs(x, 1 - s / d) - v_upper) == 0
+reverse_gap = (h - rho / c) * (1 - s - 3 * c * s) - s * (h + 2 * s)
+assert sp.factor(sp.diff(reverse_gap, h) - (1 - 2 * s - 3 * c * s)) == 0
+assert 1 - 5 * s > 0
+assert sp.factor(sp.diff(reverse_gap.subs(h, 1), c) - rho * (1 - s) / c**2 + 3 * s) == 0
+assert rho * (1 - s) - 3 * s == sp.Rational(405, 1024)
+assert reverse_gap.subs({h: 1, c: 1}) == -sp.Rational(57, 2048)
+
+print("Both C1 mixed-pentagon exclusions and exact certificates verified.")

@@ -1,9 +1,9 @@
 # The mixed upper pair in the C1 pentagon
 
-This note continues the exact-pentagon branch of
-[ONE_CORNER_COMPLETION.md](ONE_CORNER_COMPLETION.md). It excludes the
-complete placement in which the lower left-sector point is inside
-\(OHF\). The other placement is stated explicitly at the end.
+This note completes the exact-pentagon branch of
+[ONE_CORNER_COMPLETION.md](ONE_CORNER_COMPLETION.md). It excludes both
+remaining mixed upper-pair placements. The ordinary alternative is
+closed in Sections 4--6, and the reverse alternative in Section 7.
 
 Write \([XYZ]=\det(Y-X,Z-X)\) for signed doubled area, and put
 
@@ -325,15 +325,122 @@ each quadratic, and therefore each \(N_i\), is strictly positive.
 The denominator in (14) is positive. Its right side is consequently
 negative, contradicting (8). This proves the theorem. \(\square\)
 
+## 7. The reverse alternative is also impossible
+
+It remains to suppose \(P\in OHF\) and \(L\in OCF\).
+The point \(M\) is already inside \(OCF\), as proved in Section 3.
+We first use this incidence to obtain a second two-interior triangle.
+
+**Both \(L,M\) lie inside \(OCP\).** Indeed \(P\) is on the
+\(H\)-side of \(OF\), so its ray \(OP\) is strictly steeper
+than \(OF\). Both \(L,M\) lie on the \(C\)-side of \(OF\),
+and therefore on the \(C\)-side of \(OP\). Also \(P\) is above
+\(HC\), so the line \(CP\) is above \(CH\) at every first
+coordinate strictly between zero and \(c\). The lower points are
+below \(HC\), hence below \(CP\), and they are above \(OC\).
+These are exactly the three strict side tests for \(OCP\).
+
+Write \(P=(p,z)\), while retaining \(Q=(x,t)\). The
+two-interior-point bound consequently gives
+
+\[
+\boxed{cz\ge Ks>\rho.}                                 \tag{15}
+\]
+
+The forced signs of \(PQ\) put \(P\) inside \(HCQ\): it is
+above \(HC\), below \(HQ\), and on the \(H\)-side of \(CQ\).
+In particular, the two positive actual doubled areas satisfy
+
+\[
+hp+cz-hc\ge s,\qquad
+x(h-z)-(h-t)p\ge s.
+\]
+
+Since \(Q\) is below \(OD\) and \(d\le h\), we have
+\(h-t>0\). Substitute the lower bound
+\(p\ge c(h-z)/h+s/h\) from the first inequality into the second.
+With
+
+\[
+V:=[HCQ]=hx+ct-hc>0,
+\]
+
+the result is the necessary inequality
+
+\[
+\boxed{(h-z)V\ge s(2h-t).}                              \tag{16}
+\]
+
+We now bound both sides using only the actual triangles at \(Q\).
+As in Section 5, \([OQD]\ge s\) and \([CDQ]\ge s\) imply
+
+\[
+t\le dx-s,\qquad x\le1-\frac{s}{d}.
+\]
+
+Therefore
+
+\[
+t\le d-2s\le h-2s,                                   \tag{17}
+\]
+
+and
+
+\[
+\begin{aligned}
+V
+&\le(h+cd)x-hc-cs\\
+&\le h(1-c)+cd-\frac{sh}{d}-2cs\\
+&\le1-s-3cs.                                          \tag{18}
+\end{aligned}
+\]
+
+For the last line, (4) gives \(d\le1-s\), whence
+\(h(1-c)+cd\le1-cs\), and \(h/d\ge1\).
+
+The right side of (18) is positive, since it is at least
+\(1-4s=9/16\). Equations (15)--(18) thus force
+
+\[
+0\le
+\left(h-\frac{\rho}{c}\right)(1-s-3cs)-s(h+2s).
+                                                               \tag{19}
+\]
+
+This expression increases with \(h\) for \(0<c\le1\), because
+its derivative is \(1-2s-3cs\ge1-5s>0\). Replace \(h\) by
+one. The derivative of the resulting expression with respect to \(c\)
+is
+
+\[
+\frac{\rho(1-s)}{c^2}-3s
+\ge\rho(1-s)-3s=\frac{405}{1024}>0.
+\]
+
+Replacing \(c\) by one therefore gives the strictly negative upper
+bound
+
+\[
+\left(1-\rho\right)(1-4s)-s-2s^2
+=-\frac{57}{2048}<0,
+\]
+
+contradicting (19). This excludes the complete reverse alternative.
+
+Sections 3, 6, and 7 exhaust the two \(OF\) alternatives, so the
+mixed upper-ear placement is impossible. Reflection across \(x=y\)
+excludes the other upper-ear placement. Combined with the earlier central
+and opposite-sector exclusions, **the entire C1 case with convex hull
+equal to the five-anchor pentagon is now excluded**. \(\square\)
+
 ## Remaining scope and verification
 
-The sole remaining exact-pentagon alternative in this note is
-\(P\in OHF\), \(L\in OCF\), with all the sector and line
-placements in (1), (6). It requires a separate argument. C1 hulls larger
-than the five-anchor pentagon are also not excluded here.
+C1 configurations whose convex hull has more than the five prescribed
+anchor vertices are not excluded by this note.
 
 [check_c1_mixed_pentagon.py](check_c1_mixed_pentagon.py) checks the
 determinant identities, monotone expressions, rational bounds, quartic
-identities, and quadratic certificates. The containments and exhaustive
+identities, quadratic certificates, and the exact reverse-case gap.
+The containments and exhaustive
 geometric alternatives are proved above, not inferred from numerical
 samples.
