@@ -151,13 +151,15 @@ Consequently
 x\le1-s,\qquad z\le1-\frac{2s}{1-b}.                    \tag{3}
 \]
 
-Furthermore, \(S\in BRC\) gives \(r>b\), \(x>b\), and
+Furthermore, \(S\in BRC\) gives \(r>b\) and \(x>b\). Its
+diagonal-sector placement \(S\in CRO\) makes both
+\(\Delta DRS\) and \(\Delta RCS\) positive. Their exact sum is
 
 \[
-s\le\Delta BRS=(r-b)z-u(x-b)\le(1-b)z.
+z-u=\Delta DRS+\Delta RCS\ge2s.
 \]
 
-Thus \(z\ge2s>3/16>\lambda\).
+Since \(u\ge0\), this gives \(z\ge2s>3/16>\lambda\).
 
 The barycentric coefficients of \(Q\) at \(E,B\) in \(EBS\)
 are at least \(s/A\). Since \(z>\lambda\), this implies

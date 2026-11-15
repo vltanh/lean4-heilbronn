@@ -28,6 +28,7 @@ identities = [
     (doubled(D, E, L), q * l),
     (doubled(E, C, L), h - lam - q * l),
     (doubled(R, C, S), v * (1 - x) - (1 - r) * (1 - z)),
+    (doubled(D, R, S) + doubled(R, C, S), z - u),
     (doubled(C, B, S), x - b - (1 - b) * z),
     (doubled(B, R, S), (r - b) * z - u * (x - b)),
     (doubled(E, B, S), b * z + lam * (x - b)),
