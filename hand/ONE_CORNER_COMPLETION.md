@@ -518,6 +518,13 @@ point lies inside \(OHCX\). After reflection it shares \(OCX\)
 with one lower point, giving \(hc,cX_y\ge(4+2\sqrt3)s\).
 The coupled one-cap configuration with those area bounds is still open.
 
+[C1_TOP_CAP_OF_SPLIT.md](C1_TOP_CAP_OF_SPLIT.md) closes the complete
+alternative in which the two lower points straddle \(OF\), after
+the reflection that puts the upper interior point in \(OCX\).
+The remaining one-cap placement therefore has both lower points in
+\(OHC\cap OCF\), on opposite sides of \(OX\), and the two
+actual containing-area bounds just stated.
+
 ## Verification
 
 The exact diagnostic `check_one_corner_completion.py` checks the affine
