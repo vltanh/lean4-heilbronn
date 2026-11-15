@@ -196,5 +196,7 @@ The optional exact diagnostic
 checks the two area sums, the barycentric stress, all derivatives, the
 endpoint rational identity, and the final cubic and quadratic signs.
 The simultaneous relaxation and its denominator signs are proved in
-the text. The theorem excludes the complete cell (1); it does not yet
-exclude every mixed placement with \(P\) above \(HC\).
+the text. The theorem excludes the complete cell (1). The companion
+[SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md](SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md)
+uses it to complete the entire mixed branch above \(HC\), and then
+assembles the full normalized seven-boundary theorem.
