@@ -196,7 +196,7 @@ a,b,1-a,1-b\ge Ks.
 Since \(\sqrt3>5/3\), one has \(K>22/3\). Consequently
 
 \[
-0<a,b<B:=1-\frac{22}{3}s=\frac{115}{192}.                 \tag{7}
+0<a,b<1-\frac{22}{3}s=\frac{115}{192}<B:=\frac35.                 \tag{7}
 \]
 
 ## 4. Neither joining line can separate its two nearby hull vertices
@@ -249,7 +249,7 @@ because \(B>s\). But at the two rational endpoints,
 
 \[
 [B^2-s(1+B)]^2-4sB^2
-=-\frac{26465591}{5435817984}<0.                          \tag{9}
+=-\frac{719}{160000}<0.                          \tag{9}
 \]
 
 This contradiction excludes the other two cases as well. Thus \(PQ\)

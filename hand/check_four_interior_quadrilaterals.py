@@ -52,10 +52,10 @@ equal(((u - s) * (1 - s / b - u / (a * b))).subs(u, z + s),
       z * (a * b - s * (1 + a) - z) / (a * b))
 
 sigma = Fraction(7, 128)
-endpoint = 1 - Fraction(22, 3) * sigma
-assert endpoint == Fraction(115, 192)
+endpoint = Fraction(3, 5)
+assert 1 - Fraction(22, 3) * sigma == Fraction(115, 192) < endpoint
 gap = (endpoint**2 - sigma * (1 + endpoint))**2 - 4 * sigma * endpoint**2
-assert gap == -Fraction(26465591, 5435817984)
+assert gap == -Fraction(719, 160000)
 assert endpoint > sigma > Fraction(7, 32)**2
 assert 4 * Fraction(7, 32) + 4 * sigma == Fraction(35, 32) > 1
 assert 18**2 * 65 - 145**2 == 35
