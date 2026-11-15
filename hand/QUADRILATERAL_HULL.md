@@ -268,10 +268,56 @@ hc\ge2\Gamma A_0=(11+3\sqrt5)A_0.                         \tag{18}
 \]
 
 In particular, both \(h\) and \(c\) are at least the right side of
-(18), since each is at most one. The two free points in the \((2,2)\)
-case and the single upper point in the \((3,1)\) case still require
-further analysis. Configurations with additional hull vertices also
-remain outside these last two conditional classifications.
+(18), since each is at most one. The later corner-triangle theorem in
+[ONE_CORNER.md](ONE_CORNER.md) excludes the entire \((3,1)\) branch,
+including configurations with additional hull vertices. Sections 7--8
+of that note further reduce the exact-pentagon \((2,2)\) branch to
+the cases where both upper points lie in HCD or both lie in HCF.
+Those two cases remain open. Configurations with additional hull
+vertices are not covered by the conditional pentagon classification.
+
+## 5. One of the two lower N ears is always empty
+
+**Lemma 5.** In the complete family N, suppose every triangle has
+area at least \(t\), and put \(s=2t>1/12\). The two actual
+triangles \(ABH\) and \(ABC\) cannot both contain further
+configuration points. After interchanging the coordinate axes and
+relabeling the anchors if necessary, one may therefore assume that
+\(ABC\) contains no other configuration point.
+
+**Proof.** If both triangles contain a further point, subdividing each
+into three actual triangles gives
+
+\[
+b(h-a)\ge3s,\qquad a(c-b)\ge3s.
+\]
+
+The contained points need not be distinct for this argument. Since
+\(h,c\le1\), the Cauchy--Schwarz inequality gives
+
+\[
+\begin{aligned}
+2\sqrt{3s}
+&\le\sqrt{b(h-a)}+\sqrt{a(c-b)}\\
+&\le\sqrt{b(1-a)}+\sqrt{a(1-b)}\\
+&\le\sqrt{b+(1-b)}\,\sqrt{(1-a)+a}=1.
+\end{aligned}
+\]
+
+This implies \(s\le1/12\), a contradiction. A further point on
+an edge would already give zero minimum area. Transposition
+\((x,y)\mapsto(y,x)\), followed by the relabeling
+\((A,H,B,C,D,F)\mapsto(B,C,A,H,F,D)\), exchanges the two
+ears and preserves all inequalities defining N. This proves the
+normalization assertion. \(\square\)
+
+This lemma requires no assumption that the six anchors are the full
+convex hull, and hence applies throughout the competitive family N.
+If one additionally assumes that they are the full hull, then the
+emptiness of \(ABC\) puts all three remaining points in the
+pentagon \(A,C,D,F,H\): that pentagon and the ear \(ABC\)
+partition the anchor hexagon. Without that additional hull hypothesis,
+points in exterior square-corner caps need not belong to the pentagon.
 
 ## Verification
 
