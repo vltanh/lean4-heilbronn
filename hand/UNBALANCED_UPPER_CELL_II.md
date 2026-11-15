@@ -115,7 +115,7 @@ quadratic term to obtain the strictly positive lower bound
 =\frac{10323799}{262144}>0.
 \]
 
-The interval starts at \(s_0\) because \([DBE]=bq\ge s>s_0\).
+The interval starts at \(s_0\) because \([DEB]=bq\ge s>s_0\).
 
 ## 2. A small containing triangle controls the central line
 
