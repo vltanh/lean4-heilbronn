@@ -112,6 +112,10 @@ establish the geometric exclusions.
 | Convex two-opposite-cap hull: 94 words, 100 exact cubics and the sharp E/F chamber | [SIX_BOUNDARY_TWO_TOP_CONVEX.md](SIX_BOUNDARY_TWO_TOP_CONVEX.md) |
 | Complete N side-and-opposite occupancy, all 97 words and equality | [SIX_BOUNDARY_SIDE_OPPOSITE.md](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
 | Contributed cubic-only completion of the same N6 side-and-opposite occupancy | [SIX_BOUNDARY_SIDE_TOP_COMPLETION.md](SIX_BOUNDARY_SIDE_TOP_COMPLETION.md) |
+| Alternate unrestricted assembly using the concurrent completion packages | [GLOBAL_THEOREM.md](GLOBAL_THEOREM.md) |
+| Alternate single-opposite-cap cover: 542 cubics and 897 terminal cells | [SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md](SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md) |
+| Alternate two-opposite-cap cover: 329 cubics across both cap hulls | [SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md](SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md) |
+| Sharp E/F chamber with the high-contact hypothesis used by the alternate cover | [SHARP_EF_HIGH.md](SHARP_EF_HIGH.md) |
 | Simultaneous B/D sharp chamber | [SHARP_BD_MOVING.md](SHARP_BD_MOVING.md) |
 | Simultaneous D/F and E/F sharp chambers under rational bounds | [SHARP_DF_MOVING.md](SHARP_DF_MOVING.md); [SHARP_EF_MOVING.md](SHARP_EF_MOVING.md) |
 

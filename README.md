@@ -35,6 +35,19 @@ The complete C1 one-lower assembly is Theorem 2 of
 Both build on the previously completed zero-lower, two-lower, seven-boundary
 and corner-family arguments.
 
+### Preserved alternative certificate covers
+
+The concurrent assembly [GLOBAL_THEOREM.md](hand/GLOBAL_THEOREM.md)
+proves the same result using separately developed final covers. Its
+[single-top completion](hand/SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md) has
+542 certificates and 897 terminal cells; its
+[double-top completion](hand/SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md) has
+329 certificates across both cap hulls, using the
+[high E/F sharp chamber](hand/SHARP_EF_HIGH.md). Both complete covers and
+the sharp chamber passed separate symbolic and geometric audits. These
+packages are retained alongside the primary assembly above; each count
+belongs to its named certificate file.
+
 ## Reproduce the exact checks
 
 Python 3 and SymPy are used by the complete collection of hand-proof
@@ -44,8 +57,10 @@ integer and fraction arithmetic; they do not import an optimizer.
 Run the whole integrated collection with
 `python research/run_hand_checks.py`; its per-file results and input
 fingerprints are in [research/HAND_CHECKS.md](research/HAND_CHECKS.md).
-The final integrated run passed all **86 diagnostics**, with zero failures;
-a targeted follow-up also confirmed all 62 parent cases and 221 leaves.
+The final combined verification passed all **89 diagnostics**, with zero
+failures. It preserves the original 86-check run, adds the three concurrent
+diagnostics, and confirms that the original proof inputs were unchanged.
+A targeted follow-up also confirmed all 62 parent cases and 221 leaves.
 
 The final packages can also be checked directly:
 

@@ -48,11 +48,24 @@ N6 side/top completion are also preserved, verified and indexed. The
 latter's lower 18-certificate data were reformatted but remain semantically
 identical to the independently audited original table.
 
+The later concurrent completion adds an alternate global assembly in
+[hand/GLOBAL_THEOREM.md](hand/GLOBAL_THEOREM.md), a 542-cubic single-top
+cover, and a 329-cubic double-top cover with its high E/F chamber. On import, all
+20 added source, coefficient and audit files were checked byte-for-byte
+against their published Git blob hashes. Separate exact, symbolic and
+geometric checks passed for both covers and the sharp chamber. The primary
+assembly retains its own complete covers; their different cell and term
+counts are intentional and refer to their respective data files.
+The final geometric review also clarified that the two cap edges support
+the anchor hexagon; they need not support the whole square.
+
 ## Verification and trust boundary
 
-The final integrated gate passed all **86 hand-proof diagnostics** with
-zero failures. A targeted census follow-up confirmed all 62 parents and
-221 leaves. The input fingerprints, complete outputs and reproduction
+The final combined gate passed all **89 hand-proof diagnostics** with
+zero failures. It preserves the original 86-check receipt and extends it
+with the three concurrent diagnostics after confirming all original proof
+inputs unchanged. A targeted census follow-up confirmed all 62 parents
+and 221 leaves. The input fingerprints, complete outputs and reproduction
 command are recorded in [research/HAND_CHECKS.md](research/HAND_CHECKS.md).
 
 The files under `hand/` contain the mathematical arguments and fixed exact
