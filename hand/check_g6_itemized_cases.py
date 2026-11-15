@@ -20,8 +20,35 @@ HEADER = ("id", "group", "l", "t", "r", "lower", "upper", "inner",
           "sectors", "wedge", "signs", "status", "proof")
 
 
-N6_CLOSED = {"N6-04-L0":"SIX_BOUNDARY_SIDE_OPPOSITE.md","N6-04-L1":"SIX_BOUNDARY_SIDE_OPPOSITE.md","N6-01-L0":"SIX_BOUNDARY_SINGLE_SIDE.md","N6-01-L1":"SIX_BOUNDARY_SINGLE_SIDE.md","N6-02-L0":"SIX_BOUNDARY_TWO_SIDE_UPPER.md","N6-02-L1":"SIX_BOUNDARY_TWO_SIDE_COMPLETION.md","N6-05-L0":"SIX_BOUNDARY_TWO_SIDE_UPPER.md","N6-07-L0":"SIX_BOUNDARY_SIDE_TWO_TOP.md","N6-08-L0":"SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md"}
-C1_ONE_CLOSED = {"C1-1-04":"C1_ONE_LOWER_MIXED_CAPS.md","C1-1-07":"C1_ONE_LOWER_MIXED_CAPS.md","C1-1-10":"C1_ONE_LOWER_TOP_MULTIPLICITY.md","C1-1-11":"C1_ONE_LOWER_TOP_MULTIPLICITY.md","C1-1-12":"C1_ONE_LOWER_TOP_MULTIPLICITY.md","C1-1-01":"C1_ONE_LOWER_SIDE_CAP.md","C1-1-02":"C1_ONE_LOWER_RIGHT_PAIR.md","C1-1-03":"C1_ZERO_LOWER.md","C1-1-05":"C1_ZERO_LOWER.md","C1-1-06":"C1_ONE_LOWER_TOP_CAP.md","C1-1-08":"C1_ONE_LOWER_RIGHT_PAIR.md","C1-1-09":"C1_ONE_LOWER_EIGHT_HULL.md"}
+N6_CLOSED = {
+    "N6-01-L0": "SIX_BOUNDARY_SINGLE_SIDE.md",
+    "N6-01-L1": "SIX_BOUNDARY_SINGLE_SIDE.md",
+    "N6-02-L0": "SIX_BOUNDARY_TWO_SIDE_UPPER.md",
+    "N6-02-L1": "SIX_BOUNDARY_TWO_SIDE_COMPLETION.md",
+    "N6-03-L0": "SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md",
+    "N6-03-L1": "SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md",
+    "N6-04-L0": "SIX_BOUNDARY_SIDE_TOP_COMPLETION.md",
+    "N6-04-L1": "SIX_BOUNDARY_SIDE_TOP_LOWER.md",
+    "N6-05-L0": "SIX_BOUNDARY_TWO_SIDE_UPPER.md",
+    "N6-06-L0": "SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md",
+    "N6-06-L1": "SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md",
+    "N6-07-L0": "SIX_BOUNDARY_SIDE_TWO_TOP.md",
+    "N6-08-L0": "SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md"
+}
+C1_ONE_CLOSED = {
+    "C1-1-01": "C1_ONE_LOWER_SIDE_CAP.md",
+    "C1-1-02": "C1_ONE_LOWER_RIGHT_PAIR.md",
+    "C1-1-03": "C1_ZERO_LOWER.md",
+    "C1-1-04": "C1_ONE_LOWER_MIXED_CAPS.md",
+    "C1-1-05": "C1_ZERO_LOWER.md",
+    "C1-1-06": "C1_ONE_LOWER_TOP_CAP.md",
+    "C1-1-07": "C1_ONE_LOWER_MIXED_CAPS.md",
+    "C1-1-08": "C1_ONE_LOWER_RIGHT_PAIR.md",
+    "C1-1-09": "C1_ONE_LOWER_EIGHT_HULL.md",
+    "C1-1-10": "C1_ONE_LOWER_TOP_MULTIPLICITY.md",
+    "C1-1-11": "C1_ONE_LOWER_TOP_MULTIPLICITY.md",
+    "C1-1-12": "C1_ONE_LOWER_TOP_MULTIPLICITY.md"
+}
 
 
 def sector_choices(k):
@@ -99,16 +126,17 @@ def main():
     )
     assert len({r["id"] for r in actual}) == len(actual)
     counts = Counter((r["group"], r["status"]) for r in actual)
+    assert len(N6_CLOSED) == 13 and len(C1_ONE_CLOSED) == 12
+    assert all((Path(__file__).parent / row["proof"]).is_file() for row in actual)
     assert counts == {
-        ("N6", "OPEN"): 15,
-        ("N6", "CLOSED"): 23,
+        ("N6", "CLOSED"): 38,
         ("N7", "CLOSED"): 16,
         ("C1-0", "CLOSED"): 65,
         ("C1-1", "CLOSED"): 102,
     }, counts
 
-    print("PASS: 62 parent cases and 221 explicitly enumerated leaves")
-    print("PASS: 15 open and 206 covered leaves, 221 distinct case IDs")
+    print("PASS: all 62 parent cases closed; 221 explicitly enumerated leaves")
+    print("PASS: 0 open and 221 covered leaves, 221 distinct case IDs")
     print("NOTE: geometric feasibility and exact exclusion are NOT checked")
 
 

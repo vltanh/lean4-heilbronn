@@ -8,8 +8,10 @@ the corner-free branch can be represented by **six distinct prescribed boundary
 points and three arbitrary points**. The one-corner branch still has four
 arbitrary points, but its fixed corner removes one coordinate parameter.
 
-This is a reduction, not a sharp upper bound. In particular, it does not prove
-that an optimizer has eight boundary points, and it does not close G6.
+This note proves the structural reduction. The complete family bounds and
+unrestricted equality classification are now assembled in
+[GLOBAL_THEOREM.md](GLOBAL_THEOREM.md); the boundary conclusion follows
+there from the completed cases, not from the reduction alone.
 
 Write
 
@@ -195,15 +197,15 @@ adjacent sides, three sides, or all four sides. With one corner, the doubled
 sides must include its two incident sides, and may include zero, one, or
 both opposite sides. With two opposite corners, all four sides are doubled.
 These are seven incidence patterns up to square symmetry. They are
-**incidence patterns only**; the triangle-orientation and contact-pattern
-classification within them has not been solved.
+**incidence patterns only**. Their complete continuous family bounds and
+equality cases are proved in the manuscripts assembled in GLOBAL_THEOREM.md.
 
-## 4. Equality and the remaining obstruction
+## 4. Equality transfer and the completed global theorem
 
 The contact-increasing maps are determinant-one shears, not necessarily
 square symmetries. Theorem 3 by itself transfers the optimal *value*.
 The existing strict local theorem supplies exactly the additional rigidity
-needed to transfer a future normalized equality classification.
+needed to transfer the normalized equality classification.
 
 **Lemma 4 (equality transfer).** Suppose an arbitrary maximizing configuration
 can be transformed into the candidate by finitely many square symmetries,
@@ -223,39 +225,18 @@ proved in Theorem 2 of `HAND_PROOF.md`. Therefore that shear cannot change
 the configuration. Applying the same argument backwards eliminates every
 shear. Only square symmetries and relabelings remain. \(\square\)
 
-Consequently a future proof of sharpness and candidate uniqueness in the
-five normalized families would give both conclusions globally. The missing
-part is the sharp classification of those families, not inverse-shear
-rigidity.
+The completed sharp classification of the five normalized families is
+assembled in [GLOBAL_THEOREM.md](GLOBAL_THEOREM.md). Applying Lemma 4
+gives the unrestricted equality classification as well as the optimal value.
 
-The obstacle after this lemma remains substantive: in N the three arbitrary
-points need not be movable to the boundary while keeping all triangle areas
-above the sharp threshold. For a fixed choice of the other eight points,
-each oriented area constraint on the ninth point is a half-plane, so a
-sign-consistent feasible component is a convex polygon. Such a polygon can
-be trapped entirely inside the square. The new shear argument applies to
-the whole configuration through its enclosing parallelogram; it makes no
-unsupported assertion about these individual-point feasible polygons.
+The distinction between a whole-configuration shear and individual-point
+motion remains essential. For fixed positions of the other eight points,
+a sign-consistent feasible component for the ninth point is a convex
+polygon, and that polygon can be trapped inside the square. None of the
+normalization or completion arguments assumes otherwise.
 
-The complete family C2 has since been excluded in
-[`OPPOSITE_CORNERS.md`](OPPOSITE_CORNERS.md): every member has a triangle
-of area at most \(7/128<A_0\). The entire eight-boundary family, including
-all its orientation classes, is also closed by Theorem 13 of
-[`EIGHT_BOUNDARY.md`](EIGHT_BOUNDARY.md).
-
-To close G6, a sharp inequality or a further proved structural reduction
-is still required for N with fewer than eight boundary points and for C1.
-The complete eight-boundary theorem cannot yet be applied to arbitrary
-members of these two families. Type III is now completely excluded at
-\(7/128<A_0\) by [`CORNER_FAMILIES.md`](CORNER_FAMILIES.md). The remaining
-corner obligation is Type II, reduced to the two count classes in
-[`TYPE_II.md`](TYPE_II.md), Section 8.
-
-The later note [`THREE_INTERIOR_TRIANGLES.md`](THREE_INTERIOR_TRIANGLES.md)
-proves unrestricted triangle capacity two at the target threshold. Its
-normalization applies to arbitrary competitive configurations by first
-choosing a minimum-area enclosing parallelogram. Further completed
-restrictions are in [`ONE_CORNER.md`](ONE_CORNER.md),
-[`SEVEN_BOUNDARY_CAPS.md`](SEVEN_BOUNDARY_CAPS.md), and
-[`TYPE_II_BALANCED.md`](TYPE_II_BALANCED.md). They do not yet supply the
-remaining sharp inequalities for N, C1, or the two Type-II rows.
+The original capacity arguments remain upstream of the final cap closures.
+[THREE_INTERIOR_TRIANGLES.md](THREE_INTERIOR_TRIANGLES.md) establishes
+unrestricted actual-triangle capacity two using the earlier corner and ear
+results; it does not use the completed C1 or N theorem. The final assembly
+records the dependency order explicitly.
