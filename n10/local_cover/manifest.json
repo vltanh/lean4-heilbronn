@@ -1,0 +1,834 @@
+{
+  "schema": "heilbronn-n10-deferred-lp-manifest-v1",
+  "status": "ALL_LISTED_ROOTS_CERTIFIED",
+  "scope": "Only the exact listed N roots; global enumeration must separately cover every other root.",
+  "journals": [
+    {
+      "path": "n10/runs/deferred_N_0_100000.roots",
+      "sha256": "b3f66b872fd4114bd53adee2d4dab19b52baa4bc8b2dfc3ea487675a6fefa9e0",
+      "records": 14
+    },
+    {
+      "path": "n10/runs/deferred_N_200000_300000.roots",
+      "sha256": "0484672ce838e000c105181f69562e62230aab6f12af3bbe0c52474ca3c518fb",
+      "records": 13
+    }
+  ],
+  "generator": {
+    "path": "n10/local_cover/lp_cover.py",
+    "sha256": "2b9132b5d650c14c84f02f6de5b26ac0771833653b247fa05e00b2b89e1bc101"
+  },
+  "count": 27,
+  "roots": [
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        146,
+        314,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_146_314_417_480.json",
+      "sha256": "4b41e48e87f2a3d8315852223ebe0da102f97bbbee600639eb070428c4af5941",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 60
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        146,
+        315,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_146_315_417_480.json",
+      "sha256": "0effc60ddda28a6deb3f7db66c31d7fe5550719ab04cb6c13ca7d9fc9907eb5c",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 62
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        146,
+        336,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_146_336_417_480.json",
+      "sha256": "97c36cae5a28996380e464f98de655f537fbccba5059b766489b155e84e111ce",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 62
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        147,
+        314,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_147_314_417_480.json",
+      "sha256": "e92a88787d75ee1509aef56ddd3f1b46a90874a4c3aa64a6370b07d626dfaaa3",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 62
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        147,
+        315,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_147_315_417_480.json",
+      "sha256": "85c2903a72e7b5f41a99fae3758499224a1587c119ee79f0d31b8d5cdcd71fe6",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 2,
+        "lp_bounds": 43
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        147,
+        336,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_147_336_417_480.json",
+      "sha256": "ab12bfae7126dd1f09bcf54816122b958d8aa3ec319387a080c647efec3a5ff5",
+      "nodes": 11,
+      "counts": {
+        "local": 3,
+        "area": 0,
+        "farkas": 3,
+        "empty": 0,
+        "split": 5,
+        "contractions": 23,
+        "lp_bounds": 538
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        147,
+        337,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_147_337_417_480.json",
+      "sha256": "378217e4390a6dfc127e2f429437714276ac6dab5e0f1c6187c0b9e535945a57",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 63
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        168,
+        314,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_168_314_417_480.json",
+      "sha256": "c75af8f0814ef417adc35f611702444d2137989eb89e79ca03ef0de7c1f6a75d",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 62
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        168,
+        315,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_168_315_417_480.json",
+      "sha256": "c9c234df4ced5726fbac4d4747a83c941acd2f703e5a3492173f4d1fb7a517b8",
+      "nodes": 3,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 2,
+        "empty": 0,
+        "split": 1,
+        "contractions": 4,
+        "lp_bounds": 82
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        168,
+        336,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_168_336_417_480.json",
+      "sha256": "16486725e76aec296e2eaa06827505a59422bcfe9cbc75a67eb729f66cf95f75",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 2,
+        "lp_bounds": 43
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        168,
+        337,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_168_337_417_480.json",
+      "sha256": "6117d706436e0d322395a9c387aca57cb60a083143e69d9f22196a06fccebeea",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 2,
+        "lp_bounds": 41
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        169,
+        315,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_169_315_417_480.json",
+      "sha256": "2b45cebb3585c729432ea4a72e195a045b089324013d11e258f5e9e7a317d191",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 2,
+        "lp_bounds": 41
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        169,
+        336,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_169_336_417_480.json",
+      "sha256": "3ccf22ed24f5d3a9dab81ba03285d82cc83d4b47ff0226b22d89018e9c2b52f5",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 63
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 57964,
+      "anchors": [
+        3,
+        16,
+        25,
+        38,
+        49,
+        71
+      ],
+      "free": [
+        169,
+        337,
+        417,
+        480
+      ],
+      "certificate": "n10/local_cover/certificates/N_57964_169_337_417_480.json",
+      "sha256": "2d723d28efbe4cdc8c06fd0478a24d8c59da5bafa39733d8cad896ba44f51834",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 62
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        138,
+        322,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_138_322_465.json",
+      "sha256": "bf60a5f0b3847dbf5840bb30c832211aee365c75a8bcb9c64518b5cc94e82f5c",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 2,
+        "lp_bounds": 44
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        138,
+        323,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_138_323_465.json",
+      "sha256": "dde891cc8c78ea5303ae40f2ef7b2edf03b6c76904e6d5c52b1570954705a481",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 63
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        138,
+        344,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_138_344_465.json",
+      "sha256": "9373f6a9284024a637f500c320a0b7957fa1901933d843981c8ea102f0ae2ad6",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 63
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        138,
+        345,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_138_345_465.json",
+      "sha256": "e80ef8ca4a2bc10475574a65b86197c55a1e3d04365ae9f4572113c0dd016bf0",
+      "nodes": 11,
+      "counts": {
+        "local": 2,
+        "area": 0,
+        "farkas": 4,
+        "empty": 0,
+        "split": 5,
+        "contractions": 22,
+        "lp_bounds": 514
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        139,
+        322,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_139_322_465.json",
+      "sha256": "d1326c69ad626be013f9d40360806d0a98aae743242f169c7535598286a5f1cd",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 62
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        139,
+        323,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_139_323_465.json",
+      "sha256": "dd4548e62410b2feaeaa4e95e4ca770f8d175541ff8477bc2916993c8ad596e9",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 60
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        139,
+        345,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_139_345_465.json",
+      "sha256": "e66b1de4dfb59ce32a261baa61a2aed9d1bb21eb458a32d735bcd787ff65032d",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 63
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        160,
+        322,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_160_322_465.json",
+      "sha256": "1af996f3f6830eda7b164a825e5990285616529bde7a1503c08f30f378efeca9",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 62
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        160,
+        344,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_160_344_465.json",
+      "sha256": "cb9be2a13fe653a1c44dacad72788c75aa4ffd5241b2ed5789f71c9699710ff6",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 60
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        160,
+        345,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_160_345_465.json",
+      "sha256": "f4603c37222f557d28704960d8c6bd9d46adae2282acb7edfb334ba4cca01459",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 3,
+        "lp_bounds": 63
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        161,
+        322,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_161_322_465.json",
+      "sha256": "f22d3973f29e789cfd8c8e7c46fafb72f13e815069070394111d0c4ff7ea8319",
+      "nodes": 3,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 2,
+        "empty": 0,
+        "split": 1,
+        "contractions": 4,
+        "lp_bounds": 80
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        161,
+        323,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_161_323_465.json",
+      "sha256": "991d0b28d8fcf5c5fe6745bb69323f19bde0fe2d5e57ad40f751fbc8901f310a",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 2,
+        "lp_bounds": 41
+      },
+      "status": "COMPLETE"
+    },
+    {
+      "pattern": 269299,
+      "anchors": [
+        5,
+        18,
+        27,
+        40,
+        60,
+        82
+      ],
+      "free": [
+        87,
+        161,
+        344,
+        465
+      ],
+      "certificate": "n10/local_cover/certificates/N_269299_87_161_344_465.json",
+      "sha256": "2b0bbe0e261ab1a99d15148a21598469e67709e4aebabe5b853aa0e2870298a2",
+      "nodes": 1,
+      "counts": {
+        "local": 0,
+        "area": 0,
+        "farkas": 1,
+        "empty": 0,
+        "split": 0,
+        "contractions": 2,
+        "lp_bounds": 41
+      },
+      "status": "COMPLETE"
+    }
+  ]
+}

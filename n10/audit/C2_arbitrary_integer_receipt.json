@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "family": "C2",
+  "journal": "n10/audit/journals/C2.roots.gz",
+  "journal_sha256": "3998cbdbd37f807ffd0816e40e5a5bdcb7e3ab58cd1cc528cedc7132d6294028",
+  "stored_file_sha256": "4a30a8c634c7580bb2cdaf523b63b9820910defd85817e7566ba1925f307abdb",
+  "arithmetic": "Python arbitrary-precision integers",
+  "method": "direct determinant vertices, synchronous face updates, closed bisection",
+  "roots": 58494,
+  "journal_roots": 58494,
+  "interval_nodes": 58494,
+  "all_listed_roots_verified": true,
+  "enumeration_completeness_verified": false,
+  "seconds": 9.596590372999344
+}

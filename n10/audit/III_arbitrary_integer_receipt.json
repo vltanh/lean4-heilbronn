@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "family": "III",
+  "journal": "n10/audit/journals/III.roots.gz",
+  "journal_sha256": "7a248e6b0a0b31b6f56c161f609b6a362e084cfc5acad6d68dd59e43a3a4b50a",
+  "stored_file_sha256": "b07581e27a09ba2f7adfce3e372ada90952f9612c4f57e0d17224f95a5a9cc8a",
+  "arithmetic": "Python arbitrary-precision integers",
+  "method": "direct determinant vertices, synchronous face updates, closed bisection",
+  "roots": 12172,
+  "journal_roots": 12172,
+  "interval_nodes": 12172,
+  "all_listed_roots_verified": true,
+  "enumeration_completeness_verified": false,
+  "seconds": 2.629436060999069
+}

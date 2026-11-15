@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "python_optimization": true,
+  "scipy_imported": false,
+  "certificates_replayed": 27,
+  "tamper_tests": [
+    "wrong_endpoint",
+    "negative_dual",
+    "missing_child"
+  ],
+  "manifest_sha256": "38f8c6ba91c2f59010f975f74fc256a209cbaa70005883a8aefb6d705a83c074"
+}
