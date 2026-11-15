@@ -207,6 +207,23 @@ equal(phi.subs({HH: H0, hh: h0}) - phi,
 assert H0 - 2 * ss > 0
 assert phi.subs({HH: H0, hh: h0}) == -sp.Rational(47171, 79691776) < 0
 
+# Unbalanced triangular-right hull: empty ear at the stronger threshold.
+sigma = sp.Rational(8, 73)
+assert 219**2 * 65 - 1765**2 == 2240 > 0
+assert sigma > ss
+assert sp.Rational(72, 169) < 1
+lower_ear_bound = 1 - sigma * (K * b / (1 - b) + (1 - b) / b)
+equal(sp.diff(lower_ear_bound, b), sigma * (1 / b**2 - K / (1 - b)**2))
+equal(lower_ear_bound.subs(b, 1 - K * sigma),
+      K * sigma * (1 - sigma / (1 - K * sigma)))
+equal(8 * K * (K - 2) - 73 * (K - 3), 87 - 50 * sp.sqrt(3))
+assert 87**2 - 3 * 50**2 == 69 > 0
+equal((1 - q) + q * x - (x - b) / (1 - b),
+      (1 - (1 - b) * q) * (1 - x) / (1 - b))
+equal(determinant((0, 1), (0, 1 - q), (1 / q, 1)), 1)
+equal(determinant((0, 1 - q), (1 / q, 1), (x, y)),
+      (y - (1 - q) - q**2 * x) / q)
+
 
 def by_four_subsets(intervals):
     return all(max(intervals[i][0] for i in subset)
@@ -237,4 +254,4 @@ assert by_four_subsets(examples[0])
 assert not by_four_subsets(examples[1])  # Four closed intervals meet at 3.
 assert by_four_subsets(examples[2])
 assert not by_four_subsets(examples[3])
-print("PASS: two-vertex capacity, swept tests, balanced right-quadrilateral, second-shear alternating, upper and left mixed inner-cell exclusions")
+print("PASS: capacity and swept tests; balanced right-quadrilateral, second-shear, upper and left mixed cells; unbalanced triangular-right empty ear")

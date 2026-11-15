@@ -1367,6 +1367,185 @@ This is a complete exclusion of the balanced row, not a numerical search
 over its coordinates. The unbalanced row still requires its own coupled
 argument; no conclusion about that row is inferred from Theorem 11.
 
+## 12. The unbalanced triangular-right hull has an empty lower ear
+
+We now consider only the remaining count \((1,2,3)\). Its left point
+is \(E\), its central points are \(P,Q\), and its three right
+points are \(R,S,T\). This section treats the whole branch in which
+the right five-point set has triangular hull \(BCR\), with \(S,T\)
+strictly inside it. It closes the cut with exactly one central point
+above \(CE\); the cut with both central points above \(CE\) remains
+open.
+
+For this section use the slightly stronger rational doubled threshold
+
+\[
+\sigma=\frac8{73}<2A_0,\qquad K=4+2\sqrt3.
+\]
+
+The comparison is exact: it is equivalent to
+\(219\sqrt{65}>1765\), and
+
+\[
+219^2\cdot65-1765^2=2240>0.
+\]
+
+In particular \(\sigma>7/64\), so \(K\sigma>13/16\).
+Assume throughout that the original minimum area is at least \(A_0\),
+so every actual doubled area is at least \(\sigma\) and the global
+four-interior quadrilateral theorem applies.
+
+**Theorem 12.** In the unbalanced triangular-right branch, the actual
+triangle \(EBR\) contains no further configuration point. The two
+eight-point subsets obtained by removing \(E\) and by removing \(B\)
+have respective quadrilateral hulls \(DBRC\) and \(DERC\), with
+the same four interior points \(P,Q,S,T\). Consequently both central
+points lie above \(CE\).
+
+### 12.1. The entire lower ear has doubled area less than \(3\sigma\)
+
+Write \(R=(r,u)\), \(q=1-\lambda\), and \(w=1-b\).
+The two-interior-point inequality in \(BCR\) gives
+
+\[
+g:=r-b-wu\ge K\sigma.
+\]
+
+Since \(r\le1\), while \(DBE\) is an actual triangle, we have
+
+\[
+u\le1-\frac{K\sigma}{w},\qquad
+b\le1-K\sigma<\frac3{16},\qquad
+\lambda\le1-\frac{\sigma}{b}.
+                                                               \tag{39}
+\]
+
+The positive doubled area of the lower ear is
+
+\[
+\begin{aligned}
+\delta:=[EBR]
+ &=bu+\lambda(r-b)\\
+ &\le b\left(1-\frac{K\sigma}{1-b}\right)
+      +(1-b)\left(1-\frac{\sigma}{b}\right)\\
+ &=1-\sigma\left(\frac{Kb}{1-b}+\frac{1-b}{b}\right)
+ =:F(b).
+\end{aligned}                                             \tag{40}
+\]
+
+All replacements use nonnegative coefficients; in particular
+\(r>b\) follows from \(g>0\), and \(b>\sigma\) follows from
+\(\lambda>0\) and \(bq\ge\sigma\).
+
+The function in (40) is strictly increasing over the required interval.
+Indeed
+
+\[
+F'(b)=\sigma\left(\frac1{b^2}-\frac{K}{(1-b)^2}\right)>0,
+\]
+
+because \(b<3/16\) and \(K<8\) imply
+\(Kb^2/(1-b)^2<72/169<1\). Thus, putting
+\(b_0=1-K\sigma>0\),
+
+\[
+\delta\le F(b_0)
+=K\sigma\left(1-\frac{\sigma}{1-K\sigma}\right)
+<3\sigma.                                               \tag{41}
+\]
+
+To verify the strict last inequality, multiply by the positive
+\(1-K\sigma\) and divide by \(\sigma\). It is equivalent to
+\(\sigma K(K-2)>K-3\). At \(\sigma=8/73\), the difference
+after multiplication by 73 is
+
+\[
+8K(K-2)-73(K-3)=87-50\sqrt3>0,
+\qquad 87^2-3\cdot50^2=69>0.
+\]
+
+Any further point inside \(EBR\) would subdivide it into three
+actual triangles, each of doubled area at least \(\sigma\),
+contrary to (41). A further point on an edge would give a collinear
+triple. Thus the closed ear contains only its three vertices.
+
+### 12.2. Two alternating quadrilaterals force the two-above cut
+
+The original eight points other than \(E\) have exact quadrilateral
+hull \(DBRC\): \(P,Q\) are inside \(DBC\), while \(S,T\)
+are inside \(BCR\). The fifth hull vertex of the full configuration
+is \(E\), which lies strictly outside \(DBRC\) on the other side
+of \(DB\). The full hull has cyclic order \(D,E,B,R,C\).
+
+Its decomposition along \(ER\) is the union of the quadrilateral
+\(DERC\) and the lower ear \(EBR\). Since that ear is empty,
+all four free points lie strictly inside \(DERC\) as well. Thus
+the eight points other than \(B\) have exact quadrilateral hull
+\(DERC\).
+
+Apply [FOUR_INTERIOR_QUADRILATERALS.md](FOUR_INTERIOR_QUADRILATERALS.md)
+to both subsets. Each has exactly one free point in each open diagonal
+sector. Moreover both right interior points \(S,T\) are below
+\(CE\). Indeed, for \(x<1\),
+
+\[
+\lambda+qx-\frac{x-b}{1-b}
+=\frac{[1-(1-b)q](1-x)}{1-b}>0,
+\]
+
+so the line \(CE\) lies strictly above \(BC\), and \(S,T\)
+are on the lower/right side of \(BC\).
+
+The two sectors of \(DERC\) above \(CE\) must therefore be
+occupied by \(P,Q\), one each. Both central points lie above
+\(CE\). This proves Theorem 12 and excludes the entire one-above,
+one-below cut in this right-hull branch. \(\square\)
+
+### 12.3. Exact surviving placement and obligation
+
+The still-open triangular-right placement can now be labeled uniquely
+by the common line \(DR\): \(P,S\) are on its \(C\)-side,
+and \(Q,T\) are on its \(B\)-side. The sector assignments are
+
+| Eight-point hull | Sector at its first left edge | Sector at its lower edge | Sector at \(RC\) | Sector at \(CD\) |
+|---|---|---|---|---|
+| \(D,B,R,C\) | \(Q\) at \(DB\) | \(T\) at \(BR\) | \(S\) | \(P\) |
+| \(D,E,R,C\) | \(Q\) at \(DE\) | \(T\) at \(ER\) | \(S\) | \(P\) |
+
+In particular the following are genuine two-interior triangle costs,
+not independent assumptions on a search region:
+
+| Actual triangle | Its two interior points | Required doubled area |
+|---|---|---|
+| \(DCE\) | \(P,Q\) | \(q\ge K\sigma\) |
+| \(BCR\) | \(S,T\) | \(g\ge K\sigma\) |
+| \(DER\) | \(Q,T\) | \(qr\ge K\sigma\) |
+| \(DBR\) | \(Q,T\) | \(r-b+bu\ge K\sigma\) |
+| \(DCR\) | \(P,S\) | \(v:=1-u\ge K\sigma\) |
+| \(ECR\) | \(S,T\) | \(v-q(1-r)\ge K\sigma\) |
+
+The anchors still satisfy \(bq\ge\sigma\) and
+\(\sigma\le\delta<3\sigma\), in addition to (39).
+No free point is permitted on any of the displayed actual dividing lines.
+
+There is also a useful consequence of Theorem 1. The triangle with
+actual vertices \(D,E\) and virtual third vertex \((1/q,1)\)
+has area exactly \(1/2\). It contains \(C,P,Q\), because both
+central points are above \(CE\). Its capacity is already full, so
+each of the three right points \(X\in\{R,S,T\}\) must satisfy
+
+\[
+\boxed{X_y<\lambda+q^2X_x.}                             \tag{42}
+\]
+
+The inequality is strict because the capacity theorem is about a closed
+triangle. The virtual apex is allowed outside the square.
+
+The two-above placement recorded in this subsection still requires a
+coupled inequality between the central pair and the right pair. Neither
+the individual costs in the table nor (42) are claimed to close it. The
+nontriangular right-hull branch is outside the scope of Theorem 12.
+
 ## Verification
 
 [check_type_ii_completion.py](check_type_ii_completion.py) verifies the
@@ -1385,4 +1564,7 @@ have their own exact algebra diagnostics,
 [check_balanced_right_mixed.py](check_balanced_right_mixed.py) and
 [check_balanced_bottom_inner_sector.py](check_balanced_bottom_inner_sector.py).
 Theorem 11 is the exhaustive assembly of these hand proofs and requires
-no further coordinate enumeration.
+no further coordinate enumeration. The diagnostic also checks the
+stronger rational threshold, lower-ear function, strict radical gap,
+and line comparison in Section 12; its residual placement is stated
+without an exclusion claim.
