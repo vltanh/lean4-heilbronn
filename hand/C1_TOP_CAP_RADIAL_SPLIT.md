@@ -412,6 +412,8 @@ also excludes this final alternative.
 
 All central-cell line cases have now been excluded. Both lower points
 cannot lie on the \(C\)-side of \(OX\); reflection excludes their
-being on its other side. This proves the theorem. The case with one
-lower point on each side of \(OX\) remains to be coupled to the
-ninth point.
+being on its other side. This proves the theorem. The complementary
+case with one lower point on each side of \(OX\) is coupled to the
+ninth point and fully excluded in
+[C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md), using
+the side-ear and pair-line companion results cited there.

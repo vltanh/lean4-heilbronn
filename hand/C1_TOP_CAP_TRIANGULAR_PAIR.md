@@ -277,6 +277,10 @@ adaptive subdivision.
 
 This excludes the triangular upper hull. Together with the convex
 upper-hull exclusion, it proves the theorem. For two lower points in
-\(OHC\), the larger-hull work is now reduced to exactly one point
+\(OHC\), the larger-hull work is reduced to exactly one point
 in the top cap, paired with one point inside the original anchor
-pentagon. Other lower occupancies remain separate obligations.
+pentagon. That placement is completely excluded in
+[C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md).
+The separate complete proofs for zero and one lower points are
+[C1_ZERO_LOWER.md](C1_ZERO_LOWER.md) and Section 6 of
+[C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md).

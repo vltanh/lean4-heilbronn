@@ -293,5 +293,6 @@ Equation (12) is a convex combination of these negative numbers, so
 
 After this complete exclusion, the remaining one-cap placement with
 \(P\in OCX\) has both lower points in \(OHC\cap OCF\), still
-on opposite sides of \(OX\). That common-cell placement is not
-excluded by the present argument.
+on opposite sides of \(OX\). The common-cell pair-line alternatives
+are excluded in the companion notes assembled in
+[C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md).

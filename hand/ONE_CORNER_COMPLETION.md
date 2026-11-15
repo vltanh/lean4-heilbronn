@@ -3,8 +3,12 @@
 ## Scope
 
 This note closes the entire six-point quadrilateral class in which
-both interior points lie on the same side of each hull diagonal. It applies to the remaining C1 pentagonal branch, but it
-**does not complete C1** or the unrestricted nine-point theorem.
+both interior points lie on the same side of each hull diagonal, and
+proves the forced pair-line signs for the mixed diagonal placement.
+These theorems are ingredients in the C1 and N proofs. Section 4 links
+their C1 applications to the subsequent complete exclusions of every
+lower-point occupancy; the quadrilateral theorems themselves do not
+assume a boundary-saturation result.
 
 Write
 
@@ -460,13 +464,12 @@ regardless of the line through the two points.
 The same theorem applies to a pair in \(HCD\cap HCF\) in family N;
 no lower-point or maximizing hypothesis is required for the theorem.
 
-This leaves only the mixed upper placements within the pentagonal branch:
+The quadrilateral theorems reduce the pentagonal branch to the mixed upper placements:
 one upper point is in \(HCD\cap HCF\), and the other in \(CDF\), or the
-reflected placement with the other point in \(HDF\). C1 hulls larger than
-the five-anchor pentagon also remain open. In the first mixed placement,
+reflected placement with the other point in \(HDF\). In the first mixed placement,
 Theorem 3 additionally forces the line through the upper pair to isolate
 \(C\) from \(H,D,F\). The reflected placement isolates \(H\).
-These are proved sign restrictions, not exclusions of the mixed classes.
+The mixed classes are excluded by the following companion proof.
 
 The companion [C1_MIXED_PENTAGON.md](C1_MIXED_PENTAGON.md) now excludes
 both complete alternatives within the first mixed placement. With the
@@ -477,15 +480,15 @@ point above \(OD\) named \(L\), exactly one of \(L,P\) is inside
 then excludes the reverse alternative \(P\in OHF\), \(L\in OCF\)
 by two overlapping triangle bounds. Reflection covers the other upper
 ear. Thus the entire C1 case with exact five-anchor pentagonal hull is
-excluded. Larger C1 hulls remain open; no boundary-saturation theorem or
-complete C1 exclusion is claimed.
+excluded.
+
+### Completion for larger hulls and all lower occupancies
 
 The larger-hull companion
 [C1_TWO_LOWER_SIDE_CAP.md](C1_TWO_LOWER_SIDE_CAP.md) excludes both
 exterior side caps whenever two free points are inside \(OHC\).
 Thus that occupancy can extend beyond the five-anchor pentagon only
-through the top cap beyond \(DF\). The top-cap case and the lower
-occupancies still require separate arguments.
+through the top cap beyond \(DF\).
 
 [C1_TOP_CAP_RADIAL_SPLIT.md](C1_TOP_CAP_RADIAL_SPLIT.md) further excludes
 the complete top-cap placement in which the ray from \(O\) to an
@@ -516,7 +519,6 @@ triangles \(HFX\) and \(CDX\) each have doubled area less than
 \(3s\), where \(X\) is the unique cap point. Thus the remaining
 point lies inside \(OHCX\). After reflection it shares \(OCX\)
 with one lower point, giving \(hc,cX_y\ge(4+2\sqrt3)s\).
-The coupled one-cap configuration with those area bounds is still open.
 
 [C1_TOP_CAP_OF_SPLIT.md](C1_TOP_CAP_OF_SPLIT.md) closes the complete
 alternative in which the two lower points straddle \(OF\), after
@@ -524,6 +526,23 @@ the reflection that puts the upper interior point in \(OCX\).
 The remaining one-cap placement therefore has both lower points in
 \(OHC\cap OCF\), on opposite sides of \(OX\), and the two
 actual containing-area bounds just stated.
+
+The two isolated-endpoint alternatives are excluded in
+[C1_TOP_CAP_COMMON_CELL.md](C1_TOP_CAP_COMMON_CELL.md), and the
+containment alternative in
+[C1_TOP_CAP_CONTAINMENT_PAIR.md](C1_TOP_CAP_CONTAINMENT_PAIR.md).
+[C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md) excludes
+the final same-side alternative and assembles these results into the
+complete exclusion of exactly two lower points, for every hull.
+
+The other lower occupancies have separate complete proofs:
+[C1_ZERO_LOWER.md](C1_ZERO_LOWER.md) excludes zero lower points,
+and Section 6 of
+[C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md) assembles
+the exclusions of exactly one lower point. Three or more lower points
+are impossible by the corner-triangle occupancy theorem in
+[ONE_CORNER.md](ONE_CORNER.md), applied to \(OHC\).
+Together these results exclude the entire competitive C1 family.
 
 ## Verification
 

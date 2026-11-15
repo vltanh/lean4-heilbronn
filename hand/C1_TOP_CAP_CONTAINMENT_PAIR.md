@@ -35,7 +35,9 @@ is impossible. This is the complete middle, or containment, alternative
 for two points in the common sector of the quadrilateral \(OCFH\).
 Together with the isolated-endpoint exclusions in the common-cell
 note, only the case in which \(O,C\) are on the same side of
-\(LM\) remains in this two-lower, one-cap placement.
+\(LM\) remains after these reductions. That final case is fully
+excluded in [C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md),
+which assembles the complete two-lower theorem.
 
 ## 1. The cap forces \(z<1/2\)
 

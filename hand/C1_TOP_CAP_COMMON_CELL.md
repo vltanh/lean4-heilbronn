@@ -43,8 +43,11 @@ the \(OF\)-split note. The point \(P\) will not otherwise be used.
 \(C\) from \(O,H,F\), and it cannot isolate \(O\) from
 \(C,H,F\).
 
-These are complete exclusions of the two indicated pair-line cases. The
-other pair-line cases in the common-cell placement remain separate.
+These are complete exclusions of the two indicated pair-line cases.
+The other two alternatives are excluded in
+[C1_TOP_CAP_CONTAINMENT_PAIR.md](C1_TOP_CAP_CONTAINMENT_PAIR.md) and
+[C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md), which
+also gives the complete two-lower assembly.
 
 ## 1. The isolated-endpoint inequality
 

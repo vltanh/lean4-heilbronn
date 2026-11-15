@@ -150,6 +150,7 @@ placement consequently has the genuine containing-area bounds
 hc\ge(4+2\sqrt3)s,\qquad cy\ge(4+2\sqrt3)s.           \tag{5}
 \]
 
-This is the remaining obligation, not an exclusion of the entire
-one-top-cap case. The theorem above closes both adjacent-ear placements
-without imposing an additional condition on the two lower points.
+The theorem above closes both adjacent-ear placements without imposing
+an additional condition on the two lower points. The reduced placement
+with (5) is fully excluded by the subsequent ray and pair-line arguments
+assembled in [C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md).
