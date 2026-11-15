@@ -998,11 +998,148 @@ proving Theorem 8. The only remaining balanced placement has \(Q\) in
 the sector at \(ER\) and \(S\) in the sector at \(RC\); its coupled
 inequality is still needed for a complete balanced-row exclusion.
 
+## 9. The upper inner-diagonal cell is impossible
+
+Continue with the sole alternating placement left by Theorem 8. Thus
+\(L,P,Q,S\) occupy, respectively, the sectors at the edges
+\(DE,DC,ER,RC\) of the quadrilateral \(D,E,R,C\). In particular,
+\(L,P\) are above \(EC\), \(Q,S\) are below \(EC\),
+\(P,S\) are above \(DR\), and \(L,Q\) are below \(DR\).
+Keep \(q=1-\lambda\), \(v=1-u\), and \(s=7/64\).
+
+The two actual lines \(ES\) and \(LR\) divide this placement into
+four sign alternatives. Here “above \(ES\)” means the side containing
+\(D\), and “above \(LR\)” means the side containing \(C\).
+All the relevant determinants are nonzero under the positive-minimum-area
+hypothesis.
+
+**Theorem 9.** The point \(Q\) cannot be above both \(ES\) and
+\(LR\).
+
+### 9.1. Two containing triangles
+
+First, \(L\) lies in the actual triangle \(DES\). Indeed \(S\)
+is below \(EC\), so the line \(ES\) has slope less than that of
+\(EC\). Since \(L\) is above \(EC\), it is above \(ES\).
+Also \(S\) is to the right of \(BC\), hence
+
+\[
+S_x>b+(1-b)S_y>b(1-S_y).
+\]
+
+The slope of \(DS\) is consequently greater than the slope of
+\(DB\). Since \(L\) is below \(DB\) and to the right of
+\(DE\), it is below \(DS\). These are exactly the three strict
+half-plane inequalities for \(L\in\operatorname{int}(DES)\).
+
+Similarly \(Q\) is below \(DS\): it is below \(DR\), whereas
+\(S\) is above \(DR\), so \(DS\) lies above \(DR\) at every
+positive horizontal coordinate. It follows that
+
+\[
+Q\text{ above }ES\quad\Longrightarrow\quad
+L,Q\in\operatorname{int}(DES).                          \tag{30}
+\]
+
+The reflected statement is
+
+\[
+Q\text{ above }LR\quad\Longrightarrow\quad
+S,Q\in\operatorname{int}(CRL).                          \tag{31}
+\]
+
+For completeness, the shear and reflection (26) exchanges the roles
+\(D\leftrightarrow C\), \(E\leftrightarrow R\), and
+\(L\leftrightarrow S\), while preserving the left, central, and
+right triangle containments used in (30). Its bottom parameter is
+\(b'=g/v\in(0,1)\). The preceding slope argument requires only
+\(0<b'<1\), so it proves (31) as well. Equivalently, each containment
+can be read directly in the four diagonal sectors of \(D,E,R,C\).
+
+### 9.2. The two-interior cost contradicts the bottom ear
+
+Suppose \(Q\) is above both lines. By (30)--(31), the two-interior
+triangle theorem applies to both \(DES\) and \(CRL\). With
+\(K=4+2\sqrt3\), it gives
+
+\[
+qS_x\ge Ks,\qquad
+v(1-L_x)-(1-r)(1-L_y)\ge Ks.                           \tag{32}
+\]
+
+On the other hand, the actual triangles \(CRS\) and \(DEL\)
+have doubled areas at least \(s\). Therefore
+
+\[
+v(1-S_x)-(1-r)(1-S_y)\ge s,
+\qquad qL_x\ge s.
+\]
+
+Since \(0<q,v\le1\), \(r\le1\), and \(L_y,S_y\le1\),
+these imply
+
+\[
+S_x\le1-\frac{s}{v}\le1-s,
+\qquad L_x\ge\frac{s}{q}\ge s.
+\]
+
+Substituting these bounds in (32) yields
+
+\[
+q(1-s)\ge Ks,\qquad v(1-s)\ge Ks.
+\]
+
+The required strict numerical comparison is particularly small:
+
+\[
+Ks>\frac{13}{16}>(1-s)^2,
+\qquad
+\frac{13}{16}-\left(\frac{57}{64}\right)^2
+=\frac{79}{4096}>0.
+\]
+
+Consequently \(q,v>1-s\), or equivalently
+\(\lambda,u<s\). But the actual bottom-ear triangle \(EBR\)
+then satisfies
+
+\[
+s\le\Delta EBR=bu+\lambda(r-b)
+\le bu+\lambda(1-b)<bs+s(1-b)=s,
+\]
+
+a contradiction. This proves Theorem 9. \(\square\)
+
+### 9.3. Exact scope of the remaining alternatives
+
+The proof also gives a useful asymmetric consequence without assuming
+both signs. If \(Q\) is above \(ES\), (30) alone forces
+\(q>1-s\), hence \(\lambda<s\). The bottom-ear inequality then
+forces \(u>s\), or \(v<1-s\). The reflected statement holds if
+\(Q\) is above \(LR\).
+
+Thus the remaining balanced problem has precisely the following three
+inner-line sign alternatives. “Open” denotes a necessary case still to
+exclude, not an assertion that a competitive configuration exists.
+
+| Side of \(ES\) | Side of \(LR\) | Consequence | Status |
+|---|---|---|---|
+| Above | Above | \(q,v>1-s\), contradicting \(\Delta EBR\ge s\) | Excluded |
+| Above | Below | \(q>1-s\), \(v<1-s\) | Open |
+| Below | Above | \(v>1-s\), \(q<1-s\) | Open |
+| Below | Below | Neither of the preceding one-sided conclusions is forced | Open |
+
+This exhausts all possibilities because neither line can contain \(Q\).
+The unbalanced Type-II row \((1,2,3)\) is not addressed by Theorem 9.
+
 ## Verification
 
 [check_type_ii_completion.py](check_type_ii_completion.py) verifies the
 algebraic interval formulas, determinant normalizations, the exact gap
 \(7/128<A_0\), and the reduction of interval depth to the 35 four-subset
 tests, the empty-ear bound (7), and all identities and rational signs in
-the complete quadrilateral-right exclusion. The global geometric dependencies and hull alternatives are proved
-above; they are not conclusions of that diagnostic script.
+the complete quadrilateral-right exclusion. It also checks the universal
+six-point root identities in Section 7, the second-shear identities and
+four-rectangle coefficient table in Section 8, and the area identities
+and exact rational gap used in Section 9. The global geometric
+dependencies, containments, and hull alternatives are proved above; they
+are not conclusions of that diagnostic script.

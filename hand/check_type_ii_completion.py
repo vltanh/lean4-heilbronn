@@ -157,6 +157,23 @@ for bound, upper, g0, g1, g2minus in [
     assert neg_g3 < 0
     assert g2 + neg_g3 / 5 == g2minus > 0
 
+# Upper inner-diagonal cell: both containing triangles force a small ear.
+lx, ly, sx, sy = sp.symbols("lx ly sx sy")
+def determinant(a, b, c):
+    return sp.det(sp.Matrix([[b[0] - a[0], b[1] - a[1]],
+                             [c[0] - a[0], c[1] - a[1]]]))
+
+
+equal(determinant((0, 1), (0, 1 - q), (sx, sy)), q * sx)
+equal(-determinant((1, 1), (rr, 1 - vz), (lx, ly)),
+      vz * (1 - lx) - (1 - rr) * (1 - ly))
+equal(-determinant((1, 1), (rr, 1 - vz), (sx, sy)),
+      vz * (1 - sx) - (1 - rr) * (1 - sy))
+equal(determinant((0, 1 - q), (b, 0), (rr, 1 - vz)),
+      b * (1 - vz) + (1 - q) * (rr - b))
+assert 3 * 14**2 > 24**2  # (4 + 2 sqrt(3)) * (7/64) > 13/16.
+assert sp.Rational(13, 16) - (1 - ss)**2 == sp.Rational(79, 4096) > 0
+
 
 def by_four_subsets(intervals):
     return all(max(intervals[i][0] for i in subset)
@@ -187,4 +204,4 @@ assert by_four_subsets(examples[0])
 assert not by_four_subsets(examples[1])  # Four closed intervals meet at 3.
 assert by_four_subsets(examples[2])
 assert not by_four_subsets(examples[3])
-print("PASS: two-vertex capacity, swept tests, both balanced right-hull exclusions, and second-shear alternating exclusion")
+print("PASS: two-vertex capacity, swept tests, balanced right-quadrilateral, second-shear alternating, and upper inner-cell exclusions")
