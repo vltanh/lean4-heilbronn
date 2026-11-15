@@ -91,10 +91,12 @@ The active itemized checklist is `hand/ROADMAP.md`. Exact attainment,
 normalization, qualitative local optimality, the stated symmetric chamber,
 and the four-corner exclusion have written hand proofs. The new global
 occupancy theorem closes III-3C-U4, and the eight-point endpoint theorem
-closes III-3C-U0 and III-3C-U1. The conditional shear-reversal lemma is also
-proved.
+closes III-3C-U0 and III-3C-U1. Its seven-point strengthening also closes
+III-3C-U2. HP10 now covers both orientations of the stated symmetric family:
+the opposite ADO orientation has the elementary bound m<=1/24<A*.
+The conditional shear-reversal lemma is also proved.
 
-Eight global obligations remain: III-3C-U2, III-3C-U3, C2, II, C1, N6, N7,
+Seven global obligations remain: III-3C-U3, C2, II, C1, N6, N7,
 and the complete asymmetric N8 domain. HP14 (assembly) and HP15 (final
 manuscript audit) depend on those obligations and remain unchecked. The
 computer-assisted completion above is not a substitute for these hand proofs.

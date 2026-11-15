@@ -200,9 +200,9 @@ three occupied corners. Hence the residual exact-three-corner classes are
     (number in U_s, number in L_s) = (0,7),(1,6),(2,5),(3,4),(4,3).
 
 The four-corner alternative is fully excluded in FOUR_CORNERS.md. The stronger
-occupancy theorem excludes (4,3). THREE_CORNERS.md excludes (0,7) and (1,6)
-by a complete eight-point endpoint lemma. Thus the only remaining exact-
-three-corner counts are (2,5) and (3,4); their exclusions are still open.
+occupancy theorem excludes (4,3). THREE_CORNERS.md excludes (0,7), (1,6)
+and (2,5) by a complete seven-point endpoint theorem. Thus the only remaining
+exact-three-corner count is (3,4); its exclusion is still open.
 
 ## 8. Conditional reversal of normalization: HP13
 

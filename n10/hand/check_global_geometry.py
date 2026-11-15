@@ -2,7 +2,8 @@
 """Exact transcription checks for the new n=10 hand geometry.
 
 This script checks polynomial identities and rational comparisons printed in
-TRIANGLE_OCCUPANCY.md and THREE_CORNERS.md. It does not enumerate configurations
+TRIANGLE_OCCUPANCY.md, THREE_CORNERS.md and SYMMETRIC_CHAMBER.md.
+It does not enumerate configurations
 or prove geometric coverage. The written arguments supply those deductions.
 Run locally with: python3 n10/hand/check_global_geometry.py
 """
@@ -66,6 +67,51 @@ def endpoint_cells():
     print("PASS: endpoint-cell identities, cap maximum, exact comparison")
 
 
+def seven_point_endpoint():
+    h, beta, sigma, x, w = sp.symbols("h beta sigma x w")
+    N = (1-beta)*w+(h-beta)*x-(1-beta)*h
+    lower = beta*(1-h)*w/h-beta*(1-h)-sigma+beta*sigma/h
+    zero(N.subs(x, 1-(sigma+w)/h)-lower)
+    q = sp.Rational
+    threshold, u, k0, k1 = q(93, 1000), q(9, 10), q(16461, 20000), q(4371, 5000)
+    F = lambda z: z-threshold/(1-z)
+    M, M1 = F(k0), F(k1)
+    assert M == q(21055479, 70780000)
+    assert M1 == q(424359, 3145000)
+    assert threshold-(M1-threshold) == q(160611, 3145000) > 0
+    assert (1-k0)**2 < threshold
+    assert 3*threshold < M < 4*threshold
+    B = lambda z: 1-2*threshold/u-(2/u-1)*z
+    assert B(M) > 0
+    assert B(3*threshold) == q(1357, 3000)
+    bound = (M-threshold)*B(3*threshold)
+    assert bound == q(6546592741, 70780000000)
+    assert threshold-bound == q(35947259, 70780000000) > 0
+    assert q(1, 11)-q(55, 608) == q(3, 6688) > 0
+    # Regression check of the four explicitly proved vertex-pair rows.
+    lo = [(0, threshold), (B(threshold), threshold), (0, M), (B(M), M)]
+    hi = [(0, 3*threshold), (B(3*threshold), 3*threshold), (0, M), (B(M), M)]
+    determinant = lambda p, q, r: ((q[0]-p[0])*(r[1]-p[1])
+                                   -(q[1]-p[1])*(r[0]-p[0]))
+    assert max(abs(determinant(p, q, r)) for p in hi for q in hi for r in lo) == bound
+    print("PASS: seven-point strip identity, both exact gaps, trapezoid table")
+
+
+def symmetric_opposite_orientation():
+    a, b, t = sp.symbols("a b t")
+    c = 1-a-b
+    A, B, D, G, H, O = (sp.Matrix(p) for p in
+                         [(0, a), (a, 0), (1, b), (b, 1), (0, 1-b), (t, t)])
+    zero(-2*area(A, D, O)-(a*(1-2*t)-c*t))
+    zero(-2*area(A, H, O)-c*t)
+    zero(2*area(A, G, H)-b*c)
+    zero(2*area(A, B, O)-a*(2*t-a))
+    zero(a*(2*t-a)+a*(1-2*t)-c*t-(a*(1-a)-c*t))
+    print("PASS: opposite symmetric orientation area formulas")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
+    seven_point_endpoint()
+    symmetric_opposite_orientation()

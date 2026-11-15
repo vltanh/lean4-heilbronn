@@ -18,7 +18,7 @@ not a Lean-kernel formalization. All computation was local, with no CI.
 ## Start here
 
 - [hand/ROADMAP.md](hand/ROADMAP.md): the active hand-proof checklist, including
-  the completed U0, U1 and U4 three-corner cases. The unrestricted hand proof
+  the completed U0, U1, U2 and U4 three-corner cases. The unrestricted hand proof
   remains open; the computational completion below does not check those boxes.
 - [PROOF.md](PROOF.md): theorem, exhaustive reduction, proof assembly, equality.
 - [STATUS.md](STATUS.md): completed gates and exact counts.

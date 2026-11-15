@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 2 — November 15, 2026.
+Checkpoint 3 — November 15, 2026.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -55,14 +55,15 @@ and relabeling. The unrestricted hand upper bound is NOT yet complete.
       optimality, allowing all twenty coordinates to move.
       Proof: LOCAL_RIGIDITY.md, Section 4 and the general lemma.
 - [x] HP10. Prove the sharp upper bound and equality classification throughout
-      the candidate-oriented symmetric three-parameter chamber.
+      the complete stated symmetric three-parameter family, including both
+      ADO orientations. The opposite orientation has m<=1/24<A*.
       Proof: SYMMETRIC_CHAMBER.md.
 
 HP09 proves existence of a positive neighborhood radius. It does NOT reprove
 the explicit radius 1/2000 used in the old exact checker. Quantifying a radius
 is a separate optional task unless later hand localization requires one.
-HP10 does not prove that arbitrary maximizers are symmetric, and it states
-its ADO orientation hypothesis explicitly.
+HP10 does not prove that arbitrary maximizers are symmetric. Its former ADO
+orientation restriction is now discharged by a complete two-case inequality.
 
 ## Gate III — global cases, with real closures recorded
 
@@ -79,7 +80,8 @@ its ADO orientation hypothesis explicitly.
         Proof: THREE_CORNERS.md, eight-point endpoint lemma.
   - [x] III-3C-U1. Exactly three corners: 1 upper and 6 lower free points.
         Proof: THREE_CORNERS.md, the same complete endpoint lemma.
-  - [ ] III-3C-U2. Exactly three corners: 2 upper and 5 lower free points.
+  - [x] III-3C-U2. Exactly three corners: 2 upper and 5 lower free points.
+        Proof: THREE_CORNERS.md, Sections 5–9, seven-point endpoint theorem.
   - [ ] III-3C-U3. Exactly three corners: 3 upper and 4 lower free points.
   - [x] III-3C-U4. Exactly three corners: 4 upper and 3 lower free points.
         Proof: TRIANGLE_OCCUPANCY.md. In fact any triangle containing
@@ -92,7 +94,7 @@ For these five residual classes use corners (0,0),(0,1),(1,1), s=2A*, and
 
 The quoted counts are in these two explicit triangles. A competitive point
 cannot lie on the separating diagonal. The count split is proved exhaustive.
-Only U2 and U3 remain unresolved in the exactly-three-corner family.
+Only U3 remains unresolved in the exactly-three-corner family.
 
 ### Other corner and corner-free families
 
@@ -108,9 +110,9 @@ Only U2 and U3 remain unresolved in the exactly-three-corner family.
       orientation of the two interior points. HP10 closes only its stated
       symmetric subchamber, not this parent item.
 
-There are now EIGHT named unresolved global obligations: the two remaining
-exact-three-corner count classes and the six entries immediately above. These
-are continuous-domain obligations, not eight small arithmetic checks. Each must
+There are now SEVEN named unresolved global obligations: the remaining
+exact-three-corner class U3 and the six entries immediately above. These
+are continuous-domain obligations, not seven small arithmetic checks. Each must
 admit a uniform argument or an explicitly exhaustive further subdivision.
 New subdivisions must retain their parent until all children close. No bound
 on the eventual number of smaller subcases is claimed.
@@ -139,14 +141,14 @@ Ordinary averaging is not a justified reduction.
 | ATTAINMENT.md | Exact lower bound, 16 active areas, 104 strict gaps |
 | NORMALIZATION.md | Exhaustive reduction, boundary-count catalogue, occupancy cut, conditional equality transfer |
 | LOCAL_RIGIDITY.md | Strict local optimality without stored dual certificates; existential radius |
-| SYMMETRIC_CHAMBER.md | Sharp bound and equality in the expressly stated symmetric sign chamber |
+| SYMMETRIC_CHAMBER.md | Sharp bound and equality throughout the stated symmetric family; both orientations |
 | FOUR_CORNERS.md | Full four-corner exclusion with bound (sqrt(33)-5)/16 |
 | TRIANGLE_OCCUPANCY.md | Universal bound for a triangle containing four points; full U4 exclusion |
-| THREE_CORNERS.md | Eight-point endpoint lemma; full U0 and U1 exclusions |
+| THREE_CORNERS.md | Seven-point endpoint theorem; full U0, U1 and U2 exclusions |
 
 ## Next attack and stopping rules
 
-The next target is the exact-three-corner family, now reduced to U2 and U3.
+The next target is the exact-three-corner family, now reduced to U3.
 The stronger global occupancy bound may also be used in the other families.
 A successful next checkpoint should close one or more whole entries,
 not merely produce another local lemma disconnected from that ledger.

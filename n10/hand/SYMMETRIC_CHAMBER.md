@@ -1,4 +1,4 @@
-# Sharp hand proof in the candidate-oriented symmetric chamber
+# Sharp hand proof for the complete symmetric three-parameter family
 
 This closes HP10. It is a complete proof for the domain stated below, not a
 claim that an arbitrary maximizing configuration is symmetric. No averaging
@@ -14,19 +14,43 @@ Let a,b>=0, a+b<=1 and 0<=t<=1/2. Consider
     G=(b,1),        H=(0,1-b),
     O=(t,t),        P=(1-t,1-t).
 
-Assume also the explicit orientation condition
-
-    t(1-b+a)-a >= 0.                              (1)
-
 The minimum ordinary triangle area is at most A*. Equality occurs precisely
 at t=g, b=g/2 and a=1-3g+2g^2, in this fixed parametrization.
 
-Condition (1) selects the candidate's sign for triangle ADO. The opposite
-orientation is not discarded from the unrestricted problem; it remains in
-the complete N8 obligation. Square symmetries and relabeling can of course
-be applied to the stated theorem.
+There is no orientation hypothesis. Section 2 excludes the sign opposite
+to the candidate's by the strict bound 1/24; Sections 3–6 prove the sharp
+bound in the candidate's orientation. Square symmetries and relabeling can
+of course be applied to the stated theorem.
 
-## 2. Three actual triangles suffice for the upper bound
+## 2. Exclude the opposite ADO orientation
+
+Put c=1-a-b>=0 and let s be twice the minimum ordinary triangle area.
+Suppose the signed doubled determinant of ADO is nonpositive:
+
+    t(1-b+a)-a <= 0.
+
+The actual triangles AHO, AGH and ADO give
+
+    s<=ct,     s<=bc,     s<=a(1-2t)-ct.                 (1)
+
+If 2t<=a, the first two inequalities yield
+
+    3s <= ac+bc = c(1-c) <= 1/4.
+
+If 2t>=a, triangle ABO has unsigned doubled area a(2t-a). Adding its
+inequality to the last one in (1), and using ct>=s, gives instead
+
+    3s <= a(1-a) <= 1/4.
+
+These two cases are exhaustive, including equality. Thus s<=1/12 and the
+minimum ordinary area is at most 1/24<A*. The comparison follows already
+from A*>1/22. Degenerate cases give s=0 and require no division.
+
+Every competitive configuration in this symmetric family must therefore
+have t(1-b+a)-a>0. This proves the missing orientation reduction inside
+the entire stated three-parameter family.
+
+## 3. Three actual triangles suffice in the remaining orientation
 
 Let s be twice the minimum ordinary triangle area. Direct determinants give
 
@@ -35,9 +59,9 @@ Let s be twice the minimum ordinary triangle area. Direct determinants give
     s <= t(1-b+a)-a                      from ADO.       (2)
 
 The first two expressions are nonnegative on the domain; the last one is
-nonnegative by (1). Thus these are bounds on unsigned doubled areas, not
+positive by Section 2. Thus these are bounds on unsigned doubled areas, not
 an assumed signed relaxation. If s=0 the upper bound is immediate.
-The cases t=0 and t=1/2 also give s=0 from (1) or (2).
+The cases t=0 and t=1/2 cannot be competitive by Section 2 or (2).
 
 For 0<t<1/2 put d=1-2t>0. The first inequality gives a>=s/d. Substituting
 this into the other two inequalities yields
@@ -49,7 +73,7 @@ For example, the ADO inequality is
 s<=t(1-b)-(1-t)a<=t(1-b)-(1-t)s/d, which gives U1.
 All denominators in (3) are positive.
 
-## 3. The main parameter range: 0<t<=2/5
+## 4. The main parameter range: 0<t<=2/5
 
 Define
 
@@ -86,7 +110,7 @@ shows
 
 This proves the sharp upper bound in the main range.
 
-## 4. The remaining range: 2/5<=t<1/2
+## 5. The remaining range: 2/5<=t<1/2
 
 Here d=1-2t<=1/5. Suppose s>=1/11. The first inequality of (2) gives
 a>=5/11. For every b,
@@ -101,10 +125,11 @@ The exact root bounds in ATTAINMENT.md give
 
 Therefore this whole parameter range has strictly smaller minimum area.
 
-## 5. Equality
+## 6. Equality
 
-If s=2A*, Section 4 excludes t>=2/5, and the unique scalar maximum in
-Section 3 forces t=g. In either b-branch, strict monotonicity forces b=g/2.
+If s=2A*, Section 2 fixes the orientation, Section 5 excludes t>=2/5,
+and the unique scalar maximum in Section 4 forces t=g. In either b-branch,
+strict monotonicity forces b=g/2.
 
 The first and third inequalities in (2) then pin down a:
 
@@ -120,8 +145,9 @@ within this chamber is complete.
 
 ## Remaining global dependency
 
-This theorem covers a continuous three-parameter chamber, not just a small
-neighborhood. It still does not close the asymmetric eight-boundary domain.
+This theorem covers the complete stated symmetric three-parameter family,
+including both ADO orientations. It still does not close the asymmetric
+eight-boundary domain.
 To use it as the terminal step of a global hand proof, one must prove that
 a maximizer belongs to this chamber up to symmetry and relabeling, or prove
 the full asymmetric bound by another argument. That step remains open.
