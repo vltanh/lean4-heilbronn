@@ -3,6 +3,7 @@ from fractions import Fraction as F
 from itertools import product, combinations, combinations_with_replacement
 import json
 from pathlib import Path
+from check_c1_zero_lower import verify_caps
 from check_c1_zero_lower_certificates import (
     const, add, scale, sub, mul, area, VARS, ZERO, ONE, POINTS, TRIPLES, AREAS,
     W, VARIABLES, WORDS, ALL_WORDS, sign, inside, oriented_sign, cube_upper)
@@ -141,6 +142,7 @@ def cyclic_consistent(case,additional):
     return True
 
 def verify_bounds():
+    verify_caps()
     assert len(ALL_WORDS)==16 and len(WORDS)==11
     assert len(CASES)==62
     assert [sum(ca[0]==kind for ca in CASES) for kind in ('rt','rl','tl')]==[20,20,22]
@@ -150,12 +152,32 @@ def verify_bounds():
     assert S/(1-S)==F(8,65) and S/(1-3*S)==F(8,49) and S/(1-4*S)==F(8,41)
     assert (1-RHO)/(4*S)==F(803,1920)
     assert 3>F(25,9) # sqrt(3)>5/3.
+    assert AREAS[(2,3,4)]==add(sub(ONE,h),mul(f,sub(h,d)))
+    assert AREAS[(1,2,3)]==add(sub(ONE,c),mul(d,sub(c,f)))
+    x,y=XY[0]
+    right=scale(AREAS[(1,2,5)],-1)
+    assert sub(mul(sub(ONE,c),sub(d,y)),right)==mul(d,sub(ONE,x))
+    assert sub(mul(d,sub(x,c)),right)==mul(sub(ONE,c),y)
+    top=scale(AREAS[(2,3,5)],-1)
+    assert sub(mul(sub(ONE,d),sub(x,f)),top)==mul(sub(ONE,f),sub(ONE,y))
+    assert sub(mul(sub(ONE,f),sub(y,d)),top)==mul(sub(ONE,d),sub(ONE,x))
+    left=scale(AREAS[(3,4,5)],-1)
+    assert sub(mul(sub(ONE,h),sub(f,x)),left)==mul(f,sub(ONE,y))
+    assert sub(mul(f,sub(y,h)),left)==mul(sub(ONE,h),x)
     for ca in CASES:
         assert cost_specs(ca) is not None and cyclic_consistent(ca,())
         ws=words(ca)
         # X,Y and each OHC vertex have the same positive orientation.
         sg=base_signs(ca)
         assert all(sg[(v,5,6)]==1 for v in (0,1,4))
+    rows=[]
+    for u,r,t,l in product(range(4),repeat=4):
+        if u+r+t+l!=3 or u>1 or r>2 or l>1:continue
+        if r==2 and (l or t>1):continue
+        if l and t>1 or r and t>2:continue
+        rows.append((u,r,t,l))
+    assert set(rows)=={(1,2,0,0),(0,2,1,0),(1,1,1,0),(1,1,0,1),
+                      (1,0,1,1),(1,0,2,0),(0,1,2,0),(0,1,1,1),(0,0,3,0)}
     return True
 
 
@@ -253,10 +275,6 @@ def verify_data(data,require_complete=True):
 
 if __name__=='__main__':
     path=Path(__file__).with_name('c1_one_lower_mixed_caps_certificates.json')
-    if path.exists():
-        print(verify_data(json.loads(path.read_text())))
-    else:
-        verify_bounds()
-        print('mixed-cap exact common bounds and 62-case cover pass; final data not present')
+    print(verify_data(json.loads(path.read_text())))
 
 

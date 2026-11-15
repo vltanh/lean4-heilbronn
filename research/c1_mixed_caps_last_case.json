@@ -1,5 +1,5 @@
 {
-  "status": "unresolved_discovery_checkpoint",
+  "status": "closed_conditional_cell",
   "case": [
     "rt",
     1,
@@ -372,5 +372,5 @@
       -1
     ]
   ],
-  "note": "The full-sign cubic relaxation is feasible. No exclusion certificate for this cell is claimed."
+  "note": "Both closed half-spaces Q_x<=5/8 and Q_x>=5/8 have fixed exact certificates in c1_mixed_caps_last_certificates.json; the complete 62-case theorem is in hand/C1_ONE_LOWER_MIXED_CAPS.md."
 }

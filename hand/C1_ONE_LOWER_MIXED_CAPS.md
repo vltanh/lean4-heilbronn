@@ -2,10 +2,9 @@
 
 This note treats the three rows
 \((U,R,T,L_{\rm cap})=(1,1,1,0),(1,1,0,1),(1,0,1,1)\)
-in the one-lower occupancy ledger. Its present checkpoint establishes
-the exact model and the finite geometric cover. A final certificate
-theorem will be added only after every surviving cell has been
-regenerated and checked with rational arithmetic.
+in the one-lower occupancy ledger. Theorem 1 below excludes all three
+rows by a complete finite cover and fixed rational polynomial
+certificates.
 
 Use the actual anchors
 \[
@@ -227,9 +226,11 @@ cost \(s,3s,\rho\) if respectively zero, one, or two additional
 actual points are certified to lie inside it. Containment is checked
 by the three oriented edge signs. Every coordinate is in \([0,1]\).
 
-One especially constrained word is
+For any of the three cap classes, consider the lower word and either
+of the following upper words:
 \[
-RT,\qquad L:(2,3,2,2,1),\quad Q:(2,1,2,3,2).
+L:(2,3,2,2,1),\qquad
+Q:(2,1,2,3,2)\ \text{or}\ (2,2,2,2,2).
 \]
 Both points belong to both \(ODH\) and \(ODF\). Therefore
 \[
@@ -237,14 +238,164 @@ h\ge\rho,\qquad1-df\ge\rho,\qquad
 f\le\frac{1-\rho}{4s}=\frac{803}{1920}.                   \tag{15}
 \]
 The last step uses (2). The two affine factors in (15) can be
-included directly in every cubic product for this whole word;
+included directly in every cubic product for these six whole words;
 no assumption on the line \(LQ\) is needed.
 
 The discovery script in
 [../research/c1_mixed_caps_search.py](../research/c1_mixed_caps_search.py)
 uses floating linear programs to seek certificates. Such programs
-and their status codes are not proofs. A successful final package
-must give fixed positive rational combinations of the proved
-nonnegative factors and costs, then check their polynomial
-expansions with exact arithmetic over an exhaustive finite cover.
+and their status codes are not proofs. Section 5 supplies the fixed
+positive rational combinations and their exact verification over
+the complete finite cover.
+
+## 5. Complete exclusion of the three mixed-cap rows
+
+**Theorem 1.** None of the three configurations \(RT,RL,TL\)
+described above has minimum actual triangle area at least \(A_0\).
+The result allows additional contacts on the sides of the square.
+
+The full fixed rational table is
+[c1_one_lower_mixed_caps_certificates.json](c1_one_lower_mixed_caps_certificates.json).
+Its variables, in order, are
+\[
+h,c,d,f,\ x_X,y_X,\ x_Y,y_Y,\ \ell_x,\ell_y,\ q_x,q_y.
+\]
+Every variable lies in \([0,1]\). For each of the sixty-two
+word pairs, the table supplies a finite binary tree. A sign branch
+splits an actual nonzero determinant into its positive and negative
+possibilities. There is exactly one additional scalar branch,
+\[
+q_x\le5/8\qquad\hbox{or}\qquad q_x\ge5/8.                  \tag{16}
+\]
+These are closed half-spaces and cover their common boundary.
+The branch occurs in the \(RT\) word
+\(L=(2,3,2,2,1),Q=(2,1,2,3,2)\). The inequalities (15)
+apply throughout that word.
+
+At every certificate leaf the table gives a polynomial
+\[
+\mathcal P
+ =\sum_\alpha a_\alpha\prod_{i\in I_\alpha}L_i
+  +\sum_\beta b_\beta B_\beta M_\beta
+  +\sum_\gamma c_\gamma C_\gamma,                         \tag{17}
+\]
+with all coefficients positive rational numbers. Here:
+
+- The \(L_i\) are the proved affine factors from Sections 1–4,
+  together with the appropriate factor from (16) when applicable;
+  each product has between one and three factors.
+- Each \(B_\beta\) is a proved quadratic cost: a signed actual
+  area minus its occupancy cost, one of the upper bounds (6),
+  (7), (12), or the area bounds (1), (5).
+  The multiplier \(M_\beta\) is \(1\) or one affine factor.
+- The \(C_\gamma\) are the applicable cubic support costs (8).
+
+Thus every summand in (17) is nonnegative in its cell. The
+dictionary format records a positive integer numerator for each
+coefficient and one positive integer denominator per certificate.
+
+Expand (17) as \(\sum_m p_m z^m\), where the total degree is at
+most three. Since all variables belong to \([0,1]\),
+\[
+0\le\mathcal P
+ \le p_0+\sum_{m\ne0}\max(p_m,0).                         \tag{18}
+\]
+The exact value of the right-hand side is stored for each
+certificate and independently recomputed by the companion checker.
+Every value is smaller than \(-3/4\), a contradiction.
+
+The complete verification has the following exact totals:
+
+| Item | Count |
+|---|---:|
+| Geometric word pairs | 62 |
+| Fixed rational certificates | 134 |
+| Positive rational terms | 20,543 |
+| Terminal branches | 136 |
+| Scalar branch locations | 1 |
+
+Two terminal branches are excluded directly by the geometric
+pruning rules in Section 3; every other terminal branch has a
+certificate. The largest right-hand side of (18) is
+\[
+-\frac{14173057434018160863047671}
+       {14173058272635861860352000}<-\frac34.              \tag{19}
+\]
+
+The checker reconstructs all sixty-two initial words, all actual
+determinants and occupancy costs, every branch, and every rational
+polynomial. It verifies that every listed node is reached exactly
+once and that every initial word is covered. The fixed verification
+uses only integer and rational arithmetic from the Python standard
+library; it invokes no optimizer.
+
+For each possible placement, the finite cover therefore ends at a
+proved impossibility or the contradiction (18)–(19). This proves
+the theorem.
+
+### Verification
+
+Run
+
+\[
+\texttt{python hand/check\_c1\_one\_lower\_mixed\_caps.py}.
+\]
+
+The discovery and export scripts under \(\texttt{research/}\)
+are retained to document how the fixed table was found. The proof
+consists of the geometric inequalities and exhaustive cover above,
+together with the explicit rational identities in the fixed table.
+
+## 6. Complete one-lower C1 assembly
+
+**Theorem 2.** A competitive C1 configuration cannot have exactly
+one of its four free points in \(OHC\).
+
+Transpose first if necessary to arrange \(f\le d\). This preserves
+the C1 hypotheses and lower occupancy. If none of the other three
+points is exterior to \(OCDFH\), then all three lie in \(HCDF\).
+The seven-point quadrilateral bound would give \(W\ge10s>1\),
+contrary to \(W\le1\). If exactly one is exterior, the complete
+single-top and single-side exclusions apply:
+[C1_ONE_LOWER_TOP_CAP.md](C1_ONE_LOWER_TOP_CAP.md) and
+[C1_ONE_LOWER_SIDE_CAP.md](C1_ONE_LOWER_SIDE_CAP.md).
+
+It remains to have at least two exterior points. Write
+\((U,R,T,L_{\rm cap})\) for the occupancies of the three nonlower
+points. The occupancy-independent cap lemmas from
+[C1_ZERO_LOWER.md](C1_ZERO_LOWER.md) give
+\(R\le2,\ L_{\rm cap}\le1,\ T\le3\). Two right-cap points forbid
+a left-cap point and allow at most one top-cap point. A left-cap
+point allows at most one top-cap point, and any right-cap point
+allows at most two top-cap points. Together with
+\[
+U+R+T+L_{\rm cap}=3,\qquad U\le1,
+\]
+these leave exactly the following nine rows.
+
+| Occupancy \((U,R,T,L_{\rm cap})\) | Complete exclusion |
+|---|---|
+| \((1,2,0,0)\) | [C1_ONE_LOWER_RIGHT_PAIR.md](C1_ONE_LOWER_RIGHT_PAIR.md) |
+| \((0,2,1,0)\) | [C1_ONE_LOWER_RIGHT_PAIR.md](C1_ONE_LOWER_RIGHT_PAIR.md) |
+| \((1,1,1,0)\) | Theorem 1 above |
+| \((1,1,0,1)\) | Theorem 1 above |
+| \((1,0,1,1)\) | Theorem 1 above |
+| \((1,0,2,0)\) | [C1_ONE_LOWER_TOP_TRIANGLE.md](C1_ONE_LOWER_TOP_TRIANGLE.md) for a triangular top hull; [C1_ONE_LOWER_CONVEX_TOP.md](C1_ONE_LOWER_CONVEX_TOP.md) for a quadrilateral top hull |
+| \((0,1,2,0)\) | [C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md](C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md) for a triangular top hull; [C1_ONE_LOWER_EIGHT_HULL.md](C1_ONE_LOWER_EIGHT_HULL.md) for a quadrilateral top hull |
+| \((0,1,1,1)\) | [C1_ONE_LOWER_EIGHT_HULL.md](C1_ONE_LOWER_EIGHT_HULL.md) |
+| \((0,0,3,0)\) | [C1_ONE_LOWER_CONVEX_TOP.md](C1_ONE_LOWER_CONVEX_TOP.md) |
+
+For two top-cap points, “top hull” means the convex hull of those
+points together with \(D,F\). Both anchors are hull vertices, so
+the triangular and quadrilateral alternatives are exhaustive.
+With one point in each cap, the five anchors and three cap points
+are all hull vertices, giving the eight-vertex case in the table.
+The three-top theorem includes every possible top hull.
+
+Each listed row is therefore excluded in its entirety. The
+companion checker also verifies this nine-row enumeration directly
+from the stated integer occupancy restrictions. This proves
+Theorem 2.
+
+
 
