@@ -1,4 +1,4 @@
-# Two-vertex triangle capacity and swept Type-II restrictions
+# Type-II completion: capacity and the complete balanced-row exclusion
 
 ## Scope
 
@@ -9,11 +9,14 @@ A_0=\frac{9\sqrt{65}-55}{320}.
 \]
 
 This note strengthens the global triangle-capacity theorem to containers
-whose third vertex need not be a configuration point. It then gives an
-exact interval formulation for every Type-II configuration. It does not
-claim that the remaining Type-II count classes are closed.
+whose third vertex need not be a configuration point, gives an exact
+interval formulation for every Type-II configuration, and excludes the
+entire balanced count row \((2,2,2)\). The complete balanced-row
+assembly is Theorem 11. Of the count rows left by `TYPE_II.md`, only the
+unbalanced row \((1,2,3)\) remains open.
 
-The two inputs are already proved in this directory:
+The initial capacity theorem has two inputs already proved in this
+directory:
 
 1. In a nine-point configuration in the unit square with minimum triangle
    area at least \(A_0\), an actual triangle contains at most two further
@@ -995,8 +998,8 @@ therefore excludes the opposite-side alternative as well.
 The same-side and opposite-side alternatives exhaust the line \(PQ\)
 relative to \(B',E'\). Both contradict the minimum-area hypothesis,
 proving Theorem 8. The only remaining balanced placement has \(Q\) in
-the sector at \(ER\) and \(S\) in the sector at \(RC\); its coupled
-inequality is still needed for a complete balanced-row exclusion.
+the sector at \(ER\) and \(S\) in the sector at \(RC\).
+Sections 9--11 and their two companion notes exclude this final placement.
 
 ## 9. The upper inner-diagonal cell is impossible
 
@@ -1118,15 +1121,14 @@ forces \(u>s\), or \(v<1-s\). The reflected statement holds if
 \(Q\) is above \(LR\).
 
 Thus the remaining balanced problem has precisely the following
-inner-line sign alternatives. The later results listed in the final
-column record their current status. “Open” denotes a necessary case still
-to exclude, not an assertion that a competitive configuration exists.
+inner-line sign alternatives. Each is now excluded by the result in the
+final column.
 
 | Side of \(ES\) | Side of \(LR\) | Consequence | Status |
 |---|---|---|---|
 | Above | Above | \(q,v>1-s\), contradicting \(\Delta EBR\ge s\) | Excluded |
 | Above | Below | \(q>1-s\), \(v<1-s\) | Excluded by Section 10 below |
-| Below | Above | \(v>1-s\), \(q<1-s\) | Open |
+| Below | Above | \(v>1-s\), \(q<1-s\) | Excluded by [BALANCED_RIGHT_MIXED.md](BALANCED_RIGHT_MIXED.md) |
 | Below | Below | Neither of the preceding one-sided conclusions is forced | Excluded by [BALANCED_BOTTOM_INNER_SECTOR.md](BALANCED_BOTTOM_INNER_SECTOR.md) |
 
 This exhausts all possibilities because neither line can contain \(Q\).
@@ -1292,6 +1294,79 @@ the already established global reduction and the lower bound on \(v\).
 It excludes the whole left mixed cell, including every placement of the
 line through \(L,P\) relative to the anchors.
 
+## 11. The complete balanced count row is excluded
+
+**Theorem 11.** Let nine points in the unit square have the Type-II
+normalization
+
+\[
+D=(0,1),\quad C=(1,1),\quad E=(0,\lambda),\quad B=(b,0),
+\qquad 0<b\le\frac12,\quad0<\lambda<1.
+\]
+
+Suppose the left, central, and right containers determined by \(DB\)
+and \(BC\) contain respectively two, two, and two of the six points
+other than \(D,C,B\). Then some actual triangle has area strictly
+less than \(A_0\).
+
+**Proof.** Suppose instead that all actual triangle areas are at least
+\(A_0\). In particular every doubled area is greater than
+\(s=7/64\), and all global capacity results for a competitive
+nine-point configuration apply.
+
+Write the left points as \(E,L\), the central points as \(P,Q\),
+and the right points as \(R,S\), relabeling within each pair when
+needed. The balanced normalization has \(b\le1/2\), as in
+[TYPE_II.md](TYPE_II.md).
+
+The theorem and cut restrictions in
+[TYPE_II_BALANCED.md](TYPE_II_BALANCED.md) force the left hull to be
+the triangle \(DBE\), with \(L\) strictly inside it and above
+\(CE\). They also force exactly one central point above \(CE\);
+call that point \(P\), and call the point below it \(Q\).
+
+The right four-point hull on \(B,C,R,S\) is either triangular or
+quadrilateral. Section 6 excludes its entire quadrilateral alternative.
+In the triangular alternative, label its third hull vertex \(R\),
+so \(S\) is strictly inside \(BCR\).
+
+Section 5 proves that the lower ear \(EBR\) contains none of the
+free points. The eight points other than \(B\) therefore have the
+quadrilateral hull \(D,E,R,C\), and its four interior points are
+\(L,P,Q,S\). The global theorem in
+[FOUR_INTERIOR_QUADRILATERALS.md](FOUR_INTERIOR_QUADRILATERALS.md)
+forces exactly one of these points in each open diagonal sector.
+
+The known original container positions put \(L\) in the sector at
+\(DE\) and \(P\) in the sector at \(DC\). Theorem 8 excludes
+the assignment with \(S\) at \(ER\) and \(Q\) at \(RC\).
+The sole surviving assignment has \(Q\) at \(ER\) and \(S\)
+at \(RC\).
+
+Finally the actual lines \(ES\) and \(LR\) leave exactly four
+possibilities for \(Q\), since a point on either line would make an
+actual triangle degenerate. Theorem 9 excludes the cell above both
+lines. Theorem 10 excludes the cell above \(ES\) and below \(LR\).
+[BALANCED_RIGHT_MIXED.md](BALANCED_RIGHT_MIXED.md) excludes the cell
+below \(ES\) and above \(LR\).
+[BALANCED_BOTTOM_INNER_SECTOR.md](BALANCED_BOTTOM_INNER_SECTOR.md)
+excludes the cell below both lines. Every possibility gives a
+contradiction, proving the theorem. \(\square\)
+
+**Type-II consequence.** Section 8 of
+[TYPE_II.md](TYPE_II.md) had reduced every competitive Type-II
+configuration to the two count rows \((1,2,3)\) and \((2,2,2)\).
+Theorem 11 removes the second row. Thus any remaining Type-II
+configuration must have count
+
+\[
+\boxed{(\ell,c,r)=(1,2,3).}
+\]
+
+This is a complete exclusion of the balanced row, not a numerical search
+over its coordinates. The unbalanced row still requires its own coupled
+argument; no conclusion about that row is inferred from Theorem 11.
+
 ## Verification
 
 [check_type_ii_completion.py](check_type_ii_completion.py) verifies the
@@ -1305,4 +1380,9 @@ and exact rational gap used in Section 9. It also verifies the
 barycentric affine identity, endpoint factorization, and negative
 rational upper bound in Section 10. The global geometric
 dependencies, containments, and hull alternatives are proved above; they
-are not conclusions of that diagnostic script.
+are not conclusions of that diagnostic script. The two companion notes
+have their own exact algebra diagnostics,
+[check_balanced_right_mixed.py](check_balanced_right_mixed.py) and
+[check_balanced_bottom_inner_sector.py](check_balanced_bottom_inner_sector.py).
+Theorem 11 is the exhaustive assembly of these hand proofs and requires
+no further coordinate enumeration.
