@@ -176,16 +176,181 @@ assignments, with the names \(P,R\) interchangeable, are
 \]
 
 The first two are the mixed placements in \(HCD\) and \(HCF\);
-the last two are the opposite-sector placements. These assignments
-are not excluded by the present note. The lower point may be assumed
+the last two are the opposite-sector placements. Section 3 excludes
+the third assignment. The lower point may be assumed
 to lie in \(AHC\) after the empty-\(ABC\) normalization from
 Section 5 of [QUADRILATERAL_HULL.md](QUADRILATERAL_HULL.md).
+
+## 3. The lower and upper opposite sectors cannot both be occupied
+
+**Theorem 3.** Under the exact six-anchor hull hypothesis, the
+assignment \(\{HCJ,DFJ\}\) in (9) is impossible.
+
+Put \(z=hc\). The five actual points \(H,C,A,B,Q\), where \(Q\)
+is the lower free point, lie in the triangle with vertices
+\((0,0),H,C\). Two of its vertices are actual points. The
+endpoint-triangle theorem in [TYPE_II.md](TYPE_II.md), Section 1,
+therefore gives
+
+\[
+z\ge\frac{s}{3-2\sqrt2}>\frac7{11}=:z_0.                   \tag{10}
+\]
+
+For the strict rational comparison, \(3-2\sqrt2<11/64\)
+follows from \(\sqrt2>181/128\), verified by
+\(2\cdot128^2-181^2=7>0\). The upper quadrilateral contains
+both upper points, so Theorem 1 of
+[QUADRILATERAL_HULL.md](QUADRILATERAL_HULL.md) gives
+
+\[
+8s\le W\le1.                                               \tag{11}
+\]
+
+In fact (10)--(11), together with the six anchors, forbid any free
+point in the sector \(DFJ\). The other upper point is used only in
+obtaining (11).
+
+### The determinant inequality in the \(DF\) sector
+
+Set
+
+\[
+p=cd,\qquad q=hf,\qquad k=\frac{pq}{z}=df,\qquad
+E=[HDF]=1-h+q-k,\qquad G=[CDF]=1-c+p-k.
+\]
+
+All of \(E,G\) are positive, and
+
+\[
+s\le p,q\le z,\qquad W=1-z+p+q-k.                          \tag{12}
+\]
+
+The lower bounds follow from \([BCD]=d(c-b)\ge s\) and
+\([AFH]=f(h-a)\ge s\). The upper bounds use \(d\le h\) and
+\(f\le c\).
+
+If \(R\) belongs to \(DFJ\), it is inside both \(HDF\) and \(CDF\);
+hence \(E,G\ge3s\). The diagonal-sector calculation in
+Section 1 of [QUADRILATERAL_HULL.md](QUADRILATERAL_HULL.md)
+also gives
+
+\[
+\boxed{EG\ge s(W+E+G).}                                   \tag{13}
+\]
+
+To make the conversion explicit, normalize the two full diagonals to
+have length one, and put \(x=[HCF]/W\), \(y=[HCD]/W\).
+The distances from their intersection toward \(D,F\) are \(1-x,1-y\).
+The three positive triangles at \(R\), two using a full diagonal and
+one using the hull edge \(DF\), give
+
+\[
+(1-x)(1-y)\ge\frac{s}{W}(3-x-y).
+\]
+
+Since \(G=W(1-x)\) and \(E=W(1-y)\), multiplication by \(W^2\)
+is exactly (13).
+
+### Eliminate the two remaining individual heights
+
+Define
+
+\[
+U=1-s+q-k,\qquad V=1-s+p-k.
+\]
+
+Then \(E-s=U-h>0\), \(G-s=V-c>0\), and (13) says
+
+\[
+(U-h)(V-c)\ge s(W+s).
+\]
+
+Cauchy--Schwarz gives
+
+\[
+(U-h)(V-c)
+=UV+z-Uc-Vh
+\le(\sqrt{UV}-\sqrt z)^2.
+\]
+
+Both factors on the left are positive, so \(U>h\), \(V>c\),
+and \(\sqrt{UV}>\sqrt z\). Consequently
+
+\[
+\Delta:=UV-z-s(W+s)\ge2\sqrt{zs(W+s)}>0.                   \tag{14}
+\]
+
+The identity
+
+\[
+UV=(1-s)(W+z-s)-(W-s)k                                   \tag{15}
+\]
+
+reduces the other side to two scalar parameters. Indeed,
+\((p-s)(q-s)\ge0\) and (12) imply
+
+\[
+k(z-s)\ge s(W-1+z-s),\qquad
+k\ge s+\frac{s(W-1)}{z-s}.                                \tag{16}
+\]
+
+Since \(W-s>0\), inserting (16) into (15) gives
+
+\[
+\begin{split}
+\Delta\le J(z,W):={}&
+W(1-3s)-sz-s+s^2\\
+&-\frac{s(W-s)(W-1)}{z-s}.                                \tag{17}
+\end{split}
+\]
+
+### One scalar rectangle yields an exact contradiction
+
+For \(z\ge z_0=7/11\) and \(8s\le W\le1\),
+
+\[
+\frac{\partial J}{\partial z}
+=-s+\frac{s(W-s)(W-1)}{(z-s)^2}<0.
+\]
+
+Also \(2W-1-s>0\), so
+
+\[
+\begin{split}
+\frac{\partial J}{\partial W}
+&=1-3s-\frac{s(2W-1-s)}{z-s}\\
+&\ge1-3s-\frac{s(1-s)}{z_0-s}
+=\frac{413}{848}>0.
+\end{split}
+\]
+
+These are scalar relaxations, not movements of configuration points.
+Thus (17) implies
+
+\[
+0<\Delta\le J(z_0,1)
+=1-4s+s^2-sz_0=\frac{22747}{45056}.                        \tag{18}
+\]
+
+But (14) and (11) require
+\(\Delta^2\ge4z_0s(9s)=36z_0s^2\), whereas
+
+\[
+\left(\frac{22747}{45056}\right)^2-36z_0s^2
+=-\frac{38925479}{2030043136}<0.                           \tag{19}
+\]
+
+This contradiction proves Theorem 3. \(\square\)
+
+Only the mixed pairs \(\{HCJ,CDJ\}\), \(\{HCJ,FHJ\}\), and the
+remaining opposite pair \(\{CDJ,FHJ\}\) survive the present note.
+
 
 ## Verification
 
 The optional script [check_six_boundary_hull.py](check_six_boundary_hull.py)
-checks the determinant formulas, the Cauchy difference, the two exact
-rational gaps, and the transposition. The continuous inequalities and
+checks the determinant formulas, the Cauchy differences, exact rational
+gaps, transposition, and all scalar identities in Section 3. The continuous inequalities and
 the complete placement exclusions are proved above; no search or
 parameter sampling is used as a premise.
 

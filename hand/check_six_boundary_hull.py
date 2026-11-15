@@ -36,3 +36,24 @@ assert sp.expand((1-h+f*(h-d)).subs(swap, simultaneous=True)-(1-c+d*(c-f))) == 0
 assert sp.expand(det(H,C,D)+det(H,D,F)-(1-(h-d)*(c-f))) == 0
 print("PASS: six-anchor ear bounds, transpose identities, and exact gaps")
 
+# Section 3: a point in the opposite DF sector.
+z, W, p, r, ss = sp.symbols("z W p r ss")
+kk = p*r/z
+WW = 1-z+p+r-kk
+U, V = 1-ss+r-kk, 1-ss+p-kk
+assert sp.factor(U*V-(1-ss)*(WW+z-ss)+(WW-ss)*kk) == 0
+assert sp.factor(kk*(z-ss)-ss*(WW-1+z-ss)-(p-ss)*(r-ss)) == 0
+klower = ss+ss*(W-1)/(z-ss)
+J = W*(1-3*ss)-ss*z-ss+ss**2-ss*(W-ss)*(W-1)/(z-ss)
+assert sp.factor((1-ss)*(W+z-ss)-(W-ss)*klower-z-ss*(W+ss)-J) == 0
+assert sp.factor(sp.diff(J,z)-(-ss+ss*(W-ss)*(W-1)/(z-ss)**2)) == 0
+assert sp.factor(sp.diff(J,W)-(1-3*ss-ss*(2*W-1-ss)/(z-ss))) == 0
+z0 = sp.Rational(7, 11)
+assert 2*128**2-181**2 == 7
+assert 16*s-1-s > 0
+assert 1-3*s-s*(1-s)/(z0-s) == sp.Rational(413, 848) > 0
+end = J.subs({ss:s,z:z0,W:1})
+assert end == sp.Rational(22747,45056) > 0
+assert end**2-36*z0*s**2 == -sp.Rational(38925479,2030043136) < 0
+print("PASS: the complete HC/DF opposite-sector exclusion")
+
