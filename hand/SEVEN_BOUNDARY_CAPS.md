@@ -258,6 +258,132 @@ still have to be combined. Other placements, including one free point
 in the left quadrilateral and one in the central triangle, cannot be
 discarded merely from the individual capacity bounds.
 
+## 5. No free point in the adjacent bottom ear
+
+**Theorem 4.** Under (1)--(2), the triangle \(ABC\) cannot contain
+either free point at minimum area at least \(7/128\).
+
+**Proof.** A point on an edge gives a zero-area triangle. If a free
+point is strictly inside \(ABC\), subdivision into three actual
+triangles gives
+
+\[
+                         aM\ge3s.                         \tag{12}
+\]
+
+Together with \(bL\ge s\), the identity
+
+\[
+hc=(a+L)(b+M)
+  \ge\bigl(\sqrt{aM}+\sqrt{bL}\bigr)^2
+\]
+
+therefore gives \(hc\ge Ks\), where \(K=4+2\sqrt3\).
+Since \(c\le1-s\), this forces
+
+\[
+h\ge\frac{Ks}{1-s}>1-s.                                  \tag{13}
+\]
+
+For the strict comparison, \(K>22/3\) follows from
+\(\sqrt3>5/3\), and at \(s=7/64\)
+
+\[
+\frac{22}{3}s-(1-s)^2
+=\frac{77}{96}-\frac{3249}{4096}
+=\frac{109}{12288}>0.
+\]
+
+Set \(\alpha=1-h\) and \(\beta=1-e\). Equation (13)
+gives \(0\le\alpha<s\). The doubled area of \(HFE\) is
+\((1-f)\alpha+f\beta\ge s\). Because \(f\le1/2\),
+the same rearrangement as in (6) gives
+
+\[
+                         \alpha+\beta\ge2s.              \tag{14}
+\]
+
+The horizontal and vertical length budgets now imply
+
+\[
+\begin{aligned}
+M+\frac{s}{L}+\frac{s}{R}&\le1,\\
+L+R+\frac{4s}{M}&\le2-2s,\\
+L&\le1-\frac{3s}{M}.                                    \tag{15}
+\end{aligned}
+\]
+
+The first follows from \(M+b+(1-c)=1\), \(b\ge s/L\),
+and \(1-c\ge s/R\). For the second,
+\(L+R=2-\alpha-\beta-a-d\), while (12) and \(dM\ge s\)
+give \(a+d\ge4s/M\). The last is \(h=a+L\le1\)
+combined with (12).
+
+Put
+
+\[
+U=1-\frac{3s}{M},\qquad
+V=2-2s-\frac{4s}{M}.
+\]
+
+The last inequality in (15) gives \(0<L\le U\), so
+\(M>3s\) and \(U>0\). Also \(M<1\) and
+
+\[
+U-\frac V2=s\left(1-\frac1M\right)<0.                   \tag{16}
+\]
+
+Thus \(U<V/2\), and \(V-U>0\). The second inequality of
+(15) gives \(0<R\le V-L\). The function
+\(z\mapsto1/z+1/(V-z)\) decreases on \((0,V/2)\), as
+its derivative is \(-1/z^2+1/(V-z)^2<0\). Consequently
+
+\[
+\frac1L+\frac1R
+\ge\frac1L+\frac1{V-L}
+\ge\frac1U+\frac1{V-U}.
+\]
+
+Substituting this in the first inequality of (15) yields
+
+\[
+M+\frac{sM}{M-3s}
+ +\frac{sM}{(1-2s)M-s}\le1.                              \tag{17}
+\]
+
+Both denominators are positive by the preceding arguments. At the
+fixed value \(s=7/64\), the left side of (17) minus one is
+
+\[
+\frac{N(M)}{(M-3s)((1-2s)M-s)},
+\quad
+N(M)=\frac{3200M^3-3900M^2+1449M-147}{4096}.             \tag{18}
+\]
+
+This numerator is strictly positive throughout the required range
+\(M>3s=21/64\). Indeed
+
+\[
+N'(M)=\frac{3(40M-21)(80M-23)}{4096}.
+\]
+
+The root \(23/80\) lies below \(21/64\). Hence on this
+range N decreases to \(M=21/40\), then increases, and its
+minimum is
+
+\[
+                         N(21/40)=\frac{147}{327680}>0.
+\]
+
+Equation (18) contradicts (17), proving the theorem. \(\square\)
+
+In particular, when both free points lie in the left pentagon
+\(A,B,C,F,H\), both of its lower ears \(ABH\) and \(ABC\)
+are empty of free points. The two points therefore lie in the
+intersection of the quadrilaterals \(HBCF\) and \(ACFH\).
+This additional containment still does not by itself exclude the
+pair; the two-point interaction remains a separate obligation.
+
 ## Verification
 
 The optional [check_seven_boundary_caps.py](check_seven_boundary_caps.py)
