@@ -39,4 +39,16 @@ assert R(177, 20) * R(79, 720) == R(13983, 14400) > R(29, 30)
 assert R(39, 32) > R(30, 29)
 assert R(19, 2) * R(7, 64) == R(133, 128) > 1
 
-print("PASS: canonical pentagon, width polar, and global occupancy comparisons")
+x, y, tau, rx, ry, b, lam = sp.symbols("x y tau rx ry b lam", real=True)
+F = sp.Matrix([x + tau * (1 - y), y])
+assert F.jacobian([x, y]).det() == 1
+assert F.subs({x: 0, y: 1}) == sp.Matrix([0, 1])
+assert F.subs({x: 1, y: 1}) == sp.Matrix([1, 1])
+assert sp.simplify(F[0].subs({x: rx, y: ry, tau: (1-rx)/(1-ry)}) - 1) == 0
+support = (1-x)*(1-ry) - (1-rx)*(1-y)
+ratio_difference = (1-x)/(1-y) - (1-rx)/(1-ry)
+assert sp.factor(support - (1-y)*(1-ry)*ratio_difference) == 0
+DB, DE = sp.Matrix([b, -1]), sp.Matrix([0, lam-1])
+assert sp.factor(sp.Matrix.hstack(DB, DE).det() - b*(lam-1)) == 0
+
+print("PASS: canonical pentagon, width polar, and N/Type-II triangle capacity")

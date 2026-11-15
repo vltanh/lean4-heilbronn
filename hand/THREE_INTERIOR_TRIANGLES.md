@@ -24,6 +24,14 @@ every actual triangle contains at most two further points at minimum area
 at least \(A_0\). This applies whether or not the three arbitrary points
 add further square-boundary contacts or hull vertices.
 
+The same conclusion holds for the entire normalized Type-II family,
+by Corollary 4 below. Its additional input is only the original
+corner-triangle occupancy theorem in Sections 1--4 of
+[ONE_CORNER.md](ONE_CORNER.md), not the later C1 hull-ear corollary.
+Corollary 5 then proves triangle capacity two for every competitive
+nine-point configuration in the unit square, without a normalization
+or maximizing hypothesis.
+
 The new geometric ingredient is an explicit five-point enclosing-
 parallelogram bound. Its proof below has only a six-entry rational table.
 The other ingredients are the six-point triangular-hull theorem in
@@ -319,6 +327,194 @@ triangle exists, proving Corollary 2.
 This eliminates all three-interior-triangle order types from the entire
 continuous family N. It does not show that the remaining configurations
 have eight boundary points, and it leaves their sharp upper bound open.
+
+## 4. Consequence for the complete normalized Type-II family
+
+**Corollary 4 (Type II has triangle capacity two).** Suppose nine points
+in the unit square include
+
+\[
+D=(0,1),\quad C=(1,1),\quad E=(0,\lambda),\quad B=(b,0),
+\qquad 0<\lambda<1,\quad0<b\le\frac12.
+                                                               \tag{13}
+\]
+
+If their minimum triangle area is at least \(A_0\), every actual
+triangle contains at most two further configuration points. The other
+five points may be anywhere in the square.
+
+**Proof.** Put \(s=2t\ge s_0\), where t is the minimum area.
+Every point \(P\ne D,C\) satisfies
+
+\[
+                 P_y\le1-s,                              \tag{14}
+\]
+
+because the doubled area of \(DCP\) is \(1-P_y\). The triangle
+\(DBE\) also gives
+
+\[
+                  b(1-\lambda)\ge s,
+                  \qquad b\ge s.                         \tag{15}
+\]
+
+Suppose an actual triangle contains three other points. By Theorem 1
+it is a full-hull ear, formed by three consecutive hull vertices, and
+its doubled area is at least \(\Gamma s\).
+
+An ear using neither D nor C lies in the rectangle
+\([0,1]\times[0,1-s]\), by (14). Its doubled area is at most
+\(1-s<\Gamma s\), where the strict inequality follows from (12).
+
+The hull chain from D to B which avoids C lies to the left of the
+line DB, hence inside \(\operatorname{conv}\{D,B,(0,0)\}\).
+Indeed DB is a diagonal of the convex hull, and its two boundary
+chains lie in its opposite half-planes. The actual vertex E lies
+strictly between D and B on this chain. An ear using D but not C
+consists of D and the next two vertices of this chain: DC is a hull
+edge, so these are the only three consecutive vertices containing D
+and avoiding C. Its doubled area is at most \(b\le1/2<\Gamma s\).
+
+There is also at least one point strictly to the right of BC.
+For completeness, the endpoint-triangle theorem in Section 1 of
+`TYPE_II.md` permits at most two of the six points other than D,C,B
+in the left container: three would give
+\(s\le(3-2\sqrt2)b<1/10<7/64\), since
+\(3-2\sqrt2<1/5\) and \(b\le1/2\).
+The actual central triangle DBC contains at most three points by the
+seven-point triangular-hull bound. If the right container were empty,
+these two capacities would accommodate at most five of the six points.
+Thus the hull chain from C to B which avoids D has a vertex strictly
+between C and B.
+
+This latter hull chain lies inside
+\(\operatorname{conv}\{B,C,(1,0)\}\). An ear using C but not D
+has doubled area at most \(1-b\le1-s<\Gamma s\), by (15).
+
+It remains to consider ears containing both D and C. The other hull
+neighbor of D is E, since DE is the occupied left-side hull edge.
+Thus the only possibilities are \(DCE\) and \(DCR\), where R is
+the other hull neighbor of C. The first is a triangle with an actual
+square corner and its other two vertices on the incident square sides.
+The corner-triangle theorem in Sections 1--4 of `ONE_CORNER.md`
+excludes three further points inside it at minimum area
+\(t\ge A_0>7/128\).
+
+For \(DCR\), (14) makes every denominator in the following minimum
+strictly positive. The supporting edge CR gives
+
+\[
+\tau=\frac{1-R_x}{1-R_y}
+    =\min_{P\ne D,C}\frac{1-P_x}{1-P_y}\ge0.             \tag{16}
+\]
+
+To check the equality directly, the inward half-plane of the line CR
+is
+
+\[
+(1-P_x)(1-R_y)-(1-R_x)(1-P_y)\ge0.
+\]
+
+It contains every actual point because CR is a hull edge and it
+contains D. Division by the positive factors in (16) proves the
+minimum formula.
+
+Apply the determinant-one shear
+
+\[
+                 F_\tau(x,y)=(x+\tau(1-y),y).             \tag{17}
+\]
+
+It fixes D and C. Every other point remains in the unit square:
+its new x-coordinate is nonnegative since \(\tau\ge0\), and is
+at most one by the defining minimum (16); its y-coordinate is
+unchanged. Equation (16) makes \(F_\tau(R)=(1,R_y)\).
+Therefore the image of \(DCR\) is an actual corner triangle at C,
+with D on the top side and \(F_\tau(R)\) on the right side.
+Its three interior points remain interior, since (17) is an affine
+bijection, and all triangle areas are unchanged. The same
+corner-triangle theorem again gives a contradiction.
+
+Every possible hull ear has been excluded, proving the corollary.
+\(\square\)
+
+The argument is valid for all configurations satisfying (13), not only
+for a maximizing configuration or a specified side-count class.
+
+## 5. Unrestricted triangle capacity two
+
+**Corollary 5 (global triangle capacity).** In any nine-point
+configuration in the unit square with minimum triangle area at least
+\(A_0\), every triangle spanned by actual configuration points
+contains at most two further configuration points.
+
+The issue in passing from normalized families to this unrestricted
+statement is that the configuration need not be a global maximizer.
+We therefore justify the needed normalization directly.
+
+Let K be its convex hull. Positive minimum area gives K nonempty
+interior, so K contains a disk of some radius \(r>0\). If u and v
+are two independent unit normal vectors, the smallest parallelogram
+with those two support directions containing K has area
+
+\[
+\mathcal A(u,v)=\frac{w_K(u)w_K(v)}{|\det(u,v)|},          \tag{18}
+\]
+
+where \(w_K\) is the width of K. These widths are continuous and
+at least \(2r\). Since the given unit square encloses K, the
+infimum of (18) is at most one. Every pair with
+\(\mathcal A(u,v)\le1\) satisfies
+\(|\det(u,v)|\ge4r^2>0\). Such pairs lie in a compact subset
+of the product of two unit circles, on which (18) is continuous.
+It follows that a minimum-area enclosing parallelogram exists.
+
+Map this parallelogram affinely onto the unit square. The absolute
+determinant is at least one, because its original area is at most one.
+Thus every triangle area weakly increases, while all containment
+relations among actual triangles and points are preserved. The image
+square is a minimum-area enclosing parallelogram for the image hull:
+any smaller one would pull back to an enclosure of K of smaller area.
+
+The support-contact and opposite-projection arguments in
+[BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md) use only this minimum
+parallelogram property. The two contact-increasing shears of
+[GLOBAL_STRUCTURE.md](GLOBAL_STRUCTURE.md) likewise use this property,
+strictly positive minimum area, and the finite list of points. They
+preserve every triangle area and every triangle-interior relation.
+After each shear the square remains a minimum-area enclosure, because
+an inverse determinant-one shear preserves the area of every enclosing
+parallelogram. Hence the proofs apply verbatim to the normalized
+configuration even though no global maximizing hypothesis was made.
+
+Consequently an affine image of the original configuration, with
+minimum area still at least \(A_0\), belongs to one of the five
+complete families N, C1, C2, Type II, and Type III. The adjacent-corner
+normalization also uses only determinant-one shears within the square,
+as explicitly described in `BOUNDARY_REDUCTION.md`.
+In Type II, apply the further top-fixed shear and reflection from
+Section 3 of [TYPE_II.md](TYPE_II.md). It either produces Type III or
+puts the bottom contact at \(b\le1/2\), as required by Corollary 4.
+
+Families C2 and Type III are impossible at this threshold, by
+[OPPOSITE_CORNERS.md](OPPOSITE_CORNERS.md) and
+[CORNER_FAMILIES.md](CORNER_FAMILIES.md), respectively. The remaining
+families have triangle capacity two: N by Corollary 2 above, C1 by
+Section 6 of [ONE_CORNER.md](ONE_CORNER.md), and Type II by Corollary 4.
+An affine bijection preserves strict interior containment, so the
+original configuration has the same capacity property. This proves
+the corollary. \(\square\)
+
+The dependency order is noncircular. Theorem 1 uses the triangular-hull
+and robust exterior-point lemmas. The C1 result in `ONE_CORNER.md`,
+Section 6, and the Type-II result above then use Theorem 1 together
+with the original corner-triangle occupancy theorem in that note's
+Sections 1--4. Only after these results is Corollary 5 deduced by
+normalization.
+
+Corollary 5 excludes all order types containing a triangle with three
+interior points. It does not exclude the surviving order types or
+complete the unrestricted sharp upper bound.
 
 ## Verification
 
