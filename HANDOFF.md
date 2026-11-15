@@ -146,6 +146,14 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 
 ## Fine G6 case catalogue
 
+For an itemized, individually numbered list with open/closed flags, see
+[hand/G6_ITEMIZED_CASES.md](hand/G6_ITEMIZED_CASES.md): 62 parent
+rows, 44 open and 18 closed. The 221 explicit
+[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 186
+open leaves and 35 closed by the parent theorems; their census is
+checked by [hand/check_g6_itemized_cases.py](hand/check_g6_itemized_cases.py).
+These are occupancy/sign partitions, not separately feasible witnesses.
+
 [hand/G6_FINITE_CASE_LEDGER.md](hand/G6_FINITE_CASE_LEDGER.md) records
 stable case IDs: N6 has 8 coarse cap-occupancy orbits (13 lower/upper
 refinements), and C1 zero/one-lower has 21 and 12 unpruned cap orbits.
