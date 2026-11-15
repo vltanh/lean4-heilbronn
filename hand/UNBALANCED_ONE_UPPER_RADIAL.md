@@ -19,16 +19,14 @@ Assume the minimum area of the nine-point configuration is at least
 greater than \(s\), and the global actual-triangle capacity theorem
 applies. Write \([XYZ]=\det(Y-X,Z-X)\).
 
-**Theorem 1.** The upper central point \(P\) is above \(DR\).
-Exactly one of \(Q,T\) is below \(DR\), and the other is above it.
-Furthermore \(DRS\) contains at most one further actual point.
-Thus at least one of \(P\) and the upper member of \(Q,T\) is
-above \(DS\).
+**Theorem 1.** The points \(P,T\) are above \(DR\), and \(Q\)
+is below it. Furthermore \(DRS\) contains at most one further
+actual point. Thus at least one of \(P,T\) is above \(DS\).
 
-This is a complete exclusion of the radial assignment with \(P\)
-below \(DR\), and two uniform triangle-capacity bounds. The two
-assignments obtained by interchanging \(Q,T\) below \(DR\) remain
-separate obligations; this note does not exclude them.
+This completely excludes both radial assignments with \(P\) or
+\(T\) below \(DR\), and proves two uniform triangle-capacity
+bounds. The single assignment stated in Theorem 1 remains a separate
+obligation; this note does not exclude it.
 
 The two-point upper cut is already completely excluded in
 [UNBALANCED_UPPER_CELL_II.md](UNBALANCED_UPPER_CELL_II.md).
@@ -323,10 +321,80 @@ The farther point therefore gives an actual triangle \(DEQ\) or
 All line signs have been exhausted, so \(P\) cannot be below \(DR\).
 
 Section 3 now says that \(Q,T\) lie on opposite sides of \(DR\),
-and \(P\) is on its upper side. The two points above \(DR\) lie
-in \(DCR\subset D R S C\). If both were below \(DS\), they
-would both be in \(DRS\), contrary to (10). This proves every
-assertion of Theorem 1. \(\square\)
+and \(P\) is on its upper side. We exclude the lower assignment
+for \(T\) next.
+
+## 6. The right interior point cannot be below DR
+
+Suppose \(T\) is below \(DR\). Then \(P,Q\) lie in the common
+\(DC\) sector of the quadrilateral \(DBRC\), while \(T\) lies
+in the opposite \(BR\) sector. Put
+
+\[
+g=[BRC]=r-1+wv,\qquad h=[DBR]=g+1-v,\qquad
+H_0=2\operatorname{area}(DBRC)=1+g.
+\]
+
+Since \(DCR\) contains \(P,Q\), we have \(v\ge Ks>13/16\).
+
+First suppose \(PQ\) separates \(B,R\). The line meets the
+relative interior of the hull edge \(BR\), and its nearer central
+point lies inside the triangle formed by \(B,R\) and its farther
+central point. The opposite-sector geometry also puts \(T\) in
+that triangle, by exactly the ray argument in Section 5. For
+\(Z=P\) or \(Q\), however, affinity on the containing triangle
+\(DBC\) gives
+
+\[
+0<[BRZ]\le\max\{[BRD],[BRB],[BRC]\}=h<Ks.
+\]
+
+Here \(h\ge g\), because \(1-v\ge0\), and the last bound is
+(1). The resulting two-interior-point triangle is impossible.
+
+In every other line sign, the common-sector pair inequalities, weakened
+as in Section 4, give
+
+\[
+v-s(1+v)\ge2\sqrt{sv(1+g)}.
+\]
+
+Divide by \(v>0\) and increase \(v\le1\) to one. The left
+side increases and the right side decreases. Consequently
+
+\[
+1-2s\ge2\sqrt{s(1+g)},\qquad
+g\le\frac{177}{448}<\frac25.                           \tag{16}
+\]
+
+But \(T\) is in the common \(BR\) sector of the same
+quadrilateral. Its one-point inequality (6), now with containing areas
+\(g,h\) and quadrilateral area \(H_0\), requires
+
+\[
+g(g+1-v)\ge s(3g+2-v).                                 \tag{17}
+\]
+
+Also \(g\ge3s\), since \(T\in BCR\). The difference between
+the two sides of (17) decreases with \(v\), because its derivative
+is \(s-g<0\). At \(v=13/16\) it increases with
+\(g\ge3s\), since its derivative is
+\(2g+3/16-3s>0\). Thus (16)--(17) would imply
+
+\[
+\begin{aligned}
+0&\le g(g+1-v)-s(3g+2-v)\\
+ &\le\left(\frac25\right)^2
+ +\left(\frac3{16}-3s\right)\frac25
+ -\frac{19s}{16}
+=-\frac{669}{25600}<0.                                 \tag{18}
+\end{aligned}
+\]
+
+This contradiction excludes the entire assignment with \(T\) below
+\(DR\). Hence \(Q\) is below it and \(P,T\) are above it.
+If both \(P,T\) were below \(DS\), they would both be inside
+\(DRS\), contrary to (10). This proves Theorem 1. \(\square\)
 
 ## Verification
 
