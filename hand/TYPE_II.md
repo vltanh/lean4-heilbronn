@@ -818,3 +818,106 @@ to one of precisely these two remaining continuous count classes:
 In this final table \(s=2t\) is again the actual doubled minimum area.
 Neither row is claimed to be excluded by the present note. Each central
 count is exactly two; the left count includes the prescribed point E.
+
+## 9. A robust affine version of the central-triple theorem
+
+The central-triple theorem has a useful margin beyond the normalization
+\(b\le1/2\).
+
+**Affine corollary.** Let an actual triangle ABC of area S contain three
+further actual points. Suppose another actual point E has barycentric
+coordinates
+
+\[
+ E=(\alpha,q,-p),\qquad
+ 0<q\le1,\qquad 0<p\le\frac{11}{20}q,
+ \qquad \alpha+q-p=1.
+\]
+
+Then among the seven points some triangle has area less than
+\((7/64)S\). In particular the bound is less than \(7/128\) when
+\(S\le1/2\).
+
+Normalize the doubled area of ABC to one. The affine transformation used
+in Section 7 identifies these hypotheses with the physical coordinates
+of (5), but with \(b=p/q\le11/20\). Every step of Sections 6–7 remains
+valid with the following explicit changes.
+
+First, the two-point chamber lemma of Section 6 holds for
+\(b\le11/20\). Its derivative bound (19) did not need \(b\le1/2\).
+For the cubic in (20),
+
+\[
+ G_{bb}\le z^2\left(3780-\frac{29088}{5}z\right)<0
+ \qquad(3/4\le z\le1).
+\]
+
+Thus check b=0 as before, and \(b=11/20\). At the latter endpoint,
+with \(w=1-z\in[0,1/4]\),
+
+\[
+\begin{aligned}
+ G(11/20,z)
+ &=\frac{8241}{1000}+\frac{77669}{125}w
+       +\frac{991823}{1000}w^2-\frac{122177}{125}w^3\\
+ &\ge\frac{8241}{1000}+\frac{77669}{125}w
+       +\frac{747469}{1000}w^2>0.
+\end{aligned}
+\]
+
+This proves the needed extension of Section 6.
+
+Second, in the zero-point case of (27), (21) now gives
+\(\alpha\le1-9p/11\). It would follow that
+
+\[
+ 1\ge(\Gamma+9/11)s>
+       \left(\frac{17}{2}+\frac9{11}\right)\frac7{64}
+       =\frac{1435}{1408}>1.
+\]
+
+The three-point case is unchanged. Both middle-case eliminations give
+
+\[
+ K\ge\frac{2s}{1+p}\ge\frac{40s}{31}
+            =\frac{35}{248}>\frac18,
+\]
+
+still contradicting (23).
+
+Finally, in the last one-point case,
+\(\alpha\le1-9q/20\), so the two-interior-point inequality gives
+\(q<95/216\). The ear estimate (24), now using
+\(\Gamma>35/4\), gives \(x<39/256\); this comparison follows from
+\(\sqrt5>13/6\). Also \(Z_A\ge3s=21/64\). Therefore
+
+\[
+\begin{aligned}
+ u&=qx+pZ_B\le q\left(x+\frac{11}{20}Z_B\right),\\
+ x+\frac{11}{20}Z_B
+ &=\frac{11}{20}(1-Z_A)+\frac9{20}x
+ <\frac{2243}{5120},\\
+ u&<\frac{95}{216}\frac{2243}{5120}
+   =\frac{213085}{1105920}<\frac7{36},
+\end{aligned}
+\]
+
+contrary to (31). The final comparison is the integer inequality
+\(213085<215040\). This checks every place where the former one-half
+assumption was used, and proves the corollary.
+
+For a maximum-area actual triangle, every barycentric coordinate of any
+other actual point has absolute value at most one. Thus the condition
+\(q\le1\) is automatic. One may also interchange the two endpoints of
+the edge across which E lies. Consequently, in a competitive configuration,
+any exterior point of a maximum-area triangle containing three interior
+points must satisfy both
+
+\[
+                 p>\frac{11}{20}q,\qquad
+                 p>\frac{11}{20}\alpha.
+\]
+
+As \(\alpha+q=1+p\), these inequalities imply
+\(p>11/29\). This is an exact further geometric restriction, not an
+assertion that every configuration has such a maximum-area triangle.

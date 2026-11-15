@@ -152,3 +152,18 @@ assert sp.Rational(361, 1920) < sp.Rational(7, 36)
 assert sp.Rational(7, 48) > sp.Rational(1, 8)
 print('PASS: central-triple rational comparisons')
 print('TYPE_II_CENTRAL_TRIPLE_PASS: 11 further groups')
+
+# The robust affine corollary only changes one cubic endpoint and constants.
+equal(
+    G.subs({b: sp.Rational(11, 20), z: 1 - w}),
+    sp.Rational(8241, 1000) + sp.Rational(77669, 125) * w
+    + sp.Rational(991823, 1000) * w**2
+    - sp.Rational(122177, 125) * w**3,
+    'robust chamber cubic endpoint',
+)
+assert sp.Rational(1435, 1408) > 1
+assert sp.Rational(35, 248) > sp.Rational(1, 8)
+assert sp.Rational(95, 216) * sp.Rational(2243, 5120) < sp.Rational(7, 36)
+assert sp.Rational(13, 6) ** 2 < 5
+print('PASS: robust affine rational comparisons')
+print('TYPE_II_ROBUST_AFFINE_PASS: 2 further groups')
