@@ -29,6 +29,27 @@ Both thresholds are larger than `1/22` and `45/(2*22^2)`. Thus the distinct-cell
 argument and coarse determinant cutoff used by the global enumeration are
 compatible with both targets.
 
+## Arbitrary-integer journal replay
+
+`replay_root_journal.py` independently checks every continuous root box in the
+persisted III and C2 journals. It expands the determinant into six products,
+enumerates every rectangle vertex, computes coordinate proposals against the
+unchanged triangle box, and applies the proposals synchronously. All arithmetic
+uses Python's arbitrary-precision integers. It imports no primary checker code.
+
+The completed runs verify all 12,172 III roots and all 58,494 C2 roots, with one
+interval node per root. The journals are stored losslessly as gzip files under
+`journals/`; both stored-byte and decoded-byte hashes are recorded. Reproduce:
+
+```
+python n10/audit/replay_root_journal.py n10/audit/journals/III.roots.gz --family III
+python n10/audit/replay_root_journal.py n10/audit/journals/C2.roots.gz --family C2
+```
+
+This checks all listed roots. The independent complete global checker must
+separately verify that enumeration covers every necessary root; the replay
+receipts explicitly do not claim enumeration completeness.
+
 ## Face contraction is conservative
 
 Fix a triangle and one varying coordinate `z` in `[l,h]`. Let `M0` and `M1`

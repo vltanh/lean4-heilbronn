@@ -53,6 +53,17 @@ class ManifestTests(unittest.TestCase):
         self.add_run('III',1,2,2)
         self.assertTrue(validate(self.manifest,self.root,FAMILIES)['all_families_complete'])
 
+    def test_independent_kind(self):
+        self.manifest['checker_kind'] = 'independent'
+        for record in self.manifest['runs']:
+            text = (self.root/record['log']).read_text().replace('_RANGE_PASS','_INDEPENDENT_RANGE_PASS').replace('_COMPLETE_PASS','_INDEPENDENT_COMPLETE_PASS')
+            self.replace_log(record,text)
+        self.assertTrue(validate(self.manifest,self.root,FAMILIES)['all_families_complete'])
+
+    def test_mixed_checker_kind(self):
+        self.manifest['checker_kind'] = 'independent'
+        self.check_fails()
+
     def test_missing_family(self):
         self.manifest['runs'].pop()
         self.check_fails()

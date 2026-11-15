@@ -292,6 +292,15 @@ most `tN<A` or lies in a certified local box, where it has minimum area at
 most A. Applying the exhaustive normalization to an arbitrary maximizer
 therefore gives `H10<=A`; attainment supplies `H10>=A`.
 
+The same assembly allows a finite table of separately proved original-root
+lemmas. Their exact certificate trees must cover the entire listed coarse
+root and have the same two leaf conclusions: infeasibility of all triangle
+areas being greater than `tN`, or membership in a strict local neighborhood.
+Matching a table entry is not an extra mathematical assumption when every
+such certificate and the table-to-root correspondence are independently
+replayed. In particular, it does not enlarge the set of possible equality
+configurations.
+
 This argument does not assume that every point outside the local neighborhood
 has a known strict gap. The complete global run is precisely what proves
 the exclusion needed there. A partial range or a positive node count cannot

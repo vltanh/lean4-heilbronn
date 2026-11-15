@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "source": "n10/global/global_cover_certified.cpp",
+  "sha256": "c7515883c88417ca9d8f6e6e3341aa8e7503c3c8695e587020a43508281761eb",
+  "binary_sha256": "c69155d3a6e81ddef5ea8309ea4faf6aa4b73249ff6bbf1effe9a40ea04a836e",
+  "command": "g++ -O3 -march=native -std=c++17 -Wno-narrowing n10/global/global_cover_certified.cpp -o n10/bin/global_cover_certified",
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0"
+}

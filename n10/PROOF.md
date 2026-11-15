@@ -1,9 +1,9 @@
 # The unrestricted ten-point Heilbronn theorem
 
-This document assembles the exact computer-assisted proof. The current execution
-status and acceptance receipts are recorded in `STATUS.md`; completion requires
-the full primary and independent covers, the exact local inputs, and the finite
-root certificates described below.
+This document assembles the completed exact computer-assisted proof. All five
+families have completed in both implementations, with zero unresolved roots;
+all per-pattern inventories agree. The final acceptance record is
+`audit/complete_receipt.json`; `STATUS.md` gives the completed gates and counts.
 
 ## Statement
 
@@ -85,7 +85,7 @@ makes the contacts aligned. A determinant-one shear fixes those contacts,
 preserves the other two side lines and all areas, and can be continued until
 another boundary incidence is acquired. Each step preserves the previous
 incidences. At most two points can lie on a side. Square symmetries and these
-shears therefore place some maximizer in one of the following five domains.
+shears therefore place any maximizing configuration in one of the following five domains.
 Every unspecified point is allowed anywhere in the closed square.
 
 | Family | Specified points | Restrictions | Free points |

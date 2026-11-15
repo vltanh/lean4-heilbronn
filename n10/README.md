@@ -1,28 +1,66 @@
-# Ten-point Heilbronn problem: computer-assisted proof first
+# Heilbronn n=10: complete exact computer-assisted proof
 
-Target: H10 = A, where A is the unique real root of
-`3456*A^3 - 1764*A^2 + 268*A - 9 = 0` (approximately 0.04653741958254177).
+The unrestricted ten-point upper bound and exact attainment are complete in
+this proof package. Both independent global implementations have finished all
+five normalized families with zero unresolved cases, and every per-pattern
+inventory has been compared.
 
-**The unrestricted upper bound is not yet proved.** This work starts from the
-previous ten-point package: exact attainment, an unrestricted radius-1/2000
-local theorem, and one complete asymmetric eight-boundary orientation chamber.
-Those results are not a global proof. The n=9 theorem and files are unchanged.
+The result is
 
-Current priority is an exhaustive exact cover of all normalized ten-point
-families, then independent verification. Hand-proof compression is deferred.
-No Lean compilation or GitHub CI is part of this work.
+    H10 = A = 0.04653741958254177...,
+    3456 A^3 - 1764 A^2 + 268 A - 9 = 0.
 
-## Acceptance gates
+The equality argument classifies every maximizer up to square symmetries and
+relabeling as the displayed attaining configuration. This is an exact
+computer-assisted proof draft; it has not received external peer review and is
+not a Lean-kernel formalization. All computation was local, with no CI.
 
-- C0: preserve and replay construction, local certificate, and existing chamber.
-- C1: implement and audit exhaustive normalized global domains.
-- C2: implement an exact unsigned-area checker; every unresolved box must fail closed.
-- C3: complete every global root family, without assuming candidate symmetry or contacts.
-- C4: independent replay and unrestricted theorem assembly.
+## Start here
 
-Root families are N, C1, C2, adjacent-corner II, and three-corner III.
-Four corner families (III, C2, II, C1) now have complete exact runs; see `STATUS.md`. A completed subchamber does not close its
-parent family. All new receipts must state their own n=10 domains and thresholds.
+- [hand/ROADMAP.md](hand/ROADMAP.md): the active hand-proof checklist, including
+  the completed U0, U1 and U4 three-corner cases. The unrestricted hand proof
+  remains open; the computational completion below does not check those boxes.
+- [PROOF.md](PROOF.md): theorem, exhaustive reduction, proof assembly, equality.
+- [STATUS.md](STATUS.md): completed gates and exact counts.
+- [REPRODUCE.md](REPRODUCE.md): stored-package audit and both full recomputations.
+- [audit/complete_receipt.json](audit/complete_receipt.json): successful final
+  acceptance record, source/input hashes, and complete comparison totals.
+- [local_cover/LP_CERTIFICATES.md](local_cover/LP_CERTIFICATES.md): all 27 difficult
+  root cases and the exact inequalities closing them.
 
-This branch is based on main at 75eb8bcfd1eb971ab53b69e144064d6e9525971f,
-after the n=9 PR merge. It deliberately uses the isolated `n10/` directory.
+Run the stored-package acceptance check from the repository root:
+
+```sh
+python n10/audit/verify_complete.py
+```
+
+The final line is
+
+```text
+UNRESTRICTED_N10_COMPUTER_ASSISTED_PROOF_PASS patterns=888824 roots=49008609 root_lemmas=27 unresolved=0
+```
+
+That command replays the mathematical input certificates and validates all
+stored execution evidence. REPRODUCE.md also gives the full C++ enumerations.
+
+## Exhaustive closure
+
+| Family | Anchor patterns | Continuous roots | Status |
+|---|---:|---:|---|
+| III | 1 | 12,172 | COMPLETE |
+| II | 348 | 641,738 | COMPLETE |
+| C2 | 17,903 | 58,494 | COMPLETE |
+| C1 | 35,545 | 9,366,572 | COMPLETE |
+| N | 835,027 | 38,929,633 | COMPLETE |
+| **Total** | **888,824** | **49,008,609** | **Zero unresolved** |
+
+The difficult part of N consists of 27 exact initial-root lemmas, in two anchor
+patterns. Their complete certificates use 51 nodes, 34 exact infeasibility
+leaves, five strict-local-theorem leaves, and 2,500 checked integer dual bounds.
+The numerical solver proposes coefficients; a separate verifier using only
+unbounded integer arithmetic checks the entire proof trees.
+
+Hand-proof conversion is now active under `hand/`, with its own acceptance
+rule and explicit open cases. Lean formalization remains a separate task.
+This PR follows the requested computer-assisted-first order and adds only files
+under `n10/`; the merged n=9 work is unchanged.

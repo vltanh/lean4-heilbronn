@@ -1,0 +1,4 @@
+INDEPENDENT_INITIALIZED grid=22 scale=11534336 jacobi_passes=8
+III_INDEPENDENT_PROGRESS pattern=0 roots=12172 search=19430909 bb=12172 local=0 deferred=0 certified=0 ms=1965
+III_INDEPENDENT_RANGE_PASS start=0 stop=1 total=1 patterns=1 roots=12172 search=19430909 bb=12172 local=0 certified=0
+III_INDEPENDENT_COMPLETE_PASS

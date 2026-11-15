@@ -1,34 +1,110 @@
-# Ten-point proof status
+# Status: complete unrestricted n=10 computer-assisted proof
 
-The complete primary exact cover now passes. Independent global replay and
-final cross-checking are in progress. The exact candidate and the
-radius-1/2000 unrestricted local theorem have been replayed successfully.
-All five exhaustive normalized families pass the primary checker with no
-unresolved boxes. The independent arithmetic replay of all difficult-root
-certificates also passes.
+**All five exhaustive families are closed, with zero unresolved roots.** Both
+independently implemented global checkers completed, and the final acceptance
+check compared every one of the 888,824 anchor patterns. The exact attainment,
+unrestricted local theorem, and all 27 exceptional root certificates were
+replayed in exact arithmetic.
 
-| Family | Domain | Status | Anchor patterns | Continuous roots | Unresolved |
-|---|---|---|---:|---:|---:|
-| III | Three occupied corners | COMPLETE | 1 | 12,172 | 0 |
-| C2 | Two opposite occupied corners | COMPLETE | 17,903 | 58,494 | 0 |
-| II | Adjacent occupied corners after shear | COMPLETE | 348 | 641,738 | 0 |
-| C1 | One occupied corner | COMPLETE | 35,545 | 9,366,572 | 0 |
-| N | No occupied corner, normalized support contacts | PRIMARY COMPLETE | 835,027 | 38,929,633 | 0 |
+## Theorem
 
-The completed families are bounded by 4653/100000, strictly below the candidate
-value A. Every one of their continuous roots was excluded at its first interval
-node; no local theorem, fixed orientation, or candidate symmetry was assumed.
-Their raw logs and source hash are in `runs/initial_completion.json`.
-The N cover uses 27 exact root lemmas in two anchor patterns. Their 51-node
-proof trees contain 34 exact infeasibility leaves and five strict-local-theorem
-leaves, with 2,500 exact dual bounds. All 27 have passed a second verifier using
-unbounded integers and no numerical solver.
+For ten points in the unit square,
 
-Independent geometric and exact-field audits have passed. A separately written
-global checker is completing the same full enumeration, after which every
-per-pattern inventory and all receipt hashes will be compared. The completion
-claim remains gated on that replay and the final assembly check. A run that
-reaches its work budget or leaves any box unresolved cannot close its family.
+    H10 = A = 0.04653741958254177...,
+    3456 A^3 - 1764 A^2 + 268 A - 9 = 0.
 
-All computation is local. No CI or Lean compilation is used. The merged n=9
-files are unchanged.
+Every maximizer is the configuration in PROOF.md, up to square symmetry and
+relabeling. The strict local theorem and the reverse-shear argument prove the
+equality classification; it is not inferred merely from enumeration counts.
+
+## Exhaustive family inventory
+
+| Family | Domain | Anchor patterns | Continuous roots | Unresolved |
+|---|---|---:|---:|---:|
+| III | Three occupied corners | 1 | 12,172 | 0 |
+| II | Adjacent occupied corners after shear | 348 | 641,738 | 0 |
+| C2 | Two opposite occupied corners | 17,903 | 58,494 | 0 |
+| C1 | One occupied corner | 35,545 | 9,366,572 | 0 |
+| N | Corner-free normalized support contacts | 835,027 | 38,929,633 | 0 |
+| **Total** | **All normalized maximizers** | **888,824** | **49,008,609** | **0** |
+
+The four corner families are excluded at 4653/100000, strictly below A. Every
+corner root closes at its first interval node. N uses the smaller-than-A
+threshold 4653741958254/10^14 together with the unrestricted strict local theorem.
+All 120 triangle areas are treated unsigned. The initial boxes cover real
+coordinates continuously; points are not restricted to grid vertices.
+
+Both implementations agree on every pattern's anchor IDs, initial-root count,
+discrete-search count and certified-root count. Their total number of discrete
+search nodes is 2,613,250,637. Their fine N interval-tree counts differ because
+the endpoint scales and traversal orders differ: 39,060,816 primary versus
+39,074,196 independent. Both prove every original root.
+
+## Exact closure of the difficult roots
+
+| Anchor pattern | Root lemmas | Certificate nodes | Exact infeasibility leaves | Local leaves |
+|---|---:|---:|---:|---:|
+| 57,964 | 14 | 26 | 17 | 3 |
+| 269,299 | 13 | 25 | 17 | 2 |
+| **Total** | **27** | **51** | **34** | **5** |
+
+The certificates also contain 12 splits, 115 contraction rounds, and 2,500
+exact integer dual bounds. Every split has both children. A standalone second
+verifier regenerates every affine inequality and replays every proof-tree node
+using Python's unbounded integers, with no numerical solver imported. The
+root-lemma table is checked for exact equality with the verified certificate
+manifest before its global-cover uses are accepted.
+
+## Acceptance gates
+
+| Gate | Requirement | Result |
+|---|---|---|
+| C0 | Exact attainment and unrestricted radius-1/2000 local theorem | PASS; two field implementations |
+| C1 | Exhaustive five-family normalization of arbitrary maximizers | PASS; independent geometric audit |
+| C2 | Exact continuous unsigned-area checking; unresolved work fails closed | PASS; two separately written implementations |
+| C3 | Complete every global family and every exceptional root | PASS; zero unresolved |
+| C4 | Independent replay, full per-pattern comparison, theorem and equality assembly | PASS |
+
+The final acceptance command is
+
+```sh
+python n10/audit/verify_complete.py
+```
+
+Its successful record is `audit/complete_receipt.json`. The complete source
+cohorts and their dependency hashes are in `runs/primary/manifest.json` and
+`runs/independent/manifest.json`. Compressed per-pattern inventories and actual
+run logs are included. `REPRODUCE.md` distinguishes auditing those stored
+receipts from recomputing both full enumerations.
+
+## Scope and review status
+
+This is a completed exact computer-assisted proof draft, not a Lean-kernel
+formalization or external peer review. Both implementations and their audits
+were produced in this work session; independent means separately implemented,
+not external authorship. No GitHub CI or Lean compilation was used. The merged
+n=9 files are unchanged.
+
+## Hand-proof conversion
+
+The active itemized checklist is `hand/ROADMAP.md`. Exact attainment,
+normalization, qualitative local optimality, the stated symmetric chamber,
+and the four-corner exclusion have written hand proofs. The new global
+occupancy theorem closes III-3C-U4, and the eight-point endpoint theorem
+closes III-3C-U0 and III-3C-U1. The conditional shear-reversal lemma is also
+proved.
+
+Eight global obligations remain: III-3C-U2, III-3C-U3, C2, II, C1, N6, N7,
+and the complete asymmetric N8 domain. HP14 (assembly) and HP15 (final
+manuscript audit) depend on those obligations and remain unchecked. The
+computer-assisted completion above is not a substitute for these hand proofs.
+
+## Publication and verification correction
+
+The previous local completion commit contained the independent checker,
+complete run manifests and inventories, final acceptance command, and receipts,
+but those additions had not reached the PR branch. They are now included here.
+The stored-package acceptance command was rerun after recovering its final
+source versions and passed, producing a byte-identical completion receipt.
+This rechecks exact input certificates and both complete recorded inventories;
+it does not rerun the full C++ enumerations.

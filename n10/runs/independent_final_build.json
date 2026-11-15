@@ -1,0 +1,23 @@
+{
+  "source": "n10/audit/independent_cover.cpp",
+  "source_sha256": "11b9961e44c336826e0e91c6d42c9fa56947a995501aec5879168a6ddda733c6",
+  "binary": "n10/bin/independent_cover_final",
+  "binary_sha256": "21754fab26b91aef4d87f0fbb790f7a6546208f6ec372274b1e2a9bea00e376e",
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "flags": "-O3 -std=c++17 -Wall -Wextra -Wpedantic",
+  "scale": 11534336,
+  "passes": 8,
+  "root_budget_for_N": 2000,
+  "root_lemmas": "n10/local_cover/root_lemmas.txt",
+  "root_lemmas_sha256": "5a5fc27434eecac93004f508b589af7e01cb76507cd1eeb1c7bf6453929d9426",
+  "N_ranges": [
+    [
+      0,
+      400000
+    ],
+    [
+      400000,
+      835027
+    ]
+  ]
+}
