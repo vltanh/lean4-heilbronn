@@ -24,8 +24,11 @@ s=\frac7{64},\qquad K=4+2\sqrt3,\qquad \rho=\frac{13}{16}<Ks.
 Assume every unsigned actual doubled triangle area is at least \(s\).
 This note excludes two complete pair cells and all four vertical-triangle
 pair classes, with no assumptions on the sign of the line through the
-two points. It also restricts the mixed left/right placement. It does not
-yet exclude every mixed placement.
+two points. Its reductions are completed in
+[SEVEN_BOUNDARY_MIXED_LOWER.md](SEVEN_BOUNDARY_MIXED_LOWER.md) and
+[SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md](SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md),
+which exclude every mixed placement. The latter note also assembles the
+complete open-side seven-boundary theorem.
 
 The anchor inequalities used below are
 

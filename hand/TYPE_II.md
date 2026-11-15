@@ -1,12 +1,15 @@
-# Type II: an endpoint-triangle bound and two residual count classes
+# Type II: an endpoint-triangle bound and count reduction
 
 ## Scope
 
-**Current continuation.** The entire Type-II family is now excluded by
-[UNBALANCED_FINAL_LOWER_WEDGE.md](UNBALANCED_FINAL_LOWER_WEDGE.md),
-Theorem 2, including every count, hull, cell, and cut and the Type-III
-alternative. The statements below retain the scope of the intermediate
-lemmas used in that complete proof.
+**Completed continuation.** Theorem 11 of
+[TYPE_II_COMPLETION.md](TYPE_II_COMPLETION.md) excludes the balanced row
+\((2,2,2)\), and its Theorem 14 excludes the triangular-right branch
+of \((1,2,3)\). Theorem 2 of
+[UNBALANCED_FINAL_LOWER_WEDGE.md](UNBALANCED_FINAL_LOWER_WEDGE.md)
+assembles the remaining exclusions and completes the entire Type-II
+family. The statements below retain the scope of the intermediate
+lemmas used in that proof.
 
 Write
 
@@ -18,10 +21,10 @@ Write
 
 This note proves a five-point triangle lemma, an additional area-preserving
 normalization for Type II, and a complete exclusion of one resulting
-occupancy class. It does **not** claim that Type II is closed. After allowing
-the already defined Type-III family as a separate alternative, only two
-Type-II count classes remain in this note; Section 7 additionally excludes
-every configuration with three central points.
+occupancy class. After allowing the already defined Type-III family as a
+separate alternative, its count reduction leaves two Type-II classes;
+Section 7 additionally excludes every configuration with three central
+points. These are inputs to the completed theorem linked above.
 
 All small-point bounds used below are proved in this hand-proof directory.
 No numerical search or published triangle-container bound is a premise.
@@ -394,16 +397,16 @@ alternative and the following four continuous count classes, with
 
 Here \(s=2t\ge2A_0\), E is counted among the left points, and the other
 five points retain all their original freedom inside their assigned
-triangles. These four rows are not claimed to have been excluded. The
-normalization and the eliminated occupancy class are proved geometrically;
-the table is a finite count reduction, not a numerical cover of the
-remaining positions.
+triangles. These four rows form an intermediate count reduction for the
+placement arguments in the following sections and completion notes.
+The normalization and the eliminated occupancy class are proved
+geometrically.
 
 
 ## 6. A further local exclusion useful in the central-triple cases
 
-This section proves an additional six-point exclusion. It does not yet
-classify all orientations in the four residual count classes of Section 5.
+This section proves an additional six-point exclusion used in the later
+classification of the four count classes of Section 5.
 
 **Two-point chamber lemma.** In the notation (5), assume \(b\le1/2\).
 Suppose two further points P,Q lie strictly inside both DCB and DCE, and

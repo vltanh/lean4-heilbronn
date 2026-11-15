@@ -26,8 +26,8 @@ entire triangular-left branch as well. Sections 1--3 of the present note
 exclude two quadrilateral side hulls without using the central points;
 Section 4 excludes the remaining left-quadrilateral case using those
 two points. Sections 5--6 further force exactly one central point on
-each side of CE, with L on the D side. These restrictions still leave
-the interaction with the two right points unresolved.
+each side of CE, with L on the D side. The resulting interaction with
+the right pair is excluded by the complete balanced theorem just cited.
 
 ## 1. The lower vertex in a four-point endpoint quadrilateral
 
@@ -400,8 +400,9 @@ q>(52/7)\sigma=13/16,\qquad\lambda<3/16.                 \tag{23}
 
 The remaining balanced configurations therefore have L strictly
 inside DBE and above CE, one central point P above CE, one central
-point Q below CE, and two points in the right container. No claim of
-an exclusion of these surviving placements is made here.
+point Q below CE, and two points in the right container. These are the
+intermediate placements excluded by Theorem 11 of
+[TYPE_II_COMPLETION.md](TYPE_II_COMPLETION.md).
 
 ## Verification
 

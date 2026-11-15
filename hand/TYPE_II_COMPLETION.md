@@ -13,8 +13,10 @@ whose third vertex need not be a configuration point, gives an exact
 interval formulation for every Type-II configuration, and excludes the
 entire balanced count row \((2,2,2)\). The complete balanced-row
 assembly is Theorem 11. Theorem 14 further excludes the entire
-triangular-right branch of the unbalanced row \((1,2,3)\). Only that
-row's nontriangular right-hull branch remains open in this note.
+triangular-right branch of the unbalanced row \((1,2,3)\). The
+nontriangular branch and complete Type-II assembly are proved in
+[UNBALANCED_FINAL_LOWER_WEDGE.md](UNBALANCED_FINAL_LOWER_WEDGE.md),
+Theorem 2.
 
 The initial capacity theorem has two inputs already proved in this
 directory:
