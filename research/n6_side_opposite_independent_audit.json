@@ -1,0 +1,20 @@
+{
+  "status": "independent_sympy_pass",
+  "data_sha256": "cd60c320a7eda7fc4b16cc2cec08497f65464494fd9a7f3d9a10629c53eb3129",
+  "radial_words": 97,
+  "expressions": 108,
+  "cubic_expressions": 107,
+  "quartic_expressions": 1,
+  "positive_terms": 22019,
+  "greatest_cube_upper": "-77110359731/78230061056",
+  "checks": [
+    "All 32 affine bounds independently audited geometrically",
+    "All 94 costs independently reconstructed",
+    "Both empty-ear dependencies and the 97-word cover audited",
+    "All fixed expressions independently expanded in Sympy",
+    "Complete branch cover independently checked",
+    "Both projection identities independently expanded",
+    "All 84 determinants of the sharp rotation independently checked",
+    "Both sharp-theorem hypotheses and equality conclusions audited"
+  ]
+}
