@@ -1,0 +1,21 @@
+{
+  "status": "independent_geometry_and_model_pass",
+  "data_sha256": "df99d7e4c9e6cfeac8c7446a09ab4e343d6b2a0a2fda59805028d9478eb1175d",
+  "radial_words": 57,
+  "cap_words": 5,
+  "anchor_inner_words": 52,
+  "ordered_pairs": 260,
+  "terminal_cells": 262,
+  "checks": [
+    "Complete triangular cap/hull normalization, including square-side contacts",
+    "All 27 common affine inequalities audited geometrically",
+    "Inner-cap upper coordinate bounds checked from actual subdivision costs",
+    "All five lower-Q affine inequalities and their endpoint-triangle premise",
+    "Both case230 CXF containments, independently of the CPQ sign",
+    "All four new case230 inequalities, with positive signed area CXF",
+    "All actual-containment and extra quadratic costs",
+    "Both exhaustive actual-line splits and the threshold-aware reuse rule",
+    "Strict minimum-area bound below 4/73 for the entire branch"
+  ],
+  "coefficient_audit": "Separate independent SymPy audit by one_corner:220 cubics,29641 terms"
+}
