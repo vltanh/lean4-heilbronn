@@ -32,8 +32,10 @@ central-point cut relative to CE.
 impossible as well. Thus the entire nontriangular right-hull branch of
 this two-point upper cut reduces to cell II.
 
-These are complete continuous-cell exclusions. They do **not** close
-cell II, the one-point upper cut, or the whole unbalanced Type-II row.
+These are complete continuous-cell exclusions. The subsequent
+[two-point upper-cut theorem](UNBALANCED_UPPER_CELL_II.md) closes cell II,
+and the [complete Type-II assembly](UNBALANCED_FINAL_LOWER_WEDGE.md)
+covers the one-point upper cut and the entire unbalanced row.
 
 **Theorem 3.** In the two-point upper cut, the line PQ cannot isolate C
 from D,E,B when the right hull is nontriangular. This excludes the entire
@@ -566,7 +568,7 @@ second power by \((5/42)t\), gives the positive lower bound
 This again contradicts (9). The two ranges exhaust (11), proving
 Theorem 4.
 
-## Verification and the remaining interaction
+## Verification and the subsequent interaction theorems
 
 [check_unbalanced_right_hull.py](check_unbalanced_right_hull.py) verifies
 the normalized determinants, generalized lower-vertex elimination,
@@ -580,8 +582,14 @@ unavailable in that cell. Theorems 3 and 4 additionally exclude both
 isolated-endpoint central-line alternatives. Hence PQ must put D,C
 together and E,B together on its two sides. The scalar central-pair
 inequalities alone do
-not supply an analogous occupied outer ear. The present argument does
-not control the cross-triangles joining P or Q to the right subset; a
-stronger interaction involving their actual positions is still needed.
-In the one-point upper cut, the bound (7) is not available, so this note does not exclude cells
-I or III there.
+not supply an analogous occupied outer ear. The cross-triangles joining
+P or Q to the right subset are treated in
+[UNBALANCED_UPPER_CELL_II.md](UNBALANCED_UPPER_CELL_II.md), which closes
+that entire two-point upper cut.
+
+In the one-point upper cut, the bound (7) is not available. Its complete
+cell-I and cell-III exclusions are in
+[UNBALANCED_CELL_I.md](UNBALANCED_CELL_I.md) and
+[UNBALANCED_CELL_III.md](UNBALANCED_CELL_III.md); the cell-II closure and
+the complete Type-II assembly are in
+[UNBALANCED_FINAL_LOWER_WEDGE.md](UNBALANCED_FINAL_LOWER_WEDGE.md).

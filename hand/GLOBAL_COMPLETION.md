@@ -7,6 +7,8 @@ hull vertices, both lower exterior caps with seven boundary contacts, and
 the complete sharp orientation chamber when one upper boundary point is
 allowed to move into the square. The last result is Theorem 3 below; it
 does not assume that an arbitrary configuration belongs to that chamber.
+These results are components of the completed unrestricted assembly in
+[UNRESTRICTED.md](UNRESTRICTED.md).
 
 For the first family no square-boundary incidence assumption, normal form,
 or coordinate subdivision is needed.
@@ -185,7 +187,7 @@ This proves Theorem 1, including a strict margin below the target.
 Degenerate configurations already have minimum triangle area zero. A
 nine-vertex convex hull is strictly convex, so no other case was omitted.
 
-## Verification and remaining scope
+## Verification and hull scope
 
 The optional script [check_global_completion.py](check_global_completion.py)
 checks the two local polynomial identities (4)--(5), their area factors,
@@ -194,10 +196,11 @@ the affine isoperimetric theorem are mathematical premises, not consequences
 of that diagnostic.
 
 The complete nine-vertex hull family is excluded. The hull-eight family
-with one interior point remains distinct from the already completed
-eight-**boundary** family. In particular, (8) at n=8 alone is not strong
-enough to close the hull-eight case; the interior point's triangle
-constraints must still be used.
+with one interior point is distinct from the eight-**boundary** family.
+Equation (8) at n=8 alone is not strong enough to close the hull-eight
+case. The complete hull-eight arguments assembled in
+[UNRESTRICTED.md](UNRESTRICTED.md) also use the interior point's triangle
+constraints.
 
 ## 4. Both lower exterior corner caps with seven boundary contacts
 
@@ -887,8 +890,9 @@ the rational constants, and every lower bound in both coefficient tables.
 It uses rational arithmetic throughout. The tables and formulas above,
 rather than a program's success message, are the algebraic certificates.
 
-Theorem 3 closes the full F-moving sharp chamber, including the residual
-case \(h>e\) and \(u<v\). It does not show that every hull-eight
-configuration can be placed in this chamber, nor that all other chambers
-can be deformed to eight square-boundary points. Those remain separate
-global obligations.
+Theorem 3 closes the full F-moving sharp chamber, including the case
+\(h>e\) and \(u<v\). The other hull-eight chambers are handled by
+their own continuous inequalities and complete sign covers in the
+unrestricted assembly [UNRESTRICTED.md](UNRESTRICTED.md). The assembly
+does not require every hull-eight configuration to belong to the
+F-moving chamber.

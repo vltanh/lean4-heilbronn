@@ -25,8 +25,9 @@ actual point. Thus at least one of \(P,T\) is above \(DS\).
 
 This completely excludes both radial assignments with \(P\) or
 \(T\) below \(DR\), and proves two uniform triangle-capacity
-bounds. The single assignment stated in Theorem 1 remains a separate
-obligation; this note does not exclude it.
+bounds. The single assignment stated in Theorem 1 is subsequently
+excluded by the interaction theorems assembled in Section 5 of
+[UNBALANCED_FINAL_LOWER_WEDGE.md](UNBALANCED_FINAL_LOWER_WEDGE.md).
 
 The two-point upper cut is already completely excluded in
 [UNBALANCED_UPPER_CELL_II.md](UNBALANCED_UPPER_CELL_II.md).

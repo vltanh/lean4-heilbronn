@@ -17,6 +17,8 @@ The three other actual configuration points may be anywhere in the
 square. In particular, this note makes no exact-anchor-hull hypothesis.
 The full exact-six-anchor hull was excluded in
 [SIX_BOUNDARY_HULL.md](SIX_BOUNDARY_HULL.md).
+The exterior restrictions below are used in the complete eight-occupancy
+assembly for N in Section 4 of [UNRESTRICTED.md](UNRESTRICTED.md).
 
 ## 1. The exterior cap at the double-contact corner is empty
 
@@ -94,7 +96,7 @@ there are two actual contacts on each of its two incident sides. Reflect
 and apply Lemma 1 to those four contacts and the alleged cap point.
 The result requires no condition on the two unused sides.
 
-## 2. Consequences for the remaining larger-hull problem
+## 2. Consequences for the larger-hull cases
 
 The virtual lower triangle
 \(T_0=\operatorname{conv}\{(0,0),H,C\}\) contains at most one
@@ -116,8 +118,9 @@ only
 \]
 
 The exact-six-anchor hull exclusion ensures that at least one free point
-lies in these three caps. This is a restriction on the remaining
-larger-hull cases, not an exclusion of those three caps.
+lies in these three caps. Together with the capacity-one theorem below,
+this gives the eight occupancy classes listed and closed in Section 4 of
+[UNRESTRICTED.md](UNRESTRICTED.md).
 
 ## 3. Each exterior cap adjacent to one double-contact side has capacity one
 

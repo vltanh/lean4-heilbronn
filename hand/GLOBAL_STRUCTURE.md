@@ -8,10 +8,10 @@ the corner-free branch can be represented by **six distinct prescribed boundary
 points and three arbitrary points**. The one-corner branch still has four
 arbitrary points, but its fixed corner removes one coordinate parameter.
 
-This note proves the structural reduction. The complete family bounds and
-unrestricted equality classification are now assembled in
-[GLOBAL_THEOREM.md](GLOBAL_THEOREM.md); the boundary conclusion follows
-there from the completed cases, not from the reduction alone.
+The normalization and equality-transfer lemmas here are used in the completed
+unrestricted theorem in [UNRESTRICTED.md](UNRESTRICTED.md). That assembly
+supplies the sharp bounds and equality classification for all five families
+obtained below.
 
 Write
 
@@ -196,16 +196,18 @@ can also be listed finitely. Without corners, the doubled sides number two
 adjacent sides, three sides, or all four sides. With one corner, the doubled
 sides must include its two incident sides, and may include zero, one, or
 both opposite sides. With two opposite corners, all four sides are doubled.
-These are seven incidence patterns up to square symmetry. They are
-**incidence patterns only**. Their complete continuous family bounds and
-equality cases are proved in the manuscripts assembled in GLOBAL_THEOREM.md.
+These are seven incidence patterns up to square symmetry. They describe the
+structural reduction; the required orientation and contact cases within them
+are covered by the component theorems assembled in Sections 3--4 of
+[UNRESTRICTED.md](UNRESTRICTED.md).
 
-## 4. Equality transfer and the completed global theorem
+## 4. Equality and the completed unrestricted assembly
 
 The contact-increasing maps are determinant-one shears, not necessarily
 square symmetries. Theorem 3 by itself transfers the optimal *value*.
 The existing strict local theorem supplies exactly the additional rigidity
-needed to transfer the normalized equality classification.
+used to transfer the normalized equality classification to the original
+configuration.
 
 **Lemma 4 (equality transfer).** Suppose an arbitrary maximizing configuration
 can be transformed into the candidate by finitely many square symmetries,
@@ -225,18 +227,22 @@ proved in Theorem 2 of `HAND_PROOF.md`. Therefore that shear cannot change
 the configuration. Applying the same argument backwards eliminates every
 shear. Only square symmetries and relabelings remain. \(\square\)
 
-The completed sharp classification of the five normalized families is
-assembled in [GLOBAL_THEOREM.md](GLOBAL_THEOREM.md). Applying Lemma 4
-gives the unrestricted equality classification as well as the optimal value.
+The sharp bound and candidate uniqueness in the five normalized families
+are now assembled in [UNRESTRICTED.md](UNRESTRICTED.md). Lemma 4 transfers
+that equality classification through the normalization and proves global
+uniqueness up to square symmetry and relabeling.
 
-The distinction between a whole-configuration shear and individual-point
-motion remains essential. For fixed positions of the other eight points,
-a sign-consistent feasible component for the ninth point is a convex
-polygon, and that polygon can be trapped inside the square. None of the
-normalization or completion arguments assumes otherwise.
+For a fixed choice of the other eight points,
+each oriented area constraint on the ninth point is a half-plane, so a
+sign-consistent feasible component is a convex polygon. Such a polygon can
+be trapped entirely inside the square. The completed proof handles these
+configurations through continuous inequalities and exact finite sign covers.
+The shear argument above applies to the whole configuration through its
+enclosing parallelogram.
 
-The original capacity arguments remain upstream of the final cap closures.
-[THREE_INTERIOR_TRIANGLES.md](THREE_INTERIOR_TRIANGLES.md) establishes
-unrestricted actual-triangle capacity two using the earlier corner and ear
-results; it does not use the completed C1 or N theorem. The final assembly
-records the dependency order explicitly.
+The final assembly excludes C1, C2, Type II, and Type III. It covers N by
+its six-, seven-, and eight-boundary alternatives, including all eight
+exterior-cap occupancy classes in the six-boundary form. The continuous
+sharp-chamber theorems classify every surviving equality branch. See
+Sections 3--6 of [UNRESTRICTED.md](UNRESTRICTED.md) for the complete theorem
+links, boundary conventions, and exact-certificate audit.
