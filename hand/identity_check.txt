@@ -1,0 +1,13 @@
+Stress residual / q, by point:
+A [137/8, 1/4]
+B [67/7, 50]
+C [-3/2, -37]
+D [37, 3/2]
+E [-50, -67/7]
+F [-1/4, -137/8]
+G [-15/14, -203/4]
+H [203/4, 15/14]
+O [-493/8, 493/8]
+All chamber identities, stress identities and kernel coefficient: PASS
+Exact 84-triangle attainment, 19 positive weights, equality product: PASS
+Scope: algebraic diagnostics only; no unrestricted global hand proof asserted.

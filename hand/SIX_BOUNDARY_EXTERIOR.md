@@ -1,0 +1,522 @@
+# Exterior restrictions for larger hulls in family N
+
+## Scope
+
+Use the six prescribed boundary contacts
+
+\[
+A=(0,a),\quad H=(0,h),\quad B=(b,0),\quad C=(c,0),
+\quad D=(1,d),\quad F=(f,1),
+\]
+\[
+0<a<h\le1,\quad0<b<c\le1,\qquad a\le d\le h,
+\quad b\le f\le c.
+\]
+
+The three other actual configuration points may be anywhere in the
+square. In particular, this note makes no exact-anchor-hull hypothesis.
+The full exact-six-anchor hull was excluded in
+[SIX_BOUNDARY_HULL.md](SIX_BOUNDARY_HULL.md).
+The exterior restrictions below are used in the complete eight-occupancy
+assembly for N in Section 4 of [UNRESTRICTED.md](UNRESTRICTED.md).
+
+## 1. The exterior cap at the double-contact corner is empty
+
+The following elementary five-point lemma does not use \(D,F\),
+the projection-overlap conditions, or the other free points.
+
+**Lemma 1.** Let \(X\) belong to the closed triangle with vertices
+\((0,0),A,B\). Then one of the three actual triangles
+\(AHX,BCX,ABX\) has ordinary area strictly less than
+
+\[
+\frac{hc}{20}\le\frac1{20}.
+\]
+
+**Proof.** Apply the affine map \((x,y)\mapsto(x/c,y/h)\),
+which divides doubled areas by \(hc\). It suffices to prove the
+assertion when \(h=c=1\). Continue to write \(a,b,x,y\) for
+the normalized coordinates, so \(0<a,b<1\).
+
+If any of the three indicated triangles is degenerate, the conclusion
+is immediate. Otherwise let \(s>0\) be the minimum of their three
+doubled areas. Since \(X=(x,y)\) is below \(AB\),
+
+\[
+x(1-a)\ge s,\qquad y(1-b)\ge s,
+\qquad ab-ax-by\ge s.
+\]
+
+Substitute the first two lower bounds in the third. They give
+
+\[
+ab\ge s\left(1+\frac{a}{1-a}+\frac{b}{1-b}\right),
+\qquad
+s\le\frac{ab(1-a)(1-b)}{1-ab}.                         \tag{1}
+\]
+
+Put \(t=\sqrt{ab}\in(0,1)\). The inequality
+\(a+b\ge2\sqrt{ab}\) implies
+\((1-a)(1-b)\le(1-t)^2\), hence
+
+\[
+s\le\frac{t^2(1-t)}{1+t}<\frac1{10}.                  \tag{2}
+\]
+
+For a direct exact check of the strict comparison, it is equivalent to
+
+\[
+10t^3-10t^2+t+1>0.
+\]
+
+Set \(z=t-3/5\ge-3/5\). The left side is
+
+\[
+10z^3+8z^2-\frac z5+\frac4{25}
+\ge2z^2-\frac z5+\frac4{25}>0.
+\]
+
+The first inequality uses \(8+10z\ge2\); the last quadratic
+has positive leading coefficient and discriminant \(-31/25<0\).
+Thus one of the normalized doubled areas is below \(1/10\).
+Undoing the affine normalization proves the lemma. \(\square\)
+
+**Theorem 2.** In a competitive configuration in the entire family N,
+the closed exterior cap \(\operatorname{conv}\{(0,0),A,B\}\)
+contains no further actual point.
+
+Indeed \(A_0>7/128>1/20\), so Lemma 1 contradicts a minimum
+ordinary triangle area at least \(A_0\). The statement remains valid
+if some of the other points are additional boundary contacts or hull
+vertices.
+
+This same lemma also gives a shorter independent exclusion of each lower
+exterior cap in the seven-boundary configuration: at either such corner
+there are two actual contacts on each of its two incident sides. Reflect
+and apply Lemma 1 to those four contacts and the alleged cap point.
+The result requires no condition on the two unused sides.
+
+## 2. Consequences for the larger-hull cases
+
+The virtual lower triangle
+\(T_0=\operatorname{conv}\{(0,0),H,C\}\) contains at most one
+free point, by Theorem 4 of
+[QUADRILATERAL_HULL.md](QUADRILATERAL_HULL.md).
+If such a point exists, Theorem 2 puts it inside the lower anchor
+quadrilateral \(HABC\). After the permitted transpose that makes
+\(ABC\) empty in Lemma 5 of that note, it lies in \(AHC\).
+These statements are valid without an exact-hull hypothesis.
+
+The square outside the anchor hexagon is the union of its four exterior
+corner triangles. Theorem 2 removes the double-contact corner, leaving
+only
+
+\[
+\operatorname{conv}\{(1,0),C,D\},\qquad
+\operatorname{conv}\{(1,1),D,F\},\qquad
+\operatorname{conv}\{(0,1),F,H\}.
+\]
+
+The exact-six-anchor hull exclusion ensures that at least one free point
+lies in these three caps. Together with the capacity-one theorem below,
+this gives the eight occupancy classes listed and closed in Section 4 of
+[UNRESTRICTED.md](UNRESTRICTED.md).
+
+## 3. Each exterior cap adjacent to one double-contact side has capacity one
+
+The two exterior caps adjacent to exactly one double-contact side
+satisfy the following stronger restriction.
+
+**Theorem 3.** Assume that every unsigned doubled triangle area is at
+least \(s=7/64\). Then each of
+
+\[
+\operatorname{conv}\{(1,0),C,D\},\qquad
+\operatorname{conv}\{(0,1),F,H\}
+\]
+
+contains at most one further actual point. This statement holds
+throughout family N, with any number of additional hull vertices.
+
+**Proof.** It suffices to treat the first cap: transposition of the square
+and the relabeling
+
+\[
+(A,H,B,C,D,F)\longmapsto(B,C,A,H,F,D)
+\]
+
+preserve all the stated normalization conditions and exchange the two
+caps. A degenerate cap contains no further actual point, because its
+actual endpoints would give a zero triangle. Thus take \(0<c<1\)
+and \(d>0\), and suppose that the first cap contains two actual points
+\(P,Q\).
+
+Put
+
+\[
+m=c-b,\qquad \alpha=1-c,\qquad
+u=\frac{s}{md},\quad v=\frac{s}{bd},\quad
+\tau=\frac{s}{\alpha d},\quad p=1-u.
+\]
+
+For a cap point \(X=(x,y)\), use coordinates
+
+\[
+U=\frac{1-x}{\alpha},\qquad V=\frac yd.
+\]
+
+The cap becomes \(U,V\ge0\), \(U+V\le1\), and
+\(D\) becomes \((0,1)\). The actual triangles \(BCX\)
+and \(CDX\) have unsigned doubled areas \(mdV\) and
+\(\alpha d(1-U-V)\). Consequently both \(P,Q\) belong to
+the smaller triangle
+
+\[
+\mathcal T=
+\operatorname{conv}\{(0,u),(1-\tau-u,u),(0,1-\tau)\}.
+                                                               \tag{3}
+\]
+
+If \(1-\tau-u\le0\), this set is empty or degenerate, which
+already contradicts \(|[DPQ]|\ge s\). Otherwise
+\(0<u<1\). The maximum of an absolute determinant with two
+points in a triangle occurs at two vertices: fix one point, use
+convexity in the other, and then repeat. The three vertex-pair values
+for doubled areas based at \(D=(0,1)\) are
+
+\[
+(1-\tau-u)(1-u),\quad
+(1-\tau-u)\tau,\quad 0.
+\]
+
+The first is largest because \(1-u>\tau\). Restoring the
+area scale \(\alpha d\) therefore gives
+
+\[
+s\le |[DPQ]|
+\le\alpha d(1-u)(1-u-\tau)
+=\alpha d p^2-sp.                                           \tag{4}
+\]
+
+Only three anchor areas are needed from this point onward.
+The inequalities \([ABC]\ge s\) and \([ABH]\ge s\)
+give
+
+\[
+h\ge\frac{s}{m}+\frac{s}{b}=d(u+v),\qquad h\ge d.
+                                                               \tag{5}
+\]
+
+Also
+
+\[
+s\le[HDF]=1-h+f(h-d)
+\le1-h+c(h-d),
+\qquad (1-c)h+cd\le1-s.                                  \tag{6}
+\]
+
+In particular \(d\le1-s\). Write
+
+\[
+k=\frac{1-s}{s}=\frac{57}{7}.
+\]
+
+Since \(c=(s/d)(1/u+1/v)\), the upper bound in (4), divided
+by \(s\), equals
+
+\[
+\left(\frac d s-\frac1u-\frac1v\right)p^2-p.               \tag{7}
+\]
+
+If \(u+v\le1\), then \(v\le p\). Using
+\(d/s\le k\), (7) is at most
+
+\[
+\left(k-\frac1u-\frac1p\right)p^2-p
+=k(1-u)^2+u-\frac1u=:B(u).                                \tag{8}
+\]
+
+If \(u+v>1\), substitute (5) into (6) and use
+\(cd=s(1/u+1/v)\). This gives
+
+\[
+\frac d s\le\frac{k}{u+v}+\frac{u+v-1}{uv},
+\]
+
+so (7) is at most
+
+\[
+g(v)p^2-p,
+\qquad g(v)=\frac{k}{u+v}-\frac1{uv},\qquad v>p.           \tag{9}
+\]
+
+If \(ku\le1\), then \(g(v)<0\), already contradicting
+(4). Suppose \(ku>1\), and put \(w=\sqrt{ku}>1\).
+For every \(v>0\),
+
+\[
+\frac{(w-1)^2}{u^2}-g(v)
+=\frac{((w-1)v-u)^2}{u^2v(u+v)}\ge0.                       \tag{10}
+\]
+
+If \(kup^2\le1\), then \(p(w-1)\le1-p=u\).
+Equation (10) makes (9) at most \(1-p<1\), which contradicts
+(4). If \(kup^2>1\), then
+\(p>u/(w-1)\). The derivative
+
+\[
+g'(v)=-\frac{k}{(u+v)^2}+\frac1{uv^2}
+\]
+
+is negative for \(v\ge p\), since \((w-1)v>u\).
+Thus \(g(v)\le g(p)\), and (9) is again bounded by
+\(B(u)\) in (8).
+
+It remains to show \(B(u)<1\) for \(0<u<1\). Equivalently,
+
+\[
+7u(B(u)-1)=57u^3-107u^2+50u-7<0.                          \tag{11}
+\]
+
+Set \(z=u-3/10\), so \(z\le7/10\). The cubic in (11)
+becomes
+
+\[
+57z^3-\frac{557}{10}z^2+\frac{119}{100}z-\frac{91}{1000}
+\le-\frac{79}{5}z^2+\frac{119}{100}z-\frac{91}{1000}<0.
+\]
+
+The first comparison uses \(57z-557/10\le-79/5\).
+The last quadratic has negative leading coefficient and discriminant
+\(-43351/10000<0\). This contradicts (4) in all cases and
+proves the theorem. \(\square\)
+
+Theorem 3 rules out a pair in either side cap, while Theorem 2 makes the
+lower-left cap empty. The upper-right cap and interactions between
+distinct caps remain to be considered.
+
+## 4. Three points in the opposite cap force an eight-vertex hull
+
+The upper-right cap is qualitatively different from the side caps.
+Here is an exhaustive reduction of the occupancy in which it contains
+all three free points.
+
+**Theorem 4.** Suppose all three free points are in
+\(\operatorname{conv}\{D,F,(1,1)\}\), and every actual doubled
+triangle area is at least \(s=7/64\). They can be named \(E,G,O\)
+so that \(D,E,G,F\), in that cyclic order, is a strictly convex
+quadrilateral and
+
+\[
+                         O\in DFE\cap DFG.
+\]
+
+Consequently the full configuration has exactly eight hull vertices,
+with \(O\) as its sole interior point. Every triangular cap hull and
+every other support-cell placement is impossible. The surviving common
+cell is not excluded by this theorem.
+
+**Proof.** The actual inequalities \([ABC]\ge s\) and
+\([ABH]\ge s\) give \(a>s\) and \(b>s\), because both
+side gaps are less than one. Thus \(d\ge a>s\) and
+\(f\ge b>s\). The cap's doubled area \(\delta\) satisfies
+
+\[
+\delta=(1-d)(1-f)<(1-s)^2
+=\frac{3249}{4096}<\frac{13}{16}<Ks,
+\qquad K=4+2\sqrt3.                                    \tag{12}
+\]
+
+Apply the five-point endpoint-triangle analysis in Section 1 of
+[TYPE_II.md](TYPE_II.md) to \(D,F\) and the three free points,
+with this cap as containing triangle. Its triangular-hull alternative
+would put two additional actual points inside an actual triangle of
+doubled area at most \(\delta\). The two-interior-point theorem
+would then require \(\delta\ge Ks\), contradicting (12).
+
+In the nontriangular alternative, that analysis constructs a support
+triangle inside the cap, with actual points \(E,G\) in the relative
+interiors of its legs at \(D,F\), respectively. Let its doubled area
+be \(\delta'\le\delta\). The five possible cells for the last
+point \(O\) are exactly the five cells in that analysis. Cells I
+and III require \(\delta'\ge Ks\), cell IV requires
+\(\delta'\ge12s\), and cell V requires
+\(\delta'>10s\). All contradict (12). Only cell II remains;
+its actual containments are precisely \(O\in DFE\cap DFG\).
+In particular \(O\) is strictly inside the quadrilateral \(D,E,G,F\).
+
+For clarity, both cap vertices \(E,G\) remain hull vertices after
+the four lower anchors are restored. The support legs from \(D,F\)
+meet at a point of the original cap. Their lines put every point of
+the square below \(DF\), in particular \(A,H,B,C\), on the
+same inner side as the support triangle. For example, the leg from
+\(D\) is either vertical or has negative slope of magnitude at least
+\((1-d)/(1-f)\), so all four anchors lie below it; the transposed
+argument handles the other leg. The exposed edges \(DE\) and
+\(GF\) therefore remain support edges of the full hull. The six
+prescribed contacts are also hull vertices: \(A,H\) are the two
+extremes on the left side, \(B,C\) on the bottom side, \(D\) is
+the lowest contact on the right, and \(F\) the leftmost contact on
+the top. Positive minimum area excludes any collinear third point.
+Thus the full hull has exactly these eight vertices, proving the
+theorem. \(\square\)
+
+## 5. An occupied side cap makes the opposite lower ear empty
+
+**Theorem 5.** If an actual free point lies in the lower-right exterior
+cap \(CD(1,0)\), then \([ABH]<3s\), where \(s=7/64\).
+Consequently the actual triangle \(ABH\) contains no further
+configuration point. Transposition gives the companion statement:
+an occupied upper-left exterior cap \(FH(0,1)\) implies
+\([ABC]<3s\), and that lower ear is empty.
+
+**Proof.** Write the cap point as \(X=(x,y)\), and put
+
+\[
+m=c-b,\qquad w=1-c,\qquad b+m+w=1.
+\]
+
+The signed cap costs give
+
+\[
+my=[BCX]\ge s,\qquad
+d(x-c)-wy=-[CDX]\ge s.
+\]
+
+Since \(x\le1\), they imply
+
+\[
+                       d\ge\frac{s}{m}+\frac{s}{w}.      \tag{13}
+\]
+
+Suppose, for a contradiction, that \([ABH]\ge3s\).
+Together with \([ABC]\ge s\), this gives
+
+\[
+                       h\ge\frac{s}{m}+\frac{3s}{b}.     \tag{14}
+\]
+
+The same top budget (6), namely \(wh+(1-w)d\le1-s\),
+therefore requires
+
+\[
+ F(m,w):=\frac1m+\frac{3w}{1-m-w}+\frac1w\le\frac1s.
+                                                               \tag{15}
+\]
+
+Here is the complete scalar contradiction. The bounds \(h,d\le1\)
+in (13)--(14) imply \(m>s\) and
+
+\[
+b\ge b_0:=\frac{3sm}{m-s},\qquad
+\frac{sm}{m-s}\le w\le w_0:=1-m-b_0.
+                                                               \tag{16}
+\]
+
+In particular \(w_0>0\), and summing the first two lower bounds
+in (16) gives
+
+\[
+m^2-(1-3s)m+s\le0,\qquad m>\frac14.                     \tag{17}
+\]
+
+For the latter conclusion, the polynomial on the left decreases on
+\([0,1/4]\) and has value \(1/256>0\) at \(1/4\).
+Furthermore
+
+\[
+b_0-2w_0=
+\frac{2m^2+(7s-2)m+2s}{m-s}>0,                          \tag{18}
+\]
+
+because its numerator has positive leading coefficient and discriminant
+\(-927/4096<0\). Thus throughout the interval (16),
+\(b/w>2>\sqrt{3(1-m)}\), and
+
+\[
+\frac{\partial F}{\partial w}
+=\frac{3(1-m)}{(1-m-w)^2}-\frac1{w^2}<0.
+\]
+
+Consequently \(F(m,w)\ge F(m,w_0)\). Exact simplification gives
+
+\[
+F(m,w_0)-\frac1s
+=-\frac{P(m)}{7(64m^2-50m+7)},
+\qquad
+P(m)=4096m^3-2304m^2+196m+49.                            \tag{19}
+\]
+
+The denominator in (19) is negative, since
+\(w_0=-(64m^2-50m+7)/(64m-7)>0\). The numerator
+\(P(m)\) is positive for \(m>1/4\): putting
+\(z=m-1/3>-1/12\),
+
+\[
+\begin{aligned}
+P(m)&=4096z^3+1792z^2+\frac{76}{3}z+\frac{271}{27}\\
+&\ge\frac{4352}{3}z^2+\frac{76}{3}z+\frac{271}{27}>0.
+\end{aligned}
+\]
+
+The last quadratic has positive leading coefficient and discriminant
+\(-4665584/81<0\). Thus (19) is strictly positive, contradicting
+(15). This proves \([ABH]<3s\). A further actual point inside
+\(ABH\) would divide it into three actual triangles of doubled area
+at least \(s\), which is impossible. The transposed conclusion follows
+by the relabeling in Theorem 3. \(\square\)
+
+This proof uses the same scalar cubic as the occupied-ear estimate in
+[SEVEN_BOUNDARY_CAPS.md](SEVEN_BOUNDARY_CAPS.md), but its hypotheses
+here are the six-contact N normalization and one exterior point. The
+argument above records the independent area conversion for this use.
+
+## 6. Side projection preserves every anchor-pair cost
+
+The following observation isolates the obstruction to a full boundary
+projection; it does not assert that every triangle involving another
+free point is preserved.
+
+**Lemma 6.** Let \(X=(x,y)\in CD(1,0)\), and suppose all triangles
+formed by \(X\) and two of the six anchors have unsigned doubled area
+at least \(s>0\). Then the same is true after replacing \(X\) by
+\(X'=(1,y)\). The transposed statement holds for the upper-left cap.
+
+**Proof.** Positivity gives \(c<x\le1\) and \(0<y<d\le h\).
+As the first coordinate of \(X\) increases, the absolute areas for
+the anchor pairs
+
+\[
+AB,AC,AD,AF,AH,BD,BF,BH,CD,CF,CH,FH
+\]
+
+are nondecreasing, and the \(BC\) area is constant. The signs are
+fixed by \(X\)'s cap placement, \(a\le d\le h\), and
+\(b\le f\le c\). The only decreasing magnitudes are those for
+\(HD\) and \(DF\). But the original \(CDX\) cost says
+
+\[
+(1-c)(d-y)\ge s+d(1-x)\ge s.
+\]
+
+At the endpoint,
+
+\[
+|[HDX']|=d-y\ge s,\qquad
+|[DFX']|=(1-f)(d-y)\ge(1-c)(d-y)\ge s.
+\]
+
+Both decreasing areas therefore remain above the threshold throughout
+the segment as well. This proves the lemma. \(\square\)
+
+## Verification
+
+The optional exact diagnostic
+[check_six_boundary_exterior.py](check_six_boundary_exterior.py)
+checks the area formulas, the two cap reductions, the rational
+simplifications, the one-variable maximization identity, and the strict
+polynomial comparisons in Lemma 1 and Theorem 3. It also checks the
+rational area comparison in Theorem 4; that theorem's support-cell
+classification is the already proved endpoint-triangle analysis. The
+occupied-ear elimination and its scalar polynomials, and all fifteen
+anchor-pair formulas for Lemma 6, are also checked exactly.

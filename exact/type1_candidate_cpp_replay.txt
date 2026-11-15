@@ -1,0 +1,1 @@
+TYPE1_RANGE_PASS start=132220 stop=132221 patterns=1 roots=11424 search=34569 bb=15666 local=62

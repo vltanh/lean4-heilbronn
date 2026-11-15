@@ -1,0 +1,38 @@
+{
+  "status": "COMPLETE_PASS",
+  "secondary_ranges": [
+    [
+      0,
+      150000
+    ],
+    [
+      150000,
+      240000
+    ],
+    [
+      240000,
+      330988
+    ]
+  ],
+  "primary_cpp": {
+    "patterns": 330988,
+    "roots": 102364833,
+    "search_nodes": 1221968862,
+    "branch_nodes": 102496433,
+    "local_leaves": 1352
+  },
+  "secondary_numba": {
+    "patterns": 330988,
+    "roots": 102364833,
+    "search_nodes": 1221968862,
+    "branch_nodes": 102496471,
+    "local_leaves": 1352
+  },
+  "agreement": [
+    "patterns",
+    "roots",
+    "search_nodes"
+  ],
+  "unresolved_patterns": 0,
+  "unresolved_boxes": 0
+}

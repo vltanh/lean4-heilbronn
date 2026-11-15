@@ -1,0 +1,17 @@
+{
+  "status": "independent_sympy_pass",
+  "data_sha256": "477ce389dd82aadcb5174da9dd14e5a36e38039b3c27278e50660f5cf1f1031a",
+  "radial_words": 94,
+  "cubic_expressions": 100,
+  "positive_terms": 17619,
+  "greatest_cube_upper": "-11315534897214263309/11507808525803520000",
+  "checks": [
+    "All 31 affine factors independently audited geometrically",
+    "All 93 quadratic costs independently reconstructed",
+    "All 94 radial words and 100 branches independently enumerated",
+    "Every fixed expression independently expanded in Sympy",
+    "Both cap-order identities and every cap/projection identity independently checked",
+    "All eleven sharp E/F determinant formulas and signs independently reconstructed",
+    "Complete sharp-chamber hypotheses and equality conclusion independently audited"
+  ]
+}

@@ -1,0 +1,23 @@
+row 0 verified 15005 elapsed 7.4432477951049805
+row 1 verified 28454 elapsed 13.088162660598755
+row 2 verified 61101 elapsed 25.796249866485596
+row 3 verified 119821 elapsed 51.40081810951233
+row 4 verified 175382 elapsed 74.01090598106384
+row 5 verified 218410 elapsed 91.36262154579163
+row 6 verified 242133 elapsed 101.07197523117065
+row 7 verified 266015 elapsed 110.89225792884827
+row 8 verified 296474 elapsed 123.00870084762573
+row 9 verified 325511 elapsed 134.83677625656128
+row 10 verified 339168 elapsed 140.66679883003235
+row 11 verified 350458 elapsed 145.9633092880249
+row 12 verified 355003 elapsed 148.354266166687
+row 13 verified 355975 elapsed 148.57891154289246
+row 14 verified 356006 elapsed 148.59656167030334
+row 15 verified 356024 elapsed 148.61116433143616
+row 16 verified 356024 elapsed 148.61893510818481
+row 17 verified 356024 elapsed 148.62765765190125
+row 18 verified 356024 elapsed 148.6354615688324
+row 19 verified 356024 elapsed 148.6435399055481
+{'j_start': 0, 'j_stop': 20, 'roots_verified': 356024, 'seconds': 148.64365601539612, 'status': 'PASS'}
+
+Type III: 12326 leaves passed independently in replay_typeIII_leaves.py.

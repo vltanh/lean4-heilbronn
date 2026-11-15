@@ -1,0 +1,1 @@
+SELFTEST_PASS corner_maxima=20000 feasible_witnesses=3813 candidate_preserved=1 broad_box_preserved=1 zero_excluded=1
