@@ -1,37 +1,29 @@
-# Nine-point Heilbronn: hand proofs and the remaining global gap
+# Nine-point Heilbronn: complete proof and exact certificates
 
-The **complete eight-boundary theorem** is proved in
-[EIGHT_BOUNDARY.md](EIGHT_BOUNDARY.md): every nine-point configuration in
-the unit square with at least eight boundary points has minimum triangle
-area at most
+The unrestricted theorem is proved in [UNRESTRICTED.md](UNRESTRICTED.md):
 
 \[
-A_0=\frac{9\sqrt{65}-55}{320},
+H_9=\frac{9\sqrt{65}-55}{320},
 \]
 
-with equality only at the stated construction, up to square symmetry and
-relabeling. No symmetry or orientation chamber is assumed in that theorem.
+with equality exactly at the displayed construction, up to square symmetry
+and relabeling. That note assembles the global normalization, every corner
+family, all six/seven/eight-boundary alternatives, and the equality transfer
+through feasible shears. The component-theorem index below gives the full
+proof sources.
 
-**The unrestricted hand proof remains incomplete.** The global normalization
-does not yet force eight boundary points, and the remaining continuous
-families are listed below. The older computational draft is separate.
-
-For the fully itemized register, see
-[G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md) (62 individually
-numbered parent cases) and [G6_ITEMIZED_LEAVES.tsv](G6_ITEMIZED_LEAVES.tsv)
-(221 lower-point/sector/wedge/sign leaves). The
-[deterministic enumeration checker](check_g6_itemized_cases.py) verifies
-the list; 2 parent cases and 5 leaves remain open.
-For the underlying structural case classification, see
-[G6_FINITE_CASE_LEDGER.md](G6_FINITE_CASE_LEDGER.md). Its unpruned
-occupancy/sign census (8 N6, up to 16 N7, and 21+12 C1 coarse
-classes) is a planning ledger. Its status entries distinguish the
-now-complete N7 cover and the other completed subrows from open cases.
+All **62 parent cases and 221 indexed leaves are closed**. Their stable
+IDs and theorem links are retained in [G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md)
+and [G6_ITEMIZED_LEAVES.tsv](G6_ITEMIZED_LEAVES.tsv). The
+[enumeration checker](check_g6_itemized_cases.py) verifies this census and
+that its proof files exist. The manuscripts and fixed exact certificates
+establish the geometric exclusions.
 
 ## Proven results
 
 | Result | Written proof |
 |---|---|
+| Unrestricted sharp theorem and unique equality configuration | [UNRESTRICTED.md](UNRESTRICTED.md), Theorem 1 |
 | Exact construction and all 84 triangle areas | [HAND_PROOF.md](HAND_PROOF.md), appendix |
 | Sharp eleven-triangle inequality for the asymmetric candidate chamber | `HAND_PROOF.md`, Part I |
 | Unrestricted strict local maximum against all eighteen coordinate perturbations | `HAND_PROOF.md`, Part II |
@@ -115,6 +107,9 @@ now-complete N7 cover and the other completed subrows from open cases.
 | Complete one-lower C1 with two or three top-cap points; all three parent rows | [C1_ONE_LOWER_TOP_MULTIPLICITY.md](C1_ONE_LOWER_TOP_MULTIPLICITY.md) |
 | Complete C1 one-lower class and the final three mixed-cap placements | [C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md), Theorems 1–2 |
 | Complete single opposite-cap N occupancy, all 893 cells | [SIX_BOUNDARY_SINGLE_TOP.md](SIX_BOUNDARY_SINGLE_TOP.md) |
+| Complete two-opposite-cap N occupancy, both cap hulls and equality | [SIX_BOUNDARY_TWO_TOP_COMPLETION.md](SIX_BOUNDARY_TWO_TOP_COMPLETION.md) |
+| Triangular two-opposite-cap hull: 262 cells and 220 exact cubics | [SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md](SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md) |
+| Convex two-opposite-cap hull: 94 words, 100 exact cubics and the sharp E/F chamber | [SIX_BOUNDARY_TWO_TOP_CONVEX.md](SIX_BOUNDARY_TWO_TOP_CONVEX.md) |
 | Complete N side-and-opposite occupancy, all 97 words and equality | [SIX_BOUNDARY_SIDE_OPPOSITE.md](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
 | Contributed cubic-only completion of the same N6 side-and-opposite occupancy | [SIX_BOUNDARY_SIDE_TOP_COMPLETION.md](SIX_BOUNDARY_SIDE_TOP_COMPLETION.md) |
 | Simultaneous B/D sharp chamber | [SHARP_BD_MOVING.md](SHARP_BD_MOVING.md) |
@@ -125,99 +120,37 @@ The original three-family argument is retained in
 include arbitrary remaining points; they do not assume those points lie in
 an observed numerical pattern.
 
-## What remains
+## Complete assembly and equality
 
-- **N with six boundary contacts:** only two opposite-cap points with
-  one anchor-interior point (N6-06) remains. Its triangular and convex
-  top hulls are being assembled and independently checked; both lower
-  and upper placements of the remaining point must be covered.
-- **C1 is complete.** Theorem 2 of
-  [C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md) closes the
-  entire one-lower class. Together with the zero-lower, two-lower and
-  lower-triangle capacity theorems, it excludes every C1 configuration.
+The N6 exact hull, all eight exterior-cap occupancies, the entire normalized
+N7 form and the eight-boundary theorem cover N. The zero-, one-, two- and
+three-plus-lower theorems cover C1. C2, Type II and Type III have complete
+strict exclusions below \(A_0\). Section 4 of UNRESTRICTED.md links each
+N6 row to its exact scope, including both hulls in the final two-top row.
 
-The entire normalized seven-boundary form is complete, including every
-interior pair, every exterior placement, and equality. Its final assembly
-is Theorem 2 of SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md.
+The sharp moving-point chambers classify every possible equality branch.
+Lemma 4 of GLOBAL_STRUCTURE.md then uses unrestricted strict local
+optimality to show that the normalizing shears cannot change an equality
+configuration. Thus uniqueness applies to the original nine points.
 
-The opposite-corner family C2, the entire three-corner family Type III,
-and the entire adjacent-corner Type-II family are closed by strict
-bounds below \(A_0\).
-For every competitive configuration, even before normalization, every
-actual triangle contains at most two further configuration points. This
-global occupancy theorem is proved but does not exclude all surviving
-order types.
+## Exact verification
 
-A proof covering these complete families, or a proved boundary-saturation
-reduction to the solved family, would finish the unrestricted theorem.
-A local theorem or a numerical description of the candidate does not supply
-that step. See [../ROADMAP.md](../ROADMAP.md) for the current completion gates.
-
-## Optional exact diagnostics
-
-From the repository root, run:
+From the repository root, the integrated runner executes every
+`hand/check_*.py` file and records each result:
 
 ```sh
-python hand/check_identities.py
-python hand/check_eight_boundary.py
-python hand/check_radial.py
-python hand/check_r6.py
-python hand/check_opposite_corners.py
-python hand/check_corners.py
-python hand/check_four_corners.py
-python hand/check_type_ii.py
-python hand/check_quadrilateral_hulls.py
-python hand/check_one_corner.py
-python hand/check_seven_boundary_caps.py
-python hand/check_three_interior_triangles.py
-python hand/check_type_ii_balanced.py
-python hand/check_global_completion.py
-python hand/check_type_ii_completion.py
-python hand/check_one_corner_completion.py
-python hand/check_c1_mixed_pentagon.py
-python hand/check_four_interior_quadrilaterals.py
-python hand/check_balanced_bottom_inner_sector.py
-python hand/check_balanced_right_mixed.py
-python hand/check_unbalanced_right_hull.py
-python hand/check_unbalanced_radial_split.py
-python hand/check_unbalanced_cell_i.py
-python hand/check_unbalanced_cell_iii.py
-python hand/check_unbalanced_upper_cell_ii.py
-python hand/check_seven_boundary_left_pair.py
-python hand/check_seven_boundary_right_pair.py
-python hand/check_six_boundary_hull.py
-python hand/check_c1_two_lower_side_cap.py
-python hand/check_c1_top_cap_radial_split.py
-python hand/check_seven_boundary_top_cap.py
-python hand/check_seven_boundary_top_cap_right.py
-python hand/check_seven_boundary_mixed_pair.py
-python hand/check_sharp_bc_moving.py
-python hand/check_c1_top_cap_convex_pair.py
-python hand/check_c1_top_cap_triangular_pair.py
-python hand/check_c1_top_cap_side_ears.py
-python hand/check_c1_top_cap_of_split.py
-python hand/check_unbalanced_one_upper_radial.py
-python hand/check_unbalanced_occupied_lower_ear.py
-python hand/check_unbalanced_final_negative_line.py
-python hand/check_unbalanced_final_upper_pair.py
-python hand/check_unbalanced_final_lower_wedge.py
-python hand/check_c1_top_cap_common_cell.py
-python hand/check_sharp_g_moving_projection.py
-python hand/check_seven_boundary_top_cap_radial.py
-python hand/check_six_boundary_exterior.py
-python hand/check_seven_boundary_adjacent_caps.py
-python hand/check_c1_top_cap_containment_pair.py
-python hand/check_c1_two_lower_completion.py
-python hand/check_seven_boundary_adjacent_caps_completion.py
-python hand/check_seven_boundary_upper_triangle.py
-python hand/check_seven_boundary_exterior_certificates.py
-python hand/check_seven_boundary_mixed_lower.py
-python hand/check_seven_boundary_mixed_above.py
-python hand/check_seven_boundary_mixed_above_certificates.py
-python hand/check_six_boundary_two_side_projection.py
-python hand/check_six_boundary_two_side_completion.py
-python hand/check_c1_one_lower_top_cap.py
+python research/run_hand_checks.py
 ```
+
+Its report is [research/HAND_CHECKS.md](../research/HAND_CHECKS.md), with
+exact input fingerprints and individual outputs in the accompanying JSON
+files. Python 3 and SymPy are required for the whole collection; the fixed
+rational coefficient verifiers use the standard library.
+
+Separate `research/audit_*.py` programs independently reconstruct the
+complete finite covers, factors, signed costs and coefficient expansions.
+The final N6 and C1 packages have passed those separate audits. Each
+component manuscript also links the exact verifier for that result.
 
 These scripts use SymPy where appropriate and verify the printed determinant
 identities, rational inequalities, and small finite tables. The written proofs

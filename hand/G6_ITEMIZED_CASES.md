@@ -1,20 +1,20 @@
 # Itemized G6 case register (individual IDs and statuses)
 
 This file expands [G6_FINITE_CASE_LEDGER.md](G6_FINITE_CASE_LEDGER.md) into
-**individually numbered rows**. It is a working case register for the remaining
+**individually numbered rows**. It is the completed case register for the
 unrestricted nine-point Heilbronn hand proof; it is *not* itself a proof.
 
 Counts, at the present commit:
 
-- **N6:** 13 lower-versus-upper occupancy rows, **11 closed, 2 open**.
+- **N6:** 13 lower-versus-upper occupancy rows, **all 13 closed**.
 - **N7:** 16 four-sign orientation rows, **all 16 closed**.
 - **C1-0:** 21 upper-cap occupancy rows, **all 21 closed**.
 - **C1-1:** 12 upper-cap occupancy rows, **all 12 closed**.
-- **Total:** 62 itemized rows, **2 open** and **60 closed**.
+- **Total:** 62 itemized rows, **0 open** and **62 closed**.
 
 For a more detailed machine-readable list, see
 [G6_ITEMIZED_LEAVES.tsv](G6_ITEMIZED_LEAVES.tsv): it explicitly enumerates
-all **221** occupancy/sector/sign leaves (5 open, 216 covered by complete
+all **221** occupancy/sector/sign leaves (0 open, 221 covered by complete
 class theorems). These are *necessary geometric types*, not claims that each
 leaf has a feasible configuration. Certain free-point line signs still need
 further subdivision before a proof, and case boundaries must be checked.
@@ -75,8 +75,8 @@ is assumed.
 | N6-04-L0 | (0,1,1;1) | 0 | 1 | **CLOSED** | [SIX_BOUNDARY_SIDE_OPPOSITE](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
 | N6-04-L1 | (0,1,1;1) | 1 | 0 | **CLOSED** | [SIX_BOUNDARY_SIDE_OPPOSITE](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
 | N6-05-L0 | (1,1,1;0) | 0 | 0 | **CLOSED** | [SIX_BOUNDARY_TWO_SIDE_UPPER](SIX_BOUNDARY_TWO_SIDE_UPPER.md) |
-| N6-06-L0 | (0,2,0;1) | 0 | 1 | **OPEN** | Remaining: two top-cap points plus one anchor-interior point |
-| N6-06-L1 | (0,2,0;1) | 1 | 0 | **OPEN** | Remaining: two top-cap points plus one anchor-interior point |
+| N6-06-L0 | (0,2,0;1) | 0 | 1 | **CLOSED** | [SIX_BOUNDARY_TWO_TOP_COMPLETION](SIX_BOUNDARY_TWO_TOP_COMPLETION.md) |
+| N6-06-L1 | (0,2,0;1) | 1 | 0 | **CLOSED** | [SIX_BOUNDARY_TWO_TOP_COMPLETION](SIX_BOUNDARY_TWO_TOP_COMPLETION.md) |
 | N6-07-L0 | (0,2,1;0) | 0 | 0 | **CLOSED** | [SIX_BOUNDARY_SIDE_TWO_TOP](SIX_BOUNDARY_SIDE_TWO_TOP.md) |
 | N6-08-L0 | (0,3,0;0) | 0 | 0 | **CLOSED** | [SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION](SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md) |
 
@@ -84,8 +84,9 @@ All caps and interior classes above are exhaustive *before* selecting the
 specific upper diagonal-sector subset and pair-line signs. In particular
 N6-08-L0 is now completely bounded sharply, with equality forcing the
 additional boundary contacts. Both N6-02 lower/upper subrows are closed.
-Only N6-06 remains open in this table. The complete N6-04
-theorem covers both lower and upper anchor-interior points, with equality.
+All eight N6 occupancies are closed, including both lower and upper
+anchor-interior alternatives and both hulls for two opposite-cap points.
+The sharp cases include their complete equality classification.
 
 ## B. N7 — all 16 sign words individually marked closed
 
@@ -118,7 +119,7 @@ excluded class, not 16 remaining tasks.
 ## C. C1-0 — 21 individually numbered cases, zero lower points
 
 Here (n_0=0), the tuple totals four, and every row is now CLOSED by
-[C1_ZERO_LOWER.md](C1_ZERO_LOWER.md), Theorem 3. Its general cap
+[C1_ZERO_LOWER.md](C1_ZERO_LOWER.md), Theorem 4. Its general cap
 lemmas first reduce these 21 unpruned orbits, and its complete fixed
 certificate cover excludes every surviving placement.
 The exact anchor-pentagon case ((0,0,0;4)) is already closed and hence
@@ -151,9 +152,9 @@ not included.
 ## D. C1-1 — 12 individually numbered cases, one lower point
 
 Each tuple totals three *upper* points in addition to its one lower
-point. Every OPEN row further divides into three lower radial wedges
-(W_1,W_2,W_3) and upper diagonal-sector subsets. A CLOSED row is
-closed for all three wedges and all sector choices.
+point. Each row includes three lower radial wedges (W_1,W_2,W_3)
+and upper diagonal-sector subsets. Every row is closed for all three
+wedges and all sector choices.
 
 | Case ID | ((n_L,n_T,n_R;n_I)) | Upper diagonal-sector count | Status | Scope / proof |
 |---|---|---:|---|---|
@@ -176,7 +177,7 @@ general cap lemmas; a right-cap pair is excluded by the one-lower
 right-pair theorem. Thus choosing n_L≤n_R in this historical register
 does not introduce an additional assumption into the proofs.
 
-## Completeness, next proof obligations and limits
+## Completeness and proof scope
 
 The complete normalization theorem leaves N6 and C1 (zero/one lower)
 after the independent N7 and corner-family theorems. In these branches
@@ -196,11 +197,9 @@ including every free-point line sign, or prove a new theorem closing the
 entire row at once. Do not mark as closed based on a finite point
 sampling, bounded-degree subcase, or partial feasible-polygon argument.
 
-**Remaining parent rows:** N6-06-L0/L1.
-The entire C1 family is closed: the zero-lower and two-lower theorems,
-the lower-triangle capacity bound, and Theorem 2 of
-[C1_ONE_LOWER_MIXED_CAPS](C1_ONE_LOWER_MIXED_CAPS.md) cover every lower
-occupancy. The complete N6-04 theorem, including equality, is
-[SIX_BOUNDARY_SIDE_OPPOSITE](SIX_BOUNDARY_SIDE_OPPOSITE.md).
-After the remaining N6 occupancy closes, audit global normalization,
-equality and boundary transitions to finish G7.
+**All 62 parent rows are CLOSED.** The complete N6-06 assembly is
+[SIX_BOUNDARY_TWO_TOP_COMPLETION](SIX_BOUNDARY_TWO_TOP_COMPLETION.md).
+The unrestricted theorem, normalization and equality transfer are
+assembled in [UNRESTRICTED.md](UNRESTRICTED.md). This register remains
+an exhaustive bookkeeping cover; its linked theorems and fixed rational
+certificates supply the mathematical exclusions.

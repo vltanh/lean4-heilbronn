@@ -1,22 +1,22 @@
-# G6 finite case ledger: remaining unrestricted Heilbronn \(n=9\) families
+# G6 finite case ledger: completed unrestricted Heilbronn \(n=9\) families
 
 For **each case listed separately** (rather than grouped cap counts),
 see [G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). The
 [221 indexed leaf rows](G6_ITEMIZED_LEAVES.tsv) and
 [deterministic census checker](check_g6_itemized_cases.py) refine the
 62 parent cases by lower-point counts, upper diagonal sectors, radial
-wedges, and N7 sign words. Currently 2 parent cases are open and
-60 are closed; the 221 leaves comprise 5 open and 216 covered.
+wedges, and N7 sign words. All 62 parent cases are closed; all 221 leaves are covered.
+The complete theorem is assembled in [UNRESTRICTED.md](UNRESTRICTED.md).
 
 This ledger refines [ROADMAP.md](../ROADMAP.md) at the target
 \[
 A_0=\frac{9\sqrt{65}-55}{320}.
 \]
-It describes a **finite, disjoint combinatorial cover** of the remaining
+It describes a **finite, disjoint combinatorial cover** of the normalized
 continuous parameter families. It is **not** an exhaustive finite numerical
-certificate and does not prove the unrestricted upper bound. A row labelled
-OPEN is a *necessary candidate type*, not an assertion that the type has a
-feasible realization.
+certificate and does not by itself prove the unrestricted upper bound.
+Every candidate type is now closed by its linked theorem; the census
+does not assert that each type has a feasible realization.
 
 The global normalization in
 [GLOBAL_STRUCTURE.md](GLOBAL_STRUCTURE.md) reduces the theorem to N, C1,
@@ -65,7 +65,7 @@ n_I=3-n_L-n_T-n_R\ge0,\quad n_L+n_T+n_R\ge1.
 Transpose the square, exchanging \(L,R\), to arrange \(n_L\le n_R\).
 These conditions give **exactly eight** coarse occupancy orbits:
 
-| ID | \((n_L,n_T,n_R;n_I)\) | Specific remaining task |
+| ID | \((n_L,n_T,n_R;n_I)\) | Occupancy and complete proof |
 |---|---|---|
 | N6-01 | \((0,0,1;2)\) | One side-cap point; couple it with both inner points |
 | N6-02 | \((1,0,1;1)\) | Opposite side caps; their cross-triangle costs with the inner point |
@@ -76,7 +76,7 @@ These conditions give **exactly eight** coarse occupancy orbits:
 | N6-07 | \((0,2,1;0)\) | Two top points and one side point |
 | N6-08 | \((0,3,0;0)\) | Three top points; forced common support cell II, eight hull vertices |
 
-**Status:** N6-01, N6-02, N6-03, N6-04, N6-05, N6-07 and N6-08 are **CLOSED**.
+**Status:** all eight N6 occupancies are **CLOSED**.
 The respective complete proofs are
 [single-side](SIX_BOUNDARY_SINGLE_SIDE.md),
 [both-side and nonagon](SIX_BOUNDARY_TWO_SIDE_UPPER.md),
@@ -88,8 +88,9 @@ The full side-and-opposite theorem is
 [SIX_BOUNDARY_SIDE_OPPOSITE.md](SIX_BOUNDARY_SIDE_OPPOSITE.md), including
 its two sharp equality chambers. The single-opposite occupancy is closed by
 [SIX_BOUNDARY_SINGLE_TOP.md](SIX_BOUNDARY_SINGLE_TOP.md), with an
-independently checked 893-cell cover. Only N6-06, with its lower/upper
-alternatives, remains open.
+independently checked 893-cell cover. The final two-top occupancy is closed by
+[SIX_BOUNDARY_TWO_TOP_COMPLETION.md](SIX_BOUNDARY_TWO_TOP_COMPLETION.md),
+which joins its complete triangular and convex hull theorems.
 
 **Second-level finite split (exhaustive, without claiming feasibility).**
 The virtual lower triangle \((0,0)HC\) has capacity one, so among the
@@ -108,11 +109,10 @@ not by a multiset. The eight rows yield **thirteen**
 choices. Sector subsets and line signs are finite refinements; no
 sector is assumed occupied unless proved.
 
-**Closure gate N6:** a continuous strict area bound or a checked
-finite sign/inequality certificate for all eight rows, covering both
-values of \(n_0\) where permitted, every sector subset, cap boundaries,
-and all pair-line signs. Do not substitute the exact-hexagon theorem
-for configurations with exterior hull vertices.
+**Closure gate N6: COMPLETE.** Every coarse occupancy, permitted
+lower count, sector subset and actual pair-line sign is covered by its
+linked complete theorem. The equality branches force the known
+configuration and the additional boundary contacts.
 
 ## G6-N7: seven square-boundary contacts, two free interior points
 
@@ -201,7 +201,7 @@ The entire zero-lower class is now also excluded by
 lower occupancy is closed. The catalogue below is retained as a complete
 closed cover.
 
-For a remaining count, set \(m=4-n_0\), and partition the \(m\)
+For either recorded count, set \(m=4-n_0\), and partition the \(m\)
 upper points into
 \[
 L=HF(0,1),\quad T=DF(1,1),\quad R=CD(1,0),
@@ -250,7 +250,7 @@ sectors \(HCJ,CDJ,DFJ,FHJ\), where \(J=HD\cap CF\).
 The same-sector pair exclusion in ONE_CORNER_COMPLETION.md,
 Theorem 2, applies since \(\operatorname{area}(HCDF)\le1/2\).
 Thus \(n_I\le4\) and upper sector assignments are subsets of four;
-for the open rows the stronger \(n_I\le3\) follows from exterior
+for the exterior-occupancy rows the stronger \(n_I\le3\) follows from exterior
 occupancy. When \(n_0=1\), further split the one lower point \(Z\)
 into the **three** disjoint radial wedges:
 \[
@@ -270,26 +270,21 @@ packages include their geometric bounds, complete sign refinements,
 fixed rational coefficients and exact verifiers. Separate symbolic
 implementations have independently reconstructed their expansions.
 
-## Priority and acceptance criteria
+## Completed assembly and verification
 
-1. **N7-M: complete.** Both sides of HC and every pair-line sign
-   are covered by the complete mixed theorems above.
-2. **N6-S:** complete N6-06, including both lower/upper alternatives
-   and both hulls for two opposite-cap points.
-3. **C1: complete.** Retain its 33 historical coarse rows and the
-   separate two-lower theorem as the exhaustive closed cover.
-4. **Final G7 audit.** Recheck the global normalization, all open-row
-   exhaustiveness, strict/equality cases, collinear and cap-boundary
-   transitions, and equality transfer through determinant-one shears.
+The full N7 class, all eight N6 cap occupancies and all C1 lower counts
+are closed. [UNRESTRICTED.md](UNRESTRICTED.md) combines them with the
+corner theorems and the exact attaining construction, and checks the
+normalization, boundary transitions and equality transfer.
 
-A case is marked **CLOSED** only if its proof excludes *all*
-continuous parameter values consistent with its stated signs and
-occupancies. A finite sign catalogue is not itself a proof. Symbolic
-transcription diagnostics, even with exact Bernstein coefficients, do
-not certify the prior geometric containments; the manuscript must
-justify those implications.
+A case is marked **CLOSED** because its linked theorem covers every
+continuous parameter choice in its scope, including all actual-line
+signs and coordinate-cut boundaries. Counting sign words alone does
+not prove a geometric exclusion. The fixed rational verifiers check
+all polynomial coefficients and the complete covers; the manuscripts
+establish their geometric premises.
 
-Run [check_g6_case_ledger.py](check_g6_case_ledger.py) to verify the
-elementary occupancy enumerations (8 N6 orbits, 21+12 C1 orbits,
-16 N7 sign words). That script does **not** certify any geometric
-exclusion.
+Run [check_g6_case_ledger.py](check_g6_case_ledger.py) for the elementary
+occupancy counts, and [check_g6_itemized_cases.py](check_g6_itemized_cases.py)
+for all 62 parent IDs and 221 closed leaves. These scripts verify the
+census and links, not the geometric inequalities themselves.

@@ -2,15 +2,13 @@
 
 ## Status and scope
 
-**This is not yet a complete hand proof of the unrestricted nine-point theorem.**
-This manuscript contains the sharp chamber inequality, unrestricted strict
-local optimality, and the exact construction check. The companion
-[`EIGHT_BOUNDARY.md`](EIGHT_BOUNDARY.md) now proves the sharp theorem for
-**every configuration with at least eight boundary points**, using the chamber
-inequality here together with a complete orientation classification. The
-global normalization and corner advances are indexed in
-[`README.md`](README.md); several families with fewer boundary contacts
-remain open by hand.
+**The unrestricted theorem is now assembled in
+[UNRESTRICTED.md](UNRESTRICTED.md).** This foundational manuscript proves
+the sharp chamber inequality, unrestricted strict local optimality and
+the exact construction check. The companion
+[EIGHT_BOUNDARY.md](EIGHT_BOUNDARY.md) proves the full eight-boundary
+classification; the complete family theorems indexed in
+[README.md](README.md) close every lower-contact alternative.
 
 The statements proved here do not assume that an arbitrary optimizer is
 symmetric or has eight boundary points. In particular, those assumptions must
