@@ -104,6 +104,59 @@ equal(poly3.subs(b, (u + 3) / 7),
 equal(poly4.subs(b, (u + 9) / 20),
       (169 * u**3 + 3653 * u**2 + 20712 * u + 1216) / 500)
 
+# Universal six-point parameter inequality, without b <= 1/2.
+equal((q - zz - s) * (zz - s) - q * s,
+      -(zz**2 - q * zz + 2 * s * q - s**2))
+equal((q - 4 * s)**2 - q * (q - 4 * s) + 2 * s * q - s**2,
+      s * (15 * s - 2 * q))
+q0 = sp.Rational(89, 100)
+b0 = sp.Rational(2, 5)
+z0 = ss * (q0 + 1) / (b0 * q0)
+assert z0 == sp.Rational(6615, 11392)
+assert z0 - q0 / 2 == sp.Rational(38639, 284800) > 0
+assert z0**2 - q0 * z0 + 2 * ss * q0 - ss**2 == sp.Rational(10077669, 3244441600) > 0
+
+# Second support shear and both-central-points-above cut.
+rr, uy, beta, vz, ww = sp.symbols("rr uy beta vz ww")
+tau = (1 - rr) / (1 - uy)
+bbprime = 1 - b - tau
+gg = rr - b - (1 - b) * uy
+equal(bbprime, gg / (1 - uy))
+equal(1 - rr - tau * (1 - uy), 0)
+bfun = (vz - ss * (vz + 1))**2 / (4 * ss * vz**2) - 1 / vz
+equal(sp.diff(bfun, vz), ((3 - ss) * vz - ss) / (2 * vz**3))
+assert bfun.subs(vz, 1) == sp.Rational(177, 448) < sp.Rational(1, 2)
+assert 9 * ss == sp.Rational(63, 64)
+assert sp.Rational(1, 3) * sp.Rational(3, 16) + sp.Rational(1, 64) == sp.Rational(5, 64) < ss
+for bb, qq, value, cap in [
+    (sp.Rational(1, 3), sp.Rational(89, 100), sp.Rational(1427, 1600), sp.Rational(25, 28)),
+    (sp.Rational(2, 5), sp.Rational(7, 8), sp.Rational(117, 128), sp.Rational(15, 16)),
+    (sp.Rational(3, 7), sp.Rational(27, 32), sp.Rational(61, 64), sp.Rational(31, 32)),
+]:
+    assert qq + (1 - ss - qq) / bb == value < cap
+
+poly_g = (448 * beta**3 * vz**3
+          + beta**2 * vz**2 * (1890 - 3648 * vz)
+          + beta * vz * (3648 * vz**2 - 5293 * vz + 2135)
+          + 399 * vz**2 - 847 * vz + 644)
+equal(sp.diff(poly_g, beta, 2),
+      vz**2 * (2688 * beta * vz + 3780 - 7296 * vz))
+assert 7296 - 2688 * sp.Rational(2, 3) == 5504
+assert 3780 - 5504 * sp.Rational(13, 16) == -692 < 0
+assert sp.Rational(3, 16) < sp.Rational(1, 5)
+for bound, upper, g0, g1, g2minus in [
+    (sp.Rational(2, 3), sp.Rational(25, 28), sp.Rational(707369, 148176), sp.Rational(1107899, 882), sp.Rational(45961, 945)),
+    (sp.Rational(3, 5), sp.Rational(15, 16), sp.Rational(1213, 128), sp.Rational(9331, 10), sp.Rational(277314, 625)),
+    (sp.Rational(4, 7), sp.Rational(31, 32), sp.Rational(436571, 50176), sp.Rational(601887, 784), sp.Rational(155703, 245)),
+    (sp.Rational(11, 20), sp.Rational(1), sp.Rational(8241, 1000), sp.Rational(77669, 125), sp.Rational(3981699, 5000)),
+]:
+    expansion = sp.Poly(sp.expand(poly_g.subs({beta: bound, vz: upper - ww})), ww)
+    neg_g3, g2, actual_g1, actual_g0 = expansion.all_coeffs()
+    assert actual_g0 == g0 > 0
+    assert actual_g1 == g1 > 0
+    assert neg_g3 < 0
+    assert g2 + neg_g3 / 5 == g2minus > 0
+
 
 def by_four_subsets(intervals):
     return all(max(intervals[i][0] for i in subset)
@@ -134,4 +187,4 @@ assert by_four_subsets(examples[0])
 assert not by_four_subsets(examples[1])  # Four closed intervals meet at 3.
 assert by_four_subsets(examples[2])
 assert not by_four_subsets(examples[3])
-print("PASS: two-vertex capacity, swept tests, empty ear, and complete balanced quadrilateral-right exclusion")
+print("PASS: two-vertex capacity, swept tests, both balanced right-hull exclusions, and second-shear alternating exclusion")
