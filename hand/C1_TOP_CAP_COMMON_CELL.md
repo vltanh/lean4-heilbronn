@@ -39,10 +39,11 @@ hc\ge Ks>\rho,\qquad cY\ge Ks>\rho,
 The last inequality is the independent cap argument in Section 2 of
 the \(OF\)-split note. The point \(P\) will not otherwise be used.
 
-**Theorem.** In this entire placement, the line \(LM\) cannot put
-\(C\) on one side and all three of \(O,H,F\) on the other.
+**Theorems.** In this entire placement, the line \(LM\) cannot isolate
+\(C\) from \(O,H,F\), and it cannot isolate \(O\) from
+\(C,H,F\).
 
-This is a complete exclusion of the indicated pair-line case. The
+These are complete exclusions of the two indicated pair-line cases. The
 other pair-line cases in the common-cell placement remain separate.
 
 ## 1. The isolated-endpoint inequality
@@ -202,7 +203,219 @@ Finally,
 
 contradicting the actual \(HFX\) cost. This proves the theorem.
 
-## 3. Exact diagnostic
+## 3. The line cannot isolate the corner \(O\)
+
+Suppose now that \(LM\) isolates \(O\), and write
+
+\[
+L=(\ell,y),\qquad M=(m,t).
+\]
+
+Orient \(LM\) from \(L\) to \(M\). Its signed determinant at
+\(O\) is negative because the rays \(OL,OM\) are respectively
+to the \(H\)- and \(C\)-sides of \(OX\). Thus its determinants
+at \(C,H,F\) are positive. Subtracting its determinant at \(O\)
+from those at \(C,H\) shows, respectively, that
+
+\[
+y>t,\qquad m>\ell.
+\]
+
+Put \(a=m-\ell>0\), \(b=y-t>0\). The actual \(CLM,HLM\)
+costs give
+
+\[
+(c-\ell)b-ya\ge s,\qquad (h-y)a-\ell b\ge s.
+\]
+
+Multiply the first inequality by \(h-y>0\), the second by
+\(y>0\), and add. This yields
+
+\[
+(y-t)(hc-h\ell-cy)\ge hs.                              \tag{7}
+\]
+
+The actual \(OCM\) cost gives \(ct\ge s\). On putting
+\(v=cy\), we therefore have \(v>s\) and
+
+\[
+(v-s)(p-h\ell-v)\ge ps.                                \tag{8}
+\]
+
+The two opposite-edge costs for \(L\), with signs fixed by its
+membership in \(OHC\cap OCF\), are
+
+\[
+\ell-fy\ge s,\qquad hf+(1-h)\ell-fy\ge s.
+\]
+
+The first gives \(h\ell\ge hs+zv\). Multiplying (8) by
+\(1-h\ge0\) and using the second gives a further inequality
+without dividing by \(1-h\). The two results are
+
+\[
+\begin{aligned}
+F_1&=(v-s)\{p-hs-(1+z)v\}-ps\ge0,\\
+F_2&=(v-s)\{(1-h+z)(p-v)-hs\}-ps(1-h)\ge0.
+\end{aligned}                                          \tag{9}
+\]
+
+### A monotone reduction to \(c=1\)
+
+Keep \(p,z,v\) fixed and decrease \(h=p/c\) to \(p\).
+To justify this scalar relaxation, let
+
+\[
+F_0=(v-s)(p-v)-ps.
+\]
+
+The first inequality in (9) gives
+\(F_0\ge(v-s)(hs+zv)>0\). Moreover,
+
+\[
+\frac{\partial F_1}{\partial h}=-s(v-s)<0,
+\qquad
+\frac{\partial F_2}{\partial h}=-F_0-s(v-s)<0.
+\]
+
+Both inequalities in (9) are therefore preserved under this decrease.
+Independently, the cap bound (6) increases when \(c\) is increased
+to one with \(p,z\) fixed, because throughout \(p\ge\rho\),
+\(c\le1\), \(z>0\),
+
+\[
+\frac{\partial\mathcal A}{\partial c}
+\ge1-\frac{s+\rho}{\rho}+\rho
+=\rho-\frac{s}{\rho}
+=\frac{146473}{214620}>0.
+\]
+
+Thus a necessary scalar system is obtained by setting \(h=p,c=1\)
+in (9) and (6). No actual motion of the configuration is asserted.
+
+Set
+
+\[
+a_2=1-p+z>0,\qquad
+B_1=p-s(1+p+z),\qquad B_2=a_2(p-s)-ps.
+\]
+
+Writing \(w=v-s>0\), the two inequalities in (9) become
+
+\[
+w\{B_1-(1+z)w\}\ge ps,
+\qquad
+w(B_2-a_2w)\ge ps(1-p).
+\]
+
+Their positive brackets and quadratic maxima imply
+
+\[
+\begin{aligned}
+B_1&>0,&
+G_1(p,z)&:=B_1^2-4sp(1+z)\ge0,\\
+B_2&>0,&
+G_2(p,z)&:=B_2^2-4a_2ps(1-p)\ge0.
+\end{aligned}                                          \tag{10}
+\]
+
+The second bracket is strictly positive even at \(p=1\), since
+\(w>0\) and \(a_2>0\). The relaxed cap cost is
+
+\[
+s\le(1-p)\left(1-\frac{s}{p}\right)
+        +z\left(1-\frac{\rho}{p}\right).               \tag{11}
+\]
+
+## 4. Two univariate quartics contradict the relaxed system
+
+**First interval: \(\rho\le p\le89/100\).** We claim
+\(z>3/20\). For fixed \(p\) in this interval, \(G_2\) is
+an upward quadratic in \(a_2=1-p+z\), negative at the positive
+zero of \(B_2\). Hence the two conditions involving \(B_2,G_2\)
+in (10) place \(a_2\) at or beyond the larger root. Increasing
+\(z\) preserves them. If \(z\le3/20\), they would remain true
+at \(z=3/20\). But the quartic
+
+\[
+\begin{aligned}
+P_1(p)&:=2131600\,G_2(p,3/20)\\
+&=2131600p^4-5837080p^3+5365281p^2-1692432p+33856
+\end{aligned}
+\]
+
+is strictly negative throughout this interval, by the exact certificate
+below. Thus \(z>3/20\).
+
+Decreasing \(z\) to \(3/20\) increases the positive bracket
+\(B_1\) and decreases the subtracted term in \(G_1\), so it
+preserves the first line of (10). For fixed \(z=3/20\), \(G_1\)
+is an upward quadratic in \(p\), negative at the positive zero
+of its bracket. The larger-root argument permits increasing \(p\)
+to \(89/100\). This would give
+
+\[
+0\le G_1(89/100,3/20)
+=-\frac{48147}{10658000}<0,
+\]
+
+a contradiction.
+
+**Second interval: \(89/100\le p\le1\).** The coefficient
+\(1-\rho/p\) in (11) is positive. Solving it for \(z\) gives
+
+\[
+z\ge q(p):=\frac{p^2-p+s}{p-\rho}.
+\]
+
+Decrease \(z\) to this lower bound. As before, the positive-bracket
+condition and \(G_1\ge0\) are preserved. Consequently
+
+\[
+P_2(p):=102233667600(p-\rho)^2G_1(p,q(p))\ge0.
+\]
+
+After clearing the displayed denominator, the quartic is
+
+\[
+\begin{aligned}
+P_2(p)={}&17515357200p^4-79495677240p^3
+ +98117240305p^2\\
+&-37399223344p+613850176.
+\end{aligned}
+\]
+
+Its exact certificate below is again strictly negative, a contradiction.
+The two intervals exhaust the parameter range and exclude the entire
+\(O\)-isolated case.
+
+### The ten exact Bernstein coefficients
+
+For \(P_1\), substitute \(p=\rho+(11/150)\theta\); for
+\(P_2\), substitute \(p=89/100+(11/100)\theta\). Write each
+result as
+
+\[
+P_i(p(\theta))=\sum_{k=0}^4 b_{i,k}\binom4k
+                          \theta^k(1-\theta)^{4-k}.
+\]
+
+The following integers give all five coefficients after multiplication
+by a positive common denominator:
+
+| \(k\) | \(10125000\,b_{1,k}\) | \(1500000\,b_{2,k}\) |
+|---:|---:|---:|
+| 0 | -10883875000 | -7879524510312 |
+| 1 | -4215963750 | -101309868116010 |
+| 2 | -1228984425 | -288190723895375 |
+| 3 | -798761115 | -577077596272500 |
+| 4 | -1176942798 | -972679354500000 |
+
+The degree-four Bernstein basis functions are nonnegative and sum to
+one on \([0,1]\). Every coefficient is strictly negative, so both
+claimed interval inequalities follow.
+
+## 5. Exact diagnostic
 
 Run
 
@@ -211,5 +424,6 @@ python hand/check_c1_top_cap_common_cell.py
 ```
 
 The checker verifies the isolated-endpoint scaling, cap substitution,
-both derivative identities, and every displayed rational comparison.
+the monotone reductions, both quartic identities, all ten Bernstein
+coefficients, and every displayed rational comparison.
 It uses no floating-point search or numerical premise.
