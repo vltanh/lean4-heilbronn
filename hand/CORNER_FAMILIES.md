@@ -2,11 +2,11 @@
 
 ## Scope
 
-This note proves handwritten exclusions for every Type-III diagonal count
-except \(3+3\), and a triangle-occupancy restriction for every competitive
-configuration. It does **not** close Type III or Type II. Only the case
-with three free points on each side of the occupied diagonal remains
-open for Type III in this note.
+This note proves a complete handwritten exclusion of Type III: every
+nine-point configuration containing three square corners has minimum
+triangle area at most \(7/128<A_0\). It also proves triangle-occupancy
+restrictions for every competitive configuration. Type II is not closed
+by this note.
 
 Write
 
@@ -45,16 +45,27 @@ self-contained six-point theorem in [OPPOSITE_CORNERS.md](OPPOSITE_CORNERS.md).
 No external small-point Heilbronn theorem is imported.
 
 **A third Type-III exclusion.** If exactly two of the six free points lie
-above \(y=x\), then a configuration with minimum area at least \(A_0\)
-would satisfy
+above \(y=x\), then a configuration with minimum area greater than
+\(7/128\) would satisfy
 
 \[
-t\le\frac{38809}{715084}<\frac7{128}<A_0,
+t\le\frac{154449}{2830924}<\frac7{128}<A_0,
 \]
 
 a contradiction. Sections 8 and 9 prove this using the sharp six-point
 triangular-hull theorem and the four-corner theorem in
 [FOUR_CORNERS.md](FOUR_CORNERS.md).
+
+**The last Type-III exclusion.** If exactly three free points lie on each
+side of \(y=x\), then
+
+\[
+\boxed{t\le\frac7{128}<A_0.}
+\]
+
+Sections 10--12 prove this by quantitative inequalities for the upper
+six-point triangle and a two-region packing argument for the lower points.
+Together the four exclusions exhaust every Type-III configuration.
 
 ## 1. The area cost of a degree-four or degree-five star
 
@@ -287,7 +298,7 @@ The remaining count classes are
 | 0 | 6 | Strictly excluded by (9) and the six-point theorem |
 | 1 | 5 | Strictly excluded by (9) and the six-point theorem |
 | 2 | 4 | Strictly excluded by Sections 8 and 9 |
-| 3 | 3 | Open |
+| 3 | 3 | Strictly excluded by Sections 10--12 |
 | 4, 5, or 6 | 2, 1, or 0 | Strictly excluded by (1) |
 
 ## 6. At most one upper point: a complete exclusion
@@ -403,8 +414,9 @@ diagonal count classes remain for a complete Type-III hand exclusion.
 
 ## 7. A further hand restriction on the three-upper-point case
 
-The remaining \(3+3\) count class is not closed here. The following gives
-a precise restriction on its upper triple without importing another theorem.
+The \(3+3\) count class is closed in Sections 10--12 below. The following
+gives the first restriction on its upper triple without importing another
+theorem.
 
 **Two-interior-point lemma.** Suppose a triangle of area \(S\), together
 with two points strictly inside it, has minimum triangle area at least
@@ -487,7 +499,7 @@ complete the remaining global classification.
 ## 8. The two-upper-point case has a triangular lower hull
 
 Suppose the Type-III configuration has two upper points and four lower
-points, and has minimum area at least \(A_0\). The six-point subset
+points, and has minimum area greater than \(7/128\). The six-point subset
 consisting of \(A,C\) and the four lower points lies in \(T\).
 By the nontriangular-hull lemma, its convex hull must be triangular.
 Let \(R=(r_x,r_y)\) be its third hull vertex. It is one of the four lower
@@ -691,7 +703,8 @@ The entries follow from the determinant formula and
 ### Quantitative conclusion for the fourth hull vertex
 
 Since \(\operatorname{area}(ACR)=(r_x-r_y)/2\), apply (14) to the lower
-six-point subset to obtain
+six-point subset to obtain \(r_x-r_y\ge(11+3\sqrt5)t\). In particular,
+at the competitive threshold \(t\ge A_0\),
 
 \[
 \boxed{r_x-r_y\ge(11+3\sqrt5)A_0
@@ -724,10 +737,10 @@ R=(1-\epsilon,\eta),
 \]
 
 with \(\epsilon,\eta\ge0\) and
-\(r=1-\epsilon-\eta\ge97/100\). Then their minimum triangle area satisfies
+\(r=1-\epsilon-\eta\ge193/200\). Then their minimum triangle area satisfies
 
 \[
-\boxed{t\le\frac{38809}{715084}<\frac7{128}.}               \tag{22}
+\boxed{t\le\frac{154449}{2830924}<\frac7{128}.}              \tag{22}
 \]
 
 To prove this, put
@@ -804,8 +817,8 @@ Consequently every triangle's area is multiplied by at least
 
 \[
 \frac{4r^2}{(1+r)^2}
-\ge\frac{4(97/100)^2}{(1+97/100)^2}
-=\frac{37636}{38809}.                                    \tag{25}
+\ge\frac{4(193/200)^2}{(1+193/200)^2}
+=\frac{148996}{154449}.                                  \tag{25}
 \]
 
 The function \(r/(1+r)\) is increasing for \(r>0\), which justifies the
@@ -815,45 +828,635 @@ transformed triangle has area at most \(1/19\). Applying (25) to its
 original triangle proves
 
 \[
-t\le\frac{38809}{19\cdot37636}=\frac{38809}{715084}.
+t\le\frac{154449}{19\cdot148996}=\frac{154449}{2830924}.
 \]
 
 The strict comparison in (22) follows from
 
 \[
-7\cdot715084-128\cdot38809=38036>0.
+7\cdot2830924-128\cdot154449=46996>0.
 \]
 
 **Application to the entire \(2+4\) class.** Suppose now that a Type-III
 configuration has exactly two upper points and minimum area
-\(t\ge A_0\). Section 8 gives the quadrilateral hull \(ABCR\) and
+\(t>7/128\). Section 8 gives the quadrilateral hull \(ABCR\) and
 
 \[
-r=r_x-r_y\ge(11+3\sqrt5)A_0.
+r=r_x-r_y\ge(11+3\sqrt5)t.
 \]
 
-The elementary rational lower bounds
+The elementary rational lower bound \(\sqrt5>67/30\) gives
 
 \[
-\sqrt5>\frac{67}{30},\qquad
-\sqrt{65}>\frac{403}{50},\qquad
-A_0>\frac{877}{16000}
+r>\frac{177}{10}\cdot\frac7{128}
+=\frac{1239}{1280}
+>\frac{193}{200}.
 \]
 
+The square-root comparison follows from \(67^2<5\cdot30^2\).
+Set \(\epsilon=1-r_x\), \(\eta=r_y\), and apply (22). It gives
+\(t<7/128\), a contradiction. Thus the entire \(2+4\) class has
+\(t\le7/128<A_0\). Only \(3+3\) remains at this stage among the
+Type-III diagonal count classes.
+
+## 10. Quantitative rigidity of a distributed six-point triangle
+
+The remaining \(3+3\) class has a distributed upper triple. The following
+two quantitative estimates will be useful. They are proved here at the
+slightly smaller doubled-area threshold
+
+\[
+s=\frac7{64}<2A_0.
+\]
+
+Suppose a triangle has doubled area one, contains three interior points
+in the distributed pattern of Section 8, and every doubled triangle area
+is at least \(s\). Use the seven-face mesh and six positive cross areas
+from (16)--(19), now interpreting every area as a doubled area. Let
+\(K\) be the doubled area of the central triangle, and let \(a,b,c\)
+be the three connector areas.
+
+**Quantitative mesh lemma.** One has
+
+\[
+\boxed{K\le\frac{109}{98}s<\frac98s,
+       \qquad a,b,c>\frac65s.}                             \tag{26}
+\]
+
+Each outer ear is also at most \(55/384\).
+
+### The central area and the ears
+
+Normalize all doubled areas by \(s\), and put \(\kappa=K/s\).
+The notation \(Z_0\) in (20) then satisfies
+
+\[
+0\le Z_0\le\frac1s-7=\frac{15}{7},
+\qquad
+6(\kappa-1)\le\frac{Z_0^2}{3}+Z_0-3
+\le\frac{33}{49}.
+\]
+
+The right side is increasing for \(Z_0\ge0\). This proves
+\(\kappa\le109/98<9/8\).
+
+The sharp-six proof also gives
+\(a+b+c\ge3\varphi s\), where \(\varphi=(1+\sqrt5)/2\).
+After accounting for the other two ears and the central area, each ear
+is at most
+
+\[
+1-(3\varphi+3)s<1-\frac{47}{6}s=\frac{55}{384}.              \tag{27}
+\]
+
+Here \(\sqrt5>20/9\) gives \(3\varphi+3>47/6\).
+
+### Every connector is larger than \(6s/5\)
+
+Continue to use areas normalized by \(s\). Suppose, contrary to (26),
+that one connector is \(C\le6/5\), and call the other two \(A,B\) in
+cyclic order. Write \(\kappa\) for the normalized central area. The three
+outer ears are at least one, so
+
+\[
+A+B\le M:=\frac{43}{7}-\kappa-C.                            \tag{28}
+\]
+
+In the notation of (18)--(19), put \(U=u_C\), \(V=v_C\).
+Then
+
+\[
+U,V\ge1,\qquad U+V=C+\kappa,
+\qquad 1\le\kappa\le\frac98.
+\]
+
+The three product identities, with each outer ear bounded below by one,
 give
 
 \[
-r>\frac{177}{10}\cdot\frac{877}{16000}
-=\frac{155229}{160000}
->\frac{97}{100}.
+AB\ge\kappa+u_Av_B,\qquad
+BC\ge\kappa+u_BV,\qquad
+CA\ge\kappa+Uv_A.
 \]
 
-The two square-root comparisons follow respectively from
-\(67^2<5\cdot30^2\) and \(403^2<65\cdot50^2\).
-Set \(\epsilon=1-r_x\), \(\eta=r_y\), and apply (22). It gives
-\(t<7/128<A_0\), contradicting the competitive hypothesis.
-Thus the \(2+4\) class is completely excluded. Only \(3+3\) remains
-among the Type-III diagonal count classes.
+Since \(u_A+v_A=A+\kappa\) and \(u_B+v_B=B+\kappa\), the last two
+inequalities imply
+
+\[
+u_A\ge\frac{A(U-C)+\kappa(U+1)}{U},\qquad
+v_B\ge\frac{B(V-C)+\kappa(V+1)}{V}.                         \tag{29}
+\]
+
+Both right sides are positive. Indeed \(A,B\le22/7\), by the total
+area and the lower bounds on the other six faces; also \(U,V\ge1\),
+\(C\le6/5\), and \(\kappa\ge1\). Each numerator in (29) is therefore
+at least \(2-(22/7)/5=48/35>0\). We may multiply (29) and use the first
+product inequality. Expanding and using \(U+V=C+\kappa\) yields
+
+\[
+CAB+A(V-\kappa)(V+1)+B(U-\kappa)(U+1)
+\ge(1+\kappa)UV+\kappa(C+\kappa+1).                        \tag{30}
+\]
+
+Here is an explicit upper bound for the left side minus the right side.
+Set
+
+\[
+N=A+B,\quad L=U+V=C+\kappa,\quad P=UV,
+\quad \alpha=(V-\kappa)(V+1),\quad
+\beta=(U-\kappa)(U+1).
+\]
+
+Completing the square in \(A-B\) gives
+
+\[
+CAB+\alpha A+\beta B
+\le\frac{CN^2}{4}+\frac{N(\alpha+\beta)}2
+       +\frac{(\alpha-\beta)^2}{4C}.                       \tag{31}
+\]
+
+This bound increases with \(N\ge2\). Its derivative is
+\((CN+\alpha+\beta)/2>0\), because
+\(\alpha,\beta\ge2(1-\kappa)\ge-1/4\) and \(CN\ge2\).
+Thus (28) permits replacing \(N\) by \(M\).
+
+Next,
+
+\[
+\alpha+\beta=L^2-2P+(1-\kappa)L-2\kappa,
+\qquad
+(\alpha-\beta)^2=(L^2-4P)(C+1)^2.
+\]
+
+After subtracting the right side of (30), the coefficient of \(P\)
+in (31) is
+
+\[
+-M-\frac{(C+1)^2}{C}-(1+\kappa)<0.
+\]
+
+Since \(U,V\ge1\), one has \(P\ge U+V-1=C+\kappa-1\).
+Therefore the largest permitted bound occurs at this smallest value of
+\(P\), or equivalently at \(U=1,V=C+\kappa-1\) after interchanging
+the two variables. Substitution in (31) gives the necessary inequality
+
+\[
+0\le F(C,\kappa):=
+\frac{177C}{49}-\frac{89\kappa}{7}+\frac{57}{7}
+ +\frac{(\kappa-2)^2}{4C}.                                 \tag{32}
+\]
+
+For clarity, the expression before collecting terms is
+
+\[
+2(1-\kappa)M+
+ \frac{((36/7)C+\kappa-2)^2}{4C}
+ -\bigl((1+2\kappa)(C+\kappa)-1\bigr).
+\]
+
+On \(1\le C\le6/5\), \(1\le\kappa\le9/8\), the function \(F\)
+decreases with \(\kappa\) and increases with \(C\):
+
+\[
+\frac{\partial F}{\partial\kappa}
+ =-\frac{89}{7}+\frac{\kappa-2}{2C}<0,
+\qquad
+\frac{\partial F}{\partial C}
+ =\frac{177}{49}-\frac{(\kappa-2)^2}{4C^2}>0.
+\]
+
+Consequently
+
+\[
+F(C,\kappa)\le F(6/5,1)=-\frac{167}{5880}<0,
+\]
+
+contradicting (32). Cyclically the same proof applies to each connector,
+completing (26).
+
+## 11. Uniform signs for an additional lower point
+
+The following sign restriction is the next ingredient for the \(3+3\)
+packing argument completed in Section 12.
+Use the physical square coordinates
+
+\[
+Y=(u,v),\qquad Z=(p,q),\qquad X=(c,1-a),
+\]
+
+for the distributed upper triple, with
+\(Z\in ABY\) and \(X\in BCY\). Put
+
+\[
+h=1-v,\quad z=1-q,\quad f=v-u,\quad
+k=h-a,\quad Q=hc-au,
+\]
+
+and let \(K\) be the central doubled area. All these are actual areas
+or coordinates, not quantities normalized by \(s\). In particular
+\(Q\ge s\). Let
+\(E=55/384\). The ear bounds and the three fan containments give
+
+\[
+\begin{gathered}
+s\le p,a,f\le E,\\
+u,h,c,z,\ 1-c-a,\ 1-p-z\ge3s.                             \tag{33}
+\end{gathered}
+\]
+
+For example, \(BCY\) contains \(X\); its doubled area \(h\) is the
+sum of the three triangles obtained by joining \(X\) to its vertices,
+each at least \(s\). All other inequalities follow in exactly the same
+way from the cyclic containments proved in Section 8. In particular
+\(k\ge3s-E=71/384>1/8\).
+
+Suppose \(R=(x,y)\) is any additional configuration point below \(AC\),
+and all triangles involving it also have doubled area at least \(s\).
+Write \(D(P,Q,R)=\det(Q-P,R-P)\). Then
+
+\[
+\boxed{D(B,Z,R)\ge s,\quad D(B,X,R)\le-s,
+       \quad D(X,Y,R)\ge s.}                               \tag{34}
+\]
+
+### The two signs at \(B\)
+
+Since \(Z\) is above \(AC\) and \(R\) is below it,
+\(D(A,Z,R)=py-qx<0\); its area constraint gives \(x\ge s/q\).
+If \(D(B,Z,R)\le-s\), then
+
+\[
+(1-q)x-p(1-y)\le-s,
+\qquad x\le\frac{p-s}{1-q}.
+\]
+
+The two bounds on \(x\) require \(pq\ge s\). But by (33),
+
+\[
+pq\le E(1-3s)=\frac{2365}{24576}
+<\frac{2688}{24576}=s.
+\]
+
+Thus \(D(B,Z,R)\ge s\). Reflection across \(x+y=1\) exchanges the
+left and top roles and proves \(D(B,X,R)\le-s\).
+
+### The sign for \(XYR\)
+
+Put \(b=1-y\). The lower-point constraints include
+
+\[
+0\le b\le1,\qquad x+b\ge1+s,
+\qquad zx-pb\ge s.                                       \tag{35}
+\]
+
+The last inequality is the first sign in (34). Direct calculation gives
+
+\[
+D(X,Y,R)=(c-u)b+kx-Q=:F,
+\qquad K=Q+z(u-c)-pk.                                    \tag{36}
+\]
+
+Because \(k>0\), (35) gives
+
+\[
+F\ge(c-u)b+k\max\left(1+s-b,\frac{s+pb}{z}\right)-Q.
+\]
+
+The two affine lower bounds on \(x\) coincide at
+
+\[
+b_0=\frac{z(1+s)-s}{p+z}\in(0,1).
+\]
+
+For \(b\le b_0\), the resulting bound on \(F\) has slope
+\(c-u-k=f-(1-c-a)<0\). For \(b\ge b_0\), its slope is
+\((Q-K)/z\), by (36). Hence its minimum occurs at \(b=1\) when
+\(Q\le K\), and at \(b=b_0\) when \(Q\ge K\).
+
+In the first case, using \(Q\ge s\) and \(K<9s/8\),
+
+\[
+F\ge\frac{ks-K+Q(1-z)}z
+\ge-s+\frac{s(k+1)-K}{z}>-s,
+\]
+
+because \(k>1/8\). In the second case, substitution of \(b_0\) gives
+
+\[
+F\ge-K+s\frac{1-c-a-f}{p+z}.
+\]
+
+More explicitly, the substituted expression is the displayed right side
+plus
+
+\[
+\frac{(K-Q)(p+z-1-s)}{p+z}\ge0,
+\]
+
+since \(Q\ge K\) and \(p+z\le1-3s\).
+
+Here \(1-c-a-f\ge3s-E\), while \(p+z\le1-3s\). Therefore
+
+\[
+\frac{1-c-a-f}{p+z}\ge\frac{3s-E}{1-3s}
+=\frac{71}{258}>\frac14,
+\qquad F> -\frac98s+\frac14s=-\frac78s>-s.
+\]
+
+In both cases \(F>-s\), and \(|F|\ge s\) forces \(F\ge s\), proving
+the last sign in (34).
+
+## 12. Complete exclusion of the three-upper-point class
+
+Suppose a Type-III configuration has exactly three upper and three lower
+points, and minimum area \(t>7/128\). All its doubled triangle areas
+are then at least \(s=7/64\). The upper triple must be distributed:
+otherwise Section 7 gives
+\(t\le1/(12+4\sqrt3)<7/128\).
+Thus Sections 10 and 11 apply.
+
+Reflect across \(x+y=1\), if necessary, so that \(u+v\ge1\), or
+equivalently \(u\ge h\). This reflection preserves the upper and lower
+half-squares and exchanges the roles of \(X\) and \(Z\).
+
+The line \(BY\) divides the lower points into two classes. Call a lower
+point \(R=(x,y)\) an A-side point when
+
+\[
+D(B,Y,R)=hx-u(1-y)\le-s,
+\]
+
+and a C-side point when this determinant is at least \(s\). The area
+constraint leaves no third possibility. We prove that each class contains
+at most one point, contradicting the three lower points.
+
+### At most one C-side point
+
+A C-side point satisfies \(x+y>1\). Indeed, if \(x+y\le1\), then
+
+\[
+hx-u(1-y)\le hx-ux\le0,
+\]
+
+because \(u\ge h\).
+
+Suppose \(R,S\) were two C-side lower points. The six actual points
+\(B,C,Y,X,R,S\) all lie in the triangle \(BCD\), where \(D=(1,0)\)
+is only a container vertex. The points \(Y,X\) lie there because
+\(u+v\ge1\) and \(X\in BCY\). The container has area \(1/2\), and
+two of its vertices, \(B,C\), are actual points.
+
+If the six-point hull is nontriangular, the nontriangular-hull lemma of
+Section 6 applies after an area-preserving affine map taking the base
+\(BC\) to the diagonal base used there. It gives a triangle of area at
+most \(7/128\), contrary to \(t>7/128\).
+
+If the hull is triangular, its vertices are \(B,C,T\), where \(T\) is
+one of \(R,S\). Indeed, \(X\) is strictly inside \(BCY\), so cannot
+be the third hull vertex; and neither lower point lies in \(BCY\), so
+the third vertex cannot be \(Y\). The sharp-six theorem gives
+
+\[
+1-T_y\ge\Gamma s,
+\qquad \Gamma=\frac{11+3\sqrt5}{2}.
+\]
+
+On the other hand, the C-side inequality for \(T\) gives
+
+\[
+s\le hT_x-u(1-T_y)
+\le h-u+uT_y\le T_y.
+\]
+
+Thus \(1\ge(\Gamma+1)s>133/128>1\), since \(\Gamma>17/2\).
+This contradiction proves that the C-side class has at most one point.
+
+### The feasible triangle for A-side points
+
+Keep the notation of Section 11 and put
+
+\[
+d=u-c,\qquad e=Q+d=u(1-a)-cv,\qquad
+J=k-Q.
+\]
+
+Here \(e\) is the doubled area of \(AYX\), so \(e\ge s\), and
+\(J\) is the connector area of \(CYX\), so \(J>6s/5\).
+
+For an A-side lower point, its class inequality and (34) give
+
+\[
+hx+uy\le u-s,\qquad kx+dy\ge s+e,
+\qquad y\ge0.                                            \tag{37}
+\]
+
+Since \(ku-hd=Q>0\), these inequalities describe a triangle, possibly
+empty or degenerate. Its vertices are
+
+\[
+L=(\ell,0),\quad R_0=(r_0,0),\quad T_0=(x_0,y_0),
+\]
+
+where
+
+\[
+\begin{aligned}
+\ell&=\frac{s+e}{k},&
+r_0&=\frac{u-s}{h},\\
+y_0&=v-\frac{s(k+h)}Q,&
+x_0&=u+\frac{s(u+d)}Q.
+\end{aligned}                                             \tag{38}
+\]
+
+If there is an A-side point, \(y_0\ge0\) and \(r_0\ge\ell\).
+The triangle in (37) is allowed to extend outside the square; enlarging
+the feasible set in this way is harmless. If it is degenerate, it is a
+single point and cannot contain two distinct lower points. Assume it is
+nondegenerate from now on.
+
+We will prove that every triangle formed by \(Z\) and two points in this
+feasible triangle has doubled area less than \(s\). A determinant is
+affine in each of its two varying vertices separately. Therefore its
+absolute value on the product of two triangles is at most its maximum
+on pairs of vertices. It suffices to examine the following three numbers:
+
+\[
+\begin{aligned}
+G_0&=|D(Z,L,R_0)|=q(r_0-\ell)
+       =\frac{qQy_0}{hk},\\
+G_1&=|D(Z,L,T_0)|=\frac{(s+K)y_0}{k},\\
+G_2&=|D(Z,R_0,T_0)|=\frac{(P-s)y_0}{h},
+\end{aligned}                                             \tag{39}
+\]
+
+where \(P=u(1-q)-hp\ge s\) is the doubled area of \(BYZ\).
+The formulas follow by substituting the two boundary-line equations
+from (37). In particular \(D(X,Y,Z)=-K\), whereas the entire line
+\(LT_0\) has \(D(X,Y,\cdot)=s\). All three displayed quantities are
+nonnegative.
+
+### The left-side vertex pair
+
+Since \(k=Q+J\) and \(h=Q+J+a\), (38) becomes
+
+\[
+y_0=1-a-Q-J-2s-\frac{s(a+2J)}Q.                            \tag{40}
+\]
+
+For \(y_0\ge0\), the expression \((s+K)y_0/(Q+J)\) increases when
+\(K\) increases, and when either \(a\) or \(J\) decreases. Use
+\(K<9s/8\), \(a\ge s\), and \(J>6s/5\) to obtain
+
+\[
+G_1\le\frac{17s}{8}
+ \frac{1-(21/5)s-Q-(17/5)s^2/Q}{Q+(6/5)s}<s.                \tag{41}
+\]
+
+For the last strict inequality, put \(\rho=Q/s>0\), substitute
+\(s=7/64\), and multiply positive denominators. It is equivalent to
+
+\[
+875\rho^2-2605\rho+2023>0.
+\]
+
+The leading coefficient is positive and the discriminant is
+\(-294475<0\). This proves (41) for every possible \(Q\).
+
+### The two base vertices
+
+For this pair a second product identity is useful. Let \(W\) be the
+connector area of \(BXZ\), and let \(V\) be the cross area of \(CZX\).
+The mesh identity and the subdivision of \(BCZ\) give
+
+\[
+WJ=aK+QV,
+\qquad 1-q=a+W+V.
+\]
+
+Since \(a,K,V\ge s\), these imply
+
+\[
+q\le1-2s-\frac{s(s+Q)}J.                                 \tag{42}
+\]
+
+This upper bound is positive, since \(q\ge4s\). Also
+\(W=P+Q-K\), so the seven-face area sum can be written as
+
+\[
+1=(\hbox{three outer ears})
+ +(\hbox{connector }AZY)+J+P+Q.
+\]
+
+The three ears and \(P\) are at least \(s\), while both displayed
+connectors exceed \(6s/5\). Therefore
+
+\[
+Q<1-\frac{32}{5}s,
+\qquad 1\le\rho:=\frac Qs<\frac{96}{35}.                   \tag{43}
+\]
+
+Put \(\gamma=J/s\ge6/5\). Use (42), and decrease \(a\) to \(s\)
+in (40) and in \(h=Q+J+a\). This increases the nonnegative expression
+for \(G_0\), so
+
+\[
+G_0\le
+\frac{\left(1-2s-\frac{s(1+\rho)}\gamma\right)\rho
+ \left(1-s(\rho+\gamma+3)-\frac{s(2\gamma+1)}\rho\right)}
+ {s(\rho+\gamma)(\rho+\gamma+1)}.                          \tag{44}
+\]
+
+At \(s=7/64\), subtracting the right side of (44) from \(s\) and
+putting over a common denominator gives
+
+\[
+\frac{N(\gamma,\rho)}
+ {448\gamma(\gamma+\rho)(\gamma+\rho+1)},
+\]
+
+where
+
+\[
+\begin{aligned}
+N(\gamma,\rho)={}&49\gamma^3+448\gamma^2\rho+749\gamma^2
+ +350\gamma\rho^2-2248\gamma\rho+252\gamma\\
+&-49\rho^3+252\rho^2+252\rho-49.
+\end{aligned}                                             \tag{45}
+\]
+
+The denominator is positive. Here is a short exact proof that the
+numerator is positive on the whole range in (43).
+
+First \(N_\gamma\) increases with \(\gamma>0\), since
+
+\[
+N_{\gamma\gamma}=14(21\gamma+64\rho+107)>0.
+\]
+
+At the lower endpoint,
+
+\[
+N_\gamma(6/5,\rho)
+=\frac2{25}(4375\rho^2-14660\rho+28266)>0.
+\]
+
+This quadratic has positive leading coefficient and negative
+discriminant. Consequently it suffices to set \(\gamma=6/5\). There
+
+\[
+125N(6/5,\rho)
+=P_0(\rho):=-6125\rho^3+84000\rho^2-225060\rho+177079.
+\]
+
+For \(1\le\rho\le2\),
+
+\[
+P_0(\rho)\ge71750\rho^2-225060\rho+177079>0,
+\]
+
+because this last quadratic has positive leading coefficient and
+discriminant \(-169669400\). For \(2\le\rho\le96/35\), the derivative
+\(P_0'\) is concave and has positive values \(37440\) and \(97500\)
+at the two endpoints. Thus \(P_0'>0\) throughout that interval, and
+
+\[
+P_0(\rho)\ge P_0(2)=13959>0.
+\]
+
+This proves positivity in (45), hence \(G_0<s\).
+
+### The last vertex pair and the contradiction
+
+Finally, (33) gives \(q\ge4s\), whereas (40) and the lower bounds
+\(a,Q\ge s\), \(J>6s/5\) give
+
+\[
+y_0<1-\frac{26}{5}s<4s.
+\]
+
+The last gap is \(4s-(1-(26/5)s)=1/160>0\). A direct subtraction
+in (39) gives
+
+\[
+G_1-G_2=(r_0-\ell)(q-y_0)\ge0.
+\]
+
+Therefore \(G_2\le G_1<s\), and all three vertex-pair determinants
+are below \(s\). The affine-in-each-vertex observation following (38)
+shows that two A-side lower points would form a triangle with \(Z\)
+of doubled area below \(s\), a contradiction.
+
+Both sides of \(BY\) contain at most one lower point. There cannot be
+three lower points. The assumption \(t>7/128\) was impossible, proving
+the complete \(3+3\) bound
+
+\[
+\boxed{t\le\frac7{128}<A_0.}
+\]
+
+Together with Sections 3, 6, and 9, this exhausts all seven possible
+counts of upper points and proves the universal Type-III bound
+\(t\le7/128<A_0\).
 
 ## Verification
 
