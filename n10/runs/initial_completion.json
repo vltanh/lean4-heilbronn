@@ -26,6 +26,13 @@
       "log_sha256": "9a2146ef88eb3db10408ce476bca52b2f72770b9b6d168fad1c8bcdd7b9b44e2",
       "threshold": "4653/100000",
       "local_acceptance": false
+    },
+    "C1": {
+      "status": "complete",
+      "log": "n10/runs/baseline_C1.log",
+      "log_sha256": "abbd385e96be9b8d40164627d72252925383290d77cf4148af9dc8b5730bea2c",
+      "threshold": "4653/100000",
+      "local_acceptance": false
     }
   }
 }
