@@ -23,37 +23,28 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
 | G5 | Type II: adjacent corners and five free points | **Complete hand exclusion**, including every count/hull/cell/cut and the Type-III shear alternative |
-| G6 | N6, N7 mixed, and C1 zero/one-lower | **OPEN: 8 N6 cap-orbits; at most 16 N7 sign words; 21 + 12 C1 cap-orbits**; see fine ledger |
+| G6 | N and C1 with fewer than eight boundary points | **All N7 and C1 two-lower complete**; N6 larger hulls and C1 zero/one-lower remain after the further completed occupancies below |
 | G7 | Unrestricted sharp theorem and uniqueness | Conditional on G6; equality transfer through shears is already proved |
 
-## G6 fine-grained case ledger
+## G6 finite case ledger
 
-The authoritative **unclosed-case classification** is
-[hand/G6_FINITE_CASE_LEDGER.md](hand/G6_FINITE_CASE_LEDGER.md).
-Its fixed, independently enumerated combinatorial partition is:
+[hand/G6_FINITE_CASE_LEDGER.md](hand/G6_FINITE_CASE_LEDGER.md) supplies
+stable IDs and a finite combinatorial cover for the low-contact families.
 
-| Open branch | Exhaustive coarse cases (up to stated reflection) | Necessary continuous proof |
+| Branch | Unpruned coarse cover | Current proof status |
 |---|---:|---|
-| **N6:** exactly six square-boundary contacts | **8 cap-occupancy orbits**; 13 lower/upper occupancy refinements, then upper diagonal sectors | Exclude larger-than-anchor hulls; no exact-hexagon case remains |
-| **N7:** exactly seven square-boundary contacts | **One mixed interior placement**, partitioned into **at most 16 four-sign orientation cells** | Exclude every nonempty sign word, including equality |
-| **C1, zero lower points** | **21 cap-occupancy orbits**, then upper diagonal sectors | Close entire zero-lower family for all larger hulls |
-| **C1, one lower point** | **12 cap-occupancy orbits**, then three radial wedges for its lower point and upper diagonal sectors | Close entire one-lower family for all larger hulls |
+| N6 | 8 cap-occupancy orbits; 13 lower/upper refinements | N6-02 with a lower point is complete; other larger-hull placements remain |
+| N7 | One mixed placement, with at most 16 four-sign cells | Complete for both sides of HC and every pair-line sign |
+| C1, zero lower | 21 cap-occupancy orbits | Larger-hull branch remains |
+| C1, one lower | 12 cap-occupancy orbits | The single-top-cap hexagon is complete; other placements remain |
 
-These are **combinatorial cover counts**, not 8 + 16 + 21 + 12
-independently feasible configurations, and not a computer-verified global
-upper bound. Each row still ranges over continuous point coordinates.
-The checker [hand/check_g6_case_ledger.py](hand/check_g6_case_ledger.py)
-audits the occupancy and sign counts only. The preferred workflow is to
-prove one inequality closing a whole row or group of rows, record its
-precise parameter/sign scope, add an exact algebra diagnostic, and then
-mark that class closed. Never count an unsupported boundary-pushing step
-as a closure.
-
-**Dependency order:** N7 mixed pair; N6 outer-cap occupancies; C1 zero/one
-lower (seek uniform cap-cap inequalities before 33 individual certificates);
-then the G7 global normalization and equality audit. The seven-boundary
-exterior case, complete Type II, complete C2/III, C1 two-lower, and exact
-N6 anchor hull are already closed.
+These are combinatorial cover counts, including closed or geometrically
+empty cells. The checker
+[hand/check_g6_case_ledger.py](hand/check_g6_case_ledger.py) audits
+the census only. A closure requires a proved continuous inequality
+and its full geometric scope; a boundary projection also needs every
+affected actual triangle threshold checked. The final G7 audit follows
+completion of the remaining N6 and C1 rows.
 
 ## 1. The completed eight-boundary gate
 
@@ -107,13 +98,14 @@ C2 is closed. The unresolved parts of the former Type-I obligation are:
 - **N:** six distinct prescribed boundary points, two on each of two adjacent
   sides and one on each opposite side, with the stated projection-overlap
   inequalities; three further points are arbitrary. Its eight-boundary
-  members are covered by G2. The larger six-boundary hulls and the mixed
-  seven-boundary interior pair still need a sharp bound or a further
-  structural reduction; the seven-boundary exterior case is complete.
+  members are covered by G2. The entire normalized seven-boundary form
+  is complete. Larger six-boundary hulls remain after the completed
+  two-side-cap occupancy with the third point below HC.
 - **C1:** one occupied corner, one further contact on each incident side,
   and one contact on each opposite side; four further points are arbitrary.
   The full five-anchor hull and the complete two-lower occupancy are
-  excluded. Only larger hulls with zero or one lower point remain.
+  excluded. Only larger hulls with zero or one lower point remain;
+  the one-lower hexagon with a single top-cap point is also closed.
 
 Several complete restrictions now apply within these families.
 [THREE_INTERIOR_TRIANGLES.md](hand/THREE_INTERIOR_TRIANGLES.md) proves that
@@ -142,6 +134,12 @@ the mixed left point into ACF, and gives capacity one to ADE, AHD,
 AHE, and HDE. The remaining mixed right point is in CEF.
 [SEVEN_BOUNDARY_UPPER_TRIANGLE.md](hand/SEVEN_BOUNDARY_UPPER_TRIANGLE.md)
 excludes every further point from HEF, so both mixed points are below HE.
+[SEVEN_BOUNDARY_MIXED_LOWER.md](hand/SEVEN_BOUNDARY_MIXED_LOWER.md)
+closes the whole mixed branch below HC with 40 exact cubic certificates.
+[SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md](hand/SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md)
+closes the upper branch with 55 certificates and assembles the entire
+normalized seven-boundary theorem, including equality. Both finite word
+covers and all 11,106 positive terms were independently re-expanded.
 Sections 10--11 exclude the nearer upper exterior cap and limit the
 farther cap to one point. [SEVEN_BOUNDARY_TOP_CAP.md](hand/SEVEN_BOUNDARY_TOP_CAP.md)
 then excludes the upper, lower, and left side quadrilaterals for the
@@ -160,6 +158,11 @@ actual points and a strict area bound below 1/20. It also gives capacity
 one to both side caps, excludes the opposite lower ear under side-cap
 occupancy, and classifies the all-three-in-the-opposite-cap case as
 support cell II with an eight-vertex hull.
+[SIX_BOUNDARY_TWO_SIDE_COMPLETION.md](hand/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md)
+closes the complete occupancy with both side caps occupied and the third
+point below HC: four exhaustive obstruction quadrants force at least one
+threshold-preserving side projection, and the seven-boundary theorem
+then supplies the sharp bound and equality classification.
 [GLOBAL_COMPLETION.md](hand/GLOBAL_COMPLETION.md) additionally excludes
 both lower exterior corner caps, without requiring the top contact to
 be on the nearer half of its side. It also proves that every nine-point
@@ -200,6 +203,11 @@ also excludes the middle containment signs.
 the last same-side O/C case and assembles the entire two-lower theorem
 for every hull size. Only the zero/one-lower C1 counts and the remaining
 N cases keep G6 open.
+[C1_ONE_LOWER_TOP_CAP.md](hand/C1_ONE_LOWER_TOP_CAP.md) additionally
+excludes the entire one-lower hexagon with a single exterior top-cap
+point and two interior upper points. Its 98 fixed cubic certificates
+cover all 205 remaining sign cells; all 9,677 terms were independently
+expanded using a separate symbolic implementation.
 
 For a fixed choice of the other eight points, the sign-consistent feasible
 positions of a ninth point form a convex polygon cut out by area half-planes.

@@ -26,7 +26,8 @@ A_0=\frac{9\sqrt{65}-55}{320}.
 - **Further moving-vertex and low-contact branches:** [hand/SHARP_BC_MOVING.md](hand/SHARP_BC_MOVING.md) extends the sharp chamber to an inward-moving B with height at most d, or C with height less than a; equality forces the moved vertex back to the boundary. In the two-lower C1 count, [hand/C1_TOP_CAP_CONVEX_PAIR.md](hand/C1_TOP_CAP_CONVEX_PAIR.md) and [hand/C1_TOP_CAP_TRIANGULAR_PAIR.md](hand/C1_TOP_CAP_TRIANGULAR_PAIR.md) exclude the full two-point exterior top cap. [hand/C1_TOP_CAP_SIDE_EARS.md](hand/C1_TOP_CAP_SIDE_EARS.md) excludes its two side ears, and [hand/C1_TOP_CAP_OF_SPLIT.md](hand/C1_TOP_CAP_OF_SPLIT.md) closes the lower-pair split by OF. In the last Type-II branch, [hand/UNBALANCED_ONE_UPPER_RADIAL.md](hand/UNBALANCED_ONE_UPPER_RADIAL.md) forces the radial assignment and [hand/UNBALANCED_OCCUPIED_LOWER_EAR.md](hand/UNBALANCED_OCCUPIED_LOWER_EAR.md) excludes the occupied lower ear.
 - **Complete seven-boundary exterior theorem:** [hand/SEVEN_BOUNDARY_TOP_CAP_RADIAL.md](hand/SEVEN_BOUNDARY_TOP_CAP_RADIAL.md) closes all four R3 radial words of the seven-boundary exterior case, including equality. The last word is excluded by the exact weighted cubic argument in [hand/SHARP_G_MOVING_PROJECTION.md](hand/SHARP_G_MOVING_PROJECTION.md). [hand/SEVEN_BOUNDARY_ADJACENT_CAPS.md](hand/SEVEN_BOUNDARY_ADJACENT_CAPS.md) and [hand/SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md](hand/SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md) exclude all four R1 words. [hand/SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md](hand/SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md) now closes the entire exterior case: all four R1 words and the other 28 words are excluded, leaving only the already classified R3 equality cases. The last 28 exclusions are fixed rational cubic identities with 4,113 positive integer-weighted terms.
 - **Complete C1 two-lower occupancy:** [hand/C1_TWO_LOWER_COMPLETION.md](hand/C1_TWO_LOWER_COMPLETION.md) excludes every configuration with two free points in OHC, at every hull size. Only the zero- and one-lower C1 counts remain. [hand/SEVEN_BOUNDARY_UPPER_TRIANGLE.md](hand/SEVEN_BOUNDARY_UPPER_TRIANGLE.md) excludes every further point from HEF in the seven-boundary normalization.
-- **The unrestricted hand proof is still incomplete.** [ROADMAP.md](ROADMAP.md) and [HANDOFF.md](HANDOFF.md) identify the remaining continuous families: N with larger six-boundary hulls or a mixed seven-boundary interior pair, and C1 with zero or one lower point and a larger hull. The eight-boundary theorem does not assert that an unrestricted optimizer has eight boundary points.
+- **Complete normalized seven-boundary theorem:** [hand/SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md](hand/SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md), Theorem 2, now assembles every interior and exterior placement, with equality forcing the eighth boundary contact. The lower and upper mixed branches use 40 and 55 fixed cubic certificates, respectively, with complete radial-word coverage and independent exact expansions. [hand/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md](hand/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md) also closes the entire six-boundary occupancy with both side caps occupied and the third point below HC, including equality. [hand/C1_ONE_LOWER_TOP_CAP.md](hand/C1_ONE_LOWER_TOP_CAP.md) closes the one-lower C1 hexagon with one exterior top-cap point.
+- **The unrestricted hand proof is still incomplete.** [ROADMAP.md](ROADMAP.md) and [HANDOFF.md](HANDOFF.md) identify the remaining continuous families: N with larger six-boundary hulls, and C1 with zero or one lower point and a larger hull, after the complete exclusions above. The boundary theorems do not assert that an unrestricted optimizer has eight boundary points.
 
 ## Quick local checks
 
@@ -83,6 +84,12 @@ python hand/check_c1_two_lower_completion.py
 python hand/check_seven_boundary_adjacent_caps_completion.py
 python hand/check_seven_boundary_upper_triangle.py
 python hand/check_seven_boundary_exterior_certificates.py
+python hand/check_seven_boundary_mixed_lower.py
+python hand/check_seven_boundary_mixed_above.py
+python hand/check_seven_boundary_mixed_above_certificates.py
+python hand/check_six_boundary_two_side_projection.py
+python hand/check_six_boundary_two_side_completion.py
+python hand/check_c1_one_lower_top_cap.py
 python hand/check_six_boundary_hull.py
 python exact/verify_local.py                # standard-library exact local theorem
 cd exact

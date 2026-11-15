@@ -13,8 +13,9 @@ feasible realization.
 The global normalization in
 [GLOBAL_STRUCTURE.md](GLOBAL_STRUCTURE.md) reduces the theorem to N, C1,
 C2, Type II and Type III. The eight-boundary class, C2, Type II and Type III
-are already closed. The entire seven-boundary exterior case is also closed;
-see [SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md](SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md).
+are already closed. The entire normalized seven-boundary form is now closed;
+see [SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md](SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md),
+Theorem 2. The N7 sign census below is retained as a closed cover.
 The entire C1 **two-lower** class is closed by
 [C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md).
 These statements concern the written hand arguments and exact diagnostics;
@@ -69,6 +70,9 @@ These conditions give **exactly eight** coarse occupancy orbits:
 
 **Status:** all eight rows remain OPEN as complete classes. Some
 subplacements in them are excluded, but no row has a full exclusion.
+In N6-02, the whole lower-point subrow is **CLOSED**, including its
+sharp equality classification, by
+[SIX_BOUNDARY_TWO_SIDE_COMPLETION.md](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md).
 The last row has the stronger established shape stated in
 [SIX_BOUNDARY_EXTERIOR.md](SIX_BOUNDARY_EXTERIOR.md), Theorem 4.
 If a side cap is occupied, the opposite lower anchor ear is empty
@@ -116,7 +120,11 @@ in the right quadrilateral are also excluded by
 [SEVEN_BOUNDARY_LEFT_PAIR.md](SEVEN_BOUNDARY_LEFT_PAIR.md) and
 [SEVEN_BOUNDARY_RIGHT_PAIR.md](SEVEN_BOUNDARY_RIGHT_PAIR.md).
 
-**The only open macroscopic placement is the mixed interior pair.**
+**This entire branch is CLOSED.** The mixed interior pair was the last
+macroscopic placement. Its lower-HC branch is closed by
+[SEVEN_BOUNDARY_MIXED_LOWER.md](SEVEN_BOUNDARY_MIXED_LOWER.md), and its
+upper-HC branch by
+[SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md](SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md).
 Name its left and right members \(P,Q\), respectively. The established
 constraints are
 \[
@@ -140,7 +148,7 @@ For an **explicit exhaustive orientation refinement**, use the signs
 \]
 where \([UVW]=\det(V-U,W-U)\) and the line \(PQ\) is directed
 from the left member to the right member. Each sign is strictly \(+\)
-or \(-\) by noncollinearity. This partitions the remaining class into
+or \(-\) by noncollinearity. This partitions that mixed class into
 **at most \(2^4=16\) orientation cells**, with no points omitted:
 
 | Primary cell | \(\epsilon_1\): \(P\) vs \(HC\) | \(\epsilon_2\): \(Q\) vs \(DF\) | Further subcells |
@@ -150,18 +158,16 @@ or \(-\) by noncollinearity. This partitions the remaining class into
 | N7-M3 | \(-\) | \(+\) | Same four pair-line sign words |
 | N7-M4 | \(-\) | \(-\) | Same four pair-line sign words |
 
-These are **partition cells, not 16 certified feasible survivors**:
+These are **partition cells, not 16 feasible survivors**:
 the established containment and capacity restrictions can make
-individual words empty. For each word, first derive all implied
-triangle containment signs; then either exhibit a direct contradiction
-or a rational polynomial certificate valid on the *entire* continuous
-cell. If a word is geometrically empty, prove that with its sign
-conditions rather than silently dropping it.
+individual words empty. All four rows and every pair-line sign are now
+covered by the two complete mixed theorems; their finer radial covers
+require no restriction on the joining line.
 
-**Closure gate N7:** all four primary cells, all nonempty pair-line
-sign subcells, and strict equality audit. The previously completed
-exterior case already handles its own equality and boundary-contact
-transitions; the mixed interior pair must be closed separately.
+**Closure gate N7: COMPLETE.** All four primary cells and all pair-line
+sign subcells are excluded strictly below the target. The full exterior
+theorem handles equality and boundary-contact transitions; Theorem 2 of
+the upper mixed completion assembles the normalized open-side form.
 
 ## G6-C1: one prescribed corner, zero or one lower free point
 
@@ -210,8 +216,10 @@ and \(n_I\) is determined by the count equation:
 | C1-1 | 3 | (0,0) | 1 |
 | **C1-1 subtotal** | | | **12** |
 
-**Status:** all **33** coarse C1 rows are OPEN unless ruled out by
-a cited global theorem in a future revision. These counts are an
+**Status:** the C1-1 row \((n_L,n_T,n_R;n_I)=(0,1,0;2)\) is
+**CLOSED** by [C1_ONE_LOWER_TOP_CAP.md](C1_ONE_LOWER_TOP_CAP.md).
+Other coarse rows remain open unless excluded by a cited global theorem.
+These counts are an
 unpruned, exhaustive combinatorial catalogue; they are not 33
 independent proof obligations if a uniform area inequality can close
 several rows simultaneously.
@@ -244,10 +252,8 @@ exact rational coefficient rule, and independent checker.
 
 ## Priority and acceptance criteria
 
-1. **N7-M (one continuous pair family, at most 16 sign words).**
-   It is already constrained to \(ACF\times CEF\) below \(HE\).
-   Use actual cross-triangles and the established four triangle
-   capacity-one bounds to eliminate whole sign words.
+1. **N7-M: complete.** Both sides of HC and every pair-line sign
+   are covered by the complete mixed theorems above.
 2. **N6-S (eight cap-occupancy orbits).**
    Attack the three-point top cap N6-08 using its forced common
    support cell II; group the remaining rows by zero/one occupancy

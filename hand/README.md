@@ -16,10 +16,11 @@ relabeling. No symmetry or orientation chamber is assumed in that theorem.
 does not yet force eight boundary points, and the remaining continuous
 families are listed below. The older computational draft is separate.
 
-For the finer open-case classification and case IDs, see
-[G6_FINITE_CASE_LEDGER.md](G6_FINITE_CASE_LEDGER.md). Its finite
+For the finer case classification and stable case IDs, see
+[G6_FINITE_CASE_LEDGER.md](G6_FINITE_CASE_LEDGER.md). Its unpruned
 occupancy/sign census (8 N6, up to 16 N7, and 21+12 C1 coarse
-classes) is a planning ledger, not a global proof certificate.
+classes) is a planning ledger. Its status entries distinguish the
+now-complete N7 cover and the other completed subrows from open cases.
 
 ## Proven results
 
@@ -89,6 +90,10 @@ classes) is a planning ledger, not a global proof certificate.
 | The entire C1 two-lower occupancy is excluded, with every hull size and pair-line case covered | [C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md) |
 | Complete seven-boundary exterior theorem, all 36 radial words and equality | [SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md](SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md) |
 | Both N side exterior caps have capacity one; three points in the opposite cap force support cell II and an eight-vertex hull | [SIX_BOUNDARY_EXTERIOR.md](SIX_BOUNDARY_EXTERIOR.md), Sections 3–4 |
+| Complete mixed branch below HC, all 64 surviving radial-word pairs | [SEVEN_BOUNDARY_MIXED_LOWER.md](SEVEN_BOUNDARY_MIXED_LOWER.md) |
+| Complete mixed branch above HC and the entire normalized seven-boundary theorem, including equality | [SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md](SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md), Theorems 1–2 |
+| Complete N occupancy with both side caps occupied and the third point below HC, including equality | [SIX_BOUNDARY_TWO_SIDE_COMPLETION.md](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md) |
+| Complete one-lower C1 hexagon with one exterior top-cap point and two interior upper points | [C1_ONE_LOWER_TOP_CAP.md](C1_ONE_LOWER_TOP_CAP.md) |
 
 The original three-family argument is retained in
 [BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md). All strengthened normal forms
@@ -102,15 +107,16 @@ an observed numerical pattern.
   exterior cap is empty and both side caps have capacity one. An occupied
   side cap makes the opposite lower ear empty. If all three free points
   are in the opposite cap, only support cell II with an eight-vertex
-  hull survives. The interactions between these placements remain.
-- **N with seven boundary contacts:** only a mixed interior pair remains.
-  Its left point lies in ACF, its right point in CEF, and both lie below HE.
-  No pair can lie in any of ADE, AHD, AHE, or HDE. The full exterior
-  case is complete, including equality; the full left and right interior
-  pair classes are also complete.
+  hull survives. The whole occupancy with both side caps occupied and
+  the third point below HC is now complete; other interactions remain.
 - **C1:** only the zero- and one-lower counts in OHC remain, with hulls
   larger than the prescribed five-anchor pentagon. The entire two-lower
   occupancy and every exact-five-anchor-hull placement are excluded.
+  The one-lower hexagon with one exterior top-cap point is also excluded.
+
+The entire normalized seven-boundary form is complete, including every
+interior pair, every exterior placement, and equality. Its final assembly
+is Theorem 2 of SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md.
 
 The opposite-corner family C2, the entire three-corner family Type III,
 and the entire adjacent-corner Type-II family are closed by strict
@@ -183,6 +189,12 @@ python hand/check_c1_two_lower_completion.py
 python hand/check_seven_boundary_adjacent_caps_completion.py
 python hand/check_seven_boundary_upper_triangle.py
 python hand/check_seven_boundary_exterior_certificates.py
+python hand/check_seven_boundary_mixed_lower.py
+python hand/check_seven_boundary_mixed_above.py
+python hand/check_seven_boundary_mixed_above_certificates.py
+python hand/check_six_boundary_two_side_projection.py
+python hand/check_six_boundary_two_side_completion.py
+python hand/check_c1_one_lower_top_cap.py
 ```
 
 These scripts use SymPy where appropriate and verify the printed determinant
