@@ -1,0 +1,4 @@
+bin/
+work/
+__pycache__/
+seed/attainment_120.json

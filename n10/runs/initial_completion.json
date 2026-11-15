@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "scope": "Exact continuous global cover for Heilbronn n=10; partial family completion only",
+  "source": {
+    "path": "n10/global/global_cover.cpp",
+    "sha256": "25f29bd92f08879777bae1d50168ddb5235024c4c093d0047d692cb1a055839e"
+  },
+  "families": {
+    "III": {
+      "status": "complete",
+      "log": "n10/runs/baseline_III.log",
+      "log_sha256": "1cb8ae64bec817d677b7e80983762638053add7110cd58f9dc53ac1d1ec9bd72",
+      "threshold": "4653/100000",
+      "local_acceptance": false
+    },
+    "C2": {
+      "status": "complete",
+      "log": "n10/runs/baseline_C2.log",
+      "log_sha256": "822371b530519c2c7d9241fa2c5a64ae6f90355b2a064e480659b72ea7b2feb5",
+      "threshold": "4653/100000",
+      "local_acceptance": false
+    },
+    "II": {
+      "status": "complete",
+      "log": "n10/runs/baseline_II.log",
+      "log_sha256": "9a2146ef88eb3db10408ce476bca52b2f72770b9b6d168fad1c8bcdd7b9b44e2",
+      "threshold": "4653/100000",
+      "local_acceptance": false
+    }
+  }
+}

@@ -21,7 +21,7 @@ No Lean compilation or GitHub CI is part of this work.
 - C4: independent replay and unrestricted theorem assembly.
 
 Root families are N, C1, C2, adjacent-corner II, and three-corner III.
-At initialization none is closed. A completed subchamber does not close its
+Three families (III, C2, II) now have complete exact runs; see `STATUS.md`. A completed subchamber does not close its
 parent family. All new receipts must state their own n=10 domains and thresholds.
 
 This branch is based on main at 75eb8bcfd1eb971ab53b69e144064d6e9525971f,

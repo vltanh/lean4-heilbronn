@@ -85,6 +85,8 @@ def main():
     g=Cubic([0,1,0]);a=1-3*g+2*g*g;A=5*g*g/8-g**3/2
     require(not any(3456*A**3-1764*A*A+268*A-9),'area cubic')
     require((2*A-F(SL,QDEN)).sign()>0,'rational threshold must be below 2A')
+    require((A-F(4653,100000)).sign()>0,'global corner threshold must be below A')
+    require((A-F(4653741958254,10**14)).sign()>0,'global N threshold must be below A')
     require((A-F(1,25)).sign()>0,'positive area margin')
     P=[(0,a),(a,0),(1-g/2,0),(1,g/2),(1,1-a),(1-a,1),
        (g/2,1),(0,1-g/2),(g,g),(1-g,1-g)]
