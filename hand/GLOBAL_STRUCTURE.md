@@ -237,7 +237,14 @@ be trapped entirely inside the square. The new shear argument applies to
 the whole configuration through its enclosing parallelogram; it makes no
 unsupported assertion about these individual-point feasible polygons.
 
+The complete family C2 has since been excluded in
+[`OPPOSITE_CORNERS.md`](OPPOSITE_CORNERS.md): every member has a triangle
+of area at most \(7/128<A_0\). The entire eight-boundary family, including
+all its orientation classes, is also closed by Theorem 13 of
+[`EIGHT_BOUNDARY.md`](EIGHT_BOUNDARY.md).
+
 To close G6, a sharp inequality or a further proved structural reduction
-is still required for all of N, C1, and C2. In particular, the eight-boundary
-chamber theorem cannot yet be applied to arbitrary members of these three
-families.
+is still required for N with fewer than eight boundary points and for C1.
+The complete eight-boundary theorem cannot yet be applied to arbitrary
+members of these two families. Type II and the two residual Type-III
+diagonal-count cases are the separate remaining corner obligations.

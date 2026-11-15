@@ -3,10 +3,14 @@
 ## Status and scope
 
 **This is not yet a complete hand proof of the unrestricted nine-point theorem.**
-It contains a sharp, global hand proof on a specified asymmetric boundary family,
-an independent hand proof of unrestricted strict local optimality, and an exact
-construction check. The original global classification still depends on the
-computer-assisted cover in the preceding package.
+This manuscript contains the sharp chamber inequality, unrestricted strict
+local optimality, and the exact construction check. The companion
+[`EIGHT_BOUNDARY.md`](EIGHT_BOUNDARY.md) now proves the sharp theorem for
+**every configuration with at least eight boundary points**, using the chamber
+inequality here together with a complete orientation classification. The
+global normalization and corner advances are indexed in
+[`README.md`](README.md); several families with fewer boundary contacts
+remain open by hand.
 
 The statements proved here do not assume that an arbitrary optimizer is
 symmetric or has eight boundary points. In particular, those assumptions must
@@ -488,26 +492,37 @@ This proves Theorem 2 entirely by finite algebra and compactness.
 
 # Part III. What remains for a complete hand proof
 
-The preceding computer-assisted draft has a hand reduction to three exhaustive
-normal forms. It obtains the remaining global exclusions by enumerating real
-coordinate boxes. The new proofs here do not replace that global enumeration.
+The original three-family normalization has been strengthened by the
+contact-increasing shear argument in
+[`GLOBAL_STRUCTURE.md`](GLOBAL_STRUCTURE.md). It is sufficient to handle
+five explicit continuous families: N, C1, C2, Type II, and Type III. The
+following ledger includes the companion hand proofs in this directory.
 
 | Obligation | Hand-proof status |
 |---|---|
 | Attaining construction | Complete; exact area check in the appendix below |
-| Three-family normalization | Already a hand argument; see the copied boundary-reduction note |
+| Exhaustive global normalization | Three original forms in `BOUNDARY_REDUCTION.md`; strengthened five-family reduction in `GLOBAL_STRUCTURE.md` |
 | Sharp bound and equality in the boundary chamber of Part I | Complete here, with arbitrary asymmetric boundary parameters |
+| All configurations with at least eight boundary points | Complete; `EIGHT_BOUNDARY.md`, Theorem 13, with equality classification |
 | Strict local optimality against all 18 coordinate perturbations | Complete here, qualitative radius |
-| Type III: three prescribed corners and six free points | No complete hand exclusion in this note |
-| Type II: adjacent-corner form and five free points | No complete hand exclusion in this note |
-| General Type I: five boundary points and four free points | No complete hand reduction to Part I or other hand-excluded families in this note |
+| C2: two opposite corners, four other side contacts, three free points | Complete strict exclusion \(\min\mathrm{Area}\le7/128<A_0\); `OPPOSITE_CORNERS.md` |
+| Type III: three prescribed corners and six free points | Only the \(2+4\) and \(3+3\) diagonal-count cases remain; `CORNER_FAMILIES.md` |
+| Type II: adjacent-corner form and five free points | Still open by hand |
+| N: six prescribed boundary points and three free points | Still open below eight boundary points |
+| C1: one occupied corner, four other side contacts, four free points | Still open by hand |
 
-A sufficient new structural theorem would say that any global maximizer with
-minimum area at least \(A_0\), after a square symmetry and relabeling, has the
-eight boundary incidences and the orientation chamber of Part I. **That theorem
-is not proved here.** The existing five-boundary-point normalization does not
-imply it. Nor can it be inferred just from the coordinates of the candidate,
-from stationarity at that candidate, or from the equality argument in Part I.
+A sufficient new structural theorem would say that a global maximizer can
+be transformed, without lowering its value, to a configuration with eight
+boundary points or to one of the hand-excluded families. **That theorem is
+not proved here.** The six-contact normalization does not imply it. Nor can
+it be inferred from the candidate coordinates, local stationarity, or the
+chamber equality argument. The missing orientation cases *within* the
+eight-boundary family have, however, all been closed.
+
+Lemma 4 of `GLOBAL_STRUCTURE.md` proves equality transfer through the
+normalizing shears, using the strict local theorem here. Thus a future
+sharp classification of the remaining normalized families will also give
+global uniqueness; no separate inverse-shear assumption is needed.
 
 The original quantitative local radius \(1/200\) remains justified by its
 previous exact arithmetic certificate. The qualitative proof in Part II is
