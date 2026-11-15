@@ -73,4 +73,30 @@ assert sp.factor((N.subs(v, v1)*65536*(1-alpha)**2).subs(alpha, sp.Rational(5, 3
 assert all(coef > 0 for coef in sp.Poly(lower_numerator, t).all_coeffs())
 assert all(coef > 0 for coef in sp.Poly(upper_numerator, t).all_coeffs())
 
-print("PASS: seven-boundary cap identities, diagonal-triangle capacity, and rational exclusions")
+# The upper-left overlap AHF intersect HCF is empty.
+x, y = sp.symbols("x y", real=True)
+Q = (x, y)
+gap = h-a
+Z = c*(1-h)+f*h
+assert sp.expand(Z*doubled(A, F, Q) + (Z+c*gap)*doubled(F, H, Q)
+                 + f*gap*doubled(H, C, Q) - f*gap*Z) == 0
+Psi = f*gap*Z-s*(2*Z+gap*(c+f))
+assert sp.expand(sp.diff(Psi, f) - (gap*c*(1-h)+2*f*h*gap-s*(2*h+gap))) == 0
+assert sp.factor(sp.diff(Psi.subs(f, sp.Rational(1, 2)), c)
+                 - (gap*((1-h)/2-s)-2*s*(1-h))) == 0
+assert (sp.Rational(1, 2)+s)**2-4*s == -sp.Rational(271, 4096)
+assert sp.Rational(6, 49) < s/(1-s) == sp.Rational(7, 57)
+R = sp.factor(Psi.subs({c:s/a+s/(h-a), f:sp.Rational(1, 2)}))
+Dgap = (a-sp.Rational(7, 32))*gap**2 + (a/8+sp.Rational(49, 1024))*gap + sp.Rational(49, 512)*a
+assert sp.factor(R.subs(h, 1)-R-(1-h)*Dgap/(4*a*gap)) == 0
+endpoint = 1024*a**3-2400*a**2+1649*a-175
+assert sp.factor(1024*Dgap.subs(h, 1)-endpoint) == 0
+assert 1649-4800*sp.Rational(7, 32) == 599 > 0
+assert endpoint.subs(a, sp.Rational(1, 7)) == sp.Rational(5000, 343) > 0
+quadratic = (1-2*s)*a**2+(6*s-1)*a+4*s**2
+assert sp.factor(R.subs(h, 1)+quadratic/(4*a)) == 0
+assert sp.discriminant(quadratic, a) == -sp.Rational(257, 8192)
+assert sp.factor(b+(f-b)*y-f*(y-a)/(1-a)
+                 - (1-y)*(b*(1-a)+a*f)/(1-a)) == 0
+
+print("PASS: seven-boundary caps, diagonal-triangle capacity, and complete upper-left overlap exclusion")

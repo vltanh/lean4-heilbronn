@@ -550,9 +550,167 @@ in \(ACF\), by Theorem 5. If both lay in \(AHF\), both would
 be on the \(H\)-side of \(BF\); since they also lie in
 \(HBCF\), both would then be inside \(HBF\), contrary to
 Theorem 2.
-Thus the diagonals \(HC,BF,AF\) each separate the pair. This
-does not yet exclude the two surviving placements; their coupled
-constraints remain to be proved.
+Thus the diagonals \(HC,BF,AF\) each separate the pair. Section 7
+below excludes one of the two surviving diagonal-sector assignments.
+
+## 7. The upper left overlap is empty
+
+**Theorem 6.** Under (1)--(2), no further configuration point can lie
+inside both \(AHF\) and \(HCF\) if every triangle has doubled
+area at least \(s=7/64\).
+
+**Proof.** Suppose that \(Q\) lies in this intersection, and put
+
+\[
+L=h-a,\qquad Z=[HCF]=c(1-h)+fh>0.
+\]
+
+The positive areas \([AFQ],[FHQ],[HCQ]\) satisfy the exact
+weighted identity
+
+\[
+Z[AFQ]+(Z+cL)[FHQ]+fL[HCQ]=fLZ.
+\]
+
+All three weights are positive, so
+
+\[
+\Psi(a,h,c,f):=fLZ-s\{2Z+L(c+f)\}\ge0.                  \tag{25}
+\]
+
+We will derive a negative upper bound for \(\Psi\). First the
+boundary triangles \(ABH,ABC,CDE\) imply
+
+\[
+bL\ge s,\qquad a(c-b)\ge s,\qquad c\le1-s,
+\]
+
+and hence
+
+\[
+c\ge\frac{s}{a}+\frac{s}{L},\qquad
+1-s\ge\frac{s}{a}+\frac{s}{1-a}.
+\]
+
+The second inequality uses \(L\le1-a\). Thus
+\(a(1-a)\ge s/(1-s)=7/57\), which forces
+
+\[
+                         a>\frac17:                      \tag{26}
+\]
+
+if \(a\le1/7\), then \(a(1-a)\le6/49<7/57\), since
+\(342<343\).
+
+### Increase the top contact to its allowed endpoint
+
+Since \(Q\) is inside \(AHF\), subdivision gives \(fL\ge3s\).
+For all larger \(f\), keeping \(a,h,c\) fixed,
+
+\[
+\frac{\partial\Psi}{\partial f}
+=Lc(1-h)+2fhL-s(2h+L)
+\ge4hs-sL\ge3hs>0.
+\]
+
+Therefore replacing \(f\) by \(1/2\) increases \(\Psi\).
+This is a scalar upper bound; it does not move an actual point or
+assert that the new coordinates remain a configuration.
+
+At \(f=1/2\), the coefficient of \(c\) in \(\Psi\) is
+
+\[
+C=L\left(\frac{1-h}{2}-s\right)-2s(1-h)<0.                \tag{27}
+\]
+
+Indeed, if the expression in parentheses is nonpositive, the sign is
+immediate, including \(h=1\). Otherwise use \(L\le h\) to bound
+\(C\) above by
+
+\[
+-\frac{h^2}{2}+\left(\frac12+s\right)h-2s<0.
+\]
+
+This downward quadratic is negative for all real \(h\), because
+its discriminant is
+\((1/2+s)^2-4s=-271/4096<0\).
+
+By (27), replacing \(c\) by its lower bound
+\(s/a+s/L\) also increases \(\Psi\). Define the resulting
+rational function by
+
+\[
+R(a,h)=\Psi\left(a,h,\frac{s}{a}+\frac{s}{h-a},\frac12\right).
+\]
+
+We have proved
+
+\[
+                         0\le\Psi\le R(a,h).             \tag{28}
+\]
+
+### The remaining height replacement has a positive remainder
+
+The following exact identity permits increasing \(h\) to one:
+
+\[
+R(a,1)-R(a,h)=\frac{(1-h)D(a,L)}{4aL},
+\]
+
+\[
+D(a,L)=\left(a-\frac7{32}\right)L^2
+ +\left(\frac a8+\frac{49}{1024}\right)L
+ +\frac{49a}{512}.                                      \tag{29}
+\]
+
+We claim \(D>0\) throughout the required range
+\(a>1/7\), \(0<L\le1-a\). If \(a\ge7/32\), all
+coefficients in (29) are nonnegative and the constant is positive.
+If \(1/7\le a\le7/32\), the polynomial is concave in \(L\),
+so its minimum on \([0,1-a]\) occurs at an endpoint. At zero
+its value is positive, and at the other endpoint
+
+\[
+1024D(a,1-a)=1024a^3-2400a^2+1649a-175.
+\]
+
+This polynomial increases on \([1/7,7/32]\), since its derivative
+is at least \(1649-4800(7/32)=599>0\). Its value at \(1/7\)
+is \(5000/343>0\). Both endpoint values are therefore positive,
+proving the claim. Equation (29) now gives \(R(a,h)\le R(a,1)\).
+
+Finally, direct simplification gives
+
+\[
+R(a,1)
+=-\frac{(1-2s)a^2+(6s-1)a+4s^2}{4a}<0.                   \tag{30}
+\]
+
+The numerator is an upward quadratic whose discriminant is
+\(-257/8192<0\). Its denominator is positive. Equations
+(28)--(30) contradict one another, proving the theorem. \(\square\)
+
+**Corollary 7 (one complete left-pair assignment is excluded).** In the
+placement of Section 4, the free points cannot occupy the sectors at
+\(BC\) and \(FH\) of the quadrilateral \(HBCF\).
+
+Indeed the point in the \(BC\) sector is on the \(C\)-side of
+\(BF\), and therefore below \(AF\). Theorem 5 and the subsequent
+separation consequence force the other point above \(AF\). A point
+in the \(FH\) sector is also above \(HC\) and below \(HF\),
+so it would lie in both \(AHF\) and \(HCF\), contrary to
+Theorem 6. The comparison between \(BF\) and \(AF\) is strict
+away from \(F\): at every height \(y<1\), their first-coordinate
+difference is
+
+\[
+\left[b+(f-b)y\right]-\frac{f(y-a)}{1-a}
+=\frac{(1-y)\{b(1-a)+af\}}{1-a}>0.
+\]
+
+Thus the only remaining left-pair assignment has one point in the
+\(HB\) sector, above \(AF\), and one in the \(CF\) sector.
+The exclusion of that last assignment is a separate obligation.
 
 ## Verification
 
