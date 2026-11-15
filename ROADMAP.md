@@ -91,12 +91,16 @@ Its Sections 8--9 exclude every point from CDE and give capacity one
 for CDF and DEF. [SEVEN_BOUNDARY_LEFT_PAIR.md](hand/SEVEN_BOUNDARY_LEFT_PAIR.md)
 closes the full smaller-left pair class, and
 [SEVEN_BOUNDARY_RIGHT_PAIR.md](hand/SEVEN_BOUNDARY_RIGHT_PAIR.md) closes
-the entire right-quadrilateral pair. Mixed left/right placements remain,
-as do the top exterior caps.
+the entire right-quadrilateral pair. Mixed left/right placements remain.
+Sections 10--11 exclude the nearer upper exterior cap and limit the
+farther cap to one point. [SEVEN_BOUNDARY_TOP_CAP.md](hand/SEVEN_BOUNDARY_TOP_CAP.md)
+then excludes the upper, lower, and left side quadrilaterals for the
+other point, which lies inside the original heptagon.
 [SIX_BOUNDARY_HULL.md](hand/SIX_BOUNDARY_HULL.md) gives capacity one
-for all six N anchor ears and reduces the exact six-anchor hull to
-one mixed HCD upper pair with its lower point in ABH, up to transposition.
-Larger six-boundary hulls are not covered by that last reduction.
+for all six N anchor ears and excludes the entire exact six-anchor
+convex hull. Its final lower-ear placement is excluded by an additional
+cross-triangle area inequality and three explicit scalar intervals.
+Larger six-boundary hulls remain open.
 [GLOBAL_COMPLETION.md](hand/GLOBAL_COMPLETION.md) additionally excludes
 both lower exterior corner caps, without requiring the top contact to
 be on the nearer half of its side. It also proves that every nine-point
@@ -117,6 +121,9 @@ both remaining mixed-pair placements, completing the entire exact
 five-anchor C1 pentagon.
 [C1_TWO_LOWER_SIDE_CAP.md](hand/C1_TWO_LOWER_SIDE_CAP.md) further excludes
 both exterior side caps whenever two free points lie in OHC.
+[C1_TOP_CAP_RADIAL_SPLIT.md](hand/C1_TOP_CAP_RADIAL_SPLIT.md) further
+forces those lower points onto opposite sides of every ray OX to an
+exterior top-cap point.
 The top exterior cap in that count, the counts zero and one below HC,
 and the remaining N cases keep G6 open.
 
@@ -217,8 +224,11 @@ in either cut. In the two-above case,
 [UNBALANCED_RADIAL_SPLIT.md](hand/UNBALANCED_RADIAL_SPLIT.md) forces the
 central points to opposite sides of DR, the right interior point above
 DR, and the lower right hull vertex to height below 3/16.
-These two explicitly described cell-II branches still require coupled
-arguments; their scalar restrictions do not alone complete G5.
+[UNBALANCED_UPPER_CELL_II.md](hand/UNBALANCED_UPPER_CELL_II.md) now
+closes that last two-above cell with an exact stress, monotone
+elimination, and twelve printed Bernstein boxes with 960 strictly
+negative rational coefficients. Thus G5 has only one branch left:
+support cell II with exactly one central point above CE.
 
 The same new note proves a stronger global container theorem: a triangle
 of area at most \(1/2\) with two actual vertices contains at most five
