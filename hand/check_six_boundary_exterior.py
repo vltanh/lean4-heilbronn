@@ -91,3 +91,11 @@ assert k == sp.Rational(57, 7)
 assert sp.Poly(quad_z, z).LC() < 0
 
 print("PASS: complete lower-right and upper-left exterior-cap capacity-one theorem")
+
+eq((1-s)**2, sp.Rational(3249, 4096))
+assert sp.Rational(13, 16)-(1-s)**2 == sp.Rational(79, 4096) > 0
+assert 3-sp.Rational(12, 7)**2 > 0
+eq((4+2*sp.Rational(12, 7))*s, sp.Rational(13, 16))
+assert 12*s > 10*s > 8*s > sp.Rational(13, 16)
+
+print("PASS: the three-point opposite-cap occupancy reduces to support cell II and hull size eight")

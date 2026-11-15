@@ -292,10 +292,78 @@ Theorem 3 rules out a pair in either side cap, while Theorem 2 makes the
 lower-left cap empty. The upper-right cap and interactions between
 distinct caps remain to be considered.
 
+## 4. Three points in the opposite cap force an eight-vertex hull
+
+The upper-right cap is qualitatively different from the side caps.
+Here is an exhaustive reduction of the occupancy in which it contains
+all three free points.
+
+**Theorem 4.** Suppose all three free points are in
+\(\operatorname{conv}\{D,F,(1,1)\}\), and every actual doubled
+triangle area is at least \(s=7/64\). They can be named \(E,G,O\)
+so that \(D,E,G,F\), in that cyclic order, is a strictly convex
+quadrilateral and
+
+\[
+                         O\in DFE\cap DFG.
+\]
+
+Consequently the full configuration has exactly eight hull vertices,
+with \(O\) as its sole interior point. Every triangular cap hull and
+every other support-cell placement is impossible. The surviving common
+cell is not excluded by this theorem.
+
+**Proof.** The actual inequalities \([ABC]\ge s\) and
+\([ABH]\ge s\) give \(a>s\) and \(b>s\), because both
+side gaps are less than one. Thus \(d\ge a>s\) and
+\(f\ge b>s\). The cap's doubled area \(\delta\) satisfies
+
+\[
+\delta=(1-d)(1-f)<(1-s)^2
+=\frac{3249}{4096}<\frac{13}{16}<Ks,
+\qquad K=4+2\sqrt3.                                    \tag{12}
+\]
+
+Apply the five-point endpoint-triangle analysis in Section 1 of
+[TYPE_II.md](TYPE_II.md) to \(D,F\) and the three free points,
+with this cap as containing triangle. Its triangular-hull alternative
+would put two additional actual points inside an actual triangle of
+doubled area at most \(\delta\). The two-interior-point theorem
+would then require \(\delta\ge Ks\), contradicting (12).
+
+In the nontriangular alternative, that analysis constructs a support
+triangle inside the cap, with actual points \(E,G\) in the relative
+interiors of its legs at \(D,F\), respectively. Let its doubled area
+be \(\delta'\le\delta\). The five possible cells for the last
+point \(O\) are exactly the five cells in that analysis. Cells I
+and III require \(\delta'\ge Ks\), cell IV requires
+\(\delta'\ge12s\), and cell V requires
+\(\delta'>10s\). All contradict (12). Only cell II remains;
+its actual containments are precisely \(O\in DFE\cap DFG\).
+In particular \(O\) is strictly inside the quadrilateral \(D,E,G,F\).
+
+For clarity, both cap vertices \(E,G\) remain hull vertices after
+the four lower anchors are restored. The support legs from \(D,F\)
+meet at a point of the original cap. Their lines put every point of
+the square below \(DF\), in particular \(A,H,B,C\), on the
+same inner side as the support triangle. For example, the leg from
+\(D\) is either vertical or has negative slope of magnitude at least
+\((1-d)/(1-f)\), so all four anchors lie below it; the transposed
+argument handles the other leg. The exposed edges \(DE\) and
+\(GF\) therefore remain support edges of the full hull. The six
+prescribed contacts are also hull vertices: \(A,H\) are the two
+extremes on the left side, \(B,C\) on the bottom side, \(D\) is
+the lowest contact on the right, and \(F\) the leftmost contact on
+the top. Positive minimum area excludes any collinear third point.
+Thus the full hull has exactly these eight vertices, proving the
+theorem. \(\square\)
+
 ## Verification
 
 The optional exact diagnostic
 [check_six_boundary_exterior.py](check_six_boundary_exterior.py)
 checks the area formulas, the two cap reductions, the rational
 simplifications, the one-variable maximization identity, and the strict
-polynomial comparisons in Lemma 1 and Theorem 3.
+polynomial comparisons in Lemma 1 and Theorem 3. It also checks the
+rational area comparison in Theorem 4; that theorem's support-cell
+classification is the already proved endpoint-triangle analysis.
