@@ -1,4 +1,4 @@
-# The balanced adjacent-corner case: a complete hull-pair exclusion
+# The balanced adjacent-corner case: the left hull must be triangular
 
 ## Scope
 
@@ -16,12 +16,14 @@ contain respectively two, two, and two of the six points other than
 points on the dividing lines. Put \(s=7/64\), and suppose every
 doubled triangle area is at least \(s\).
 
-**Theorem.** The two four-point sets \(D,B,E,L\) and \(B,C,Q,R\)
-cannot both have quadrilateral convex hulls.
+**Theorem.** The four-point set \(D,B,E,L\) has triangular convex
+hull \(DBE\). Equivalently, \(L\) lies strictly inside \(DBE\).
 
-This is a complete continuous exclusion of one hull combination within
-the balanced count \((2,2,2)\). The cases with a triangular side hull
-remain open. The two central points are not used in the proof.
+This excludes the entire left-quadrilateral branch of the balanced count
+\((2,2,2)\). The triangular-left branch remains open. Sections 1--3
+exclude two quadrilateral side hulls without using the central points;
+Section 4 excludes the remaining left-quadrilateral case using those
+two points.
 
 ## 1. The lower vertex in a four-point endpoint quadrilateral
 
@@ -145,16 +147,101 @@ D(L,B,Q)&=(b-p)Q_y+v(Q_x-b)\\
 \end{aligned}
 \]
 
-This contradicts the assumed minimum and proves the theorem.
+This contradicts the assumed minimum and excludes the case in which
+both side hulls are quadrilateral.
 
-## 4. A further cut restriction in the triangular-left branch
+## 4. A triangular right hull also contradicts the left quadrilateral
+
+Continue to suppose that the left hull is quadrilateral. If the right
+hull is triangular, relabel its two free points so that \(R=(r,u)\)
+is its third hull vertex and \(Q\) is inside \(BCR\). The other
+two hull vertices must be \(B,C\): they are extreme vertices of the
+right container. Write \(w=1-b\), and let
+
+\[
+g=(r-b)-wu
+\]
+
+be the positive doubled area of \(BCR\). Its subdivision at \(Q\)
+gives \(g\ge3s\). Since \(r\le1\),
+
+\[
+u\le1-\frac{3s}{w}.                                      \tag{10}
+\]
+
+The two central points and \(Q\) all lie strictly inside the
+quadrilateral \(DBRC\), which is the union of \(DBC\) and
+\(BCR\). Its other diagonal \(DR\) partitions it into \(DBR\)
+and \(DCR\). The doubled area of the first triangle satisfies
+
+\[
+\begin{aligned}
+2\operatorname{area}(DBR)
+ &=r-b+bu\le1-b+bu\\
+ &\le1-\frac{3sb}{1-b}
+ \le1-\frac{12s^2}{1-4s}
+ =\frac{143}{192}<\frac{13}{16},                         \tag{11}
+\end{aligned}
+\]
+
+where (5) gives \(b\ge4s\). On the other hand, an actual triangle
+containing two configuration points has doubled area at least
+
+\[
+(4+2\sqrt3)s>\frac{52}{7}s=\frac{13}{16},                \tag{12}
+\]
+
+by the two-interior-point theorem and \(\sqrt3>12/7\). Thus
+\(DBR\) contains at most one of these three points. No point lies on
+\(DR\), since that would create a zero-area triangle. At least two
+therefore lie inside \(DCR\). Its doubled area is \(1-u\), so
+(12) implies
+
+\[
+u<\frac3{16}.                                           \tag{13}
+\]
+
+We also sharpen the horizontal bound on the left point. Equations
+(4)--(5), together with \(b\le1/2\), give
+
+\[
+\lambda(1-\lambda)\ge2s=\frac7{32}.
+\]
+
+For \(\lambda\le5/16\) or \(\lambda\ge11/16\), the product
+would be at most \(55/256<7/32\). Hence
+
+\[
+\frac5{16}<\lambda<\frac{11}{16},\qquad
+p\ge\frac{s}{1-\lambda}>\frac7{44},\qquad
+b-p<\frac{15}{44}.                                      \tag{14}
+\]
+
+Finally \(r\ge b\), because \(R\) is in the right container.
+Using (6), (13), (14), and \(r-b\le1-b\le9/16\), the doubled
+area of \(LBR\) is positive and satisfies
+
+\[
+\begin{aligned}
+D(L,B,R)&=(b-p)u+v(r-b)\\
+ &<\frac{15}{44}\cdot\frac3{16}
+    +\frac1{15}\cdot\frac9{16}
+  =\frac{357}{3520}<\frac7{64}=s.                       \tag{15}
+\end{aligned}
+\]
+
+The last gap is exactly \(7/880\). This is a contradiction.
+The right four-point hull is either triangular or quadrilateral, so
+Sections 3--4 exhaust the possibilities and prove the theorem.
+
+## 5. A further cut restriction in the triangular-left branch
 
 For completeness, suppose instead that the left hull is triangular, so
 \(L\) is inside \(DBE\). Subdivision into its three actual
 triangles gives
 
 \[
-b(1-\lambda)\ge3s.                                     \tag{10}
+b(1-\lambda)\ge3s.                                     \tag{16}
 \]
 
 The two central points cannot both be in \(EBC\). If they were,
@@ -164,7 +251,7 @@ the two-interior-point triangular-hull theorem would imply
 \alpha:=1-(1-b)(1-\lambda)\ge(4+2\sqrt3)s.
 \]
 
-But (10) would then give
+But (16) would then give
 
 \[
 1\ge(1-b)\frac{3s}{b}+(4+2\sqrt3)s

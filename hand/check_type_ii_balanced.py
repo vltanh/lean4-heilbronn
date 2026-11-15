@@ -33,4 +33,13 @@ assert 7 * 64 - 21**2 == 7
 assert sp.Rational(1, 2) * sp.Rational(1, 8) + sp.Rational(1, 15) * sp.Rational(9, 16) == sp.Rational(1, 10)
 assert sp.Rational(1, 10) < sigma
 assert 10 * sigma > 1
-print("PASS: endpoint-quadrilateral elimination and balanced Type-II bounds")
+assert 1 - 12 * sigma**2 / (1 - 4 * sigma) == sp.Rational(143, 192) < sp.Rational(13, 16)
+assert sp.Rational(52, 7) * sigma == sp.Rational(13, 16)
+assert 3 > sp.Rational(12, 7)**2
+assert sp.Rational(5, 16) * sp.Rational(11, 16) == sp.Rational(55, 256) < 2 * sigma
+assert sigma / sp.Rational(11, 16) == sp.Rational(7, 44)
+assert sp.Rational(1, 2) - sp.Rational(7, 44) == sp.Rational(15, 44)
+bound = sp.Rational(15, 44) * sp.Rational(3, 16) + sp.Rational(1, 15) * sp.Rational(9, 16)
+assert bound == sp.Rational(357, 3520)
+assert sigma - bound == sp.Rational(7, 880) > 0
+print("PASS: endpoint-quadrilateral elimination and both left-quadrilateral exclusions")
