@@ -134,3 +134,15 @@ quadupper = (-sp.Rational(283838904, 2401)
              +sp.Rational(200704, 64000000))
 assert quadupper == -sp.Rational(572810756110631, 9604000000) < 0
 print("PASS: complete seven-boundary ACE-ADE pair-cell exclusion")
+
+
+# The whole mixed placement above AF is excluded.
+right_cdf = (1-sp.Rational(4, 5)
+             +sp.Rational(391, 1600)
+              *(sp.Rational(4, 5)-sp.Rational(97, 200)))
+right_def = sp.Rational(103, 200)*(sp.Rational(633, 800)-sp.Rational(33, 200))
+assert right_cdf == sp.Rational(88633, 320000) < 3*s
+assert right_def == sp.Rational(51603, 160000) < 3*s
+assert sp.expand(det(C, D, F)-(1-c+d*(c-f))) == 0
+assert sp.expand(det(D, E, F)-(1-f)*(e-d)) == 0
+print("PASS: complete mixed above-AF exclusion; the left point is in ACF")

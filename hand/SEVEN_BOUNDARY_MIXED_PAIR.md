@@ -540,6 +540,69 @@ This contradicts (18) after the allowed replacement (20).
 All line signs have been excluded, proving Theorem 2. \(\square\)
 
 
+## 4. The mixed left point cannot be above AF
+
+**Theorem 3.** In the mixed left/right placement, the left point \(P\)
+belongs to \(ACF\).
+
+Here \(P\) is in the left pentagon \(ABCFH\), and the right point
+\(Q\) is in \(CEF\). The latter placement follows from the empty
+triangle \(CDE\).
+
+First suppose that \(P\) is below \(HC\) and above \(AF\).
+The empty ear \(ABH\) puts \(P\) inside \(HBC\), and the left-pentagon
+hypothesis puts it inside \(AHF\). The four-point inequalities and
+their rational consequences in Sections 1--2 of
+[SEVEN_BOUNDARY_LEFT_PAIR.md](SEVEN_BOUNDARY_LEFT_PAIR.md) therefore
+apply to this point. Those sections use only this one point and the
+seven anchors; they do not use the location of the second free point.
+Their bounds include
+
+\[
+f>\frac{97}{200},\quad c>\frac45,\quad
+\frac{33}{200}<d<\frac{391}{1600},\quad
+e<\frac{633}{800}.                                     \tag{23}
+\]
+
+They make both triangles in the right quadrilateral too small to
+contain \(Q\). For \(CDF\), the expression \(1-c+d(c-f)\)
+decreases with \(c,f\) and increases with \(d\) on the relevant range.
+Thus
+
+\[
+[CDF]<
+1-\frac45+\frac{391}{1600}
+ \left(\frac45-\frac{97}{200}\right)
+=\frac{88633}{320000}<3s.
+\]
+
+For the other triangle,
+
+\[
+[DEF]=(1-f)(e-d)
+<\frac{103}{200}
+ \left(\frac{633}{800}-\frac{33}{200}\right)
+=\frac{51603}{160000}<3s.                               \tag{24}
+\]
+
+The diagonal \(DF\) partitions \(CDEF\) into these two triangles.
+An actual point in either would give three actual triangles and
+require its doubled area to be at least \(3s\). This contradicts
+\(Q\in CEF\subset CDEF\). Hence \(P\) cannot be below \(HC\) and
+above \(AF\).
+
+If \(P\) is above both \(HC\) and \(AF\), it belongs to the upper
+left overlap \(HCF\cap AHF\), which is empty by Theorem 7 of
+SEVEN_BOUNDARY_CAPS.md. Incidence with either actual line gives a zero
+triangle. Therefore \(P\) is below \(AF\) in every surviving mixed
+placement.
+
+Finally, the empty ear \(ABC\) puts \(P\) above \(AC\), and its
+mixed-placement definition puts it on the left-pentagon side of \(CF\).
+Together with the \(AF\) side just proved, these are precisely the
+three side tests for \(P\in ACF\). \(\square\)
+
+
 ## Verification
 
 The optional exact diagnostic
