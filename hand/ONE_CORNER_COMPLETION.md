@@ -480,6 +480,13 @@ ear. Thus the entire C1 case with exact five-anchor pentagonal hull is
 excluded. Larger C1 hulls remain open; no boundary-saturation theorem or
 complete C1 exclusion is claimed.
 
+The larger-hull companion
+[C1_TWO_LOWER_SIDE_CAP.md](C1_TWO_LOWER_SIDE_CAP.md) excludes both
+exterior side caps whenever two free points are inside \(OHC\).
+Thus that occupancy can extend beyond the five-anchor pentagon only
+through the top cap beyond \(DF\). The top-cap case and the lower
+occupancies still require separate arguments.
+
 ## Verification
 
 The exact diagnostic `check_one_corner_completion.py` checks the affine
