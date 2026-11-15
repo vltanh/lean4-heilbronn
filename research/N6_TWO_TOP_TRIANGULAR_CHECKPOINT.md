@@ -1,7 +1,8 @@
 # Discovery checkpoint: the triangular two-top N6 occupancy
 
 This is a recovery checkpoint, not the proof entry point. The complete
-geometric manuscript and standard-library verifier are being assembled.
+geometric manuscript and standard-library verifier are in
+[SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md](../hand/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md).
 
 The full hull is A,B,C,D,X,F,H; P is inside DXF, and Q is inside the
 original anchor hexagon. Of the 57 seven-vertex radial words, five
@@ -12,8 +13,8 @@ giving 262 terminal cells.
 The fixed raw cache now covers every terminal cell with 220 rational
 cubic expressions containing 29,641 positive terms. Every expression
 was expanded exactly before saving. The largest recorded upper bound
-is −4128115667948309/4197433925959680, below −3/4. Independent geometric
-and polynomial audits are still required for the assembled proof.
+is −4128115667948309/4197433925959680, below −3/4. The linked proof
+verifier checks the full geometric cover and every use of these weights.
 
 The last CPQ-positive case uses four additional affine consequences
 of both P,Q lying inside the actual triangle C,X,F. At s=8/73 and
