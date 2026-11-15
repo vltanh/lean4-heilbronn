@@ -494,6 +494,14 @@ such top-cap point must lie angularly between the two lower points.
 The remaining interaction with the ninth point is not inferred from
 that separation theorem.
 
+[C1_TOP_CAP_CONVEX_PAIR.md](C1_TOP_CAP_CONVEX_PAIR.md) excludes the
+complete placement in which both upper points lie beyond \(DF\) and
+form a convex quadrilateral with \(D,F\). Its exact rational
+certificate leaves only the triangular upper-hull arrangement, where
+one upper point is inside the triangle formed by the other and
+\(D,F\), among placements with two top-cap points. It does not
+exclude an interior upper point paired with one top-cap point.
+
 ## Verification
 
 The exact diagnostic `check_one_corner_completion.py` checks the affine
