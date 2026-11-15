@@ -1,38 +1,38 @@
 # Integrated hand-proof diagnostic gate
 
-**Status: PASSED.** 86 passed, 0 failed, 86/86 completed.
+**Status: PASSED.** 89 passed, 0 failed, 89/89 completed.
 
-This gate executes every current `hand/check_*.py` file in a separate Python process, with at most four processes running concurrently. The diagnostics check the exact identities, rational certificates, finite covers, and case ledgers supplied with the hand proof. The geometric arguments remain in the linked proof manuscripts.
+This gate covers every current `hand/check_*.py` file. Fresh runs execute each diagnostic in a separate Python process, with at most four processes running concurrently. The diagnostics check the exact identities, rational certificates, finite covers, and case ledgers supplied with the hand proof. The geometric arguments remain in the linked proof manuscripts.
 
 ## Reproduce
 
 ```bash
-python research/run_hand_checks.py --jobs 4 --expected-count 86
+python research/run_hand_checks.py --jobs 4 --expected-count 89
 ```
 
 - [Compact JSON manifest](hand_checks_manifest.json)
 - [Complete output from every diagnostic](hand_check_outputs.json)
 - [Runner](run_hand_checks.py)
 
-- Started (UTC): `2026-11-15T19:01:13+00:00`
-- Finished (UTC): `2026-11-15T19:01:57+00:00`
+- Started (UTC): `2026-11-15T19:10:15+00:00`
+- Finished (UTC): `2026-11-15T19:10:37+00:00`
 - Python: `3.12.14`
 - SymPy: `1.14.0`
-- Git HEAD at start: `61a7735c847a151163ee52df37fda80230738f48`
-- Verified proof input fingerprint: `7660346d809d1c8a2fd05f57a6b6f2094baa178b7f30234c1c7222bcca24722c`
+- Git HEAD at start: `9ed7075abeca39b9ed134db3612cffdcb37b99b0`
+- Verified proof input fingerprint: `7bb8d5552c996db54cede89ade50076ac87f1bc1618d3c3c513935b2f6d40a8b`
 
 The verified fingerprint covers every Python source and fixed JSON/TSV table in `hand/`. The runner checks that these inputs are unchanged during the run and returns a nonzero exit status if a diagnostic fails, times out, or the input snapshot changes. It records full combined standard output and standard error for each process.
 
-## Targeted follow-up
+## Extension of the previous receipt
 
-After the complete 86-diagnostic gate, the final itemized census was confirmed separately with its TSV dependency explicitly fingerprinted. The other 85 diagnostics were unchanged and were not repeated.
+The previous **86-diagnostic** receipt is preserved in the JSON manifest. This extension executed **3 new diagnostics**. Before reusing the earlier results, the runner verified that every previously recorded Python, JSON, and TSV input still matched its exact fingerprint.
 
-- Diagnostic: `hand/check_g6_itemized_cases.py`
-- Result: **PASS**
-- Finished (UTC): `2026-11-15T19:05:14+00:00`
-- Explicitly recorded inputs:
-  - `hand/check_g6_itemized_cases.py`: `44e6c545b5cb5e4afc87d16f9cef498e925aa0ee4f3bef7b00e0a209098809bc`
-  - `hand/G6_ITEMIZED_LEAVES.tsv`: `47597cef547c40272b0c051d8eeb13da527510b15913c1758f8f5b7fb95c3edb`
+- Baseline revision: `2d301d6`
+- Unchanged earlier-input fingerprint: `7660346d809d1c8a2fd05f57a6b6f2094baa178b7f30234c1c7222bcca24722c`
+- Newly executed diagnostics:
+  - `hand/check_sharp_ef_high.py`
+  - `hand/check_six_boundary_double_top_completion.py`
+  - `hand/check_six_boundary_single_top_completion.py`
 
 ## Individual results
 
@@ -94,8 +94,10 @@ After the complete 86-diagnostic gate, the final itemized census was confirmed s
 | [check_sharp_bd_moving.py](../hand/check_sharp_bd_moving.py) | PASS (exit 0) | 0.555 |
 | [check_sharp_cd_moving.py](../hand/check_sharp_cd_moving.py) | PASS (exit 0) | 0.385 |
 | [check_sharp_df_moving.py](../hand/check_sharp_df_moving.py) | PASS (exit 0) | 0.471 |
+| [check_sharp_ef_high.py](../hand/check_sharp_ef_high.py) | PASS (exit 0) | 0.965 |
 | [check_sharp_ef_moving.py](../hand/check_sharp_ef_moving.py) | PASS (exit 0) | 0.562 |
 | [check_sharp_g_moving_projection.py](../hand/check_sharp_g_moving_projection.py) | PASS (exit 0) | 0.910 |
+| [check_six_boundary_double_top_completion.py](../hand/check_six_boundary_double_top_completion.py) | PASS (exit 0) | 20.357 |
 | [check_six_boundary_exterior.py](../hand/check_six_boundary_exterior.py) | PASS (exit 0) | 0.891 |
 | [check_six_boundary_hull.py](../hand/check_six_boundary_hull.py) | PASS (exit 0) | 0.763 |
 | [check_six_boundary_opposite_cap.py](../hand/check_six_boundary_opposite_cap.py) | PASS (exit 0) | 0.847 |
@@ -105,6 +107,7 @@ After the complete 86-diagnostic gate, the final itemized census was confirmed s
 | [check_six_boundary_side_two_top.py](../hand/check_six_boundary_side_two_top.py) | PASS (exit 0) | 0.883 |
 | [check_six_boundary_single_side.py](../hand/check_six_boundary_single_side.py) | PASS (exit 0) | 12.768 |
 | [check_six_boundary_single_top.py](../hand/check_six_boundary_single_top.py) | PASS (exit 0) | 17.046 |
+| [check_six_boundary_single_top_completion.py](../hand/check_six_boundary_single_top_completion.py) | PASS (exit 0) | 22.125 |
 | [check_six_boundary_two_side_completion.py](../hand/check_six_boundary_two_side_completion.py) | PASS (exit 0) | 0.599 |
 | [check_six_boundary_two_side_projection.py](../hand/check_six_boundary_two_side_projection.py) | PASS (exit 0) | 0.492 |
 | [check_six_boundary_two_side_upper.py](../hand/check_six_boundary_two_side_upper.py) | PASS (exit 0) | 6.726 |

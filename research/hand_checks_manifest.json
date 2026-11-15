@@ -1,21 +1,696 @@
 {
+  "baseline_revision": "2d301d6",
   "changed_inputs": [],
-  "discovered_checks": 86,
+  "discovered_checks": 89,
+  "executed_checks": 3,
   "failed": 0,
-  "final_verification_at": "2026-11-15T19:05:14+00:00",
-  "finished_at": "2026-11-15T19:01:57+00:00",
-  "git_head_final_verification": "e92471cc12054147554ca48fb48fddc955b14b85",
-  "git_head_finish": "61a7735c847a151163ee52df37fda80230738f48",
-  "git_head_start": "61a7735c847a151163ee52df37fda80230738f48",
-  "input_digest_finish": "c01cad6b109cfa36a4583b01ebba8f3537cf441ab919e5cd4d6c7ebe1fee42ca",
-  "input_digest_start": "c01cad6b109cfa36a4583b01ebba8f3537cf441ab919e5cd4d6c7ebe1fee42ca",
-  "input_files": 110,
+  "finished_at": "2026-11-15T19:10:37+00:00",
+  "git_head_finish": "9ed7075abeca39b9ed134db3612cffdcb37b99b0",
+  "git_head_start": "9ed7075abeca39b9ed134db3612cffdcb37b99b0",
+  "input_digest_finish": "7bb8d5552c996db54cede89ade50076ac87f1bc1618d3c3c513935b2f6d40a8b",
+  "input_digest_start": "7bb8d5552c996db54cede89ade50076ac87f1bc1618d3c3c513935b2f6d40a8b",
+  "input_files": 118,
   "input_patterns": [
     "hand/*.py",
-    "hand/*.json"
+    "hand/*.json",
+    "hand/*.tsv"
   ],
+  "integration_mode": "extension",
   "jobs": 4,
-  "passed": 86,
+  "new_checks": [
+    "hand/check_sharp_ef_high.py",
+    "hand/check_six_boundary_double_top_completion.py",
+    "hand/check_six_boundary_single_top_completion.py"
+  ],
+  "passed": 89,
+  "previous_receipts": [
+    {
+      "changed_inputs": [],
+      "discovered_checks": 86,
+      "failed": 0,
+      "final_verification_at": "2026-11-15T19:05:14+00:00",
+      "finished_at": "2026-11-15T19:01:57+00:00",
+      "git_head_final_verification": "e92471cc12054147554ca48fb48fddc955b14b85",
+      "git_head_finish": "61a7735c847a151163ee52df37fda80230738f48",
+      "git_head_start": "61a7735c847a151163ee52df37fda80230738f48",
+      "input_digest_finish": "c01cad6b109cfa36a4583b01ebba8f3537cf441ab919e5cd4d6c7ebe1fee42ca",
+      "input_digest_start": "c01cad6b109cfa36a4583b01ebba8f3537cf441ab919e5cd4d6c7ebe1fee42ca",
+      "input_files": 110,
+      "input_patterns": [
+        "hand/*.py",
+        "hand/*.json"
+      ],
+      "jobs": 4,
+      "passed": 86,
+      "python_version": "3.12.14",
+      "results": [
+        {
+          "exit_code": 0,
+          "output_sha256": "f370dd8bbc0ab169101410d19f6ad2bbd5069e50eed73f211c9af3cb864814e8",
+          "path": "hand/check_balanced_bottom_inner_sector.py",
+          "seconds": 0.728824,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "4945cce2cb63fe21963fbeda8fe4e066b3d1149a7c5a2bee569d69021f1d940b",
+          "path": "hand/check_balanced_right_mixed.py",
+          "seconds": 0.554288,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "b14f25f872cc76b3608d77cca9275ed3bba32ab9ffb585070e8658f6a21f5553",
+          "path": "hand/check_c1_mixed_pentagon.py",
+          "seconds": 0.587654,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "7646c57ac76da453fa0e31ebb72b2ce04948f21b0ae577cfc18060a46de80444",
+          "path": "hand/check_c1_one_lower_convex_top.py",
+          "seconds": 5.626987,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "88195bbf7e433d158bb5c6dddcd9a0a28e8e55e5350ae0ac90f82daa5abcbfeb",
+          "path": "hand/check_c1_one_lower_eight_hull.py",
+          "seconds": 0.629118,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "d38f12de72217f1f8bee40d4dc168a0ae87214a1047685b8acc7a5fc347544da",
+          "path": "hand/check_c1_one_lower_mixed_caps.py",
+          "seconds": 4.578219,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "41af249b812df701cc74939f93338b0764086b152dcaf2a84577f0c90ba49581",
+          "path": "hand/check_c1_one_lower_right_pair.py",
+          "seconds": 0.26608,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "7acdcb81acc48767b7cbadf3f97e5b38d4cb2fd795fc349870553511ecc20e9c",
+          "path": "hand/check_c1_one_lower_right_top_triangle.py",
+          "seconds": 0.63539,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "f233cfb0e6a1a09fbbf8920684bc54a0955be2bac63508ec6bf61dbaa578e9d3",
+          "path": "hand/check_c1_one_lower_side_cap.py",
+          "seconds": 0.840623,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "c0107421bc88213bb9b95672a1caf72874f5b9d0ee933d817828a333673c6769",
+          "path": "hand/check_c1_one_lower_top_cap.py",
+          "seconds": 5.334038,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "a5c95f563813a4923f25486abd50066d4a5054d77480feb4e2d395f9806b8d79",
+          "path": "hand/check_c1_one_lower_top_multiplicity.py",
+          "seconds": 5.72053,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "25553c37d69c68407a85600e9488b04231d77782f33023f9086d427f24700bff",
+          "path": "hand/check_c1_one_lower_top_triangle.py",
+          "seconds": 3.904285,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "3b2f86d127aead863493986fec83ee70a12dddcc657c2f62e1fe54fb11097d95",
+          "path": "hand/check_c1_top_cap_common_cell.py",
+          "seconds": 0.643405,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "1c5da9696c4fd7d09612baaa99b2d9973b90105af2446328bf9c8bac970d114a",
+          "path": "hand/check_c1_top_cap_containment_pair.py",
+          "seconds": 1.292484,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "f58d03e4c2353dc39f8be6161f4856fcd2cd270114ea0048d058bab2ea82b36d",
+          "path": "hand/check_c1_top_cap_convex_pair.py",
+          "seconds": 0.740789,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "b9c3c8dab72493786de554c5d823fc3e6e6cf51c2b5eb7bcfdb169770dafc750",
+          "path": "hand/check_c1_top_cap_of_split.py",
+          "seconds": 3.428311,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "b72b37304eb05aa421722fb0a2eeaf18b10b0daf4b75d3e12d294a829b298de2",
+          "path": "hand/check_c1_top_cap_radial_split.py",
+          "seconds": 0.512492,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "d8f14afeaa6b810364dc9d1b40c74fbf901fa9ca4e06639adac37bbd014aece4",
+          "path": "hand/check_c1_top_cap_side_ears.py",
+          "seconds": 0.870544,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "8a71de38c0ba07190ceb51d6b8e72479d700aaf1737a743da7726b04a007de1d",
+          "path": "hand/check_c1_top_cap_triangular_pair.py",
+          "seconds": 0.629248,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "ed3c92b8bb4d53d90f1b1b152cdcebc686538a0ad8fcadfacc5170d58f42cbc4",
+          "path": "hand/check_c1_two_lower_completion.py",
+          "seconds": 0.879969,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "f36aa8aef6ff12905ea0198996ddf7e2be615fa6439a969a364e6da7d9984ebd",
+          "path": "hand/check_c1_two_lower_side_cap.py",
+          "seconds": 0.588694,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "4b423a09dedb72bc6da9ccd6190591b860d1d0463890a3d0f77c3b0274007b35",
+          "path": "hand/check_c1_zero_lower.py",
+          "seconds": 0.025738,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "c5bc254e1c403ab3a6df936648fd4b9a2e6d627c59c580838ba7d4b77d1667d5",
+          "path": "hand/check_c1_zero_lower_certificates.py",
+          "seconds": 5.700838,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "18ee6f5534885d290cecefe683cd8d19ff532c49c0694ca00976a9731a96abbb",
+          "path": "hand/check_corners.py",
+          "seconds": 1.783289,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "9868e7da5ab09fc3f60c61aa4ffec6c8b86f2108e0b3a93bd25d927371106920",
+          "path": "hand/check_eight_boundary.py",
+          "seconds": 0.827186,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "20c2e54b7b5c1466f879c9de78c8f253f4930ddfb99104df8c09e617a96d7da8",
+          "path": "hand/check_four_corners.py",
+          "seconds": 0.585375,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "d0749173806effacb59f757f57ccdb3f8957b2624f7532d678bfc1680164dd44",
+          "path": "hand/check_four_interior_quadrilaterals.py",
+          "seconds": 0.59978,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "f333437c95090d2b9efb5470e72ad509f35fa6301437cdcfe9be1d6b7205fd35",
+          "path": "hand/check_g6_case_ledger.py",
+          "seconds": 0.019744,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_key": "recheck:hand/check_g6_itemized_cases.py",
+          "output_sha256": "76d1f9c8a765f1838ae547b31b8e25fdfb2858e76fd1285aa2925eaf6cf59cb1",
+          "path": "hand/check_g6_itemized_cases.py",
+          "seconds": 0.046596,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "f45abba09c1eb785ed6025f102a9a62d56dc51aa0a36df6ae408aa17cf5c5902",
+          "path": "hand/check_global_completion.py",
+          "seconds": 13.215099,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "7f8c69abc3142d69eb01da54c390b4533c1a2af85bae7a609fa7513da5b5250b",
+          "path": "hand/check_identities.py",
+          "seconds": 0.91043,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "8516856ecaa4f2c6c4aca060a7ab02245893b8c2adb77681741f2aec5561c1a8",
+          "path": "hand/check_one_corner.py",
+          "seconds": 0.949105,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "b9647e3644df17e33467f3812e8be2b0c654d87d90e38af5ee2a46f158915461",
+          "path": "hand/check_one_corner_completion.py",
+          "seconds": 0.43482,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "0c1c4ab0e6aa3d0d1966a31515b820da310666d28a880b74f807099a371cec0b",
+          "path": "hand/check_opposite_corners.py",
+          "seconds": 0.630823,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "88ef07d2b6e886fea985fd9daaa5e7485489898d8b1aebeeaba16388bfe44cf6",
+          "path": "hand/check_quadrilateral_hulls.py",
+          "seconds": 0.37336,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "2157b2d50e38794d09d15d65c1cca0c80f11e9cb05d582962fd93d762786986f",
+          "path": "hand/check_r6.py",
+          "seconds": 0.667223,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "8c11e3d17b89e63591ded57c7b72a2c273d52648630537097fc7f9faacbd2ce2",
+          "path": "hand/check_radial.py",
+          "seconds": 0.026212,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "3687fe3c7accbad47363420ec4199ce1ebc6180e7d27f0b37dec6b05e86361ed",
+          "path": "hand/check_seven_boundary_adjacent_caps.py",
+          "seconds": 0.413442,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "581c483281dcadba3773b479ad3dadf31c703e5b741de993c8f6ae3ad6543aaa",
+          "path": "hand/check_seven_boundary_adjacent_caps_completion.py",
+          "seconds": 0.427534,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "18990fd45c7db809ba8a4dbe8778b4ae585a0b10a0e4cdc7f874c5e7785490e9",
+          "path": "hand/check_seven_boundary_caps.py",
+          "seconds": 1.24939,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "8572f323d7f4f3975e725831be0c3e23d3e0bc4cdea2ad8c7ebce4aacb6eb9e0",
+          "path": "hand/check_seven_boundary_exterior_certificates.py",
+          "seconds": 1.197588,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "80e97ff5d3858908daf58738e5fdf10fc735bbfadc7c2de5f38f917b37247714",
+          "path": "hand/check_seven_boundary_left_pair.py",
+          "seconds": 0.858837,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "8a2906f343adbd4d6d7ce3847015b4c7b814b8ca28ac83d05483e9af9ee3ab65",
+          "path": "hand/check_seven_boundary_mixed_above.py",
+          "seconds": 0.501129,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "71491b19f80ba6d927211b223158e1c75dc100f8e42524f3f3d837298c62bb19",
+          "path": "hand/check_seven_boundary_mixed_above_certificates.py",
+          "seconds": 1.828196,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "63137440f7514fa5da273e9163f5f791736e11357f4425001011160629237367",
+          "path": "hand/check_seven_boundary_mixed_lower.py",
+          "seconds": 1.229585,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "dd69b87f07d6594540268336e5d226a5cdb68bfdc6fd6b8c928ef65969e564da",
+          "path": "hand/check_seven_boundary_mixed_pair.py",
+          "seconds": 2.488615,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "b3cdd0f380373756227ce02da063e21f44b99e4914905c5b72cfb7bdbc621590",
+          "path": "hand/check_seven_boundary_right_pair.py",
+          "seconds": 0.883152,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "739b22f775260784cc6c64fdf7aee14f3f811e89aaef94cd533867522b5c9461",
+          "path": "hand/check_seven_boundary_top_cap.py",
+          "seconds": 0.558353,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "50c7f149384023f852d7cda40106201ea28334179c2e3c464ae8581ec07f6ae1",
+          "path": "hand/check_seven_boundary_top_cap_radial.py",
+          "seconds": 0.598066,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "e8bcd7d83a92bd7fc07a452056c4a8779d7d73bd3fea0b585476cf45b59637eb",
+          "path": "hand/check_seven_boundary_top_cap_right.py",
+          "seconds": 0.948804,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "bf9d3aa0a20eb587666b22884dde1e7f13ce5af3f865bbce7a0206dc3026d92d",
+          "path": "hand/check_seven_boundary_upper_triangle.py",
+          "seconds": 1.000025,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "63713168e5d677e20adc207f56731c092ef73710cb02fbaf5b4af426fd9fb575",
+          "path": "hand/check_sharp_b_e_moving.py",
+          "seconds": 0.817402,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "a37d92aaf74f6a4d767fa24f98b4599b1d2250483629221c0c07b4ccacf81baa",
+          "path": "hand/check_sharp_bc_moving.py",
+          "seconds": 0.766215,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "414090404b3e12a555b79267d3b92d337873954d27275ca0077ab09650882de9",
+          "path": "hand/check_sharp_bd_moving.py",
+          "seconds": 0.555195,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "fe0634636db687c2641ccbd576cb9ea38f4bc67cbffbcc6ce96b275a79428a22",
+          "path": "hand/check_sharp_cd_moving.py",
+          "seconds": 0.384635,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "d78f62bd7f1c166ac5d6eaa39c59ec25395900a374bf9838143b054fc91df8d7",
+          "path": "hand/check_sharp_df_moving.py",
+          "seconds": 0.471002,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "b62e0d3cb4ed4f450e65e6f30f2772f2590b751e6f9d9f60375c8852ababb628",
+          "path": "hand/check_sharp_ef_moving.py",
+          "seconds": 0.562469,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "d1e11ee6f3c2226e7c47018384f4befed77efc2658874d87218a8a64ba0ac12c",
+          "path": "hand/check_sharp_g_moving_projection.py",
+          "seconds": 0.909879,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "3f23fd0989613b73dfba84f220a03bd35a1d09ca009e0803d89d0ab1bcccd35f",
+          "path": "hand/check_six_boundary_exterior.py",
+          "seconds": 0.891277,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "47c418447dc438c1f46ebf7bef1d8139e732b7b3fd6f4023c32cd8c9504359fb",
+          "path": "hand/check_six_boundary_hull.py",
+          "seconds": 0.762772,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "d20847fd91c3a15b05719b786eeae0f6e4a9d7594542d4f342940e12d5cd4835",
+          "path": "hand/check_six_boundary_opposite_cap.py",
+          "seconds": 0.847131,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "3e8979c1f82a2d8cbe600affc5401e1985fd6a346afb677ce2b98eaca170a299",
+          "path": "hand/check_six_boundary_side_opposite.py",
+          "seconds": 7.536886,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "920636cf5d94e7e862efe66d19dc44aff0837b27cc4ddd37f82d643c1580adff",
+          "path": "hand/check_six_boundary_side_top_completion.py",
+          "seconds": 6.335494,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "8c67e28ff6d7e2386414496ba16f4ef81866d7d751f12270a6dfd997f45c693b",
+          "path": "hand/check_six_boundary_side_top_lower.py",
+          "seconds": 1.526002,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "ea88c670e33a0948a50815b99bdcffa266e95de3bcb6055f58e57874430a876f",
+          "path": "hand/check_six_boundary_side_two_top.py",
+          "seconds": 0.88286,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "1a266b5295b3a6448674cdb6b4c1ef7992d67455599bd41ed76dfa068b223eea",
+          "path": "hand/check_six_boundary_single_side.py",
+          "seconds": 12.767974,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "9c5a7e9eb825a6992e473071cf018c2801b0761f1bfa06900a2038f7b8beb071",
+          "path": "hand/check_six_boundary_single_top.py",
+          "seconds": 17.045697,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "58d96c2448325f387d0de272414b679046d94a537049e74d0ac5adbf0dc3f762",
+          "path": "hand/check_six_boundary_two_side_completion.py",
+          "seconds": 0.598582,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "75f111ee1438fbf26405f2f3d595c0ccab744880d929a23edf53ebe26216edcb",
+          "path": "hand/check_six_boundary_two_side_projection.py",
+          "seconds": 0.49243,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "3dcdc88de31c993c0a2b75e81901128797f4df166d376308e896b271066c59c9",
+          "path": "hand/check_six_boundary_two_side_upper.py",
+          "seconds": 6.725835,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "8ed19992b96796fcabe36f2e489c4d7bb452f810833850502a89abecf99f5eef",
+          "path": "hand/check_six_boundary_two_top_convex.py",
+          "seconds": 4.327691,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "24bdae9901ed26a4957450a3c2587824d9ded7632b748a82fae815c7ed8a0361",
+          "path": "hand/check_six_boundary_two_top_triangular.py",
+          "seconds": 6.209332,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "d7e583f7e9ed1f0a24890a4f708efe85cf3e3e222b9119e3b762d1a83f7b225d",
+          "path": "hand/check_three_interior_triangles.py",
+          "seconds": 0.826146,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "94854a06b8b7e766f8e0ff32eaf104b75add570a8b99e6a468d5a7af6fbd5ece",
+          "path": "hand/check_type_ii.py",
+          "seconds": 0.643365,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "2fa91214733c2f4df39c896325b6db5027a66aa1ca9a1a25506b69e25aa37132",
+          "path": "hand/check_type_ii_balanced.py",
+          "seconds": 0.876087,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "b4949c1b08946cd788ad98c36a8c006cc7bcd0fa3433379749c28161aa393d61",
+          "path": "hand/check_type_ii_completion.py",
+          "seconds": 1.301281,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "d0602a56b991e03cc07bdf8af00e4a61b177146b83a2db08029e72d2d55dfd1e",
+          "path": "hand/check_unbalanced_cell_i.py",
+          "seconds": 1.186892,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "ee2dc0b8b7006ec62017e0baf14c0486ffa7e80401d70612cc9371829e7d5736",
+          "path": "hand/check_unbalanced_cell_iii.py",
+          "seconds": 0.996775,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "3b70558ae322f57899df42df601f74e8a00ab25e2c676ec9012f4c0188eb229d",
+          "path": "hand/check_unbalanced_final_lower_wedge.py",
+          "seconds": 0.609332,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "9509a3ca3e8f9cf5aeee07c6f16f71158c5b2f99468b5153d7e4dce03783ea6e",
+          "path": "hand/check_unbalanced_final_negative_line.py",
+          "seconds": 0.774797,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "e7285cb12121e235c4613d76bb9e8759aba8955cab26edffe1298d318bb92100",
+          "path": "hand/check_unbalanced_final_upper_pair.py",
+          "seconds": 0.592043,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "72a36667964941ad60aab6aa81401703727c63ece4f845bab7a84200832a6921",
+          "path": "hand/check_unbalanced_occupied_lower_ear.py",
+          "seconds": 2.961116,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "f98f58e4fdadc658b1f525b6207c41466d285e68010f947906652c1c1c901bfb",
+          "path": "hand/check_unbalanced_one_upper_radial.py",
+          "seconds": 0.663554,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "e474ac6dd01c32c8de7df47ec4f2ded97edadb93cbfdca3d0693e2e9562e72e3",
+          "path": "hand/check_unbalanced_radial_split.py",
+          "seconds": 0.88575,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "aebd2e576563a1f9b327dcb65aeb8baa9a6922821b876450b460dfa606aef781",
+          "path": "hand/check_unbalanced_right_hull.py",
+          "seconds": 0.999167,
+          "status": "pass"
+        },
+        {
+          "exit_code": 0,
+          "output_sha256": "133fd7147546461cc3c0ce727556f341a94c592f4dfe7048aa4796a3fcaa51f6",
+          "path": "hand/check_unbalanced_upper_cell_ii.py",
+          "seconds": 3.04086,
+          "status": "pass"
+        }
+      ],
+      "started_at": "2026-11-15T19:01:13+00:00",
+      "status": "passed",
+      "sympy_version": "1.14.0",
+      "targeted_rechecks": [
+        {
+          "finished_at": "2026-11-15T19:05:14+00:00",
+          "initial_result": {
+            "exit_code": 0,
+            "output_sha256": "76d1f9c8a765f1838ae547b31b8e25fdfb2858e76fd1285aa2925eaf6cf59cb1",
+            "path": "hand/check_g6_itemized_cases.py",
+            "seconds": 0.036165,
+            "status": "pass"
+          },
+          "inputs": {
+            "hand/G6_ITEMIZED_LEAVES.tsv": "47597cef547c40272b0c051d8eeb13da527510b15913c1758f8f5b7fb95c3edb",
+            "hand/check_g6_itemized_cases.py": "44e6c545b5cb5e4afc87d16f9cef498e925aa0ee4f3bef7b00e0a209098809bc"
+          },
+          "path": "hand/check_g6_itemized_cases.py",
+          "reason": "After the complete 86-diagnostic gate, the final itemized census was confirmed separately with its TSV dependency explicitly fingerprinted. The other 85 diagnostics were unchanged and were not repeated.",
+          "result": {
+            "exit_code": 0,
+            "output_key": "recheck:hand/check_g6_itemized_cases.py",
+            "output_sha256": "76d1f9c8a765f1838ae547b31b8e25fdfb2858e76fd1285aa2925eaf6cf59cb1",
+            "path": "hand/check_g6_itemized_cases.py",
+            "seconds": 0.046596,
+            "status": "pass"
+          },
+          "started_at": "2026-11-15T19:05:14+00:00"
+        }
+      ],
+      "timeout_seconds": 900,
+      "verified_input_digest": "7660346d809d1c8a2fd05f57a6b6f2094baa178b7f30234c1c7222bcca24722c",
+      "verified_input_files": 111,
+      "verified_input_patterns": [
+        "hand/*.py",
+        "hand/*.json",
+        "hand/*.tsv"
+      ],
+      "version": 1,
+      "wall_seconds": 43.474174
+    }
+  ],
+  "previously_passed_checks": 86,
   "python_version": "3.12.14",
   "results": [
     {
@@ -413,6 +1088,13 @@
     },
     {
       "exit_code": 0,
+      "output_sha256": "f93cad7665a052c00e423f503d13519132f4dbdb676db3f66562b7fc7cabd90c",
+      "path": "hand/check_sharp_ef_high.py",
+      "seconds": 0.965266,
+      "status": "pass"
+    },
+    {
+      "exit_code": 0,
       "output_sha256": "b62e0d3cb4ed4f450e65e6f30f2772f2590b751e6f9d9f60375c8852ababb628",
       "path": "hand/check_sharp_ef_moving.py",
       "seconds": 0.562469,
@@ -423,6 +1105,13 @@
       "output_sha256": "d1e11ee6f3c2226e7c47018384f4befed77efc2658874d87218a8a64ba0ac12c",
       "path": "hand/check_sharp_g_moving_projection.py",
       "seconds": 0.909879,
+      "status": "pass"
+    },
+    {
+      "exit_code": 0,
+      "output_sha256": "893b08c069dd585cc3c309eddd7e18d6746d0f1876bffd8d78ed5bacc7261984",
+      "path": "hand/check_six_boundary_double_top_completion.py",
+      "seconds": 20.356994,
       "status": "pass"
     },
     {
@@ -486,6 +1175,13 @@
       "output_sha256": "9c5a7e9eb825a6992e473071cf018c2801b0761f1bfa06900a2038f7b8beb071",
       "path": "hand/check_six_boundary_single_top.py",
       "seconds": 17.045697,
+      "status": "pass"
+    },
+    {
+      "exit_code": 0,
+      "output_sha256": "15aed98276d591a5f850df170e1353956850dfc231c7b67a97103b90c26f0531",
+      "path": "hand/check_six_boundary_single_top_completion.py",
+      "seconds": 22.125233,
       "status": "pass"
     },
     {
@@ -622,44 +1318,12 @@
       "status": "pass"
     }
   ],
-  "started_at": "2026-11-15T19:01:13+00:00",
+  "started_at": "2026-11-15T19:10:15+00:00",
   "status": "passed",
   "sympy_version": "1.14.0",
-  "targeted_rechecks": [
-    {
-      "finished_at": "2026-11-15T19:05:14+00:00",
-      "initial_result": {
-        "exit_code": 0,
-        "output_sha256": "76d1f9c8a765f1838ae547b31b8e25fdfb2858e76fd1285aa2925eaf6cf59cb1",
-        "path": "hand/check_g6_itemized_cases.py",
-        "seconds": 0.036165,
-        "status": "pass"
-      },
-      "inputs": {
-        "hand/G6_ITEMIZED_LEAVES.tsv": "47597cef547c40272b0c051d8eeb13da527510b15913c1758f8f5b7fb95c3edb",
-        "hand/check_g6_itemized_cases.py": "44e6c545b5cb5e4afc87d16f9cef498e925aa0ee4f3bef7b00e0a209098809bc"
-      },
-      "path": "hand/check_g6_itemized_cases.py",
-      "reason": "After the complete 86-diagnostic gate, the final itemized census was confirmed separately with its TSV dependency explicitly fingerprinted. The other 85 diagnostics were unchanged and were not repeated.",
-      "result": {
-        "exit_code": 0,
-        "output_key": "recheck:hand/check_g6_itemized_cases.py",
-        "output_sha256": "76d1f9c8a765f1838ae547b31b8e25fdfb2858e76fd1285aa2925eaf6cf59cb1",
-        "path": "hand/check_g6_itemized_cases.py",
-        "seconds": 0.046596,
-        "status": "pass"
-      },
-      "started_at": "2026-11-15T19:05:14+00:00"
-    }
-  ],
   "timeout_seconds": 900,
-  "verified_input_digest": "7660346d809d1c8a2fd05f57a6b6f2094baa178b7f30234c1c7222bcca24722c",
-  "verified_input_files": 111,
-  "verified_input_patterns": [
-    "hand/*.py",
-    "hand/*.json",
-    "hand/*.tsv"
-  ],
+  "unchanged_previous_input_digest": "7660346d809d1c8a2fd05f57a6b6f2094baa178b7f30234c1c7222bcca24722c",
+  "verified_input_digest": "7bb8d5552c996db54cede89ade50076ac87f1bc1618d3c3c513935b2f6d40a8b",
   "version": 1,
-  "wall_seconds": 43.474174
+  "wall_seconds": 22.161639
 }

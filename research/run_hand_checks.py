@@ -71,8 +71,9 @@ def write_report(manifest: dict) -> None:
         f"{passed} passed, {failed} failed, "
         f"{len(results)}/{manifest['discovered_checks']} completed.",
         "",
-        "This gate executes every current `hand/check_*.py` file in a separate "
-        "Python process, with at most four processes running concurrently. "
+        "This gate covers every current `hand/check_*.py` file. Fresh runs execute "
+        "each diagnostic in a separate Python process, with at most four processes "
+        "running concurrently. "
         "The diagnostics check the exact identities, rational certificates, "
         "finite covers, and case ledgers supplied with the hand proof. "
         "The geometric arguments remain in the linked proof manuscripts.",
@@ -111,6 +112,21 @@ def write_report(manifest: dict) -> None:
         ]
     if manifest.get("error"):
         lines += ["## Runner error", "", manifest["error"], ""]
+    if manifest.get("integration_mode") == "extension":
+        lines += [
+            "## Extension of the previous receipt", "",
+            f"The previous **{manifest['previously_passed_checks']}-diagnostic** receipt "
+            f"is preserved in the JSON manifest. This extension executed "
+            f"**{manifest['executed_checks']} new diagnostics**. Before reusing the "
+            "earlier results, the runner verified that every previously recorded "
+            "Python, JSON, and TSV input still matched its exact fingerprint.",
+            "",
+            f"- Baseline revision: `{manifest['baseline_revision']}`",
+            f"- Unchanged earlier-input fingerprint: `{manifest['unchanged_previous_input_digest']}`",
+            "- Newly executed diagnostics:",
+            *[f"  - `{path}`" for path in manifest["new_checks"]],
+            "",
+        ]
     if manifest.get("targeted_rechecks"):
         lines += ["## Targeted follow-up", ""]
         for check in manifest["targeted_rechecks"]:
@@ -184,12 +200,62 @@ def main() -> int:
     parser.add_argument("--jobs", type=int, choices=range(1, 5), default=4)
     parser.add_argument("--expected-count", type=int)
     parser.add_argument("--timeout-seconds", type=float, default=900)
+    parser.add_argument(
+        "--extend-from", metavar="GIT_REVISION",
+        help="Reuse a successful receipt after matching all its inputs from this revision; run only newly added checks.",
+    )
     args = parser.parse_args()
     if args.timeout_seconds <= 0:
         parser.error("--timeout-seconds must be positive")
 
     paths = sorted((ROOT / "hand").glob("check_*.py"))
     before = input_hashes()
+    existing_results = []
+    outputs: dict[str, str] = {}
+    extension = {}
+    pending_paths = paths
+    if args.extend_from:
+        try:
+            previous = json.loads(MANIFEST.read_text())
+            outputs = json.loads(OUTPUTS.read_text())
+            assert previous["status"] == "passed"
+            assert previous["failed"] == 0
+            existing_results = previous["results"]
+            assert len(existing_results) == previous["discovered_checks"]
+            assert all(row["status"] == "pass" for row in existing_results)
+            old_paths = {row["path"] for row in existing_results}
+            assert len(old_paths) == len(existing_results)
+            assert old_paths <= {str(path.relative_to(ROOT)) for path in paths}
+            for row in existing_results:
+                key = row.get("output_key", row["path"])
+                assert sha256(outputs[key].encode()) == row["output_sha256"]
+            tree = subprocess.run(
+                ["git", "ls-tree", "-r", "--name-only", args.extend_from, "--", "hand"],
+                cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                check=False,
+            )
+            assert tree.returncode == 0, tree.stderr
+            names = [name for name in tree.stdout.splitlines()
+                     if Path(name).parent == Path("hand")
+                     and Path(name).suffix in (".py", ".json", ".tsv")]
+            assert len(names) == previous.get("verified_input_files", previous["input_files"])
+            old_hashes = {name: before[name] for name in names}
+            expected_digest = previous.get("verified_input_digest", previous["input_digest_finish"])
+            assert input_digest(old_hashes) == expected_digest, "An earlier proof input changed; use a fresh full run."
+            pending_paths = [path for path in paths if str(path.relative_to(ROOT)) not in old_paths]
+            earlier_receipts = previous.get("previous_receipts", [])
+            receipt = {key: value for key, value in previous.items() if key != "previous_receipts"}
+            extension = {
+                "integration_mode": "extension",
+                "baseline_revision": args.extend_from,
+                "previously_passed_checks": len(existing_results),
+                "executed_checks": len(pending_paths),
+                "unchanged_previous_input_digest": expected_digest,
+                "new_checks": [str(path.relative_to(ROOT)) for path in pending_paths],
+                "previous_receipts": earlier_receipts + [receipt],
+            }
+        except (AssertionError, KeyError, ValueError, OSError) as error:
+            parser.error(f"Cannot extend the previous receipt: {error}")
     try:
         sympy_version = metadata.version("sympy")
     except metadata.PackageNotFoundError:
@@ -207,9 +273,9 @@ def main() -> int:
         "input_files": len(before),
         "input_patterns": ["hand/*.py", "hand/*.json", "hand/*.tsv"],
         "input_digest_start": input_digest(before),
-        "results": [],
+        "results": list(existing_results),
+        **extension,
     }
-    outputs: dict[str, str] = {}
     atomic_json(MANIFEST, manifest)
     atomic_json(OUTPUTS, outputs)
     write_report(manifest)
@@ -236,7 +302,7 @@ def main() -> int:
     with ThreadPoolExecutor(max_workers=args.jobs) as executor:
         futures = {
             executor.submit(run_one, path, args.timeout_seconds, environment): path
-            for path in paths
+            for path in pending_paths
         }
         for completed, future in enumerate(as_completed(futures), 1):
             result, output = future.result()
@@ -246,7 +312,7 @@ def main() -> int:
             atomic_json(OUTPUTS, outputs)
             atomic_json(MANIFEST, manifest)
             print(
-                f"{completed}/{len(paths)} {result['status'].upper()} "
+                f"{len(existing_results) + completed}/{len(paths)} {result['status'].upper()} "
                 f"{result['path']} ({result['seconds']:.3f}s)", flush=True,
             )
 
