@@ -19,6 +19,12 @@ equal((1 - y) * (upper - z), x - z * (1 - y))
 equal(sp.det(sp.Matrix([[1, 0], [z, -1]])), -1)
 equal(lam + (1 - lam) * x - x, lam * (1 - x))
 equal((0 - lam) / (1 - lam), -lam / (1 - lam))
+equal(lower, 1 - (1 - x) / (1 - y))
+a, c = sp.symbols("a c", positive=True)
+wx, wy = a / (a + c), 1 - 1 / (a + c)
+equal(wx, a * (1 - wy))
+equal(1 - wx, c * (1 - wy))
+equal(1 - wy, 1 / (a + c))
 assert 18**2 * 65 - 145**2 == 35
 assert len(list(combinations(range(7), 4))) == 35
 

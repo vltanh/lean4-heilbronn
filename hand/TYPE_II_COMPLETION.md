@@ -153,7 +153,53 @@ tests; it is not an infinite collection of unperformed tests over \(z\).
 These tests are necessary conditions, not a sufficiency claim for the
 original triangle-area inequalities.
 
-## 3. A complete additional cut in the balanced Type-II class
+There is also a useful equivalent expression. Put
+
+\[
+a_X=\frac{x}{1-y},\qquad c_X=\frac{1-x}{1-y}.
+\]
+
+Then \(I_X=[1-c_X,a_X]\), so (3) is exactly
+
+\[
+\boxed{\min_i a_{X_i}+\min_i c_{X_i}<1.}                     \tag{4}
+\]
+
+When the sum \(M=\min_i a_{X_i}+\min_i c_{X_i}\) is positive,
+the two supporting rays from \(D,C\) meet at
+
+\[
+W=\left(\frac{\min_i a_{X_i}}{M},\ 1-\frac1M\right).
+\]
+
+Their triangle contains the selected points and has area \(1/(2M)\).
+Indeed every selected point satisfies
+\(x\ge(\min a)(1-y)\) and
+\(1-x\ge(\min c)(1-y)\). Thus (4) says exactly that this
+smallest triangle supported from \(D,C\) has area greater than
+\(1/2\). This gives a direct geometric interpretation of each of the
+35 tests.
+
+## 3. Opposite occupied corners are impossible without extra side contacts
+
+**Corollary 3.** A competitive nine-point configuration cannot contain two
+opposite square corners, whether or not any other square side is contacted.
+
+More generally, it cannot be contained in a parallelogram of area at most
+one whose two opposite vertices are actual configuration points.
+
+**Proof.** The diagonal through those two vertices partitions the
+parallelogram into two closed triangles of equal area at most \(1/2\).
+None of the other seven configuration points lies on the diagonal, since
+that would give a collinear actual triple. At least four therefore lie in
+one of the triangles. Its two diagonal endpoints are actual, contradicting
+Theorem 1. \(\square\)
+
+This is a consequence of the present dependency chain, not a replacement
+for the earlier Type-III and C2 arguments: those arguments are among the
+inputs used upstream to prove global actual-triangle capacity.
+
+## 4. A complete additional cut in the balanced Type-II class
 
 Use the surviving placement established in
 [TYPE_II_BALANCED.md](TYPE_II_BALANCED.md):
@@ -186,7 +232,7 @@ already contains the five actual points \(D,C,E,L,P\). Theorem 1
 therefore forces
 
 \[
-\boxed{Q_y<Q_x.}                                          \tag{4}
+\boxed{Q_y<Q_x.}                                          \tag{5}
 \]
 
 Equality is excluded as well because \(T_0\) is closed. The right
@@ -200,7 +246,7 @@ following distribution relative to the diagonal \(y=x\):
 
 This excludes the entire balanced branch in which the lower central point
 lies on or above \(y=x\). The surviving placements still need a coupled
-area argument; this note does not assert that (4) closes the balanced row.
+area argument; this note does not assert that (5) closes the balanced row.
 
 ## Verification
 
