@@ -21,7 +21,7 @@ For the fully itemized register, see
 numbered parent cases) and [G6_ITEMIZED_LEAVES.tsv](G6_ITEMIZED_LEAVES.tsv)
 (221 lower-point/sector/wedge/sign leaves). The
 [deterministic enumeration checker](check_g6_itemized_cases.py) verifies
-the list; 6 parent cases and 39 leaves remain open.
+the list; 4 parent cases and 15 leaves remain open.
 For the underlying structural case classification, see
 [G6_FINITE_CASE_LEDGER.md](G6_FINITE_CASE_LEDGER.md). Its unpruned
 occupancy/sign census (8 N6, up to 16 N7, and 21+12 C1 coarse
@@ -113,7 +113,10 @@ now-complete N7 cover and the other completed subrows from open cases.
 | Complete N occupancy with one side-cap and two opposite-cap points | [SIX_BOUNDARY_SIDE_TWO_TOP.md](SIX_BOUNDARY_SIDE_TWO_TOP.md) |
 | Complete N side-plus-opposite-cap occupancy with a lower anchor-interior point (N6-04-L1) | [SIX_BOUNDARY_SIDE_TOP_LOWER.md](SIX_BOUNDARY_SIDE_TOP_LOWER.md) |
 | Complete one-lower C1 with two or three top-cap points; all three parent rows | [C1_ONE_LOWER_TOP_MULTIPLICITY.md](C1_ONE_LOWER_TOP_MULTIPLICITY.md) |
-| Complete N side-plus-opposite-cap occupancy, both interior placements and equality | [SIX_BOUNDARY_SIDE_TOP_COMPLETION.md](SIX_BOUNDARY_SIDE_TOP_COMPLETION.md) |
+| Complete C1 one-lower class and the final three mixed-cap placements | [C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md), Theorems 1–2 |
+| Complete N side-and-opposite occupancy, all 97 words and equality | [SIX_BOUNDARY_SIDE_OPPOSITE.md](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
+| Simultaneous B/D sharp chamber | [SHARP_BD_MOVING.md](SHARP_BD_MOVING.md) |
+| Simultaneous D/F and E/F sharp chambers under rational bounds | [SHARP_DF_MOVING.md](SHARP_DF_MOVING.md); [SHARP_EF_MOVING.md](SHARP_EF_MOVING.md) |
 
 The original three-family argument is retained in
 [BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md). All strengthened normal forms
@@ -122,17 +125,15 @@ an observed numerical pattern.
 
 ## What remains
 
-- **N with six boundary contacts:** only N6-03 (one opposite-cap point
-  and two anchor-interior points) and N6-06 (two opposite-cap points and
-  one anchor-interior point) remain, each with lower/upper alternatives.
-  The entire mixed-cap family N6-04 is closed, sharply and with equality,
-  by [SIX_BOUNDARY_SIDE_TOP_COMPLETION.md](SIX_BOUNDARY_SIDE_TOP_COMPLETION.md).
-- **C1:** only the one-lower rows C1-1-04 and 07 remain.
-  Both have two different occupied caps and one upper interior point.
-  Every one-lower configuration with two or three top-cap points is
-  completely excluded by the new top-multiplicity theorem. All zero-lower
-  and two-lower configurations, single-exterior-point hexagons, side-cap
-  pairs and eight-vertex hulls are already closed.
+- **N with six boundary contacts:** two cap occupancies remain:
+  one opposite-cap point with two anchor-interior points (N6-03), and
+  two opposite-cap points with one anchor-interior point (N6-06).
+  Both retain their lower/upper alternatives; the latter also needs
+  both triangular and quadrilateral top hulls.
+- **C1 is complete.** Theorem 2 of
+  [C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md) closes the
+  entire one-lower class. Together with the zero-lower, two-lower and
+  lower-triangle capacity theorems, it excludes every C1 configuration.
 
 The entire normalized seven-boundary form is complete, including every
 interior pair, every exterior placement, and equality. Its final assembly

@@ -23,7 +23,7 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
 | G5 | Type II: adjacent corners and five free points | **Complete hand exclusion**, including every count/hull/cell/cut and the Type-III shear alternative |
-| G6 | N and C1 with fewer than eight boundary points | **All N7, C1 zero-lower and two-lower complete**; two N6 coarse occupancies and two C1 one-lower coarse rows remain |
+| G6 | N and C1 with fewer than eight boundary points | **All N7 and C1 complete**; only N6-03 and N6-06 remain |
 | G7 | Unrestricted sharp theorem and uniqueness | Conditional on G6; equality transfer through shears is already proved |
 
 ## G6 finite case ledger
@@ -35,7 +35,7 @@ its open/closed status**, use
 The [221-row machine-readable leaf register](hand/G6_ITEMIZED_LEAVES.tsv)
 and [itemization checker](hand/check_g6_itemized_cases.py) refine them
 by lower-point occupancy, upper sectors, and the retained N7 line signs.
-The census currently has 6 open parent rows (39 open leaves); leaf
+The census currently has 4 open parent rows (15 open leaves); leaf
 counts do not independently certify a geometric exclusion.
 
 | Branch | Unpruned coarse cover | Current proof status |
@@ -43,7 +43,7 @@ counts do not independently certify a geometric exclusion.
 | N6 | 8 cap-occupancy orbits; 13 lower/upper refinements | Six complete occupancies closed; only N6-03 and N6-06 remain |
 | N7 | One mixed placement, with at most 16 four-sign cells | Complete for both sides of HC and every pair-line sign |
 | C1, zero lower | 21 cap-occupancy orbits | **Entire class complete** |
-| C1, one lower | 12 cap-occupancy orbits | Ten rows complete; only C1-1-04 and 07 remain |
+| C1, one lower | 12 cap-occupancy orbits | **Entire class complete**; Theorem 2 of C1_ONE_LOWER_MIXED_CAPS.md |
 
 These are combinatorial cover counts, including closed or geometrically
 empty cells. The checker
@@ -51,7 +51,7 @@ empty cells. The checker
 the census only. A closure requires a proved continuous inequality
 and its full geometric scope; a boundary projection also needs every
 affected actual triangle threshold checked. The final G7 audit follows
-completion of the remaining N6 and C1 rows.
+completion of the remaining N6 rows.
 
 ## 1. The completed eight-boundary gate
 
@@ -106,14 +106,14 @@ C2 is closed. The unresolved parts of the former Type-I obligation are:
   sides and one on each opposite side, with the stated projection-overlap
   inequalities; three further points are arbitrary. Its eight-boundary
   members are covered by G2. The entire normalized seven-boundary form
-  is complete. Only the three six-boundary cap occupancies listed above
-  remain; five complete N6 occupancies are closed.
+  is complete. Only the two six-boundary cap occupancies listed above
+  remain; six complete N6 occupancies are closed.
 - **C1:** one occupied corner, one further contact on each incident side,
   and one contact on each opposite side; four further points are arbitrary.
-  The full five-anchor hull and the complete two-lower occupancy are
-  excluded. The entire zero-lower class is also complete. Only the five
-  one-lower coarse rows listed above remain, after the further complete
-  side-pair, single-exterior-point and eight-hull exclusions.
+  The entire family is excluded. The one-lower assembly in
+  [C1_ONE_LOWER_MIXED_CAPS.md](hand/C1_ONE_LOWER_MIXED_CAPS.md), Theorem 2,
+  joins the complete zero-lower and two-lower results and the lower
+  capacity theorem.
 
 Several complete restrictions now apply within these families.
 [THREE_INTERIOR_TRIANGLES.md](hand/THREE_INTERIOR_TRIANGLES.md) proves that
@@ -210,8 +210,9 @@ also excludes the middle containment signs.
 [C1_TWO_LOWER_COMPLETION.md](hand/C1_TWO_LOWER_COMPLETION.md) closes
 the last same-side O/C case and assembles the entire two-lower theorem
 for every hull size. The zero-lower C1 count is now also complete by
-[C1_ZERO_LOWER.md](hand/C1_ZERO_LOWER.md). Only the listed one-lower
-C1 rows and remaining N6 occupancies keep G6 open.
+[C1_ZERO_LOWER.md](hand/C1_ZERO_LOWER.md). The one-lower assembly in
+[C1_ONE_LOWER_MIXED_CAPS.md](hand/C1_ONE_LOWER_MIXED_CAPS.md) completes
+C1. Only the two listed N6 occupancies keep G6 open.
 [C1_ONE_LOWER_TOP_CAP.md](hand/C1_ONE_LOWER_TOP_CAP.md) additionally
 excludes the entire one-lower hexagon with a single exterior top-cap
 point and two interior upper points. Its 98 fixed cubic certificates

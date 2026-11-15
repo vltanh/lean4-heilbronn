@@ -2,30 +2,19 @@
 
 ## Current outcome
 
-The hand proof is complete for **all nine-point configurations with at least
-eight boundary points**, including exact equality classification. The full
-opposite-corner family C2 and the three-corner family Type III are also
-excluded by hand at \(7/128<A_0\).
-Every nine-point convex-position configuration is excluded below
-\(1/19\). The **entire Type-II family is now excluded**: the final
-lower wedge closes its last count/hull/cut/cell combination, and the
-assembly explicitly includes the area-equivalent Type-III alternative.
-The C1 case whose hull is exactly its five prescribed anchors is
-completely excluded; only larger C1 hulls remain.
-With seven boundary contacts, the complete smaller-left pair and
-right-quadrilateral pair classes are excluded. The exact six-anchor
-N convex hull is completely excluded. The entire seven-boundary exterior
-case is now complete: all 36 radial words are covered, and equality
-forces the eighth boundary contact and the original configuration.
-Both mixed interior branches are now excluded as well, completing the
-entire normalized seven-boundary theorem and its equality classification.
-The entire C1 zero-lower and two-lower occupancies are excluded, including
-all larger hulls. The one-lower branch has all single-exterior-point,
-side-cap-pair and eight-vertex-hull placements closed. Five complete N6
-occupancies are also closed: single side, both sides, one point in each
-cap, side plus two top, and all three top. Their proof links and exact
-remaining cases are listed below.
-The unrestricted nine-point theorem is **not yet proved by hand**.
+The complete normalized seven-boundary and eight-boundary theorems,
+C1, C2, Type II and Type III are proved, including the applicable
+sharp equality classifications. Six of the eight N6 cap occupancies
+are also complete. The newest full occupancy is
+[hand/SIX_BOUNDARY_SIDE_OPPOSITE.md](hand/SIX_BOUNDARY_SIDE_OPPOSITE.md):
+its 97-word cover has 108 fixed expressions and two sharp residual chambers.
+
+The entire C1 one-lower class is assembled in Theorem 2 of
+[hand/C1_ONE_LOWER_MIXED_CAPS.md](hand/C1_ONE_LOWER_MIXED_CAPS.md).
+Its last finite package has 134 exact cubics and 20,543 positive terms;
+a separate SymPy implementation checked every branch and coefficient.
+The two remaining N6 occupancies and the final global assembly are still
+in progress. The unrestricted theorem is therefore not yet claimed.
 
 Target:
 
@@ -150,9 +139,9 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 
 For an itemized, individually numbered list with open/closed flags, see
 [hand/G6_ITEMIZED_CASES.md](hand/G6_ITEMIZED_CASES.md): 62 parent
-rows, 6 open and 56 closed. The 221 explicit
-[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 39
-open leaves and 182 closed by the parent theorems; their census is
+rows, 4 open and 58 closed. The 221 explicit
+[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 15
+open leaves and 206 closed by the parent theorems; their census is
 checked by [hand/check_g6_itemized_cases.py](hand/check_g6_itemized_cases.py).
 These are occupancy/sign partitions, not separately feasible witnesses.
 
@@ -163,21 +152,19 @@ The former N7 four-sign cover is retained and marked complete.
 [hand/check_g6_case_ledger.py](hand/check_g6_case_ledger.py) checks
 the combinatorial census. These counts do not certify feasibility
 or continuous exclusion. Each closed row now links its complete theorem;
-all zero-lower C1 rows and six of the eight coarse N6 occupancies are closed.
+all C1 rows and six of the eight coarse N6 occupancies are closed.
 
 ## Exact remaining obligations
 
-- **N with six boundary contacts:** only N6-03 (one opposite-cap point
-  and two anchor-interior points) and N6-06 (two opposite-cap points and
-  one anchor-interior point) remain, each with lower/upper alternatives.
-  The entire mixed-cap family N6-04 is closed, sharply and with equality,
-  by [SIX_BOUNDARY_SIDE_TOP_COMPLETION.md](hand/SIX_BOUNDARY_SIDE_TOP_COMPLETION.md).
-- **C1:** only the one-lower rows C1-1-04 and 07 remain.
-  Both have two different occupied caps and one upper interior point.
-  Every one-lower configuration with two or three top-cap points is
-  completely excluded by the new top-multiplicity theorem. All zero-lower
-  and two-lower configurations, single-exterior-point hexagons, side-cap
-  pairs and eight-vertex hulls are already closed.
+- **N with six boundary contacts:** two cap occupancies remain:
+  one opposite-cap point with two anchor-interior points (N6-03), and
+  two opposite-cap points with one anchor-interior point (N6-06).
+  Both retain their lower/upper alternatives; the latter also needs
+  both triangular and quadrilateral top hulls.
+- **C1 is complete.** Theorem 2 of
+  [C1_ONE_LOWER_MIXED_CAPS.md](hand/C1_ONE_LOWER_MIXED_CAPS.md) closes the
+  entire one-lower class. Together with the zero-lower, two-lower and
+  lower-triangle capacity theorems, it excludes every C1 configuration.
 
 The normalized seven-boundary form is completely closed by Theorem 2 of
 [SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md](hand/SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md),
@@ -185,7 +172,8 @@ using the complete lower mixed theorem in
 [SEVEN_BOUNDARY_MIXED_LOWER.md](hand/SEVEN_BOUNDARY_MIXED_LOWER.md).
 
 Type II, Type III, and C2 are completely closed. The unrestricted
-completion obligation now consists only of the N and C1 families above.
+completion obligation now consists only of the two N6 occupancies above
+and the global assembly audit.
 
 No theorem yet forces every competitive configuration to have eight boundary
 points. Moving a single point within its area-feasible polygon may be trapped

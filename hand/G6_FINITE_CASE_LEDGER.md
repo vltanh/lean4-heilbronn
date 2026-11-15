@@ -5,8 +5,8 @@ see [G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). The
 [221 indexed leaf rows](G6_ITEMIZED_LEAVES.tsv) and
 [deterministic census checker](check_g6_itemized_cases.py) refine the
 62 parent cases by lower-point counts, upper diagonal sectors, radial
-wedges, and N7 sign words. Currently 6 parent cases are open and
-56 are closed; the 221 leaves comprise 39 open and 182 covered.
+wedges, and N7 sign words. Currently 4 parent cases are open and
+58 are closed; the 221 leaves comprise 15 open and 206 covered.
 
 This ledger refines [ROADMAP.md](../ROADMAP.md) at the target
 \[
@@ -70,13 +70,13 @@ These conditions give **exactly eight** coarse occupancy orbits:
 | N6-01 | \((0,0,1;2)\) | One side-cap point; couple it with both inner points |
 | N6-02 | \((1,0,1;1)\) | Opposite side caps; their cross-triangle costs with the inner point |
 | N6-03 | \((0,1,0;2)\) | One top-cap point and two inner points |
-| N6-04 | \((0,1,1;1)\) | **Closed**, including both lower/upper points and equality, by [SIX_BOUNDARY_SIDE_TOP_COMPLETION](SIX_BOUNDARY_SIDE_TOP_COMPLETION.md) |
+| N6-04 | \((0,1,1;1)\) | Complete sharp theorem and equality in [SIX_BOUNDARY_SIDE_OPPOSITE](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
 | N6-05 | \((1,1,1;0)\) | One point in each outer cap; no inner point |
 | N6-06 | \((0,2,0;1)\) | Two top-cap points and one inner point |
 | N6-07 | \((0,2,1;0)\) | Two top points and one side point |
 | N6-08 | \((0,3,0;0)\) | Three top points; forced common support cell II, eight hull vertices |
 
-**Status:** N6-01, N6-02, N6-05, N6-07 and N6-08 are **CLOSED**.
+**Status:** N6-01, N6-02, N6-04, N6-05, N6-07 and N6-08 are **CLOSED**.
 The respective complete proofs are
 [single-side](SIX_BOUNDARY_SINGLE_SIDE.md),
 [both-side and nonagon](SIX_BOUNDARY_TWO_SIDE_UPPER.md),
@@ -84,7 +84,10 @@ The respective complete proofs are
 [all three top](SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md).
 The both-side theorem includes its separately proved
 [lower-point branch](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md).
-Only N6-03 and N6-06 with their lower/upper splits remain open. The entire mixed-cap family N6-04 is completely closed.
+The full side-and-opposite theorem is
+[SIX_BOUNDARY_SIDE_OPPOSITE.md](SIX_BOUNDARY_SIDE_OPPOSITE.md), including
+its two sharp equality chambers. Only N6-03 and N6-06, each with its
+lower/upper alternatives, remain open.
 
 **Second-level finite split (exhaustive, without claiming feasibility).**
 The virtual lower triangle \((0,0)HC\) has capacity one, so among the
@@ -191,9 +194,10 @@ Counts \(n_0\ge3\) are excluded by [ONE_CORNER.md](ONE_CORNER.md);
 the exact five-anchor hull is excluded by
 [C1_MIXED_PENTAGON.md](C1_MIXED_PENTAGON.md).
 The entire zero-lower class is now also excluded by
-[C1_ZERO_LOWER.md](C1_ZERO_LOWER.md). Therefore **only \(n_0=1\)**
-and the specified larger-hull rows remain. The zero-lower catalogue
-below is retained as a complete closed cover.
+[C1_ZERO_LOWER.md](C1_ZERO_LOWER.md). The entire one-lower class is now excluded by Theorem 2 of
+[C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md). Thus every C1
+lower occupancy is closed. The catalogue below is retained as a complete
+closed cover.
 
 For a remaining count, set \(m=4-n_0\), and partition the \(m\)
 upper points into
@@ -230,12 +234,11 @@ and \(n_I\) is determined by the count equation:
 | C1-1 | 3 | (0,0) | 1 |
 | **C1-1 subtotal** | | | **12** |
 
-**Status:** every C1-0 row is **CLOSED**. In C1-1, seven of the twelve
-coarse rows are closed: the single-exterior-point rows, both side-pair
-rows, the side-capacity impossibilities, and the one-in-each-cap row.
-The exact individual statuses and proof links are in
-[G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). The five open rows are
-C1-1-04 and 07. These counts remain an unpruned,
+**Status:** all 21 C1-0 rows and all 12 C1-1 rows are **CLOSED**.
+Theorem 2 of [C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md)
+assembles every one-lower occupancy and hull alternative. The exact
+individual statuses and proof links are in
+[G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). These counts remain an unpruned,
 exhaustive combinatorial catalogue; one uniform theorem can close
 several rows simultaneously.
 
@@ -259,23 +262,20 @@ After these splits, orient pair lines through free points and use
 anchor-side signs only as needed; no unproved symmetry or interior
 boundary-pushing lemma is assumed.
 
-**Closure gate C1:** finish both lower-count branches, preferably with
-a uniform cap-cap or cap-quadrilateral inequality rather than 33
-unrelated local computations. If a finite box certificate is required,
-publish its polynomial inequalities, domain bounds, complete box list,
-exact rational coefficient rule, and independent checker.
+**Closure gate C1: COMPLETE.** Every lower count, cap occupancy and
+hull alternative is excluded by its linked complete theorem. The finite
+packages include their geometric bounds, complete sign refinements,
+fixed rational coefficients and exact verifiers. Separate symbolic
+implementations have independently reconstructed their expansions.
 
 ## Priority and acceptance criteria
 
 1. **N7-M: complete.** Both sides of HC and every pair-line sign
    are covered by the complete mixed theorems above.
-2. **N6-S (eight cap-occupancy orbits).**
-   Attack the three-point top cap N6-08 using its forced common
-   support cell II; group the remaining rows by zero/one occupancy
-   of the virtual lower triangle and by upper diagonal-sector subsets.
-3. **C1-0 / C1-1 (33 coarse cap orbits).**
-   Seek a uniform hull/cap capacity theorem to prune the list *before*
-   allocating 33 separate algebraic certificates.
+2. **N6-S:** complete N6-03 and N6-06, including both lower/upper
+   alternatives and both hulls for two opposite-cap points.
+3. **C1: complete.** Retain its 33 historical coarse rows and the
+   separate two-lower theorem as the exhaustive closed cover.
 4. **Final G7 audit.** Recheck the global normalization, all open-row
    exhaustiveness, strict/equality cases, collinear and cap-boundary
    transitions, and equality transfer through determinant-one shears.
