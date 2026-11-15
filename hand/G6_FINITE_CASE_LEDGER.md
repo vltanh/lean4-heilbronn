@@ -1,5 +1,13 @@
 # G6 finite case ledger: remaining unrestricted Heilbronn \(n=9\) families
 
+For **each case listed separately** (rather than grouped cap counts),
+see [G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). The
+[221 indexed leaf rows](G6_ITEMIZED_LEAVES.tsv) and
+[deterministic census checker](check_g6_itemized_cases.py) refine the
+62 parent cases by lower-point counts, upper diagonal sectors, radial
+wedges, and N7 sign words. Currently 44 parent cases are open and
+18 are closed; the 221 leaves comprise 186 open and 35 covered.
+
 This ledger refines [ROADMAP.md](../ROADMAP.md) at the target
 \[
 A_0=\frac{9\sqrt{65}-55}{320}.
