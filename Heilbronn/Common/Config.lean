@@ -71,6 +71,18 @@ theorem sarea_le_of_le_min_of_neg {P : Fin n → Point} {t : ℝ} (ht : 0 < t)
     sarea (P i) (P j) (P k) ≤ -(2 * t) :=
   (le_triangleArea_of_neg ht hneg).1 (area_of_le_min h i j k hij hjk hik)
 
+/-- A triangle of area at least `t > 0` whose signed area is nonnegative has doubled signed area
+at least `2t`. -/
+theorem two_mul_le_sarea_of_nonneg {p q r : Point} {t : ℝ} (ht : 0 < t)
+    (h0 : 0 ≤ sarea p q r) (h : t ≤ triangleArea p q r) : 2 * t ≤ sarea p q r := by
+  rcases (le_triangleArea_iff p q r t).1 h with h' | h' <;> [exact h'; linarith]
+
+/-- A triangle of area at least `t > 0` whose signed area is nonpositive has doubled signed area
+at most `-2t`. -/
+theorem sarea_le_of_nonpos {p q r : Point} {t : ℝ} (ht : 0 < t)
+    (h0 : sarea p q r ≤ 0) (h : t ≤ triangleArea p q r) : sarea p q r ≤ -(2 * t) := by
+  rcases (le_triangleArea_iff p q r t).1 h with h' | h' <;> [linarith; exact h']
+
 /-- Three distinct points of a configuration of positive least area are not collinear. -/
 theorem sarea_ne_zero_of_min_pos {P : Fin n → Point} (h : 0 < minTriangleArea P) (i j k : Fin n)
     (hij : i ≠ j := by decide) (hjk : j ≠ k := by decide) (hik : i ≠ k := by decide) :
