@@ -1,4 +1,4 @@
-# A complete exclusion of nine convex-hull vertices
+# Global hull and exterior-cap exclusions
 
 ## Scope
 
@@ -193,3 +193,127 @@ with one interior point remains distinct from the already completed
 eight-**boundary** family. In particular, (8) at n=8 alone is not strong
 enough to close the hull-eight case; the interior point's triangle
 constraints must still be used.
+
+## 4. Both lower exterior corner caps with seven boundary contacts
+
+There is a second complete placement exclusion, independent of affine
+isoperimetry. Use the seven-boundary notation
+
+\[
+\begin{array}{lll}
+A=(0,a),&H=(0,h),&0<a<h<1,\\
+B=(b,0),&C=(c,0),&0<b<c<1,\\
+D=(1,d),&E=(1,e),&0<d<e<1,\\
+F=(f,1),&&0<f<1.
+\end{array}                                                \tag{10}
+\]
+
+The other two points may lie anywhere in the square. In particular, the
+following statement does not require either free point to be inside the
+boundary heptagon or to be a vertex of the full hull. It does not even
+require the projection-overlap condition \(b\le f\le c\).
+
+**Theorem 2.** If either free point lies in either lower exterior corner
+cap
+
+\[
+\operatorname{conv}\{(0,0),A,B\},\qquad
+\operatorname{conv}\{(1,0),C,D\},
+\]
+
+then some configuration triangle has area strictly less than \(7/128\).
+
+**Proof.** Horizontal reflection exchanges the two caps, so consider
+\(P=(x,y)\) in the first cap. Assume for a contradiction that every
+triangle has doubled area at least
+
+\[
+ s=\frac7{64},\qquad L=h-a,\quad M=c-b,\quad R=e-d.
+\]
+
+A point on an actual triangle edge already makes a collinear triple;
+the area inequalities below handle the full closed cap in any case.
+The cap condition and the triangles AHP and BCP give
+
+\[
+\frac xb+\frac ya\le1,\qquad xL\ge s,\qquad yM\ge s.
+\]
+
+Consequently
+
+\[
+\frac{s}{bL}+\frac{s}{aM}\le1.
+\]
+
+Set \(\lambda=s/(aM)\). Positivity gives \(0<\lambda<1\),
+and therefore
+
+\[
+a=\frac{s}{\lambda M},\qquad
+b\ge\frac{s}{(1-\lambda)L}.                              \tag{11}
+\]
+
+Triangles BCD and CDE imply \(dM\ge s\) and \((1-c)R\ge s\).
+The horizontal length identity \(M+b+(1-c)=1\) now yields
+
+\[
+1\ge M+\frac{s}{(1-\lambda)L}+\frac{s}{R}.                \tag{12}
+\]
+
+The doubled area of HFE is
+
+\[
+(1-f)(1-h)+f(1-e)\ge s.
+\]
+
+This is a convex combination of \(1-h\) and \(1-e\). Hence
+at least one of h,e is at most \(1-s\); both are at most one.
+With the unequal positive weights 3/4 and 1/4 this gives
+
+\[
+\frac34h+\frac14e\le1-\frac s4.
+\]
+
+Using (11), \(h=a+L\), and \(e=d+R\), we conclude that
+
+\[
+1-\frac s4\ge\frac{3L}{4}+\frac R4
+          +\frac{s}{4M}\left(\frac3\lambda+1\right).     \tag{13}
+\]
+
+Add (12)--(13), and group each positive length with its reciprocal.
+Three applications of the arithmetic-geometric mean inequality give
+
+\[
+2-\frac s4\ge\sqrt{s}\left(
+\sqrt{1+\frac3\lambda}
++\sqrt{\frac3{1-\lambda}}+1\right)>6\sqrt{s}.             \tag{14}
+\]
+
+For the strict final comparison put \(q=\lambda(1-\lambda)\le1/4\).
+The square of the sum of the first two radicals is
+
+\[
+1+\frac3q+2\sqrt{\frac{3(\lambda+3)}q}
+ >1+12+12=25.
+\]
+
+Both radicals are positive, so their sum exceeds five. At \(s=7/64\),
+(14) is impossible, since
+
+\[
+2-\frac s4=\frac{505}{256}
+ <\frac{3\sqrt7}{4}=6\sqrt s.
+\]
+
+Squaring positive quantities reduces this last comparison to
+\(7\cdot192^2-505^2=3023>0\). This contradiction proves the left-cap
+exclusion; reflection proves the right-cap exclusion. No constraint
+involving the other free point was used. \(\square\)
+
+Thus a competitive seven-boundary configuration has no free point in
+either exterior cap along its doubled bottom side. If exactly eight
+points are hull vertices and the eighth lies outside the boundary
+heptagon, it must lie in one of the two upper exterior caps. Those upper
+caps contain perturbations of the known optimal configuration, and are
+not claimed to have a uniform strict bound below A0.
