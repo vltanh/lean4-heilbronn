@@ -59,6 +59,9 @@ The six actual points \(O,H,C,F,L,M\) imply
 
 Here is the exact transfer of the universal parameter calculation in
 Section 7 of [TYPE_II_COMPLETION.md](TYPE_II_COMPLETION.md).
+The independent cap argument at the start of Section 2 uses only (1)
+and the actual anchor--cap areas, and gives \(f<x<c\). Thus the
+parameter \(f/c\) below is strictly between zero and one, as required.
 Apply \((a,b)\mapsto(a/c,1-b)\). The images of \(O,C,H,F\)
 are, respectively,
 
