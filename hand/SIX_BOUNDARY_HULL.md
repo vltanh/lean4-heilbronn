@@ -666,11 +666,251 @@ point still lies in \(HABC\); its position must be treated together
 with that mixed pair in any continuation.
 
 
+## 5. The mixed pair with the lower point on the \(C\)-side of \(HB\)
+
+**Theorem 5.** Suppose the upper pair is
+\(P\in HCJ,\ R\in CDJ\), so both points are inside \(HCD\),
+and suppose the lower point \(Q\) is inside \(HBC\).
+This entire placement is impossible at minimum area at least \(A_0\).
+
+Continue with \(\sigma=8/73\). This theorem does not require
+\(Q\in AHC\), so it also covers the lower point in the ear \(ABC\).
+The mixed-pair line theorem, Theorem 3 of
+[ONE_CORNER_COMPLETION.md](ONE_CORNER_COMPLETION.md), gives
+
+\[
+[PRH],[PRD],[PRF]>0>[PRC].                                 \tag{35}
+\]
+
+The orientation is fixed by the segment from \(P\) to \(R\), which
+crosses \(CF\) from its \(H\)-side to its \(D\)-side.
+
+### The central upper point is above \(BD\)
+
+If both \(P,R\) were below \(BD\), they would both be inside
+\(BCD\), contrary to Theorem 1. If \(P\) were below \(BD\)
+and \(R\) above it, both first coordinates would exceed \(b\), and
+
+\[
+\frac{P_y}{P_x-b}<\frac{d}{1-b}
+<\frac{R_y}{R_x-b}
+\quad\Longrightarrow\quad [PRB]>0.
+\]
+
+Their segment would cross the relative interior of \(BD\), so
+\(B,D\) would have opposite signs with respect to \(PR\).
+This contradicts \([PRB],[PRD]>0\). Thus \(P\) is above \(BD\).
+There are exactly two possibilities for \(R\).
+
+### Both upper points are above \(BD\)
+
+In this case \(P,R\in HBD\cap HCD\). If \(Q\) were also
+above \(BD\), all three would belong to \(HBD\), contrary to
+triangle capacity two in [THREE_INTERIOR_TRIANGLES.md](THREE_INTERIOR_TRIANGLES.md),
+Corollary 2. Hence \(Q\) is below \(BD\), so
+
+\[
+Q\in BCD\cap HBC.
+\]
+
+Let
+
+\[
+a_1=[HBD],\qquad a_2=[HCD],\qquad
+V=\text{doubled area of }HBCD.
+\]
+
+Both containing triangles of \(P,R\) have doubled area at least
+\(K\sigma\). Both complementary triangles \(BCD,HBC\) contain
+\(Q\), and therefore have doubled area at least \(3\sigma\). Thus,
+with \(A=\max(a_1,a_2)\), \(B=\min(a_1,a_2)\),
+
+\[
+V\ge A+3\sigma,\qquad A\le1,\qquad B\le1-\sigma.           \tag{36}
+\]
+
+Here \(a_1=h-b(h-d)\le h\le1\);
+also \(a_2\le1-\sigma\), since
+\(a_2+[HDF]=W\le1\).
+
+The line \(PR\) puts \(H,D\) on its positive side.
+Since both \(P,R\) are inside \(HBD\), it puts \(B\)
+on the negative side; (35) gives the same sign for \(C\).
+The general same-side weighted inequality in
+[ONE_CORNER_COMPLETION.md](ONE_CORNER_COMPLETION.md), equation (9),
+applied before its unit-area specialization, gives a positive \(v\)
+such that
+
+\[
+a_1a_2(v-\sigma)-\sigma v(a_1+a_2)-Vv^2\ge0.
+\]
+
+For applicability of its canonical affine coordinates, the relevant
+overlap parameter is
+
+\[
+a_1+a_2-V=h(1-c)+bd>0.
+\]
+
+Maximizing the displayed concave quadratic in \(v\) therefore requires
+
+\[
+[AB-\sigma(A+B)]^2\ge4\sigma(A+3\sigma)AB,\qquad
+AB-\sigma(A+B)>0.                                        \tag{37}
+\]
+
+We now exclude (37) by two root comparisons. For fixed \(A\),
+its left side minus right side is an upward quadratic in \(B\),
+negative at the positive zero of its bracket. Hence increasing
+\(B\) to \(1-\sigma\) preserves both necessary conditions.
+After that replacement, the leading coefficient of the quadratic
+in \(A\) is
+
+\[
+(1-2\sigma)^2-4\sigma(1-\sigma)
+=\frac{1169}{5329}>0.
+\]
+
+It too is negative at the positive zero of its bracket, so \(A\)
+may be increased to one. But the resulting value is
+
+\[
+[1-\sigma-\sigma(2-\sigma)]^2
+-4\sigma(1+3\sigma)(1-\sigma)
+=-\frac{1471599}{28398241}<0.
+\]
+
+Thus the whole case with both upper points above \(BD\) is excluded.
+
+### The right upper point is below \(BD\)
+
+Now \(R\in BCD\). Its ear has capacity one, so \(Q\) must be
+above \(BD\); we already know that \(P\) is above it. Both
+\(P,Q\) lie inside \(HBR\).
+
+Here are all three side tests for that containment. They are above
+\(HB\), since \(Q\in HBC\) and \(P\) is above \(HC\).
+They are above \(BR\), because the ray \(BR\) is strictly below
+\(BD\). The point \(P\) is below \(HR\) by (35); the point \(Q\)
+is below \(HC\), while \(R\) is above it, so \(Q\) is also below
+\(HR\). Consequently
+
+\[
+[HBR]\ge K\sigma.                                        \tag{38}
+\]
+
+We give a quantitative upper bound that contradicts this.
+
+Write \(R=(x,y)\), \(m=c-b\), and
+
+\[
+T=[HBD]=h(1-b)+bd,\qquad A=[BCD]=dm\ge3\sigma.
+\]
+
+The affine function \([HBX]\) has values \(0,hm,T\) at
+\(B,C,D\), respectively, with \(T>hm>0\).
+The barycentric weights of \(R\) at both \(B,C\) are at least
+\(\sigma/A\). Therefore
+
+\[
+[HBR]\le
+T-\frac{\sigma}{dm}(2T-hm)
+=T\left(1-\frac{2\sigma}{d(c-b)}\right)+\frac{\sigma h}{d}.
+                                                               \tag{39}
+\]
+
+The anchor inequalities imply \(b(1-b)\ge\sigma>7/64\),
+so \(b>1/8\). To see the first assertion, combine
+\(a\ge\sigma/(1-b)\) with
+\(a\le1-\sigma/b\).
+The right side of (39) strictly decreases with \(b\) and increases
+with \(c\) on \(d(c-b)\ge3\sigma\): its derivatives are
+
+\[
+(d-h)\left(1-\frac{2\sigma}{d(c-b)}\right)
+-\frac{2\sigma T}{d(c-b)^2}<0,\qquad
+\frac{2\sigma T}{d(c-b)^2}>0.
+\]
+
+Decrease \(b\) to \(1/8\) and increase \(c\) to one.
+Both changes increase \(d(c-b)\), so they preserve the range in
+which those signs were proved. This yields
+
+\[
+[HBR]\le
+F(h,d):=\frac{7h}{8}+\frac d8-\frac{\sigma h}{d}
+-\frac{2\sigma}{7}.                                      \tag{40}
+\]
+
+Because \(R\in CDF\), \(f\le1-3\sigma\). The actual triangle
+\(HDF\) then gives the linear budget
+
+\[
+3\sigma h+(1-3\sigma)d\le1-\sigma.                        \tag{41}
+\]
+
+The function \(F\) increases with \(d>0\).
+For \(h\le1-\sigma\), replacing \(d\le h\) by \(h\) gives
+
+\[
+F(h,d)\le h-\frac{9\sigma}{7}
+\le1-\frac{16\sigma}{7}
+<\frac{373}{50}\sigma<K\sigma.                            \tag{42}
+\]
+
+For \(h\ge1-\sigma\), (41) allows the larger value
+
+\[
+d=D(h):=\frac{1-\sigma-3\sigma h}{1-3\sigma},
+\qquad D(h)\ge D(1)=\frac{41}{49}=:d_0.
+\]
+
+The derivative of \(F(h,D(h))\) is positive throughout this interval.
+Indeed \(h\le1\), \(D(h)\ge d_0\), and
+
+\[
+\begin{split}
+\frac{d}{dh}F(h,D(h))
+&=\frac78-\frac{\sigma}{D(h)}
+-\frac{3\sigma}{1-3\sigma}
+ \left(\frac18+\frac{\sigma h}{D(h)^2}\right)\\
+&\ge
+\frac78-\frac{\sigma}{d_0}
+-\frac{3\sigma}{1-3\sigma}
+ \left(\frac18+\frac{\sigma}{d_0^2}\right)
+=\frac{29157287}{48103496}>0.
+\end{split}
+\]
+
+It follows that
+
+\[
+F(h,d)\le F(1,d_0)=\frac{119864}{146657}
+<\frac{373}{50}\sigma<K\sigma,                            \tag{43}
+\]
+
+where the first strict gap is exactly \(828/3666425>0\).
+Equations (40), (42)--(43) contradict (38), excluding the second case.
+This proves Theorem 5. \(\square\)
+
+After transposition, the corresponding mixed \(HCF\) pair is excluded
+whenever the lower point lies in \(AHC\).
+Thus, after choosing the empty-\(ABC\) normalization, the only
+placement still unresolved is
+
+\[
+\boxed{P\in HCJ,\quad R\in CDJ,\quad Q\in ABH.}             \tag{44}
+\]
+
+Its transpose is the same remaining geometric class. No statement that
+the full six-anchor hull has been excluded is made here.
+
+
 ## Verification
 
 The optional script [check_six_boundary_hull.py](check_six_boundary_hull.py)
 checks the determinant formulas, the Cauchy differences, exact rational
-gaps, transposition, and all scalar identities in Sections 3--4. The continuous inequalities and
+gaps, transposition, and all scalar identities in Sections 3--5. The continuous inequalities and
 the complete placement exclusions are proved above; no search or
 parameter sampling is used as a premise.
 

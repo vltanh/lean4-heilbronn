@@ -109,3 +109,35 @@ assert sp.Rational(12,73)-sp.Rational(4,25) == sp.Rational(8,1825) > 0
 assert 1-3*sp.Rational(7,36) == sp.Rational(5,12)
 assert 1-3*sp.Rational(1,5) == sp.Rational(2,5)
 print("PASS: cross-triangle capacities and complete CD/FH opposite-sector exclusion")
+
+# Section 5: both radial signs of the mixed pair.
+hbd, hcd = det(H,B,D), det(H,C,D)
+quad_hbcd = det(H,B,C)+det(H,C,D)
+assert sp.expand(hbd+hcd-quad_hbcd-(h*(1-c)+b*d)) == 0
+AA, BB, VV, vv = sp.symbols("AA BB VV vv")
+Fcentral = AA*BB*(vv-ss)-ss*vv*(AA+BB)-VV*vv**2
+assert sp.factor(sp.discriminant(Fcentral,vv)-((AA*BB-ss*(AA+BB))**2-4*VV*ss*AA*BB)) == 0
+rootpoly = (AA*BB-ss*(AA+BB))**2-4*ss*(AA+3*ss)*AA*BB
+polyA = sp.Poly(rootpoly.subs({BB:1-sigma,ss:sigma}),AA)
+assert polyA.LC() == sp.Rational(1169,5329) > 0
+assert rootpoly.subs({AA:1,BB:1-sigma,ss:sigma}) == -sp.Rational(1471599,28398241) < 0
+TT = h*(1-b)+b*d
+Gbound = TT*(1-2*ss/(d*(c-b)))+ss*h/d
+assert sp.factor(sp.diff(Gbound,b) - ((d-h)*(1-2*ss/(d*(c-b)))-2*ss*TT/(d*(c-b)**2))) == 0
+assert sp.factor(sp.diff(Gbound,c)-2*ss*TT/(d*(c-b)**2)) == 0
+Fheight = sp.Rational(7,8)*h+d/8-ss*h/d-2*ss/7
+assert sp.factor(Gbound.subs({b:sp.Rational(1,8),c:1})-Fheight) == 0
+assert sp.factor(sp.diff(Fheight,d)-(sp.Rational(1,8)+ss*h/d**2)) == 0
+assert sp.factor(Fheight.subs(d,h)-(h-9*ss/7)) == 0
+assert sp.Rational(373,50)*sigma-(1-16*sigma/7) == sp.Rational(869,12775) > 0
+Dh = (1-ss-3*ss*h)/(1-3*ss)
+assert sp.factor(sp.diff(Fheight.subs(d,Dh),h)-(
+    sp.Rational(7,8)-ss/Dh-3*ss/(1-3*ss)*(sp.Rational(1,8)+ss*h/Dh**2))) == 0
+d0 = Dh.subs({ss:sigma,h:1})
+assert d0 == sp.Rational(41,49)
+derlo = sp.Rational(7,8)-sigma/d0-3*sigma/(1-3*sigma)*(sp.Rational(1,8)+sigma/d0**2)
+assert derlo == sp.Rational(29157287,48103496) > 0
+endF = Fheight.subs({ss:sigma,h:1,d:d0})
+assert endF == sp.Rational(119864,146657)
+assert sp.Rational(373,50)*sigma-endF == sp.Rational(828,3666425) > 0
+print("PASS: both mixed-pair radial cases when the lower point lies in HBC")
