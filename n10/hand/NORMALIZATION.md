@@ -172,6 +172,17 @@ inside the unit square has area at most 1/2: multi-affinity of its signed
 determinant reduces its maximum absolute value to square vertices.
 For k>=5 we would get area>=11A*>1/2. Thus k<=4.
 
+The stronger hand argument in TRIANGLE_OCCUPANCY.md improves this to k<=3.
+For four interior points it proves
+
+    area >= ((15+3 sqrt(5))/2) m,
+    m <= 1/(15+3 sqrt(5)) < 5/108 < A*.
+
+The proof selects an interior point of minimum barycentric coordinate,
+leaving an empty fan triangle, and uses explicit two- and three-interior-point
+area inequalities in the other two fan triangles. It applies to every triangle
+of actual configuration points, with no assumption about the remaining points.
+
 For exactly three corners, choose (0,0),(0,1),(1,1) and put s=2A*.
 The seven other points satisfy
 
@@ -188,9 +199,10 @@ three occupied corners. Hence the residual exact-three-corner classes are
 
     (number in U_s, number in L_s) = (0,7),(1,6),(2,5),(3,4),(4,3).
 
-The four-corner alternative is fully excluded in FOUR_CORNERS.md.
-The five displayed exact-three-corner classes remain open in the hand ledger;
-listing them is not a proof of their exclusions.
+The four-corner alternative is fully excluded in FOUR_CORNERS.md. The stronger
+occupancy theorem excludes (4,3). THREE_CORNERS.md excludes (0,7) and (1,6)
+by a complete eight-point endpoint lemma. Thus the only remaining exact-
+three-corner counts are (2,5) and (3,4); their exclusions are still open.
 
 ## 8. Conditional reversal of normalization: HP13
 

@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 1 — November 15, 2026.
+Checkpoint 2 — November 15, 2026.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -75,11 +75,15 @@ its ADO orientation hypothesis explicitly.
   - [x] III-3C-U5+. Exactly three corners and at least five free points above
         their diagonal: impossible at m>=A* by the 11-triangle occupancy
         bound. Proof: NORMALIZATION.md, Section 7.
-  - [ ] III-3C-U0. Exactly three corners: 0 upper and 7 lower free points.
-  - [ ] III-3C-U1. Exactly three corners: 1 upper and 6 lower free points.
+  - [x] III-3C-U0. Exactly three corners: 0 upper and 7 lower free points.
+        Proof: THREE_CORNERS.md, eight-point endpoint lemma.
+  - [x] III-3C-U1. Exactly three corners: 1 upper and 6 lower free points.
+        Proof: THREE_CORNERS.md, the same complete endpoint lemma.
   - [ ] III-3C-U2. Exactly three corners: 2 upper and 5 lower free points.
   - [ ] III-3C-U3. Exactly three corners: 3 upper and 4 lower free points.
-  - [ ] III-3C-U4. Exactly three corners: 4 upper and 3 lower free points.
+  - [x] III-3C-U4. Exactly three corners: 4 upper and 3 lower free points.
+        Proof: TRIANGLE_OCCUPANCY.md. In fact any triangle containing
+        four further points forces m<=1/(15+3 sqrt(5))<A*.
 
 For these five residual classes use corners (0,0),(0,1),(1,1), s=2A*, and
 
@@ -87,8 +91,8 @@ For these five residual classes use corners (0,0),(0,1),(1,1), s=2A*, and
     L_s=conv{(s,0),(1,0),(1,1-s)}.
 
 The quoted counts are in these two explicit triangles. A competitive point
-cannot lie on the separating diagonal. The count split is proved exhaustive;
-none of its five unresolved entries is being silently dropped.
+cannot lie on the separating diagonal. The count split is proved exhaustive.
+Only U2 and U3 remain unresolved in the exactly-three-corner family.
 
 ### Other corner and corner-free families
 
@@ -104,9 +108,9 @@ none of its five unresolved entries is being silently dropped.
       orientation of the two interior points. HP10 closes only its stated
       symmetric subchamber, not this parent item.
 
-There are now ELEVEN named unresolved global obligations: the five exact-
-three-corner count classes and the six entries immediately above. These are
-continuous-domain obligations, not eleven small arithmetic checks. Each must
+There are now EIGHT named unresolved global obligations: the two remaining
+exact-three-corner count classes and the six entries immediately above. These
+are continuous-domain obligations, not eight small arithmetic checks. Each must
 admit a uniform argument or an explicitly exhaustive further subdivision.
 New subdivisions must retain their parent until all children close. No bound
 on the eventual number of smaller subcases is claimed.
@@ -137,11 +141,14 @@ Ordinary averaging is not a justified reduction.
 | LOCAL_RIGIDITY.md | Strict local optimality without stored dual certificates; existential radius |
 | SYMMETRIC_CHAMBER.md | Sharp bound and equality in the expressly stated symmetric sign chamber |
 | FOUR_CORNERS.md | Full four-corner exclusion with bound (sqrt(33)-5)/16 |
+| TRIANGLE_OCCUPANCY.md | Universal bound for a triangle containing four points; full U4 exclusion |
+| THREE_CORNERS.md | Eight-point endpoint lemma; full U0 and U1 exclusions |
 
 ## Next attack and stopping rules
 
-The next target is the exact-three-corner family, using its five occupancy
-classes. A successful next checkpoint should close one or more whole entries,
+The next target is the exact-three-corner family, now reduced to U2 and U3.
+The stronger global occupancy bound may also be used in the other families.
+A successful next checkpoint should close one or more whole entries,
 not merely produce another local lemma disconnected from that ledger.
 The local qualitative argument and symmetric terminal optimization no longer
 need a certificate-compression detour.
