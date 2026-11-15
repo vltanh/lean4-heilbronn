@@ -2,6 +2,12 @@
 
 ## Scope
 
+**Current continuation.** The two-row reduction proved in this note has
+now been strengthened: [TYPE_II_COMPLETION.md](TYPE_II_COMPLETION.md),
+Theorem 11, completely excludes the balanced row \((2,2,2)\).
+Only \((1,2,3)\) remains open. The statements below retain the scope
+of the intermediate lemmas used in that later proof.
+
 Write
 
 \[

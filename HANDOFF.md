@@ -7,10 +7,8 @@ eight boundary points**, including exact equality classification. The full
 opposite-corner family C2 and the three-corner family Type III are also
 excluded by hand at \(7/128<A_0\).
 Every nine-point convex-position configuration is now excluded below
-\(1/19\). The complete balanced Type-II quadrilateral-right branch is
-also excluded. Any surviving balanced configuration has triangular left
-and right hulls and an alternating four-interior-point quadrilateral;
-only the assignment with Q at ER and S at RC remains.
+\(1/19\). The **entire balanced Type-II count row \((2,2,2)\)** is
+also excluded. Only the unbalanced Type-II count \((1,2,3)\) remains.
 The full sharp chamber with F moved inward from its top side is closed,
 and equality forces the original configuration.
 The unrestricted nine-point theorem is **not yet proved by hand**.
@@ -31,9 +29,11 @@ H_9=\frac{9\sqrt{65}-55}{320}=:A_0.
 4. [hand/OPPOSITE_CORNERS.md](hand/OPPOSITE_CORNERS.md): complete C2 exclusion.
 5. [hand/CORNER_FAMILIES.md](hand/CORNER_FAMILIES.md): complete Type-III
    proof, quantitative triangular-hull theorems, and lower-point packing.
-6. [hand/TYPE_II.md](hand/TYPE_II.md): adjacent-corner normalization and its
-   two remaining count classes.
-7. [ROADMAP.md](ROADMAP.md): precise open completion gates.
+6. [hand/TYPE_II.md](hand/TYPE_II.md): adjacent-corner normalization and
+   initial reduction to two count classes.
+7. [hand/TYPE_II_COMPLETION.md](hand/TYPE_II_COMPLETION.md), Theorem 11:
+   complete balanced-row exclusion, leaving only \((1,2,3)\).
+8. [ROADMAP.md](ROADMAP.md): precise open completion gates.
 
 The later structural notes are
 [hand/THREE_INTERIOR_TRIANGLES.md](hand/THREE_INTERIOR_TRIANGLES.md),
@@ -48,14 +48,19 @@ The latest results are in
 [hand/GLOBAL_COMPLETION.md](hand/GLOBAL_COMPLETION.md) (convex-position
 and lower exterior-cap exclusions, and the full inward-moving sharp chamber),
 [hand/TYPE_II_COMPLETION.md](hand/TYPE_II_COMPLETION.md) (two-actual-vertex
-triangle capacity, swept interval tests, and the complete balanced
-quadrilateral-right exclusion),
+triangle capacity, swept interval tests, and the complete balanced-row
+exclusion),
 [hand/ONE_CORNER_COMPLETION.md](hand/ONE_CORNER_COMPLETION.md) (the full
 common-sector pair exclusion and the mixed-pair line restriction), and
 [hand/FOUR_INTERIOR_QUADRILATERALS.md](hand/FOUR_INTERIOR_QUADRILATERALS.md)
 (one point in each diagonal sector whenever an actual quadrilateral
 contains four further points). Competitive configurations have five to
 eight hull vertices; this is not a square-boundary count.
+The final two balanced cells have separate short notes:
+[hand/BALANCED_BOTTOM_INNER_SECTOR.md](hand/BALANCED_BOTTOM_INNER_SECTOR.md)
+uses a five-area cancellation and weighted-mean identity, and
+[hand/BALANCED_RIGHT_MIXED.md](hand/BALANCED_RIGHT_MIXED.md) proves a
+uniform height bound and a strict rational area gap.
 
 The sharp chamber inequality, positive stress, local proof, and 84-triangle
 attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
@@ -72,20 +77,13 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
   ear vertex. The corresponding four-interior-point quadrilateral must
   alternate across its diagonals. These placements and larger hulls
   still need an argument.
-- **Type II:** after normalization to \(b\le1/2\), only the two occupancy
-  classes \((\ell,c,r)=(1,2,3)\) and \((2,2,2)\) remain. The left count
-  includes the prescribed side contact. Type III, the normalization's
-  alternative, is already closed. In the balanced case, the left point
-  is inside DBE and above CE, one central point is above CE, and the
-  other is below CE. The entire quadrilateral-right hull alternative is
-  excluded. In the triangular-right alternative, the lower ear EBR is
-  empty of free points, and the eight points other than B have hull DERC
-  with one interior point in each diagonal sector. The second supporting
-  shear excludes the assignment S at ER and Q at RC. The sole remaining
-  assignment has Q at ER and S at RC; its interaction with B still needs
-  a coupled inequality.
-  In the unbalanced case, one or two central points are above CE and
-  must be coupled to the right triple.
+- **Type II:** after normalization to \(b\le1/2\), only the occupancy
+  class \((\ell,c,r)=(1,2,3)\) remains. The left count consists of the
+  prescribed side contact. Type III, the normalization's alternative,
+  and the entire balanced Type-II row are closed. One or two central
+  points are above CE and must be coupled to the right triple. The
+  triangular and nontriangular right-hull alternatives both remain
+  obligations within this single row.
 
 No theorem yet forces every competitive configuration to have eight boundary
 points. Moving a single point within its area-feasible polygon may be trapped
@@ -93,7 +91,7 @@ inside the square; do not treat boundary pushing as automatic.
 
 ## Checks and trust boundary
 
-All seventeen hand-proof diagnostics have been run locally: the original identities,
+All nineteen hand-proof diagnostics have been run locally: the original identities,
 the eight-boundary inequalities, radial catalogue, R6 derivatives,
 opposite-corner identities, corner-family identities and exact attainment,
 four-corner argument, Type-II identities, quadrilateral-hull formulas,
@@ -101,8 +99,8 @@ one-corner inequalities, seven-boundary cap bounds, the global triangle-capacity
 argument, balanced Type-II exclusions, the new global hull and cap bounds,
 the two-vertex capacity and right-hull arguments, both quadrilateral-pair
 exclusions, the alternating-sector theorem, the second-shear exclusion,
-and the inward-moving chamber's determinant and scalar identities and all
-918 rational coefficient bounds.
+the four exhaustive final balanced cells, and the inward-moving chamber's
+determinant and scalar identities and all 918 rational coefficient bounds.
 The original exact local checker has also passed. The arguments include the
 geometric and sign reasoning that those diagnostics alone cannot establish.
 No external independent review or Lean verification is claimed.

@@ -22,7 +22,7 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G3 | Strict local maximum against arbitrary eighteen-coordinate perturbations | Complete qualitative hand proof; separate explicit-radius arithmetic certificate |
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
-| G5 | Type II: adjacent corners and five free points | Two counts remain; the balanced count is reduced to the single alternating assignment Q at ER and S at RC |
+| G5 | Type II: adjacent corners and five free points | **Balanced count \((2,2,2)\) complete**; only the unbalanced count \((1,2,3)\) remains |
 | G6 | N and C1 with fewer than eight boundary points | **Main remaining global structural obstruction** |
 | G7 | Unrestricted sharp theorem and uniqueness | Conditional on G5, G6; equality transfer through shears is already proved |
 
@@ -112,7 +112,7 @@ it cannot assume that every interior point reaches the square boundary.
 family, including degeneracies. A theorem about one observed active pattern,
 or about configurations already having eight contacts, does not close G6.
 
-## 3. Corner families: Type III closed, two Type-II counts left
+## 3. Corner families: Type III and balanced Type II are closed
 
 ### Complete Type-III theorem
 
@@ -142,17 +142,18 @@ have counts \((\ell,c,r)\).
 
 The five-point endpoint-triangle theorem, a complete exclusion of
 \((2,1,3)\), and the exhaustive central-triple orientation argument leave
-only these two complete continuous classes:
+the following two complete continuous classes. The later balanced-row
+theorem closes the second:
 
-| Count \((\ell,c,r)\) | Necessary range, with \(s=2t\ge2A_0\) |
-|---|---|
-| \((1,2,3)\) | \(s\le b\le1-s/(3-2\sqrt2)\) |
-| \((2,2,2)\) | \(3s\le b\le1/2\) |
+| Count \((\ell,c,r)\) | Necessary range, with \(s=2t\ge2A_0\) | Current status |
+|---|---|---|
+| \((1,2,3)\) | \(s\le b\le1-s/(3-2\sqrt2)\) | Open |
+| \((2,2,2)\) | \(3s\le b\le1/2\) | Completely excluded by `TYPE_II_COMPLETION.md`, Theorem 11 |
 
-Their point coordinates remain arbitrary within their assigned triangles.
-Neither row is yet excluded. The recorded exact checker gives the separate
+The remaining row has arbitrary point coordinates within its assigned
+triangles. The recorded exact checker gives the separate
 computational bound \(137/2500<A_0\); that claim is not substituted for
-these hand obligations.
+the remaining hand obligation.
 
 Useful global tools now include the sharp six-point triangular-hull bound,
 the sharp six-point quadrilateral-hull bound, and the complete six-point
@@ -169,8 +170,14 @@ ear EBR is empty. The eight points other than B therefore have hull DERC,
 and the four interior points occupy its four diagonal sectors once each.
 Sections 7–8 of `TYPE_II_COMPLETION.md` use a second supporting shear to
 exclude the assignment with S in the sector at ER and Q in the sector at
-RC. Only the assignment with Q at ER and S at RC remains. Its coupling
-to B is the last balanced-row obligation.
+RC. For the other assignment, the lines ES and LR give four exhaustive
+cells. Sections 9–10 exclude the upper and left mixed cells;
+[BALANCED_RIGHT_MIXED.md](hand/BALANCED_RIGHT_MIXED.md) excludes the right
+mixed cell by a uniform height bound; and
+[BALANCED_BOTTOM_INNER_SECTOR.md](hand/BALANCED_BOTTOM_INNER_SECTOR.md)
+excludes the bottom cell by a five-area cancellation and weighted-mean
+identity. Theorem 11 assembles these arguments into the **complete
+balanced-row exclusion**.
 In the unbalanced row, at least one central point is above CE; the
 one-point and two-point cuts against the right triple remain open.
 Sections 11--12 of `TYPE_II.md` supply exact necessary parameter bounds
@@ -181,7 +188,7 @@ of area at most \(1/2\) with two actual vertices contains at most five
 configuration points in total, even if its third vertex is outside the
 square. For Type II, sweeping that third vertex along the bottom line
 gives 35 explicit strict interval-overlap exclusions. These are necessary
-conditions, not a proof that either residual count is empty. The new
+conditions; they do not by themselves close the unbalanced row. The new
 capacity theorem depends on the earlier unrestricted actual-triangle
 capacity theorem, so its corollary about opposite occupied corners is
 downstream of the original C2 proof.

@@ -47,7 +47,8 @@ families are listed below. The older computational draft is separate.
 | Every actual quadrilateral with four interior configuration points has exactly one in each diagonal sector; every competitive configuration has five to eight hull vertices | [FOUR_INTERIOR_QUADRILATERALS.md](FOUR_INTERIOR_QUADRILATERALS.md) |
 | Two interior points in the same quadrilateral diagonal sector have minimum area below \(7S/64\); the remaining mixed pair line must isolate its ear vertex | [ONE_CORNER_COMPLETION.md](ONE_CORNER_COMPLETION.md) |
 | Complete balanced Type-II quadrilateral-right exclusion; the triangular-right branch has an empty lower ear and an alternating eight-point quadrilateral | `TYPE_II_COMPLETION.md`, Sections 5–6 |
-| One of the two alternating balanced assignments is excluded by a second supporting shear, leaving only Q at ER and S at RC | `TYPE_II_COMPLETION.md`, Sections 7–8 |
+| One alternating balanced assignment is excluded by a second supporting shear | `TYPE_II_COMPLETION.md`, Sections 7–8 |
+| Complete balanced Type-II count-row exclusion, leaving only \((1,2,3)\) | `TYPE_II_COMPLETION.md`, Theorem 11, with [BALANCED_BOTTOM_INNER_SECTOR.md](BALANCED_BOTTOM_INNER_SECTOR.md) and [BALANCED_RIGHT_MIXED.md](BALANCED_RIGHT_MIXED.md) |
 | Equality transfer through all normalizing shears | `GLOBAL_STRUCTURE.md`, Lemma 4 |
 
 The original three-family argument is retained in
@@ -75,19 +76,12 @@ an observed numerical pattern.
   one in each diagonal sector. These placements and the larger-hull
   cases remain open.
 - **Type II:** after the area-preserving normalization to \(b\le1/2\), only
-  the left/central/right counts \((1,2,3)\) and \((2,2,2)\) remain. The left
-  count includes the prescribed side contact. All cases with three central
-  points, and the count \((2,1,3)\), have been excluded. In the balanced
-  count, the left hull is triangular; the left free point and one central
-  point are above CE, and the other central point is below CE. The two
-  right hull is also triangular: the entire quadrilateral-right branch
-  is excluded. The eight points other than the bottom contact have a
-  quadrilateral hull with one interior point in each diagonal sector.
-  Of its two alternating assignments, only Q in the sector at ER and S
-  in the sector at RC remains; its interaction with the ninth point B
-  is still open. In the unbalanced count,
-  one or two central points are above CE; their interaction with the right
-  triple remains open.
+  the left/central/right count \((1,2,3)\) remains. The left count consists
+  of the prescribed side contact. All cases with three central points,
+  the count \((2,1,3)\), and the entire balanced count \((2,2,2)\) are
+  excluded. In the unbalanced row, one or two central points are above
+  CE; their interaction with the right triple remains open, including
+  both triangular and nontriangular right-hull alternatives.
 
 The opposite-corner family C2 and the entire three-corner family Type III
 are closed at \(7/128<A_0\).
@@ -123,6 +117,8 @@ python hand/check_global_completion.py
 python hand/check_type_ii_completion.py
 python hand/check_one_corner_completion.py
 python hand/check_four_interior_quadrilaterals.py
+python hand/check_balanced_bottom_inner_sector.py
+python hand/check_balanced_right_mixed.py
 ```
 
 These scripts use SymPy where appropriate and verify the printed determinant

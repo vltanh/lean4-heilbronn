@@ -20,7 +20,9 @@ doubled triangle area is at least \(s\).
 hull \(DBE\). Equivalently, \(L\) lies strictly inside \(DBE\).
 
 This excludes the entire left-quadrilateral branch of the balanced count
-\((2,2,2)\). The triangular-left branch remains open. Sections 1--3
+\((2,2,2)\). The subsequent proof in
+[TYPE_II_COMPLETION.md](TYPE_II_COMPLETION.md), Theorem 11, now closes the
+entire triangular-left branch as well. Sections 1--3 of the present note
 exclude two quadrilateral side hulls without using the central points;
 Section 4 excludes the remaining left-quadrilateral case using those
 two points. Sections 5--6 further force exactly one central point on
