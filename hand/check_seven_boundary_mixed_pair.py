@@ -157,3 +157,152 @@ assert sp.cancel((1+bbroot)**2/(1-bbroot**2)
                  -(1+bbroot)/(1-bbroot)) == 0
 assert (1+sp.Rational(1, 3))/(1-sp.Rational(1, 3)) == 2
 print("PASS: complete ADE/AHD exclusions without the half-side convention, and AHE under it")
+
+
+# The complete HDE pair class: the point-sector identity and two endpoint bounds.
+from fractions import Fraction
+from itertools import product
+from math import comb
+
+v, px, py = sp.symbols("v px py", real=True)
+point = sp.Matrix([px, py])
+hce = (1-c)*h+c*e
+rgap = e-d
+hcf = c*(1-h)+f*h
+hdf = 1-h+f*(h-d)
+hcdf = 1-(h-d)*(c-f)
+hcde = hce+(1-c)*rgap
+assert sp.expand(det(H, C, F)-hcf) == 0
+assert sp.expand(det(H, D, F)-hdf) == 0
+assert sp.expand(hcdf*(-det(H, E, point))
+                 +(hce+top)*det(H, D, point)
+                 +rgap*det(C, F, point)-rgap*hcf) == 0
+fpair = hce*rgap*(v-s)-s*v*(hce+rgap)-hcde*v*v
+gpoint = rgap*(hcf-s)-s*(hce+top)-hcdf*v
+assert sp.expand(sp.diff(gpoint, d)+(hcf-s)+(c-f)*v) == 0
+assert sp.expand(sp.diff(fpair, c)
+                 -(e-h)*(rgap*(v-s)-s*v)-(h-d)*v*v) == 0
+assert sp.expand(sp.diff(gpoint, c)
+                 -(rgap-s)*(1-h)-s*(1-e)-(h-d)*v) == 0
+assert sp.expand(sp.diff(gpoint, f)
+                 -h*(rgap-v-s)-s*e-d*v) == 0
+assert sp.expand(sp.diff(gpoint, h)+(c-f)*(rgap-v-s)) == 0
+
+r, t, eps = sp.symbols("r t eps", real=True)
+Fweak = aa*r*(v-s)-s*v*(aa+r)-(aa+s)*v*v
+assert sp.discriminant(Fweak.subs({aa:1, r:sp.Rational(5, 6)}), v) == -sp.Rational(197, 49152)
+assert sp.discriminant(Fweak.subs({aa:1-s, r:sp.Rational(6, 7)}), v) == -sp.Rational(5373423, 822083584)
+vf = Fweak.subs({aa:1, r:sp.Rational(6, 7)})
+assert vf.subs(v, sp.Rational(6, 25)) == -sp.Rational(3, 4375)
+assert vf.subs(v, sp.Rational(7, 20)) == -sp.Rational(19, 25600)
+assert sp.diff(vf, v).subs(v, sp.Rational(6, 25)) == sp.Rational(1361, 11200)
+assert sp.diff(vf, v).subs(v, sp.Rational(7, 20)) == -sp.Rational(549, 4480)
+assert 1-sp.Rational(5, 6)-sp.Rational(49, 335) == sp.Rational(41, 2010) < sp.Rational(1, 40)
+assert sp.Rational(5, 6)-sp.Rational(7, 20)-s > 0
+
+den = r*(v-s)-s*v-v*v
+TF = (r-s*r*v*(r+v)/den-(r-s)*eps)/s
+param = {c:1-s/r, e:1-eps, d:1-eps-r, h:1-t,
+         f:(t-s)/(t-eps)}
+Gred = sp.factor(gpoint.subs(param, simultaneous=True))
+Ared = 1-eps-(s/r)*(t-eps)
+Fred = Ared*den-s*r*v-s*v*v
+assert sp.cancel(Fred-(s/r)*den*(TF-t)) == 0
+GFfull = sp.factor(Gred.subs(t, TF))
+Xfac = v*v+(2*s-r)*v+2*r*s
+Yfac = -v*v+(r*(1-2*s)-s*(1-s))*v-r*s*(1-s)
+squareden = den*(1-eps)-s*v*(r+v)
+assert sp.cancel(sp.diff(GFfull, eps)-s*v*Xfac*Yfac/squareden**2) == 0
+disc_x = sp.discriminant(Xfac, v)
+disc_y = sp.discriminant(Yfac, v)
+assert sp.diff(disc_x, r, 2) > 0
+assert sp.diff(disc_y, r, 2) > 0
+assert disc_x.subs(r, sp.Rational(5, 6)) == -sp.Rational(3239, 9216)
+assert disc_x.subs(r, sp.Rational(6, 7)) == -sp.Rational(17183, 50176)
+assert disc_y.subs(r, sp.Rational(5, 6)) == -sp.Rational(2748311, 150994944)
+assert disc_y.subs(r, sp.Rational(6, 7)) == -sp.Rational(5373423, 822083584)
+
+b_endpoint = 1-s/r-s/d
+h_endpoint = d+s/b_endpoint
+assert sp.cancel(sp.diff(h_endpoint, d)
+                 -(1-s*s/(d*d*b_endpoint*b_endpoint))) == 0
+assert 1-s/(sp.Rational(5, 6)*sp.Rational(1, 6)) == sp.Rational(17, 80) < sp.Rational(1, 3)
+assert 1-(s/(sp.Rational(1, 6)*sp.Rational(1, 3)))**2 < -2
+bzero = 1-s/r-s/(1-r)
+TAzero = sp.factor(r-s/bzero)
+assert sp.cancel(TAzero-r*(64*r*r-71*r+14)/((8*r-7)*(8*r-1))) == 0
+assert sp.cancel(sp.diff(TAzero, r)
+                 -(1+s*s*(1/r**2-1/(1-r)**2)/bzero**2)) == 0
+assert 1-s*s*9*(36-sp.Rational(36, 25)) == -sp.Rational(8707, 3200)
+assert TAzero.subs(r, sp.Rational(17, 20)) == sp.Rational(187, 2320) < s
+r0 = sp.Rational(8453, 10000)
+r1 = sp.Rational(423, 500)
+assert sp.Rational(9, 50)-TAzero.subs(r, r0) == sp.Rational(5717317, 1746360000) > 0
+assert 1-sp.Rational(1, 40)-sp.Rational(6, 5)*s*sp.Rational(9, 50)-(1-s) == sp.Rational(243, 4000) > 0
+assert sp.Rational(9, 50)+sp.Rational(1, 40) < 2*s
+assert 2*sp.Rational(5, 6)-3*sp.Rational(7, 20)-3*s == sp.Rational(277, 960) > 0
+assert sp.expand(sp.diff(gpoint.subs(d, e-r), e)+(c-f)*(s+v)) == 0
+
+NF = 7*(116736*r**3*v**2-14336*r**3*v-364544*r**2*v**3
+        -3136*r**2*v**2+4704*r**2*v-343*r**2+378880*r*v**4
+        +68544*r*v**3-3136*r*v**2-686*r*v-131072*v**5
+        -57344*v**4-7840*v**3-343*v**2)
+NA = (14942208*r**5-16777216*r**4*v-34988032*r**4
+      +35389440*r**3*v+28574848*r**3-24095296*r**2*v
+      -9643039*r**2+5661824*r*v+1309917*r-379456*v-61054)
+denf1 = 57*r*v-7*r-71*v*v-7*v
+denf2 = 64*r*v-7*r-64*v*v-7*v
+dena = 4096*(8*r-7)*(8*r-1)*(64*r*r-71*r+14)
+GF = GFfull.subs(eps, 0)
+GA = sp.factor(Gred.subs({t:TAzero, eps:0}))
+assert sp.cancel(GF-NF/(2048*denf1*denf2)) == 0
+assert sp.cancel(GA-NA/dena) == 0
+assert sp.expand(denf2-64*den) == 0
+assert sp.cancel(TF.subs(eps, 0)-r*denf1/(s*denf2)) == 0
+dena_quad = 64*r*r-71*r+14
+assert dena_quad.subs(r, r0) < 0
+assert dena_quad.subs(r, sp.Rational(17, 20)) < 0
+assert sp.diff(dena_quad, r, 2) > 0
+
+
+def rectangle_bernstein(poly, variables, bounds):
+    """Exact affine substitution and power-to-Bernstein conversion."""
+    coordinates = sp.symbols("rect_x:"+str(len(variables)))
+    substitutions = {var:lo+(hi-lo)*coord
+                     for var, coord, (lo, hi)
+                     in zip(variables, coordinates, bounds)}
+    power_poly = sp.Poly(sp.expand(poly.subs(substitutions)), *coordinates)
+    degrees = power_poly.degree_list()
+    output = []
+    for index in product(*(range(n+1) for n in degrees)):
+        value = Fraction(0)
+        for power, coefficient in power_poly.terms():
+            if all(j <= i for i, j in zip(index, power)):
+                term = Fraction(int(coefficient.p), int(coefficient.q))
+                for i, j, n in zip(index, power, degrees):
+                    term *= Fraction(comb(i, j), comb(n, j))
+                value += term
+        output.append(value)
+    return degrees, output
+
+
+box_rows = [
+    (NF, (r, v), [(sp.Rational(5, 6), r0),
+                  (sp.Rational(6, 25), sp.Rational(11, 40))], (3, 5)),
+    (NF, (r, v), [(sp.Rational(5, 6), r0),
+                  (sp.Rational(11, 40), sp.Rational(23, 80))], (3, 5)),
+    (NF, (r, v), [(sp.Rational(5, 6), r0),
+                  (sp.Rational(23, 80), sp.Rational(3, 10))], (3, 5)),
+    (NF, (r, v), [(sp.Rational(5, 6), r0),
+                  (sp.Rational(3, 10), sp.Rational(7, 20))], (3, 5)),
+    (NF, (r, v), [(r0, r1),
+                  (sp.Rational(6, 25), sp.Rational(11, 40))], (3, 5)),
+    (NA.subs(v, sp.Rational(11, 40)), (r,), [(r0, r1)], (5,)),
+    (NA.subs(v, sp.Rational(6, 25)), (r,),
+     [(r1, sp.Rational(17, 20))], (5,)),
+]
+for polynomial, variables, bounds, expected_degrees in box_rows:
+    degrees, coefficients = rectangle_bernstein(polynomial, variables, bounds)
+    assert degrees == expected_degrees
+    assert max(coefficients) < -1
+print("PASS: complete HDE pair exclusion, both endpoint transfers, and all seven exact coefficient regions")
