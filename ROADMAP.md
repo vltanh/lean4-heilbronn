@@ -23,8 +23,37 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
 | G5 | Type II: adjacent corners and five free points | **Complete hand exclusion**, including every count/hull/cell/cut and the Type-III shear alternative |
-| G6 | N and C1 with fewer than eight boundary points | **N7 exterior and C1 two-lower complete**; N6 larger hulls, N7 mixed interior pair, and C1 zero/one-lower remain |
+| G6 | N6, N7 mixed, and C1 zero/one-lower | **OPEN: 8 N6 cap-orbits; at most 16 N7 sign words; 21 + 12 C1 cap-orbits**; see fine ledger |
 | G7 | Unrestricted sharp theorem and uniqueness | Conditional on G6; equality transfer through shears is already proved |
+
+## G6 fine-grained case ledger
+
+The authoritative **unclosed-case classification** is
+[hand/G6_FINITE_CASE_LEDGER.md](hand/G6_FINITE_CASE_LEDGER.md).
+Its fixed, independently enumerated combinatorial partition is:
+
+| Open branch | Exhaustive coarse cases (up to stated reflection) | Necessary continuous proof |
+|---|---:|---|
+| **N6:** exactly six square-boundary contacts | **8 cap-occupancy orbits**; 13 lower/upper occupancy refinements, then upper diagonal sectors | Exclude larger-than-anchor hulls; no exact-hexagon case remains |
+| **N7:** exactly seven square-boundary contacts | **One mixed interior placement**, partitioned into **at most 16 four-sign orientation cells** | Exclude every nonempty sign word, including equality |
+| **C1, zero lower points** | **21 cap-occupancy orbits**, then upper diagonal sectors | Close entire zero-lower family for all larger hulls |
+| **C1, one lower point** | **12 cap-occupancy orbits**, then three radial wedges for its lower point and upper diagonal sectors | Close entire one-lower family for all larger hulls |
+
+These are **combinatorial cover counts**, not 8 + 16 + 21 + 12
+independently feasible configurations, and not a computer-verified global
+upper bound. Each row still ranges over continuous point coordinates.
+The checker [hand/check_g6_case_ledger.py](hand/check_g6_case_ledger.py)
+audits the occupancy and sign counts only. The preferred workflow is to
+prove one inequality closing a whole row or group of rows, record its
+precise parameter/sign scope, add an exact algebra diagnostic, and then
+mark that class closed. Never count an unsupported boundary-pushing step
+as a closure.
+
+**Dependency order:** N7 mixed pair; N6 outer-cap occupancies; C1 zero/one
+lower (seek uniform cap-cap inequalities before 33 individual certificates);
+then the G7 global normalization and equality audit. The seven-boundary
+exterior case, complete Type II, complete C2/III, C1 two-lower, and exact
+N6 anchor hull are already closed.
 
 ## 1. The completed eight-boundary gate
 
