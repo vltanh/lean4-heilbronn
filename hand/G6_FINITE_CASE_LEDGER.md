@@ -5,8 +5,8 @@ see [G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). The
 [221 indexed leaf rows](G6_ITEMIZED_LEAVES.tsv) and
 [deterministic census checker](check_g6_itemized_cases.py) refine the
 62 parent cases by lower-point counts, upper diagonal sectors, radial
-wedges, and N7 sign words. Currently 7 parent cases are open and
-55 are closed; the 221 leaves comprise 43 open and 178 covered.
+wedges, and N7 sign words. Currently 6 parent cases are open and
+56 are closed; the 221 leaves comprise 39 open and 182 covered.
 
 This ledger refines [ROADMAP.md](../ROADMAP.md) at the target
 \[
@@ -70,7 +70,7 @@ These conditions give **exactly eight** coarse occupancy orbits:
 | N6-01 | \((0,0,1;2)\) | One side-cap point; couple it with both inner points |
 | N6-02 | \((1,0,1;1)\) | Opposite side caps; their cross-triangle costs with the inner point |
 | N6-03 | \((0,1,0;2)\) | One top-cap point and two inner points |
-| N6-04 | \((0,1,1;1)\) | Lower inner point closed by [SIX_BOUNDARY_SIDE_TOP_LOWER](SIX_BOUNDARY_SIDE_TOP_LOWER.md); upper inner point remains |
+| N6-04 | \((0,1,1;1)\) | **Closed**, including both lower/upper points and equality, by [SIX_BOUNDARY_SIDE_TOP_COMPLETION](SIX_BOUNDARY_SIDE_TOP_COMPLETION.md) |
 | N6-05 | \((1,1,1;0)\) | One point in each outer cap; no inner point |
 | N6-06 | \((0,2,0;1)\) | Two top-cap points and one inner point |
 | N6-07 | \((0,2,1;0)\) | Two top points and one side point |
@@ -84,7 +84,7 @@ The respective complete proofs are
 [all three top](SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md).
 The both-side theorem includes its separately proved
 [lower-point branch](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md).
-Only N6-03 and N6-06 with their lower/upper splits, and the upper row N6-04-L0, remain open. The lower row N6-04-L1 is completely closed.
+Only N6-03 and N6-06 with their lower/upper splits remain open. The entire mixed-cap family N6-04 is completely closed.
 
 **Second-level finite split (exhaustive, without claiming feasibility).**
 The virtual lower triangle \((0,0)HC\) has capacity one, so among the

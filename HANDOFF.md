@@ -150,9 +150,9 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 
 For an itemized, individually numbered list with open/closed flags, see
 [hand/G6_ITEMIZED_CASES.md](hand/G6_ITEMIZED_CASES.md): 62 parent
-rows, 7 open and 55 closed. The 221 explicit
-[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 43
-open leaves and 178 closed by the parent theorems; their census is
+rows, 6 open and 56 closed. The 221 explicit
+[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 39
+open leaves and 182 closed by the parent theorems; their census is
 checked by [hand/check_g6_itemized_cases.py](hand/check_g6_itemized_cases.py).
 These are occupancy/sign partitions, not separately feasible witnesses.
 
@@ -163,17 +163,15 @@ The former N7 four-sign cover is retained and marked complete.
 [hand/check_g6_case_ledger.py](hand/check_g6_case_ledger.py) checks
 the combinatorial census. These counts do not certify feasibility
 or continuous exclusion. Each closed row now links its complete theorem;
-all zero-lower C1 rows and five of the eight coarse N6 occupancies are closed.
+all zero-lower C1 rows and six of the eight coarse N6 occupancies are closed.
 
 ## Exact remaining obligations
 
-- **N with six boundary contacts:** only three cap occupancies remain:
-  one opposite-cap point with two anchor-interior points (N6-03), one
-  side-cap point with one opposite-cap point and one upper anchor-interior
-  point (N6-04-L0), and two opposite-cap points with one anchor-interior
-  point (N6-06). N6-03 and N6-06 retain both lower/upper alternatives;
-  the full lower mixed-cap row N6-04-L1 is closed by
-  [SIX_BOUNDARY_SIDE_TOP_LOWER.md](hand/SIX_BOUNDARY_SIDE_TOP_LOWER.md).
+- **N with six boundary contacts:** only N6-03 (one opposite-cap point
+  and two anchor-interior points) and N6-06 (two opposite-cap points and
+  one anchor-interior point) remain, each with lower/upper alternatives.
+  The entire mixed-cap family N6-04 is closed, sharply and with equality,
+  by [SIX_BOUNDARY_SIDE_TOP_COMPLETION.md](hand/SIX_BOUNDARY_SIDE_TOP_COMPLETION.md).
 - **C1:** only the one-lower rows C1-1-04 and 07 remain.
   Both have two different occupied caps and one upper interior point.
   Every one-lower configuration with two or three top-cap points is

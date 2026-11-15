@@ -44,7 +44,13 @@ def costs(q,threshold=S):
 
 def factors(branch='whole'):
  extras={'whole':[],'left':[sub(z,x)],'low':[sub(h,w)],
-         'project_a':[sub(a,t)],'project_c':[sub(r,c)],'project_h':[sub(h,w)]}
+         'project_a':[sub(a,t)],'project_c':[sub(r,c)],'project_h':[sub(h,w)],
+         'df_Llo':[sub(const(F(11,20)),sub(h,a))],
+         'df_Lhi':[sub(sub(h,a),const(F(2,3)))],
+         'df_Mlo':[sub(const(F(11,20)),sub(z,f))],
+         'df_g':[sub(f,const(F(1,4)))],
+         'df_c':[sub(const(F(2,3)),c)],
+         'side_above':[sub(y,a)],'side_below':[sub(a,y)]}
  assert branch in extras
  return FACTORS+extras[branch]
 

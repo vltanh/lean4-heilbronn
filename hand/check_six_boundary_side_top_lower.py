@@ -16,6 +16,7 @@ def verify():
         q=tuple(cert['word'])
         assert q in expected and q not in seen and cert['branch']=='whole'
         assert cert['scale']==4096
+        assert F(cert.get('threshold',str(p.S)))==p.S
         seen.add(q)
         bound=p.cube_upper(p.residual(cert))
         assert bound==F(cert['upper_bound']) and bound<=-F(3,4)
