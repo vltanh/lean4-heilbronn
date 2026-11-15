@@ -937,6 +937,45 @@ of the right quadrilateral. Their interaction is completely excluded in
 [SEVEN_BOUNDARY_RIGHT_PAIR.md](SEVEN_BOUNDARY_RIGHT_PAIR.md), using the
 pair-line identities and an explicit rational concavity certificate.
 
+## 10. The nearer upper exterior cap is empty
+
+**Theorem 10.** Under (1)--(2), no further actual point lies in the
+exterior cap \(\operatorname{conv}\{H,F,(0,1)\}\).
+
+**Proof.** Let \(X=(x,y)\) be such a point. A point on \(HF\) or the
+left side gives a zero triangle, so the only competitive case has
+\(x>0\), \(y>h\), and \([HFX]\ge s\).
+Write \(L=h-a\). The actual triangle \(AHX\) and the bound \(y\le1\)
+give
+
+\[
+xL\ge s,\qquad
+s\le[HFX]=f(y-h)-(1-h)x\le(1-h)(f-x).
+\]
+
+All denominators below are positive. Therefore
+
+\[
+f\ge\frac{s}{L}+\frac{s}{1-h}
+\ge\frac{4s}{L+1-h}=\frac{4s}{1-a}.
+\]
+
+The last inequality is the two-term reciprocal Cauchy inequality.
+Since \(f\le1/2\), it implies \(a\le1-8s=1/8\).
+But (3) gives \(b\ge s\), \(c\le1-s\), and \(a(c-b)\ge s\), so
+
+\[
+a\ge\frac{s}{1-2s}=\frac7{50}>\frac18,
+\]
+
+a contradiction. This excludes the entire nearer upper exterior cap,
+independently of the position of the other free point. \(\square\)
+
+Together with the two lower exterior-cap exclusions in
+[GLOBAL_COMPLETION.md](GLOBAL_COMPLETION.md), only the upper-right
+exterior cap \(\operatorname{conv}\{F,E,(1,1)\}\) remains under the
+choice \(f\le1/2\).
+
 ## Verification
 
 The optional [check_seven_boundary_caps.py](check_seven_boundary_caps.py)

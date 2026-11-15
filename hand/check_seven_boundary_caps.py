@@ -142,3 +142,15 @@ assert sp.discriminant(1792*z**2-143*z+sp.Rational(49, 8), z) == -23455
 assert 1-sp.Rational(1, 8)-s == sp.Rational(49, 64) < sp.Rational(13, 16)
 
 print("PASS: seven-boundary caps, diagonal capacity, upper-left overlap, and all three right-hand triangle bounds")
+
+# The nearer upper exterior cap, Theorem 10.
+cap_x, cap_y = sp.symbols("cap_x cap_y", real=True)
+assert sp.expand(doubled((0, a), (0, h), (cap_x, cap_y)) + (h-a)*cap_x) == 0
+assert sp.expand(doubled((0, h), (f, 1), (cap_x, cap_y))
+                 - (f*(cap_y-h)-(1-h)*cap_x)) == 0
+assert sp.factor(1/(h-a)+1/(1-h)-4/(1-a)
+                 - (2*h-a-1)**2/((h-a)*(1-h)*(1-a))) == 0
+assert sp.Rational(7, 50) - sp.Rational(1, 8) == sp.Rational(3, 200)
+assert sp.Rational(7, 64) / (1 - 2 * sp.Rational(7, 64)) == sp.Rational(7, 50)
+assert 1 - 8 * sp.Rational(7, 64) == sp.Rational(1, 8)
+print("PASS: complete nearer upper exterior-cap exclusion")
