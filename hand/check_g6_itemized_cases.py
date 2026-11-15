@@ -20,6 +20,10 @@ HEADER = ("id", "group", "l", "t", "r", "lower", "upper", "inner",
           "sectors", "wedge", "signs", "status", "proof")
 
 
+N6_CLOSED = {"N6-01-L0":"SIX_BOUNDARY_SINGLE_SIDE.md","N6-01-L1":"SIX_BOUNDARY_SINGLE_SIDE.md","N6-02-L0":"SIX_BOUNDARY_TWO_SIDE_UPPER.md","N6-02-L1":"SIX_BOUNDARY_TWO_SIDE_COMPLETION.md","N6-05-L0":"SIX_BOUNDARY_TWO_SIDE_UPPER.md","N6-07-L0":"SIX_BOUNDARY_SIDE_TWO_TOP.md","N6-08-L0":"SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md"}
+C1_ONE_CLOSED = {"C1-1-01":"C1_ONE_LOWER_SIDE_CAP.md","C1-1-02":"C1_ONE_LOWER_RIGHT_PAIR.md","C1-1-03":"C1_ZERO_LOWER.md","C1-1-05":"C1_ZERO_LOWER.md","C1-1-06":"C1_ONE_LOWER_TOP_CAP.md","C1-1-08":"C1_ONE_LOWER_RIGHT_PAIR.md","C1-1-09":"C1_ONE_LOWER_EIGHT_HULL.md"}
+
+
 def sector_choices(k):
     return combinations(range(4), k)
 
@@ -34,14 +38,15 @@ def make_row(case_id, group, l, t, r, lower, upper, inner,
 def expected():
     for case_id, l, t, r, n_i in N6:
         for n0 in range(min(1, n_i) + 1):
-            closed = case_id == "N6-02" and n0 == 1
+            proof = N6_CLOSED.get(f"{case_id}-L{n0}")
+            closed = proof is not None
             for sector in sector_choices(n_i - n0):
                 indices = "".join(str(j + 1) for j in sector) or "0"
                 names = "+".join(SECTORS[j] for j in sector) or "-"
                 yield make_row(
                     f"{case_id}-L{n0}-S{indices}", "N6",
                     l, t, r, n0, n_i - n0, n_i, names, "-", "-", closed,
-                    "SIX_BOUNDARY_TWO_SIDE_COMPLETION.md")
+                    proof)
 
     for left_bits in product("PM", repeat=2):
         for right_bits in product("PM", repeat=2):
@@ -64,7 +69,8 @@ def expected():
                     counter += 1
                     group = f"C1-{n0}"
                     row = f"{group}-{counter:02}"
-                    closed = n0 == 1 and (left, top, right, inside) == (0,1,0,2)
+                    proof = "C1_ZERO_LOWER.md" if n0 == 0 else C1_ONE_CLOSED.get(row)
+                    closed = proof is not None
                     wedges = ("-",) if n0 == 0 else ("W1", "W2", "W3")
                     for wedge in wedges:
                         for sector in sector_choices(inside):
@@ -74,7 +80,7 @@ def expected():
                             yield make_row(
                                 row + suffix, group, left, top, right,
                                 n0, inside, inside, names, wedge, "-",
-                                closed, "C1_ONE_LOWER_TOP_CAP.md")
+                                closed, proof)
 
 
 def main():
@@ -94,16 +100,16 @@ def main():
     assert len({r["id"] for r in actual}) == len(actual)
     counts = Counter((r["group"], r["status"]) for r in actual)
     assert counts == {
-        ("N6", "OPEN"): 37,
-        ("N6", "CLOSED"): 1,
+        ("N6", "OPEN"): 20,
+        ("N6", "CLOSED"): 18,
         ("N7", "CLOSED"): 16,
-        ("C1-0", "OPEN"): 65,
-        ("C1-1", "OPEN"): 84,
-        ("C1-1", "CLOSED"): 18,
+        ("C1-0", "CLOSED"): 65,
+        ("C1-1", "OPEN"): 42,
+        ("C1-1", "CLOSED"): 60,
     }, counts
 
     print("PASS: 62 parent cases and 221 explicitly enumerated leaves")
-    print("PASS: 186 open and 35 covered leaves, 221 distinct case IDs")
+    print("PASS: 62 open and 159 covered leaves, 221 distinct case IDs")
     print("NOTE: geometric feasibility and exact exclusion are NOT checked")
 
 

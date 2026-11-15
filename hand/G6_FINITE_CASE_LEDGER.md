@@ -5,8 +5,8 @@ see [G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). The
 [221 indexed leaf rows](G6_ITEMIZED_LEAVES.tsv) and
 [deterministic census checker](check_g6_itemized_cases.py) refine the
 62 parent cases by lower-point counts, upper diagonal sectors, radial
-wedges, and N7 sign words. Currently 44 parent cases are open and
-18 are closed; the 221 leaves comprise 186 open and 35 covered.
+wedges, and N7 sign words. Currently 11 parent cases are open and
+51 are closed; the 221 leaves comprise 62 open and 159 covered.
 
 This ledger refines [ROADMAP.md](../ROADMAP.md) at the target
 \[
@@ -76,15 +76,15 @@ These conditions give **exactly eight** coarse occupancy orbits:
 | N6-07 | \((0,2,1;0)\) | Two top points and one side point |
 | N6-08 | \((0,3,0;0)\) | Three top points; forced common support cell II, eight hull vertices |
 
-**Status:** all eight rows remain OPEN as complete classes. Some
-subplacements in them are excluded, but no row has a full exclusion.
-In N6-02, the whole lower-point subrow is **CLOSED**, including its
-sharp equality classification, by
-[SIX_BOUNDARY_TWO_SIDE_COMPLETION.md](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md).
-The last row has the stronger established shape stated in
-[SIX_BOUNDARY_EXTERIOR.md](SIX_BOUNDARY_EXTERIOR.md), Theorem 4.
-If a side cap is occupied, the opposite lower anchor ear is empty
-(Theorem 5 of that note); use this before splitting pair-line signs.
+**Status:** N6-01, N6-02, N6-05, N6-07 and N6-08 are **CLOSED**.
+The respective complete proofs are
+[single-side](SIX_BOUNDARY_SINGLE_SIDE.md),
+[both-side and nonagon](SIX_BOUNDARY_TWO_SIDE_UPPER.md),
+[side plus two top](SIX_BOUNDARY_SIDE_TWO_TOP.md), and
+[all three top](SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md).
+The both-side theorem includes its separately proved
+[lower-point branch](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md).
+Only N6-03, N6-04 and N6-06 remain open, each with its lower/upper split.
 
 **Second-level finite split (exhaustive, without claiming feasibility).**
 The virtual lower triangle \((0,0)HC\) has capacity one, so among the
@@ -190,7 +190,10 @@ Counts \(n_0\ge3\) are excluded by [ONE_CORNER.md](ONE_CORNER.md);
 [C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md), and
 the exact five-anchor hull is excluded by
 [C1_MIXED_PENTAGON.md](C1_MIXED_PENTAGON.md).
-Therefore **only \(n_0=0\) or \(n_0=1\)** and larger hulls remain.
+The entire zero-lower class is now also excluded by
+[C1_ZERO_LOWER.md](C1_ZERO_LOWER.md). Therefore **only \(n_0=1\)**
+and the specified larger-hull rows remain. The zero-lower catalogue
+below is retained as a complete closed cover.
 
 For a remaining count, set \(m=4-n_0\), and partition the \(m\)
 upper points into
@@ -202,9 +205,12 @@ Let \((n_L,n_T,n_R;n_I)\) be their counts. A larger hull has
 \(1\le n_L+n_T+n_R\le m\), and
 \(n_I=m-n_L-n_T-n_R\).
 Reflect in \(x=y\) to impose \(n_L\le n_R\).
-No general capacity-one statement for either C1 side cap in the
-**zero/one-lower** counts has yet been proved; do **not** import the
-two-lower side-cap theorem into these rows.
+The general cap restrictions in [C1_ZERO_LOWER.md](C1_ZERO_LOWER.md)
+apply independently of its zero-lower hypothesis. In the one-lower
+class, [C1_ONE_LOWER_RIGHT_PAIR.md](C1_ONE_LOWER_RIGHT_PAIR.md), together
+with those restrictions after f≤d normalization, gives capacity one
+to each side cap. The historical count table below is deliberately
+unpruned, so its case IDs remain stable.
 
 The following lists **every** cap-occupancy orbit, grouping by the
 top-cap count \(n_T\). Each parenthesized pair denotes \((n_L,n_R)\),
@@ -224,12 +230,13 @@ and \(n_I\) is determined by the count equation:
 | C1-1 | 3 | (0,0) | 1 |
 | **C1-1 subtotal** | | | **12** |
 
-**Status:** the C1-1 row \((n_L,n_T,n_R;n_I)=(0,1,0;2)\) is
-**CLOSED** by [C1_ONE_LOWER_TOP_CAP.md](C1_ONE_LOWER_TOP_CAP.md).
-Other coarse rows remain open unless excluded by a cited global theorem.
-These counts are an
-unpruned, exhaustive combinatorial catalogue; they are not 33
-independent proof obligations if a uniform area inequality can close
+**Status:** every C1-0 row is **CLOSED**. In C1-1, seven of the twelve
+coarse rows are closed: the single-exterior-point rows, both side-pair
+rows, the side-capacity impossibilities, and the one-in-each-cap row.
+The exact individual statuses and proof links are in
+[G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). The five open rows are
+C1-1-04, 07, 10, 11 and 12. These counts remain an unpruned,
+exhaustive combinatorial catalogue; one uniform theorem can close
 several rows simultaneously.
 
 **Second-level split.** Each further point in the actual upper

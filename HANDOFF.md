@@ -19,10 +19,12 @@ case is now complete: all 36 radial words are covered, and equality
 forces the eighth boundary contact and the original configuration.
 Both mixed interior branches are now excluded as well, completing the
 entire normalized seven-boundary theorem and its equality classification.
-The entire C1 two-lower occupancy is excluded, including all larger-hull
-and pair-line cases. The one-lower C1 hexagon with one exterior top-cap
-point is also excluded. In N, the whole occupancy with both side caps
-occupied and the third point below HC is complete, including equality.
+The entire C1 zero-lower and two-lower occupancies are excluded, including
+all larger hulls. The one-lower branch has all single-exterior-point,
+side-cap-pair and eight-vertex-hull placements closed. Five complete N6
+occupancies are also closed: single side, both sides, one point in each
+cap, side plus two top, and all three top. Their proof links and exact
+remaining cases are listed below.
 The unrestricted nine-point theorem is **not yet proved by hand**.
 
 Target:
@@ -148,9 +150,9 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 
 For an itemized, individually numbered list with open/closed flags, see
 [hand/G6_ITEMIZED_CASES.md](hand/G6_ITEMIZED_CASES.md): 62 parent
-rows, 44 open and 18 closed. The 221 explicit
-[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 186
-open leaves and 35 closed by the parent theorems; their census is
+rows, 11 open and 51 closed. The 221 explicit
+[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 62
+open leaves and 159 closed by the parent theorems; their census is
 checked by [hand/check_g6_itemized_cases.py](hand/check_g6_itemized_cases.py).
 These are occupancy/sign partitions, not separately feasible witnesses.
 
@@ -160,26 +162,22 @@ refinements), and C1 zero/one-lower has 21 and 12 unpruned cap orbits.
 The former N7 four-sign cover is retained and marked complete.
 [hand/check_g6_case_ledger.py](hand/check_g6_case_ledger.py) checks
 the combinatorial census. These counts do not certify feasibility
-or continuous exclusion. The ledger now marks the completed N6-02
-lower-point subrow and C1-1 single-top-cap row as well.
+or continuous exclusion. Each closed row now links its complete theorem;
+all zero-lower C1 rows and five of the eight coarse N6 occupancies are closed.
 
 ## Exact remaining obligations
 
-- **N with six boundary points:** larger hulls beyond the six prescribed
-  contacts. [SIX_BOUNDARY_EXTERIOR.md](hand/SIX_BOUNDARY_EXTERIOR.md)
-  makes the lower-left exterior cap empty and gives capacity one to both
-  side caps. An occupied side cap excludes the opposite lower ear.
-  Three points in the opposite cap force support cell II and an
-  eight-vertex hull. The two-side-cap occupancy with the third point
-  below HC is complete in
-  [SIX_BOUNDARY_TWO_SIDE_COMPLETION.md](hand/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md).
-  Other larger-hull placements remain to be closed.
-- **C1:** zero or one free point in OHC, with a hull larger than the
-  prescribed five-anchor pentagon. Every exact pentagon and the entire
-  two-lower occupancy are closed; see
-  [C1_TWO_LOWER_COMPLETION.md](hand/C1_TWO_LOWER_COMPLETION.md).
-  The one-lower hexagon with one exterior top-cap point is also closed in
-  [C1_ONE_LOWER_TOP_CAP.md](hand/C1_ONE_LOWER_TOP_CAP.md).
+- **N with six boundary contacts:** only three cap occupancies remain:
+  one opposite-cap point with two anchor-interior points (N6-03), one
+  side-cap point with one opposite-cap point and one anchor-interior
+  point (N6-04), and two opposite-cap points with one anchor-interior
+  point (N6-06). Each includes its lower/upper interior alternatives.
+- **C1:** only the one-lower rows C1-1-04, 07, 10, 11 and 12 remain.
+  They comprise two different occupied caps with one upper interior
+  point, two opposite-cap points with one upper interior point, and
+  the remaining three-exterior-point placements. All zero-lower and
+  two-lower configurations, all single-exterior-point hexagons,
+  every side-cap pair, and all eight-vertex hulls are closed.
 
 The normalized seven-boundary form is completely closed by Theorem 2 of
 [SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md](hand/SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md),

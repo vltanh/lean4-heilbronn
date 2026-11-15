@@ -6,15 +6,15 @@ unrestricted nine-point Heilbronn hand proof; it is *not* itself a proof.
 
 Counts, at the present commit:
 
-- **N6:** 13 lower-versus-upper occupancy rows, **1 closed, 12 open**.
+- **N6:** 13 lower-versus-upper occupancy rows, **7 closed, 6 open**.
 - **N7:** 16 four-sign orientation rows, **all 16 closed**.
-- **C1-0:** 21 upper-cap occupancy rows, **all 21 open**.
-- **C1-1:** 12 upper-cap occupancy rows, **1 closed, 11 open**.
-- **Total:** 62 itemized rows, **44 open** and **18 closed**.
+- **C1-0:** 21 upper-cap occupancy rows, **all 21 closed**.
+- **C1-1:** 12 upper-cap occupancy rows, **7 closed, 5 open**.
+- **Total:** 62 itemized rows, **11 open** and **51 closed**.
 
 For a more detailed machine-readable list, see
 [G6_ITEMIZED_LEAVES.tsv](G6_ITEMIZED_LEAVES.tsv): it explicitly enumerates
-all **221** occupancy/sector/sign leaves (186 open, 35 covered by complete
+all **221** occupancy/sector/sign leaves (62 open, 159 covered by complete
 class theorems). These are *necessary geometric types*, not claims that each
 leaf has a feasible configuration. Certain free-point line signs still need
 further subdivision before a proof, and case boundaries must be checked.
@@ -66,26 +66,25 @@ is assumed.
 
 | Case ID | \((n_L,n_T,n_R;n_I)\) | \(n_0\) | Upper interior | Status | Scope / proof |
 |---|---|---:|---:|---|---|
-| N6-01-L0 | (0,0,1;2) | 0 | 2 | **OPEN** | Remaining: one side cap plus two anchor-interior points |
-| N6-01-L1 | (0,0,1;2) | 1 | 1 | **OPEN** | Remaining: one side cap plus two anchor-interior points |
-| N6-02-L0 | (1,0,1;1) | 0 | 1 | **OPEN** | Remaining: both side caps plus one anchor-interior point |
-| N6-02-L1 | (1,0,1;1) | 1 | 0 | **CLOSED** | [two-side completion](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md) |
+| N6-01-L0 | (0,0,1;2) | 0 | 2 | **CLOSED** | [SIX_BOUNDARY_SINGLE_SIDE](SIX_BOUNDARY_SINGLE_SIDE.md) |
+| N6-01-L1 | (0,0,1;2) | 1 | 1 | **CLOSED** | [SIX_BOUNDARY_SINGLE_SIDE](SIX_BOUNDARY_SINGLE_SIDE.md) |
+| N6-02-L0 | (1,0,1;1) | 0 | 1 | **CLOSED** | [SIX_BOUNDARY_TWO_SIDE_UPPER](SIX_BOUNDARY_TWO_SIDE_UPPER.md) |
+| N6-02-L1 | (1,0,1;1) | 1 | 0 | **CLOSED** | [SIX_BOUNDARY_TWO_SIDE_COMPLETION](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md) |
 | N6-03-L0 | (0,1,0;2) | 0 | 2 | **OPEN** | Remaining: one top cap plus two anchor-interior points |
 | N6-03-L1 | (0,1,0;2) | 1 | 1 | **OPEN** | Remaining: one top cap plus two anchor-interior points |
 | N6-04-L0 | (0,1,1;1) | 0 | 1 | **OPEN** | Remaining: one top cap, one side cap, one anchor-interior point |
 | N6-04-L1 | (0,1,1;1) | 1 | 0 | **OPEN** | Remaining: one top cap, one side cap, one anchor-interior point |
-| N6-05-L0 | (1,1,1;0) | 0 | 0 | **OPEN** | Remaining: one in every outer cap |
+| N6-05-L0 | (1,1,1;0) | 0 | 0 | **CLOSED** | [SIX_BOUNDARY_TWO_SIDE_UPPER](SIX_BOUNDARY_TWO_SIDE_UPPER.md) |
 | N6-06-L0 | (0,2,0;1) | 0 | 1 | **OPEN** | Remaining: two top-cap points plus one anchor-interior point |
 | N6-06-L1 | (0,2,0;1) | 1 | 0 | **OPEN** | Remaining: two top-cap points plus one anchor-interior point |
-| N6-07-L0 | (0,2,1;0) | 0 | 0 | **OPEN** | Remaining: two top-cap points plus one side cap |
-| N6-08-L0 | (0,3,0;0) | 0 | 0 | **OPEN** | Remaining: three in top cap, common support cell II |
+| N6-07-L0 | (0,2,1;0) | 0 | 0 | **CLOSED** | [SIX_BOUNDARY_SIDE_TWO_TOP](SIX_BOUNDARY_SIDE_TWO_TOP.md) |
+| N6-08-L0 | (0,3,0;0) | 0 | 0 | **CLOSED** | [SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION](SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md) |
 
 All caps and interior classes above are exhaustive *before* selecting the
 specific upper diagonal-sector subset and pair-line signs. In particular
-N6-08-L0 is known to have an eight-vertex hull with the remaining top point
-in common support cell II; this geometric restriction is not itself an
-exclusion. The N6-02-L1 closure is the whole branch with its unique
-hexagon-interior point below (HC), not the neighboring N6-02-L0 case.
+N6-08-L0 is now completely bounded sharply, with equality forcing the
+additional boundary contacts. Both N6-02 lower/upper subrows are closed.
+Only N6-03, N6-04 and N6-06 remain open in this table.
 
 ## B. N7 — all 16 sign words individually marked closed
 
@@ -117,33 +116,36 @@ excluded class, not 16 remaining tasks.
 
 ## C. C1-0 — 21 individually numbered cases, zero lower points
 
-Here (n_0=0), the tuple totals four, and every row is currently OPEN.
+Here (n_0=0), the tuple totals four, and every row is now CLOSED by
+[C1_ZERO_LOWER.md](C1_ZERO_LOWER.md), Theorem 3. Its general cap
+lemmas first reduce these 21 unpruned orbits, and its complete fixed
+certificate cover excludes every surviving placement.
 The exact anchor-pentagon case ((0,0,0;4)) is already closed and hence
 not included.
 
 | Case ID | ((n_L,n_T,n_R;n_I)) | Upper diagonal-sector count | Status |
 |---|---|---:|---|
-| C1-0-01 | (0,0,1;3) | 3 | **OPEN** |
-| C1-0-02 | (0,0,2;2) | 2 | **OPEN** |
-| C1-0-03 | (0,0,3;1) | 1 | **OPEN** |
-| C1-0-04 | (0,0,4;0) | 0 | **OPEN** |
-| C1-0-05 | (1,0,1;2) | 2 | **OPEN** |
-| C1-0-06 | (1,0,2;1) | 1 | **OPEN** |
-| C1-0-07 | (1,0,3;0) | 0 | **OPEN** |
-| C1-0-08 | (2,0,2;0) | 0 | **OPEN** |
-| C1-0-09 | (0,1,0;3) | 3 | **OPEN** |
-| C1-0-10 | (0,1,1;2) | 2 | **OPEN** |
-| C1-0-11 | (0,1,2;1) | 1 | **OPEN** |
-| C1-0-12 | (0,1,3;0) | 0 | **OPEN** |
-| C1-0-13 | (1,1,1;1) | 1 | **OPEN** |
-| C1-0-14 | (1,1,2;0) | 0 | **OPEN** |
-| C1-0-15 | (0,2,0;2) | 2 | **OPEN** |
-| C1-0-16 | (0,2,1;1) | 1 | **OPEN** |
-| C1-0-17 | (0,2,2;0) | 0 | **OPEN** |
-| C1-0-18 | (1,2,1;0) | 0 | **OPEN** |
-| C1-0-19 | (0,3,0;1) | 1 | **OPEN** |
-| C1-0-20 | (0,3,1;0) | 0 | **OPEN** |
-| C1-0-21 | (0,4,0;0) | 0 | **OPEN** |
+| C1-0-01 | (0,0,1;3) | 3 | **CLOSED** |
+| C1-0-02 | (0,0,2;2) | 2 | **CLOSED** |
+| C1-0-03 | (0,0,3;1) | 1 | **CLOSED** |
+| C1-0-04 | (0,0,4;0) | 0 | **CLOSED** |
+| C1-0-05 | (1,0,1;2) | 2 | **CLOSED** |
+| C1-0-06 | (1,0,2;1) | 1 | **CLOSED** |
+| C1-0-07 | (1,0,3;0) | 0 | **CLOSED** |
+| C1-0-08 | (2,0,2;0) | 0 | **CLOSED** |
+| C1-0-09 | (0,1,0;3) | 3 | **CLOSED** |
+| C1-0-10 | (0,1,1;2) | 2 | **CLOSED** |
+| C1-0-11 | (0,1,2;1) | 1 | **CLOSED** |
+| C1-0-12 | (0,1,3;0) | 0 | **CLOSED** |
+| C1-0-13 | (1,1,1;1) | 1 | **CLOSED** |
+| C1-0-14 | (1,1,2;0) | 0 | **CLOSED** |
+| C1-0-15 | (0,2,0;2) | 2 | **CLOSED** |
+| C1-0-16 | (0,2,1;1) | 1 | **CLOSED** |
+| C1-0-17 | (0,2,2;0) | 0 | **CLOSED** |
+| C1-0-18 | (1,2,1;0) | 0 | **CLOSED** |
+| C1-0-19 | (0,3,0;1) | 1 | **CLOSED** |
+| C1-0-20 | (0,3,1;0) | 0 | **CLOSED** |
+| C1-0-21 | (0,4,0;0) | 0 | **CLOSED** |
 
 ## D. C1-1 — 12 individually numbered cases, one lower point
 
@@ -154,18 +156,24 @@ closed for all three wedges and all sector choices.
 
 | Case ID | ((n_L,n_T,n_R;n_I)) | Upper diagonal-sector count | Status | Scope / proof |
 |---|---|---:|---|---|
-| C1-1-01 | (0,0,1;2) | 2 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
-| C1-1-02 | (0,0,2;1) | 1 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
-| C1-1-03 | (0,0,3;0) | 0 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
+| C1-1-01 | (0,0,1;2) | 2 | **CLOSED** | [C1_ONE_LOWER_SIDE_CAP](C1_ONE_LOWER_SIDE_CAP.md) |
+| C1-1-02 | (0,0,2;1) | 1 | **CLOSED** | [C1_ONE_LOWER_RIGHT_PAIR](C1_ONE_LOWER_RIGHT_PAIR.md) |
+| C1-1-03 | (0,0,3;0) | 0 | **CLOSED** | [C1_ZERO_LOWER](C1_ZERO_LOWER.md) |
 | C1-1-04 | (1,0,1;1) | 1 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
-| C1-1-05 | (1,0,2;0) | 0 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
-| C1-1-06 | (0,1,0;2) | 2 | **CLOSED** | [one-lower top-cap theorem](C1_ONE_LOWER_TOP_CAP.md) |
+| C1-1-05 | (1,0,2;0) | 0 | **CLOSED** | [C1_ZERO_LOWER](C1_ZERO_LOWER.md) |
+| C1-1-06 | (0,1,0;2) | 2 | **CLOSED** | [C1_ONE_LOWER_TOP_CAP](C1_ONE_LOWER_TOP_CAP.md) |
 | C1-1-07 | (0,1,1;1) | 1 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
-| C1-1-08 | (0,1,2;0) | 0 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
-| C1-1-09 | (1,1,1;0) | 0 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
+| C1-1-08 | (0,1,2;0) | 0 | **CLOSED** | [C1_ONE_LOWER_RIGHT_PAIR](C1_ONE_LOWER_RIGHT_PAIR.md) |
+| C1-1-09 | (1,1,1;0) | 0 | **CLOSED** | [C1_ONE_LOWER_EIGHT_HULL](C1_ONE_LOWER_EIGHT_HULL.md) |
 | C1-1-10 | (0,2,0;1) | 1 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
 | C1-1-11 | (0,2,1;0) | 0 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
 | C1-1-12 | (0,3,0;0) | 0 | **OPEN** | Larger-hull case; requires complete continuous exclusion |
+
+The right-pair and general-cap closures are valid for these reflection
+orbits: first normalize f≤d. A left-cap pair is then impossible by the
+general cap lemmas; a right-cap pair is excluded by the one-lower
+right-pair theorem. Thus choosing n_L≤n_R in this historical register
+does not introduce an additional assumption into the proofs.
 
 ## Completeness, next proof obligations and limits
 
@@ -187,9 +195,10 @@ including every free-point line sign, or prove a new theorem closing the
 entire row at once. Do not mark as closed based on a finite point
 sampling, bounded-degree subcase, or partial feasible-polygon argument.
 
-**Next closure order:** N6-08 (top support cell II), N6-02-L0
-(the sibling of a fully closed row), then uniform N6 side-cap
-inequalities, then C1-0 and C1-1 grouped by which caps are occupied.
-After all G6 rows are excluded, audit global normalization, equality
-and boundary transitions to finish G7.
-
+**Remaining parent rows:** N6-03-L0/L1, N6-04-L0/L1, N6-06-L0/L1,
+and C1-1-04, C1-1-07, C1-1-10, C1-1-11, C1-1-12. The two-top C1
+rows already have their triangular or eight-vertex subplacements
+closed as specified in the linked manuscripts, but a partial result
+does not change the parent status. After the remaining complete rows
+close, audit global normalization, equality and boundary transitions
+to finish G7.

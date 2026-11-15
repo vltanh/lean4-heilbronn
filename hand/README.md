@@ -21,7 +21,7 @@ For the fully itemized register, see
 numbered parent cases) and [G6_ITEMIZED_LEAVES.tsv](G6_ITEMIZED_LEAVES.tsv)
 (221 lower-point/sector/wedge/sign leaves). The
 [deterministic enumeration checker](check_g6_itemized_cases.py) verifies
-the list; 44 parent cases and 186 leaves remain open.
+the list; 11 parent cases and 62 leaves remain open.
 For the underlying structural case classification, see
 [G6_FINITE_CASE_LEDGER.md](G6_FINITE_CASE_LEDGER.md). Its unpruned
 occupancy/sign census (8 N6, up to 16 N7, and 21+12 C1 coarse
@@ -101,6 +101,18 @@ now-complete N7 cover and the other completed subrows from open cases.
 | Complete N occupancy with both side caps occupied and the third point below HC, including equality | [SIX_BOUNDARY_TWO_SIDE_COMPLETION.md](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md) |
 | Complete one-lower C1 hexagon with one exterior top-cap point and two interior upper points | [C1_ONE_LOWER_TOP_CAP.md](C1_ONE_LOWER_TOP_CAP.md) |
 
+| Every zero-lower C1 configuration | [C1_ZERO_LOWER.md](C1_ZERO_LOWER.md) |
+| Every one-lower C1 single-side exterior hexagon | [C1_ONE_LOWER_SIDE_CAP.md](C1_ONE_LOWER_SIDE_CAP.md) |
+| One-lower C1 with a triangular two-top cap and an upper interior point | [C1_ONE_LOWER_TOP_TRIANGLE.md](C1_ONE_LOWER_TOP_TRIANGLE.md) |
+| Every one-lower C1 eight-vertex hull | [C1_ONE_LOWER_EIGHT_HULL.md](C1_ONE_LOWER_EIGHT_HULL.md) |
+| Every one-lower C1 side-cap pair, using the general cap normalization | [C1_ONE_LOWER_RIGHT_PAIR.md](C1_ONE_LOWER_RIGHT_PAIR.md) |
+| Simultaneous B/E inward-moving sharp chamber and equality | [SHARP_B_E_MOVING.md](SHARP_B_E_MOVING.md) |
+| Simultaneous C/D inward-moving sharp chamber and equality | [SHARP_CD_MOVING.md](SHARP_CD_MOVING.md) |
+| Complete N occupancy with both side caps occupied, and the one-in-each-cap corollary | [SIX_BOUNDARY_TWO_SIDE_UPPER.md](SIX_BOUNDARY_TWO_SIDE_UPPER.md) |
+| Complete N occupancy with three opposite-cap points, including equality | [SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md](SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md) |
+| Complete N single-side occupancy with two anchor-interior points | [SIX_BOUNDARY_SINGLE_SIDE.md](SIX_BOUNDARY_SINGLE_SIDE.md) |
+| Complete N occupancy with one side-cap and two opposite-cap points | [SIX_BOUNDARY_SIDE_TWO_TOP.md](SIX_BOUNDARY_SIDE_TWO_TOP.md) |
+
 The original three-family argument is retained in
 [BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md). All strengthened normal forms
 include arbitrary remaining points; they do not assume those points lie in
@@ -108,17 +120,17 @@ an observed numerical pattern.
 
 ## What remains
 
-- **N with six boundary contacts:** larger hulls beyond the prescribed
-  six anchors. The exact six-anchor hull is excluded. The lower-left
-  exterior cap is empty and both side caps have capacity one. An occupied
-  side cap makes the opposite lower ear empty. If all three free points
-  are in the opposite cap, only support cell II with an eight-vertex
-  hull survives. The whole occupancy with both side caps occupied and
-  the third point below HC is now complete; other interactions remain.
-- **C1:** only the zero- and one-lower counts in OHC remain, with hulls
-  larger than the prescribed five-anchor pentagon. The entire two-lower
-  occupancy and every exact-five-anchor-hull placement are excluded.
-  The one-lower hexagon with one exterior top-cap point is also excluded.
+- **N with six boundary contacts:** only three cap occupancies remain:
+  one opposite-cap point with two anchor-interior points (N6-03), one
+  side-cap point with one opposite-cap point and one anchor-interior
+  point (N6-04), and two opposite-cap points with one anchor-interior
+  point (N6-06). Each includes its lower/upper interior alternatives.
+- **C1:** only the one-lower rows C1-1-04, 07, 10, 11 and 12 remain.
+  They comprise two different occupied caps with one upper interior
+  point, two opposite-cap points with one upper interior point, and
+  the remaining three-exterior-point placements. All zero-lower and
+  two-lower configurations, all single-exterior-point hexagons,
+  every side-cap pair, and all eight-vertex hulls are closed.
 
 The entire normalized seven-boundary form is complete, including every
 interior pair, every exterior placement, and equality. Its final assembly
