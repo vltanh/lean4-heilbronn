@@ -396,7 +396,7 @@ These bounds give
 <\frac3{16}+\frac38\frac{23}{84}
 =\frac{65}{224}<3s.
 \]
-Also \([CDE]<3s\) by Theorem 8 of SEVEN_BOUNDARY_CAPS.md.
+Also \([CDE]=wR<w<23/84<3s\), directly from (16) and \(R<1\).
 For every \(X\in ADE\), the affine function \(X\mapsto[CDX]\)
 has values \([ACD],0,[CDE]\) at \(A,D,E\). Hence
 \[
@@ -601,6 +601,81 @@ Finally, the empty ear \(ABC\) puts \(P\) above \(AC\), and its
 mixed-placement definition puts it on the left-pentagon side of \(CF\).
 Together with the \(AF\) side just proved, these are precisely the
 three side tests for \(P\in ACF\). \(\square\)
+
+
+## 5. Three complete vertical-triangle pair classes
+
+**Theorem 4.** Neither \(ADE\) nor \(AHD\) can contain both free
+points. These two assertions need only the projection condition
+\(b\le f\le c\); they do not need \(f\le1/2\).
+Under the full normalization \(f\le1/2\), the triangle \(AHE\)
+also cannot contain both free points.
+
+For the first assertion, suppose both free points are in \(ADE\).
+Its doubled area \(R\) is at least \(Ks>\rho\). Every estimate in
+(15)--(16) follows from this fact and the anchor inequalities, without
+using either free point's \(CE\) side. In particular
+
+\[
+[CDE]=wR<w<\frac{23}{84}<3s.
+\]
+
+No free point can therefore belong to \(CDE\).
+The portion of \(ADE\) on the \(D\)-side of \(CE\) is contained in
+\(CDE\): the crossing of \(AD,CE\) lies on the segment \(CE\), and
+the portion in question is the triangle with vertices \(D,E\) and
+that crossing. Thus both free points must lie in
+\(ACE\cap ADE\), contrary to Theorem 2.
+
+This proof and the proof of Theorem 2 use \(b\le f\), \(c<1-s\),
+and \(0<f<1\), but no upper bound \(f\le1/2\).
+In particular, the lower bound \(b>1/8\) comes from \(b(1-b)>s\),
+and the later upper bound \(b<1/3\) comes from \(R>\rho\);
+neither is taken from \(f\le1/2\).
+Horizontal reflection preserves the projection condition and changes
+\(ADE\) into \(AHD\), proving the second assertion.
+
+For the last assertion we first record an anchor-only comparison:
+
+\[
+\boxed{[AEF]<1-2s<Ks.}                                  \tag{25}
+\]
+
+Indeed, with \(M=c-b\), \(w=1-c\), the lower bounds for \(a,e\) give
+
+\[
+[AEF]=1-(1-f)a-fe
+\le1-s\left(\frac1M+\frac{f}{w}\right)
+\le1-s\left(\frac1M+\frac{b}{w}\right).
+\]
+
+Since \(M+w=1-b\), Cauchy--Schwarz implies
+
+\[
+\frac1M+\frac bw
+\ge\frac{(1+\sqrt b)^2}{1-b}
+=\frac{1+\sqrt b}{1-\sqrt b}>2.
+\]
+
+Here \(b>1/8>1/9\), so \(\sqrt b>1/3\).
+Also \(1-2s=25/32<13/16<Ks\), proving (25).
+
+Now suppose both free points belong to \(AHE\).
+They are both inside the boundary heptagon.
+The complete left-pair and right-pair theorems in
+[SEVEN_BOUNDARY_LEFT_PAIR.md](SEVEN_BOUNDARY_LEFT_PAIR.md) and
+[SEVEN_BOUNDARY_RIGHT_PAIR.md](SEVEN_BOUNDARY_RIGHT_PAIR.md)
+leave only the mixed placement.
+Name its points as above. Theorem 3 puts \(P\) in \(ACF\), while
+\(Q\) is in \(CEF\). Both are above \(AE\), by the assumed
+\(AHE\) containment.
+
+The part of \(ACF\) above \(AE\), and the part of \(CEF\) above
+\(AE\), are both inside \(AEF\). This follows by cutting the two
+triangles at the crossing of \(AE,CF\).
+Thus both free points are inside \(AEF\), contradicting (25) and
+the two-interior-point triangle theorem. This proves the final
+assertion. \(\square\)
 
 
 ## Verification

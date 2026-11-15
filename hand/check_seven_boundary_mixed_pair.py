@@ -146,3 +146,14 @@ assert right_def == sp.Rational(51603, 160000) < 3*s
 assert sp.expand(det(C, D, F)-(1-c+d*(c-f))) == 0
 assert sp.expand(det(D, E, F)-(1-f)*(e-d)) == 0
 print("PASS: complete mixed above-AF exclusion; the left point is in ACF")
+
+
+# The full ADE/AHD classes and the AHE consequence.
+assert sp.Rational(23, 84) < 3*s
+assert sp.expand(det(A, E, F)-(1-(1-f)*a-f*e)) == 0
+assert 1-2*s == sp.Rational(25, 32) < rho
+bbroot = sp.symbols("bbroot")
+assert sp.cancel((1+bbroot)**2/(1-bbroot**2)
+                 -(1+bbroot)/(1-bbroot)) == 0
+assert (1+sp.Rational(1, 3))/(1-sp.Rational(1, 3)) == 2
+print("PASS: complete ADE/AHD exclusions without the half-side convention, and AHE under it")
