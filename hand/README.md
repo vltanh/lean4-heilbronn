@@ -31,7 +31,10 @@ families are listed below. The older computational draft is separate.
 | Seven-point triangular-hull bound and global triangle-occupancy restriction | [CORNER_FAMILIES.md](CORNER_FAMILIES.md), Sections 1–4 |
 | Six-point nontriangular-hull support-triangle bound | `CORNER_FAMILIES.md`, Section 6 |
 | Sharp six-point triangular-hull bound \(S\ge(11+3\sqrt5)t/2\) | `CORNER_FAMILIES.md`, Section 8 |
-| Type III reduced to two diagonal-count cases, with further geometric restrictions | `CORNER_FAMILIES.md`, Sections 5–8 |
+| Complete Type-III exclusion at \(7/128<A_0\), including every diagonal count | `CORNER_FAMILIES.md`, Sections 3–12 |
+| Four-corner theorem at \(1/19\), with a controlled projective transfer | [FOUR_CORNERS.md](FOUR_CORNERS.md) and `CORNER_FAMILIES.md`, Section 9 |
+| Type II reduced to two count classes; every central-triple orientation excluded | [TYPE_II.md](TYPE_II.md) |
+| Sharp six-point quadrilateral-hull bound and N/C1 occupancy restrictions | [QUADRILATERAL_HULL.md](QUADRILATERAL_HULL.md) |
 | Equality transfer through all normalizing shears | `GLOBAL_STRUCTURE.md`, Lemma 4 |
 
 The original three-family argument is retained in
@@ -45,12 +48,13 @@ an observed numerical pattern.
   than eight total boundary points.
 - **C1:** one occupied corner, four further side contacts, and four arbitrary
   points.
-- **Type II:** adjacent occupied corners, two further side contacts, and five
-  arbitrary points.
-- **Type III:** three occupied corners and six arbitrary points. Relative to
-  the occupied diagonal, only the \(2+4\) and \(3+3\) counts remain. In the
-  \(2+4\) case the lower six-point hull must be triangular, with its apex
-  within \(1-(11+3\sqrt5)A_0\) of the missing corner in both coordinates.
+- **Type II:** after the area-preserving normalization to \(b\le1/2\), only
+  the left/central/right counts \((1,2,3)\) and \((2,2,2)\) remain. The left
+  count includes the prescribed side contact. All cases with three central
+  points, and the count \((2,1,3)\), have been excluded.
+
+The opposite-corner family C2 and the entire three-corner family Type III
+are closed at \(7/128<A_0\).
 
 A proof covering these complete families, or a proved boundary-saturation
 reduction to the solved family, would finish the unrestricted theorem.
@@ -68,6 +72,9 @@ python hand/check_radial.py
 python hand/check_r6.py
 python hand/check_opposite_corners.py
 python hand/check_corners.py
+python hand/check_four_corners.py
+python hand/check_type_ii.py
+python hand/check_quadrilateral_hulls.py
 ```
 
 These scripts use SymPy where appropriate and verify the printed determinant

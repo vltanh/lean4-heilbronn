@@ -21,10 +21,10 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G2 | Every configuration with at least eight boundary points | **Complete sharp hand theorem and equality classification** |
 | G3 | Strict local maximum against arbitrary eighteen-coordinate perturbations | Complete qualitative hand proof; separate explicit-radius arithmetic certificate |
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
-| G4b | Type III: three corners and six free points | Reduced to the \(2+4\) and \(3+3\) diagonal-count cases; both still open |
-| G5 | Type II: adjacent corners and five free points | Still open by hand |
+| G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
+| G5 | Type II: adjacent corners and five free points | Reduced to two exhaustive count classes, \((1,2,3)\) and \((2,2,2)\) |
 | G6 | N and C1 with fewer than eight boundary points | **Main remaining global structural obstruction** |
-| G7 | Unrestricted sharp theorem and uniqueness | Conditional on G4b, G5, G6; equality transfer through shears is already proved |
+| G7 | Unrestricted sharp theorem and uniqueness | Conditional on G5, G6; equality transfer through shears is already proved |
 
 ## 1. The completed eight-boundary gate
 
@@ -72,44 +72,57 @@ it cannot assume that every interior point reaches the square boundary.
 family, including degeneracies. A theorem about one observed active pattern,
 or about configurations already having eight contacts, does not close G6.
 
-## 3. The remaining corner cases
+## 3. Corner families: Type III closed, two Type-II counts left
 
-### Type III
+### Complete Type-III theorem
 
-Put the fixed corners at \(A=(0,0),B=(0,1),C=(1,1)\), and count the six
-free points above and below the occupied diagonal \(AC\).
-[CORNER_FAMILIES.md](hand/CORNER_FAMILIES.md) excludes upper counts
-\(0,1,4,5,6\) by self-contained hand arguments. Only these cases remain:
+[CORNER_FAMILIES.md](hand/CORNER_FAMILIES.md) now proves that any nine points
+containing three square corners have minimum triangle area at most
+\(7/128<A_0\). All seven diagonal counts are covered:
 
-| Upper + lower count | Proved additional restriction |
+| Number of free points above the occupied diagonal | Hand argument |
 |---|---|
-| \(2+4\) | The lower six-point hull is triangular, with actual apex \(R\) satisfying \(r_x-r_y\ge(11+3\sqrt5)A_0\). The whole nine-point hull is \(ABCR\). |
-| \(3+3\) | For each upper point, the other two lie in different triangles of its fan to \(A,B,C\). The upper six-point configuration has the distributed seven-face mesh of the sharp triangular-hull theorem. |
+| 0 or 1 | Six-point support-triangle theorem and seven-point endpoint lemma |
+| 2 | Sharp six-point triangular-hull theorem; the fourth hull vertex is near the missing corner; controlled projective transfer to the four-corner \(1/19\) theorem |
+| 3 | Quantitative distributed-six mesh inequalities; uniform signs; at most one lower point on each side of the line through the middle corner and the designated upper point |
+| 4, 5, or 6 | Seven-point triangular-hull bound |
 
-Useful proven tools include:
+The last case uses a central-area bound \(K<9s/8\), a connector-area bound
+\(a,b,c>6s/5\), and two explicit polynomial positivity arguments. All
+geometric cases and exact identities are printed in the manuscript.
 
-- A triangle containing two further points has area at least
-  \((4+2\sqrt3)t\), when all triangle areas are at least \(t\).
-- A triangular hull containing three further points has area at least
-  \((11+3\sqrt5)t/2\), sharply.
-- At the target threshold, no triangle contains four other configuration
-  points.
-- Six points in a triangle of area at most \(1/2\), including two vertices
-  and having nontriangular hull, have minimum area at most \(7/128\).
+### The remaining Type-II obligation
 
-These are global geometric restrictions, not full exclusions of the two
-remaining count classes.
+[TYPE_II.md](hand/TYPE_II.md) supplies a further determinant-one shear
+normalization: either the configuration becomes Type III, already excluded,
+or its bottom contact has \(0<b\le1/2\). Partition the square into the
+left, central, and right triangles determined by the two top corners and
+the bottom contact. The six other points, including the left contact,
+have counts \((\ell,c,r)\).
 
-### Type II
+The five-point endpoint-triangle theorem, a complete exclusion of
+\((2,1,3)\), and the exhaustive central-triple orientation argument leave
+only these two complete continuous classes:
 
-The adjacent-corner family still needs a hand argument covering its two
-edge parameters and five arbitrary points. The recorded exact checker bounds
-it by \(137/2500<A_0\); that computational result is not substituted for
-a hand proof. Any strict hand bound below \(A_0\) would suffice.
+| Count \((\ell,c,r)\) | Necessary range, with \(s=2t\ge2A_0\) |
+|---|---|
+| \((1,2,3)\) | \(s\le b\le1-s/(3-2\sqrt2)\) |
+| \((2,2,2)\) | \(3s\le b\le1/2\) |
+
+Their point coordinates remain arbitrary within their assigned triangles.
+Neither row is yet excluded. The recorded exact checker gives the separate
+computational bound \(137/2500<A_0\); that claim is not substituted for
+these hand obligations.
+
+Useful global tools now include the sharp six-point triangular-hull bound,
+the sharp six-point quadrilateral-hull bound, and the complete six-point
+support-triangle theorem. [QUADRILATERAL_HULL.md](hand/QUADRILATERAL_HULL.md)
+also gives a universal N cap exclusion and precise, explicitly conditional
+occupancy classifications for the six-hull N and five-hull C1 cases.
 
 ## 4. Final assembly and verification
 
-Once G4b, G5, and G6 are closed, combine the exhaustive normalization with
+Once G5 and G6 are closed, combine the exhaustive normalization with
 the completed eight-boundary theorem and exact attaining construction.
 Lemma 4 of `GLOBAL_STRUCTURE.md` already proves that uniqueness survives
 the normalizing shears: a nontrivial final shear into the candidate would

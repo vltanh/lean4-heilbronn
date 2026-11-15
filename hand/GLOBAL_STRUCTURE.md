@@ -246,5 +246,7 @@ all its orientation classes, is also closed by Theorem 13 of
 To close G6, a sharp inequality or a further proved structural reduction
 is still required for N with fewer than eight boundary points and for C1.
 The complete eight-boundary theorem cannot yet be applied to arbitrary
-members of these two families. Type II and the two residual Type-III
-diagonal-count cases are the separate remaining corner obligations.
+members of these two families. Type III is now completely excluded at
+\(7/128<A_0\) by [`CORNER_FAMILIES.md`](CORNER_FAMILIES.md). The remaining
+corner obligation is Type II, reduced to the two count classes in
+[`TYPE_II.md`](TYPE_II.md), Section 8.

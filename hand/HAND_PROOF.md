@@ -506,8 +506,8 @@ following ledger includes the companion hand proofs in this directory.
 | All configurations with at least eight boundary points | Complete; `EIGHT_BOUNDARY.md`, Theorem 13, with equality classification |
 | Strict local optimality against all 18 coordinate perturbations | Complete here, qualitative radius |
 | C2: two opposite corners, four other side contacts, three free points | Complete strict exclusion \(\min\mathrm{Area}\le7/128<A_0\); `OPPOSITE_CORNERS.md` |
-| Type III: three prescribed corners and six free points | Only the \(2+4\) and \(3+3\) diagonal-count cases remain; `CORNER_FAMILIES.md` |
-| Type II: adjacent-corner form and five free points | Still open by hand |
+| Type III: three prescribed corners and six free points | Complete bound \(\min\mathrm{Area}\le7/128<A_0\); `CORNER_FAMILIES.md` |
+| Type II: adjacent-corner form and five free points | Reduced to two count classes, \( (1,2,3)\) and \( (2,2,2)\); `TYPE_II.md` |
 | N: six prescribed boundary points and three free points | Still open below eight boundary points |
 | C1: one occupied corner, four other side contacts, four free points | Still open by hand |
 
