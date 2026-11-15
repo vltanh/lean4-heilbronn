@@ -16,7 +16,13 @@ relabeling. No symmetry or orientation chamber is assumed in that theorem.
 does not yet force eight boundary points, and the remaining continuous
 families are listed below. The older computational draft is separate.
 
-For the finer case classification and stable case IDs, see
+For the fully itemized register, see
+[G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md) (62 individually
+numbered parent cases) and [G6_ITEMIZED_LEAVES.tsv](G6_ITEMIZED_LEAVES.tsv)
+(221 lower-point/sector/wedge/sign leaves). The
+[deterministic enumeration checker](check_g6_itemized_cases.py) verifies
+the list; 44 parent cases and 186 leaves remain open.
+For the underlying structural case classification, see
 [G6_FINITE_CASE_LEDGER.md](G6_FINITE_CASE_LEDGER.md). Its unpruned
 occupancy/sign census (8 N6, up to 16 N7, and 21+12 C1 coarse
 classes) is a planning ledger. Its status entries distinguish the
