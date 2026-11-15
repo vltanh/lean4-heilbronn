@@ -1,9 +1,9 @@
-# A complete line-orientation exclusion for two interior points
+# A complete exclusion for two points in the central part of a quadrilateral
 
 ## Scope
 
-This note closes a whole affine orientation class of six-point
-quadrilaterals. It applies to the remaining C1 pentagonal branch, but it
+This note closes the entire six-point quadrilateral class in which
+both interior points lie on the same side of each hull diagonal. It applies to the remaining C1 pentagonal branch, but it
 **does not complete C1** or the unrestricted nine-point theorem.
 
 Write
@@ -204,7 +204,148 @@ But at \(s=7/64\) the expression in (7) equals
 This contradiction excludes the two remaining cases of (5) and proves
 Theorem 1.
 
-## 2. Application to the remaining pentagonal C1 branch
+## 2. The other line orientation is also impossible
+
+**Theorem 2 (central-pair quadrilateral bound).** Let \(A,B,C,D\) be the
+cyclic vertices of a convex quadrilateral of area \(S\), and let \(P,Q\)
+lie strictly inside both \(ABC\) and \(ABD\). Then their minimum
+triangle area is strictly less than
+
+\[
+\boxed{\frac7{64}S.}                                      \tag{8}
+\]
+
+Thus the line-separation hypothesis of Theorem 1 can be removed.
+Equivalently, for six points whose minimum triangle area is at least
+\(7/64\) times their quadrilateral hull area, **at least one hull diagonal
+must separate the two interior points**.
+
+Suppose again that the conclusion fails, and use the first normalization,
+\(s,a,b,J,T,h,\beta,\sigma\), from the preceding proof. Theorem 1 handles
+the case in which \(PQ\) separates \(A,B\). Otherwise orient the line so
+that \(d_A,d_B<0\). Each containing triangle \(ABC,ABD\) contains
+\(P,Q\), so its third vertex must be on the other side of the line;
+thus \(d_C,d_D>0\).
+
+Interchange \(A,B\) and \(C,D\), if needed, to arrange \(a\ge b\).
+This preserves all the present containment and line-sign hypotheses.
+In the canonical coordinates (4), write the two points as
+\((p,p+w)\), \((q,q+z)\), and put
+
+\[
+v=T\min(w,z).
+\]
+
+Thus \(v\) is the smaller doubled area of \(ABP,ABQ\) in the first
+normalization. The general same-side calculation (21)--(22) in
+`OPPOSITE_CORNERS.md`, before maximizing over the point height, says
+
+\[
+s\le v\left(1-\frac{s(a+b)}{ab}\right)-\frac{v^2}{ab}.
+\]
+
+Equivalently,
+
+\[
+F(a,b,v):=ab(v-s)-sv(a+b)-v^2\ge0.                        \tag{9}
+\]
+
+This in particular forces \(v>s\).
+
+### The previously unused opposite-edge constraint bounds the height
+
+For either point \(X=(x,x+w)\) in the canonical coordinates, its
+central-cell inequality and its area with the hull edge \(DC\) are
+
+\[
+x\ge\frac{\sigma+(1-\beta)w}{\beta},\qquad
+N(X)=(1-\beta)w+(h-\beta)x-(1-\beta)h\le-\sigma.
+\]
+
+Since \(h\ge\beta\), substituting the lower bound for \(x\) gives
+
+\[
+\frac{(1-\beta)h}{\beta}w
+ +\frac{(h-\beta)\sigma}{\beta}-(1-\beta)h\le-\sigma,
+\]
+
+and hence
+
+\[
+w\le\beta-\frac{\sigma}{1-\beta}.
+\]
+
+Multiplying by \(T\), and using \(1-\beta=(1-b)/a\), proves
+
+\[
+\boxed{v\le b-\frac{sa}{1-b}
+            \le V(b):=b-\frac{sb}{1-b}.}                  \tag{10}
+\]
+
+All denominators are positive by (2). This inequality uses an actual
+hull-edge triangle for each point; it is stronger than the earlier
+height bound obtained from the two diagonal constraints alone.
+
+### Two rational intervals exhaust the parameter range
+
+Under (9), both partial derivatives of \(F\) with respect to \(a,b\)
+are positive. For example, if
+\(b(v-s)-sv\le0\), then
+
+\[
+F=a[b(v-s)-sv]-sbv-v^2<0,
+\]
+
+contrary to (9); the other derivative is handled identically. Increasing
+\(a\) or \(b\) while keeping \(v\) fixed therefore preserves \(F\ge0\):
+its derivative in the parameter being increased is constant, and the
+other derivative increases since \(v>s\). This justifies each relaxation
+below without assuming coordinate motions of the original points.
+
+**First interval: \(b\le17/20\).** Increase \(a\) to \(57/64=1-s\)
+and \(b\) to \(17/20\). For these values \(F\) is a concave quadratic
+in \(v\), whose maximum is
+
+\[
+\frac{[ab-s(a+b)]^2-4sab}{4}
+=-\frac{847963}{335544320}<0.                              \tag{11}
+\]
+
+This contradicts (9), for every real \(v\).
+
+**Second interval: \(b\ge17/20\).** The function \(V\) in (10)
+decreases on this interval, because
+
+\[
+V'(b)=1-\frac{s}{(1-b)^2}<0.
+\]
+
+Consequently
+
+\[
+v\le V(17/20)=\frac{221}{960}.                            \tag{12}
+\]
+
+Increase both \(a,b\) to \(57/64\). The resulting quadratic
+
+\[
+F(57/64,57/64,v)
+\]
+
+increases for \(v\le221/960\): at the upper endpoint its derivative is
+\(8477/61440>0\), and its derivative decreases as \(v\) increases.
+It follows that
+
+\[
+F(a,b,v)\le F(57/64,57/64,221/960)
+=-\frac{58967}{29491200}<0,                               \tag{13}
+\]
+
+again contradicting (9). The two intervals are exhaustive, so the
+same-side case is impossible. Combined with Theorem 1, this proves
+Theorem 2.
+
+## 3. Application to the remaining pentagonal C1 branch
 
 Use the C1 anchors
 
@@ -222,22 +363,24 @@ points in \(OHC\), and two in the upper quadrilateral
 W=1-(h-d)(c-f)\le1.
 \]
 
-If both upper points belong to both \(HCD\) and \(HCF\), Theorem 1
-applies with \((A,B,C,D)=(H,C,D,F)\). Hence their joining line must put
-\(H,C\) on the **same** side. The entire opposite-side branch is now
-excluded, including all three possible signs of the other two anchors.
+If both upper points belong to both \(HCD\) and \(HCF\), Theorem 2
+applies with \((A,B,C,D)=(H,C,D,F)\). Its bound contradicts the assumed
+minimum area. Thus this **entire central upper-pair branch is excluded**,
+regardless of the line through the two points.
 
 The same theorem applies to a pair in \(HCD\cap HCF\) in family N;
 no lower-point or maximizing hypothesis is required for the theorem.
 
-This result leaves the same-side branch and the mixed upper placements,
-as well as C1 hulls larger than the five-anchor pentagon. In particular,
+This leaves only the mixed upper placements within the pentagonal branch:
+one upper point is in \(HCD\cap HCF\), and the other in \(CDF\), or the
+reflected placement with the other point in \(HDF\). C1 hulls larger than
+the five-anchor pentagon also remain open. In particular,
 no boundary-saturation theorem or complete C1 exclusion is claimed.
 
 ## Verification
 
 The exact diagnostic `check_one_corner_completion.py` checks the affine
 area conversion, the general determinant identity used to obtain (6),
-and the final rational sign. The sign classification, containments, and
+the opposite-edge height bound, and the final rational signs. The sign classification, containments, and
 endpoint replacements are proved above; the script does not establish
 those geometric statements by enumeration.

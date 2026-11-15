@@ -40,3 +40,23 @@ assert 1-2*s0 > 0
 assert 14*s0 > 1
 assert 10*s0 > 1
 print('PASS: affine area conversion, line-sign identities, and exact negative endpoint')
+
+# Same-side case: the opposite hull-edge constraint, before maximization.
+a, b, s, T, w = S.symbols('a b s T w', positive=True)
+h, beta, sigma = a/T, b/T, s/T
+height_upper = T*(beta-sigma/(1-beta))
+assert S.factor(height_upper.subs(T,a*b/(a+b-1)) - (b-s*a/(1-b))) == 0
+
+s0 = S.Rational(7,64)
+A, B = 1-s0, S.Rational(17,20)
+v = S.symbols('v')
+def pair_bound(a,b,v):
+    return a*b*(v-s0)-s0*v*(a+b)-v*v
+first_discriminant = (A*B-s0*(A+B))**2-4*s0*A*B
+assert first_discriminant == -S.Rational(847963,83886080)
+height_cap = B-s0*B/(1-B)
+assert height_cap == S.Rational(221,960)
+assert pair_bound(A,A,height_cap) == -S.Rational(58967,29491200)
+assert S.diff(pair_bound(A,A,v),v).subs(v,height_cap) == S.Rational(8477,61440)
+assert s0 > (1-B)**2
+print('PASS: opposite-edge height restriction and both exhaustive rational intervals')
