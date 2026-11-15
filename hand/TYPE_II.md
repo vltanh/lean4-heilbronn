@@ -903,8 +903,10 @@ Finally, in the last one-point case,
 \]
 
 contrary to (31). The final comparison is the integer inequality
-\(213085<215040\). This checks every place where the former one-half
-assumption was used, and proves the corollary.
+\(213085<215040\). The endpoint q=1 corresponds to physical \(\lambda=0\); it is included
+because the Section 6 formulas and bounds include z=1. No Type-III
+exclusion is used for this endpoint. This checks every place where the
+former one-half assumption was used, and proves the corollary.
 
 For a maximum-area actual triangle, every barycentric coordinate of any
 other actual point has absolute value at most one. Thus the condition
@@ -921,3 +923,158 @@ points must satisfy both
 As \(\alpha+q=1+p\), these inequalities imply
 \(p>11/29\). This is an exact further geometric restriction, not an
 assertion that every configuration has such a maximum-area triangle.
+
+
+## 10. A coupled affine extension slightly past q=1
+
+The following version is useful when the central triangle itself has
+area slightly below one half. Put \(s_0=2A_0\).
+
+**Coupled affine corollary.** Normalize the doubled area of an actual
+triangle ABC to one, suppose it contains three further points, and suppose
+an additional point E has barycentric coordinates
+
+\[
+ E=(\alpha,q,-p),\qquad
+ 0<q\le\frac{30}{29},\quad 0<p\le\frac{11}{20}q,
+ \quad\alpha+q-p=1.
+\]
+
+It is impossible for all triangles of these seven points to have doubled
+area at least s when
+
+\[
+                         s\ge s_0\max(1,q).              \tag{32}
+\]
+
+For \(q\le1\), Section 9 proves this already. Assume \(1<q\le30/29\).
+As before \(p\ge s\), while \(p\le33/58\). In particular
+\(\alpha=1+p-q\ge1+s-q>0\), because
+\(s\ge7/64>1/29\). The distributed mesh, its four ray-cut possibilities,
+the ear-excess bound (24), and \(k_*<9s/8\) all remain valid: their proofs
+only require \(s\ge7/64\).
+
+Now \(\alpha<p\le33/58\), so EBC cannot contain two of the interior
+points. That would require
+\(\alpha\ge(4+2\sqrt3)s>7s\ge49/64>33/58\). Thus only the two-point
+and three-point cuts of (27) remain.
+
+### Three points in ACE
+
+The same barycentric expansion used before gives
+
+\[
+ y\ge\frac{s}{q}+\frac{\alpha X_B}{q}
+ \ge\frac{s}{q}+\frac{3s(1+s-q)}q.
+\]
+
+Here \(1+s-q>0\), as checked above, so substitution of \(X_B\ge3s\)
+is valid. Combining this with (24) and \(s/q\ge s_0\) gives
+
+\[
+\begin{aligned}
+ 1&\ge(\Gamma-1)s+y\\
+  &\ge(\Gamma-4)s+\frac{s(4+3s)}q\\
+  &\ge(\Gamma-4)s+s_0(4+3s)\\
+  &\ge\Gamma s_0+3s_0^2>1.
+\end{aligned}
+\]
+
+The penultimate inequality uses \(s\ge s_0\) and
+\(\Gamma-4+3s_0>0\). The last strict inequality already holds with
+\(s_0\) replaced by \(7/64\), as checked in Section 7. This is a
+contradiction.
+
+### Two points in ACE
+
+If \(\langle EYZ\rangle>0\), the elimination (28)–(29) remains valid
+without a restriction \(q\le1\). It gives
+
+\[
+ K\ge\frac{2s}{1+p}\ge\frac{116s}{91}
+       \ge\frac{203}{1456}>\frac18,
+\]
+
+contradicting (23).
+
+It remains to handle \(\langle EYZ\rangle<0\). Return to the physical
+coordinates of Section 6, with
+
+\[
+ b=p/q\le11/20,\qquad\lambda=1-q\in[-1/29,0).
+\]
+
+The points P=Y and Q=Z are inside both DCB and DCE, and have the same
+orientation signs (13). Write \(Q=(q_x,t)\); thus t here is a coordinate,
+not a minimum area. The lower bounds from DBQ and ECQ imply
+
+\[
+ q_x\ge s+b(1-t),\qquad
+ t\ge\lambda+q q_x+s,
+\]
+
+and hence, with \(\beta=bq=p\),
+
+\[
+               t\ge\frac{1-q+\beta+(1+q)s}{1+\beta}.      \tag{33}
+\]
+
+The weighted identity (16) remains true. Its positive coefficient
+\(D_Q=b(t-\lambda)+\lambda q_x\) is the doubled area of EBQ.
+Since \(\lambda<0\), now use the **lower** bound for \(q_x\) to obtain
+
+\[
+ D_Q\le bqt+\lambda s\le\beta t.
+\]
+
+The identity, \(p_y\le1-s\), and \(\lambda<0\) give
+
+\[
+                    \beta(1-s-t)\ge2s.
+\]
+
+Substituting (33) and clearing positive denominators yields
+
+\[
+ \frac{s}{q}\le
+        \frac{\beta}{\beta^2+(q+4)\beta+2}.               \tag{34}
+\]
+
+For fixed q, the right side increases with \(\beta\le11q/20\), since
+its derivative has the sign of \(2-\beta^2>0\). Put \(\rho=11/20\).
+Its resulting upper bound
+
+\[
+                  \frac{\rho q}{(\rho^2+\rho)q^2+4\rho q+2}
+\]
+
+increases on \(1\le q\le30/29\): the derivative has the sign of
+\(2-(\rho^2+\rho)q^2>0\). At the last endpoint its exact value is
+\(1914/17453\). But
+
+\[
+ \frac{s}{q}\ge s_0>\frac{79}{720}>\frac{1914}{17453},
+\]
+
+contradicting (34). These comparisons are elementary:
+\(s_0>79/720\) is equivalent to \(\sqrt{65}>653/81\), verified by
+\(65\cdot81^2-653^2=56>0\); and
+\(79\cdot17453-1914\cdot720=707>0\).
+
+All cuts are excluded, proving the coupled corollary. Notice that its
+additional condition (32) is essential to the proof; no unconditional
+extension to \(q>1\) is asserted.
+
+**Geometric form.** If the original triangle has area \(S\le1/2\), its
+normalized doubled minimum at the competitive threshold is at least
+\(A_0/S=s_0/(2S)\). Thus the coupled corollary applies whenever
+
+\[
+        q\le\min\left(\frac{30}{29},\frac1{2S}\right),
+        \qquad 0<p\le\frac{11}{20}q.
+\]
+
+For example, for a corner triangle with legs h,c and area \(hc/2\), an
+external contact whose normalized coordinate is \(q=1/c\) meets the
+coupling condition because \(h\le1\). Its separate bound \(q\le30/29\)
+must still be checked from the established lower bound on c.

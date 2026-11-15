@@ -167,3 +167,33 @@ assert sp.Rational(95, 216) * sp.Rational(2243, 5120) < sp.Rational(7, 36)
 assert sp.Rational(13, 6) ** 2 < 5
 print('PASS: robust affine rational comparisons')
 print('TYPE_II_ROBUST_AFFINE_PASS: 2 further groups')
+
+# Coupled q>1 extension. Here qt is the external-coordinate parameter.
+qt, bt, sy = sp.symbols('qt bt sy', positive=True)
+t0 = (1 - qt + bt + (1 + qt) * sy) / (1 + bt)
+equal(
+    (bt * (1 - sy - t0) - 2 * sy) * (1 + bt),
+    bt * qt - sy * (bt**2 + (qt + 4) * bt + 2),
+    'coupled chamber elimination',
+)
+rho = sp.Rational(11, 20)
+f = bt / (bt**2 + (qt + 4) * bt + 2)
+equal(
+    sp.diff(f, bt) * (bt**2 + (qt + 4) * bt + 2)**2,
+    2 - bt**2,
+    'coupled chamber first monotonicity',
+)
+f2 = rho * qt / ((rho**2 + rho) * qt**2 + 4 * rho * qt + 2)
+equal(
+    sp.diff(f2, qt) * ((rho**2 + rho) * qt**2 + 4 * rho * qt + 2)**2,
+    rho * (2 - (rho**2 + rho) * qt**2),
+    'coupled chamber second monotonicity',
+)
+equal(f2.subs(qt, sp.Rational(30, 29)), sp.Rational(1914, 17453),
+      'coupled chamber rational endpoint')
+assert 65 * 81**2 - 653**2 == 56
+assert 79 * 17453 - 1914 * 720 == 707
+assert sp.Rational(203, 1456) > sp.Rational(1, 8)
+assert sp.Rational(49, 64) > sp.Rational(33, 58)
+print('PASS: coupled affine rational comparisons')
+print('TYPE_II_COUPLED_AFFINE_PASS: 5 further groups')
