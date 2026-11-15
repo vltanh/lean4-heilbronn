@@ -139,6 +139,14 @@ theorem claim_central_cut {l b : ℝ} {X : Point} (hb : 0 < b) (hb1 : b < 1) (hl
     (hl1 : l < 1) (hX : IsCentral b X) :
     (InTriangle X ptD (ptE l) ptC ↔ 0 < sarea (ptE l) ptC X) ∧
       (InTriangle X (ptE l) (ptB b) ptC ↔ sarea (ptE l) ptC X < 0) := by
-  sorry
+  obtain ⟨h1, h2, h3⟩ := hX
+  simp only [InTriangle, sarea, ptD, ptB, ptC, ptE] at h1 h2 h3 ⊢
+  have hy : 0 < X.2 := by linarith
+  have hx : b * (1 - X.2) < X.1 := by linarith
+  have hx0 : 0 < X.1 := by nlinarith
+  have hEB : 0 < (b - 0) * (X.2 - l) - (0 - l) * (X.1 - 0) := by
+    nlinarith [mul_pos hl (sub_pos.2 hx), mul_pos (mul_pos hb hy) (sub_pos.2 hl1)]
+  refine ⟨⟨fun h => h.2.1, fun h => ⟨by nlinarith, h, by linarith⟩⟩,
+    ⟨fun h => by linarith [h.2.2], fun h => ⟨hEB, by linarith, by linarith⟩⟩⟩
 
 end Heilbronn.TypeII
