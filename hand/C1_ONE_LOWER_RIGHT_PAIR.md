@@ -87,8 +87,8 @@ L=(\ell_x,\ell_y):\quad
 \]
 
 For example,
-\(h(c-\ell_x)=[HCL]+c\ell_y\ge2s\). Also division of
-\([HCL]=hc-h\ell_x-c\ell_y\ge s\) by \(hc\) gives
+\(h(c-\ell_x)=[HLC]+c\ell_y\ge2s\). Also division of
+\([HLC]=hc-h\ell_x-c\ell_y\ge s\) by \(hc\) gives
 \(\ell_x/c+\ell_y/h\le1-s/(hc)\le1-s\), which implies
 the final bound in (5).
 
