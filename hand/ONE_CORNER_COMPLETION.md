@@ -467,8 +467,16 @@ the five-anchor pentagon also remain open. In the first mixed placement,
 Theorem 3 additionally forces the line through the upper pair to isolate
 \(C\) from \(H,D,F\). The reflected placement isolates \(H\).
 These are proved sign restrictions, not exclusions of the mixed classes.
-In particular,
-no boundary-saturation theorem or complete C1 exclusion is claimed.
+
+The companion [C1_MIXED_PENTAGON.md](C1_MIXED_PENTAGON.md) now excludes
+one complete alternative within the first mixed placement. With the
+central upper point named \(P\), the ear point \(Q\), and the lower
+point above \(OD\) named \(L\), exactly one of \(L,P\) is inside
+\(OHF\). The companion excludes the entire alternative \(L\in OHF\),
+\(P\in OCF\), including both polynomial parameter intervals. The
+reverse alternative \(P\in OHF\), \(L\in OCF\), and larger C1 hulls
+remain open. No boundary-saturation theorem or complete C1 exclusion is
+claimed.
 
 ## Verification
 
