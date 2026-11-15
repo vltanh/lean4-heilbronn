@@ -1,6 +1,7 @@
 module
 
 public import Heilbronn.Construction
+public import Heilbronn.Common.Families
 
 /-!
 # Assembly of the main theorems
@@ -19,15 +20,6 @@ least `A₀` is a relabelling of the image of the construction under a symmetry 
 
 noncomputable section
 namespace Heilbronn
-
-/-- `P` is a relabelling of the image of the construction under a symmetry of the square. -/
-def IsOptimal (P : Fin 9 → Point) : Prop :=
-  ∃ (g : SquareSymmetry) (σ : Equiv.Perm (Fin 9)), ∀ i, P (σ i) = g.apply (optimalConfiguration i)
-
-/-- `P` lies in the square and no configuration in the square has a larger least area. -/
-def IsMaximizer (P : Fin 9 → Point) : Prop :=
-  (∀ i, P i ∈ unitSquare) ∧
-    ∀ Q : Fin 9 → Point, (∀ i, Q i ∈ unitSquare) → minTriangleArea Q ≤ minTriangleArea P
 
 /-- **Every maximizer is the construction** (`hand/UNRESTRICTED.md`, Sections 2–5). -/
 theorem maximizer_congruent (P : Fin 9 → Point) (hP : IsMaximizer P)
