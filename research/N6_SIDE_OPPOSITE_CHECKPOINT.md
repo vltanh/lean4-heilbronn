@@ -2,8 +2,10 @@
 
 This directory preserves the recoverable search state after the workspace
 rollback. It is **discovery data, not a completed proof or an independently
-audited certificate package**. The full geometric manuscript and a verifier
-that reconstructs every premise are being written separately.
+audited certificate package**. The complete geometric assembly and its
+exact verifier are now in
+[SIX_BOUNDARY_SIDE_OPPOSITE.md](../hand/SIX_BOUNDARY_SIDE_OPPOSITE.md).
+This cache preserves discovery state; it is not the proof entry point.
 
 The anchors are A=(0,a), H=(0,h), B=(b,0), C=(c,0), D=(1,d),
 F=(f,1), with a≤d≤h and b≤f≤c. There is a right-cap point
@@ -26,8 +28,8 @@ The raw cache contains 108 fixed rational expressions with 22,019
 positive terms. All their exact monomial cube upper bounds were checked
 negative by the discovery scripts. The quartic uses products of two
 nonnegative quadratic area costs in addition to the cubic term types.
-The bound and coverage still require a separately reconstructed verifier
-and an independent mathematical audit before the row is recorded complete.
+The linked manuscript and verifier reconstruct the complete cover and
+all premises separately from these discovery scripts.
 
 `n6_side_opposite_rebuild.py` is a self-contained Fraction/SciPy discovery
 model. With no arguments it searches every whole word. Arguments such as

@@ -15,7 +15,7 @@ the rollback.
 | C1_ONE_LOWER_CONVEX_TOP | 57 words; 5 lower, 33 upper and 10 cap placements; 157+50 initial pairs; 168+52 terminal cells | 155 | 25,184 | −3448691771523/3500729749504 |
 | C1_ONE_LOWER_RIGHT_TOP_TRIANGLE | 57 words; 5 lower and 5 cap placements; all 25 pairs | 15 | 1,211 | −707476541255103311/712957274349465600 |
 
-Run the corresponding scripts from any directory:
+From the repository root, run:
 
 ```sh
 python research/audit_c1_one_lower_convex_top_sympy.py
