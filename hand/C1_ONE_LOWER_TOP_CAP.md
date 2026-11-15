@@ -158,9 +158,9 @@ c-\ell_x\ge2s,\qquad h-\ell_y\ge2s,\qquad
 \]
 
 For example,
-\(h(c-\ell_x)=[HCL]+c\ell_y\ge2s\), and the other
+\(h(c-\ell_x)=[HLC]+c\ell_y\ge2s\), and the other
 coordinate difference is analogous. Dividing the positive area
-\([HCL]=hc-h\ell_x-c\ell_y\ge s\) by \(hc\) gives
+\([HLC]=hc-h\ell_x-c\ell_y\ge s\) by \(hc\) gives
 \(\ell_x/c+\ell_y/h\le1-s/(hc)\le1-s\), proving the
 last bound.
 
