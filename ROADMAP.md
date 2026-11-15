@@ -22,8 +22,8 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G3 | Strict local maximum against arbitrary eighteen-coordinate perturbations | Complete qualitative hand proof; separate explicit-radius arithmetic certificate |
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
-| G5 | Type II: adjacent corners and five free points | **Balanced count \((2,2,2)\) complete**; only the unbalanced count \((1,2,3)\) remains |
-| G6 | N and C1 with fewer than eight boundary points | **Main remaining global structural obstruction** |
+| G5 | Type II: adjacent corners and five free points | **Balanced count and unbalanced triangular-right hull complete**; only unbalanced quadrilateral-right hulls remain |
+| G6 | N and C1 with fewer than eight boundary points | **C1 exact five-anchor hull complete**; N and larger C1 hulls remain |
 | G7 | Unrestricted sharp theorem and uniqueness | Conditional on G5, G6; equality transfer through shears is already proved |
 
 ## 1. The completed eight-boundary gate
@@ -69,6 +69,7 @@ C2 is closed. The unresolved parts of the former Type-I obligation are:
   sharp bound or a further structural reduction.
 - **C1:** one occupied corner, one further contact on each incident side,
   and one contact on each opposite side; four further points are arbitrary.
+  The full five-anchor hull case is now excluded. Only larger hulls remain.
 
 Several complete restrictions now apply within these families.
 [THREE_INTERIOR_TRIANGLES.md](hand/THREE_INTERIOR_TRIANGLES.md) proves that
@@ -83,7 +84,9 @@ For C1 whose hull is exactly its five prescribed anchors, precisely two
 free points lie on each side of HC; the two upper points must both be in
 HCD or both in HCF. The other pentagonal placements are excluded.
 [SEVEN_BOUNDARY_CAPS.md](hand/SEVEN_BOUNDARY_CAPS.md) excludes two lower ears
-and several complete pair placements with seven boundary contacts.
+and several complete pair placements with seven boundary contacts. Its
+Sections 6--7 also prove \([ACF]<13/16\), exclude any free point in
+\(AHF\cap HCF\), and close the BC/FH left-pair assignment.
 [GLOBAL_COMPLETION.md](hand/GLOBAL_COMPLETION.md) additionally excludes
 both lower exterior corner caps, without requiring the top contact to
 be on the nearer half of its side. It also proves that every nine-point
@@ -99,8 +102,10 @@ entire common-sector upper pair in the exact-pentagon C1 branch. A
 surviving pair has one point in the central sector and one in the
 corresponding outer ear; its joining line isolates the ear vertex.
 The four free points also alternate in the corresponding four-vertex
-container. The ninth-point interaction is not yet excluded.
-These results narrow G6 but do not complete it.
+container. [C1_MIXED_PENTAGON.md](hand/C1_MIXED_PENTAGON.md) now excludes
+both remaining mixed-pair placements, completing the entire exact
+five-anchor C1 pentagon. Larger C1 hulls and the remaining N cases keep
+G6 open.
 
 For a fixed choice of the other eight points, the sign-consistent feasible
 positions of a ninth point form a convex polygon cut out by area half-planes.
@@ -179,19 +184,21 @@ excludes the bottom cell by a five-area cancellation and weighted-mean
 identity. Theorem 11 assembles these arguments into the **complete
 balanced-row exclusion**.
 In the unbalanced row, at least one central point is above CE.
-Section 12 of `TYPE_II_COMPLETION.md` now proves that a triangular
+Section 12 of `TYPE_II_COMPLETION.md` proves that a triangular
 right hull BCR, with S,T inside, has an empty lower ear EBR. Both
 eight-point hulls DBRC and DERC alternate, forcing both central points
-above CE. This closes the entire one-above cut for the triangular
-right hull. The two-above cut remains open with the precise sector,
-triangle-cost, and virtual-container inequalities printed there.
+above CE. The stronger six-point cell-II inequality in Theorem 13,
+at doubled threshold \(3/28\), then closes the two-above cut as well:
+Theorem 14 excludes the entire unbalanced triangular-right branch.
 
 [UNBALANCED_RIGHT_HULL.md](hand/UNBALANCED_RIGHT_HULL.md) proves that
 the nontriangular right hull must be a quadrilateral. If both central
 points are above CE, its occupied outer-ear support cells I and III
 are completely excluded; only the common central cell II remains.
+Both isolated-endpoint central-line alternatives are also excluded,
+so PQ must put D,C together and E,B together on opposite sides.
 For exactly one central point above CE, cells I, II, and III remain.
-Thus three explicitly described unbalanced branches still require
+Thus two explicitly described unbalanced branches still require
 coupled arguments. No scalar necessary condition alone is claimed to
 finish them.
 

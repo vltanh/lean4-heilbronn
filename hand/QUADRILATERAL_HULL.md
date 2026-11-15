@@ -273,8 +273,9 @@ In particular, both \(h\) and \(c\) are at least the right side of
 including configurations with additional hull vertices. Sections 7--8
 of that note further reduce the exact-pentagon \((2,2)\) branch to
 the cases where both upper points lie in HCD or both lie in HCF.
-Those two cases remain open. Configurations with additional hull
-vertices are not covered by the conditional pentagon classification.
+The later [C1_MIXED_PENTAGON.md](C1_MIXED_PENTAGON.md) excludes both
+remaining cases, completing this exact-pentagon branch. Configurations
+with additional hull vertices are not covered by that theorem.
 
 ## 5. One of the two lower N ears is always empty
 

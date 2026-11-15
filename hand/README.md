@@ -49,8 +49,10 @@ families are listed below. The older computational draft is separate.
 | Complete balanced Type-II quadrilateral-right exclusion; the triangular-right branch has an empty lower ear and an alternating eight-point quadrilateral | `TYPE_II_COMPLETION.md`, Sections 5–6 |
 | One alternating balanced assignment is excluded by a second supporting shear | `TYPE_II_COMPLETION.md`, Sections 7–8 |
 | Complete balanced Type-II count-row exclusion, leaving only \((1,2,3)\) | `TYPE_II_COMPLETION.md`, Theorem 11, with [BALANCED_BOTTOM_INNER_SECTOR.md](BALANCED_BOTTOM_INNER_SECTOR.md) and [BALANCED_RIGHT_MIXED.md](BALANCED_RIGHT_MIXED.md) |
-| In unbalanced Type II, a triangular right hull has an empty lower ear and forces both central points above CE | `TYPE_II_COMPLETION.md`, Theorem 12 |
-| A nontriangular right hull is quadrilateral; with both central points above CE, its two outer support cells are excluded | [UNBALANCED_RIGHT_HULL.md](UNBALANCED_RIGHT_HULL.md) |
+| Complete unbalanced triangular-right exclusion, using a stronger cell-II six-point bound at doubled threshold \(3/28\) | `TYPE_II_COMPLETION.md`, Theorems 13--14 |
+| A nontriangular right hull is quadrilateral; with both central points above CE, its outer cells and both isolated central-line alternatives are excluded | [UNBALANCED_RIGHT_HULL.md](UNBALANCED_RIGHT_HULL.md) |
+| Complete exclusion of C1 when the five prescribed anchors are its full hull | [C1_MIXED_PENTAGON.md](C1_MIXED_PENTAGON.md) |
+| Seven-boundary diagonal triangle ACF has capacity one; the upper overlap AHF/HCF and the BC/FH left-pair assignment are excluded | `SEVEN_BOUNDARY_CAPS.md`, Theorems 5--6 and Corollary 7 |
 | Equality transfer through all normalizing shears | `GLOBAL_STRUCTURE.md`, Lemma 4 |
 
 The original three-family argument is retained in
@@ -68,24 +70,17 @@ an observed numerical pattern.
   including equality. Other placements and orientation chambers keep the
   complete family open.
 - **C1:** one occupied corner, four further side contacts, and four arbitrary
-  points. Every actual triangle has capacity two. If the five prescribed
-  anchors are the full hull, exactly two free points lie on each side of
-  the opposite diagonal, and the upper pair must lie together in HCD or
-  HCF. The two upper points cannot occupy the same diagonal sector:
-  one is in the common central sector and the other in the corresponding
-  outer ear, and their joining line isolates that ear's vertex. The
-  corresponding quadrilateral containing all four free points must have
-  one in each diagonal sector. These placements and the larger-hull
-  cases remain open.
+  points. The complete five-anchor pentagon is excluded. Only configurations
+  with additional hull vertices outside that pentagon remain.
 - **Type II:** after the area-preserving normalization to \(b\le1/2\), only
   the left/central/right count \((1,2,3)\) remains. The left count consists
   of the prescribed side contact. All cases with three central points,
   the count \((2,1,3)\), and the entire balanced count \((2,2,2)\) are
-  excluded. A triangular right hull forces both central points above CE
-  and two alternating eight-point quadrilaterals; its remaining coupled
-  inequality is open. A nontriangular right hull must be quadrilateral.
-  With both central points above CE only support cell II remains; with
-  exactly one above, cells I, II, and III remain.
+  excluded, as is the entire unbalanced triangular-right branch.
+  The remaining right hull is quadrilateral. With both central points
+  above CE only support cell II remains, and PQ puts D,C together and
+  E,B together on opposite sides. With exactly one above, cells I, II,
+  and III remain.
 
 The opposite-corner family C2 and the entire three-corner family Type III
 are closed at \(7/128<A_0\).
@@ -120,6 +115,7 @@ python hand/check_type_ii_balanced.py
 python hand/check_global_completion.py
 python hand/check_type_ii_completion.py
 python hand/check_one_corner_completion.py
+python hand/check_c1_mixed_pentagon.py
 python hand/check_four_interior_quadrilaterals.py
 python hand/check_balanced_bottom_inner_sector.py
 python hand/check_balanced_right_mixed.py

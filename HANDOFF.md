@@ -9,6 +9,9 @@ excluded by hand at \(7/128<A_0\).
 Every nine-point convex-position configuration is now excluded below
 \(1/19\). The **entire balanced Type-II count row \((2,2,2)\)** is
 also excluded. Only the unbalanced Type-II count \((1,2,3)\) remains.
+Its entire triangular-right branch is now excluded as well. The C1
+case whose hull is exactly its five prescribed anchors is completely
+excluded; only larger C1 hulls remain.
 The full sharp chamber with F moved inward from its top side is closed,
 and equality forces the original configuration.
 The unrestricted nine-point theorem is **not yet proved by hand**.
@@ -61,11 +64,18 @@ The final two balanced cells have separate short notes:
 uses a five-area cancellation and weighted-mean identity, and
 [hand/BALANCED_RIGHT_MIXED.md](hand/BALANCED_RIGHT_MIXED.md) proves a
 uniform height bound and a strict rational area gap.
-For unbalanced Type II, Section 12 of `hand/TYPE_II_COMPLETION.md`
-excludes the one-above CE cut when the right hull is triangular.
+For unbalanced Type II, Theorem 14 of `hand/TYPE_II_COMPLETION.md`
+excludes the entire triangular-right branch using the stronger
+six-point cell-II inequality of Theorem 13.
 [hand/UNBALANCED_RIGHT_HULL.md](hand/UNBALANCED_RIGHT_HULL.md)
 excludes a pentagonal right hull and, in the two-above CE cut,
-both outer support cells of the quadrilateral right hull.
+both outer support cells of the quadrilateral right hull and both
+isolated-endpoint orientations of the central pair.
+[hand/C1_MIXED_PENTAGON.md](hand/C1_MIXED_PENTAGON.md) completes
+both mixed-pair alternatives and therefore the whole five-anchor C1
+pentagon. Sections 6--7 of `hand/SEVEN_BOUNDARY_CAPS.md` give the
+strict doubled-area bound \([ACF]<13/16\), exclude the whole upper
+left overlap \(AHF\cap HCF\), and close the BC/FH left-pair assignment.
 
 The sharp chamber inequality, positive stress, local proof, and 84-triangle
 attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
@@ -74,29 +84,19 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 
 - **N with six or seven boundary points:** six prescribed side contacts,
   three arbitrary points, and projection-overlap inequalities.
-- **C1:** one corner, four additional side contacts, four arbitrary points.
-  If these five anchors are the full hull, the only remaining placements
-  have two free points in the lower corner triangle and two together in
-  HCD or HCF. Within that upper triangle, one is in the common central
-  sector and one is in the outer ear; their joining line isolates the
-  ear vertex. The corresponding four-interior-point quadrilateral must
-  alternate across its diagonals. These placements and larger hulls
-  still need an argument.
+- **C1:** only configurations whose hull extends beyond the five prescribed
+  anchors remain. Every exact five-anchor pentagon placement is closed.
 - **Type II:** after normalization to \(b\le1/2\), only the occupancy
   class \((\ell,c,r)=(1,2,3)\) remains. The left count consists of the
   prescribed side contact. Type III, the normalization's alternative,
   and the entire balanced Type-II row are closed. The exact residual
   cases are:
 
-  1. A triangular right hull BCR with S,T inside: both central points
-     are above CE. The eight-point hulls DBRC and DERC both have the
-     same alternating four interior points. Every right point X obeys
-     \(X_y<\lambda+q^2X_x\), but the required coupled inequality
-     between the central and right pairs remains open.
-  2. A quadrilateral right hull with both central points above CE:
+  1. A quadrilateral right hull with both central points above CE:
      only support cell II remains; its right interior point lies in
-     both BCR and BCS, with neither outer ear occupied.
-  3. A quadrilateral right hull with exactly one central point above
+     both BCR and BCS, with neither outer ear occupied. The central
+     joining line puts D,C together and E,B together on opposite sides.
+  2. A quadrilateral right hull with exactly one central point above
      CE: support cells I, II, and III remain. A pentagonal right hull
      is excluded in both CE cuts.
 
@@ -106,7 +106,7 @@ inside the square; do not treat boundary pushing as automatic.
 
 ## Checks and trust boundary
 
-All twenty hand-proof diagnostics have been run locally: the original identities,
+The twenty original hand-proof diagnostics have been run locally: the original identities,
 the eight-boundary inequalities, radial catalogue, R6 derivatives,
 opposite-corner identities, corner-family identities and exact attainment,
 four-corner argument, Type-II identities, quadrilateral-hull formulas,
@@ -116,8 +116,12 @@ the two-vertex capacity and right-hull arguments, both quadrilateral-pair
 exclusions, the alternating-sector theorem, the second-shear exclusion,
 the four exhaustive final balanced cells, the inward-moving chamber's
 determinant and scalar identities and all 918 rational coefficient bounds,
-the unbalanced triangular-right empty-ear reduction, and both
-unbalanced outer-support-cell exclusions.
+the unbalanced triangular-right reduction, and both
+unbalanced outer-support-cell exclusions. The updated diagnostics and
+the new C1 mixed-pentagon diagnostic also pass for the complete
+triangular-right exclusion, both isolated central-line exclusions,
+the full C1 pentagon theorem, and the seven-boundary diagonal and
+upper-left overlap bounds.
 The original exact local checker has also passed. The arguments include the
 geometric and sign reasoning that those diagnostics alone cannot establish.
 No external independent review or Lean verification is claimed.
