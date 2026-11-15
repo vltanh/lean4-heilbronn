@@ -412,7 +412,7 @@ left side of (16) strictly greater than
 \[
 g(b):=\frac1b+\frac{99}{17(1-b)},
 \]
-and also strictly below by the same expression \(g(w)\).
+and is likewise strictly greater than \(g(w)\).
 The function \(g\) decreases on \(0<b\le19/100\) and increases
 on \(w\ge41/100\).
 Its endpoint excesses above \(86/7\) are respectively
