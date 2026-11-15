@@ -22,7 +22,7 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G3 | Strict local maximum against arbitrary eighteen-coordinate perturbations | Complete qualitative hand proof; separate explicit-radius arithmetic certificate |
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
-| G5 | Type II: adjacent corners and five free points | Reduced to two exhaustive count classes, \((1,2,3)\) and \((2,2,2)\) |
+| G5 | Type II: adjacent corners and five free points | Two counts remain; the balanced count has triangular left and right hulls and an alternating eight-point quadrilateral |
 | G6 | N and C1 with fewer than eight boundary points | **Main remaining global structural obstruction** |
 | G7 | Unrestricted sharp theorem and uniqueness | Conditional on G5, G6; equality transfer through shears is already proved |
 
@@ -76,6 +76,22 @@ free points lie on each side of HC; the two upper points must both be in
 HCD or both in HCF. The other pentagonal placements are excluded.
 [SEVEN_BOUNDARY_CAPS.md](hand/SEVEN_BOUNDARY_CAPS.md) excludes two lower ears
 and several complete pair placements with seven boundary contacts.
+[GLOBAL_COMPLETION.md](hand/GLOBAL_COMPLETION.md) additionally excludes
+both lower exterior corner caps, without requiring the top contact to
+be on the nearer half of its side. It also proves that every nine-point
+convex-position configuration has minimum triangle area below \(1/19\),
+using the classical planar affine isoperimetric inequality.
+[FOUR_INTERIOR_QUADRILATERALS.md](hand/FOUR_INTERIOR_QUADRILATERALS.md)
+proves that an actual quadrilateral containing four further points has
+exactly one in each diagonal sector. Consequently every competitive
+configuration has between five and eight hull vertices.
+
+[ONE_CORNER_COMPLETION.md](hand/ONE_CORNER_COMPLETION.md) excludes the
+entire common-sector upper pair in the exact-pentagon C1 branch. A
+surviving pair has one point in the central sector and one in the
+corresponding outer ear; its joining line isolates the ear vertex.
+The four free points also alternate in the corresponding four-vertex
+container. The ninth-point interaction is not yet excluded.
 These results narrow G6 but do not complete it.
 
 For a fixed choice of the other eight points, the sign-consistent feasible
@@ -138,11 +154,26 @@ occupancy classifications for the six-hull N and five-hull C1 cases.
 In addition, [TYPE_II_BALANCED.md](hand/TYPE_II_BALANCED.md) excludes the
 entire balanced left-quadrilateral branch. Its left free point is inside
 DBE and above CE, exactly one central point is above CE, and the other is
-below CE. Their interaction with the two right points remains open.
+below CE. [TYPE_II_COMPLETION.md](hand/TYPE_II_COMPLETION.md), Section 6,
+now excludes the entire balanced right-quadrilateral branch as well.
+For the surviving triangular right hull BCR, with S inside, its lower
+ear EBR is empty. The eight points other than B therefore have hull DERC,
+and the four interior points occupy its four diagonal sectors once each.
+The coupling to B remains open.
 In the unbalanced row, at least one central point is above CE; the
 one-point and two-point cuts against the right triple remain open.
 Sections 11--12 of `TYPE_II.md` supply exact necessary parameter bounds
 for those cuts, without claiming they suffice for an exclusion.
+
+The same new note proves a stronger global container theorem: a triangle
+of area at most \(1/2\) with two actual vertices contains at most five
+configuration points in total, even if its third vertex is outside the
+square. For Type II, sweeping that third vertex along the bottom line
+gives 35 explicit strict interval-overlap exclusions. These are necessary
+conditions, not a proof that either residual count is empty. The new
+capacity theorem depends on the earlier unrestricted actual-triangle
+capacity theorem, so its corollary about opposite occupied corners is
+downstream of the original C2 proof.
 
 ## 4. Final assembly and verification
 

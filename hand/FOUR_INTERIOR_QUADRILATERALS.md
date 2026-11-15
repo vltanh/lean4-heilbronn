@@ -274,7 +274,7 @@ The other sector gives the same lower bound for
 \[
 \begin{aligned}
 1
-&\ge\sqrt{ab}+\sqrt{(1-a)(1-b)}\
+&\ge\sqrt{ab}+\sqrt{(1-a)(1-b)}\\
 &\ge4\sqrt{s}+4s>1.
 \end{aligned}                                            \tag{10}
 \]
@@ -289,6 +289,20 @@ actual diagonal; the corresponding actual triangle would violate the
 same capacity theorem. This proves the last assertion too.
 
 ## 6. Consequences for the remaining hand-proof families
+
+Together with the convex-position exclusion in
+[GLOBAL_COMPLETION.md](GLOBAL_COMPLETION.md), this also bounds the
+number of hull vertices of every competitive configuration:
+
+\[
+\boxed{5\le\#\operatorname{vert}(\operatorname{conv}\mathcal P)\le8.}
+\]
+
+A triangular hull would contain six further actual points, contradicting
+triangle capacity two. A quadrilateral hull would contain five, contrary
+to Theorem 1. Positive minimum area rules out additional points on hull
+edges, and the cited convex-position theorem excludes nine hull vertices.
+These are hull counts; the vertices need not lie on the square boundary.
 
 In the balanced Type-II case with a triangular right hull, Section 5 of
 [TYPE_II_COMPLETION.md](TYPE_II_COMPLETION.md) proves that the eight
