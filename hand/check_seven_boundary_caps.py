@@ -154,3 +154,15 @@ assert sp.Rational(7, 50) - sp.Rational(1, 8) == sp.Rational(3, 200)
 assert sp.Rational(7, 64) / (1 - 2 * sp.Rational(7, 64)) == sp.Rational(7, 50)
 assert 1 - 8 * sp.Rational(7, 64) == sp.Rational(1, 8)
 print("PASS: complete nearer upper exterior-cap exclusion")
+
+# The far cap's fixed-leg support triangle and its strict area budget.
+cap_k = 1-(1-f)*(1-cap_y)/(cap_x-f)
+assert sp.factor(doubled((f, 1), (cap_x, cap_y), (1, cap_k))) == 0
+assert sp.factor(cap_k-e
+                 - doubled((f, 1), (1, e), (cap_x, cap_y))/(cap_x-f)) == 0
+assert sp.factor(doubled((1, d), (1, cap_k), (f, 1))
+                 - (1-f)*(cap_k-d)) == 0
+assert sp.Rational(1, 12) < sp.Rational(1, 8)
+assert sp.Rational(1, 10) < sp.Rational(1, 8)
+assert sp.Rational(49, 64) < sp.Rational(13, 16)
+print("PASS: far upper exterior-cap capacity one")

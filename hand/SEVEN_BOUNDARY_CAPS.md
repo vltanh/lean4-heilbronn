@@ -976,6 +976,70 @@ Together with the two lower exterior-cap exclusions in
 exterior cap \(\operatorname{conv}\{F,E,(1,1)\}\) remains under the
 choice \(f\le1/2\).
 
+## 11. The far upper exterior cap contains at most one free point
+
+**Theorem 11.** Under (1)--(2), the cap
+\(\operatorname{conv}\{F,E,K_0\}\), \(K_0=(1,1)\), cannot contain
+both free points.
+
+**Proof.** Suppose it contains \(X=(x,y)\) and \(Y\).
+An edge coincidence on \(EF\) gives zero area; a point on the right
+side would be collinear with \(D,E\). Thus both points have first
+coordinate strictly between \(f\) and one, and lie strictly beyond
+\(EF\). For each point \(Z=(z_1,z_2)\), the line \(FZ\) meets the
+right side at height
+
+\[
+\kappa_Z=1-\frac{(1-f)(1-z_2)}{z_1-f},
+\qquad e<\kappa_Z\le1.
+\]
+
+Set \(k'=\max(\kappa_X,\kappa_Y)\), and \(K'=(1,k')\).
+The triangle \(DFK'\) contains all five actual points \(D,F,E,X,Y\).
+The point \(E\) is in the relative interior of its right leg, and
+one of \(X,Y\), say \(X\), is in the relative interior of its other
+leg \(FK'\). Equality of the two intercepts would make \(F,X,Y\)
+collinear, so the remaining point \(Y\) is strictly inside the support
+triangle.
+
+Apply the half-square support normalization in Section 1 of
+[TYPE_II.md](TYPE_II.md), with \(D,F\) as the two base endpoints.
+The point \(E\) becomes its leg contact \(H\), and \(X\) becomes its
+other leg contact. Since \(Y\) is beyond \(EF\), it is outside the
+triangle formed by the two base endpoints and the first leg contact.
+Thus its sign \(K\) in that section is negative: only cells III, IV,
+or V are possible. The bounds proved there are respectively
+
+\[
+\frac1{4+2\sqrt3},\qquad \frac1{12},\qquad
+\frac{5\sqrt5-11}{2}<\frac1{10}.
+\]
+
+Each is at most \(1/K\), where \(K=4+2\sqrt3<8\).
+If \(\Omega\) is the doubled area of the support triangle, its
+normalized doubled minimum area is at least \(s/\Omega\).
+Consequently \(\Omega\ge Ks>13/16\).
+
+On the other hand, Theorem 9 gives \(b>1/8\), and the actual
+triangle \(BCD\) gives \(d(c-b)\ge s\). Since \(f\ge b\) and
+\(c-b<1-b\),
+
+\[
+\begin{aligned}
+\Omega&=(1-f)(k'-d)\le(1-f)(1-d)\\
+&\le(1-b)\left(1-\frac{s}{c-b}\right)
+<1-b-s<\frac{49}{64}<\frac{13}{16}.
+\end{aligned}
+\]
+
+This is a contradiction. The whole far upper cap therefore has
+capacity one for the two free points. \(\square\)
+
+Theorems 10--11 and the lower exterior-cap exclusions imply that any
+remaining seven-boundary configuration with an additional hull vertex
+has exactly one free point in the far upper cap and its other free
+point strictly inside the original boundary heptagon.
+
 ## Verification
 
 The optional [check_seven_boundary_caps.py](check_seven_boundary_caps.py)
