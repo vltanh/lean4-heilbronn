@@ -344,6 +344,41 @@ def mixed_central_placement():
     print("PASS: mixed/central quartic, quadrilateral capacity, complete closure constants")
 
 
+def opposite_mixed_complete():
+    q = sp.Rational
+    sigma, c = q(93,1000), q(89,100)
+    h, b, d, f, p, t, u, v, x, y, r0, z = sp.symbols("h b d f p t u v x y r0 z")
+    C, T = h*b-h*p-b*t, h*u+b*v-h*b
+    dH = h*(u-p)+p*v-u*t
+    zero((h+b)*dH-((h+u-v)*C+(h-t+p)*T))
+    DA = x*v-u*y
+    M, N = -DA-h*(u-x), DA+d*(u-x)-(v-y)
+    K, L = h-y+(1-h)*x, v-d*u
+    zero(M+N-((1-d)*x+h*(1-u)-K-L))
+    zero(h*x+2*K+y-x-(h+K))
+    assert 2*sigma*(4+q(100,69))-1 == q(39,2875) > 0
+    a = sigma/c
+    assert 1-2*sigma-2*a == q(26923,44500)
+    assert 4*a-(1-2*sigma-2*a)**2 == q(102852071,1980250000) > 0
+
+    A0 = sigma+a
+    F = lambda f,b: (f*(b+sigma)-b*A0)*(b-2*sigma)-sigma*(1+b-f)*(f+A0)
+    F1, F2 = F((1+r0-v)/2,(1+r0+v)/2), F((1-r0-v)/2,(1-r0+v)/2)
+    P = 11125000*v**3+9311500*v*v-3106261*v+246761
+    S0 = -P/44500000
+    Cv = (11125000*v+26911500)/44500000
+    J = (55625*r0*r0-55625*v*v+46615*v+85872)/222500
+    zero(F1+F2-S0-Cv*r0*r0)
+    zero(F1-F2-r0*J)
+    assert Cv.subs(v,q(2,5)) < q(7,8)
+    assert q(85872,222500)-q(3,8) == q(4869,445000) > 0
+    expansion = 11125000*z**3+13761500*z*z-29861*z+q(3307637,135)
+    zero(P.subs(v,z+q(2,15))-expansion)
+    assert 13761500-11125000*q(2,15) == q(36834500,3)
+    assert 29861**2-4*q(36834500,3)*q(3307637,135) == -q(97395898036199,81)
+    print("PASS: opposite-mixed containment identity, both orientations, final cubic contradiction")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -355,4 +390,5 @@ if __name__ == "__main__":
     mixed_cross_corners()
     universal_mixed_corner()
     mixed_central_placement()
+    opposite_mixed_complete()
     symmetric_opposite_orientation()

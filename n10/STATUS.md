@@ -104,10 +104,13 @@ subfamily is now excluded as well: the noncentral points must share a corner
 triangle, and all four pair-line sign alternatives lead to contradictions.
 The full mixed/central alternative is also excluded: its three central points
 must lie inside a quadrilateral divided by an actual diagonal into two
-triangles, each too small to contain two points. Only the opposite-corner
-mixed/mixed alternative remains unchecked under C2.
+triangles, each too small to contain two points. Finally, the opposite-corner
+mixed/mixed alternative is excluded in both exhaustive central-pair
+orientations. One violates a reciprocal-product bound; the other forces two
+opposed scalar inequalities whose minimum is strictly negative. Thus the
+entire C2 family is now closed, with boundary degeneracies covered explicitly.
 
-Seven global obligations remain: III-3C-U3, C2, II, C1, N6, N7,
+Six global obligations remain: III-3C-U3, II, C1, N6, N7,
 and the complete asymmetric N8 domain. HP14 (assembly) and HP15 (final
 manuscript audit) depend on those obligations and remain unchecked. The
 computer-assisted completion above is not a substitute for these hand proofs.

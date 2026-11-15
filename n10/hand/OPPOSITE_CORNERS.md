@@ -1,12 +1,9 @@
-# Opposite corners: complete exclusion when both diagonal halves are central
+# Opposite corners: the central theorem and complete C2 assembly
 
-This note closes the complete C2 subfamily in which both free points in
-each diagonal half belong to its central cell II. It also proves uniform
-contact bounds for the entire C2 family. The same-corner mixed alternative
-is closed in C2_MIXED.md and the mixed/central alternative in
-C2_MIXED_CENTRAL.md. The opposite-corner mixed alternative listed in Section
-10 remains open, so HP11-C2 itself is not yet closed. Every
-argument below is analytic and independent of the computer cover.
+This note proves uniform contact bounds and the central/central theorem.
+Section 10 assembles that theorem with the three complete mixed-family
+arguments into the exclusion of the entire C2 family. Every argument is
+analytic and independent of the computer cover.
 
 Use the normalized anchors
 
@@ -621,27 +618,33 @@ This is a contradiction. Thus the complete C2-II/II subfamily is excluded:
 no ten-point C2 configuration whose two free points in each half are
 central can have minimum ordinary area at least A*.
 
-## 10. Remaining C2 obligations
+## 10. Complete C2 assembly, including boundary faces
 
 The exhaustive half-pair catalogue in Section 1 has three states:
-I+II, II+II, and II+III. Section 9 closes the state II+II in both halves.
-The other states contain a noncentral point. Up to exchanging the two
-halves and simultaneously reflecting I with III, the other full
-subfamilies are
+I+II, II+II, and II+III. Its nine ordered upper/lower pairs are exhausted
+by the following four classes, up to square symmetries:
 
-    mixed/central (closed),
-    mixed/mixed with the I points toward the same occupied corner (closed),
-    mixed/mixed with the I points toward opposite occupied corners.
+| Class | Ordered half-state pairs | Complete exclusion |
+|---|---:|---|
+| Central/central | 1 | Sections 5--9 and C2_SAME_HALF_CORNER.md |
+| Mixed/central | 4 | C2_MIXED_CENTRAL.md and C2_MIXED_CROSS.md |
+| Same-corner mixed/mixed | 2 | C2_MIXED.md and C2_NONCENTRAL_CUT.md |
+| Opposite-corner mixed/mixed | 2 | C2_OPPOSITE_MIXED.md and C2_OPPOSITE_REVERSE.md |
 
-This is an exhaustive quotient of the other eight ordered half-state pairs.
-The same-corner alternative is completely excluded in
-[C2_MIXED.md](C2_MIXED.md), using the noncentral corner theorem in
-[C2_NONCENTRAL_CUT.md](C2_NONCENTRAL_CUT.md). The mixed/central alternative
-is completely excluded in [C2_MIXED_CENTRAL.md](C2_MIXED_CENTRAL.md).
-Exactly the opposite-corner mixed/mixed alternative remains open.
+The universal noncentral containment needed in the last class is proved
+in C2_MIXED_CORNER.md. Each mixed-family proof includes all of its
+half-pair and central-pair line orientations; no sign chamber remains.
+The uniform contact bounds in Section 2 apply throughout, while the
+stronger product and central-quadrilateral bounds of Sections 5--9 retain
+their explicitly stated central-half hypotheses.
 
-The uniform contact bounds (3) apply to all of them. Sections 3--4
-also exclude their stated central cross-pair corner cuts, but the stronger
-product and central-quadrilateral arguments of Sections 5--9 have the
-explicit central/central hypothesis. No unchecked mixed case is absorbed
-into the completed central/central result.
+Finally, boundary values excluded from the strict anchor parametrization
+cannot be competitive. If h=0, b=0, d=1, or f=1, two of the six anchors
+coincide. If h=1 or f=0, three anchors lie on the top or left side; if b=1
+or d=0, three lie on the bottom or right side. In every instance an actual
+triangle has zero area. Coincident free points, free points on actual
+pair lines, and all zero determinants are excluded for the same reason.
+
+Thus the nine positive-area alternatives and all their boundary faces
+have been covered. No normalized C2 configuration can have minimum
+ordinary triangle area at least A*. This closes HP11-C2 in full.

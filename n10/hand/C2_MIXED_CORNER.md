@@ -252,5 +252,5 @@ is mixed toward E, their two noncentral points lie inside AHB and EFD,
 respectively. Since each of those corner triangles has doubled area
 less than (89/100)(69/100)<Gamma2 sigma, neither can contain an additional
 free point. Both central points consequently lie outside both corner
-triangles. Further coupling of those two central points is still needed
-to close the opposite-corner mixed/mixed family.
+triangles. Their complete remaining coupling argument is given in
+C2_OPPOSITE_MIXED.md and C2_OPPOSITE_REVERSE.md, which close this family.

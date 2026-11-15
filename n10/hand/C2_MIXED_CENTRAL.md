@@ -206,5 +206,6 @@ requires its doubled area to be at least Gamma2 sigma, contradicting
 (6) or (9).
 
 This excludes every mixed/central C2 configuration, including both
-remaining orientations of its mixed half. The overall HP11-C2 parent
-still requires the separately listed opposite-corner mixed/mixed case.
+remaining orientations of its mixed half. The separately proved
+opposite-corner mixed/mixed case completes HP11-C2; see the assembly in
+OPPOSITE_CORNERS.md, Section 10.

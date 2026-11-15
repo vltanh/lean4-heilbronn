@@ -3,8 +3,8 @@
 This note excludes the complete C2 family in which both diagonal halves
 are mixed and their noncentral points are toward the same occupied
 corner. Every half-pair line orientation is included. The mixed/central
-family is separately excluded in C2_MIXED_CENTRAL.md; the mixed/mixed
-family with noncentral points toward opposite corners remains open.
+family is separately excluded in C2_MIXED_CENTRAL.md, and the opposite-corner
+mixed family in C2_OPPOSITE_MIXED.md and C2_OPPOSITE_REVERSE.md.
 No numerical optimization is used below.
 
 Use the anchors, cell definitions, and contact bounds of
@@ -225,4 +225,6 @@ minimum ordinary area at least A*.
 The conclusions above reduce the other mixed C2 possibilities to one mixed
 and one central half, or two mixed halves whose noncentral points are toward
 opposite occupied corners. C2_MIXED_CENTRAL.md now excludes the former
-completely. The opposite-corner mixed/mixed alternative remains open.
+completely. C2_OPPOSITE_MIXED.md and C2_OPPOSITE_REVERSE.md exclude the
+opposite-corner mixed/mixed alternative, completing C2 as assembled in
+OPPOSITE_CORNERS.md, Section 10.

@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 6 — November 15, 2026.
+Checkpoint 7 — November 15, 2026.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -103,7 +103,9 @@ Only the distributed alternative of U3 remains unresolved in this family.
 
 ### Other corner and corner-free families
 
-- [ ] HP11-C2. Exclude normalized maximizers with two opposite corners.
+- [x] HP11-C2. Exclude the complete normalized two-opposite-corner family.
+      The exhaustive half-cell catalogue has all four subfamilies closed;
+      OPPOSITE_CORNERS.md, Section 10 assembles them and covers boundary faces.
   - [x] C2-CENTRAL/CENTRAL. Both free points in each diagonal half are
         in its central cell II. The two corner triangles and the middle
         quadrilateral cannot accommodate all four free points.
@@ -117,9 +119,11 @@ Only the distributed alternative of U3 remains unresolved in this family.
         occupied corner. Every mixed-half orientation forces both into
         the same corner triangle, where all pair-line orientations are
         excluded. Proof: C2_MIXED.md and C2_NONCENTRAL_CUT.md.
-  - [ ] C2-MIXED/OPPOSITE. Both halves have noncentral points toward opposite
-        occupied corners. These mixed alternatives are exhaustive up to
-        square symmetry; see OPPOSITE_CORNERS.md, Sections 1 and 10.
+  - [x] C2-MIXED/OPPOSITE. Both halves have noncentral points toward opposite
+        occupied corners. A common horizontal interval fixes two contact
+        signs. One remaining orientation contradicts a mate-product bound;
+        the other forces two opposed polynomial inequalities that cannot
+        both hold. Proof: C2_OPPOSITE_MIXED.md and C2_OPPOSITE_REVERSE.md.
 - [ ] HP11-II. Exclude normalized maximizers with two adjacent corners.
 - [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -131,9 +135,9 @@ Only the distributed alternative of U3 remains unresolved in this family.
       orientation of the two interior points. HP10 closes only its stated
       symmetric subchamber, not this parent item.
 
-There are now SEVEN named unresolved global obligations: the remaining
-exact-three-corner class U3 and the six entries immediately above. These
-are continuous-domain obligations, not seven small arithmetic checks. Each must
+There are now SIX named unresolved global obligations: the remaining
+exact-three-corner class U3, II, C1, N6, N7 and complete asymmetric N8. These
+are continuous-domain obligations, not six small arithmetic checks. Each must
 admit a uniform argument or an explicitly exhaustive further subdivision.
 New subdivisions must retain their parent until all children close. No bound
 on the eventual number of smaller subcases is claimed.
@@ -167,19 +171,21 @@ Ordinary averaging is not a justified reduction.
 | TRIANGLE_OCCUPANCY.md | Universal bound for a triangle containing four points; full U4 exclusion |
 | THREE_CORNERS.md | Seven-point endpoint theorem; full U0, U1 and U2 exclusions |
 | CLUSTERED_TRIANGLE.md | Universal exclusion of three clustered interior points; full U3-CLUSTERED exclusion |
-| OPPOSITE_CORNERS.md | Uniform C2 contact bounds and complete central/central exclusion |
+| OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
 | C2_NONCENTRAL_CUT.md | Noncentral corner-cut inequality, empty-fan bound, and complete corner-pair exclusion |
 | C2_MIXED_CORNER.md | Universal noncentral corner containment, including opposite-corner mixed halves |
 | C2_MIXED_CROSS.md | Complete exclusion of a noncentral/central cross pair in the noncentral corner |
 | C2_MIXED_CENTRAL.md | Full mixed/central C2 exclusion by a two-triangle capacity contradiction |
+| C2_OPPOSITE_MIXED.md | Complete opposite-corner mixed exclusion, with the exhaustive two-orientation reduction |
+| C2_OPPOSITE_REVERSE.md | Final opposite-mixed orientation excluded by an explicit positive cubic |
 
 ## Next attack and stopping rules
 
-The next targets are the distributed U3 alternative and the remaining
-opposite-corner mixed/mixed C2 family. The stronger occupancy and
-clustered-triangle bounds also apply
+The next targets are the distributed U3 alternative and the adjacent-corner
+and one-corner families II and C1. The stronger occupancy,
+clustered-triangle and complete opposite-corner theorems also apply
 in the other families. The exact diagnostic in
 `../discovery/ENDPOINT_COVER_LIMIT.md` rules out a threshold-free shortcut;
 it does not rule out a container argument using the competitive area bound.
