@@ -9,7 +9,10 @@ public import Heilbronn.Construction
 **Role.** Primary route. `UNRESTRICTED.md` §2 (lines 56-60) uses Lemma 1, Corollary 2 and
 Theorem 3 to bring a maximizer into one of the five families N, C1, C2, Type II, Type III, and §5
 (line 212) uses Lemma 4 to transfer the equality case back through the normalizing shears.
-`THREE_INTERIOR_TRIANGLES.md` Corollary 5 reruns the same normalization.
+`THREE_INTERIOR_TRIANGLES.md` Corollary 5 reruns the same normalization: Lemma 1, Corollary 2
+and the exhaustiveness are proved under `BoundaryReduction.NoExpand` (`lemma1_of_noExpand`,
+`corollary2_of_noExpand`, `exists_family_of_noExpand`), and the maximizer statements are
+corollaries.
 
 **Setting.** A maximizer `P` of nine points with positive least area. From
 `BOUNDARY_REDUCTION.md` it has every side contacted and the projection-overlap property
@@ -178,18 +181,18 @@ theorem shear_core (x y : Fin 9 → ℝ) (ℓ : ℝ) (hx : ∀ k, 0 ≤ x k ∧ 
   `(x, y) ↦ (x, y + t(x - ℓ))`.
 `hand/GLOBAL_STRUCTURE.md`, lines 31-65.
 Uses: BOUNDARY_REDUCTION:claim-overlap -/
-theorem lemma1 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
+theorem lemma1_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P) (hpos : 0 < minTriangleArea P) :
     ((∃! i, (P i).1 = 0) → (∃! i, (P i).1 = 1) →
-      ∃ t ℓ : ℝ, (∀ i, shearX t ℓ (P i) ∈ unitSquare) ∧ IsMaximizer (shearX t ℓ ∘ P) ∧
+      ∃ t ℓ : ℝ, (∀ i, shearX t ℓ (P i) ∈ unitSquare) ∧
         incidences P ⊆ incidences (shearX t ℓ ∘ P) ∧
         ∃ i, (P i).1 ≠ 0 ∧ (P i).1 ≠ 1 ∧
           ((shearX t ℓ (P i)).1 = 0 ∨ (shearX t ℓ (P i)).1 = 1)) ∧
     ((∃! i, (P i).2 = 0) → (∃! i, (P i).2 = 1) →
-      ∃ t ℓ : ℝ, (∀ i, shearY t ℓ (P i) ∈ unitSquare) ∧ IsMaximizer (shearY t ℓ ∘ P) ∧
+      ∃ t ℓ : ℝ, (∀ i, shearY t ℓ (P i) ∈ unitSquare) ∧
         incidences P ⊆ incidences (shearY t ℓ ∘ P) ∧
         ∃ i, (P i).2 ≠ 0 ∧ (P i).2 ≠ 1 ∧
           ((shearY t ℓ (P i)).2 = 0 ∨ (shearY t ℓ (P i)).2 = 1)) := by
-  obtain ⟨hov1, hov2, hov3, hov4⟩ := claim_overlap hP hpos
+  obtain ⟨hov1, hov2, hov3, hov4⟩ := claim_overlap_of_noExpand hP hpos
   refine ⟨fun hL hR => ?_, fun hB hT => ?_⟩
   · obtain ⟨iL, hiL, huL⟩ := hL
     obtain ⟨iR, hiR, huR⟩ := hR
@@ -206,7 +209,7 @@ theorem lemma1 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangl
       (by by_contra h; push Not at h; exact not_forall_snd_eq hpos _ h)
     have hfeas' : ∀ i, shearX t (P iL).2 (P i) ∈ unitSquare := fun i =>
       ⟨(hfeas i).1, (hfeas i).2, (hP.1 i).2.2.1, (hP.1 i).2.2.2⟩
-    refine ⟨t, (P iL).2, hfeas', isMaximizer_shearX hP hfeas', ?_, k, hk0, hk1, hk⟩
+    refine ⟨t, (P iL).2, hfeas', ?_, k, hk0, hk1, hk⟩
     rintro ⟨i, S⟩ hi
     change S.Contains (P i) at hi
     change S.Contains (shearX t (P iL).2 (P i))
@@ -230,7 +233,7 @@ theorem lemma1 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangl
       (by by_contra h; push Not at h; exact not_forall_fst_eq hpos _ h)
     have hfeas' : ∀ i, shearY t (P iB).1 (P i) ∈ unitSquare := fun i =>
       ⟨(hP.1 i).1, (hP.1 i).2.1, (hfeas i).1, (hfeas i).2⟩
-    refine ⟨t, (P iB).1, hfeas', isMaximizer_shearY hP hfeas', ?_, k, hk0, hk1, hk⟩
+    refine ⟨t, (P iB).1, hfeas', ?_, k, hk0, hk1, hk⟩
     rintro ⟨i, S⟩ hi
     change S.Contains (P i) at hi
     change S.Contains (shearY t (P iB).1 (P i))
@@ -239,6 +242,25 @@ theorem lemma1 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangl
     · rw [hb i (Or.inl hi), sub_self, mul_zero, add_zero, hi]
     · exact hi
     · rw [hb i (Or.inr hi), sub_self, mul_zero, add_zero, hi]
+
+/-- **Lemma 1** (`GLOBAL_STRUCTURE:Lemma1`) for a maximizer (see `lemma1_of_noExpand`). -/
+theorem lemma1 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
+    ((∃! i, (P i).1 = 0) → (∃! i, (P i).1 = 1) →
+      ∃ t ℓ : ℝ, (∀ i, shearX t ℓ (P i) ∈ unitSquare) ∧ IsMaximizer (shearX t ℓ ∘ P) ∧
+        incidences P ⊆ incidences (shearX t ℓ ∘ P) ∧
+        ∃ i, (P i).1 ≠ 0 ∧ (P i).1 ≠ 1 ∧
+          ((shearX t ℓ (P i)).1 = 0 ∨ (shearX t ℓ (P i)).1 = 1)) ∧
+    ((∃! i, (P i).2 = 0) → (∃! i, (P i).2 = 1) →
+      ∃ t ℓ : ℝ, (∀ i, shearY t ℓ (P i) ∈ unitSquare) ∧ IsMaximizer (shearY t ℓ ∘ P) ∧
+        incidences P ⊆ incidences (shearY t ℓ ∘ P) ∧
+        ∃ i, (P i).2 ≠ 0 ∧ (P i).2 ≠ 1 ∧
+          ((shearY t ℓ (P i)).2 = 0 ∨ (shearY t ℓ (P i)).2 = 1)) := by
+  obtain ⟨h1, h2⟩ := lemma1_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
+  refine ⟨fun hL hR => ?_, fun hB hT => ?_⟩
+  · obtain ⟨t, ℓ, hf, hinc, k, hk⟩ := h1 hL hR
+    exact ⟨t, ℓ, hf, isMaximizer_shearX hP hf, hinc, k, hk⟩
+  · obtain ⟨t, ℓ, hf, hinc, k, hk⟩ := h2 hB hT
+    exact ⟨t, ℓ, hf, isMaximizer_shearY hP hf, hinc, k, hk⟩
 
 /-- A contacted side with more than one contact carries two distinct points. -/
 theorem twoContacts_of_not_unique {P : Fin 9 → Point} {S : Side} (h : ∃ i, S.Contains (P i))
@@ -254,18 +276,17 @@ which each pair of opposite sides has a side with two contacts.
 `hand/GLOBAL_STRUCTURE.md`, lines 71-82.
 Uses: GLOBAL_STRUCTURE:Lemma1, BOUNDARY_REDUCTION:claim-side-contact,
 GLOBAL_STRUCTURE:claim-two-per-side -/
-theorem corollary2 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
-    ∃ Q : Fin 9 → Point, Normalizes P Q ∧ IsMaximizer Q ∧
-      minTriangleArea Q = minTriangleArea P ∧
+theorem corollary2_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
+    (hpos : 0 < minTriangleArea P) :
+    ∃ Q : Fin 9 → Point, Normalizes P Q ∧
       (TwoContacts Q .left ∨ TwoContacts Q .right) ∧
       (TwoContacts Q .bottom ∨ TwoContacts Q .top) := by
-  obtain ⟨P₁, hPP₁, hP₁, hmin₁, hLR⟩ : ∃ P₁, Normalizes P P₁ ∧ IsMaximizer P₁ ∧
-      minTriangleArea P₁ = minTriangleArea P ∧ (TwoContacts P₁ .left ∨ TwoContacts P₁ .right) := by
-    obtain ⟨hl, -, hr, -⟩ := claim_side_contact hP hpos
+  obtain ⟨P₁, hPP₁, hLR⟩ : ∃ P₁, Normalizes P P₁ ∧
+      (TwoContacts P₁ .left ∨ TwoContacts P₁ .right) := by
+    obtain ⟨hl, -, hr, -⟩ := claim_side_contact_of_noExpand hP hpos
     by_cases hu : (∃! i, (P i).1 = 0) ∧ (∃! i, (P i).1 = 1)
-    · obtain ⟨t, ℓ, hfeas, hmax, hinc, k, hk0, hk1, hk⟩ := (lemma1 hP hpos).1 hu.1 hu.2
-      refine ⟨shearX t ℓ ∘ P, .single (.xShear t ℓ hP.1 hfeas), hmax,
-        minTriangleArea_shearX t ℓ P, ?_⟩
+    · obtain ⟨t, ℓ, hfeas, hinc, k, hk0, hk1, hk⟩ := (lemma1_of_noExpand hP hpos).1 hu.1 hu.2
+      refine ⟨shearX t ℓ ∘ P, .single (.xShear t ℓ hP.1 hfeas), ?_⟩
       obtain ⟨iL, hiL, -⟩ := hu.1
       obtain ⟨iR, hiR, -⟩ := hu.2
       rcases hk with hk | hk
@@ -275,17 +296,17 @@ theorem corollary2 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTri
       · right
         exact ⟨k, iR, by rintro rfl; exact hk1 hiR, hk,
           hinc (show (iR, Side.right) ∈ incidences P from hiR)⟩
-    · refine ⟨P, .refl, hP, rfl, ?_⟩
+    · refine ⟨P, .refl, ?_⟩
       rw [not_and_or] at hu
       rcases hu with hu | hu
       · exact Or.inl (twoContacts_of_not_unique hl hu)
       · exact Or.inr (twoContacts_of_not_unique hr hu)
-  have hpos₁ : 0 < minTriangleArea P₁ := by rw [hmin₁]; exact hpos
-  obtain ⟨-, hb, -, ht⟩ := claim_side_contact hP₁ hpos₁
+  have hP₁ := noExpand_of_normalizes hP hPP₁
+  have hpos₁ : 0 < minTriangleArea P₁ := by rw [minTriangleArea_of_normalizes hPP₁]; exact hpos
+  obtain ⟨-, hb, -, ht⟩ := claim_side_contact_of_noExpand hP₁ hpos₁
   by_cases hu : (∃! i, (P₁ i).2 = 0) ∧ (∃! i, (P₁ i).2 = 1)
-  · obtain ⟨t, ℓ, hfeas, hmax, hinc, k, hk0, hk1, hk⟩ := (lemma1 hP₁ hpos₁).2 hu.1 hu.2
-    refine ⟨shearY t ℓ ∘ P₁, hPP₁.tail (.yShear t ℓ hP₁.1 hfeas), hmax,
-      (minTriangleArea_shearY t ℓ P₁).trans hmin₁, ?_, ?_⟩
+  · obtain ⟨t, ℓ, hfeas, hinc, k, hk0, hk1, hk⟩ := (lemma1_of_noExpand hP₁ hpos₁).2 hu.1 hu.2
+    refine ⟨shearY t ℓ ∘ P₁, hPP₁.tail (.yShear t ℓ hP₁.1 hfeas), ?_, ?_⟩
     · rcases hLR with ⟨i, j, hij, hi, hj⟩ | ⟨i, j, hij, hi, hj⟩
       · exact Or.inl ⟨i, j, hij, hi, hj⟩
       · exact Or.inr ⟨i, j, hij, hi, hj⟩
@@ -298,11 +319,21 @@ theorem corollary2 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTri
     · right
       exact ⟨k, iT, by rintro rfl; exact hk1 hiT, hk,
         hinc (show (iT, Side.top) ∈ incidences P₁ from hiT)⟩
-  · refine ⟨P₁, hPP₁, hP₁, hmin₁, hLR, ?_⟩
+  · refine ⟨P₁, hPP₁, hLR, ?_⟩
     rw [not_and_or] at hu
     rcases hu with hu | hu
     · exact Or.inl (twoContacts_of_not_unique hb hu)
     · exact Or.inr (twoContacts_of_not_unique ht hu)
+
+/-- **Corollary 2** (`GLOBAL_STRUCTURE:Corollary2`) for a maximizer (see
+`corollary2_of_noExpand`). -/
+theorem corollary2 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
+    ∃ Q : Fin 9 → Point, Normalizes P Q ∧ IsMaximizer Q ∧
+      minTriangleArea Q = minTriangleArea P ∧
+      (TwoContacts Q .left ∨ TwoContacts Q .right) ∧
+      (TwoContacts Q .bottom ∨ TwoContacts Q .top) := by
+  obtain ⟨Q, hPQ, h1, h2⟩ := corollary2_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
+  exact ⟨Q, hPQ, isMaximizer_of_normalizes hP hPQ, minTriangleArea_of_normalizes hPQ, h1, h2⟩
 
 /-! ### §2. The three forms without adjacent occupied corners -/
 
@@ -755,36 +786,49 @@ theorem not_occupied_symm {M : Fin 9 → Point} (g : SquareSymmetry) {c c' : Poi
   have := congrArg (symInv g).apply (hi.trans hc.symm)
   simpa only [Function.comp_apply, symInv_apply_apply] using this
 
-/-- Every positive-area maximizer normalizes to a maximizer of the same least area in one of the
+/-- `P` normalizes to `Q` in one of the five families (no maximality). -/
+def ReachesF (P Q : Fin 9 → Point) : Prop := Normalizes P Q ∧ InFamily Q
+
+theorem reachesF_of_symm {M : Fin 9 → Point} (g : SquareSymmetry)
+    (h : ∃ Q, ReachesF (g.apply ∘ M) Q) : ∃ Q, ReachesF M Q := by
+  obtain ⟨Q, h1, h4⟩ := h
+  exact ⟨Q, Relation.ReflTransGen.head (NormStep.symmetry M g) h1, h4⟩
+
+theorem reachesF_of_perm {M : Fin 9 → Point} (σ : Equiv.Perm (Fin 9))
+    (h : InFamily (M ∘ σ)) : ∃ Q, ReachesF M Q :=
+  ⟨M ∘ σ, .single (.relabel M σ), h⟩
+
+/-- Every configuration of positive least area with no feasible expansion normalizes to a maximizer of the same least area in one of the
 five families: Corollary 2, then the adjacent-corner shear or the selections N, C1, C2 after a
 square symmetry. -/
-theorem exists_reaches {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
-    ∃ Q, Reaches P Q := by
-  obtain ⟨M, hPM, hM, hminM, hLR, hBT⟩ := corollary2 hP hpos
-  have hposM : 0 < minTriangleArea M := by rw [hminM]; exact hpos
-  suffices h : ∃ Q, Reaches M Q by
-    obtain ⟨Q, h1, h2, h3, h4⟩ := h
-    exact ⟨Q, hPM.trans h1, h2, h3.trans hminM, h4⟩
-  have hov := claim_overlap hM hposM
-  have hMg : ∀ g : SquareSymmetry, IsMaximizer (g.apply ∘ M) := isMaximizer_symm hM
+theorem exists_family_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
+    (hpos : 0 < minTriangleArea P) : ∃ Q, ReachesF P Q := by
+  obtain ⟨M, hPM, hLR, hBT⟩ := corollary2_of_noExpand hP hpos
+  have hM := noExpand_of_normalizes hP hPM
+  have hposM : 0 < minTriangleArea M := by rw [minTriangleArea_of_normalizes hPM]; exact hpos
+  suffices h : ∃ Q, ReachesF M Q by
+    obtain ⟨Q, h1, h4⟩ := h
+    exact ⟨Q, hPM.trans h1, h4⟩
+  have hov := claim_overlap_of_noExpand hM hposM
+  have hMg : ∀ g : SquareSymmetry, NoExpand (g.apply ∘ M) := hM.symm
   have hposg : ∀ g : SquareSymmetry, 0 < minTriangleArea (g.apply ∘ M) := fun g => by
     rw [SquareSymmetry.minTriangleArea_comp]; exact hposM
   have hovg : ∀ g : SquareSymmetry, ContactOverlap (g.apply ∘ M) := fun g =>
-    claim_overlap (hMg g) (hposg g)
+    claim_overlap_of_noExpand (hMg g) (hposg g)
   have adj : ∀ (g : SquareSymmetry) (c c' : Point), g.apply c = (0, 1) → g.apply c' = (1, 1) →
-      Occupied M c → Occupied M c' → ∃ Q, Reaches M Q := by
+      Occupied M c → Occupied M c' → ∃ Q, ReachesF M Q := by
     intro g c c' hc hc' h h'
-    apply reaches_of_symm g
-    obtain ⟨Q, hQ1, hQ2, hQ3, hQ4⟩ := claim_adjacent_shear (hMg g) (hposg g)
+    apply reachesF_of_symm g
+    obtain ⟨Q, hQ1, hQ4⟩ := claim_adjacent_shear_of_noExpand (hMg g) (hposg g)
       (occupied_symm g hc h) (occupied_symm g hc' h')
-    exact ⟨Q, hQ1, hQ2, hQ3, Or.inr (Or.inr (Or.inr hQ4))⟩
+    exact ⟨Q, hQ1, Or.inr (Or.inr (Or.inr hQ4))⟩
   have c1via : ∀ (g : SquareSymmetry) (c : Point), g.apply c = (0, 0) → Occupied M c →
       ¬ Occupied (g.apply ∘ M) (1, 0) → ¬ Occupied (g.apply ∘ M) (0, 1) →
-      ¬ Occupied (g.apply ∘ M) (1, 1) → ∃ Q, Reaches M Q := by
+      ¬ Occupied (g.apply ∘ M) (1, 1) → ∃ Q, ReachesF M Q := by
     intro g c hc h h1 h2 h3
-    apply reaches_of_symm g
+    apply reachesF_of_symm g
     obtain ⟨σ, hσ⟩ := claim_C1_selection (hMg g).1 (hovg g) (occupied_symm g hc h) ⟨h1, h2, h3⟩
-    exact reaches_of_perm (hMg g) σ (Or.inr (Or.inl hσ))
+    exact reachesF_of_perm σ (Or.inr (Or.inl hσ))
   by_cases hT : Occupied M (0, 1) ∧ Occupied M (1, 1)
   · exact adj ⟨false, false, false⟩ (0, 1) (1, 1) (by norm_num [SquareSymmetry.apply])
       (by norm_num [SquareSymmetry.apply]) hT.1 hT.2
@@ -802,12 +846,12 @@ theorem exists_reaches {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < mi
     have c10 : ¬ Occupied M (1, 0) := fun h => hBo ⟨c00, h⟩
     have c01 : ¬ Occupied M (0, 1) := fun h => hLe ⟨c00, h⟩
     obtain ⟨σ, hσ⟩ := claim_C2_selection hM.1 hov c00 c11 ⟨c10, c01⟩
-    exact reaches_of_perm hM σ (Or.inr (Or.inr (Or.inl hσ)))
+    exact reachesF_of_perm σ (Or.inr (Or.inr (Or.inl hσ)))
   · -- the single corner `(0,0)`: family C1
     have c10 : ¬ Occupied M (1, 0) := fun h => hBo ⟨c00, h⟩
     have c01 : ¬ Occupied M (0, 1) := fun h => hLe ⟨c00, h⟩
     obtain ⟨σ, hσ⟩ := claim_C1_selection hM.1 hov c00 ⟨c10, c01, c11⟩
-    exact reaches_of_perm hM σ (Or.inr (Or.inl hσ))
+    exact reachesF_of_perm σ (Or.inr (Or.inl hσ))
   · -- the single corner `(1,1)`: the half-turn and family C1
     have c10 : ¬ Occupied M (1, 0) := fun h => hRi ⟨h, c11⟩
     have c01 : ¬ Occupied M (0, 1) := fun h => hT ⟨h, c11⟩
@@ -817,13 +861,13 @@ theorem exists_reaches {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < mi
       (not_occupied_symm _ (by norm_num [SquareSymmetry.apply]) c00)
   · by_cases c10 : Occupied M (1, 0) <;> by_cases c01 : Occupied M (0, 1)
     · -- two opposite corners `(1,0)`, `(0,1)`: the reflection `x ↦ 1 - x` and family C2
-      apply reaches_of_symm ⟨false, true, false⟩
+      apply reachesF_of_symm ⟨false, true, false⟩
       obtain ⟨σ, hσ⟩ := claim_C2_selection (hMg ⟨false, true, false⟩).1 (hovg _)
         (occupied_symm _ (by norm_num [SquareSymmetry.apply]) c10)
         (occupied_symm _ (by norm_num [SquareSymmetry.apply]) c01)
         ⟨not_occupied_symm _ (by norm_num [SquareSymmetry.apply]) c00,
           not_occupied_symm _ (by norm_num [SquareSymmetry.apply]) c11⟩
-      exact reaches_of_perm (hMg _) σ (Or.inr (Or.inr (Or.inl hσ)))
+      exact reachesF_of_perm σ (Or.inr (Or.inr (Or.inl hσ)))
     · -- the single corner `(1,0)`: the reflection `x ↦ 1 - x` and family C1
       exact c1via ⟨false, true, false⟩ (1, 0) (by norm_num [SquareSymmetry.apply]) c10
         (not_occupied_symm _ (by norm_num [SquareSymmetry.apply]) c00)
@@ -836,7 +880,14 @@ theorem exists_reaches {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < mi
         (not_occupied_symm _ (by norm_num [SquareSymmetry.apply]) c10)
     · -- no occupied corner: family N
       obtain ⟨g, σ, hσ⟩ := claim_N_selection hM.1 hposM hov ⟨c00, c10, c01, c11⟩ hLR hBT
-      exact reaches_of_symm g (reaches_of_perm (hMg g) σ (Or.inl hσ))
+      exact reachesF_of_symm g (reachesF_of_perm σ (Or.inl hσ))
+
+/-- Every positive-area maximizer normalizes to a maximizer of the same least area in one of the
+five families (`exists_family_of_noExpand`). -/
+theorem exists_reaches {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
+    ∃ Q, Reaches P Q := by
+  obtain ⟨Q, hPQ, hfam⟩ := exists_family_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
+  exact ⟨Q, hPQ, isMaximizer_of_normalizes hP hPQ, minTriangleArea_of_normalizes hPQ, hfam⟩
 
 /-- **Theorem 3** (`GLOBAL_STRUCTURE:Theorem3`). Every positive-area maximizer `P` normalizes (by
 feasible shears, square symmetries and relabellings) to a maximizer `Q` with the same least area
