@@ -487,6 +487,13 @@ Thus that occupancy can extend beyond the five-anchor pentagon only
 through the top cap beyond \(DF\). The top-cap case and the lower
 occupancies still require separate arguments.
 
+[C1_TOP_CAP_RADIAL_SPLIT.md](C1_TOP_CAP_RADIAL_SPLIT.md) further excludes
+the complete top-cap placement in which the ray from \(O\) to an
+exterior top point leaves both lower points on the same side. Thus every
+such top-cap point must lie angularly between the two lower points.
+The remaining interaction with the ninth point is not inferred from
+that separation theorem.
+
 ## Verification
 
 The exact diagnostic `check_one_corner_completion.py` checks the affine
