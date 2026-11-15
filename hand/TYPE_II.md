@@ -1019,9 +1019,10 @@ and hence, with \(\beta=bq=p\),
                t\ge\frac{1-q+\beta+(1+q)s}{1+\beta}.      \tag{33}
 \]
 
-The weighted identity (16) remains true. Its positive coefficient
-\(D_Q=b(t-\lambda)+\lambda q_x\) is the doubled area of EBQ.
-Since \(\lambda<0\), now use the **lower** bound for \(q_x\) to obtain
+The weighted identity (16) remains true. Its coefficient
+\(D_Q=b(t-\lambda)+\lambda q_x\) is the positive doubled area of EBQ:
+indeed EBQ is a positive barycentric combination of EBD and EBC, whose
+doubled areas are p and \(\alpha\), respectively. Since \(\lambda<0\), now use the **lower** bound for \(q_x\) to obtain
 
 \[
  D_Q\le bqt+\lambda s\le\beta t.
@@ -1078,3 +1079,124 @@ For example, for a corner triangle with legs h,c and area \(hc/2\), an
 external contact whose normalized coordinate is \(q=1/c\) meets the
 coupling condition because \(h\le1\). Its separate bound \(q\le30/29\)
 must still be checked from the established lower bound on c.
+
+## 11. A further exclusion in the unbalanced row
+
+Suppose the remaining count is \((\ell,c,r)=(1,2,3)\), with the two
+central points P,Q. Use the fixed threshold \(s=7/64\), and put
+\(q=1-\lambda\), \(k=3-2\sqrt2\) as before.
+
+**Unbalanced cut lemma.** The two central points cannot both lie in EBC.
+Thus at least one lies inside DCE.
+
+Indeed DBE gives \(bq\ge s\). If both central points lay in EBC, the
+ two-interior-point theorem would give
+
+\[
+ 1-(1-b)q\ge(4+2\sqrt3)s,
+\]
+
+and hence
+
+\[
+                         1\ge(3+2\sqrt3)s+\frac sb.       \tag{35}
+\]
+
+The three right points together with B,C give \(1-b\ge s/k\) by the
+endpoint-triangle theorem. Now \(k<11/64\), because
+\(2\cdot128^2-181^2=7>0\) proves \(\sqrt2>181/128\).
+Consequently \(b<4/11\). Also \(\sqrt3>12/7\), since \(147>144\).
+The right side of (35) is therefore strictly greater than
+
+\[
+             \frac{45}{64}+\frac{77}{256}
+                         =\frac{257}{256}>1,
+\]
+
+a contradiction.
+
+There is a further precise restriction on the right five-point subset.
+If \(b>1-(4+2\sqrt3)s\), its convex hull cannot be triangular, and its
+support-normalized fifth point must be in cell II of Section 1. A
+triangular hull or cells I/III would give
+\(s\le(1-b)/(4+2\sqrt3)\). Cells IV/V already give a normalized doubled
+minimum less than \(1/10\), whereas the normalization scales the original
+minimum up to at least s. In particular cell II is forced whenever
+\(b\ge1/5\), because
+\(1-(4+2\sqrt3)s<19/96<1/5\).
+
+This is a strict exclusion of the zero-point CE cut, plus a proved
+right-side orientation restriction. The one-point and two-point CE cuts
+are not closed by this section.
+
+## 12. Parameter bounds when both central points are in DCE
+
+These bounds apply to either remaining count row. Suppose both P,Q lie
+inside DCB and DCE, and continue to use \(s=7/64\), \(q=1-\lambda\).
+By Section 6, B and E must lie on the same side of the line PQ. There are
+then three possible placements of D,C relative to that line.
+
+The necessary inequalities are
+
+| Position of D,C relative to PQ | Positive expression A | Necessary quadratic inequality |
+|---|---|---|
+| D,C on the same side | \(A=q-s(q+1)>0\) | \(A^2\ge4sq(1+bq)\) |
+| D is isolated from B,C,E | \(A=q-s[1+(1+b)q]>0\) | \(A^2\ge4sq(1+bq)\) |
+| C is isolated from B,D,E | \(A=q-s(2+bq)>0\) | \(A^2\ge4sq(1+bq)\) |
+
+Here a point is isolated when it is in one open half-plane bounded by PQ
+and the other three listed anchors lie in the other half-plane. These
+possibilities are exhaustive because P,Q are strictly inside both of the
+stated triangles.
+
+To derive the table, use the affine map
+
+\[
+ (x,y)\longmapsto\bigl(x,\ x+(1-b)(1-y)\bigr).
+\]
+
+It sends the support triangle with vertices
+\(D,C,(0,-b/(1-b))\) to the half-square of
+`OPPOSITE_CORNERS.md`. The anchors D,C,E,B become its A,E,H,F, with
+
+\[
+ h=(1-b)q,\quad\beta=1-b,\quad f=b,
+ \qquad \sigma=(1-b)s.
+\]
+
+Both free points are in cell II: membership in DCB becomes membership in
+AEF, and membership in DCE becomes membership in AEH.
+
+The same-sign calculation (21)–(22) of `OPPOSITE_CORNERS.md` is valid for
+a general positive threshold \(\sigma\), before that note specializes
+its numerical value. Substitution gives the first row. For the second
+row, the weighted identity and quadratic maximization (24)–(25) there
+again apply before numerical specialization; substitution gives the
+second row. Reflecting that half-square swaps h with \(\beta\) and gives
+the third row. The positivity of A in each row is precisely the positivity
+needed before maximizing the corresponding quadratic; no square is taken
+without that condition.
+
+One useful consequence is
+
+\[
+ \boxed{b\le2/7\quad\hbox{whenever D,C lie on opposite sides of PQ}.}
+                                                               \tag{36}
+\]
+
+For either of the last two rows, view the left side minus the right side
+as a quadratic F(q). Its leading coefficient is positive: for
+\(0<b\le1/2\), both possible leading coefficients are at least
+\((1-3s/2)^2-2s=7865/16384>0\). Its constant term is positive, while
+its value at the zero of A is negative. The condition \(A>0,F(q)\ge0\)
+therefore places q beyond the larger root. Since \(q\le1\), it follows
+that \(F(1)\ge0\). In both cases
+
+\[
+ F(1)=[1-s(2+b)]^2-4s(1+b)
+       =\frac{(7b-2)(7b-354)}{4096}.
+\]
+
+The second factor is negative for \(b\le1/2\), so (36) follows.
+The table and (36) are necessary parameter bounds; they do not claim an
+exclusion of the remaining positions.

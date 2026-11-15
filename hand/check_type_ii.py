@@ -197,3 +197,37 @@ assert sp.Rational(203, 1456) > sp.Rational(1, 8)
 assert sp.Rational(49, 64) > sp.Rational(33, 58)
 print('PASS: coupled affine rational comparisons')
 print('TYPE_II_COUPLED_AFFINE_PASS: 5 further groups')
+
+# The unbalanced cut and the general-threshold II--II substitutions.
+assert 2 * 128**2 - 181**2 == 7
+assert sp.Rational(45, 64) + sp.Rational(77, 256) > 1
+assert sp.Rational(19, 96) < sp.Rational(1, 5)
+qc, bc, sc = sp.symbols('qc bc sc', positive=True)
+bet = 1 - bc
+hc = bet * qc
+sig = bet * sc
+Ds = hc + bet - hc * bet
+equal(
+    ((hc * bet - sig * (hc + bet))**2
+     - 4 * sig * hc * bet * (hc + bet - hc * bet)) / bet**4,
+    (qc - sc * (qc + 1))**2 - 4 * sc * qc * (1 + bc * qc),
+    'central-pair same-side substitution',
+)
+equal(
+    ((hc * bet - sig * (bet + 2 * hc - hc * bet))**2
+     - 4 * sig * Ds * hc * bet) / bet**4,
+    (qc - sc * (1 + (1 + bc) * qc))**2 - 4 * sc * qc * (1 + bc * qc),
+    'central-pair isolated-left substitution',
+)
+equal(
+    ((hc * bet - sig * (hc + 2 * bet - hc * bet))**2
+     - 4 * sig * Ds * hc * bet) / bet**4,
+    (qc - sc * (2 + bc * qc))**2 - 4 * sc * qc * (1 + bc * qc),
+    'central-pair isolated-right substitution',
+)
+equal(
+    (1 - sigma * (2 + bc))**2 - 4 * sigma * (1 + bc),
+    (7 * bc - 2) * (7 * bc - 354) / 4096,
+    'central-pair bottom-parameter factorization',
+)
+print('TYPE_II_RESIDUAL_RESTRICTIONS_PASS: 5 further groups')
