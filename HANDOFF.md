@@ -142,6 +142,20 @@ closes both isolated-endpoint pair-line cases in the remaining C1 cell.
 The sharp chamber inequality, positive stress, local proof, and 84-triangle
 attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 
+## Fine G6 case catalogue
+
+[hand/G6_FINITE_CASE_LEDGER.md](hand/G6_FINITE_CASE_LEDGER.md) is the
+working classification of the remaining obligations: N6 has **8**
+cap-occupancy orbits (13 lower/upper occupancy refinements), N7 has
+**one** mixed interior placement with at most **16** anchor/pair-line
+sign cells, and C1 with zero or one point below HC has **21** and
+**12** cap-occupancy orbits, respectively, up to reflection.
+[hand/check_g6_case_ledger.py](hand/check_g6_case_ledger.py) checks the
+combinatorial enumeration. These counts do **not** assert the
+corresponding parameter cells are feasible, nor do they certify their
+continuous exclusion. A case is closed only when every admissible
+coordinate placement and its boundary transitions have a proof.
+
 ## Exact remaining obligations
 
 - **N with six boundary points:** larger hulls beyond the six prescribed
