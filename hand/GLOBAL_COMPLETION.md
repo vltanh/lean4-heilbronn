@@ -351,18 +351,18 @@ eleven oriented doubled areas:
 ABH&bL\\
 ABC&a(c-b)\\
 AGH&gL\\
-DFE&(1-f)(e-d)\\
+DEF&(1-f)(e-d)\\
 GHF&M(1-h)+g\delta\\
-GFE&M(1-e)-(1-g)\delta\\
+GEF&M(1-e)-(1-g)\delta\\
 ADO&U_1=y-a-(d-a)x\\
 DHO&U_2=h-y-(h-d)x\\
 BOE&U_3=e(x-b)-(1-b)y\\
-GOC&U_4=x-c+(c-g)y\\
+GCO&U_4=x-c+(c-g)y\\
 OCF&U_5=k(c-x)+(f-c)y.
 \end{array}                                                    \tag{15}
 \]
 
-The **plus** sign in GHF and **minus** sign in GFE are essential. There
+The **plus** sign in GHF and **minus** sign in GEF are essential. There
 is no supplementary assumption that \(g<c\), \(x<c\), or \(h\le e\).
 
 **Theorem 3.** Throughout the chamber (15), the minimum of the eleven
@@ -388,8 +388,8 @@ with eight hull vertices.
 ### 5.1. A preliminary exclusion: x cannot be at least c
 
 Assume temporarily that all expressions in (15) are at least
-\(s=7/64\), and suppose \(x\ge c\). Positivity of GFE gives \(k>e\).
-Also DFE and GFE give
+\(s=7/64\), and suppose \(x\ge c\). Positivity of GEF gives \(k>e\).
+Also DEF and GEF give
 
 \[
 (1-f)e\ge s,\qquad f(1-e)\ge s.
@@ -507,14 +507,14 @@ in (18) for x, with \(y\ge2v\), gives
 x\ge X_0:=\frac{u(1-3v)+s+2v}{1-v}.                       \tag{21}
 \]
 
-The same ABC--GOC elimination used in the boundary proof gives
+The same ABC--GCO elimination used in the boundary proof gives
 
 \[
 s(1-y)\le A_*(x-u-s).                                     \tag{22}
 \]
 
 Indeed \(c(1-y)\le x-gy-s\), \(c-b\ge s/a\), and \(b,g\ge u\);
-all factors used here are positive because \(y<e<1\). From DHO and DFE,
+all factors used here are positive because \(y<e<1\). From DHO and DEF,
 
 \[
 sx\le B_*\bigl(1-v-y-s+w(g-x)\bigr).                      \tag{23}
@@ -569,7 +569,7 @@ increasing in p on \([0,p_0]\) at \(s=s_0\), and
 \(R(p_0,s_0)=0\). Equality in both bounds forces \(p=p_0\) and
 \(uv=p^2\).
 
-Finally, DFE and GFE imply
+Finally, DEF and GEF imply
 
 \[
 0\le w\le\frac{N}{B_*(1-g)},\qquad
