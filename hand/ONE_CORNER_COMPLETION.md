@@ -510,6 +510,14 @@ both remaining points beyond \(DF\). For this lower occupancy,
 any larger hull therefore has exactly one top-cap point and one point
 inside the original anchor pentagon.
 
+[C1_TOP_CAP_SIDE_EARS.md](C1_TOP_CAP_SIDE_EARS.md) excludes both
+adjacent-ear placements for that remaining interior point: the actual
+triangles \(HFX\) and \(CDX\) each have doubled area less than
+\(3s\), where \(X\) is the unique cap point. Thus the remaining
+point lies inside \(OHCX\). After reflection it shares \(OCX\)
+with one lower point, giving \(hc,cX_y\ge(4+2\sqrt3)s\).
+The coupled one-cap configuration with those area bounds is still open.
+
 ## Verification
 
 The exact diagnostic `check_one_corner_completion.py` checks the affine
