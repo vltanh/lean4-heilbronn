@@ -502,6 +502,14 @@ one upper point is inside the triangle formed by the other and
 \(D,F\), among placements with two top-cap points. It does not
 exclude an interior upper point paired with one top-cap point.
 
+The companion [C1_TOP_CAP_TRIANGULAR_PAIR.md](C1_TOP_CAP_TRIANGULAR_PAIR.md)
+now excludes the complementary triangular upper hull, using the actual
+area formed by \(O\) and the two cap points. Together these notes
+exclude the entire placement with two lower points in \(OHC\) and
+both remaining points beyond \(DF\). For this lower occupancy,
+any larger hull therefore has exactly one top-cap point and one point
+inside the original anchor pentagon.
+
 ## Verification
 
 The exact diagnostic `check_one_corner_completion.py` checks the affine
