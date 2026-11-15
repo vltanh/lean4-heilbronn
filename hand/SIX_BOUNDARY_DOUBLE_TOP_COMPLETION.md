@@ -79,8 +79,8 @@ excludes three collinear points. There are consequently two alternatives:
 | `triangle` | Triangle \(DXF\), with \(P\in\operatorname{int}(DXF)\) | \(A,B,C,D,X,F,H\) | \(Q\in ABCDFH\) |
 
 These are full hulls. The six side contacts remain extreme; the two cap
-edges adjacent to D and F support the square on the corresponding inner
-sides, and the cap hull supplies any intermediate edge. Joining the cap
+edges adjacent to D and F have the anchor hexagon on their inner sides,
+and the cap hull supplies any intermediate edge. Joining the cap
 hull to the anchor hexagon across DF therefore gives the displayed convex
 polygon. Every containment involving an actual edge is strict.
 
