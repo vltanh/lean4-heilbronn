@@ -17,7 +17,10 @@ Consider that remaining case. Write its point as \(X=(g,k)\), where
 \(f<g<1,\ e<k\le1\), and write \(P\) for the other free point.
 The latter is inside the original boundary heptagon.
 This note excludes the upper, lower, and left side-quadrilateral
-placements of \(P\). It does not yet classify all remaining orientations.
+placements of \(P\). The companion
+[SEVEN_BOUNDARY_TOP_CAP_RIGHT.md](SEVEN_BOUNDARY_TOP_CAP_RIGHT.md)
+excludes the fourth side quadrilateral. The remaining radial orientations
+are not yet all classified.
 
 ## 1. The upper quadrilateral is empty
 
@@ -260,9 +263,13 @@ the remaining free point must lie strictly below \(HE\).
 
 The lower and left exclusions additionally put \(P\) above \(AD\)
 and on the interior side of \(BF\).
-The case now has exactly one exterior point \(X\) in the far upper cap,
-and one point \(P\) inside the original heptagon below \(HE\), above
-\(AD\), and outside \(FHAB\).
+The companion SEVEN_BOUNDARY_TOP_CAP_RIGHT.md excludes \(CDEX\) as
+well. The case therefore has exactly one exterior point \(X\) in
+the far upper cap, and one point \(P\) in the central region
+\[
+\operatorname{int}\operatorname{conv}(A,D,E,H)
+\cap\operatorname{int}\operatorname{conv}(B,C,X,F).
+\]
 The sharp moving-point chamber in Section 5 of GLOBAL_COMPLETION.md
 covers some of these orientations. The other orientations are not
 excluded by the present note.
