@@ -21,7 +21,7 @@ HEADER = ("id", "group", "l", "t", "r", "lower", "upper", "inner",
 
 
 N6_CLOSED = {"N6-04-L1":"SIX_BOUNDARY_SIDE_TOP_LOWER.md","N6-01-L0":"SIX_BOUNDARY_SINGLE_SIDE.md","N6-01-L1":"SIX_BOUNDARY_SINGLE_SIDE.md","N6-02-L0":"SIX_BOUNDARY_TWO_SIDE_UPPER.md","N6-02-L1":"SIX_BOUNDARY_TWO_SIDE_COMPLETION.md","N6-05-L0":"SIX_BOUNDARY_TWO_SIDE_UPPER.md","N6-07-L0":"SIX_BOUNDARY_SIDE_TWO_TOP.md","N6-08-L0":"SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md"}
-C1_ONE_CLOSED = {"C1-1-10":"C1_ONE_LOWER_TOP_MULTIPLICITY.md","C1-1-11":"C1_ONE_LOWER_TOP_MULTIPLICITY.md","C1-1-12":"C1_ONE_LOWER_TOP_MULTIPLICITY.md","C1-1-01":"C1_ONE_LOWER_SIDE_CAP.md","C1-1-02":"C1_ONE_LOWER_RIGHT_PAIR.md","C1-1-03":"C1_ZERO_LOWER.md","C1-1-05":"C1_ZERO_LOWER.md","C1-1-06":"C1_ONE_LOWER_TOP_CAP.md","C1-1-08":"C1_ONE_LOWER_RIGHT_PAIR.md","C1-1-09":"C1_ONE_LOWER_EIGHT_HULL.md"}
+C1_ONE_CLOSED = {"C1-1-01":"C1_ONE_LOWER_SIDE_CAP.md","C1-1-02":"C1_ONE_LOWER_RIGHT_PAIR.md","C1-1-03":"C1_ZERO_LOWER.md","C1-1-05":"C1_ZERO_LOWER.md","C1-1-06":"C1_ONE_LOWER_TOP_CAP.md","C1-1-08":"C1_ONE_LOWER_RIGHT_PAIR.md","C1-1-09":"C1_ONE_LOWER_EIGHT_HULL.md"}
 
 
 def sector_choices(k):
@@ -104,12 +104,12 @@ def main():
         ("N6", "CLOSED"): 19,
         ("N7", "CLOSED"): 16,
         ("C1-0", "CLOSED"): 65,
-        ("C1-1", "OPEN"): 24,
-        ("C1-1", "CLOSED"): 78,
+        ("C1-1", "OPEN"): 42,
+        ("C1-1", "CLOSED"): 60,
     }, counts
 
     print("PASS: 62 parent cases and 221 explicitly enumerated leaves")
-    print("PASS: 43 open and 178 covered leaves, 221 distinct case IDs")
+    print("PASS: 61 open and 160 covered leaves, 221 distinct case IDs")
     print("NOTE: geometric feasibility and exact exclusion are NOT checked")
 
 

@@ -23,7 +23,7 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
 | G5 | Type II: adjacent corners and five free points | **Complete hand exclusion**, including every count/hull/cell/cut and the Type-III shear alternative |
-| G6 | N and C1 with fewer than eight boundary points | **All N7, C1 zero-lower and two-lower complete**; three N6 coarse occupancies and two C1 one-lower coarse rows remain |
+| G6 | N and C1 with fewer than eight boundary points | **All N7, C1 zero-lower and two-lower complete**; three N6 coarse occupancies and five C1 one-lower coarse rows remain |
 | G7 | Unrestricted sharp theorem and uniqueness | Conditional on G6; equality transfer through shears is already proved |
 
 ## G6 finite case ledger
@@ -35,7 +35,7 @@ its open/closed status**, use
 The [221-row machine-readable leaf register](hand/G6_ITEMIZED_LEAVES.tsv)
 and [itemization checker](hand/check_g6_itemized_cases.py) refine them
 by lower-point occupancy, upper sectors, and the retained N7 line signs.
-The census currently has 7 open parent rows (43 open leaves); leaf
+The census currently has 10 open parent rows (61 open leaves); leaf
 counts do not independently certify a geometric exclusion.
 
 | Branch | Unpruned coarse cover | Current proof status |
@@ -43,7 +43,7 @@ counts do not independently certify a geometric exclusion.
 | N6 | 8 cap-occupancy orbits; 13 lower/upper refinements | Five complete occupancies and N6-04-L1 closed; only N6-03, N6-04-L0 and N6-06 remain |
 | N7 | One mixed placement, with at most 16 four-sign cells | Complete for both sides of HC and every pair-line sign |
 | C1, zero lower | 21 cap-occupancy orbits | **Entire class complete** |
-| C1, one lower | 12 cap-occupancy orbits | Ten rows complete; only C1-1-04 and 07 remain |
+| C1, one lower | 12 cap-occupancy orbits | Seven rows complete; only C1-1-04, 07, 10, 11 and 12 remain |
 
 These are combinatorial cover counts, including closed or geometrically
 empty cells. The checker
