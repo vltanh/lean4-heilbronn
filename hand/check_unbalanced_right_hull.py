@@ -64,3 +64,36 @@ assert lower_linear == sp.Rational(1084228751, 216000000) > 0
 print("PASS: generalized right lower-vertex elimination and outer-cell comparison")
 print("PASS: common upper-central quadratic and q>67/80")
 print("PASS: both rational polynomial contradictions for complete cells I and III")
+
+# Complete C-isolated central-line exclusion, including right cell II.
+fc = (q - s * (2 + b * q)) ** 2 - 4 * s * q * (1 + b * q)
+qc = sp.Rational(4, 5) + 2 * b / 3
+fc_line = 1225 * b**4 - 64260 * b**3 - 49766 * b**2 + 23412 * b - 2799
+assert sp.cancel(230400 * fc.subs(q, qc) - fc_line) == 0
+assert 23412**2 - 4 * 49766 * 2799 == -9058392 < 0
+assert 2 * s / (1 - 2 * s / 7) == sp.Rational(7, 31) < sp.Rational(4, 5)
+generic_n = lambda cval: 4 * cval * b * s - w * (cval - s) ** 2
+c3 = 1 - w * qc
+p3 = (
+    409600 * b**5 - 245760 * b**4 + 232704 * b**3
+    - 51712 * b**2 + 65937 * b - 7569
+)
+assert sp.cancel(921600 * generic_n(c3) - p3) == 0
+assert sp.diff(p3, b) == 2048000 * b**4 - 983040 * b**3 + 698112 * b**2 - 103424 * b + 65937
+assert 698112 - 983040 * sp.Rational(2, 7) == sp.Rational(2920704, 7)
+assert 65937 - 103424 * sp.Rational(2, 7) == sp.Rational(254711, 7)
+assert p3.subs(b, sp.Rational(123, 1000)) == sp.Rational(1437613843347, 9765625000) > 0
+c4 = 1 + s - s / b
+p4 = 6084 * b**3 - 5188 * b**2 + 945 * b - 49
+assert sp.cancel(4096 * b**2 * generic_n(c4) - p4) == 0
+shift4 = (
+    -6084 * t**3 - sp.Rational(735751, 250) * t**2
+    + sp.Rational(13778373, 250000) * t + sp.Rational(16815707, 250000000)
+)
+assert sp.expand(p4.subs(b, sp.Rational(123, 1000) - t) - shift4) == 0
+assert sp.Rational(123, 1000) - s == sp.Rational(109, 8000) < sp.Rational(1, 64)
+assert (
+    sp.Rational(13778373, 250000)
+    - sp.Rational(735751, 250 * 64) - sp.Rational(6084, 64**2)
+) == sp.Rational(122299247, 16000000) > 0
+print("PASS: complete C-isolated central-line exclusion in the upper cut")

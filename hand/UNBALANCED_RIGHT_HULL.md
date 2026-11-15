@@ -35,6 +35,10 @@ this two-point upper cut reduces to cell II.
 These are complete continuous-cell exclusions. They do **not** close
 cell II, the one-point upper cut, or the whole unbalanced Type-II row.
 
+**Theorem 3.** In the two-point upper cut, the line PQ cannot isolate C
+from D,E,B when the right hull is nontriangular. This excludes the entire
+C-isolated alternative, including the remaining right support cell II.
+
 ## 1. The right support cells and their geometric meaning
 
 Apply the support-triangle normalization from `TYPE_II.md`, Section 1,
@@ -271,17 +275,135 @@ of t, this is at least
 Again this contradicts (6). The two ranges exhaust (8), proving
 Theorem 2.
 
+## 5. Complete exclusion of the C-isolated central line
+
+Continue to suppose both central points are above CE, but now allow any
+nontriangular right hull. By Theorem 1 it is quadrilateral. The generic
+lower-vertex inequality is (2) with \(m=n=1\), which gives
+\(y\le x-a/(1-x)\). The EBR argument consequently gives
+
+\[
+s\le c-2\sqrt{\frac{cbs}{w}},\qquad c=1-wq.
+\]
+
+For any \(C\ge c\), the same monotone-root argument used after (5)
+therefore gives
+
+\[
+\mathcal N_b(C):=4Cbs-w(C-s)^2\le0.                      \tag{9}
+\]
+
+Assume that PQ isolates C. The third row of `TYPE_II.md`, Section 12,
+gives
+
+\[
+A_C=q-s(2+bq)>0,\qquad
+F_C(q):=A_C^2-4sq(1+bq)\ge0,\qquad b\le\frac27.
+\]
+
+We first strengthen the q bound to
+
+\[
+\boxed{q>q_C(b):=\frac45+\frac{2b}{3}.}                  \tag{10}
+\]
+
+The polynomial \(F_C\) is an upward quadratic in q on
+\(0<b\le2/7\), and is negative at the positive zero of \(A_C\).
+At \(q=q_C(b)\), direct substitution gives
+
+\[
+230400 F_C(q_C(b))
+=1225b^4-64260b^3-49766b^2+23412b-2799<0.
+\]
+
+The first two terms have nonpositive sum because \(b\le2/7\).
+The remaining quadratic is strictly negative for all real b: its leading
+coefficient is negative and its discriminant is
+
+\[
+23412^2-4\cdot49766\cdot2799=-9058392<0.
+\]
+
+Also \(q_C(b)>2s/(1-sb)\), the zero of \(A_C\); for example
+\(q_C(b)\ge4/5\), while that zero is at most \(7/31<4/5\).
+Convexity between the two negative values of \(F_C\), and \(A_C>0\),
+prove (10).
+
+### 5.1. The range b at least 123/1000
+
+Set \(C_3=1-wq_C(b)\), so \(C_3>c\). Expansion gives
+
+\[
+\begin{aligned}
+921600\mathcal N_b(C_3)=P(b):={}&409600b^5-245760b^4
++232704b^3-51712b^2+65937b-7569.
+\end{aligned}
+\]
+
+This polynomial is strictly increasing on \(0\le b\le2/7\).
+Indeed
+
+\[
+\begin{aligned}
+P'(b)
+&=2048000b^4-983040b^3+698112b^2-103424b+65937\\
+&\ge2048000b^4+\frac{2920704}{7}b^2+\frac{254711}{7}>0,
+\end{aligned}
+\]
+
+where both negative terms were bounded using \(b\le2/7\).
+At the lower endpoint,
+
+\[
+P(123/1000)=\frac{1437613843347}{9765625000}>0.
+\]
+
+Thus \(\mathcal N_b(C_3)>0\), contradicting (9).
+
+### 5.2. The range b at most 123/1000
+
+Use \(bq\ge s\) and \(C_4=1+s-s/b\ge c\). Then
+
+\[
+4096b^2\mathcal N_b(C_4)
+=6084b^3-5188b^2+945b-49.
+\]
+
+Put \(t=123/1000-b\). Since \(b\ge s\),
+\(0\le t\le109/8000<1/64\). The last polynomial becomes
+
+\[
+-6084t^3-\frac{735751}{250}t^2
++\frac{13778373}{250000}t+\frac{16815707}{250000000}.
+\]
+
+It is at least
+
+\[
+\begin{aligned}
+\frac{16815707}{250000000}
+&+\left(\frac{13778373}{250000}
+-\frac{735751}{250\cdot64}-\frac{6084}{64^2}\right)t\\
+&=\frac{16815707}{250000000}
++\frac{122299247}{16000000}t>0.
+\end{aligned}
+\]
+
+Again (9) is contradicted. The two ranges exhaust the C-isolated case,
+proving Theorem 3.
+
 ## Verification and the remaining interaction
 
 [check_unbalanced_right_hull.py](check_unbalanced_right_hull.py) verifies
 the normalized determinants, generalized lower-vertex elimination,
-the rational quadratic value, both exact polynomial expansions and their
+the rational quadratic values, all exact polynomial expansions and their
 positive coefficient bounds. No sampled coordinates enter the proof.
 
 In the two-point upper cut the only nontriangular right-hull possibility
 left is cell II, where T lies in both BCR and BCS and neither outer ear
 BRS or CRS contains it. Thus the factor three that drives (2)--(5) is
-unavailable in that cell. The scalar central-pair inequalities alone do
+unavailable in that cell. Theorem 3 additionally excludes its C-isolated
+central-line alternative. The scalar central-pair inequalities alone do
 not supply an analogous occupied outer ear. The present argument does
 not control the cross-triangles joining P or Q to the right subset; a
 stronger interaction involving their actual positions is still needed.
