@@ -224,6 +224,97 @@ equal(determinant((0, 1), (0, 1 - q), (1 / q, 1)), 1)
 equal(determinant((0, 1 - q), (1 / q, 1), (x, y)),
       (y - (1 - q) - q**2 * x) / q)
 
+# Stronger six-point cell-II theorem and complete triangular-right branch.
+iih, iibeta, iix, iiy, iiw, iiz = sp.symbols("iih iibeta iix iiy iiw iiz")
+iitau = sp.Rational(3, 28)
+iif = 1 - iibeta
+iik = iih * (1 - iix) - iiw
+iil = iibeta * iix - iif * iiw
+iin = iif * iiw + (iih - iibeta) * iix - iif * iih
+iib0 = iibeta * (1 - iix - iiw)
+iiX = (iix, iix + iiw)
+iiY = (iiy, iiy + iiz)
+iidA = determinant(iiX, iiY, (0, 0))
+iidZ = determinant(iiX, iiY, (1, 1))
+iidH = determinant(iiX, iiY, (0, iih))
+iidF = determinant(iiX, iiY, (iif, 1))
+equal(iin, -iif * iik - (1 - iih) * iibeta * iix)
+equal(iif * iih - iif * iiw
+      - (iih - iibeta) * (iitau + iif * iiw) / iibeta - iitau,
+      iih / iibeta * (iif * (iibeta - iiw) - iitau))
+equal(iidA, iix * iiz - iiw * iiy)
+equal(iidZ, iiw * (1 - iiy) + (iix - 1) * iiz)
+equal(iidH, (iih - iiw) * iiy + iix * iiz - iih * iix)
+equal(iiw * iidH + (iih - iiw) * iidZ, iik * (iiw - iiz))
+equal(iiw * iidH, iik * (-iidA) - iih * iix * iidZ)
+equal(iiw * iidF, iib0 * (-iidA) - iil * iidZ)
+equal(iih * iix * iib0 - iik * iil, -iiw * iin)
+
+iiU, iiS, iicap, iit = sp.symbols("iiU iiS iicap iit")
+iic = 1 / iih + 1 / iibeta - 1
+iia = 1 - iitau * (1 / iih + 1 / iibeta)
+equal(iiw * (1 - (iitau + iiz) / iih)
+      - iiz * (iitau + iif * iiw) / iibeta - iiw + iiz,
+      iiz * (1 - iitau / iibeta) - iitau * iiw / iih - iic * iiw * iiz)
+equal(iih * iibeta * (1 - iitau / iibeta - iic * iitau),
+      iih * iibeta - iitau * (iibeta + 2 * iih - iih * iibeta))
+equal((iiU - iitau * (iih + iibeta))
+      - (iiU - iitau * (iibeta + 2 * iih - iiU)),
+      iitau * (iih - iiU))
+iicommon = (iiU - iitau * iiS)**2 - 4 * iitau * iiU * (iiS - iiU)
+equal(sp.diff(iicommon, iiS), 2 * iitau * (iitau * iiS - 3 * iiU))
+equal(iicommon.subs({iiU: iicap**2, iiS: 2 * iicap}),
+      iicap**2 * ((1 + 4 * iitau) * iicap**2
+                  - 12 * iitau * iicap + 4 * iitau**2))
+iipoly = 280 * iicap**2 - 252 * iicap + 9
+equal(196 * ((1 + 4 * iitau) * iicap**2
+             - 12 * iitau * iicap + 4 * iitau**2), iipoly)
+assert iipoly.subs(iicap, sp.Rational(3, 14)) == -sp.Rational(225, 7)
+assert iipoly.subs(iicap, sp.Rational(6, 7)) == -sp.Rational(9, 7)
+assert sp.Rational(36, 49) + iitau == sp.Rational(165, 196)
+assert sp.Rational(165, 196) - sp.Rational(21, 25) == sp.Rational(9, 4900) > 0
+assert sp.Rational(16, 625) < iitau
+iiW0 = sp.Rational(477, 2800)
+assert sp.Rational(21, 25) - iitau / (1 - sp.Rational(21, 25)) == iiW0
+assert iiW0 < 2 * iitau
+assert iiW0 < (1 - 2 * iitau) / 2
+assert iitau - ((1 - 2 * iitau) * iiW0 - iiW0**2) == sp.Rational(18129, 7840000) > 0
+equal(3 * iibeta + (iih - iibeta) * (1 + iif) + iibeta * iif,
+      2 * iih + 2 * iibeta - iih * iibeta)
+ii_ratio = iih * iibeta * (1 - iibeta) / (2 * iih + 2 * iibeta - iih * iibeta)
+equal(sp.diff(ii_ratio, iih),
+      2 * iibeta**2 * (1 - iibeta) / (2 * iih + 2 * iibeta - iih * iibeta)**2)
+equal((5 - 2 * sp.sqrt(6)) * (2 + iibeta) - iibeta * (1 - iibeta),
+      (iibeta + 2 - sp.sqrt(6))**2)
+assert 6 * 56**2 - 137**2 == 47 > 0
+
+support_y = -b * uy / (rr - b)
+support_height = 1 - support_y
+support_area = rr * support_height
+def support_map(point):
+    xx, yy = point
+    return (xx / rr, ((1 - yy) + (uy - support_y) * xx / rr) / support_height)
+
+
+for actual, expected in [
+    ((0, 1), (0, 0)),
+    ((rr, uy), (1, 1)),
+    ((0, support_y), (0, 1)),
+    ((0, 1 - q), (0, q * (rr - b) / (rr - b + b * uy))),
+    ((b, 0), (b / rr, 1)),
+]:
+    for actual_coordinate, expected_coordinate in zip(support_map(actual), expected):
+        equal(actual_coordinate, expected_coordinate)
+support_jacobian = sp.Matrix(support_map((x, y))).jacobian((x, y))
+equal(support_jacobian.det(), -1 / support_area)
+equal(support_area, rr + rr * b * uy / (rr - b))
+equal((b + sp.Rational(13, 16) * uy)**2 - 4 * sp.Rational(13, 16) * b * uy,
+      (b - sp.Rational(13, 16) * uy)**2)
+assert sp.Rational(9, 256) / (4 * sp.Rational(13, 16)) == sp.Rational(9, 832)
+assert sp.Rational(9, 832) / sp.Rational(13, 16) == sp.Rational(9, 676)
+assert 1 + sp.Rational(9, 676) < sp.Rational(65, 64)
+assert sp.Rational(7, 65) - iitau == sp.Rational(1, 1820) > 0
+
 
 def by_four_subsets(intervals):
     return all(max(intervals[i][0] for i in subset)
@@ -254,4 +345,4 @@ assert by_four_subsets(examples[0])
 assert not by_four_subsets(examples[1])  # Four closed intervals meet at 3.
 assert by_four_subsets(examples[2])
 assert not by_four_subsets(examples[3])
-print("PASS: capacity and swept tests; balanced right-quadrilateral, second-shear, upper and left mixed cells; unbalanced triangular-right empty ear")
+print("PASS: capacity/sweeps; balanced row identities; stronger cell-II lemma and complete unbalanced triangular-right exclusion")

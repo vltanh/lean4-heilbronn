@@ -12,8 +12,9 @@ This note strengthens the global triangle-capacity theorem to containers
 whose third vertex need not be a configuration point, gives an exact
 interval formulation for every Type-II configuration, and excludes the
 entire balanced count row \((2,2,2)\). The complete balanced-row
-assembly is Theorem 11. Of the count rows left by `TYPE_II.md`, only the
-unbalanced row \((1,2,3)\) remains open.
+assembly is Theorem 11. Theorem 14 further excludes the entire
+triangular-right branch of the unbalanced row \((1,2,3)\). Only that
+row's nontriangular right-hull branch remains open in this note.
 
 The initial capacity theorem has two inputs already proved in this
 directory:
@@ -1374,8 +1375,8 @@ is \(E\), its central points are \(P,Q\), and its three right
 points are \(R,S,T\). This section treats the whole branch in which
 the right five-point set has triangular hull \(BCR\), with \(S,T\)
 strictly inside it. It closes the cut with exactly one central point
-above \(CE\); the cut with both central points above \(CE\) remains
-open.
+above \(CE\); Sections 13--14 then close the cut with both central
+points above \(CE\).
 
 For this section use the slightly stronger rational doubled threshold
 
@@ -1503,7 +1504,7 @@ one-below cut in this right-hull branch. \(\square\)
 
 ### 12.3. Exact surviving placement and obligation
 
-The still-open triangular-right placement can now be labeled uniquely
+The intermediate triangular-right placement can now be labeled uniquely
 by the common line \(DR\): \(P,S\) are on its \(C\)-side,
 and \(Q,T\) are on its \(B\)-side. The sector assignments are
 
@@ -1541,10 +1542,391 @@ each of the three right points \(X\in\{R,S,T\}\) must satisfy
 The inequality is strict because the capacity theorem is about a closed
 triangle. The virtual apex is allowed outside the square.
 
-The two-above placement recorded in this subsection still requires a
-coupled inequality between the central pair and the right pair. Neither
-the individual costs in the table nor (42) are claimed to close it. The
-nontriangular right-hull branch is outside the scope of Theorem 12.
+The individual costs in the table and (42) do not themselves close the
+two-above placement. Sections 13--14 supply its coupled six-point
+inequality and complete the triangular-right branch. The nontriangular
+right-hull branch remains outside the scope of Theorem 12.
+
+## 13. A stronger six-point inequality when both free points are in cell II
+
+The following lemma strengthens the cell-II part of
+[OPPOSITE_CORNERS.md](OPPOSITE_CORNERS.md). Unlike that note's full
+half-square theorem, this result requires both free points to occupy the
+same specified cell.
+
+**Theorem 13.** Let
+
+\[
+A=(0,0),\quad Z=(1,1),\quad H=(0,h),\quad F=(f,1),
+\qquad0<h,f<1.
+\]
+
+Suppose two further points \(X,Y\) are strictly inside both triangles
+\(AZH\) and \(AZF\). Then some triangle on these six points has
+unsigned doubled area strictly less than
+
+\[
+\tau=\frac3{28}.
+\]
+
+### 13.1. Coordinates and the additional distance cap
+
+Suppose for a contradiction that every actual doubled area is at least
+\(\tau\). Put \(\beta=1-f\), and write
+
+\[
+X=(x,x+w),\qquad Y=(y,y+z).
+\]
+
+For either free point, with its coordinates denoted temporarily by
+\((x,x+w)\), the actual anchor triangles give
+
+\[
+\begin{gathered}
+w\ge\tau,\qquad hx\ge\tau,\qquad
+\beta(1-x-w)\ge\tau,\\
+\ell:=\beta x-fw\ge\tau,\qquad
+k:=h(1-x)-w\ge\tau,\\
+-N:=fh-fw-(h-\beta)x\ge\tau.                         \tag{43}
+\end{gathered}
+\]
+
+The signs of \(\ell,k,-N\) are precisely the cell-II signs. In
+particular \(N<0\) follows already from
+\(N=-fk-(1-h)\beta x\). The two anchor-only areas also give
+
+\[
+h(1-\beta)\ge\tau,\qquad\beta(1-h)\ge\tau.          \tag{44}
+\]
+
+Set \(m=\min(h,\beta)\). The last inequality in (43), which is
+the area of \(HFX\), provides the useful additional cap
+
+\[
+\boxed{w,z\le W(m):=m-\frac{\tau}{1-m}.}               \tag{45}
+\]
+
+To prove it when \(h\ge\beta\), substitute
+\(x\ge(\tau+fw)/\beta\) into \(-N\ge\tau\). This gives
+
+\[
+\tau\le fh-fw-(h-\beta)\frac{\tau+fw}{\beta},
+\]
+
+which simplifies, after division by \(h>0\), to
+\(\tau\le f(\beta-w)\). Hence
+\(w\le\beta-\tau/(1-\beta)=W(m)\). The same calculation applies
+to \(Y\). If \(h<\beta\), reflect by
+\((x,y)\mapsto(1-y,1-x)\). This exchanges \(A,Z\), exchanges
+\(H,F\), and exchanges the parameters \(h,\beta\), while
+preserving the distance coordinate \(w=y-x\). It therefore proves
+(45) in the other order as well.
+
+### 13.2. Exhaustive line signs and the common quadratic inequality
+
+For each anchor let
+
+\[
+d_V=\det(Y-X,V-X).
+\]
+
+All four \(|d_V|\) are at least \(\tau\). We first record the
+quadratic necessary in every line-sign alternative except one explicit
+containment case. Put
+
+\[
+U=h\beta,\qquad S_0=h+\beta,\qquad
+c_0=\frac1h+\frac1\beta-1>0.
+\]
+
+The common necessary inequality is
+
+\[
+\boxed{
+(U-\tau S_0)^2\ge4\tau U(S_0-U),\qquad U-\tau S_0>0.
+}                                                        \tag{46}
+\]
+
+**If \(A,Z\) are on the same side of \(XY\).** Orient the line
+so \(d_A,d_Z<0\). The point inequalities in (43) give the interval
+
+\[
+\frac{\tau+fw}{\beta}\le x
+\le1-\frac{\tau+w}{h},                                \tag{47}
+\]
+
+and the analogous interval for \(y\) at height \(z\). If
+\(w\ge z\), then
+
+\[
+\begin{aligned}
+\tau&\le\min(-d_A,-d_Z)
+ =wy-xz-w+z\\
+ &\le z(1-\tau/\beta)-\tau w/h-c_0wz\\
+ &\le\left[1-\tau\left(\frac1h+\frac1\beta\right)\right]z
+       -c_0z^2.
+\end{aligned}
+\]
+
+The last step replaces \(w\) by \(z\) in an expression decreasing
+in \(w\). If \(w\le z\), the symmetric calculation using
+\(-d_A\) instead yields the same bound at \(w\). Thus, putting
+\(v_0=\min(w,z)\),
+
+\[
+\tau\le a_0v_0-c_0v_0^2,
+\qquad a_0=1-\tau\left(\frac1h+\frac1\beta\right)>0.
+                                                               \tag{48}
+\]
+
+Maximizing the quadratic gives \(a_0^2\ge4\tau c_0\), exactly
+(46). The positivity of \(a_0\) follows from the positive left side
+before squaring.
+
+**If \(A,Z\) are on opposite sides.** Orient the line so
+\(d_A<0<d_Z\). Write \(u_0=-d_A>0\), \(e_0=d_Z>0\),
+and \(b_0=\beta(1-x-w)>0\). Direct area identities are
+
+\[
+d_H=\frac{ku_0-hxe_0}{w},\qquad
+d_F=\frac{b_0u_0-\ell e_0}{w},\qquad
+hxb_0-k\ell=-wN>0.                                   \tag{49}
+\]
+
+Consequently \(d_H>0\) forces \(d_F>0\). The only possibilities
+for \((d_H,d_F)\) are \((+,+),(-,-),(-,+)\).
+
+For \((+,+)\), use the exact weighted identity
+
+\[
+w d_H+(h-w)d_Z=k(w-z).
+\]
+
+Since \(0<w<h\), \(d_H,d_Z\ge\tau\), and \(z\ge\tau\),
+it gives
+
+\[
+\begin{aligned}
+\tau&\le\frac{k}{h}(w-\tau)\\
+ &\le(w-\tau)\left[1-\frac\tau\beta-c_0w\right],
+\qquad w>\tau.                                       \tag{50}
+\end{aligned}
+\]
+
+The last step uses the lower bound for \(x\) in (47). On writing
+\(w=\tau+t\), the right side has the form
+\(t(A-c_0t)\), with
+
+\[
+U A=U-\tau(\beta+2h-U)>0.
+\]
+
+Its quadratic maximum therefore implies
+
+\[
+[U-\tau(\beta+2h-U)]^2\ge4\tau U(S_0-U).
+\]
+
+The positive bracket here is smaller than \(U-\tau S_0\), by
+\(\tau(h-U)>0\). Hence (46) follows. The reflection used above
+reduces \((-,-)\) to \((+,+)\), preserving \(w,z\), so (46)
+also holds in that alternative. The remaining case \((- ,+)\)
+will be handled separately in Section 13.4.
+
+### 13.3. The distance cap contradicts every noncontainment alternative
+
+Let \(\kappa=\sqrt U\). For fixed \(U\), the left side minus
+the right side of (46) decreases with \(S_0\) whenever
+\(\tau S_0<U\): its derivative is
+\(2\tau(\tau S_0-3U)<0\). Since \(S_0\ge2\kappa\), (46)
+therefore gives
+
+\[
+(1+4\tau)\kappa^2-12\tau\kappa+4\tau^2\ge0,
+\qquad\kappa>2\tau.
+\]
+
+At \(\tau=3/28\), the polynomial is, after multiplication by 196,
+
+\[
+p(\kappa)=280\kappa^2-252\kappa+9.
+\]
+
+It is negative throughout \([3/14,6/7]\): it is convex and its
+values at the endpoints are \(-225/7\) and \(-9/7\), respectively.
+As \(\kappa>2\tau=3/14\), we conclude
+
+\[
+\kappa>\frac67.
+\]
+
+The two anchor bounds (44) imply \(m\ge U+\tau\). Hence
+
+\[
+m>\frac{36}{49}+\frac3{28}
+=\frac{165}{196}>\frac{21}{25},
+\qquad
+\frac{165}{196}-\frac{21}{25}=\frac9{4900}>0.
+\]
+
+The function \(W(m)\) decreases for \(m\ge21/25\), because
+\((1-m)^2\le16/625<\tau\). Thus (45) gives the uniform cap
+
+\[
+\boxed{w,z\le W_0:=W(21/25)=\frac{477}{2800}<2\tau.}  \tag{51}
+\]
+
+In the same-side alternative, \(a_0\le1-2\tau\) and
+\(c_0\ge1\). The function \((1-2\tau)v-v^2\) increases on
+\([0,W_0]\). Therefore (48) and (51) require
+
+\[
+\tau\le(1-2\tau)W_0-W_0^2
+=\tau-\frac{18129}{7840000}<\tau,
+\]
+
+a contradiction. In either isolated-side alternative, (50), or its
+reflection, instead gives
+
+\[
+\tau\le(w-\tau)\left[1-\frac\tau\beta-c_0w\right]
+\le w-\tau\le W_0-\tau<\tau.
+\]
+
+Here \(w>\tau\), and the bracket is at most one. This also
+contradicts the threshold. Thus all alternatives covered by (46) are
+impossible.
+
+### 13.4. The remaining containment alternative is also impossible
+
+It remains to consider \(d_A<0<d_Z\), \(d_H<0<d_F\).
+The three oriented edge tests for the negatively oriented triangle
+\(HFY\) are
+
+\[
+[HFX]=N(X)<0,\qquad[FYX]=-d_F<0,
+\qquad[YHX]=d_H<0.
+\]
+
+Thus \(X\) is strictly inside \(HFY\), and
+\(-N(Y)\ge3\tau\). Reflect if necessary to arrange \(h\ge\beta\).
+The inequalities \(z\ge\tau\) and
+\(\beta y-fz\ge\tau\) now yield
+
+\[
+\begin{aligned}
+3\tau
+&\le hf-(h-\beta)y-fz\\
+&\le hf-\frac{\tau(h-\beta)(1+f)}{\beta}-f\tau.
+\end{aligned}
+\]
+
+Rearranging and then increasing \(h\) to one gives
+
+\[
+\tau\le\frac{h\beta(1-\beta)}{2h+2\beta-h\beta}
+\le\frac{\beta(1-\beta)}{2+\beta}
+\le5-2\sqrt6<\frac3{28}=\tau.
+\]
+
+The middle rational function increases with \(h\). The penultimate
+bound follows from the exact nonnegative square
+
+\[
+(5-2\sqrt6)(2+\beta)-\beta(1-\beta)
+=(\beta+2-\sqrt6)^2.
+\]
+
+The last strict comparison is equivalent to
+\(\sqrt6>137/56\), and \(6\cdot56^2-137^2=47>0\).
+This excludes the final line-sign alternative and proves Theorem 13.
+\(\square\)
+
+## 14. The entire unbalanced triangular-right branch is excluded
+
+**Theorem 14.** No competitive Type-II configuration of count
+\((1,2,3)\) has a triangular right five-point hull.
+
+**Proof.** Theorem 12 already places the two central points above
+\(CE\) and supplies the sector ledger in Section 12.3. In particular
+\(Q,T\) are both strictly inside each of \(DBR\) and \(DER\).
+We apply Theorem 13 to precisely these two points and the four actual
+anchors \(D,R,E,B\).
+
+Let \(W\) be the intersection of \(DE\) and \(BR\). Because
+\(r>b\), it is the well-defined point
+
+\[
+W=\left(0,-\frac{bu}{r-b}\right).
+\]
+
+The triangle \(DRW\) contains both \(DBR\) and \(DER\).
+Its doubled area is
+
+\[
+\Lambda=r\left(1+\frac{bu}{r-b}\right)
+=\frac{r(r-b+bu)}{r-b}.                                \tag{52}
+\]
+
+The affine map taking \(D,R,W\) respectively to
+\((0,0),(1,1),(0,1)\) sends the other two actual anchors to
+
+\[
+E\longmapsto(0,h),\quad
+B\longmapsto(f,1),\qquad
+h=\frac{q(r-b)}{r-b+bu},\quad f=\frac br.
+\]
+
+Both \(h,f\) belong to \((0,1)\). The images of \(Q,T\) are
+strictly inside both anchor triangles \(AZH\) and \(AZF\), since
+their preimages are inside \(DER\) and \(DBR\). Thus they have
+exactly the cell-II placement required by Theorem 13. Every doubled
+area is divided by \(\Lambda\) under this map.
+
+It remains to bound the scale in (52). The two-interior cost in \(BCR\)
+gives \(g=r-b-(1-b)u>13/16\). Since \(r\le1\), this implies
+
+\[
+r-b>\frac{13}{16},\qquad
+b+(1-b)u<\frac3{16},\qquad b<\frac3{16}.
+\]
+
+Consequently
+
+\[
+b+\frac{13}{16}u<\frac3{16},
+\qquad
+4\frac{13}{16}bu
+\le\left(b+\frac{13}{16}u\right)^2<\frac9{256},
+\]
+
+so \(bu<9/832\). Substitution into (52) now yields
+
+\[
+\Lambda=r+\frac{rbu}{r-b}
+<1+\frac{9/832}{13/16}
+=1+\frac9{676}<\frac{65}{64}.                          \tag{53}
+\]
+
+The last strict inequality uses \(9\cdot64=576<676\).
+Every original doubled area is greater than \(7/64\). By (53),
+every normalized doubled area would therefore be greater than
+
+\[
+\frac{7/64}{65/64}=\frac7{65}
+>\frac3{28},\qquad
+\frac7{65}-\frac3{28}=\frac1{1820}>0.
+\]
+
+This contradicts Theorem 13, completing the whole triangular-right
+branch. \(\square\)
+
+**Remaining Type-II scope.** Combining Theorems 11 and 14, any still
+competitive Type-II configuration must have count \((1,2,3)\) and a
+nontriangular convex hull on its five right-side points, including
+\(B,C\). There is no surviving triangular-right CE cut. The
+nontriangular branch requires the separate analysis in
+[UNBALANCED_RIGHT_HULL.md](UNBALANCED_RIGHT_HULL.md).
 
 ## Verification
 
@@ -1566,5 +1948,8 @@ have their own exact algebra diagnostics,
 Theorem 11 is the exhaustive assembly of these hand proofs and requires
 no further coordinate enumeration. The diagnostic also checks the
 stronger rational threshold, lower-ear function, strict radical gap,
-and line comparison in Section 12; its residual placement is stated
-without an exclusion claim.
+and line comparison in Section 12. For Sections 13--14 it checks the
+cell-II distance cap, pair-line identities, common quadratic and every
+rational endpoint gap, the containment inequality, and the support
+affine normalization and scale bound. These complete the triangular-right
+branch; the remaining nontriangular branch is stated separately.
