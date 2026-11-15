@@ -354,14 +354,351 @@ have precisely one of the following two patterns:
 | On the \(E\) side | \(L,P\) occupy the sector at edge \(DE\), and \(Q,S\) occupy the opposite sector at edge \(RC\) |
 | On the \(C\) side | Exactly one point in each of the four sectors |
 
-The proof covers the full triangular-right hull alternative. It does not
-yet exclude either final sector pattern or the quadrilateral-right hull
-alternative.
+The proof covers the full triangular-right hull alternative. Section 6
+excludes the quadrilateral-right alternative, so this reduction applies
+to every remaining balanced configuration. Neither final sector pattern
+is excluded by the present note.
+
+## 6. Complete exclusion of a quadrilateral right hull in the balanced row
+
+**Theorem 6.** In the balanced Type-II class, the four-point right set
+\(B,C,R,S\) cannot have a quadrilateral convex hull at minimum triangle
+area at least \(A_0\). Consequently the triangular-right reduction in
+Section 5 covers the entire surviving balanced row.
+
+Continue to put \(s=7/64\), \(q=1-\lambda\), \(w=1-b\), and
+\(K=4+2\sqrt3\). The forced placements from `TYPE_II_BALANCED.md`
+give
+
+\[
+0<b\le\tfrac12,\qquad 0<q<1,\qquad
+bq\ge3s,\qquad q\ge Ks>\frac{13}{16}.                    \tag{9}
+\]
+
+Here \(L\) is inside \(DBE\), while \(P\) is in the central
+triangle \(DCB\), and both lie above \(CE\). The last strict
+comparison follows from \(\sqrt3>12/7\).
+
+### 6.1. A sharper right-quadrilateral lower-vertex inequality
+
+Suppose the right hull is quadrilateral and label it in cyclic order
+\(B,R,S,C\). Apply the affine map
+
+\[
+(X,Y)\longmapsto\left(\frac{X-b}{w},Y\right).
+\]
+
+Write the image of \(R\) as \((x,y)\). The lower-vertex inequality
+in Section 1 of `TYPE_II_BALANCED.md` gives
+
+\[
+(x-y)(1-x)\ge a,\qquad a=\frac{s}{w},\qquad x<1.
+\]
+
+Thus \(y\le x-a/(1-x)\). Put
+
+\[
+c=b+\lambda w=1-wq>0.
+\]
+
+The doubled area of the actual triangle \(EBR\) is positive and is
+\(by+\lambda wx\). Hence
+
+\[
+\begin{aligned}
+s&\le by+\lambda wx\\
+ &\le cx-\frac{ba}{1-x}\\
+ &=c-\left(c(1-x)+\frac{ba}{1-x}\right)\\
+ &\le c-2\sqrt{cba}.
+\end{aligned}
+\]
+
+In particular,
+
+\[
+\boxed{c-s>0,\qquad (c-s)^2\ge\frac{4cbs}{w}.}            \tag{10}
+\]
+
+For a fixed \(b\), these two conditions remain true if \(c\) is
+increased. Indeed, the upward quadratic
+\((c-s)^2-4cbs/w\) is negative at \(c=s\); a point on its
+nonnegative set with \(c>s\) lies beyond its larger root. This
+justifies every upper replacement for \(c\) below.
+
+Define
+
+\[
+N_b(C)=4Cbs-(1-b)(C-s)^2.                                 \tag{11}
+\]
+
+If \(C\ge c\), (10) would imply \(N_b(C)\le0\). Each of the
+remaining cases supplies an explicit upper bound \(C\) with
+\(N_b(C)>0\), giving a contradiction.
+
+### 6.2. All parameters with \(q\ge7/8\) are excluded
+
+First suppose \(b\ge3/8\). Since \(q\ge7/8\),
+
+\[
+c\le C_1=\frac{1+7b}{8}.
+\]
+
+Direct expansion gives
+
+\[
+4096N_b(C_1)=3136b^3-1456b^2+113b-1.
+\]
+
+On writing \(v=b-3/8\ge0\), the right side becomes
+
+\[
+3136v^3+2072v^2+344v+2>0.                                \tag{12}
+\]
+
+Now suppose \(b\le3/8\). The inequality \(bq\ge3s\) gives
+
+\[
+c\le C_2=1-\frac{3s(1-b)}b.
+\]
+
+Also \(b\ge3s=21/64\). The exact expansion is
+
+\[
+4096b^2N_b(C_2)
+=8464b^3-9948b^2+3717b-441.
+\]
+
+Put \(v=3/8-b\), so \(0\le v\le3/64<1/16\). This numerator is
+
+\[
+\frac9{32}+\frac{693}{4}v-426v^2-8464v^3
+\ge\frac9{32}+\frac{1817}{16}v>0,                        \tag{13}
+\]
+
+where the lower bound follows by replacing \(v\) by \(1/16\)
+in \(426v+8464v^2\). Equations (12)--(13) contradict (10),
+and exhaust \(q\ge7/8\).
+
+### 6.3. At \(q\le7/8\), the line \(LP\) must isolate \(D\)
+
+Write
+
+\[
+L=(l,v),\qquad P=(p,t),\qquad
+z=1-v,\quad h_L=v-\lambda-ql,\quad h_P=t-\lambda-qp.
+\]
+
+The anchor-pair area inequalities and the forced locations imply
+
+\[
+\begin{gathered}
+ql\ge s,\qquad bz-l\ge s,\qquad
+h_L,h_P\ge s,\qquad t\le1-s,\\
+0<\lambda<v<1.
+\end{gathered}                                           \tag{14}
+\]
+
+Orient the line from \(L\) to \(P\), and let
+\(d_X=\det(L-X,P-X)\). The left and central sides of \(DB\)
+give
+
+\[
+\frac{l}{1-v}<b<\frac{p}{1-t},
+\]
+
+so \(d_D=p(1-v)-l(1-t)>0\), and hence \(d_D\ge s\).
+Because \(L\) is strictly inside \(DCE\), the three vertices cannot
+all be on the same side of \(LP\). Positive minimum area excludes zero
+signs. There are therefore exactly three possible sign pairs for
+\((d_E,d_C)\):
+
+\[
+(+,-),\qquad(-,+),\qquad(-,-).                            \tag{15}
+\]
+
+**The first pair is impossible at \(q\le7/8\).** In this pair,
+\(d_D,d_E\ge s\). The weighted identity
+
+\[
+(1-v)d_E+(v-\lambda)d_D=ql(t-v)
+\]
+
+and the positivity of its two weights imply \(l(t-v)\ge s\).
+By (14),
+
+\[
+l[q(1-l)-2s]\ge s.                                      \tag{16}
+\]
+
+On the other hand, \(v\ge\lambda+ql+s\), and
+\(bz-l\ge s\) with \(b\le1/2\), imply
+
+\[
+(2+q)l\le q-3s,
+\qquad l\le\frac{q-3s}{2+q}
+\le\frac{35}{184}<\frac15.                              \tag{17}
+\]
+
+The scalar function \(l[(7/8)(1-l)-2s]\) increases on
+\([0,1/5]\), since its derivative there is at least \(49/160>0\).
+Consequently the left side of (16) is at most
+
+\[
+\frac15\left(\frac78\frac45-2s\right)
+=\frac{77}{800}<\frac7{64}=s,
+\]
+
+a contradiction.
+
+**The second pair is also impossible at \(q\le7/8\).** Now
+\(d_C\ge s\) and \(-d_E\ge s\). The identity
+
+\[
+d_C-d_E=h_L-h_P
+\]
+
+implies \(h_L\ge h_P+2s\ge3s\). Using \(ql\ge s\),
+we obtain \(v\ge\lambda+4s\), and therefore
+
+\[
+z\le q-4s\le\frac7{16}.
+\]
+
+But \(bz\ge s+l\), \(l\ge s/q\), and \(b\le1/2\) give
+
+\[
+z\ge2s\left(1+\frac1q\right)
+\ge2s\left(1+\frac87\right)=\frac{15}{32}>\frac7{16},
+\]
+
+again a contradiction. Thus only \(d_E,d_C<0\) remains: the line
+\(LP\) puts \(D\) on one side and \(E,C\) on the other.
+
+### 6.4. The remaining line sign gives two coarse parameter bounds
+
+In the remaining case, the inequalities \(-d_E,-d_C\ge s\) give
+
+\[
+\frac{s+l(t-\lambda)}{v-\lambda}
+\le p\le
+1-\frac{s+(1-l)(1-t)}{1-v}.                              \tag{18}
+\]
+
+Both denominators are positive. After multiplying them out, the difference
+between the right and left sides' numerators is affine in \(t\), with
+positive coefficient \(h_L\). Thus replacing \(t\) by its upper
+bound \(1-s\) preserves the necessary nonnegativity. It yields
+
+\[
+J(l,z):=z^2-[q(1-l)+s]z+sq(2-l)\le0.
+\]
+
+Here \(z\ge(s+l)/b> s\), so
+\(\partial J/\partial l=q(z-s)>0\). Substituting \(l\ge s/q\)
+therefore gives
+
+\[
+\boxed{z^2-qz+2sq-s^2\le0,
+\qquad z\ge\frac{s(q+1)}{bq}.}                          \tag{19}
+\]
+
+Let
+
+\[
+Z(q)=\frac{q+\sqrt{q^2-8sq+4s^2}}2.
+\]
+
+The radicand is nonnegative on the feasible range \(q\ge Ks\);
+its larger zero is \(Ks\). The function \(Z\) increases there:
+\(q\) increases, and the radicand increases because \(q>4s\).
+Thus (19) implies
+
+\[
+\frac{s(q+1)}{bq}\le z\le Z(q).
+\]
+
+For \(q\le7/8\), comparison with the upper endpoint gives
+
+\[
+\frac{s(q+1)}{bq}\ge\frac{15s}{7b},\qquad
+Z(q)\le Z(7/8)=5s,
+\qquad\boxed{b\ge\frac37.}                              \tag{20}
+\]
+
+There is one further convenient bound:
+
+\[
+\boxed{q\le\frac{27}{32}\quad\Longrightarrow\quad
+b>\frac9{20}.}                                         \tag{21}
+\]
+
+Indeed, if both \(q\le27/32\) and \(b\le9/20\), the lower bound
+in (19) would be at least \(z_1=2065/3888\). But
+
+\[
+z_1-\frac12\frac{27}{32}=\frac{1699}{15552}>0,
+\]
+
+and, at \(q_1=27/32\),
+
+\[
+z_1^2-q_1z_1+2sq_1-s^2
+=\frac{1587523}{241864704}>0.
+\]
+
+The upward quadratic is positive there and \(z_1\) is to the right of
+its vertex, so \(z_1>Z(q_1)\ge Z(q)\), contradicting (19).
+
+### 6.5. Both remaining parameter ranges contradict the right ear
+
+If \(27/32\le q\le7/8\), equations (20) and (9) give
+
+\[
+b\ge\frac37,\qquad c\le C_3=1-\frac{27}{32}(1-b).
+\]
+
+The numerator of (11) is
+
+\[
+4096N_b(C_3)=2916b^3-1080b^2-35b-9.
+\]
+
+Writing \(u=7b-3\ge0\), this equals
+
+\[
+\frac{2916u^3+18684u^2+31657u+2460}{343}>0.               \tag{22}
+\]
+
+If instead \(q\le27/32\), equations (21) and (9) give
+
+\[
+b>\frac9{20},\qquad c\le C_4=1-\frac{13}{16}(1-b).
+\]
+
+Now
+
+\[
+4096N_b(C_4)=2704b^3-728b^2-159b-25.
+\]
+
+With \(u=20b-9>0\), this equals
+
+\[
+\frac{169u^3+3653u^2+20712u+1216}{500}>0.                 \tag{23}
+\]
+
+Both (22) and (23) contradict (10). Together with Section 6.2 they exhaust
+all \(q\), and Section 6.3 exhausted all line orientations. This proves
+Theorem 6. In particular, **both side four-point hulls in the balanced
+row are now triangular**, and the eight-point quadrilateral reduction of
+Section 5 is unconditional for that row. The final four-interior-point
+sector analysis remains open here.
 
 ## Verification
 
 [check_type_ii_completion.py](check_type_ii_completion.py) verifies the
 algebraic interval formulas, determinant normalizations, the exact gap
 \(7/128<A_0\), and the reduction of interval depth to the 35 four-subset
-tests, and the empty-ear bound (7). The global geometric dependencies and hull alternatives are proved
+tests, the empty-ear bound (7), and all identities and rational signs in
+the complete quadrilateral-right exclusion. The global geometric dependencies and hull alternatives are proved
 above; they are not conclusions of that diagnostic script.

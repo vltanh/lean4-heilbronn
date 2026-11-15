@@ -42,6 +42,68 @@ equal(sp.det(sp.Matrix([[r, u - 1], [0, -q]])), -q * r)
 assert 3 * 7**2 > 12**2
 assert Fraction(66, 64) > 1
 
+# Complete balanced quadrilateral-right exclusion.
+ss = sp.Rational(7, 64)
+ll, vv, pp, tt, zz = sp.symbols("ll vv pp tt zz")
+dd = pp * (1 - vv) - ll * (1 - tt)
+de = ll * (tt - lam) - pp * (vv - lam)
+dc = (1 - ll) * (1 - tt) - (1 - vv) * (1 - pp)
+hl = vv - lam - (1 - lam) * ll
+hp = tt - lam - (1 - lam) * pp
+equal((1 - vv) * de + (vv - lam) * dd,
+      (1 - lam) * ll * (tt - vv))
+equal(dc - de, hl - hp)
+ff = ((vv - lam) * (1 - vv)
+      - (s + ll * (tt - lam)) * (1 - vv)
+      - (s + (1 - ll) * (1 - tt)) * (vv - lam))
+jj = zz**2 - (q * (1 - ll) + s) * zz + s * q * (2 - ll)
+equal(sp.diff(ff, tt), hl)
+equal(ff.subs({tt: 1 - s, vv: 1 - zz, lam: 1 - q}), -jj)
+equal(sp.diff(jj, ll), q * (zz - s))
+equal(jj.subs(ll, s / q), zz**2 - q * zz + 2 * s * q - s**2)
+assert (sp.Rational(7, 8) - 3 * ss) / (2 + sp.Rational(7, 8)) == sp.Rational(35, 184)
+assert sp.Rational(35, 184) < sp.Rational(1, 5)
+assert sp.Rational(7, 8) * sp.Rational(3, 5) - 2 * ss == sp.Rational(49, 160)
+assert sp.Rational(1, 5) * (sp.Rational(7, 8) * sp.Rational(4, 5) - 2 * ss) == sp.Rational(77, 800) < ss
+assert 2 * ss * (1 + sp.Rational(8, 7)) == sp.Rational(15, 32) > sp.Rational(7, 16)
+
+def nn(cap):
+    return 4 * cap * b * ss - (1 - b) * (cap - ss)**2
+
+
+cap1 = (1 + 7 * b) / 8
+cap2 = 1 - 3 * ss * (1 - b) / b
+poly1 = 3136 * b**3 - 1456 * b**2 + 113 * b - 1
+poly2 = 8464 * b**3 - 9948 * b**2 + 3717 * b - 441
+equal(4096 * nn(cap1), poly1)
+equal(4096 * b**2 * nn(cap2), poly2)
+equal(poly1.subs(b, sp.Rational(3, 8) + vv),
+      3136 * vv**3 + 2072 * vv**2 + 344 * vv + 2)
+equal(poly2.subs(b, sp.Rational(3, 8) - vv),
+      sp.Rational(9, 32) + sp.Rational(693, 4) * vv - 426 * vv**2 - 8464 * vv**3)
+assert sp.Rational(693, 4) - sp.Rational(426, 16) - sp.Rational(8464, 256) == sp.Rational(1817, 16)
+assert sp.Rational(3, 8) - 3 * ss == sp.Rational(3, 64) < sp.Rational(1, 16)
+
+q0 = sp.Rational(7, 8)
+equal(q0**2 - 8 * ss * q0 + 4 * ss**2, (2 * ss)**2)
+assert (q0 + 2 * ss) / 2 == 5 * ss
+q1 = sp.Rational(27, 32)
+b1 = sp.Rational(9, 20)
+z1 = ss * (q1 + 1) / (b1 * q1)
+assert z1 == sp.Rational(2065, 3888)
+assert z1 - q1 / 2 == sp.Rational(1699, 15552) > 0
+assert z1**2 - q1 * z1 + 2 * ss * q1 - ss**2 == sp.Rational(1587523, 241864704) > 0
+cap3 = 1 - sp.Rational(27, 32) * (1 - b)
+cap4 = 1 - sp.Rational(13, 16) * (1 - b)
+poly3 = 2916 * b**3 - 1080 * b**2 - 35 * b - 9
+poly4 = 2704 * b**3 - 728 * b**2 - 159 * b - 25
+equal(4096 * nn(cap3), poly3)
+equal(4096 * nn(cap4), poly4)
+equal(poly3.subs(b, (u + 3) / 7),
+      (2916 * u**3 + 18684 * u**2 + 31657 * u + 2460) / 343)
+equal(poly4.subs(b, (u + 9) / 20),
+      (169 * u**3 + 3653 * u**2 + 20712 * u + 1216) / 500)
+
 
 def by_four_subsets(intervals):
     return all(max(intervals[i][0] for i in subset)
@@ -72,4 +134,4 @@ assert by_four_subsets(examples[0])
 assert not by_four_subsets(examples[1])  # Four closed intervals meet at 3.
 assert by_four_subsets(examples[2])
 assert not by_four_subsets(examples[3])
-print("PASS: two-vertex triangle capacity algebra and 35 swept-interval tests")
+print("PASS: two-vertex capacity, swept tests, empty ear, and complete balanced quadrilateral-right exclusion")
