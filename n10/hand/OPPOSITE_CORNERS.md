@@ -3,8 +3,9 @@
 This note closes the complete C2 subfamily in which both free points in
 each diagonal half belong to its central cell II. It also proves uniform
 contact bounds for the entire C2 family. The same-corner mixed alternative
-is closed in C2_MIXED.md; the other two alternatives listed in Section 10
-remain open, so HP11-C2 itself is not yet closed. Every
+is closed in C2_MIXED.md and the mixed/central alternative in
+C2_MIXED_CENTRAL.md. The opposite-corner mixed alternative listed in Section
+10 remains open, so HP11-C2 itself is not yet closed. Every
 argument below is analytic and independent of the computer cover.
 
 Use the normalized anchors
@@ -628,15 +629,16 @@ The other states contain a noncentral point. Up to exchanging the two
 halves and simultaneously reflecting I with III, the other full
 subfamilies are
 
-    mixed/central,
+    mixed/central (closed),
     mixed/mixed with the I points toward the same occupied corner (closed),
     mixed/mixed with the I points toward opposite occupied corners.
 
 This is an exhaustive quotient of the other eight ordered half-state pairs.
 The same-corner alternative is completely excluded in
 [C2_MIXED.md](C2_MIXED.md), using the noncentral corner theorem in
-[C2_NONCENTRAL_CUT.md](C2_NONCENTRAL_CUT.md). Exactly the mixed/central and
-opposite-corner mixed/mixed alternatives remain open.
+[C2_NONCENTRAL_CUT.md](C2_NONCENTRAL_CUT.md). The mixed/central alternative
+is completely excluded in [C2_MIXED_CENTRAL.md](C2_MIXED_CENTRAL.md).
+Exactly the opposite-corner mixed/mixed alternative remains open.
 
 The uniform contact bounds (3) apply to all of them. Sections 3--4
 also exclude their stated central cross-pair corner cuts, but the stronger

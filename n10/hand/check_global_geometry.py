@@ -247,6 +247,103 @@ def mixed_corners():
     print("PASS: mixed-half cubic, both containment bounds, same-corner constants")
 
 
+def mixed_cross_corners():
+    q = sp.Rational
+    sigma, a, c, r = q(93, 1000), q(69, 100), q(89, 100), q(11, 100)
+    h, b, f, u, v, x, y, z = sp.symbols("h b f u v x y z")
+    f0 = 1-sigma/(1-h)
+    X = (f*h*b-f*sigma-b*sigma)/(b+f*h)
+    X0 = X.subs({b:c,f:f0})
+    zero((q(21, 100)-X0)*(c+f0*h)*(1-h)
+         -(680000*h*h-979430*h+354021)/1000000)
+    zero((q(7, 40)-X0)*(c+f0*h)*(1-h)
+         -(715000*h*h-980025*h+322871)/1000000)
+    assert q(979430, 1000000)**2-4*q(680000, 1000000)*q(354021, 1000000) == -q(36539951, 10000000000)
+    assert (715000*q(41, 50)**2-980025*q(41, 50)+322871)/1000000 == q(33, 2000000)
+    for H, Z, lower, gap, derivative in [
+        (q(41, 50), q(21, 100), a, q(117009, 89000000), q(27889, 111250)),
+        (c, q(7, 40), q(41, 50), q(48367, 14240000), q(59013, 178000)),
+    ]:
+        L, K = H-sigma-sigma/c, lower/c+r
+        assert sigma-Z*(L-K*Z) == gap > 0
+        assert L-2*K*Z == derivative > 0
+    D = y*u-x*v
+    dH, dB = h*(u-x)-D, b*(y-v)-D
+    zero((b-u)*(v-sp.Symbol("d")*u)+u*(b*sp.Symbol("d")-sp.Symbol("d")*u+(1-b)*v)-b*(1-u)*v)
+    zero((b-u)*dH+u*dB-(u-x)*(h*(b-u)-b*v))
+    V = h*(1-u/c)-sigma/(u-sigma/h)
+    H0 = q(17, 20)
+    poly = (q(85, 89)*z**3-q(141, 178)*z*z-q(1097, 178000)*z-q(165153, 151300000))
+    zero(((V.subs(h,H0)-sigma/(1-u))*(u-sigma/H0)*(1-u)).subs(u,z+q(39, 100))-poly)
+    assert q(165153, 151300000)-q(1097, 178000)**2/(4*q(373, 1780)) == q(472358599, 451479200000) > 0
+    assert q(141, 178)-q(85, 89)*q(61, 100) == q(373, 1780)
+    assert (V.subs({h:c,u:q(1,2)})-2*sigma) == -q(5481, 176000)
+    assert (q(1,2)-sigma/c)**2-sigma == q(502387, 7921000) > 0
+    L0 = h*h/sigma-(1+h)/f0-h/c
+    zero((1+h)/f0-(h+1-sigma+sigma*(2-sigma)/(1-h-sigma)))
+    zero((V-(2*h-u*(h*h/sigma-(1+h)/f0)))*(u-sigma/h)-u*(L0*(u-sigma/h)-h))
+    assert 2*c/sigma-1-1/c-sigma*(2-sigma)/(1-H0-sigma)**2 == -q(112259480, 2987997)
+    assert L0.subs(h,H0) == q(305930, 157263)
+    assert sigma/c+H0/L0.subs(h,H0)-q(1,2) == q(22564199, 544555400) > 0
+    print("PASS: mixed cross-pair signs, two rational tables, A-cut scalar contradiction")
+
+
+def universal_mixed_corner():
+    q = sp.Rational
+    sigma = q(93, 1000)
+    h, f, w, z = sp.symbols("h f w z")
+    r = 1-w/h-sigma/(w-sigma)
+    D = h+f-h*f
+    T = D*(1-w/h)-(h+f)*sigma/(w-sigma)
+    zero(sp.diff(T,f)-(r+w-h))
+    zero(sp.diff(T,h)-(1-f+f*w/(h*h)-sigma/(w-sigma)))
+    t = q(15717, 100000)
+    assert 12*t-(1+2*t)**2 == q(396375911, 2500000000) > 0
+    assert 4*q(31, 250)-(1-2*sigma-q(31, 250))**2 == q(199, 10000) > 0
+    H, F = q(83, 100), q(17019, 41500)
+    D1 = H+F-H*F
+    U, V = D1*(1-sigma/H), sigma*D1*(H+F)/H
+    assert U == q(2751827551, 3444500000)
+    assert V == q(2233830552387, 17868343750000)
+    assert 4*V-(U-sigma)**2 == q(20914942006991399, 11864580250000000000) > 0
+    assert q(25947, 77000)**2-sigma*q(17,20)*q(1261,1000)/q(89,100) == q(204369639,131920250000) > 0
+    f0, fmax = 2*sigma+2*sigma/h, 1-sigma/(1-h)
+    w0 = sigma*(3/fmax-2)
+    P = (250000000000*h**5-350223500000*h**4+104548000000*h**3
+         -20978504853*h*h+25279678500*h+1430951103)
+    zero(T.subs({f:f0,w:w0})-sigma-P/(69750000*h*h*(1000*h-907)))
+    expansion = (250000000000*z**5+q(2074329500000,3)*z**4
+                 +q(6059227000000,9)*z**3+q(6152926618969,27)*z*z
+                 +q(19249553345,81)*z+q(4167656341,972))
+    zero(P.subs(h,q(5,6)+z)-expansion)
+    assert q(4167656341,972)-q(19249553345,81*300)-q(6059227000000,9*300**3)-q(250000000000,300**5) == q(1405598833,405) > 0
+    print("PASS: universal mixed-corner envelope, both intervals, positive quintic")
+
+
+def mixed_central_placement():
+    q = sp.Rational
+    sigma, c = q(93,1000), q(89,100)
+    h, z = sp.symbols("h z")
+    f0 = 1-sigma/(1-h)
+    R = (h*c-(c+1)*sigma)/(h+c)
+    W = R*(h-sigma*(h+1)/(h*f0)-sigma/c)-sigma*sigma/(h*c)
+    N = 890000000*h**4-1251770000*h**3+270351000*h*h+141348747*h-8501967
+    zero(sigma-W-N/(10000*h*(100*h+89)*(907-1000*h)))
+    expansion = 890000000*z**4+1596230000*z**3+683703000*z*z-6768053*z+q(6197153,5)
+    zero(N.subs(h,q(4,5)+z)-expansion)
+    assert 683703000-1596230000*q(11,100) == 508117700
+    assert 6768053**2-4*508117700*q(6197153,5) == -2473299961715671
+    assert q(6197153,5)-q(6768053**2,4*508117700) == q(2473299961715671,2032470800) > 0
+    R0 = c+sigma-c*sigma*(1+h)/(h*f0)
+    g = 907*h*h-2000*h+907
+    zero(sp.diff(R0,h)-8277*g/(100*h*h*(1000*h-907)**2))
+    assert g.subs(h,q(69,100)) == -q(411773,10000)
+    assert sp.diff(g,h).subs(h,c) < 0
+    assert R0.subs(h,q(69,100)) == q(1116359,1610000)
+    assert q(373,50)*sigma-R0.subs(h,q(69,100)) == q(1567,4025000) > 0
+    print("PASS: mixed/central quartic, quadrilateral capacity, complete closure constants")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -255,4 +352,7 @@ if __name__ == "__main__":
     opposite_corners()
     noncentral_corners()
     mixed_corners()
+    mixed_cross_corners()
+    universal_mixed_corner()
+    mixed_central_placement()
     symmetric_opposite_orientation()

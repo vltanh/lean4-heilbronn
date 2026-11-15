@@ -19,9 +19,9 @@ not a Lean-kernel formalization. All computation was local, with no CI.
 
 - [hand/ROADMAP.md](hand/ROADMAP.md): the active hand-proof checklist, including
   the completed U0, U1, U2 and U4 three-corner cases, clustered U3, and the
-  central/central and same-corner mixed subfamilies of C2. The unrestricted
-  hand proof remains open; the computational completion below does not check
-  those boxes.
+  central/central, same-corner mixed, and mixed/central subfamilies of C2.
+  The unrestricted hand proof remains open; the computational completion below
+  does not check those boxes.
 - [PROOF.md](PROOF.md): theorem, exhaustive reduction, proof assembly, equality.
 - [STATUS.md](STATUS.md): completed gates and exact counts.
 - [REPRODUCE.md](REPRODUCE.md): stored-package audit and both full recomputations.

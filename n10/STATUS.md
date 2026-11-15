@@ -102,8 +102,10 @@ The opposite-corner analysis supplies uniform contact bounds and closes the
 entire C2-CENTRAL/CENTRAL subfamily. The complete same-corner mixed/mixed
 subfamily is now excluded as well: the noncentral points must share a corner
 triangle, and all four pair-line sign alternatives lead to contradictions.
-The mixed/central and opposite-corner mixed/mixed alternatives remain explicit,
-unchecked children of C2.
+The full mixed/central alternative is also excluded: its three central points
+must lie inside a quadrilateral divided by an actual diagonal into two
+triangles, each too small to contain two points. Only the opposite-corner
+mixed/mixed alternative remains unchecked under C2.
 
 Seven global obligations remain: III-3C-U3, C2, II, C1, N6, N7,
 and the complete asymmetric N8 domain. HP14 (assembly) and HP15 (final
