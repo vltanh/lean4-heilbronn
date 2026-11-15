@@ -384,6 +384,176 @@ intersection of the quadrilaterals \(HBCF\) and \(ACFH\).
 This additional containment still does not by itself exclude the
 pair; the two-point interaction remains a separate obligation.
 
+## 6. The diagonal triangle ACF also has capacity one
+
+The following bound uses only five boundary-triangle inequalities. It is
+independent of the locations of the two free points.
+
+**Theorem 5.** Under (1)--(2), if every triangle has doubled area at least
+\(s=7/64\), then
+
+\[
+                 [ACF]<\frac{13}{16}<Ks.                  \tag{19}
+\]
+
+Here \([ACF]=c(1-a)+af\) is the positive doubled area. Consequently
+\(ACF\) cannot contain both free points at minimum area at least
+\(7/128\).
+
+**Proof.** Put
+
+\[
+\alpha=\frac{s}{c-b},\qquad u=b,\qquad v=1-c,
+\qquad u+v=1-\frac{s}{\alpha}.
+\]
+
+The triangles \(ABC,BCD,ABH,CDE\) give
+
+\[
+a,d\ge\alpha,\qquad
+h\ge\alpha+\frac{s}{u},\qquad
+e\ge\alpha+\frac{s}{v}.                                  \tag{20}
+\]
+
+The triangle \(HEF\) gives
+\((1-f)h+fe\le1-s\). Combining it with (20), and using
+\(e\le1\), yields
+
+\[
+\alpha+(1-f)\frac{s}{u}+f\frac{s}{v}\le1-s,
+\qquad v\ge\frac{s}{1-\alpha}.                            \tag{21}
+\]
+
+All denominators are positive: \(u,v,c-b>0\), and
+\(\alpha<1\) follows from (20). Since \(c\ge f\),
+
+\[
+[ACF]\le G:=1-v-\alpha(1-v-f).
+\]
+
+Suppose that \(G\ge13/16\). The inequalities \(f\le1/2\)
+and (21) imply
+
+\[
+G\le1-\frac\alpha2-(1-\alpha)v
+\le1-\frac\alpha2-s.
+\]
+
+Therefore
+
+\[
+0<\alpha\le\frac5{32},\qquad
+\frac{s}{1-\alpha}\le v\le
+v_1:=\frac{3/16-\alpha/2}{1-\alpha}.                       \tag{22}
+\]
+
+We distinguish the two possible orders of the side gaps \(u,v\).
+
+### The case \(v\ge u\)
+
+Because \(f\le1/2\),
+
+\[
+\frac{1-f}{u}+\frac f v
+\ge\frac12\left(\frac1u+\frac1v\right)
+\ge\frac2{u+v}.
+\]
+
+Also \(v\ge(u+v)/2\) implies
+
+\[
+G\le1-\frac\alpha2-\frac{1-\alpha}{2}
+                \left(1-\frac{s}{\alpha}\right)
+=\frac{1+s/\alpha-s}{2}.
+\]
+
+The assumed lower bound for \(G\) forces
+\(\alpha\le7/47<3/20\). On the other hand, (21) and the
+reciprocal bound require
+
+\[
+\alpha+\frac{2s\alpha}{\alpha-s}\le1-s,
+\qquad
+p(\alpha):=\alpha^2-(1-2s)\alpha+s(1-s)\le0.               \tag{23}
+\]
+
+Here \(\alpha-s>0\), since \(u+v=1-s/\alpha>0\).
+But \(p\) decreases on \([0,3/20]\), and
+
+\[
+p(3/20)=\frac{279}{102400}>0.
+\]
+
+This contradicts (23).
+
+### The case \(v<u\)
+
+The bound for \(G\) now gives
+
+\[
+f\ge f_0:=1-\frac{3}{16\alpha}
+                    +\frac{1-\alpha}{\alpha}v.
+\]
+
+The left side of (21) increases with \(f\), because \(v<u\).
+It follows that
+
+\[
+N(\alpha,v):=
+\left[\alpha+(1-f_0)\frac{s}{u}+f_0\frac{s}{v}-(1-s)\right]
+\alpha u v\le0,\qquad u=1-\frac{s}{\alpha}-v.              \tag{24}
+\]
+
+For fixed \(\alpha\), this is a quadratic polynomial in \(v\),
+with
+
+\[
+\frac{\partial^2N}{\partial v^2}
+=-\frac{64\alpha^2-71\alpha+14}{32}<0
+\quad(0<\alpha\le5/32).
+\]
+
+The strict sign follows already from
+\(14-71(5/32)=93/32>0\). Thus \(N\) is concave, and
+its minimum on the interval (22) occurs at an endpoint. Both endpoint
+values are strictly positive. To make this last algebraic claim explicit,
+set \(t=5/32-\alpha\ge0\). Direct expansion gives
+
+\[
+N\left(\alpha,\frac{s}{1-\alpha}\right)
+=\frac{
+ 5376t^3+4851t^2+\frac{10773}{16}t+\frac{875}{1024}}
+ {262144\alpha(1-\alpha)^2}>0,
+\]
+
+\[
+N(\alpha,v_1)
+=\frac{
+ 16384t^4+37120t^3+19928t^2+\frac{4243}{4}t+\frac{175}{128}}
+ {65536(1-\alpha)^2}>0.
+\]
+
+Every coefficient and both denominators are positive. Concavity now
+contradicts (24). Both orders of \(u,v\) are impossible, so
+\([ACF]\le G<13/16\).
+
+Finally, \(\sqrt3>12/7\), because \(147>144\), gives
+\(Ks=(4+2\sqrt3)7/64>13/16\). If both free points were
+strictly inside \(ACF\), the two-interior-point triangle theorem
+would instead give \([ACF]\ge Ks\). A point on one of its edges
+already gives zero area. This proves the capacity assertion. \(\square\)
+
+**Consequence for the left pair.** Under the placement hypothesis of
+Section 4, both points lie in the quadrilateral \(ACFH\), by
+Theorem 4. Its diagonal \(AF\) separates the pair: both cannot lie
+in \(ACF\), by Theorem 5. If both lay in \(AHF\), both would
+be on the \(H\)-side of \(BF\); since they also lie in
+\(HBCF\), both would then be inside \(HBF\), contrary to
+Theorem 2.
+Thus the diagonals \(HC,BF,AF\) each separate the pair. This
+does not yet exclude the two surviving placements; their coupled
+constraints remain to be proved.
+
 ## Verification
 
 The optional [check_seven_boundary_caps.py](check_seven_boundary_caps.py)

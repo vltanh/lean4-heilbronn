@@ -50,4 +50,27 @@ assert sp.factor(sp.diff(N, M) - 3*(40*M-21)*(80*M-23)/4096) == 0
 assert sp.Rational(23, 80) < 3*s < sp.Rational(21, 40)
 assert N.subs(M, sp.Rational(21, 40)) == sp.Rational(147, 327680) > 0
 
-print("PASS: seven-boundary cap identities and rational exclusions")
+# The diagonal triangle ACF has doubled area below 13/16.
+alpha, v, t = sp.symbols("alpha v t", real=True)
+u = 1 - s/alpha - v
+f0 = 1 - sp.Rational(3, 16)/alpha + (1-alpha)*v/alpha
+assert sp.expand(doubled(A, C, F) - (c*(1-a)+a*f)) == 0
+assert sp.Rational(12, 7)**2 < 3
+assert (4+2*sp.Rational(12, 7))*s == sp.Rational(13, 16)
+assert sp.Rational(7, 47) < sp.Rational(3, 20)
+p = alpha**2 - (1-2*s)*alpha + s*(1-s)
+assert p.subs(alpha, sp.Rational(3, 20)) == sp.Rational(279, 102400)
+assert sp.diff(p, alpha).subs(alpha, sp.Rational(3, 20)) < 0
+N = sp.cancel((alpha + (1-f0)*s/u + f0*s/v - (1-s))*alpha*u*v)
+assert sp.factor(sp.diff(N, v, 2) + (64*alpha**2-71*alpha+14)/32) == 0
+assert 14-71*sp.Rational(5, 32) == sp.Rational(93, 32) > 0
+v0 = s/(1-alpha)
+v1 = (sp.Rational(3, 16)-alpha/2)/(1-alpha)
+lower_numerator = 5376*t**3 + 4851*t**2 + sp.Rational(10773, 16)*t + sp.Rational(875, 1024)
+upper_numerator = 16384*t**4 + 37120*t**3 + 19928*t**2 + sp.Rational(4243, 4)*t + sp.Rational(175, 128)
+assert sp.factor((N.subs(v, v0)*262144*alpha*(1-alpha)**2).subs(alpha, sp.Rational(5, 32)-t) - lower_numerator) == 0
+assert sp.factor((N.subs(v, v1)*65536*(1-alpha)**2).subs(alpha, sp.Rational(5, 32)-t) - upper_numerator) == 0
+assert all(coef > 0 for coef in sp.Poly(lower_numerator, t).all_coeffs())
+assert all(coef > 0 for coef in sp.Poly(upper_numerator, t).all_coeffs())
+
+print("PASS: seven-boundary cap identities, diagonal-triangle capacity, and rational exclusions")
