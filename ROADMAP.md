@@ -22,9 +22,9 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G3 | Strict local maximum against arbitrary eighteen-coordinate perturbations | Complete qualitative hand proof; separate explicit-radius arithmetic certificate |
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
-| G5 | Type II: adjacent corners and five free points | **Balanced count, triangular-right hull, and right support cells I/III complete**; only unbalanced quadrilateral-right cell II remains |
+| G5 | Type II: adjacent corners and five free points | **Complete hand exclusion**, including every count/hull/cell/cut and the Type-III shear alternative |
 | G6 | N and C1 with fewer than eight boundary points | **C1 exact five-anchor hull complete**; N and larger C1 hulls remain |
-| G7 | Unrestricted sharp theorem and uniqueness | Conditional on G5, G6; equality transfer through shears is already proved |
+| G7 | Unrestricted sharp theorem and uniqueness | Conditional on G6; equality transfer through shears is already proved |
 
 ## 1. The completed eight-boundary gate
 
@@ -55,7 +55,14 @@ for 32 far-range and 886 near-range Bernstein coefficients.
 [SHARP_BC_MOVING.md](hand/SHARP_BC_MOVING.md) also proves the sharp
 bound when B moves upward by at most d, or C by less than a. A common
 exact weight forces the displacement to vanish at equality. These
-specified chambers do not yet exhaust the exterior seven-boundary case.
+specified chambers are now assembled with the projection-restricted
+G-moving exclusion in
+[SEVEN_BOUNDARY_TOP_CAP_RADIAL.md](hand/SEVEN_BOUNDARY_TOP_CAP_RADIAL.md).
+All four exterior R3 radial words are closed, including equality.
+The other seven radial classes remain to be extended to the displaced vertex.
+[SEVEN_BOUNDARY_ADJACENT_CAPS.md](hand/SEVEN_BOUNDARY_ADJACENT_CAPS.md)
+already excludes two of the four R1 words, centered on the right and left
+paired contacts, by exact rational area bounds.
 
 ## 2. The remaining low-contact families
 
@@ -99,7 +106,7 @@ the entire right-quadrilateral pair.
 [SEVEN_BOUNDARY_MIXED_PAIR.md](hand/SEVEN_BOUNDARY_MIXED_PAIR.md)
 excludes the complete HBE/BEF and ACE/ADE common pair cells, forces
 the mixed left point into ACF, and gives capacity one to ADE, AHD,
-and AHE. The remaining mixed right point is in CEF.
+AHE, and HDE. The remaining mixed right point is in CEF.
 Sections 10--11 exclude the nearer upper exterior cap and limit the
 farther cap to one point. [SEVEN_BOUNDARY_TOP_CAP.md](hand/SEVEN_BOUNDARY_TOP_CAP.md)
 then excludes the upper, lower, and left side quadrilaterals for the
@@ -112,6 +119,9 @@ for all six N anchor ears and excludes the entire exact six-anchor
 convex hull. Its final lower-ear placement is excluded by an additional
 cross-triangle area inequality and three explicit scalar intervals.
 Larger six-boundary hulls remain open.
+[SIX_BOUNDARY_EXTERIOR.md](hand/SIX_BOUNDARY_EXTERIOR.md) excludes
+the entire exterior cap between its two doubled sides, using only five
+actual points and a strict area bound below 1/20.
 [GLOBAL_COMPLETION.md](hand/GLOBAL_COMPLETION.md) additionally excludes
 both lower exterior corner caps, without requiring the top contact to
 be on the nearer half of its side. It also proves that every nine-point
@@ -143,8 +153,13 @@ both side ears in the one-cap case, placing the other upper point
 in OCXH. After reflection placing it in OCX,
 [C1_TOP_CAP_OF_SPLIT.md](hand/C1_TOP_CAP_OF_SPLIT.md) forces both
 lower points into OCF, still on opposite sides of OX. This remaining
-common-cell placement, the zero/one-lower counts, and the remaining
-N cases keep G6 open.
+common-cell placement is further restricted by
+[C1_TOP_CAP_COMMON_CELL.md](hand/C1_TOP_CAP_COMMON_CELL.md): neither
+O nor C can be isolated by the lower-pair line.
+[C1_TOP_CAP_CONTAINMENT_PAIR.md](hand/C1_TOP_CAP_CONTAINMENT_PAIR.md)
+also excludes the middle containment signs. Only the same-side O/C
+line type remains in this two-lower branch. That case, the zero/one-lower
+counts, and the remaining N cases keep G6 open.
 
 For a fixed choice of the other eight points, the sign-consistent feasible
 positions of a ninth point form a convex polygon cut out by area half-planes.
@@ -156,7 +171,7 @@ it cannot assume that every interior point reaches the square boundary.
 family, including degeneracies. A theorem about one observed active pattern,
 or about configurations already having eight contacts, does not close G6.
 
-## 3. Corner families: Type III and balanced Type II are closed
+## 3. Corner families: Type III and all of Type II are closed
 
 ### Complete Type-III theorem
 
@@ -175,7 +190,7 @@ The last case uses a central-area bound \(K<9s/8\), a connector-area bound
 \(a,b,c>6s/5\), and two explicit polynomial positivity arguments. All
 geometric cases and exact identities are printed in the manuscript.
 
-### The remaining Type-II obligation
+### The completed Type-II theorem
 
 [TYPE_II.md](hand/TYPE_II.md) supplies a further determinant-one shear
 normalization: either the configuration becomes Type III, already excluded,
@@ -191,13 +206,13 @@ theorem closes the second:
 
 | Count \((\ell,c,r)\) | Necessary range, with \(s=2t\ge2A_0\) | Current status |
 |---|---|---|
-| \((1,2,3)\) | \(s\le b\le1-s/(3-2\sqrt2)\) | Open |
+| \((1,2,3)\) | \(s\le b\le1-s/(3-2\sqrt2)\) | Completely excluded by `UNBALANCED_FINAL_LOWER_WEDGE.md`, Theorem 2 |
 | \((2,2,2)\) | \(3s\le b\le1/2\) | Completely excluded by `TYPE_II_COMPLETION.md`, Theorem 11 |
 
-The remaining row has arbitrary point coordinates within its assigned
-triangles. The recorded exact checker gives the separate
-computational bound \(137/2500<A_0\); that claim is not substituted for
-the remaining hand obligation.
+The unbalanced row has arbitrary point coordinates within its assigned
+triangles. The recorded exact checker gives the separate computational
+bound \(137/2500<A_0\). The completed continuous hand argument below
+is independent of that old computational claim.
 
 Useful global tools now include the sharp six-point triangular-hull bound,
 the sharp six-point quadrilateral-hull bound, and the complete six-point
@@ -254,7 +269,14 @@ and DRS. [UNBALANCED_OCCUPIED_LOWER_EAR.md](hand/UNBALANCED_OCCUPIED_LOWER_EAR.m
 excludes Q in EBR with eleven fixed coefficient boxes, so Q lies
 above ER. [UNBALANCED_FINAL_NEGATIVE_LINE.md](hand/UNBALANCED_FINAL_NEGATIVE_LINE.md)
 excludes the complete sign [QTE]<0 by two negative quadratic
-discriminants. Only [QTE]>0 remains in this final radial assignment.
+discriminants. In the positive sign,
+[UNBALANCED_FINAL_UPPER_PAIR.md](hand/UNBALANCED_FINAL_UPPER_PAIR.md)
+forces T into CQS and excludes Q above ES.
+[UNBALANCED_FINAL_LOWER_WEDGE.md](hand/UNBALANCED_FINAL_LOWER_WEDGE.md)
+then excludes the final Q-in-ERS placement with a positive weighted
+quadratic, convex endpoint reduction, and two strictly negative quartics.
+Its Theorem 2 assembles the **complete Type-II theorem**, explicitly
+disposing of the area-equivalent Type-III alternative. This closes G5.
 
 The same new note proves a stronger global container theorem: a triangle
 of area at most \(1/2\) with two actual vertices contains at most five
@@ -268,7 +290,7 @@ downstream of the original C2 proof.
 
 ## 4. Final assembly and verification
 
-Once G5 and G6 are closed, combine the exhaustive normalization with
+Once G6 is closed, combine the exhaustive normalization with
 the completed eight-boundary theorem and exact attaining construction.
 Lemma 4 of `GLOBAL_STRUCTURE.md` already proves that uniqueness survives
 the normalizing shears: a nontrivial final shear into the candidate would

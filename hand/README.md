@@ -65,7 +65,7 @@ families are listed below. The older computational draft is separate.
 | The nearer upper exterior cap is empty, and the farther cap contains at most one free point | `SEVEN_BOUNDARY_CAPS.md`, Theorems 10--11 |
 | With one seven-boundary exterior top point, the other point avoids the upper, lower, and left side quadrilaterals | [SEVEN_BOUNDARY_TOP_CAP.md](SEVEN_BOUNDARY_TOP_CAP.md), Theorems 1--3 |
 | The last seven-boundary side quadrilateral is empty; the interior companion lies in ADEH intersect BCXF, with b greater than 3/20 and the exterior point higher than H | [SEVEN_BOUNDARY_TOP_CAP_RIGHT.md](SEVEN_BOUNDARY_TOP_CAP_RIGHT.md) |
-| Complete HBE/BEF and ACE/ADE pair-cell exclusions; the mixed left point lies in ACF; ADE, AHD, and AHE each have capacity one | [SEVEN_BOUNDARY_MIXED_PAIR.md](SEVEN_BOUNDARY_MIXED_PAIR.md) |
+| Complete HBE/BEF and ACE/ADE pair-cell exclusions; the mixed left point lies in ACF; ADE, AHD, AHE, and HDE each have capacity one | [SEVEN_BOUNDARY_MIXED_PAIR.md](SEVEN_BOUNDARY_MIXED_PAIR.md) |
 | Sharp B- and C-moving chambers under their stated height conditions; equality forces the displaced vertex back to the boundary | [SHARP_BC_MOVING.md](SHARP_BC_MOVING.md) |
 | Complete two-point exterior top-cap exclusion when C1 has two lower points | [C1_TOP_CAP_CONVEX_PAIR.md](C1_TOP_CAP_CONVEX_PAIR.md) and [C1_TOP_CAP_TRIANGULAR_PAIR.md](C1_TOP_CAP_TRIANGULAR_PAIR.md) |
 | Both side ears of the one-point C1 top cap are empty; the remaining upper point lies in OCXH | [C1_TOP_CAP_SIDE_EARS.md](C1_TOP_CAP_SIDE_EARS.md) |
@@ -73,6 +73,13 @@ families are listed below. The older computational draft is separate.
 | In the last one-above Type-II cut, P and T lie above DR while Q lies below it; DBR and DRS have capacity one | [UNBALANCED_ONE_UPPER_RADIAL.md](UNBALANCED_ONE_UPPER_RADIAL.md) |
 | The occupied lower ear EBR is excluded, forcing Q above ER in the final Type-II placement | [UNBALANCED_OCCUPIED_LOWER_EAR.md](UNBALANCED_OCCUPIED_LOWER_EAR.md) |
 | The complete negative QT-E line sign is excluded in the final Type-II placement | [UNBALANCED_FINAL_NEGATIVE_LINE.md](UNBALANCED_FINAL_NEGATIVE_LINE.md) |
+| The final Type-II upper pair and lower wedge are excluded; every Type-II count, hull, cell, and cut is closed | [UNBALANCED_FINAL_UPPER_PAIR.md](UNBALANCED_FINAL_UPPER_PAIR.md) and [UNBALANCED_FINAL_LOWER_WEDGE.md](UNBALANCED_FINAL_LOWER_WEDGE.md), Theorem 2 |
+| All four sharp exterior R3 radial words, with equality forcing the eighth boundary contact | [SEVEN_BOUNDARY_TOP_CAP_RADIAL.md](SEVEN_BOUNDARY_TOP_CAP_RADIAL.md) |
+| The G-moving sharp chamber with f at most c and G at least as high as E is strictly below 7/128 | [SHARP_G_MOVING_PROJECTION.md](SHARP_G_MOVING_PROJECTION.md) |
+| Both isolated-endpoint pair-line cases in the remaining C1 top-cap common cell are excluded | [C1_TOP_CAP_COMMON_CELL.md](C1_TOP_CAP_COMMON_CELL.md) |
+| The middle containment pair-line case in that C1 common cell is excluded | [C1_TOP_CAP_CONTAINMENT_PAIR.md](C1_TOP_CAP_CONTAINMENT_PAIR.md) |
+| The entire exterior corner cap at the two doubled sides of N is empty, by a five-point bound below 1/20 | [SIX_BOUNDARY_EXTERIOR.md](SIX_BOUNDARY_EXTERIOR.md) |
+| Two complete exterior R1 words, centered on the right and left paired contacts, are excluded | [SEVEN_BOUNDARY_ADJACENT_CAPS.md](SEVEN_BOUNDARY_ADJACENT_CAPS.md) |
 
 The original three-family argument is retained in
 [BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md). All strengthened normal forms
@@ -86,35 +93,29 @@ an observed numerical pattern.
   the virtual lower corner cap has capacity one. Additional seven-boundary
   cap restrictions, including both lower exterior caps, are proved.
   The exact six-anchor convex hull is completely excluded; larger
-  six-boundary hulls remain. With seven boundary
+  six-boundary hulls remain, with the lower-left exterior cap empty. With seven boundary
   contacts, neither the smaller-left pentagon nor the right quadrilateral
   can contain both free points. Mixed interior placements remain, as does
   exactly one point in the far upper exterior cap with the other point
   inside the original heptagon and outside all four side quadrilaterals.
   The mixed left point is in ACF and its right companion in CEF;
-  the pair cannot both lie in ADE, AHD, or AHE. The sharp F-moving
-  chamber and the stated B/C-moving chambers are closed, including
-  equality; other orientations still need completion.
+  the pair cannot both lie in any of ADE, AHD, AHE, or HDE. All four sharp R3
+  exterior words are now closed, including equality. The seven other
+  exterior radial classes remain, with two of the four R1 words already excluded.
 - **C1:** one occupied corner, four further side contacts, and four arbitrary
   points. The complete five-anchor pentagon is excluded. Only configurations
   with additional hull vertices outside that pentagon remain. When two
   free points lie in OHC, both exterior side caps are excluded; the top
   cap contains exactly one point X. Its upper companion lies in OCXH.
   After reflection putting that companion in OCX, the lower points
-  straddle OX but both belong to OCF. This common-cell placement and
-  the lower counts zero and one still require completion.
-- **Type II:** after the area-preserving normalization to \(b\le1/2\), only
-  the left/central/right count \((1,2,3)\) remains. The left count consists
-  of the prescribed side contact. All cases with three central points,
-  the count \((2,1,3)\), and the entire balanced count \((2,2,2)\) are
-  excluded, as is the entire unbalanced triangular-right branch.
-  The two-above-CE cut is now completely excluded. The sole remaining
-  branch is a quadrilateral right hull in support cell II with exactly
-  one central point above CE. P and T are above DR, Q is below DR
-  and above ER, and the lower ear EBR is empty. Only [QTE]>0 remains.
+  straddle OX but both belong to OCF. Their joining line can no longer
+  isolate either O or C, or have the middle containment signs. Only the
+  same-side O/C line type and the
+  lower counts zero and one remain.
 
-The opposite-corner family C2 and the entire three-corner family Type III
-are closed at \(7/128<A_0\).
+The opposite-corner family C2, the entire three-corner family Type III,
+and the entire adjacent-corner Type-II family are closed by strict
+bounds below \(A_0\).
 For every competitive configuration, even before normalization, every
 actual triangle contains at most two further configuration points. This
 global occupancy theorem is proved but does not exclude all surviving
@@ -171,6 +172,14 @@ python hand/check_c1_top_cap_of_split.py
 python hand/check_unbalanced_one_upper_radial.py
 python hand/check_unbalanced_occupied_lower_ear.py
 python hand/check_unbalanced_final_negative_line.py
+python hand/check_unbalanced_final_upper_pair.py
+python hand/check_unbalanced_final_lower_wedge.py
+python hand/check_c1_top_cap_common_cell.py
+python hand/check_sharp_g_moving_projection.py
+python hand/check_seven_boundary_top_cap_radial.py
+python hand/check_six_boundary_exterior.py
+python hand/check_seven_boundary_adjacent_caps.py
+python hand/check_c1_top_cap_containment_pair.py
 ```
 
 These scripts use SymPy where appropriate and verify the printed determinant

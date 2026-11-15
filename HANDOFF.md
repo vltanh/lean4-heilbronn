@@ -6,26 +6,24 @@ The hand proof is complete for **all nine-point configurations with at least
 eight boundary points**, including exact equality classification. The full
 opposite-corner family C2 and the three-corner family Type III are also
 excluded by hand at \(7/128<A_0\).
-Every nine-point convex-position configuration is now excluded below
-\(1/19\). The **entire balanced Type-II count row \((2,2,2)\)** is
-also excluded. Only the unbalanced Type-II count \((1,2,3)\) remains.
-Its entire triangular-right branch is now excluded as well. The C1
-case whose hull is exactly its five prescribed anchors is completely
-excluded; only larger C1 hulls remain. Both unbalanced right support
-cells I and III are now excluded in every CE cut. The entire two-above-CE
-cut is also excluded, including its last support cell II.
+Every nine-point convex-position configuration is excluded below
+\(1/19\). The **entire Type-II family is now excluded**: the final
+lower wedge closes its last count/hull/cut/cell combination, and the
+assembly explicitly includes the area-equivalent Type-III alternative.
+The C1 case whose hull is exactly its five prescribed anchors is
+completely excluded; only larger C1 hulls remain.
 With seven boundary contacts, the complete smaller-left pair and
 right-quadrilateral pair classes are excluded. The exact six-anchor
 N convex hull is completely excluded. In the exterior seven-boundary
 case only one point in the far upper cap remains; the other point avoids
 all four side quadrilaterals and lies in the central region. The mixed
-interior left point is in ACF, and ADE, AHD, and AHE each have capacity one.
-The full sharp chamber with F moved inward from its top side is closed,
-as are the stated B/C-moving chambers; equality forces the original
+interior left point is in ACF, and ADE, AHD, AHE, and HDE each have capacity one.
+All four sharp R3 radial words in the exterior case are closed;
+equality forces the eighth boundary contact and the original
 configuration. With two lower C1 points, the two-point top cap and both
 side ears are excluded. In the one-cap case, the lower points straddle
-OX but, after the stated reflection, both lie in OCF. The final Type-II
-lower ear is empty, and its negative QT-E line sign is excluded.
+OX but, after the stated reflection, both lie in OCF. Their joining
+line cannot isolate O or C.
 The unrestricted nine-point theorem is **not yet proved by hand**.
 
 Target:
@@ -46,8 +44,8 @@ H_9=\frac{9\sqrt{65}-55}{320}=:A_0.
    proof, quantitative triangular-hull theorems, and lower-point packing.
 6. [hand/TYPE_II.md](hand/TYPE_II.md): adjacent-corner normalization and
    initial reduction to two count classes.
-7. [hand/TYPE_II_COMPLETION.md](hand/TYPE_II_COMPLETION.md), Theorem 11:
-   complete balanced-row exclusion, leaving only \((1,2,3)\).
+7. [hand/UNBALANCED_FINAL_LOWER_WEDGE.md](hand/UNBALANCED_FINAL_LOWER_WEDGE.md),
+   Theorem 2: complete Type-II assembly, with links to every count and cell.
 8. [ROADMAP.md](ROADMAP.md): precise open completion gates.
 
 The later structural notes are
@@ -118,7 +116,7 @@ and [hand/SEVEN_BOUNDARY_TOP_CAP_RIGHT.md](hand/SEVEN_BOUNDARY_TOP_CAP_RIGHT.md)
 exclude all four side quadrilaterals for the remaining interior point.
 [hand/SEVEN_BOUNDARY_MIXED_PAIR.md](hand/SEVEN_BOUNDARY_MIXED_PAIR.md)
 excludes the complete HBE/BEF and ACE/ADE common pair cells, forces
-the mixed left point into ACF, and excludes pairs in ADE, AHD, and AHE.
+the mixed left point into ACF, and excludes pairs in ADE, AHD, AHE, and HDE.
 [hand/SHARP_BC_MOVING.md](hand/SHARP_BC_MOVING.md) proves the sharp
 bound for B moving upward by at most d or C moving upward by less than a.
 Its common exact weight forces the displacement to vanish at equality.
@@ -133,6 +131,16 @@ puts P,T above DR and Q below it. The occupied lower ear is excluded in
 [hand/UNBALANCED_OCCUPIED_LOWER_EAR.md](hand/UNBALANCED_OCCUPIED_LOWER_EAR.md),
 forcing Q above ER. [hand/UNBALANCED_FINAL_NEGATIVE_LINE.md](hand/UNBALANCED_FINAL_NEGATIVE_LINE.md)
 then excludes the entire negative QT-E sign by two quadratic discriminants.
+[hand/UNBALANCED_FINAL_UPPER_PAIR.md](hand/UNBALANCED_FINAL_UPPER_PAIR.md)
+excludes Q above ES; [hand/UNBALANCED_FINAL_LOWER_WEDGE.md](hand/UNBALANCED_FINAL_LOWER_WEDGE.md)
+excludes the last lower placement and assembles the complete Type-II
+theorem. Its final weighted quadratic reduces to two negative quartics.
+[hand/SHARP_G_MOVING_PROJECTION.md](hand/SHARP_G_MOVING_PROJECTION.md)
+supplies the last sharp exterior orientation, and
+[hand/SEVEN_BOUNDARY_TOP_CAP_RADIAL.md](hand/SEVEN_BOUNDARY_TOP_CAP_RADIAL.md)
+assembles all four R3 words with explicit coordinate maps and equality.
+[hand/C1_TOP_CAP_COMMON_CELL.md](hand/C1_TOP_CAP_COMMON_CELL.md)
+closes both isolated-endpoint pair-line cases in the remaining C1 cell.
 
 The sharp chamber inequality, positive stress, local proof, and 84-triangle
 attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
@@ -142,29 +150,27 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 - **N with six or seven boundary points:** six prescribed side contacts,
   three arbitrary points, and projection-overlap inequalities. The exact
   six-anchor convex hull is completely excluded; larger six-boundary
-  hulls remain. With seven boundary contacts only mixed left/right
+  hulls remain. [SIX_BOUNDARY_EXTERIOR.md](hand/SIX_BOUNDARY_EXTERIOR.md)
+  excludes the whole lower-left exterior cap. With seven boundary contacts only mixed left/right
   interior placements and one point in the far upper exterior cap remain.
   In the latter case, the other point is inside the original heptagon,
   and in ADEH intersect BCXF. In the mixed interior case the left
   point is in ACF and the right point in CEF, with no pair in ADE,
-  AHD, or AHE. The F-moving and stated B/C-moving sharp chambers are
-  closed, but the remaining exterior orientations still need completion.
+  AHD, AHE, or HDE. The full exterior R3 class is closed; its seven
+  other radial classes remain, with two complete R1 words excluded by
+  [SEVEN_BOUNDARY_ADJACENT_CAPS.md](hand/SEVEN_BOUNDARY_ADJACENT_CAPS.md).
 - **C1:** only configurations whose hull extends beyond the five prescribed
   anchors remain. Every exact five-anchor pentagon placement is closed.
   With two lower points, exactly one exterior top point X remains and
   the other upper point lies in OCXH. After reflection choosing that
   point in OCX, the lower points straddle OX and both lie in OCF.
-  This common-cell case and the zero/one-lower cases remain.
-- **Type II:** after normalization to \(b\le1/2\), only the occupancy
-  class \((\ell,c,r)=(1,2,3)\) remains. The left count consists of the
-  prescribed side contact. Type III, the normalization's alternative,
-  and the entire balanced Type-II row are closed. The sole residual
-  case is a quadrilateral right hull in support cell II with exactly
-  one central point above CE. A pentagonal right hull, both outer
-  support cells, and the entire two-above-CE cut are excluded. The
-  remaining radial assignment has P,T above DR and Q below DR but
-  above ER. The lower ear is empty, and only the positive sign
-  [QTE]>0 remains.
+  Its pair line cannot isolate O or C, and
+  [C1_TOP_CAP_CONTAINMENT_PAIR.md](hand/C1_TOP_CAP_CONTAINMENT_PAIR.md)
+  excludes the middle containment signs. The same-side O/C line type
+  and the zero/one-lower cases remain.
+
+Type II, Type III, and C2 are completely closed. The unrestricted
+completion obligation now consists only of the N and C1 families above.
 
 No theorem yet forces every competitive configuration to have eight boundary
 points. Moving a single point within its area-feasible polygon may be trapped
@@ -199,6 +205,11 @@ reductions, the sharp B/C-moving chambers, the full C1 two-cap and
 side-ear exclusions, the three-box OF-split proof, the one-above
 radial split, all 1540 occupied-lower-ear coefficient bounds, and
 the complete negative QT-E line-sign exclusion.
+The final upper-pair and lower-wedge diagnostics also pass, completing
+Type II, as do the C1 isolated-C/O calculations and all ten printed
+univariate coefficients. The sharp exterior R3 assembly and all four
+coordinate maps have been checked independently; the G-moving proof's
+signed areas, positive weight, displacement bound, and cubic pass exactly.
 The new continuous proofs received a separate agent audit of their
 geometric signs and inequality directions; the right-pair curvature
 certificate was checked independently as well.
