@@ -710,7 +710,142 @@ difference is
 
 Thus the only remaining left-pair assignment has one point in the
 \(HB\) sector, above \(AF\), and one in the \(CF\) sector.
-The exclusion of that last assignment is a separate obligation.
+That last assignment is subsequently excluded in
+[SEVEN_BOUNDARY_LEFT_PAIR.md](SEVEN_BOUNDARY_LEFT_PAIR.md), which
+therefore completes the entire smaller-left pair class.
+
+## 8. The bottom-right ear is empty as well
+
+**Theorem 8.** Under (1)--(2), if every actual doubled triangle area is
+at least \(s=7/64\), then
+
+\[
+                         [CDE]<3s.                       \tag{31}
+\]
+
+Consequently neither free point can lie inside \(CDE\).
+
+**Proof.** Suppose instead that \([CDE]=(1-c)(e-d)\ge3s\).
+Put \(w=1-c\) and \(M=c-b\), so \(b+M+w=1\). The
+boundary triangles \(ABC,BCD,ABH\) imply
+
+\[
+h\ge\frac{s}{M}+\frac{s}{b},\qquad
+e\ge\frac{s}{M}+\frac{3s}{w}.                            \tag{32}
+\]
+
+The triangle \(HEF\) also gives
+
+\[
+                         (1-f)h+fe\le1-s.                \tag{33}
+\]
+
+### If \(e\le h\)
+
+Since \(f\le1/2\), (33) implies \(h+e\le2(1-s)\).
+On the other hand, (32) and Cauchy--Schwarz give
+
+\[
+h+e\ge s\left(\frac2M+\frac1b+\frac3w\right)
+\ge s(\sqrt2+1+\sqrt3)^2.
+\]
+
+The elementary comparisons \(\sqrt2>7/5\) and
+\(\sqrt3>5/3\) make the last quantity greater than
+\(26047/14400\), whereas
+\(2(1-s)=57/32=25650/14400\). This is a contradiction.
+
+### If \(e>h\)
+
+Now (33) increases with \(f\). Since \(f\ge b\), (32)--(33)
+imply
+
+\[
+1-s\ge(1-b)h+be
+\ge s\left(\frac1M+\frac1b-1+\frac{3b}{w}\right).
+\]
+
+Thus the necessary scalar inequality is
+
+\[
+F(M,w):=\frac1M+\frac1b+\frac{3b}{w}\le\frac1s,
+\qquad b=1-M-w.                                         \tag{34}
+\]
+
+From (32), \(M>s\), and the upper bounds \(h,e\le1\) give
+
+\[
+w\ge w_0:=\frac{3sM}{M-s},\qquad
+b\ge\frac{sM}{M-s}.
+\]
+
+In particular \(b_0:=1-M-w_0\ge b>0\). Adding these two lower
+bounds and using \(b+w=1-M\) yields
+
+\[
+M^2-(1-3s)M+s\le0.
+\]
+
+This forces \(M>1/4\): on \(0\le M\le1/4\) the polynomial
+decreases, and its value at \(1/4\) is \(1/256>0\).
+
+We next show that \(F(M,w)\) increases for \(w\ge w_0\), with
+\(M\) fixed and \(b>0\). First,
+
+\[
+w_0-2b_0
+=\frac{2M^2+(7s-2)M+2s}{M-s}>0.
+\]
+
+The numerator is an upward quadratic with discriminant
+\(-927/4096<0\). Therefore \(w/b\ge w_0/b_0>2\) on the
+whole interval from \(w_0\) to the actual \(w\). Differentiating
+(34) gives
+
+\[
+\frac{\partial F}{\partial w}
+=\frac1{b^2}-\frac{3(1-M)}{w^2}
+>\frac{4-3(1-M)}{w^2}>0.
+\]
+
+It follows that \(F(M,w)\ge F(M,w_0)\). At the fixed rational
+threshold,
+
+\[
+F(M,w_0)-\frac1s
+=-\frac{P(M)}{7(64M^2-50M+7)},
+\]
+
+\[
+P(M)=4096M^3-2304M^2+196M+49.                             \tag{35}
+\]
+
+The denominator is negative: indeed
+\(b_0=-(64M^2-50M+7)/(64M-7)>0\), and \(M>s\).
+The numerator \(P(M)\) is positive throughout \(M>1/4\).
+For a direct certificate, put \(z=M-1/3>-1/12\). Then
+
+\[
+\begin{aligned}
+P(M)
+&=4096z^3+1792z^2+\frac{76}{3}z+\frac{271}{27}\\
+&\ge\frac{4352}{3}z^2+\frac{76}{3}z+\frac{271}{27}>0.
+\end{aligned}
+\]
+
+The first inequality uses \(z^3\ge-z^2/12\). The final upward
+quadratic has discriminant \(-4665584/81<0\). Equation (35)
+therefore gives \(F(M,w_0)>1/s\), contradicting (34).
+
+Both orders of the upper contacts are impossible, proving (31).
+A point inside \(CDE\) would subdivide it into three actual
+triangles with doubled areas at least \(s\), contradicting (31);
+an edge point would give zero area. This proves the occupancy
+assertion. \(\square\)
+
+In particular, if both free points lie in the right quadrilateral
+\(CDEF\), then both lie strictly inside \(CEF\). This is a
+necessary placement for that remaining pair class, not its exclusion.
 
 ## Verification
 

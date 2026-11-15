@@ -99,4 +99,29 @@ assert sp.discriminant(quadratic, a) == -sp.Rational(257, 8192)
 assert sp.factor(b+(f-b)*y-f*(y-a)/(1-a)
                  - (1-y)*(b*(1-a)+a*f)/(1-a)) == 0
 
-print("PASS: seven-boundary caps, diagonal-triangle capacity, and complete upper-left overlap exclusion")
+# The remaining bottom-right ear CDE has doubled area below 3s.
+assert sp.Rational(7, 5)**2 < 2
+assert sp.Rational(5, 3)**2 < 3
+assert s*(1+sp.Rational(7, 5)+sp.Rational(5, 3))**2 == sp.Rational(26047, 14400)
+assert sp.Rational(26047, 14400)-2*(1-s) == sp.Rational(397, 14400) > 0
+w = sp.symbols("w", real=True)
+w0 = 3*s*M/(M-s)
+b0 = 1-M-w0
+poly_M = M**2-(1-3*s)*M+s
+assert poly_M.subs(M, sp.Rational(1, 4)) == sp.Rational(1, 256)
+assert sp.diff(poly_M, M).subs(M, sp.Rational(1, 4)) < 0
+ratio_num = 2*M**2+(7*s-2)*M+2*s
+assert sp.factor(w0-2*b0-ratio_num/(M-s)) == 0
+assert sp.discriminant(ratio_num, M) == -sp.Rational(927, 4096)
+right_budget = 1/M+1/(1-M-w)+3*(1-M-w)/w
+assert sp.factor(sp.diff(right_budget, w)-1/(1-M-w)**2+3*(1-M)/w**2) == 0
+P = 4096*M**3-2304*M**2+196*M+49
+assert sp.factor(right_budget.subs(w, w0)-1/s+P/(7*(64*M**2-50*M+7))) == 0
+assert sp.factor(b0+(64*M**2-50*M+7)/(64*M-7)) == 0
+z = sp.symbols("z", real=True)
+assert sp.expand(P.subs(M, z+sp.Rational(1, 3))
+                 -(4096*z**3+1792*z**2+sp.Rational(76, 3)*z+sp.Rational(271, 27))) == 0
+lower = sp.Rational(4352, 3)*z**2+sp.Rational(76, 3)*z+sp.Rational(271, 27)
+assert sp.discriminant(lower, z) == -sp.Rational(4665584, 81)
+
+print("PASS: seven-boundary caps, diagonal capacity, upper-left overlap, and bottom-right ear exclusion")
