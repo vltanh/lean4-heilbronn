@@ -250,3 +250,12 @@ members of these two families. Type III is now completely excluded at
 \(7/128<A_0\) by [`CORNER_FAMILIES.md`](CORNER_FAMILIES.md). The remaining
 corner obligation is Type II, reduced to the two count classes in
 [`TYPE_II.md`](TYPE_II.md), Section 8.
+
+The later note [`THREE_INTERIOR_TRIANGLES.md`](THREE_INTERIOR_TRIANGLES.md)
+proves unrestricted triangle capacity two at the target threshold. Its
+normalization applies to arbitrary competitive configurations by first
+choosing a minimum-area enclosing parallelogram. Further completed
+restrictions are in [`ONE_CORNER.md`](ONE_CORNER.md),
+[`SEVEN_BOUNDARY_CAPS.md`](SEVEN_BOUNDARY_CAPS.md), and
+[`TYPE_II_BALANCED.md`](TYPE_II_BALANCED.md). They do not yet supply the
+remaining sharp inequalities for N, C1, or the two Type-II rows.

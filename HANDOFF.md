@@ -28,6 +28,15 @@ H_9=\frac{9\sqrt{65}-55}{320}=:A_0.
    two remaining count classes.
 7. [ROADMAP.md](ROADMAP.md): precise open completion gates.
 
+The later structural notes are
+[hand/THREE_INTERIOR_TRIANGLES.md](hand/THREE_INTERIOR_TRIANGLES.md),
+[hand/ONE_CORNER.md](hand/ONE_CORNER.md),
+[hand/SEVEN_BOUNDARY_CAPS.md](hand/SEVEN_BOUNDARY_CAPS.md), and
+[hand/TYPE_II_BALANCED.md](hand/TYPE_II_BALANCED.md).
+They prove unrestricted triangle capacity two, several complete
+pentagonal and seven-boundary exclusions, and the balanced Type-II
+left-hull and CE-cut restrictions.
+
 The sharp chamber inequality, positive stress, local proof, and 84-triangle
 attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 
@@ -36,10 +45,17 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 - **N with six or seven boundary points:** six prescribed side contacts,
   three arbitrary points, and projection-overlap inequalities.
 - **C1:** one corner, four additional side contacts, four arbitrary points.
+  If these five anchors are the full hull, the only remaining placements
+  have two free points in the lower corner triangle and two together in
+  HCD or HCF. Larger hulls still need an argument.
 - **Type II:** after normalization to \(b\le1/2\), only the two occupancy
   classes \((\ell,c,r)=(1,2,3)\) and \((2,2,2)\) remain. The left count
   includes the prescribed side contact. Type III, the normalization's
-  alternative, is already closed.
+  alternative, is already closed. In the balanced case, the left point
+  is inside DBE and above CE, one central point is above CE, and the
+  other is below CE. Its two right points still need a coupled inequality.
+  In the unbalanced case, one or two central points are above CE and
+  must be coupled to the right triple.
 
 No theorem yet forces every competitive configuration to have eight boundary
 points. Moving a single point within its area-feasible polygon may be trapped
@@ -47,10 +63,12 @@ inside the square; do not treat boundary pushing as automatic.
 
 ## Checks and trust boundary
 
-All nine hand-proof diagnostics have been run locally: the original identities,
+All thirteen hand-proof diagnostics have been run locally: the original identities,
 the eight-boundary inequalities, radial catalogue, R6 derivatives,
 opposite-corner identities, corner-family identities and exact attainment,
-four-corner argument, Type-II identities, and quadrilateral-hull formulas.
+four-corner argument, Type-II identities, quadrilateral-hull formulas,
+one-corner inequalities, seven-boundary cap bounds, the global triangle-capacity
+argument, and balanced Type-II exclusions.
 The original exact local checker has also passed. The arguments include the
 geometric and sign reasoning that those diagnostics alone cannot establish.
 No external independent review or Lean verification is claimed.

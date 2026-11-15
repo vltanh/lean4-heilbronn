@@ -18,6 +18,7 @@ A_0=\frac{9\sqrt{65}-55}{320}.
 - **Complete eight-boundary hand theorem:** [hand/EIGHT_BOUNDARY.md](hand/EIGHT_BOUNDARY.md) proves the sharp upper bound and uniqueness for every configuration with at least eight boundary points. The proof includes all boundary multiplicities and all orientation classes; symmetry is a conclusion at equality.
 - **Global hand reductions and corner theorems:** [hand/GLOBAL_STRUCTURE.md](hand/GLOBAL_STRUCTURE.md) strengthens the normalization to five explicit families with at most twelve parameters. [hand/OPPOSITE_CORNERS.md](hand/OPPOSITE_CORNERS.md) completely excludes the opposite-corner family with the strict bound \(7/128<A_0\). [hand/CORNER_FAMILIES.md](hand/CORNER_FAMILIES.md) completely excludes Type III (three occupied corners) at \(7/128<A_0\), using sharp small-hull theorems and exact packing inequalities. [hand/TYPE_II.md](hand/TYPE_II.md) reduces the adjacent-corner family to two explicit count classes.
 - **Exact attainment and local optimality:** [hand/HAND_PROOF.md](hand/HAND_PROOF.md) supplies the sharp chamber argument used in the eight-boundary theorem, all 84 attaining areas, and unrestricted qualitative strict local optimality.
+- **Further global restrictions:** [hand/THREE_INTERIOR_TRIANGLES.md](hand/THREE_INTERIOR_TRIANGLES.md) proves that, in every nine-point configuration of minimum area at least \(A_0\), each actual triangle contains at most two further points. [hand/ONE_CORNER.md](hand/ONE_CORNER.md) closes the complete corner-triangle three-interior branch and several pentagonal C1 classes. [hand/SEVEN_BOUNDARY_CAPS.md](hand/SEVEN_BOUNDARY_CAPS.md) and [hand/TYPE_II_BALANCED.md](hand/TYPE_II_BALANCED.md) give additional continuous placement exclusions.
 - **Exact computational proof draft:** [exact/PROOF.md](exact/PROOF.md) and [exact/STATUS.md](exact/STATUS.md) describe a claimed complete finite global cover over three families, with exact arithmetic checkers and previously recorded PASS runs. The mathematical/code argument is unreviewed and **not Lean-verified**.
 - **The unrestricted hand proof is still incomplete.** [ROADMAP.md](ROADMAP.md) and [HANDOFF.md](HANDOFF.md) identify the remaining continuous families: N, C1, and two Type-II count classes. The eight-boundary theorem does not assert that an unrestricted optimizer has eight boundary points.
 
@@ -33,6 +34,10 @@ python hand/check_corners.py
 python hand/check_four_corners.py
 python hand/check_type_ii.py
 python hand/check_quadrilateral_hulls.py
+python hand/check_one_corner.py
+python hand/check_seven_boundary_caps.py
+python hand/check_three_interior_triangles.py
+python hand/check_type_ii_balanced.py
 python exact/verify_local.py                # standard-library exact local theorem
 cd exact
 g++ -O3 -std=c++17 verify_global.cpp -o verify_global

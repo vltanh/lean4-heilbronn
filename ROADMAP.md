@@ -62,6 +62,22 @@ C2 is closed. The unresolved parts of the former Type-I obligation are:
 - **C1:** one occupied corner, one further contact on each incident side,
   and one contact on each opposite side; four further points are arbitrary.
 
+Several complete restrictions now apply within these families.
+[THREE_INTERIOR_TRIANGLES.md](hand/THREE_INTERIOR_TRIANGLES.md) proves that
+an actual triangle containing three other points must be a full-hull ear,
+then excludes every such triangle in all normalized families. A
+minimum-area enclosing-parallelogram argument extends the result to
+every competitive configuration, without a maximizing hypothesis:
+**every actual triangle contains at most two further points**.
+[ONE_CORNER.md](hand/ONE_CORNER.md) excludes the full three-inside
+corner-triangle branch and proves triangle capacity two throughout C1.
+For C1 whose hull is exactly its five prescribed anchors, precisely two
+free points lie on each side of HC; the two upper points must both be in
+HCD or both in HCF. The other pentagonal placements are excluded.
+[SEVEN_BOUNDARY_CAPS.md](hand/SEVEN_BOUNDARY_CAPS.md) excludes two lower ears
+and several complete pair placements with seven boundary contacts.
+These results narrow G6 but do not complete it.
+
 For a fixed choice of the other eight points, the sign-consistent feasible
 positions of a ninth point form a convex polygon cut out by area half-planes.
 Such a polygon may lie wholly inside the square. A proposed pushing lemma
@@ -119,6 +135,14 @@ the sharp six-point quadrilateral-hull bound, and the complete six-point
 support-triangle theorem. [QUADRILATERAL_HULL.md](hand/QUADRILATERAL_HULL.md)
 also gives a universal N cap exclusion and precise, explicitly conditional
 occupancy classifications for the six-hull N and five-hull C1 cases.
+In addition, [TYPE_II_BALANCED.md](hand/TYPE_II_BALANCED.md) excludes the
+entire balanced left-quadrilateral branch. Its left free point is inside
+DBE and above CE, exactly one central point is above CE, and the other is
+below CE. Their interaction with the two right points remains open.
+In the unbalanced row, at least one central point is above CE; the
+one-point and two-point cuts against the right triple remain open.
+Sections 11--12 of `TYPE_II.md` supply exact necessary parameter bounds
+for those cuts, without claiming they suffice for an exclusion.
 
 ## 4. Final assembly and verification
 

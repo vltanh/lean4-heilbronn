@@ -35,6 +35,10 @@ families are listed below. The older computational draft is separate.
 | Four-corner theorem at \(1/19\), with a controlled projective transfer | [FOUR_CORNERS.md](FOUR_CORNERS.md) and `CORNER_FAMILIES.md`, Section 9 |
 | Type II reduced to two count classes; every central-triple orientation excluded | [TYPE_II.md](TYPE_II.md) |
 | Sharp six-point quadrilateral-hull bound and N/C1 occupancy restrictions | [QUADRILATERAL_HULL.md](QUADRILATERAL_HULL.md) |
+| Unrestricted triangle capacity two at minimum area at least \(A_0\) | [THREE_INTERIOR_TRIANGLES.md](THREE_INTERIOR_TRIANGLES.md) |
+| Complete corner-triangle three-point exclusion, C1 triangle capacity two, and further pentagonal exclusions | [ONE_CORNER.md](ONE_CORNER.md) |
+| Continuous seven-boundary cap and pair exclusions | [SEVEN_BOUNDARY_CAPS.md](SEVEN_BOUNDARY_CAPS.md) |
+| Balanced Type II has a triangular left hull and exactly one central point on each side of CE | [TYPE_II_BALANCED.md](TYPE_II_BALANCED.md) |
 | Equality transfer through all normalizing shears | `GLOBAL_STRUCTURE.md`, Lemma 4 |
 
 The original three-family argument is retained in
@@ -45,16 +49,30 @@ an observed numerical pattern.
 ## What remains
 
 - **N:** six prescribed boundary points and three arbitrary points, with fewer
-  than eight total boundary points.
+  than eight total boundary points. Every actual triangle has capacity two;
+  the virtual lower corner cap has capacity one. Additional seven-boundary
+  cap restrictions are proved, but the complete family is still open.
 - **C1:** one occupied corner, four further side contacts, and four arbitrary
-  points.
+  points. Every actual triangle has capacity two. If the five prescribed
+  anchors are the full hull, exactly two free points lie on each side of
+  the opposite diagonal, and the upper pair must lie together in HCD or
+  HCF. Those two placements and the larger-hull cases remain open.
 - **Type II:** after the area-preserving normalization to \(b\le1/2\), only
   the left/central/right counts \((1,2,3)\) and \((2,2,2)\) remain. The left
   count includes the prescribed side contact. All cases with three central
-  points, and the count \((2,1,3)\), have been excluded.
+  points, and the count \((2,1,3)\), have been excluded. In the balanced
+  count, the left hull is triangular; the left free point and one central
+  point are above CE, and the other central point is below CE. The two
+  right points still need a coupled inequality. In the unbalanced count,
+  one or two central points are above CE; their interaction with the right
+  triple remains open.
 
 The opposite-corner family C2 and the entire three-corner family Type III
 are closed at \(7/128<A_0\).
+For every competitive configuration, even before normalization, every
+actual triangle contains at most two further configuration points. This
+global occupancy theorem is proved but does not exclude all surviving
+order types.
 
 A proof covering these complete families, or a proved boundary-saturation
 reduction to the solved family, would finish the unrestricted theorem.
@@ -75,6 +93,10 @@ python hand/check_corners.py
 python hand/check_four_corners.py
 python hand/check_type_ii.py
 python hand/check_quadrilateral_hulls.py
+python hand/check_one_corner.py
+python hand/check_seven_boundary_caps.py
+python hand/check_three_interior_triangles.py
+python hand/check_type_ii_balanced.py
 ```
 
 These scripts use SymPy where appropriate and verify the printed determinant
