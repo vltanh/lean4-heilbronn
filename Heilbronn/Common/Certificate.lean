@@ -24,9 +24,9 @@ kernel evaluates `check` on the data (`decide +kernel`), so no step trusts the c
 
 * `Expr` is a symbolic polynomial in variables `var 0, var 1, …` with rational constants; its
   real value at `z : ℕ → ℝ` is `Expr.eval z`.
-* A monomial is a natural number `k` packing its exponent vector in base `16`: the exponent of
-  `var v` is `k / 16 ^ v % 16`. Monomials multiply by adding their keys, which is exact as long
-  as no exponent reaches `16`; every polynomial built here has total degree below `16`, which
+* A monomial is a natural number `k` packing its exponent vector in base `32`: the exponent of
+  `var v` is `k / 32 ^ v % 32`. Monomials multiply by adding their keys, which is exact as long
+  as no exponent reaches `32`; every polynomial built here has total degree below `32`, which
   `check` verifies.
 * `Poly` is a list of pairs (key, integer coefficient). `Expr.toPoly e` is a pair `(d, p)` with
   `d > 0` and `p` the integer polynomial `d • e`. The weights `w_j` are integers, and the check
@@ -40,15 +40,15 @@ namespace Heilbronn.Cert
 
 /-! ### Packed monomials -/
 
-/-- The value of the monomial with key `k` at `z`: the product of `z v ^ (k / 16 ^ v % 16)`. -/
+/-- The value of the monomial with key `k` at `z`: the product of `z v ^ (k / 32 ^ v % 32)`. -/
 noncomputable def keyEval (z : ℕ → ℝ) (k : ℕ) : ℝ :=
-  if k = 0 then 1 else z 0 ^ (k % 16) * keyEval (fun i => z (i + 1)) (k / 16)
+  if k = 0 then 1 else z 0 ^ (k % 32) * keyEval (fun i => z (i + 1)) (k / 32)
 termination_by k
 decreasing_by omega
 
-/-- The total degree of the monomial with key `k`: the sum of its base-`16` digits. -/
+/-- The total degree of the monomial with key `k`: the sum of its base-`32` digits. -/
 def digitSum (k : ℕ) : ℕ :=
-  if k = 0 then 0 else k % 16 + digitSum (k / 16)
+  if k = 0 then 0 else k % 32 + digitSum (k / 32)
 termination_by k
 decreasing_by omega
 
@@ -56,26 +56,26 @@ theorem keyEval_zero (z : ℕ → ℝ) : keyEval z 0 = 1 := by
   rw [keyEval]; simp
 
 theorem keyEval_of_ne {z : ℕ → ℝ} {k : ℕ} (hk : k ≠ 0) :
-    keyEval z k = z 0 ^ (k % 16) * keyEval (fun i => z (i + 1)) (k / 16) := by
+    keyEval z k = z 0 ^ (k % 32) * keyEval (fun i => z (i + 1)) (k / 32) := by
   rw [keyEval]; simp [hk]
 
 theorem digitSum_zero : digitSum 0 = 0 := by rw [digitSum]; simp
 
-theorem digitSum_of_ne {k : ℕ} (hk : k ≠ 0) : digitSum k = k % 16 + digitSum (k / 16) := by
+theorem digitSum_of_ne {k : ℕ} (hk : k ≠ 0) : digitSum k = k % 32 + digitSum (k / 32) := by
   rw [digitSum]; simp [hk]
 
-theorem mod_le_digitSum (k : ℕ) : k % 16 ≤ digitSum k := by
+theorem mod_le_digitSum (k : ℕ) : k % 32 ≤ digitSum k := by
   rcases eq_or_ne k 0 with rfl | hk
   · simp
   · rw [digitSum_of_ne hk]; omega
 
-theorem digitSum_div_le (k : ℕ) : digitSum (k / 16) ≤ digitSum k := by
+theorem digitSum_div_le (k : ℕ) : digitSum (k / 32) ≤ digitSum k := by
   rcases eq_or_ne k 0 with rfl | hk
   · simp
   · rw [digitSum_of_ne hk]; omega
 
-/-- Adding two keys whose degrees sum to less than `16` multiplies the monomials. -/
-theorem keyEval_add (k₁ k₂ : ℕ) (h : digitSum k₁ + digitSum k₂ < 16) (z : ℕ → ℝ) :
+/-- Adding two keys whose degrees sum to less than `32` multiplies the monomials. -/
+theorem keyEval_add (k₁ k₂ : ℕ) (h : digitSum k₁ + digitSum k₂ < 32) (z : ℕ → ℝ) :
     keyEval z (k₁ + k₂) = keyEval z k₁ * keyEval z k₂ ∧
       digitSum (k₁ + k₂) = digitSum k₁ + digitSum k₂ := by
   induction k₁ using Nat.strong_induction_on generalizing k₂ z with
@@ -88,10 +88,10 @@ theorem keyEval_add (k₁ k₂ : ℕ) (h : digitSum k₁ + digitSum k₂ < 16) (
     have hm₂ := mod_le_digitSum k₂
     have hd₁ := digitSum_div_le k₁
     have hd₂ := digitSum_div_le k₂
-    have hmod : (k₁ + k₂) % 16 = k₁ % 16 + k₂ % 16 := by omega
-    have hdiv : (k₁ + k₂) / 16 = k₁ / 16 + k₂ / 16 := by omega
-    have hlt : k₁ / 16 < k₁ := by omega
-    have hrec := ih (k₁ / 16) hlt (k₂ / 16)
+    have hmod : (k₁ + k₂) % 32 = k₁ % 32 + k₂ % 32 := by omega
+    have hdiv : (k₁ + k₂) / 32 = k₁ / 32 + k₂ / 32 := by omega
+    have hlt : k₁ / 32 < k₁ := by omega
+    have hrec := ih (k₁ / 32) hlt (k₂ / 32)
       (by rw [digitSum_of_ne h₁, digitSum_of_ne h₂] at h; omega) (fun i => z (i + 1))
     have hs : k₁ + k₂ ≠ 0 := by omega
     rw [keyEval_of_ne hs, keyEval_of_ne h₁, keyEval_of_ne h₂, digitSum_of_ne hs,
@@ -105,28 +105,28 @@ theorem keyEval_mem (z : ℕ → ℝ) (hz : ∀ v, 0 ≤ z v ∧ z v ≤ 1) (k :
     rcases eq_or_ne k 0 with rfl | hk
     · simp [keyEval_zero]
     rw [keyEval_of_ne hk]
-    have h := ih (k / 16) (by omega) (fun i => z (i + 1)) (fun v => hz (v + 1))
+    have h := ih (k / 32) (by omega) (fun i => z (i + 1)) (fun v => hz (v + 1))
     have h0 := hz 0
-    have hp0 := pow_nonneg h0.1 (k % 16)
-    have hp1 := pow_le_one₀ (n := k % 16) h0.1 h0.2
+    have hp0 := pow_nonneg h0.1 (k % 32)
+    have hp1 := pow_le_one₀ (n := k % 32) h0.1 h0.2
     exact ⟨mul_nonneg hp0 h.1, by nlinarith⟩
 
-theorem keyEval_pow (z : ℕ → ℝ) (i : ℕ) : keyEval z (16 ^ i) = z i := by
+theorem keyEval_pow (z : ℕ → ℝ) (i : ℕ) : keyEval z (32 ^ i) = z i := by
   induction i generalizing z with
   | zero => rw [keyEval_of_ne (by norm_num)]; simp [keyEval_zero]
   | succ i ih =>
     rw [keyEval_of_ne (by positivity)]
-    have h1 : 16 ^ (i + 1) % 16 = 0 := by rw [pow_succ]; simp
-    have h2 : 16 ^ (i + 1) / 16 = 16 ^ i := by rw [pow_succ]; simp
+    have h1 : 32 ^ (i + 1) % 32 = 0 := by rw [pow_succ]; simp
+    have h2 : 32 ^ (i + 1) / 32 = 32 ^ i := by rw [pow_succ]; simp
     rw [h1, h2, ih]; simp
 
-theorem digitSum_pow (i : ℕ) : digitSum (16 ^ i) = 1 := by
+theorem digitSum_pow (i : ℕ) : digitSum (32 ^ i) = 1 := by
   induction i with
   | zero => rw [digitSum_of_ne (by norm_num)]; simp [digitSum_zero]
   | succ i ih =>
     rw [digitSum_of_ne (by positivity)]
-    have h1 : 16 ^ (i + 1) % 16 = 0 := by rw [pow_succ]; simp
-    have h2 : 16 ^ (i + 1) / 16 = 16 ^ i := by rw [pow_succ]; simp
+    have h1 : 32 ^ (i + 1) % 32 = 0 := by rw [pow_succ]; simp
+    have h2 : 32 ^ (i + 1) / 32 = 32 ^ i := by rw [pow_succ]; simp
     rw [h1, h2, ih]
 
 /-! ### Integer polynomials -/
@@ -237,7 +237,7 @@ theorem deg_addPoly {D : ℕ} (p q : Poly) (hp : Poly.Deg D p) (hq : Poly.Deg D 
     exact deg_addAux t p _ (hp t (by simp)) (fun u hu => hp u (by simp [hu]))
       (fun q hq => ih q (fun u hu => hp u (by simp [hu])) hq) q hq
 
-theorem mulTerm_spec (z : ℕ → ℝ) {a b : ℕ} (hab : a + b < 16) (t : ℕ × ℤ)
+theorem mulTerm_spec (z : ℕ → ℝ) {a b : ℕ} (hab : a + b < 32) (t : ℕ × ℤ)
     (ht : digitSum t.1 ≤ a) (q : Poly) (hq : Poly.Deg b q) :
     Poly.eval z (mulTerm t q) = (t.2 : ℝ) * keyEval z t.1 * Poly.eval z q ∧
       Poly.Deg (a + b) (mulTerm t q) := by
@@ -254,7 +254,7 @@ theorem mulTerm_spec (z : ℕ → ℝ) {a b : ℕ} (hab : a + b < 16) (t : ℕ �
       · simp only; rw [hk.2]; omega
       · exact ih2 u hu
 
-theorem mulPoly_spec (z : ℕ → ℝ) {a b : ℕ} (hab : a + b < 16) (p q : Poly)
+theorem mulPoly_spec (z : ℕ → ℝ) {a b : ℕ} (hab : a + b < 32) (p q : Poly)
     (hp : Poly.Deg a p) (hq : Poly.Deg b q) :
     Poly.eval z (mulPoly p q) = Poly.eval z p * Poly.eval z q ∧
       Poly.Deg (a + b) (mulPoly p q) := by
@@ -329,7 +329,7 @@ def deg : Expr → ℕ
 
 /-- A positive integer `d` and the integer polynomial `d • e`. -/
 def toPoly : Expr → ℕ × Poly
-  | var i => (1, [(16 ^ i, 1)])
+  | var i => (1, [(32 ^ i, 1)])
   | const q => (q.den, [(0, q.num)])
   | add e₁ e₂ =>
     let a := e₁.toPoly; let b := e₂.toPoly
@@ -341,7 +341,7 @@ def toPoly : Expr → ℕ × Poly
     let a := e₁.toPoly; let b := e₂.toPoly
     (a.1 * b.1, mulPoly a.2 b.2)
 
-theorem toPoly_spec (z : ℕ → ℝ) (e : Expr) (he : e.deg < 16) :
+theorem toPoly_spec (z : ℕ → ℝ) (e : Expr) (he : e.deg < 32) :
     0 < e.toPoly.1 ∧ Poly.eval z e.toPoly.2 = e.toPoly.1 * e.eval z ∧
       Poly.Deg e.deg e.toPoly.2 := by
   induction e with
@@ -416,11 +416,11 @@ def prepare (fs : List Expr) : List (ℕ × Poly) :=
   fs.map fun e => (e.deg, e.toPoly.2)
 
 /-- The certificate check: every weight is positive, every index names an expression, every
-term has degree below `16`, and the monomial bound of the expansion is negative. -/
+term has degree below `32`, and the monomial bound of the expansion is negative. -/
 def check (fs : List Expr) (ts : List (ℤ × List ℕ)) : Bool :=
   let ps := prepare fs
   ts.all (fun t => decide (0 < t.1) && t.2.all (fun i => decide (i < fs.length)) &&
-    decide (degIdx ps t.2 < 16)) &&
+    decide (degIdx ps t.2 < 32)) &&
   decide (bound (expand ps ts) < 0)
 
 theorem eval_pairSums (z : ℕ → ℝ) (ps : List Poly) :
@@ -441,7 +441,7 @@ theorem eval_treeSum (z : ℕ → ℝ) (n : ℕ) (ps : List Poly) :
   | succ n ih => simp only [treeSum, ih, eval_pairSums]
 
 theorem prodIdx_spec (z : ℕ → ℝ) (fs : List Expr) (hf : ∀ e ∈ fs, 0 ≤ e.eval z)
-    (is : List ℕ) (hi : ∀ i ∈ is, i < fs.length) (hd : degIdx (prepare fs) is < 16) :
+    (is : List ℕ) (hi : ∀ i ∈ is, i < fs.length) (hd : degIdx (prepare fs) is < 32) :
     0 ≤ Poly.eval z (prodIdx (prepare fs) is) ∧
       Poly.Deg (degIdx (prepare fs) is) (prodIdx (prepare fs) is) := by
   induction is with
