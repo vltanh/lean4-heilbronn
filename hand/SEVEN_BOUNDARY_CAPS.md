@@ -844,8 +844,97 @@ an edge point would give zero area. This proves the occupancy
 assertion. \(\square\)
 
 In particular, if both free points lie in the right quadrilateral
-\(CDEF\), then both lie strictly inside \(CEF\). This is a
-necessary placement for that remaining pair class, not its exclusion.
+\(CDEF\), then both lie strictly inside \(CEF\). The next
+theorem also forces them to opposite sides of \(DF\).
+
+## 9. Two further right-hand triangular pair classes are excluded
+
+**Theorem 9.** Under (1)--(2) and the doubled-area threshold \(s=7/64\),
+
+\[
+[CDF]<\frac{13}{16}<Ks,\qquad
+[DEF]<\frac{49}{64}<Ks.                                 \tag{36}
+\]
+
+Thus neither \(CDF\) nor \(DEF\) can contain both free points.
+
+**Proof.** Continue to write \(M=c-b\), \(w=1-c\), and
+\(L=h-a\). The bounds \(aM\ge s\), \(bL\ge s\), and
+\(h\le1\) imply
+
+\[
+a\le1-\frac{s}{b},\qquad
+bM\ge s(b+M)=sc.
+\]
+
+In particular \(b>s\), and
+
+\[
+c\ge\frac{b^2}{b-s},\qquad b-s-b^2>0,
+\qquad\frac18<b\le\frac12.                             \tag{37}
+\]
+
+Here the strict middle inequality uses \(c<1\), while the roots of
+\(b(1-b)=s\) are \(1/8,7/8\). The final upper bound follows
+from \(b\le f\le1/2\).
+
+The triangle \(CDE\) and \(e\le1\) give
+\(d\le1-s/w\); moreover \(w>s\), because \(e-d<1\).
+Thus
+
+\[
+\begin{aligned}
+[CDF]&=1-c+d(c-f)\\
+&\le1-f-\frac{s(c-f)}{1-c}\\
+&\le1-b-\frac{s(c-b)}{1-c}\\
+&\le G(b):=1-b-\frac{bs^2}{b-s-b^2}.
+\end{aligned}                                            \tag{38}
+\]
+
+The second replacement is valid because its expression decreases with
+\(f\), with derivative \(-1+s/w<0\). The third expression
+decreases with \(c\), with derivative
+\(-s(1-b)/(1-c)^2<0\), so (37) justifies the last replacement.
+
+At \(s=7/64\),
+
+\[
+\frac{13}{16}-G(b)
+=\frac{-4096b^3+4864b^2-1167b+84}
+       {4096(b-s-b^2)}>0.                                \tag{39}
+\]
+
+The denominator is positive by (37). For the numerator put
+\(z=b-1/8\in(0,3/8]\). It becomes
+
+\[
+-4096z^3+3328z^2-143z+\frac{49}{8}
+\ge1792z^2-143z+\frac{49}{8}>0.
+\]
+
+The first inequality uses \(z\le3/8\), and the final upward
+quadratic has discriminant \(-23455<0\). This proves the first
+bound in (36).
+
+For the second, \(dM\ge s\), \(e\le1\), \(f\ge b\),
+and \(M<1-b\) give directly
+
+\[
+[DEF]=(1-f)(e-d)
+\le(1-b)\left(1-\frac{s}{M}\right)
+<1-b-s<\frac{49}{64}.
+\]
+
+Both bounds are below \(Ks\), since \(Ks>13/16\) was checked
+after Theorem 5. The two-interior-point triangle theorem therefore
+excludes the asserted pair placements. \(\square\)
+
+**Right-pair consequence.** If both free points lie in \(CDEF\),
+Theorem 8 puts both inside \(CEF\), and Theorem 9 makes \(DF\)
+separate them. Thus one is in \(CEF\cap DEF\), and the other in
+\(CEF\cap CDF\). These are two specified adjacent diagonal sectors
+of the right quadrilateral. Their remaining interaction is not excluded
+by the area bounds alone.
 
 ## Verification
 

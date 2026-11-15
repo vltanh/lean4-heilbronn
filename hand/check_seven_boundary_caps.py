@@ -124,4 +124,21 @@ assert sp.expand(P.subs(M, z+sp.Rational(1, 3))
 lower = sp.Rational(4352, 3)*z**2+sp.Rational(76, 3)*z+sp.Rational(271, 27)
 assert sp.discriminant(lower, z) == -sp.Rational(4665584, 81)
 
-print("PASS: seven-boundary caps, diagonal capacity, upper-left overlap, and bottom-right ear exclusion")
+# Both triangles adjacent to DF have capacity one.
+assert sp.Rational(1, 8)*(1-sp.Rational(1, 8)) == s
+assert sp.Rational(7, 8)*(1-sp.Rational(7, 8)) == s
+assert sp.expand(doubled(C, D, F)-(1-c+d*(c-f))) == 0
+assert sp.expand(doubled(D, E, F)-(1-f)*(e-d)) == 0
+upper_cdf = 1-f-s*(c-f)/(1-c)
+assert sp.factor(sp.diff(upper_cdf, f)+1-s/(1-c)) == 0
+assert sp.factor(sp.diff(upper_cdf.subs(f, b), c)+s*(1-b)/(1-c)**2) == 0
+G = 1-b-b*s**2/(b-s-b**2)
+assert sp.factor(upper_cdf.subs(f, b).subs(c, b**2/(b-s))-G) == 0
+H = -4096*b**3+4864*b**2-1167*b+84
+assert sp.factor(sp.Rational(13, 16)-G-H/(4096*(b-s-b**2))) == 0
+assert sp.expand(H.subs(b, z+sp.Rational(1, 8))
+                 -(-4096*z**3+3328*z**2-143*z+sp.Rational(49, 8))) == 0
+assert sp.discriminant(1792*z**2-143*z+sp.Rational(49, 8), z) == -23455
+assert 1-sp.Rational(1, 8)-s == sp.Rational(49, 64) < sp.Rational(13, 16)
+
+print("PASS: seven-boundary caps, diagonal capacity, upper-left overlap, and all three right-hand triangle bounds")
