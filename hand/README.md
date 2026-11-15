@@ -115,6 +115,7 @@ now-complete N7 cover and the other completed subrows from open cases.
 | Complete one-lower C1 with two or three top-cap points; all three parent rows | [C1_ONE_LOWER_TOP_MULTIPLICITY.md](C1_ONE_LOWER_TOP_MULTIPLICITY.md) |
 | Complete C1 one-lower class and the final three mixed-cap placements | [C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md), Theorems 1–2 |
 | Complete N side-and-opposite occupancy, all 97 words and equality | [SIX_BOUNDARY_SIDE_OPPOSITE.md](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
+| Contributed cubic-only completion of the same N6 side-and-opposite occupancy | [SIX_BOUNDARY_SIDE_TOP_COMPLETION.md](SIX_BOUNDARY_SIDE_TOP_COMPLETION.md) |
 | Simultaneous B/D sharp chamber | [SHARP_BD_MOVING.md](SHARP_BD_MOVING.md) |
 | Simultaneous D/F and E/F sharp chambers under rational bounds | [SHARP_DF_MOVING.md](SHARP_DF_MOVING.md); [SHARP_EF_MOVING.md](SHARP_EF_MOVING.md) |
 
