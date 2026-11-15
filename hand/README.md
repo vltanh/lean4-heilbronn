@@ -64,6 +64,15 @@ families are listed below. The older computational draft is separate.
 | Two lower C1 points must lie on opposite sides of the ray from O to each exterior top-cap point | [C1_TOP_CAP_RADIAL_SPLIT.md](C1_TOP_CAP_RADIAL_SPLIT.md) |
 | The nearer upper exterior cap is empty, and the farther cap contains at most one free point | `SEVEN_BOUNDARY_CAPS.md`, Theorems 10--11 |
 | With one seven-boundary exterior top point, the other point avoids the upper, lower, and left side quadrilaterals | [SEVEN_BOUNDARY_TOP_CAP.md](SEVEN_BOUNDARY_TOP_CAP.md), Theorems 1--3 |
+| The last seven-boundary side quadrilateral is empty; the interior companion lies in ADEH intersect BCXF, with b greater than 3/20 and the exterior point higher than H | [SEVEN_BOUNDARY_TOP_CAP_RIGHT.md](SEVEN_BOUNDARY_TOP_CAP_RIGHT.md) |
+| Complete HBE/BEF and ACE/ADE pair-cell exclusions; the mixed left point lies in ACF; ADE, AHD, and AHE each have capacity one | [SEVEN_BOUNDARY_MIXED_PAIR.md](SEVEN_BOUNDARY_MIXED_PAIR.md) |
+| Sharp B- and C-moving chambers under their stated height conditions; equality forces the displaced vertex back to the boundary | [SHARP_BC_MOVING.md](SHARP_BC_MOVING.md) |
+| Complete two-point exterior top-cap exclusion when C1 has two lower points | [C1_TOP_CAP_CONVEX_PAIR.md](C1_TOP_CAP_CONVEX_PAIR.md) and [C1_TOP_CAP_TRIANGULAR_PAIR.md](C1_TOP_CAP_TRIANGULAR_PAIR.md) |
+| Both side ears of the one-point C1 top cap are empty; the remaining upper point lies in OCXH | [C1_TOP_CAP_SIDE_EARS.md](C1_TOP_CAP_SIDE_EARS.md) |
+| The C1 lower pair cannot straddle OF after choosing the upper point in OCX; both lie in OCF | [C1_TOP_CAP_OF_SPLIT.md](C1_TOP_CAP_OF_SPLIT.md) |
+| In the last one-above Type-II cut, P and T lie above DR while Q lies below it; DBR and DRS have capacity one | [UNBALANCED_ONE_UPPER_RADIAL.md](UNBALANCED_ONE_UPPER_RADIAL.md) |
+| The occupied lower ear EBR is excluded, forcing Q above ER in the final Type-II placement | [UNBALANCED_OCCUPIED_LOWER_EAR.md](UNBALANCED_OCCUPIED_LOWER_EAR.md) |
+| The complete negative QT-E line sign is excluded in the final Type-II placement | [UNBALANCED_FINAL_NEGATIVE_LINE.md](UNBALANCED_FINAL_NEGATIVE_LINE.md) |
 
 The original three-family argument is retained in
 [BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md). All strengthened normal forms
@@ -81,16 +90,19 @@ an observed numerical pattern.
   contacts, neither the smaller-left pentagon nor the right quadrilateral
   can contain both free points. Mixed interior placements remain, as does
   exactly one point in the far upper exterior cap with the other point
-  inside the original heptagon and outside three side quadrilaterals.
-  The full sharp chamber with one top point moved inward is closed,
-  including equality; other orientations still need completion.
+  inside the original heptagon and outside all four side quadrilaterals.
+  The mixed left point is in ACF and its right companion in CEF;
+  the pair cannot both lie in ADE, AHD, or AHE. The sharp F-moving
+  chamber and the stated B/C-moving chambers are closed, including
+  equality; other orientations still need completion.
 - **C1:** one occupied corner, four further side contacts, and four arbitrary
   points. The complete five-anchor pentagon is excluded. Only configurations
   with additional hull vertices outside that pentagon remain. When two
   free points lie in OHC, both exterior side caps are excluded; the top
-  cap and the lower counts zero and one still require completion. In the
-  two-lower count, those points are on opposite sides of OX for every
-  exterior top point X.
+  cap contains exactly one point X. Its upper companion lies in OCXH.
+  After reflection putting that companion in OCX, the lower points
+  straddle OX but both belong to OCF. This common-cell placement and
+  the lower counts zero and one still require completion.
 - **Type II:** after the area-preserving normalization to \(b\le1/2\), only
   the left/central/right count \((1,2,3)\) remains. The left count consists
   of the prescribed side contact. All cases with three central points,
@@ -98,7 +110,8 @@ an observed numerical pattern.
   excluded, as is the entire unbalanced triangular-right branch.
   The two-above-CE cut is now completely excluded. The sole remaining
   branch is a quadrilateral right hull in support cell II with exactly
-  one central point above CE.
+  one central point above CE. P and T are above DR, Q is below DR
+  and above ER, and the lower ear EBR is empty. Only [QTE]>0 remains.
 
 The opposite-corner family C2 and the entire three-corner family Type III
 are closed at \(7/128<A_0\).
@@ -148,6 +161,16 @@ python hand/check_six_boundary_hull.py
 python hand/check_c1_two_lower_side_cap.py
 python hand/check_c1_top_cap_radial_split.py
 python hand/check_seven_boundary_top_cap.py
+python hand/check_seven_boundary_top_cap_right.py
+python hand/check_seven_boundary_mixed_pair.py
+python hand/check_sharp_bc_moving.py
+python hand/check_c1_top_cap_convex_pair.py
+python hand/check_c1_top_cap_triangular_pair.py
+python hand/check_c1_top_cap_side_ears.py
+python hand/check_c1_top_cap_of_split.py
+python hand/check_unbalanced_one_upper_radial.py
+python hand/check_unbalanced_occupied_lower_ear.py
+python hand/check_unbalanced_final_negative_line.py
 ```
 
 These scripts use SymPy where appropriate and verify the printed determinant

@@ -52,6 +52,10 @@ family forces \(k=1\) and the original construction. This removes a
 complete seven-boundary chamber, without classifying all seven-boundary
 orientations. Its scalar proof prints exact rational coefficient bounds
 for 32 far-range and 886 near-range Bernstein coefficients.
+[SHARP_BC_MOVING.md](hand/SHARP_BC_MOVING.md) also proves the sharp
+bound when B moves upward by at most d, or C by less than a. A common
+exact weight forces the displacement to vanish at equality. These
+specified chambers do not yet exhaust the exterior seven-boundary case.
 
 ## 2. The remaining low-contact families
 
@@ -91,11 +95,18 @@ Its Sections 8--9 exclude every point from CDE and give capacity one
 for CDF and DEF. [SEVEN_BOUNDARY_LEFT_PAIR.md](hand/SEVEN_BOUNDARY_LEFT_PAIR.md)
 closes the full smaller-left pair class, and
 [SEVEN_BOUNDARY_RIGHT_PAIR.md](hand/SEVEN_BOUNDARY_RIGHT_PAIR.md) closes
-the entire right-quadrilateral pair. Mixed left/right placements remain.
+the entire right-quadrilateral pair.
+[SEVEN_BOUNDARY_MIXED_PAIR.md](hand/SEVEN_BOUNDARY_MIXED_PAIR.md)
+excludes the complete HBE/BEF and ACE/ADE common pair cells, forces
+the mixed left point into ACF, and gives capacity one to ADE, AHD,
+and AHE. The remaining mixed right point is in CEF.
 Sections 10--11 exclude the nearer upper exterior cap and limit the
 farther cap to one point. [SEVEN_BOUNDARY_TOP_CAP.md](hand/SEVEN_BOUNDARY_TOP_CAP.md)
 then excludes the upper, lower, and left side quadrilaterals for the
 other point, which lies inside the original heptagon.
+[SEVEN_BOUNDARY_TOP_CAP_RIGHT.md](hand/SEVEN_BOUNDARY_TOP_CAP_RIGHT.md)
+closes the fourth side quadrilateral, forces that companion into
+ADEH intersect BCXF, and proves b>3/20 and k>h.
 [SIX_BOUNDARY_HULL.md](hand/SIX_BOUNDARY_HULL.md) gives capacity one
 for all six N anchor ears and excludes the entire exact six-anchor
 convex hull. Its final lower-ear placement is excluded by an additional
@@ -124,8 +135,16 @@ both exterior side caps whenever two free points lie in OHC.
 [C1_TOP_CAP_RADIAL_SPLIT.md](hand/C1_TOP_CAP_RADIAL_SPLIT.md) further
 forces those lower points onto opposite sides of every ray OX to an
 exterior top-cap point.
-The top exterior cap in that count, the counts zero and one below HC,
-and the remaining N cases keep G6 open.
+[C1_TOP_CAP_CONVEX_PAIR.md](hand/C1_TOP_CAP_CONVEX_PAIR.md) and
+[C1_TOP_CAP_TRIANGULAR_PAIR.md](hand/C1_TOP_CAP_TRIANGULAR_PAIR.md)
+exclude the entire two-point exterior top cap.
+[C1_TOP_CAP_SIDE_EARS.md](hand/C1_TOP_CAP_SIDE_EARS.md) excludes
+both side ears in the one-cap case, placing the other upper point
+in OCXH. After reflection placing it in OCX,
+[C1_TOP_CAP_OF_SPLIT.md](hand/C1_TOP_CAP_OF_SPLIT.md) forces both
+lower points into OCF, still on opposite sides of OX. This remaining
+common-cell placement, the zero/one-lower counts, and the remaining
+N cases keep G6 open.
 
 For a fixed choice of the other eight points, the sign-consistent feasible
 positions of a ninth point form a convex polygon cut out by area half-planes.
@@ -229,6 +248,13 @@ closes that last two-above cell with an exact stress, monotone
 elimination, and twelve printed Bernstein boxes with 960 strictly
 negative rational coefficients. Thus G5 has only one branch left:
 support cell II with exactly one central point above CE.
+[UNBALANCED_ONE_UPPER_RADIAL.md](hand/UNBALANCED_ONE_UPPER_RADIAL.md)
+puts P,T above DR and Q below it, and gives capacity one to DBR
+and DRS. [UNBALANCED_OCCUPIED_LOWER_EAR.md](hand/UNBALANCED_OCCUPIED_LOWER_EAR.md)
+excludes Q in EBR with eleven fixed coefficient boxes, so Q lies
+above ER. [UNBALANCED_FINAL_NEGATIVE_LINE.md](hand/UNBALANCED_FINAL_NEGATIVE_LINE.md)
+excludes the complete sign [QTE]<0 by two negative quadratic
+discriminants. Only [QTE]>0 remains in this final radial assignment.
 
 The same new note proves a stronger global container theorem: a triangle
 of area at most \(1/2\) with two actual vertices contains at most five

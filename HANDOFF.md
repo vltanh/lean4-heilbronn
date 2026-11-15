@@ -18,9 +18,14 @@ With seven boundary contacts, the complete smaller-left pair and
 right-quadrilateral pair classes are excluded. The exact six-anchor
 N convex hull is completely excluded. In the exterior seven-boundary
 case only one point in the far upper cap remains; the other point avoids
-the upper, lower, and left side quadrilaterals.
+all four side quadrilaterals and lies in the central region. The mixed
+interior left point is in ACF, and ADE, AHD, and AHE each have capacity one.
 The full sharp chamber with F moved inward from its top side is closed,
-and equality forces the original configuration.
+as are the stated B/C-moving chambers; equality forces the original
+configuration. With two lower C1 points, the two-point top cap and both
+side ears are excluded. In the one-cap case, the lower points straddle
+OX but, after the stated reflection, both lie in OCF. The final Type-II
+lower ear is empty, and its negative QT-E line sign is excluded.
 The unrestricted nine-point theorem is **not yet proved by hand**.
 
 Target:
@@ -109,7 +114,25 @@ puts the two lower C1 points on opposite sides of every ray OX to an
 exterior top point. Sections 10--11 of the seven-boundary cap note
 exclude the nearer upper cap and give capacity one to the farther cap.
 [hand/SEVEN_BOUNDARY_TOP_CAP.md](hand/SEVEN_BOUNDARY_TOP_CAP.md)
-excludes three side quadrilaterals for the remaining interior point.
+and [hand/SEVEN_BOUNDARY_TOP_CAP_RIGHT.md](hand/SEVEN_BOUNDARY_TOP_CAP_RIGHT.md)
+exclude all four side quadrilaterals for the remaining interior point.
+[hand/SEVEN_BOUNDARY_MIXED_PAIR.md](hand/SEVEN_BOUNDARY_MIXED_PAIR.md)
+excludes the complete HBE/BEF and ACE/ADE common pair cells, forces
+the mixed left point into ACF, and excludes pairs in ADE, AHD, and AHE.
+[hand/SHARP_BC_MOVING.md](hand/SHARP_BC_MOVING.md) proves the sharp
+bound for B moving upward by at most d or C moving upward by less than a.
+Its common exact weight forces the displacement to vanish at equality.
+[hand/C1_TOP_CAP_CONVEX_PAIR.md](hand/C1_TOP_CAP_CONVEX_PAIR.md) and
+[hand/C1_TOP_CAP_TRIANGULAR_PAIR.md](hand/C1_TOP_CAP_TRIANGULAR_PAIR.md)
+close the entire two-point top-cap placement in the two-lower count.
+[hand/C1_TOP_CAP_SIDE_EARS.md](hand/C1_TOP_CAP_SIDE_EARS.md) removes
+both side ears, and [hand/C1_TOP_CAP_OF_SPLIT.md](hand/C1_TOP_CAP_OF_SPLIT.md)
+closes the lower-pair split by OF using three fixed coefficient boxes.
+[hand/UNBALANCED_ONE_UPPER_RADIAL.md](hand/UNBALANCED_ONE_UPPER_RADIAL.md)
+puts P,T above DR and Q below it. The occupied lower ear is excluded in
+[hand/UNBALANCED_OCCUPIED_LOWER_EAR.md](hand/UNBALANCED_OCCUPIED_LOWER_EAR.md),
+forcing Q above ER. [hand/UNBALANCED_FINAL_NEGATIVE_LINE.md](hand/UNBALANCED_FINAL_NEGATIVE_LINE.md)
+then excludes the entire negative QT-E sign by two quadratic discriminants.
 
 The sharp chamber inequality, positive stress, local proof, and 84-triangle
 attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
@@ -122,20 +145,26 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
   hulls remain. With seven boundary contacts only mixed left/right
   interior placements and one point in the far upper exterior cap remain.
   In the latter case, the other point is inside the original heptagon,
-  below HE, above AD, and outside FHAB. The full inward-moving sharp
-  chamber is closed, but its other orientations still need completion.
+  and in ADEH intersect BCXF. In the mixed interior case the left
+  point is in ACF and the right point in CEF, with no pair in ADE,
+  AHD, or AHE. The F-moving and stated B/C-moving sharp chambers are
+  closed, but the remaining exterior orientations still need completion.
 - **C1:** only configurations whose hull extends beyond the five prescribed
   anchors remain. Every exact five-anchor pentagon placement is closed.
-  With two lower points, both exterior side caps are excluded; the top
-  cap and configurations with zero or one lower point remain. In the
-  two-lower case, the lower points straddle every ray OX to a top-cap point.
+  With two lower points, exactly one exterior top point X remains and
+  the other upper point lies in OCXH. After reflection choosing that
+  point in OCX, the lower points straddle OX and both lie in OCF.
+  This common-cell case and the zero/one-lower cases remain.
 - **Type II:** after normalization to \(b\le1/2\), only the occupancy
   class \((\ell,c,r)=(1,2,3)\) remains. The left count consists of the
   prescribed side contact. Type III, the normalization's alternative,
   and the entire balanced Type-II row are closed. The sole residual
   case is a quadrilateral right hull in support cell II with exactly
   one central point above CE. A pentagonal right hull, both outer
-  support cells, and the entire two-above-CE cut are excluded.
+  support cells, and the entire two-above-CE cut are excluded. The
+  remaining radial assignment has P,T above DR and Q below DR but
+  above ER. The lower ear is empty, and only the positive sign
+  [QTE]>0 remains.
 
 No theorem yet forces every competitive configuration to have eight boundary
 points. Moving a single point within its area-feasible polygon may be trapped
@@ -164,7 +193,12 @@ pairs, the complete exact six-anchor hull, the C1 two-lower side caps
 and top-cap radial split, all four seven-boundary exterior-cap
 restrictions, the three top-cap side quadrilaterals, the unbalanced
 radial split, complete support cells I/III, and all 960 coefficient
-bounds for the two-above support cell II.
+bounds for the two-above support cell II. Subsequent diagnostics also
+pass for the fourth top-cap side quadrilateral, all new mixed-pair
+reductions, the sharp B/C-moving chambers, the full C1 two-cap and
+side-ear exclusions, the three-box OF-split proof, the one-above
+radial split, all 1540 occupied-lower-ear coefficient bounds, and
+the complete negative QT-E line-sign exclusion.
 The new continuous proofs received a separate agent audit of their
 geometric signs and inequality directions; the right-pair curvature
 certificate was checked independently as well.
