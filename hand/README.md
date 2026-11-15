@@ -54,6 +54,12 @@ families are listed below. The older computational draft is separate.
 | Complete exclusion of C1 when the five prescribed anchors are its full hull | [C1_MIXED_PENTAGON.md](C1_MIXED_PENTAGON.md) |
 | Seven-boundary diagonal triangle ACF has capacity one; the upper overlap AHF/HCF and the BC/FH left-pair assignment are excluded | `SEVEN_BOUNDARY_CAPS.md`, Theorems 5--6 and Corollary 7 |
 | Equality transfer through all normalizing shears | `GLOBAL_STRUCTURE.md`, Lemma 4 |
+| Complete exclusion of both free points in the smaller-left pentagon with seven boundary contacts | [SEVEN_BOUNDARY_LEFT_PAIR.md](SEVEN_BOUNDARY_LEFT_PAIR.md) |
+| Complete exclusion of the seven-boundary right-hand pair, after empty-CDE and diagonal-capacity reductions | [SEVEN_BOUNDARY_RIGHT_PAIR.md](SEVEN_BOUNDARY_RIGHT_PAIR.md) |
+| Every N anchor ear has capacity one; the exact six-anchor hull reduces to one mixed upper pair with its lower point in ABH, up to transposition | [SIX_BOUNDARY_HULL.md](SIX_BOUNDARY_HULL.md), Theorems 1--5 |
+| Two lower C1 points exclude both exterior side caps | [C1_TWO_LOWER_SIDE_CAP.md](C1_TWO_LOWER_SIDE_CAP.md) |
+| Complete unbalanced Type-II support-cell I and III exclusions, leaving only cell II in both CE cuts | [UNBALANCED_CELL_I.md](UNBALANCED_CELL_I.md) and [UNBALANCED_CELL_III.md](UNBALANCED_CELL_III.md) |
+| The two-above unbalanced cell-II case has a forced radial split and a right vertex of height below 3/16 | [UNBALANCED_RADIAL_SPLIT.md](UNBALANCED_RADIAL_SPLIT.md) |
 
 The original three-family argument is retained in
 [BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md). All strengthened normal forms
@@ -66,12 +72,17 @@ an observed numerical pattern.
   than eight total boundary points. Every actual triangle has capacity two;
   the virtual lower corner cap has capacity one. Additional seven-boundary
   cap restrictions, including both lower exterior caps, are proved.
-  The full sharp chamber with one top point moved inward is also closed,
-  including equality. Other placements and orientation chambers keep the
-  complete family open.
+  For an exact six-anchor hull only the mixed HCD upper pair with its
+  lower point in ABH remains, up to transposition. With seven boundary
+  contacts, neither the smaller-left pentagon nor the right quadrilateral
+  can contain both free points; mixed placements and top exterior caps
+  remain. The full sharp chamber with one top point moved inward is
+  closed, including equality. Larger six-boundary hulls also remain open.
 - **C1:** one occupied corner, four further side contacts, and four arbitrary
   points. The complete five-anchor pentagon is excluded. Only configurations
-  with additional hull vertices outside that pentagon remain.
+  with additional hull vertices outside that pentagon remain. When two
+  free points lie in OHC, both exterior side caps are excluded; the top
+  cap and the lower counts zero and one still require completion.
 - **Type II:** after the area-preserving normalization to \(b\le1/2\), only
   the left/central/right count \((1,2,3)\) remains. The left count consists
   of the prescribed side contact. All cases with three central points,
@@ -79,8 +90,8 @@ an observed numerical pattern.
   excluded, as is the entire unbalanced triangular-right branch.
   The remaining right hull is quadrilateral. With both central points
   above CE only support cell II remains, and PQ puts D,C together and
-  E,B together on opposite sides. With exactly one above, cells I, II,
-  and III remain.
+  E,B together on opposite sides, with the further forced radial split.
+  With exactly one above, only support cell II remains as well.
 
 The opposite-corner family C2 and the entire three-corner family Type III
 are closed at \(7/128<A_0\).
@@ -120,6 +131,13 @@ python hand/check_four_interior_quadrilaterals.py
 python hand/check_balanced_bottom_inner_sector.py
 python hand/check_balanced_right_mixed.py
 python hand/check_unbalanced_right_hull.py
+python hand/check_unbalanced_radial_split.py
+python hand/check_unbalanced_cell_i.py
+python hand/check_unbalanced_cell_iii.py
+python hand/check_seven_boundary_left_pair.py
+python hand/check_seven_boundary_right_pair.py
+python hand/check_six_boundary_hull.py
+python hand/check_c1_two_lower_side_cap.py
 ```
 
 These scripts use SymPy where appropriate and verify the printed determinant

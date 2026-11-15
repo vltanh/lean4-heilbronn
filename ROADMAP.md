@@ -22,7 +22,7 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G3 | Strict local maximum against arbitrary eighteen-coordinate perturbations | Complete qualitative hand proof; separate explicit-radius arithmetic certificate |
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
-| G5 | Type II: adjacent corners and five free points | **Balanced count and unbalanced triangular-right hull complete**; only unbalanced quadrilateral-right hulls remain |
+| G5 | Type II: adjacent corners and five free points | **Balanced count, triangular-right hull, and right support cells I/III complete**; only unbalanced quadrilateral-right cell II remains |
 | G6 | N and C1 with fewer than eight boundary points | **C1 exact five-anchor hull complete**; N and larger C1 hulls remain |
 | G7 | Unrestricted sharp theorem and uniqueness | Conditional on G5, G6; equality transfer through shears is already proved |
 
@@ -87,6 +87,16 @@ HCD or both in HCF. The other pentagonal placements are excluded.
 and several complete pair placements with seven boundary contacts. Its
 Sections 6--7 also prove \([ACF]<13/16\), exclude any free point in
 \(AHF\cap HCF\), and close the BC/FH left-pair assignment.
+Its Sections 8--9 exclude every point from CDE and give capacity one
+for CDF and DEF. [SEVEN_BOUNDARY_LEFT_PAIR.md](hand/SEVEN_BOUNDARY_LEFT_PAIR.md)
+closes the full smaller-left pair class, and
+[SEVEN_BOUNDARY_RIGHT_PAIR.md](hand/SEVEN_BOUNDARY_RIGHT_PAIR.md) closes
+the entire right-quadrilateral pair. Mixed left/right placements remain,
+as do the top exterior caps.
+[SIX_BOUNDARY_HULL.md](hand/SIX_BOUNDARY_HULL.md) gives capacity one
+for all six N anchor ears and reduces the exact six-anchor hull to
+one mixed HCD upper pair with its lower point in ABH, up to transposition.
+Larger six-boundary hulls are not covered by that last reduction.
 [GLOBAL_COMPLETION.md](hand/GLOBAL_COMPLETION.md) additionally excludes
 both lower exterior corner caps, without requiring the top contact to
 be on the nearer half of its side. It also proves that every nine-point
@@ -104,8 +114,11 @@ corresponding outer ear; its joining line isolates the ear vertex.
 The four free points also alternate in the corresponding four-vertex
 container. [C1_MIXED_PENTAGON.md](hand/C1_MIXED_PENTAGON.md) now excludes
 both remaining mixed-pair placements, completing the entire exact
-five-anchor C1 pentagon. Larger C1 hulls and the remaining N cases keep
-G6 open.
+five-anchor C1 pentagon.
+[C1_TWO_LOWER_SIDE_CAP.md](hand/C1_TWO_LOWER_SIDE_CAP.md) further excludes
+both exterior side caps whenever two free points lie in OHC.
+The top exterior cap in that count, the counts zero and one below HC,
+and the remaining N cases keep G6 open.
 
 For a fixed choice of the other eight points, the sign-consistent feasible
 positions of a ninth point form a convex polygon cut out by area half-planes.
@@ -197,10 +210,15 @@ points are above CE, its occupied outer-ear support cells I and III
 are completely excluded; only the common central cell II remains.
 Both isolated-endpoint central-line alternatives are also excluded,
 so PQ must put D,C together and E,B together on opposite sides.
-For exactly one central point above CE, cells I, II, and III remain.
-Thus two explicitly described unbalanced branches still require
-coupled arguments. No scalar necessary condition alone is claimed to
-finish them.
+[UNBALANCED_CELL_I.md](hand/UNBALANCED_CELL_I.md) and
+[UNBALANCED_CELL_III.md](hand/UNBALANCED_CELL_III.md) now exclude the
+outer cells in the one-above cut as well. Thus only cell II remains
+in either cut. In the two-above case,
+[UNBALANCED_RADIAL_SPLIT.md](hand/UNBALANCED_RADIAL_SPLIT.md) forces the
+central points to opposite sides of DR, the right interior point above
+DR, and the lower right hull vertex to height below 3/16.
+These two explicitly described cell-II branches still require coupled
+arguments; their scalar restrictions do not alone complete G5.
 
 The same new note proves a stronger global container theorem: a triangle
 of area at most \(1/2\) with two actual vertices contains at most five
