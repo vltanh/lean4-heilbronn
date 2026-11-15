@@ -9,7 +9,10 @@ excluded by hand at \(7/128<A_0\).
 Every nine-point convex-position configuration is now excluded below
 \(1/19\). The complete balanced Type-II quadrilateral-right branch is
 also excluded. Any surviving balanced configuration has triangular left
-and right hulls and an alternating four-interior-point quadrilateral.
+and right hulls and an alternating four-interior-point quadrilateral;
+only the assignment with Q at ER and S at RC remains.
+The full sharp chamber with F moved inward from its top side is closed,
+and equality forces the original configuration.
 The unrestricted nine-point theorem is **not yet proved by hand**.
 
 Target:
@@ -43,7 +46,7 @@ left-hull and CE-cut restrictions.
 
 The latest results are in
 [hand/GLOBAL_COMPLETION.md](hand/GLOBAL_COMPLETION.md) (convex-position
-and lower exterior-cap exclusions),
+and lower exterior-cap exclusions, and the full inward-moving sharp chamber),
 [hand/TYPE_II_COMPLETION.md](hand/TYPE_II_COMPLETION.md) (two-actual-vertex
 triangle capacity, swept interval tests, and the complete balanced
 quadrilateral-right exclusion),
@@ -77,8 +80,10 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
   other is below CE. The entire quadrilateral-right hull alternative is
   excluded. In the triangular-right alternative, the lower ear EBR is
   empty of free points, and the eight points other than B have hull DERC
-  with one interior point in each diagonal sector. Their interaction
-  with B still needs a coupled inequality.
+  with one interior point in each diagonal sector. The second supporting
+  shear excludes the assignment S at ER and Q at RC. The sole remaining
+  assignment has Q at ER and S at RC; its interaction with B still needs
+  a coupled inequality.
   In the unbalanced case, one or two central points are above CE and
   must be coupled to the right triple.
 
@@ -95,7 +100,9 @@ four-corner argument, Type-II identities, quadrilateral-hull formulas,
 one-corner inequalities, seven-boundary cap bounds, the global triangle-capacity
 argument, balanced Type-II exclusions, the new global hull and cap bounds,
 the two-vertex capacity and right-hull arguments, both quadrilateral-pair
-exclusions, and the alternating-sector theorem.
+exclusions, the alternating-sector theorem, the second-shear exclusion,
+and the inward-moving chamber's determinant and scalar identities and all
+918 rational coefficient bounds.
 The original exact local checker has also passed. The arguments include the
 geometric and sign reasoning that those diagnostics alone cannot establish.
 No external independent review or Lean verification is claimed.

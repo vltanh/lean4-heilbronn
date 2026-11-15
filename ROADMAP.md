@@ -22,7 +22,7 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G3 | Strict local maximum against arbitrary eighteen-coordinate perturbations | Complete qualitative hand proof; separate explicit-radius arithmetic certificate |
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
-| G5 | Type II: adjacent corners and five free points | Two counts remain; the balanced count has triangular left and right hulls and an alternating eight-point quadrilateral |
+| G5 | Type II: adjacent corners and five free points | Two counts remain; the balanced count is reduced to the single alternating assignment Q at ER and S at RC |
 | G6 | N and C1 with fewer than eight boundary points | **Main remaining global structural obstruction** |
 | G7 | Unrestricted sharp theorem and uniqueness | Conditional on G5, G6; equality transfer through shears is already proved |
 
@@ -44,6 +44,14 @@ case remains open within G2.
 
 This theorem does not establish that an arbitrary optimizer has eight
 boundary points.
+
+Section 5 of [GLOBAL_COMPLETION.md](hand/GLOBAL_COMPLETION.md) extends
+the entire sharp eleven-triangle chamber to F=(f,k) with \(0\le k\le1\).
+The same sharp upper bound holds, and equality in the stated coordinate
+family forces \(k=1\) and the original construction. This removes a
+complete seven-boundary chamber, without classifying all seven-boundary
+orientations. Its scalar proof prints exact rational coefficient bounds
+for 32 far-range and 886 near-range Bernstein coefficients.
 
 ## 2. The remaining low-contact families
 
@@ -159,7 +167,10 @@ now excludes the entire balanced right-quadrilateral branch as well.
 For the surviving triangular right hull BCR, with S inside, its lower
 ear EBR is empty. The eight points other than B therefore have hull DERC,
 and the four interior points occupy its four diagonal sectors once each.
-The coupling to B remains open.
+Sections 7–8 of `TYPE_II_COMPLETION.md` use a second supporting shear to
+exclude the assignment with S in the sector at ER and Q in the sector at
+RC. Only the assignment with Q at ER and S at RC remains. Its coupling
+to B is the last balanced-row obligation.
 In the unbalanced row, at least one central point is above CE; the
 one-point and two-point cuts against the right triple remain open.
 Sections 11--12 of `TYPE_II.md` supply exact necessary parameter bounds

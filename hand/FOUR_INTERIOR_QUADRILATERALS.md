@@ -309,6 +309,9 @@ In the balanced Type-II case with a triangular right hull, Section 5 of
 points other than the bottom point have hull \(D,E,R,C\), with four
 interior points. Its previously listed opposite-sector alternative is
 now closed: exactly one point lies in each sector of its diagonals.
+Section 8 of that note subsequently excludes the assignment with S
+at ER and Q at RC by a second supporting shear; only the assignment
+with Q at ER and S at RC remains.
 
 The theorem also applies to a C1 pentagonal configuration whenever one
 upper triangle contains both upper free points. The corresponding four

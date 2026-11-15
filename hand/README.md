@@ -41,11 +41,13 @@ families are listed below. The older computational draft is separate.
 | Balanced Type II has a triangular left hull and exactly one central point on each side of CE | [TYPE_II_BALANCED.md](TYPE_II_BALANCED.md) |
 | Every nine-point convex-position configuration has minimum area below \(1/19\) | [GLOBAL_COMPLETION.md](GLOBAL_COMPLETION.md), Sections 1–3 |
 | Both lower exterior corner caps are empty in the seven-boundary form | `GLOBAL_COMPLETION.md`, Section 4 |
+| Full sharp candidate chamber with F allowed to move inward from the top side; equality forces F back to the boundary and gives the original candidate | `GLOBAL_COMPLETION.md`, Section 5 |
 | A triangle of area at most \(1/2\) with two actual vertices contains at most five actual points; its third vertex may be anywhere in the plane | [TYPE_II_COMPLETION.md](TYPE_II_COMPLETION.md), Theorem 1 |
 | Opposite vertices of an enclosing parallelogram of area at most one cannot both be actual points | `TYPE_II_COMPLETION.md`, Corollary 3 |
 | Every actual quadrilateral with four interior configuration points has exactly one in each diagonal sector; every competitive configuration has five to eight hull vertices | [FOUR_INTERIOR_QUADRILATERALS.md](FOUR_INTERIOR_QUADRILATERALS.md) |
 | Two interior points in the same quadrilateral diagonal sector have minimum area below \(7S/64\); the remaining mixed pair line must isolate its ear vertex | [ONE_CORNER_COMPLETION.md](ONE_CORNER_COMPLETION.md) |
 | Complete balanced Type-II quadrilateral-right exclusion; the triangular-right branch has an empty lower ear and an alternating eight-point quadrilateral | `TYPE_II_COMPLETION.md`, Sections 5–6 |
+| One of the two alternating balanced assignments is excluded by a second supporting shear, leaving only Q at ER and S at RC | `TYPE_II_COMPLETION.md`, Sections 7–8 |
 | Equality transfer through all normalizing shears | `GLOBAL_STRUCTURE.md`, Lemma 4 |
 
 The original three-family argument is retained in
@@ -58,8 +60,10 @@ an observed numerical pattern.
 - **N:** six prescribed boundary points and three arbitrary points, with fewer
   than eight total boundary points. Every actual triangle has capacity two;
   the virtual lower corner cap has capacity one. Additional seven-boundary
-  cap restrictions, including both lower exterior caps, are proved, but
-  the complete family is still open.
+  cap restrictions, including both lower exterior caps, are proved.
+  The full sharp chamber with one top point moved inward is also closed,
+  including equality. Other placements and orientation chambers keep the
+  complete family open.
 - **C1:** one occupied corner, four further side contacts, and four arbitrary
   points. Every actual triangle has capacity two. If the five prescribed
   anchors are the full hull, exactly two free points lie on each side of
@@ -79,7 +83,9 @@ an observed numerical pattern.
   right hull is also triangular: the entire quadrilateral-right branch
   is excluded. The eight points other than the bottom contact have a
   quadrilateral hull with one interior point in each diagonal sector.
-  Their interaction with the ninth point remains open. In the unbalanced count,
+  Of its two alternating assignments, only Q in the sector at ER and S
+  in the sector at RC remains; its interaction with the ninth point B
+  is still open. In the unbalanced count,
   one or two central points are above CE; their interaction with the right
   triple remains open.
 
@@ -135,6 +141,13 @@ isoperimetric inequality, stated with a primary proof reference in
 proved in this directory. In particular, the stronger two-vertex capacity
 theorem depends on the existing global actual-triangle theorem; it must
 not be used to replace an upstream ingredient in that theorem's proof.
+
+The inward-moving chamber proof includes explicit rational Bernstein
+coefficient bounds: 32 coefficients in its far parameter range and 886
+in its near parameter range. The defining polynomials, conversion
+formulas, and positive lower-bound tables are printed in the proof;
+`check_global_completion.py` recomputes every bound exactly. These finite
+algebraic certificates are part of that argument's stated trust boundary.
 
 The local radius in the hand proof is qualitative. The separate explicit
 radius \(1/200\) belongs to the older exact arithmetic certificate and cannot
