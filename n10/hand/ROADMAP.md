@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 3 — November 15, 2026.
+Checkpoint 4 — November 15, 2026.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -83,22 +83,37 @@ orientation restriction is now discharged by a complete two-case inequality.
   - [x] III-3C-U2. Exactly three corners: 2 upper and 5 lower free points.
         Proof: THREE_CORNERS.md, Sections 5–9, seven-point endpoint theorem.
   - [ ] III-3C-U3. Exactly three corners: 3 upper and 4 lower free points.
+    - [x] U3-CLUSTERED. Some upper point has the other two in one fan
+          triangle. The universal six-point theorem gives m<93/2000<A*,
+          with all four lower points unrestricted. Proof: CLUSTERED_TRIANGLE.md.
+    - [ ] U3-DISTRIBUTED. At every upper point, the other two occupy
+          different fan triangles. This is the remaining U3 alternative.
   - [x] III-3C-U4. Exactly three corners: 4 upper and 3 lower free points.
         Proof: TRIANGLE_OCCUPANCY.md. In fact any triangle containing
         four further points forces m<=1/(15+3 sqrt(5))<A*.
 
-For these five residual classes use corners (0,0),(0,1),(1,1), s=2A*, and
+For the exactly-three-corner split use corners (0,0),(0,1),(1,1), s=2A*, and
 
     U_s=conv{(s,2s),(s,1-s),(1-2s,1-s)},
     L_s=conv{(s,0),(1,0),(1,1-s)}.
 
 The quoted counts are in these two explicit triangles. A competitive point
 cannot lie on the separating diagonal. The count split is proved exhaustive.
-Only U3 remains unresolved in the exactly-three-corner family.
+Only the distributed alternative of U3 remains unresolved in this family.
 
 ### Other corner and corner-free families
 
 - [ ] HP11-C2. Exclude normalized maximizers with two opposite corners.
+  - [x] C2-CENTRAL/CENTRAL. Both free points in each diagonal half are
+        in its central cell II. The two corner triangles and the middle
+        quadrilateral cannot accommodate all four free points.
+        Proof: OPPOSITE_CORNERS.md and C2_SAME_HALF_CORNER.md.
+  - [ ] C2-MIXED/CENTRAL. One half has a noncentral point.
+  - [ ] C2-MIXED/SAME. Both halves have noncentral points toward the same
+        occupied corner.
+  - [ ] C2-MIXED/OPPOSITE. Both halves have noncentral points toward opposite
+        occupied corners. These three alternatives are exhaustive up to
+        square symmetry; see OPPOSITE_CORNERS.md, Sections 1 and 10.
 - [ ] HP11-II. Exclude normalized maximizers with two adjacent corners.
 - [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -145,11 +160,17 @@ Ordinary averaging is not a justified reduction.
 | FOUR_CORNERS.md | Full four-corner exclusion with bound (sqrt(33)-5)/16 |
 | TRIANGLE_OCCUPANCY.md | Universal bound for a triangle containing four points; full U4 exclusion |
 | THREE_CORNERS.md | Seven-point endpoint theorem; full U0, U1 and U2 exclusions |
+| CLUSTERED_TRIANGLE.md | Universal exclusion of three clustered interior points; full U3-CLUSTERED exclusion |
+| OPPOSITE_CORNERS.md | Uniform C2 contact bounds and complete central/central exclusion |
+| C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 
 ## Next attack and stopping rules
 
-The next target is the exact-three-corner family, now reduced to U3.
-The stronger global occupancy bound may also be used in the other families.
+The next targets are the distributed U3 alternative and the three mixed C2
+families. The stronger occupancy and clustered-triangle bounds also apply
+in the other families. The exact diagnostic in
+`../discovery/ENDPOINT_COVER_LIMIT.md` rules out a threshold-free shortcut;
+it does not rule out a container argument using the competitive area bound.
 A successful next checkpoint should close one or more whole entries,
 not merely produce another local lemma disconnected from that ledger.
 The local qualitative argument and symmetric terminal optimization no longer

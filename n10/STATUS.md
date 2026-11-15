@@ -96,6 +96,12 @@ III-3C-U2. HP10 now covers both orientations of the stated symmetric family:
 the opposite ADO orientation has the elementary bound m<=1/24<A*.
 The conditional shear-reversal lemma is also proved.
 
+The universal clustered-triangle theorem now closes U3-CLUSTERED with
+m<93/2000<A*. Thus U3 retains only the distributed upper-triple alternative.
+The opposite-corner analysis supplies uniform contact bounds and closes the
+entire C2-CENTRAL/CENTRAL subfamily. The three mixed half-cell alternatives
+remain explicit, unchecked children of C2.
+
 Seven global obligations remain: III-3C-U3, C2, II, C1, N6, N7,
 and the complete asymmetric N8 domain. HP14 (assembly) and HP15 (final
 manuscript audit) depend on those obligations and remain unchecked. The
