@@ -22,7 +22,7 @@ s=\frac7{64},\qquad K=4+2\sqrt3,\qquad \rho=\frac{13}{16}<Ks.
 \]
 
 Assume every unsigned actual doubled triangle area is at least \(s\).
-This note excludes one complete pair cell, with no assumptions on the
+This note excludes two complete pair cells, with no assumptions on the
 sign of the line through the two points. It also records its application
 to the mixed left/right placement. It does not yet exclude every mixed
 placement.
@@ -335,8 +335,210 @@ the \(C\)-side of \(BF\), and the two upper boundary edges are
 \(HE,EF\). Theorem 1 excludes this entire mixed subplacement.
 
 The alternatives in which \(P\) is above \(HC\), or in which the
-last \(BE,BF\) side conditions fail, are not claimed to be excluded
-by this note.
+last \(BE,BF\) side conditions fail, are not excluded by this
+application of Theorem 1.
+
+## 3. The common cell of ACE and ADE is empty of pairs
+
+**Theorem 2.** The two free points cannot both belong to
+\[
+                         ACE\cap ADE.
+\]
+
+Put
+\[
+R=e-d,\quad
+\mathcal A=[ACE]=ce+(1-c)a,\quad
+\mathcal J=[ACDE]=[ACD]+R.
+\]
+The pair-containing triangles give
+\[
+\mathcal A,R\ge Ks>\rho,\qquad
+\mathcal J\ge\mathcal A+s,                              \tag{14}
+\]
+where the last inequality is the actual triangle \(CDE\).
+
+### Coarse anchor bounds and both containment signs
+
+Since \(R>\rho\), one has \(d<3/16\), and \(dM\ge s\) gives
+\(M>7/12\). Thus
+\[
+b<c-\frac7{12}<1-s-\frac7{12}
+=\frac{59}{192}<\frac13.                                \tag{15}
+\]
+
+Also \(b>1/8\), so \(M<1-s-b<49/64\). Therefore
+\[
+e=d+R>\frac{s}{M}+\rho>\frac17+\frac{13}{16}
+=\frac{107}{112}>1-s.
+\]
+The top budget in (1) forces \(h<1-s\).
+
+In fact \(b>1/7\). If \(b\le1/7\), then
+\[
+h\ge\frac{s}{1-s-b}+\frac{s}{b}
+\ge\frac{19551}{21440}
+=(1-s)+\frac{57}{2680},
+\]
+a contradiction. The reciprocal expression decreases on
+\(0<b\le1/7\), which justifies the endpoint replacement.
+Consequently
+\[
+\boxed{
+\frac17<b<\frac13,\quad a<h-\frac{s}{b}<\frac9{16},
+\quad d<\frac3{16},\quad
+w=1-c<1-\frac17-\frac7{12}=\frac{23}{84}.}               \tag{16}
+\]
+
+These bounds give
+\[
+[ACD]=(1-c)a+cd
+<\frac3{16}+\frac38\frac{23}{84}
+=\frac{65}{224}<3s.
+\]
+Also \([CDE]<3s\) by Theorem 8 of SEVEN_BOUNDARY_CAPS.md.
+For every \(X\in ADE\), the affine function \(X\mapsto[CDX]\)
+has values \([ACD],0,[CDE]\) at \(A,D,E\). Hence
+\[
+                         [CDX]<3s.                     \tag{17}
+\]
+Neither free point can lie in the triangle formed by \(C,D\) and
+the other free point.
+
+The overlap parameter is
+\[
+\mathcal A+R-\mathcal J=cR>0.
+\]
+The exhaustive central-cell line argument used in Theorem 1 therefore
+applies with common edge \(AE\) and the other two vertices \(C,D\).
+After (17) removes the containment signs, every other sign requires
+\[
+[\mathcal A R-s(\mathcal A+R)]^2
+\ge4s\mathcal J\mathcal A R,\qquad
+\mathcal A R-s(\mathcal A+R)>0.
+\]
+Using (14), it follows that
+\[
+F(\mathcal A,R):=
+[\mathcal A R-s(\mathcal A+R)]^2
+-4s(\mathcal A+s)\mathcal A R\ge0.                       \tag{18}
+\]
+
+### The two containing areas have a one-variable upper bound
+
+The bound \(h<e\), together with \(f\ge b\), gives
+\[
+(1-b)h+be\le1-s.
+\]
+Since \(h-a\ge s/b\),
+\[
+a\le\frac{1-s-be}{1-b}-\frac{s}{b}.
+\]
+Also \(a<e\), and \(c\le1-s/R\) by the triangle \(CDE\).
+These inequalities imply
+\[
+\begin{aligned}
+\mathcal A
+&=e-(1-c)(e-a)\\
+&\le e-\frac{s}{R}
+ \left\{\frac{e-1+s}{1-b}+\frac{s}{b}\right\}\\
+&\le1-\frac{s^2}{Rb(1-b)}.                              \tag{19}
+\end{aligned}
+\]
+For the last replacement, the preceding expression increases with
+\(e\): its derivative is \(1-s/[R(1-b)]>0\), because
+\(R(1-b)>R(1-c)\ge s\).
+
+The lower triangle \(BCD\) and \(e\le1\) give
+\[
+s\le dM
+\le(1-R)\left(1-b-\frac{s}{R}\right).
+\]
+After multiplication by \(R>0\), this simplifies to
+\[
+R(1-R)(1-b)\ge s.
+\]
+Thus
+\[
+b\le u(R):=1-\frac{s}{R(1-R)}.
+\]
+This upper bound is positive and satisfies
+\[
+u(R)\le1-\frac{s}{\rho(1-\rho)}
+=\frac{11}{39}<\frac12,
+\]
+since \(R\ge\rho>1/2\). Hence \(b(1-b)\le u(R)(1-u(R))\).
+Equation (19) now gives
+\[
+\boxed{
+\mathcal A\le\overline A(R)
+:=1-\frac{s(1-R)}{u(R)}
+=1-\frac{sR(1-R)^2}{R(1-R)-s}.}                         \tag{20}
+\]
+
+We also have a short fixed interval for \(R\). From \(b>1/7\),
+\[
+M<1-s-\frac17=\frac{335}{448},\quad
+d>\frac{49}{335},\quad
+R<\frac{286}{335}<\frac67.
+\]
+Therefore
+\[
+                         \frac{13}{16}<R<\frac67.       \tag{21}
+\]
+
+### A single polynomial sign closes the cell
+
+For fixed \(R\) in (21), \(F(\mathcal A,R)\) is an upward quadratic
+in \(\mathcal A\). Indeed its leading coefficient is
+\[
+(R-s)^2-4sR
+\ge(\rho-s)^2-4s\rho=\frac{569}{4096}>0.
+\]
+At the positive zero of its bracket it is negative.
+Thus the positive bracket and nonnegative value in (18) would be
+preserved by increasing \(\mathcal A\) to \(\overline A(R)\).
+
+Direct substitution gives
+\[
+F(\overline A(R),R)
+=\frac{N(R)}{4096(8R-7)^2(8R-1)^2},
+\]
+where
+\[
+\begin{split}
+N(R)={}&200704R^8+2334080R^7+2783201R^6-22065668R^5\\
+&+28243972R^4-13878718R^3+2580732R^2-175616R+2401.
+\end{split}                                             \tag{22}
+\]
+
+Its denominator is positive on (21), and its numerator is negative
+throughout that interval. Here is an elementary coefficient certificate.
+Put \(x=6/7-R\), so \(0<x<5/112<1/20\). The exact expansion is
+\[
+\begin{split}
+N={}&-\frac{80639}{2401}-\frac{6306568}{2401}x
+-\frac{283838904}{2401}x^2-\frac{1780921934}{343}x^3\\
+&+\frac{1145488408}{49}x^4-\frac{247361416}{7}x^5
++20916449x^6-3710336x^7+200704x^8.
+\end{split}
+\]
+Discard the negative cubic, fifth, and seventh powers. Bound the
+three positive higher even powers by \(x^2/20^2\),
+\(x^2/20^4\), and \(x^2/20^6\), respectively.
+The resulting coefficient of \(x^2\) is
+\[
+-\frac{283838904}{2401}
++\frac{1145488408}{49\cdot400}
++\frac{20916449}{160000}
++\frac{200704}{64000000}
+=-\frac{572810756110631}{9604000000}<0.
+\]
+The constant and linear terms are negative as well, so \(N(R)<0\).
+
+This contradicts (18) after the allowed replacement (20).
+All line signs have been excluded, proving Theorem 2. \(\square\)
+
 
 ## Verification
 
