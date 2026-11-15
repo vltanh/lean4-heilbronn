@@ -5,8 +5,8 @@ see [G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). The
 [221 indexed leaf rows](G6_ITEMIZED_LEAVES.tsv) and
 [deterministic census checker](check_g6_itemized_cases.py) refine the
 62 parent cases by lower-point counts, upper diagonal sectors, radial
-wedges, and N7 sign words. Currently 10 parent cases are open and
-52 are closed; the 221 leaves comprise 61 open and 160 covered.
+wedges, and N7 sign words. Currently 7 parent cases are open and
+55 are closed; the 221 leaves comprise 43 open and 178 covered.
 
 This ledger refines [ROADMAP.md](../ROADMAP.md) at the target
 \[
@@ -235,7 +235,7 @@ coarse rows are closed: the single-exterior-point rows, both side-pair
 rows, the side-capacity impossibilities, and the one-in-each-cap row.
 The exact individual statuses and proof links are in
 [G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). The five open rows are
-C1-1-04, 07, 10, 11 and 12. These counts remain an unpruned,
+C1-1-04 and 07. These counts remain an unpruned,
 exhaustive combinatorial catalogue; one uniform theorem can close
 several rows simultaneously.
 

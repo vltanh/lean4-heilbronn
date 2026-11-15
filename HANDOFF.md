@@ -150,9 +150,9 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 
 For an itemized, individually numbered list with open/closed flags, see
 [hand/G6_ITEMIZED_CASES.md](hand/G6_ITEMIZED_CASES.md): 62 parent
-rows, 10 open and 52 closed. The 221 explicit
-[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 61
-open leaves and 160 closed by the parent theorems; their census is
+rows, 7 open and 55 closed. The 221 explicit
+[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 43
+open leaves and 178 closed by the parent theorems; their census is
 checked by [hand/check_g6_itemized_cases.py](hand/check_g6_itemized_cases.py).
 These are occupancy/sign partitions, not separately feasible witnesses.
 
@@ -174,12 +174,12 @@ all zero-lower C1 rows and five of the eight coarse N6 occupancies are closed.
   point (N6-06). N6-03 and N6-06 retain both lower/upper alternatives;
   the full lower mixed-cap row N6-04-L1 is closed by
   [SIX_BOUNDARY_SIDE_TOP_LOWER.md](hand/SIX_BOUNDARY_SIDE_TOP_LOWER.md).
-- **C1:** only the one-lower rows C1-1-04, 07, 10, 11 and 12 remain.
-  They comprise two different occupied caps with one upper interior
-  point, two opposite-cap points with one upper interior point, and
-  the remaining three-exterior-point placements. All zero-lower and
-  two-lower configurations, all single-exterior-point hexagons,
-  every side-cap pair, and all eight-vertex hulls are closed.
+- **C1:** only the one-lower rows C1-1-04 and 07 remain.
+  Both have two different occupied caps and one upper interior point.
+  Every one-lower configuration with two or three top-cap points is
+  completely excluded by the new top-multiplicity theorem. All zero-lower
+  and two-lower configurations, single-exterior-point hexagons, side-cap
+  pairs and eight-vertex hulls are already closed.
 
 The normalized seven-boundary form is completely closed by Theorem 2 of
 [SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md](hand/SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md),
