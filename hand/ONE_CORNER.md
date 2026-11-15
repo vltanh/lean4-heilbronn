@@ -23,7 +23,9 @@ the quantitative packing argument in Sections 10--12 of
 [CORNER_FAMILIES.md](CORNER_FAMILIES.md) to a rectangle with correlated
 side lengths and area threshold.
 
-The other C1 branches are not closed by this note.
+The other C1 branches are not closed by this note. Section 6 also proves
+that every actual triangle in the entire competitive C1 family contains
+at most two further configuration points.
 
 ## 1. Normalize the occupied corner triangle
 
@@ -311,6 +313,359 @@ theorem in [QUADRILATERAL_HULL.md](QUADRILATERAL_HULL.md) allows at most
 two free points above \(HC_0\) as well. Hence the only surviving count
 for this hull is exactly two free points on each side. The present note
 does not exclude that \(2+2\) case or configurations with larger hulls.
+
+## 6. Every competitive C1 triangle has capacity two
+
+**Global C1 occupancy corollary.** In any configuration from the complete
+C1 family with minimum triangle area at least \(A_0\), every triangle
+spanned by actual points contains at most two further actual points.
+This includes configurations with additional hull vertices or square
+boundary contacts among the four free points.
+
+Write the five prescribed anchors as
+
+\[
+O=(0,0),\quad H=(0,h),\quad C=(c,0),\quad
+D=(1,d),\quad F=(f,1),
+\qquad 0<d\le h<1,\quad0<f\le c<1,
+\]
+
+and put \(s=2t\ge2A_0>7/64\). The actual triangles \(OHF\) and
+\(OCD\) imply
+
+\[
+hf\ge s,\qquad cd\ge s,
+\qquad h,c,d,f\ge s.
+\]
+
+The other two anchor triangles give
+
+\[
+\begin{aligned}
+2\operatorname{area}(HDF)
+ &=1-h+f(h-d)\le1-d,\\
+2\operatorname{area}(CDF)
+ &=1-c+d(c-f)\le1-f,
+\end{aligned}
+\]
+
+so \(d,f\le1-s\) as well.
+
+Suppose an actual triangle contains three further points. Theorem 1 of
+[THREE_INTERIOR_TRIANGLES.md](THREE_INTERIOR_TRIANGLES.md) says that it
+is a full-hull ear: its vertices are three consecutive hull vertices,
+and the full hull has at most six vertices. Each of the five prescribed
+anchors is a hull vertex, since it lies on a supporting square side and
+no three points are collinear. Hence there are only two hull cases.
+
+### Five hull vertices
+
+The hull is \(O,C,D,F,H\). The ear \(HOC\) is excluded by the
+corner-triangle occupancy theorem proved above. The four other ears have
+the following bounds on their doubled areas:
+
+| Ear | Doubled area | Upper bound |
+|---|---|---|
+| \(OCD\) | \(cd\) | \(d\le1-s\) |
+| \(CDF\) | \(1-c+d(c-f)\) | \(1-f\le1-s\) |
+| \(DFH\) | \(1-h+f(h-d)\) | \(1-d\le1-s\) |
+| \(FHO\) | \(fh\) | \(f\le1-s\) |
+
+### Six hull vertices
+
+There is precisely one additional hull vertex \(P\). The three gaps
+between the anchor pentagon and the square are the corner caps
+
+\[
+\begin{aligned}
+T_L&=\operatorname{conv}\{H,F,U\},&U&=(0,1),\\
+T_R&=\operatorname{conv}\{C,D,V\},&V&=(1,0),\\
+T_T&=\operatorname{conv}\{D,F,W\},&W&=(1,1).
+\end{aligned}
+\]
+
+Thus \(P\) belongs to one of these three caps. Square-edge degeneracies
+are allowed in these enclosing caps. A point on an anchor-pentagon edge
+would give a zero-area actual triangle, so cannot be the additional hull
+vertex under the present hypothesis.
+
+Only the three ears adjacent to \(P\) are new. For a fixed pair of
+vertices, the absolute determinant is convex and affine up to sign in
+\(P\), so its maximum on a cap is attained at a cap vertex. The following
+table lists all nine possibilities. The symbols \(E_{CDF}\) and
+\(E_{DFH}\) denote the two doubled anchor-triangle areas bounded above.
+
+| Location of \(P\) | New ear | Bound from the cap vertices |
+|---|---|---|
+| \(T_L\) | \(DFP\) | \(\max\{E_{DFH},f(1-d)\}\le1-d\) |
+| \(T_L\) | \(FPH\) | \(f(1-h)\le1-h\) |
+| \(T_L\) | \(PHO\) | \(hf\le f\) |
+| \(T_R\) | \(OCP\) | \(cd\le d\) |
+| \(T_R\) | \(CPD\) | \(d(1-c)\le1-c\) |
+| \(T_R\) | \(PDF\) | \(\max\{E_{CDF},d(1-f)\}\le1-f\) |
+| \(T_T\) | \(CDP\) | \(\max\{E_{CDF},(1-c)(1-d)\}\le\max(1-f,1-c)\) |
+| \(T_T\) | \(DPF\) | \((1-d)(1-f)\le1-d\) |
+| \(T_T\) | \(PFH\) | \(\max\{E_{DFH},(1-f)(1-h)\}\le\max(1-d,1-h)\) |
+
+Every final bound in this table is at most \(1-s\). The remaining ears
+are unchanged anchor ears and have already been handled.
+
+### Contradiction for every possible ear
+
+The three-interior-point triangular-hull theorem forces an ear with
+three interior points to have doubled area at least \(\Gamma s\),
+where \(\Gamma=(11+3\sqrt5)/2\). All the non-corner ears above have
+doubled area at most \(1-s\), which is incompatible with
+
+\[
+(\Gamma+1)s>\frac{19}{2}\frac7{64}=\frac{133}{128}>1.
+\]
+
+The remaining corner ear \(HOC\) was excluded by (1). Thus no such
+three-interior triangle exists in either hull case. Hulls with seven
+or more vertices were already ruled out by the cited hull-ear theorem.
+This proves the corollary for the entire C1 family.
+
+## 7. A complete exclusion within the remaining pentagonal \(2+2\) case
+
+Suppose the hull is exactly the five-anchor pentagon and two free points
+lie on each side of \(HC\). Put \(\sigma=7/64\). The two-interior-point
+triangle theorem gives
+
+\[
+hc\ge(4+2\sqrt3)(2t)>(52/7)\sigma=13/16.                  \tag{11}
+\]
+
+Here \(\sqrt3>12/7\). We now exclude the whole subcase in which **both**
+diagonals \(HD\) and \(CF\) of the upper quadrilateral separate its two
+interior points. Thus, in any remaining competitive \(2+2\) configuration,
+both upper interior points must lie in one of
+\(HCD,HDF,HCF,CDF\).
+
+Write
+
+\[
+\ell=h-d,\quad m=c-f,\quad W=1-\ell m,
+\quad x=\frac{c-hm}{W},\quad y=\frac{h-c\ell}{W}.
+\]
+
+Then \(W\) is the doubled area of \(HCDF\), and \(x,y\in(0,1)\)
+are the intersection parameters along \(HD\) and \(CF\). In particular
+
+\[
+h=y+\ell x,\qquad c=x+my.                                 \tag{12}
+\]
+
+If both diagonals separate the two interior points, those points lie in
+opposite quadrants of their intersection. The diagonal-coordinate
+argument in Theorem 1 of `QUADRILATERAL_HULL.md`, applied with normalized
+doubled threshold \(\sigma/W\), gives one of the following two patterns:
+
+\[
+\begin{aligned}
+\mathrm{I}:\quad&
+Wx(1-y)\ge\sigma(2+x-y),\quad
+Wy(1-x)\ge\sigma(2+y-x);\\
+\mathrm{II}:\quad&
+Wxy\ge\sigma(1+x+y),\quad
+W(1-x)(1-y)\ge\sigma(3-x-y).
+\end{aligned}                                             \tag{13}
+\]
+
+These are the two choices of opposite quadrants; no ordering of the two
+interior points is omitted.
+
+### Pattern I forces \(hc\le625/896\)
+
+Fix \(x,y,W\). Subject only to \(h,c\le1\) and \(\ell m=1-W\),
+the expression in (12) gives
+
+\[
+hc=xy(2-W)+\ell x^2+\frac{(1-W)y^2}{\ell}.
+\]
+
+For \(W<1\) this is convex in \(\ell>0\). Its allowed interval is
+
+\[
+\frac{(1-W)y}{1-x}\le\ell\le\frac{1-y}{x},
+\]
+
+whose endpoints correspond to \(c=1\) and \(h=1\). Dropping any further
+constraints on \(d,f\) only enlarges this interval. Thus the largest
+possible product occurs at one of those endpoints. The case \(W=1\)
+follows directly by setting one of \(\ell,m\) to zero and increasing the
+other until a side length is one. By symmetry it suffices to consider
+\(h=1\). Then
+
+\[
+c=\frac{x(1-Wy)}{1-y}.                                    \tag{14}
+\]
+
+If \(y\ge x\), put \(v=1-y\), \(\delta=y-x\ge0\). The first
+inequality in Pattern I and (14) give
+
+\[
+c\le F(v)+\delta\frac{\sigma(1-v)-v}{v^2},
+\qquad F(v)=\frac{(1-v)(v-2\sigma)}{v^2}.
+\]
+
+The same inequality, together with \(Wx\le1\), gives
+\(v\ge\sigma(2-\delta)>\sigma\). Hence the coefficient of \(\delta\)
+is nonpositive, and \(c\le F(v)\).
+
+If \(y\le x\), put \(w=1-x\), \(\delta=x-y\ge0\). The second
+inequality in Pattern I gives \(w>\sigma\) and
+
+\[
+w(1-w)-2\sigma\ge\delta(w-\sigma)\ge0.
+\]
+
+Thus \(w>1/4>2\sigma/(1-\sigma)=14/57\): for \(w\le1/4\), the
+left product \(w(1-w)\) is at most \(3/16<2\sigma\). Equation (14)
+now gives
+
+\[
+\begin{aligned}
+c&\le\frac{(1-w)(w-2\sigma+\sigma\delta)}{w(w+\delta)}\\
+ &=F(w)+\frac{\delta(1-w)[2\sigma-(1-\sigma)w]}
+                  {w^2(w+\delta)}
+\le F(w).
+\end{aligned}
+\]
+
+Finally, completing the square in \(1/v\) yields
+
+\[
+F(v)=-1+\frac{1+2\sigma}{v}-\frac{2\sigma}{v^2}
+\le\frac{(1-2\sigma)^2}{8\sigma}
+=\frac{625}{896}<\frac{13}{16}.
+\]
+
+This contradicts (11), excluding Pattern I.
+
+### Pattern II forces an area ratio below \(1/10\)
+
+Only the second inequality of Pattern II is needed. Put
+
+\[
+A_*=W(1-x),\qquad B_*=W(1-y).
+\]
+
+It states
+
+\[
+\frac{A_*B_*}{W+A_*+B_*}\ge\sigma.                         \tag{15}
+\]
+
+Define
+
+\[
+H_0=hc,\quad \alpha=1-h,\quad\beta=1-c,
+\quad R=\frac{h-d}{h},\quad Z=\frac{c-f}{c}.
+\]
+
+Then \(0\le R,Z\le1\) and
+
+\[
+A_*=\beta+H_0Z(1-R),\quad
+B_*=\alpha+H_0R(1-Z),\quad W=1-H_0RZ.                     \tag{16}
+\]
+
+By (11), \(h+c\ge2\sqrt{hc}>9/5\), so
+\(\alpha+\beta<1/5\).
+
+For nonnegative \(A,B,W\) with positive denominator, the ratio
+\(AB/(W+A+B)\) increases with \(A,B\) and decreases with \(W\).
+Increasing \(H_0\) to one in (16) therefore cannot decrease it. Increasing
+\(\alpha+\beta\) to \(1/5\), by adding the slack to either variable,
+cannot decrease it either. These are relaxations of the parameters, not
+motions of configuration points. It is enough to prove
+
+\[
+\frac{AB}{W+A+B}<\frac1{10}
+\quad\text{when}\quad
+\begin{cases}
+A=\beta+Z(1-R),\quad B=\alpha+R(1-Z),\\
+W=1-RZ,\quad \alpha,\beta\ge0,
+\quad\alpha+\beta=1/5.
+\end{cases}                                              \tag{17}
+\]
+
+The possible endpoint \(W=0\) has \(A+B=1/5>0\), so no denominator
+vanishes in this relaxed family.
+
+By symmetry assume \(R\ge Z\), and set
+
+\[
+\delta=R-Z,\qquad v=\frac{R+Z-1}{2},\qquad
+X=Z(1-R)=\frac{(1-\delta)^2}{4}-v^2.
+\]
+
+Here \(0\le\delta\le1\) and \(|v|\le(1-\delta)/2\).
+For fixed \(R,Z\), the sum \(A+B\) is fixed, so it suffices to maximize
+\(AB=(X+1/5-\alpha)(X+\delta+\alpha)\) over \(0\le\alpha\le1/5\).
+
+If \(\delta\le1/5\), the maximum occurs when \(A=B\). Direct expansion
+then gives
+
+\[
+\begin{aligned}
+W+A+B-10AB
+={}&\frac9{40}-\delta^2-\frac58\delta^4
+ +(4+5\delta^2)v^2-10v^4-v\\
+\ge{}&\frac{23}{125}+\frac32v^2-v
+\ge\frac{13}{750}>0.
+\end{aligned}
+\]
+
+The first bound uses \(\delta^2\le1/25\) and \(v^2\le1/4\); the
+second completes the square in \(v\).
+
+If \(\delta\ge1/5\), the maximum occurs at \(\alpha=0\). Write
+
+\[
+C(\delta)=\frac{13}{40}-\delta+\frac32\delta^2-
+                    \frac58\delta^4.
+\]
+
+Expansion and \(v^2\le(1-\delta)^2/4\) give
+
+\[
+\begin{aligned}
+W+A+B-10AB
+&=C(\delta)-v+(4+5\delta^2)v^2-10v^4\\
+&\ge C(\delta)-v+
+       \left(\frac32+5\delta+\frac52\delta^2\right)v^2.
+\end{aligned}
+\]
+
+On \([1/5,1/2]\),
+
+\[
+C(\delta)-\frac18
+\ge\frac15-\delta+\frac{43}{32}\delta^2
+\ge\frac3{215}>0.
+\]
+
+On \([1/2,1]\), the derivative \(C'\) first increases and then
+decreases, since \(C''=3-(15/2)\delta^2\). Also \(C'(1/2)=3/16>0\),
+so \(C\) has no interior minimum on this interval. Its endpoint values
+are \(103/640\) and \(1/5\), both above \(1/8\). Thus \(C\ge1/8\)
+throughout the present case. The coefficient of \(v^2\) is at least
+\(13/5\), yielding
+
+\[
+W+A+B-10AB\ge\frac18-\frac5{52}
+=\frac3{104}>0.
+\]
+
+This proves (17). Since \(1/10<\sigma\), it contradicts (15), excluding
+Pattern II.
+
+Both opposite-quadrant patterns are impossible. This proves the claimed
+exclusion of the entire upper-quadrilateral subcase where both diagonals
+separate its two interior points. The complementary same-side cases
+specified after (11) still require further work.
 
 The optional checker [check_one_corner.py](check_one_corner.py) verifies
 the displaced-triangle formulas and the normalized identities connecting
