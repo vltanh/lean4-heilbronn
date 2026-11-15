@@ -23,7 +23,7 @@ part of this hand-proof work, and neither proof has external or Lean review.
 | G4a | C2: two opposite corners and four further side contacts | **Complete hand exclusion at \(7/128<A_0\)** |
 | G4b | Type III: three corners and six free points | **Complete hand exclusion at \(7/128<A_0\)** |
 | G5 | Type II: adjacent corners and five free points | **Complete hand exclusion**, including every count/hull/cell/cut and the Type-III shear alternative |
-| G6 | N and C1 with fewer than eight boundary points | **C1 exact five-anchor hull complete**; N and larger C1 hulls remain |
+| G6 | N and C1 with fewer than eight boundary points | **N7 exterior and C1 two-lower complete**; N6 larger hulls, N7 mixed interior pair, and C1 zero/one-lower remain |
 | G7 | Unrestricted sharp theorem and uniqueness | Conditional on G6; equality transfer through shears is already proved |
 
 ## 1. The completed eight-boundary gate
@@ -59,10 +59,12 @@ specified chambers are now assembled with the projection-restricted
 G-moving exclusion in
 [SEVEN_BOUNDARY_TOP_CAP_RADIAL.md](hand/SEVEN_BOUNDARY_TOP_CAP_RADIAL.md).
 All four exterior R3 radial words are closed, including equality.
-The other seven radial classes remain to be extended to the displaced vertex.
-[SEVEN_BOUNDARY_ADJACENT_CAPS.md](hand/SEVEN_BOUNDARY_ADJACENT_CAPS.md)
-already excludes two of the four R1 words, centered on the right and left
-paired contacts, by exact rational area bounds.
+[SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md](hand/SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md)
+closes all four R1 words.
+[SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md](hand/SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md)
+now closes the other 28 words with fixed rational cubic certificates.
+Thus the entire seven-boundary exterior case is complete, including
+equality, with no remaining radial orientation.
 
 ## 2. The remaining low-contact families
 
@@ -76,11 +78,13 @@ C2 is closed. The unresolved parts of the former Type-I obligation are:
 - **N:** six distinct prescribed boundary points, two on each of two adjacent
   sides and one on each opposite side, with the stated projection-overlap
   inequalities; three further points are arbitrary. Its eight-boundary
-  members are covered by G2. Six- and seven-boundary members still need a
-  sharp bound or a further structural reduction.
+  members are covered by G2. The larger six-boundary hulls and the mixed
+  seven-boundary interior pair still need a sharp bound or a further
+  structural reduction; the seven-boundary exterior case is complete.
 - **C1:** one occupied corner, one further contact on each incident side,
   and one contact on each opposite side; four further points are arbitrary.
-  The full five-anchor hull case is now excluded. Only larger hulls remain.
+  The full five-anchor hull and the complete two-lower occupancy are
+  excluded. Only larger hulls with zero or one lower point remain.
 
 Several complete restrictions now apply within these families.
 [THREE_INTERIOR_TRIANGLES.md](hand/THREE_INTERIOR_TRIANGLES.md) proves that
@@ -107,6 +111,8 @@ the entire right-quadrilateral pair.
 excludes the complete HBE/BEF and ACE/ADE common pair cells, forces
 the mixed left point into ACF, and gives capacity one to ADE, AHD,
 AHE, and HDE. The remaining mixed right point is in CEF.
+[SEVEN_BOUNDARY_UPPER_TRIANGLE.md](hand/SEVEN_BOUNDARY_UPPER_TRIANGLE.md)
+excludes every further point from HEF, so both mixed points are below HE.
 Sections 10--11 exclude the nearer upper exterior cap and limit the
 farther cap to one point. [SEVEN_BOUNDARY_TOP_CAP.md](hand/SEVEN_BOUNDARY_TOP_CAP.md)
 then excludes the upper, lower, and left side quadrilaterals for the
@@ -121,7 +127,10 @@ cross-triangle area inequality and three explicit scalar intervals.
 Larger six-boundary hulls remain open.
 [SIX_BOUNDARY_EXTERIOR.md](hand/SIX_BOUNDARY_EXTERIOR.md) excludes
 the entire exterior cap between its two doubled sides, using only five
-actual points and a strict area bound below 1/20.
+actual points and a strict area bound below 1/20. It also gives capacity
+one to both side caps, excludes the opposite lower ear under side-cap
+occupancy, and classifies the all-three-in-the-opposite-cap case as
+support cell II with an eight-vertex hull.
 [GLOBAL_COMPLETION.md](hand/GLOBAL_COMPLETION.md) additionally excludes
 both lower exterior corner caps, without requiring the top contact to
 be on the nearer half of its side. It also proves that every nine-point
@@ -157,9 +166,11 @@ common-cell placement is further restricted by
 [C1_TOP_CAP_COMMON_CELL.md](hand/C1_TOP_CAP_COMMON_CELL.md): neither
 O nor C can be isolated by the lower-pair line.
 [C1_TOP_CAP_CONTAINMENT_PAIR.md](hand/C1_TOP_CAP_CONTAINMENT_PAIR.md)
-also excludes the middle containment signs. Only the same-side O/C
-line type remains in this two-lower branch. That case, the zero/one-lower
-counts, and the remaining N cases keep G6 open.
+also excludes the middle containment signs.
+[C1_TWO_LOWER_COMPLETION.md](hand/C1_TWO_LOWER_COMPLETION.md) closes
+the last same-side O/C case and assembles the entire two-lower theorem
+for every hull size. Only the zero/one-lower C1 counts and the remaining
+N cases keep G6 open.
 
 For a fixed choice of the other eight points, the sign-consistent feasible
 positions of a ninth point form a convex polygon cut out by area half-planes.
@@ -261,7 +272,7 @@ DR, and the lower right hull vertex to height below 3/16.
 [UNBALANCED_UPPER_CELL_II.md](hand/UNBALANCED_UPPER_CELL_II.md) now
 closes that last two-above cell with an exact stress, monotone
 elimination, and twelve printed Bernstein boxes with 960 strictly
-negative rational coefficients. Thus G5 has only one branch left:
+negative rational coefficients. At that stage of the reduction, the sole remaining branch is:
 support cell II with exactly one central point above CE.
 [UNBALANCED_ONE_UPPER_RADIAL.md](hand/UNBALANCED_ONE_UPPER_RADIAL.md)
 puts P,T above DR and Q below it, and gives capacity one to DBR

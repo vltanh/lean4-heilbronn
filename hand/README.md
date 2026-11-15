@@ -79,7 +79,11 @@ families are listed below. The older computational draft is separate.
 | Both isolated-endpoint pair-line cases in the remaining C1 top-cap common cell are excluded | [C1_TOP_CAP_COMMON_CELL.md](C1_TOP_CAP_COMMON_CELL.md) |
 | The middle containment pair-line case in that C1 common cell is excluded | [C1_TOP_CAP_CONTAINMENT_PAIR.md](C1_TOP_CAP_CONTAINMENT_PAIR.md) |
 | The entire exterior corner cap at the two doubled sides of N is empty, by a five-point bound below 1/20 | [SIX_BOUNDARY_EXTERIOR.md](SIX_BOUNDARY_EXTERIOR.md) |
-| Two complete exterior R1 words, centered on the right and left paired contacts, are excluded | [SEVEN_BOUNDARY_ADJACENT_CAPS.md](SEVEN_BOUNDARY_ADJACENT_CAPS.md) |
+| All four exterior R1 words are excluded | [SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md](SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md) |
+| Every further point is excluded from the seven-boundary upper triangle HEF | [SEVEN_BOUNDARY_UPPER_TRIANGLE.md](SEVEN_BOUNDARY_UPPER_TRIANGLE.md) |
+| The entire C1 two-lower occupancy is excluded, with every hull size and pair-line case covered | [C1_TWO_LOWER_COMPLETION.md](C1_TWO_LOWER_COMPLETION.md) |
+| Complete seven-boundary exterior theorem, all 36 radial words and equality | [SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md](SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md) |
+| Both N side exterior caps have capacity one; three points in the opposite cap force support cell II and an eight-vertex hull | [SIX_BOUNDARY_EXTERIOR.md](SIX_BOUNDARY_EXTERIOR.md), Sections 3–4 |
 
 The original three-family argument is retained in
 [BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md). All strengthened normal forms
@@ -88,30 +92,20 @@ an observed numerical pattern.
 
 ## What remains
 
-- **N:** six prescribed boundary points and three arbitrary points, with fewer
-  than eight total boundary points. Every actual triangle has capacity two;
-  the virtual lower corner cap has capacity one. Additional seven-boundary
-  cap restrictions, including both lower exterior caps, are proved.
-  The exact six-anchor convex hull is completely excluded; larger
-  six-boundary hulls remain, with the lower-left exterior cap empty. With seven boundary
-  contacts, neither the smaller-left pentagon nor the right quadrilateral
-  can contain both free points. Mixed interior placements remain, as does
-  exactly one point in the far upper exterior cap with the other point
-  inside the original heptagon and outside all four side quadrilaterals.
-  The mixed left point is in ACF and its right companion in CEF;
-  the pair cannot both lie in any of ADE, AHD, AHE, or HDE. All four sharp R3
-  exterior words are now closed, including equality. The seven other
-  exterior radial classes remain, with two of the four R1 words already excluded.
-- **C1:** one occupied corner, four further side contacts, and four arbitrary
-  points. The complete five-anchor pentagon is excluded. Only configurations
-  with additional hull vertices outside that pentagon remain. When two
-  free points lie in OHC, both exterior side caps are excluded; the top
-  cap contains exactly one point X. Its upper companion lies in OCXH.
-  After reflection putting that companion in OCX, the lower points
-  straddle OX but both belong to OCF. Their joining line can no longer
-  isolate either O or C, or have the middle containment signs. Only the
-  same-side O/C line type and the
-  lower counts zero and one remain.
+- **N with six boundary contacts:** larger hulls beyond the prescribed
+  six anchors. The exact six-anchor hull is excluded. The lower-left
+  exterior cap is empty and both side caps have capacity one. An occupied
+  side cap makes the opposite lower ear empty. If all three free points
+  are in the opposite cap, only support cell II with an eight-vertex
+  hull survives. The interactions between these placements remain.
+- **N with seven boundary contacts:** only a mixed interior pair remains.
+  Its left point lies in ACF, its right point in CEF, and both lie below HE.
+  No pair can lie in any of ADE, AHD, AHE, or HDE. The full exterior
+  case is complete, including equality; the full left and right interior
+  pair classes are also complete.
+- **C1:** only the zero- and one-lower counts in OHC remain, with hulls
+  larger than the prescribed five-anchor pentagon. The entire two-lower
+  occupancy and every exact-five-anchor-hull placement are excluded.
 
 The opposite-corner family C2, the entire three-corner family Type III,
 and the entire adjacent-corner Type-II family are closed by strict
@@ -180,6 +174,10 @@ python hand/check_seven_boundary_top_cap_radial.py
 python hand/check_six_boundary_exterior.py
 python hand/check_seven_boundary_adjacent_caps.py
 python hand/check_c1_top_cap_containment_pair.py
+python hand/check_c1_two_lower_completion.py
+python hand/check_seven_boundary_adjacent_caps_completion.py
+python hand/check_seven_boundary_upper_triangle.py
+python hand/check_seven_boundary_exterior_certificates.py
 ```
 
 These scripts use SymPy where appropriate and verify the printed determinant

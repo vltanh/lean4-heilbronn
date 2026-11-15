@@ -212,7 +212,9 @@ now plays G, and its height k is greater than the reflected E height h.
 Section 3 therefore excludes this entire word as well.
 
 The other two R1 words, centered on the bottom and top paired positions,
-are outside the present conclusion. The exact diagnostic
+are closed in
+[SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md](SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md),
+which assembles all four R1 words. The exact diagnostic
 [check_seven_boundary_adjacent_caps.py](check_seven_boundary_adjacent_caps.py)
 checks both displacement signs, all monotone scalar calculations, and
 the two word identifications.

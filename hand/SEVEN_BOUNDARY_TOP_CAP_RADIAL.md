@@ -39,7 +39,8 @@ forces \(k=1\) and the known eight-boundary construction, up to square
 symmetry and relabeling. One of the four R3 words has the stronger bound
 strictly below \(7/128\).
 
-The other seven radial classes remain separate continuous obligations.
+The other seven classes are closed in the later
+[complete exterior theorem](SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md).
 
 ## 1. The same finite word cover applies to this octagon
 
@@ -145,13 +146,15 @@ and the candidate at equality.
 Every transformation preserves unsigned triangle areas. The four rows
 therefore prove Theorem 1, including the equality statement. \(\square\)
 
-## Remaining exterior obligation and verification
+## Completion of the exterior case and verification
 
-After this theorem, the exterior case has only the seven strict radial
-classes R1, R2, R4, R5, R6, R7, and R8 left. Their bounds in the
-eight-boundary proof have coordinate hypotheses that still need to be
-extended to the displaced hull vertex. The present theorem completes
-the entire sharp class R3 in the stated seven-boundary exterior form.
+The present theorem completes the entire sharp class R3.
+[SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md](SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md)
+closes R1, and
+[SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md](SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md)
+closes all remaining 28 words by explicit rational cubic inequalities.
+That later theorem assembles the complete exterior result, including
+this note's equality classification.
 
 [check_seven_boundary_top_cap_radial.py](check_seven_boundary_top_cap_radial.py)
 checks the four-word orbit, each sign permutation, the exact coordinate

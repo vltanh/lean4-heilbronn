@@ -14,16 +14,13 @@ The C1 case whose hull is exactly its five prescribed anchors is
 completely excluded; only larger C1 hulls remain.
 With seven boundary contacts, the complete smaller-left pair and
 right-quadrilateral pair classes are excluded. The exact six-anchor
-N convex hull is completely excluded. In the exterior seven-boundary
-case only one point in the far upper cap remains; the other point avoids
-all four side quadrilaterals and lies in the central region. The mixed
-interior left point is in ACF, and ADE, AHD, AHE, and HDE each have capacity one.
-All four sharp R3 radial words in the exterior case are closed;
-equality forces the eighth boundary contact and the original
-configuration. With two lower C1 points, the two-point top cap and both
-side ears are excluded. In the one-cap case, the lower points straddle
-OX but, after the stated reflection, both lie in OCF. Their joining
-line cannot isolate O or C.
+N convex hull is completely excluded. The entire seven-boundary exterior
+case is now complete: all 36 radial words are covered, and equality
+forces the eighth boundary contact and the original configuration.
+The only remaining seven-boundary placement is the mixed interior pair:
+the left point is in ACF, the right in CEF, both below HE, and ADE,
+AHD, AHE, and HDE each have capacity one. The entire C1 two-lower
+occupancy is excluded, including all larger-hull and pair-line cases.
 The unrestricted nine-point theorem is **not yet proved by hand**.
 
 Target:
@@ -147,27 +144,21 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 
 ## Exact remaining obligations
 
-- **N with six or seven boundary points:** six prescribed side contacts,
-  three arbitrary points, and projection-overlap inequalities. The exact
-  six-anchor convex hull is completely excluded; larger six-boundary
-  hulls remain. [SIX_BOUNDARY_EXTERIOR.md](hand/SIX_BOUNDARY_EXTERIOR.md)
-  excludes the whole lower-left exterior cap. With seven boundary contacts only mixed left/right
-  interior placements and one point in the far upper exterior cap remain.
-  In the latter case, the other point is inside the original heptagon,
-  and in ADEH intersect BCXF. In the mixed interior case the left
-  point is in ACF and the right point in CEF, with no pair in ADE,
-  AHD, AHE, or HDE. The full exterior R3 class is closed; its seven
-  other radial classes remain, with two complete R1 words excluded by
-  [SEVEN_BOUNDARY_ADJACENT_CAPS.md](hand/SEVEN_BOUNDARY_ADJACENT_CAPS.md).
-- **C1:** only configurations whose hull extends beyond the five prescribed
-  anchors remain. Every exact five-anchor pentagon placement is closed.
-  With two lower points, exactly one exterior top point X remains and
-  the other upper point lies in OCXH. After reflection choosing that
-  point in OCX, the lower points straddle OX and both lie in OCF.
-  Its pair line cannot isolate O or C, and
-  [C1_TOP_CAP_CONTAINMENT_PAIR.md](hand/C1_TOP_CAP_CONTAINMENT_PAIR.md)
-  excludes the middle containment signs. The same-side O/C line type
-  and the zero/one-lower cases remain.
+- **N with six boundary points:** larger hulls beyond the six prescribed
+  contacts. [SIX_BOUNDARY_EXTERIOR.md](hand/SIX_BOUNDARY_EXTERIOR.md)
+  makes the lower-left exterior cap empty and gives capacity one to both
+  side caps. An occupied side cap excludes the opposite lower ear.
+  Three points in the opposite cap force support cell II and an
+  eight-vertex hull. These larger-hull placements remain to be closed.
+- **N with seven boundary points:** the mixed interior pair, with the
+  left point in ACF, the right in CEF, and both below HE. No pair lies
+  in ADE, AHD, AHE, or HDE. The entire exterior case, including equality,
+  is complete in
+  [SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md](hand/SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md).
+- **C1:** zero or one free point in OHC, with a hull larger than the
+  prescribed five-anchor pentagon. Every exact pentagon and the entire
+  two-lower occupancy are closed; see
+  [C1_TWO_LOWER_COMPLETION.md](hand/C1_TWO_LOWER_COMPLETION.md).
 
 Type II, Type III, and C2 are completely closed. The unrestricted
 completion obligation now consists only of the N and C1 families above.
@@ -210,6 +201,11 @@ Type II, as do the C1 isolated-C/O calculations and all ten printed
 univariate coefficients. The sharp exterior R3 assembly and all four
 coordinate maps have been checked independently; the G-moving proof's
 signed areas, positive weight, displacement bound, and cubic pass exactly.
+The full C1 two-lower assembly, the upper-triangle HEF exclusion, and
+all four exterior R1 words also pass their exact diagnostics and separate
+audits. The remaining 28 exterior words have fixed rational cubic
+certificates with 4,113 positive terms; their complete coefficient data
+and a standard-library exact verifier accompany the proof.
 The new continuous proofs received a separate agent audit of their
 geometric signs and inequality directions; the right-pair curvature
 certificate was checked independently as well.
