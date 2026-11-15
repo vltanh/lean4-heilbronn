@@ -29,7 +29,14 @@ part of this hand-proof work, and neither proof has external or Lean review.
 ## G6 finite case ledger
 
 [hand/G6_FINITE_CASE_LEDGER.md](hand/G6_FINITE_CASE_LEDGER.md) supplies
-stable IDs and a finite combinatorial cover for the low-contact families.
+the structural classification. For **every individually numbered case and
+its open/closed status**, use
+[hand/G6_ITEMIZED_CASES.md](hand/G6_ITEMIZED_CASES.md) (62 parent rows).
+The [221-row machine-readable leaf register](hand/G6_ITEMIZED_LEAVES.tsv)
+and [itemization checker](hand/check_g6_itemized_cases.py) refine them
+by lower-point occupancy, upper sectors, and the retained N7 line signs.
+The census currently has 44 open parent rows (186 open leaves); leaf
+counts do not independently certify a geometric exclusion.
 
 | Branch | Unpruned coarse cover | Current proof status |
 |---|---:|---|
