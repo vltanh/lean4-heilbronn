@@ -1,65 +1,97 @@
-# Heilbronn n=10: hand-proof conversion roadmap
+# Heilbronn n=10: itemized hand-proof roadmap
 
-Baseline: computer-assisted proof package reviewed at commit
-`6677298653e118e446d5cd089f5ecdce1fc5fc0f`, together with the separate
-November 15 audit bundle supplied in the project conversation.
-The computer-assisted result is not a premise of the proposed hand proof.
-The existing top-level `hand/` directory concerns n=9 and is not this ledger.
+Checkpoint 1 — November 15, 2026.
+
+The computer-assisted proof package reviewed at commit
+`6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
+of the proposed hand proof. The existing top-level `hand/` directory concerns
+n=9; this conversion is isolated under `n10/hand/`.
 
 ## Acceptance rule
 
-A checked item requires a written argument with explicit hypotheses, coverage,
+A checked item has a written argument with explicit hypotheses, coverage,
 identities and sign justifications that a reader can verify without running
 an exhaustive search or trusting a solver or certificate file. Symbolic
-computation may discover and regression-check identities, but the displayed
-argument must stand on its own. A proof of a subchamber does not close its
-parent family. No numerical percentage of completion is assigned.
+computation may discover and regression-check identities; the displayed
+argument must stand on its own. A closed subchamber does not close its parent.
+No numerical percentage of completion is assigned.
 
 Target: every ten-point configuration in the closed unit square has an
 ordinary unsigned triangle area at most A*, where
 
-    f(g) = 12 g^3 - 27 g^2 + 20 g - 4 = 0,
-    a = 1 - 3g + 2g^2,
-    A* = 5g^2/8 - g^3/2.
+    f(g)=12g^3-27g^2+20g-4=0,
+    a=1-3g+2g^2,
+    A*=5g^2/8-g^3/2.
 
-The equality target is the candidate in the seed package, up to square
-symmetry and relabeling.
+The equality target is the candidate in ATTAINMENT.md, up to square symmetry
+and relabeling. The unrestricted hand upper bound is NOT yet complete.
 
-## Itemized checklist
+## Gate I — exact attainment and exhaustive analytic reduction
 
-### Gate I — exact attainment and exhaustive analytic reduction
-
-- [ ] HP01. Isolate g rationally and establish the exact candidate value.
-- [ ] HP02. Replace the 120-area attainment computation by a complete short
-      symmetry-orbit table, with explicit positive polynomial gaps.
-- [ ] HP03. Prove existence of a maximizer, minimum enclosing parallelogram,
+- [x] HP01. Isolate g rationally and establish the exact candidate value.
+      Proof: ATTAINMENT.md, Section 1.
+- [x] HP02. Replace the 120-area attainment computation by 32 symmetry
+      orbits, with 22 explicit positive gap polynomials and four active
+      orbits. Proof: ATTAINMENT.md, Sections 2–4.
+- [x] HP03. Prove existence of a maximizer, minimum enclosing parallelogram,
       and opposite-contact projection overlap.
-- [ ] HP04. Prove finite shear normalization and exhaustive coverage by the
-      five domains III, C2, II, C1 and N, including all boundary cases.
-- [ ] HP05. Refine corner-free normalized maximizers into the three exact
-      boundary counts N6, N7 and N8; do not assume eight boundary points.
+      Proof: NORMALIZATION.md, Sections 1–2.
+- [x] HP04. Prove finite shear normalization and exhaustive coverage by
+      III, C2, II, C1 and N, including boundary cases.
+      Proof: NORMALIZATION.md, Sections 3–5.
+- [x] HP05. Refine corner-free normalized maximizers into N6, N7 and N8.
+      Proof: NORMALIZATION.md, Section 6. This does not exclude N6 or N7.
 
-### Gate II — replace the local computer certificates by a hand argument
+## Gate II — replace local computer certificates by a hand argument
 
-- [ ] HP06. Prove a general positive-stress / one-dimensional-kernel /
-      negative-curvature criterion for strict local optimality.
-- [ ] HP07. Verify the candidate's positive stress by a few symmetry identities.
-- [ ] HP08. Determine the common kernel by explicit small linear systems,
-      rather than the 38 stored dual certificates.
-- [ ] HP09. Prove the negative curvature and deduce unrestricted strict local
+- [x] HP06. Prove the positive-stress / one-dimensional-kernel /
+      negative-curvature criterion. Proof: LOCAL_RIGIDITY.md, Section 1.
+- [x] HP07. Check the candidate's positive stress using the three point
+      representatives A,C,O. Proof: LOCAL_RIGIDITY.md, Section 2.
+- [x] HP08. Determine the common kernel with four explicit three-variable
+      symmetry sectors, eliminating the need for 38 stored dual certificates.
+      Proof: LOCAL_RIGIDITY.md, Section 3.
+- [x] HP09. Check four quadratic values and prove unrestricted strict local
       optimality, allowing all twenty coordinates to move.
-- [ ] HP10. Prove the sharp upper bound and equality classification in the
-      explicitly defined candidate-oriented symmetric chamber.
+      Proof: LOCAL_RIGIDITY.md, Section 4 and the general lemma.
+- [x] HP10. Prove the sharp upper bound and equality classification throughout
+      the candidate-oriented symmetric three-parameter chamber.
+      Proof: SYMMETRIC_CHAMBER.md.
 
-HP09 initially seeks an existential positive neighborhood radius. That would
-NOT reprove the numerical radius 1/2000 used by the old exact checker. A
-quantitative radius is a separate optional conversion task unless a later
-hand localization theorem needs a specific radius. HP10 does not establish
-that arbitrary maximizing configurations are symmetric.
+HP09 proves existence of a positive neighborhood radius. It does NOT reprove
+the explicit radius 1/2000 used in the old exact checker. Quantifying a radius
+is a separate optional task unless later hand localization requires one.
+HP10 does not prove that arbitrary maximizers are symmetric, and it states
+its ADO orientation hypothesis explicitly.
 
-### Gate III — the global hand-proof obligations
+## Gate III — global cases, with real closures recorded
 
-- [ ] HP11-III. Exclude normalized maximizers with at least three corners.
+### HP11-III: at least three occupied corners
+
+- [ ] HP11-III. Complete the entire at-least-three-corner family.
+  - [x] III-4C. Four occupied corners, all six other points unrestricted:
+        m(P)<A*, since m(P)<=(sqrt(33)-5)/16<A*.
+        Proof: FOUR_CORNERS.md. This is a complete global subfamily.
+  - [x] III-3C-U5+. Exactly three corners and at least five free points above
+        their diagonal: impossible at m>=A* by the 11-triangle occupancy
+        bound. Proof: NORMALIZATION.md, Section 7.
+  - [ ] III-3C-U0. Exactly three corners: 0 upper and 7 lower free points.
+  - [ ] III-3C-U1. Exactly three corners: 1 upper and 6 lower free points.
+  - [ ] III-3C-U2. Exactly three corners: 2 upper and 5 lower free points.
+  - [ ] III-3C-U3. Exactly three corners: 3 upper and 4 lower free points.
+  - [ ] III-3C-U4. Exactly three corners: 4 upper and 3 lower free points.
+
+For these five residual classes use corners (0,0),(0,1),(1,1), s=2A*, and
+
+    U_s=conv{(s,2s),(s,1-s),(1-2s,1-s)},
+    L_s=conv{(s,0),(1,0),(1,1-s)}.
+
+The quoted counts are in these two explicit triangles. A competitive point
+cannot lie on the separating diagonal. The count split is proved exhaustive;
+none of its five unresolved entries is being silently dropped.
+
+### Other corner and corner-free families
+
 - [ ] HP11-C2. Exclude normalized maximizers with two opposite corners.
 - [ ] HP11-II. Exclude normalized maximizers with two adjacent corners.
 - [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
@@ -68,46 +100,53 @@ that arbitrary maximizing configurations are symmetric.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
       points and three strictly interior points.
 - [ ] HP12-N8. Prove the sharp bound and candidate equality classification
-      for the complete asymmetric eight-boundary domain, including every
-      orientation of the two interior points.
+      for the COMPLETE asymmetric eight-boundary domain, including every
+      orientation of the two interior points. HP10 closes only its stated
+      symmetric subchamber, not this parent item.
 
-These are seven exhaustive continuous-domain obligations, not seven small
-finite arithmetic checks. Each must either admit a uniform inequality or
-be divided into explicitly described subdomains whose union is proved to
-cover it. New subdivisions must retain their parent item until all children
-are closed. No particular number of smaller subcases is claimed in advance.
+There are now ELEVEN named unresolved global obligations: the five exact-
+three-corner count classes and the six entries immediately above. These are
+continuous-domain obligations, not eleven small arithmetic checks. Each must
+admit a uniform argument or an explicitly exhaustive further subdivision.
+New subdivisions must retain their parent until all children close. No bound
+on the eventual number of smaller subcases is claimed.
 
-Important: N6 and N7 are not closed sets. Configurations of these types can
-approach the eight-boundary candidate. Do not demand a uniform rational gap
-below A* on those entire domains; excluding their attainment at a global
-maximum is sufficient. The complete N8 item may use HP10 only after a proved
-symmetry reduction, or may bypass symmetry and prove the asymmetric bound
-directly. Ordinary averaging is not such a reduction.
+N6 and N7 are not closed sets and can approach the eight-boundary candidate.
+Do not demand a uniform rational gap below A* on those entire domains;
+excluding their attainment by a maximizer is sufficient. N8 may use HP10 only
+after a proved symmetry reduction, or may be bounded directly without one.
+Ordinary averaging is not a justified reduction.
 
-### Gate IV — assembly and final scrutiny
+## Gate IV — assembly and final scrutiny
 
-- [ ] HP13. Prove the conditional shear-reversal lemma: strict local isolation
-      of a normalized equality case rules out any last nonconstant shear.
-- [ ] HP14. Assemble HP01–HP12 into the unrestricted upper bound and use HP13
-      to classify equality in the original, unnormalized configurations.
+- [x] HP13. Prove the conditional shear-reversal lemma: strict local isolation
+      of a normalized equality case rules out a last nonconstant shear.
+      Proof: NORMALIZATION.md, Section 8. Its global premise remains open.
+- [ ] HP14. Assemble the global exclusions and N8 theorem into the
+      unrestricted upper bound, then classify equality using HP13.
 - [ ] HP15. Audit the complete hand manuscript line by line, including zero
-      determinants, coincident points, sign changes, closure faces, and every
-      equality condition. Remove all dependence on machine enumeration.
+      determinants, coincidences, sign changes, closure faces and equality.
+      Remove every dependence on machine enumeration.
 
-## Work order
+## Completed proof files
 
-First write and check Gates I and II, so that the global work has a small
-explicit terminal argument rather than a large local certificate dependency.
-Then prioritize the first complete global domain that admits a uniform
-argument; preserve the seven-item global ledger while doing so. A new local
-lemma is worthwhile only when it is named in that dependency graph.
+| File | What is actually proved |
+|---|---|
+| ATTAINMENT.md | Exact lower bound, 16 active areas, 104 strict gaps |
+| NORMALIZATION.md | Exhaustive reduction, boundary-count catalogue, occupancy cut, conditional equality transfer |
+| LOCAL_RIGIDITY.md | Strict local optimality without stored dual certificates; existential radius |
+| SYMMETRIC_CHAMBER.md | Sharp bound and equality in the expressly stated symmetric sign chamber |
+| FOUR_CORNERS.md | Full four-corner exclusion with bound (sqrt(33)-5)/16 |
 
-The finite computer cover remains a discovery tool and a regression check.
-Its 27 exceptional roots are not the whole hand-proof workload: the ordinary
-roots outside those boxes still require a global analytic replacement.
+## Next attack and stopping rules
 
-## Checkpoint 0
+The next target is the exact-three-corner family, using its five occupancy
+classes. A successful next checkpoint should close one or more whole entries,
+not merely produce another local lemma disconnected from that ledger.
+The local qualitative argument and symmetric terminal optimization no longer
+need a certificate-compression detour.
 
-The roadmap is recorded. Mathematical items are not yet checked off in this
-file; each will be marked only after its hand proof is written and reviewed.
-No CI, Lean compilation or n=9 file changes are part of this conversion.
+The finite computer cover remains available for discovery and regression.
+Its 27 exceptional roots are not the entire hand workload: ordinary roots
+outside those boxes still require a global analytic replacement. No CI, Lean
+compilation or n=9 file changes are part of this conversion.
