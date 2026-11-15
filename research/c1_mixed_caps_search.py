@@ -102,7 +102,7 @@ def solve_case(ci):
     if all(C.inside(w,(0,2,4)) and C.inside(w,(0,2,3)) for w in C.words(case)[2:]):
         extra=['double_od']
     nodes=[]
-    def rec(additional):
+    def rec(additional,ex):
         ni=len(nodes);nodes.append({})
         label='case_%s_node_%s'%(ci,ni)
         if not C.cyclic_consistent(case,additional):
@@ -110,13 +110,16 @@ def solve_case(ci):
         if C.cost_specs(case,additional) is None:
             nodes[ni]={'capacity':True};return ni
         if len(nodes)>400:raise RuntimeError('too many nodes')
-        r=examine(case,additional,extra,label)
+        r=examine(case,additional,ex,label)
         if 'split' in r:
             t=r['split']
-            r['children']=[rec(additional+[(t,sg)]) for sg in (-1,1)]
+            r['children']=[rec(additional+[(t,sg)],ex) for sg in (-1,1)]
+        elif r.get('unresolved') and ci==9 and len(ex)==1:
+            cut=[10,5,8]
+            r={'cut':cut,'children':[rec(additional,ex+[cut+[sg]]) for sg in (-1,1)]}
         nodes[ni]=r
         return ni
-    rec([])
+    rec([],extra)
     out={'case':case,'extra':extra,'nodes':nodes}
     (ROOT/('tree_%d.json'%ci)).write_text(json.dumps(out))
     print('DONE',ci,len(nodes),'leaves',sum('split' not in n for n in nodes),flush=True)

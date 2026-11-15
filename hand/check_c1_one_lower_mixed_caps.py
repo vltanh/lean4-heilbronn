@@ -158,7 +158,105 @@ def verify_bounds():
         assert all(sg[(v,5,6)]==1 for v in (0,1,4))
     return True
 
-if __name__=='__main__':
+
+def residual(cert):
+    case=tuple(cert['case'])
+    additional=[(tuple(t),sg) for t,sg in cert.get('additional',[])]
+    extra=cert.get('extra',[])
+    fac,qs,cs=factors(case,extra),costs(case,additional),cubic_costs(case)
+    assert type(cert['scale']) is int and cert['scale']>0
+    out={}
+    for term in cert['terms']:
+        if term[0]=='f':
+            _,indices,weight=term
+            assert 1<=len(indices)<=3 and indices==sorted(indices)
+            assert all(type(i) is int and 0<=i<len(fac) for i in indices)
+            p=ONE
+            for i in indices:p=mul(p,fac[i])
+        elif term[0]=='q':
+            _,qi,fi,weight=term
+            assert type(qi) is int and 0<=qi<len(qs)
+            assert type(fi) is int and -1<=fi<len(fac)
+            p=qs[qi]
+            if fi>=0:p=mul(p,fac[fi])
+        else:
+            assert term[0]=='c'
+            _,ci,weight=term
+            assert type(ci) is int and 0<=ci<len(cs)
+            p=cs[ci]
+        assert type(weight) is int and weight>0
+        out=add(out,scale(p,F(weight,cert['scale'])))
+    assert all(len(m)<=3 for m in out)
+    return out
+
+def verify_data(data,require_complete=True):
     verify_bounds()
-    print('mixed-cap exact common bounds and 62-case cover pass')
+    assert data['version']==1 and data['variables']==VARIABLES
+    assert data['vertices']==['O','C','D','F','H','X','Y','L','Q']
+    certs=data['certificates']
+    worst=None;terms=0
+    for cert in certs:
+        assert tuple(cert['case']) in CASES
+        upper=cube_upper(residual(cert))
+        assert upper==F(cert['upper_bound']) and upper<-F(3,4)
+        worst=upper if worst is None else max(worst,upper)
+        terms+=len(cert['terms'])
+    covered=set();used=set();leaves=0
+    for entry in data['cover']:
+        case=tuple(entry['case'])
+        assert case in CASES and case not in covered
+        covered.add(case)
+        nodes=entry['nodes'];seen=set()
+        extra=entry.get('extra',[])
+        assert extra in ([],['double_od'])
+        if extra:factors(case,extra)
+        def visit(ni,additional,ex):
+            nonlocal leaves
+            assert type(ni) is int and 0<=ni<len(nodes) and ni not in seen
+            seen.add(ni);node=nodes[ni]
+            if 'split' in node:
+                t=tuple(node['split'])
+                assert t in AREAS and t not in get_signs(case,additional)
+                assert len(node['children'])==2
+                for child,sg in zip(node['children'],(-1,1)):
+                    visit(child,additional+[(t,sg)],ex)
+            elif 'cut' in node:
+                cut=node['cut']
+                assert len(cut)==3
+                vi,n,d=cut
+                assert type(vi) is int and vi in range(12)
+                assert type(n) is int and type(d) is int and 0<n<d
+                assert len(node['children'])==2
+                for child,sg in zip(node['children'],(-1,1)):
+                    visit(child,additional,ex+[[vi,n,d,sg]])
+            elif 'certificate' in node:
+                ci=node['certificate']
+                assert type(ci) is int and 0<=ci<len(certs)
+                cert=certs[ci]
+                assert tuple(cert['case'])==case
+                assert cert.get('additional',[])==[[list(t),sg] for t,sg in additional]
+                assert cert.get('extra',[])==ex
+                used.add(ci);leaves+=1
+            elif node.get('capacity'):
+                assert cost_specs(case,additional) is None
+                leaves+=1
+            else:
+                assert node=={'inconsistent':True}
+                assert not cyclic_consistent(case,additional)
+                leaves+=1
+        visit(0,[],extra)
+        assert seen==set(range(len(nodes)))
+    assert used==set(range(len(certs)))
+    if require_complete:assert covered==set(CASES)
+    return {'cases':len(covered),'certificates':len(certs),'leaves':leaves,
+            'terms':terms,'worst':str(worst)}
+
+if __name__=='__main__':
+    path=Path(__file__).with_name('c1_one_lower_mixed_caps_certificates.json')
+    if path.exists():
+        print(verify_data(json.loads(path.read_text())))
+    else:
+        verify_bounds()
+        print('mixed-cap exact common bounds and 62-case cover pass; final data not present')
+
 
