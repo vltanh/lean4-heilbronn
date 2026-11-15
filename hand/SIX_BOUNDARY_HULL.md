@@ -3,8 +3,8 @@
 This note studies the N normalization when its six prescribed boundary
 points are exactly the convex-hull vertices. The first theorem in fact
 applies throughout N, without this additional hull hypothesis. The note
-closes both upper-pair placements in the outer upper triangles and both
-opposite-sector assignments. Only the mixed upper pairs remain.
+closes every upper-pair placement and the exact six-anchor hull. N
+configurations with additional hull vertices are outside this conclusion.
 
 Write \([XYZ]=\det(Y-X,Z-X)\) for signed doubled area, and put
 
@@ -902,15 +902,429 @@ placement still unresolved is
 \boxed{P\in HCJ,\quad R\in CDJ,\quad Q\in ABH.}             \tag{44}
 \]
 
-Its transpose is the same remaining geometric class. No statement that
-the full six-anchor hull has been excluded is made here.
+Its transpose is the same remaining geometric class. Section 6 closes it.
+
+
+## 6. The last lower-ear placement is impossible
+
+**Theorem 6.** The placement (44) is impossible at minimum ordinary
+triangle area at least \(A_0\).
+
+Continue with \(\sigma=8/73\), and write \(L=h-a\).
+The lower point \(Q\in ABH\) and the anchor triangle \(ABC\) give
+
+\[
+bL\ge3\sigma,\qquad a(c-b)\ge\sigma.
+\]
+
+Since \(L\le1-a\), \(c\le1\), these imply
+
+\[
+1\ge\frac{3\sigma}{1-a}+\frac{\sigma}{a},
+\qquad a(1-a-2\sigma)\ge\sigma.                            \tag{45}
+\]
+
+In particular
+
+\[
+\boxed{L<K\sigma.}                                        \tag{46}
+\]
+
+Indeed, if \(L\ge K\sigma\), then
+\(a\le1-K\sigma<333/1825\). The increasing quadratic
+\(a(1-2\sigma-a)\) would then be at most its value at \(333/1825\);
+as checked in Section 4, that value minus \(\sigma\) is
+\(-1364/3330625<0\), contradicting (45).
+
+Consequently \(AHD\), whose doubled area is \(L\), has capacity one.
+So does \(AHR\), whose doubled area is \(LR_x\le L\).
+The lower point lies in \(AHC\): the ear \(ABC\) is empty, and a
+point in both \(ABC,ABH\) is also excluded by the empty-ear lemma.
+
+### The right upper point is below \(AD\)
+
+The signs (35) remain valid. Both upper points cannot be above
+\(AD\), because they would both belong to \(AHD\).
+If \(P\) were below \(AD\) and \(R\) above it, their positive
+first coordinates would give
+
+\[
+\frac{P_y-a}{P_x}<d-a<
+\frac{R_y-a}{R_x},
+\qquad [PRA]>0.
+\]
+
+Their segment would cross the relative interior of \(AD\),
+forcing opposite signs at \(A,D\), contrary to (35).
+Thus \(R\) is below \(AD\).
+
+### The central upper point cannot also be below \(AD\)
+
+Suppose first that \(P\) is below \(AD\). Then \(P,R\in ACD\).
+Triangle capacity two forces \(Q\) above \(AD\).
+
+If \([PRA]<0\), the three side tests put \(P\) inside \(AHR\):
+it is right of \(AH\), above \(AR\), and below \(HR\).
+The point \(Q\) is also inside \(AHR\). It is above \(AR\),
+because it is above \(AD\) while \(R\) is below \(AD\);
+it is below \(HR\), because \(Q\) is below \(HC\) while
+\(R\) is above \(HC\). This contradicts (46).
+Therefore \([PRA]>0\).
+
+Apply the general opposite-endpoint weighted inequality from
+[ONE_CORNER_COMPLETION.md](ONE_CORNER_COMPLETION.md), Theorem 1,
+to the quadrilateral with cyclic order \(A,C,D,H\).
+Its common base is \(CD\): the line \(PR\) puts \(C\) on its
+negative side and \(D,A,H\) on its positive side. Let
+
+\[
+a_1=[ACD],\quad a_2=[HCD],\quad
+V=\text{doubled area of }ACDH.
+\]
+
+Both containing triangles hold \(P,R\). Their complementary
+triangles \(AHD,AHC\) each contain \(Q\). Hence
+
+\[
+a_1,a_2\le1-\sigma,\qquad
+V\ge\max(a_1,a_2)+3\sigma.                                \tag{47}
+\]
+
+For the first bound, \(a_1\le d\le1-\sigma\);
+also \(a_2+[HDF]=W\le1\).
+The canonical overlap parameter is positive:
+\(a_1+a_2-V=a_2-L>0\), by \(a_2\ge K\sigma>L\).
+
+The weighted inequality, in the original area scale, therefore gives,
+after possibly interchanging \(a_1,a_2\),
+
+\[
+[a_1a_2-\sigma(V+a_1)]^2\ge4\sigma Va_1a_2,\qquad
+a_1a_2-\sigma(V+a_1)>0.                                  \tag{48}
+\]
+
+Decreasing \(V\) to \(a_1+3\sigma\) preserves these necessary
+conditions. For fixed \(a_1\), the resulting polynomial is an upward
+quadratic in \(a_2\), negative at the positive zero of its bracket.
+Thus increase \(a_2\) to \(1-\sigma\).
+The resulting quadratic in \(a_1\) has positive leading coefficient
+
+\[
+(1-3\sigma)^2-4\sigma(1-\sigma)=\frac{321}{5329}>0.
+\]
+
+The same root argument increases \(a_1\) to \(1-\sigma\).
+The final required value is, however,
+
+\[
+(1-4\sigma)^2-4\sigma(1+2\sigma)(1-\sigma)^2
+=-\frac{3074751}{28398241}<0.
+\]
+
+This excludes the whole case with \(P\) below \(AD\).
+
+### The remaining right point strengthens the lower-point inequality
+
+We are left with \(P\) above \(AD\), and \(Q,R\) below it.
+The point \(P\) lies inside \(AHR\): it is above \(AR\),
+below \(HR\) by (35), and right of \(AH\).
+By (46), \(Q\) is outside that triangle. It is below \(HR\)
+and right of \(AH\), so it must be below \(AR\).
+Together with \(Q\in AHC\), this puts \(Q\) inside \(ACR\).
+
+Write \(Q=(x,y)\), \(R=(u,v)\), and define the positive doubled
+areas
+
+\[
+n=-[ADQ]=a+(d-a)x-y,\qquad
+z_R=-[ADR]=a+(d-a)u-v.
+\]
+
+The actual triangle \(AQR\), with its now proved positive sign,
+gives the exact identity and inequality
+
+\[
+\sigma\le[AQR]=un-xz_R.
+\]
+
+Since \(u\le1\), \(n>0\), and \(z_R\ge\sigma\), it follows that
+
+\[
+\boxed{n\ge\sigma(1+x),\qquad
+y\le a+(d-a-\sigma)x-\sigma.}                             \tag{49}
+\]
+
+This is the additional constraint that uses the actual right point;
+a containing-triangle area cost alone would not give (49).
+
+Put \(T=[ABD]=a+b(d-a)\). The actual area \([ABQ]\ge\sigma\)
+and (49) imply
+
+\[
+x(T-b\sigma)\ge\sigma(1+b).
+\]
+
+In particular \(T-b\sigma>0\). Adding the positive areas
+\([ABQ]\) and \([BHQ]\) gives \(L(b-x)\ge2\sigma\), so
+
+\[
+\boxed{(T-b\sigma)(bL-2\sigma)\ge\sigma L(1+b).}           \tag{50}
+\]
+
+We now exclude (50) using only scalar anchor inequalities.
+
+### Two anchor budgets remove \(a,h,d\)
+
+Set
+
+\[
+k=1-3\sigma=\frac{49}{73},\qquad
+r=\frac{\sigma(2-3\sigma)}{k}=\frac{976}{3577}.
+\]
+
+Since \(R\in CDF\), its area is at least \(3\sigma\).
+The identities for \(CDF,HDF\), together with \(f\ge b\), give
+
+\[
+\begin{gathered}
+3\sigma\le b,\qquad b<k,\qquad
+a(1-b)\ge\sigma,\qquad a\le1-L,\\
+a(k-b)\ge\sigma(1-d),\qquad
+3\sigma h+kd\le1-\sigma.                                 \tag{51}
+\end{gathered}
+\]
+
+Here \(bL\ge3\sigma\) and \(L\le1\) give the first bound.
+For \(b<k\), observe
+\([CDF]=1-f-(1-d)(c-f)<1-b\), using \(c>b\), \(f\ge b\),
+and \(d<1\).
+For the penultimate inequality, use
+\(c\ge b+\sigma/a\) in
+\(c(1-d)+df\le k\).
+For the last, use \(f\le k\) in \([HDF]\ge\sigma\).
+
+Define
+
+\[
+\widehat T=1-br-(1-b)L.
+\]
+
+The exact identity
+
+\[
+k\bigl[\widehat T-(T-b\sigma)\bigr]
+=(k-b)(1-h)+b(1-\sigma-3\sigma h-kd)\ge0
+\]
+
+and \(bL-2\sigma>0\) turn (50) into
+
+\[
+\boxed{
+\mathcal F(L,b):=
+[1-br-(1-b)L](bL-2\sigma)-\sigma L(1+b)\ge0.}              \tag{52}
+\]
+
+This is a concave quadratic in \(L\).
+
+Its discriminant is
+
+\[
+\frac{N(b)}{12794929},\qquad
+N(b)=952576b^4-7747488b^3+19277825b^2-9335088b+153664.
+\]
+
+On \(3\sigma\le b\le7/12\),
+
+\[
+N''(b)\ge11439442>0.
+\]
+
+Both endpoint discriminant values are negative:
+
+\[
+\frac{N(3\sigma)}{12794929}
+=-\frac{31121393185280}{363353477319889},\qquad
+\frac{N(7/12)}{12794929}
+=-\frac{86111}{6906384}.
+\]
+
+Convexity puts every intermediate value below the larger endpoint.
+Thus (52) forces
+
+\[
+\boxed{\frac7{12}<b<k.}                                  \tag{53}
+\]
+
+The remaining two budgets in (51) have the useful positive combination
+
+\[
+\begin{split}
+&a\bigl[k(k-b)-3\sigma^2\bigr]-\sigma^2(3L-2)\\
+&\quad=
+k\bigl[a(k-b)-\sigma(1-d)\bigr]
++\sigma\bigl[1-\sigma-3\sigma h-kd\bigr]\ge0.              \tag{54}
+\end{split}
+\]
+
+### Three explicit upper bounds on \(L\)
+
+Set
+
+\[
+b_0=\frac{k^2-\sigma}{k-\sigma}=\frac{1817}{2993},\qquad
+b_1=k-\frac{3\sigma^2}{k}=\frac{2209}{3577}.
+\]
+
+These numbers satisfy \(7/12<b_0<b_1<k\).
+Equations (51), (54) imply the following bounds:
+
+\[
+\begin{array}{c|c}
+\text{interval for }b& L\le \ell_i(b)\\ \hline
+(7/12,b_0]&
+\ell_0=1-\dfrac{\sigma}{1-b}\\[5pt]
+[b_0,b_1]&
+\ell_1=1-\dfrac{\sigma^2}{k(k-b)}\\[5pt]
+[b_1,k)&
+\ell_2=\dfrac23+
+ \dfrac{k(k-b)-3\sigma^2}{3\sigma(1-b)} .
+\end{array}                                               \tag{55}
+\]
+
+The first is \(a\ge\sigma/(1-b)\), \(a\le1-L\).
+For the second, \(k(k-b)-3\sigma^2\ge0\), so substitute
+\(a\le1-L\) in (54).
+For the third that coefficient is nonpositive, so instead substitute
+\(a\ge\sigma/(1-b)\). Each displayed upper bound is at most
+\(\ell_0\) on its stated interval; the crossover in this comparison
+is exactly \(b_0\). If any bound is nonpositive, it already contradicts
+\(L>0\).
+
+On the relevant range \(0<L\le\ell_0\), \(\mathcal F\) increases
+with \(L\). Indeed,
+
+\[
+\begin{split}
+\frac{\partial\mathcal F}{\partial L}
+&\ge b^2(2-r)-b(1+\sigma)+\sigma=:g(b),\\
+g(7/12)&=\frac{263}{5256}>0,\qquad
+g'(b)\ge g'(7/12)=\frac{1388}{1533}>0.
+\end{split}
+\]
+
+We may therefore insert the three upper bounds (55) into (52).
+
+### Exact polynomial signs on the three intervals
+
+Direct expansion gives
+
+\[
+\begin{array}{c|c|c}
+i&\mathcal F(\ell_i,b)&N_i(b)\\ \hline
+0&\dfrac{N_0(b)}{261121(b-1)}
+&189873b^3-210681b^2+6728b+31752\\[3pt]
+1&\dfrac{N_1(b)}{12794929(73b-49)^2}
+&49579827633b^4-82791226762b^3+
+36472147945b^2+2968460920b-3456383560\\[3pt]
+2&\dfrac{N_2(b)}{150405696(b-1)}
+&992089345b^3-1208815226b^2+
+366886585b+1194816 .
+\end{array}                                               \tag{56}
+\]
+
+Each value in the middle column is strictly negative.
+
+For \(N_0\), on \(7/12\le b\le61/100<5/8\),
+
+\[
+N_0'(b)\le
+569619(5/8)^2-421362(7/12)+6728
+=-\frac{1059781}{64}<0.
+\]
+
+Since \(b_0<61/100\),
+
+\[
+N_0(b)\ge N_0(61/100)=\frac{559243313}{1000000}>0.
+\]
+
+Its denominator in (56) is negative.
+
+For \(N_1\), put \(t=b-3/5\). Throughout its interval,
+\(0<t<1/50\). Its exact expansion is
+
+\[
+\begin{split}
+N_1={}&49579827633t^4+\frac{181001797786}{5}t^3
+-\frac{136490813483}{25}t^2\\
+&+\frac{19685578244}{125}t-\frac{1683166972}{625}.
+\end{split}
+\]
+
+Use \(t^3\le t^2/50\), \(t^4\le t^2/2500\).
+The resulting coefficient of \(t^2\) is
+\(-11789483542807/2500<-4000\cdot10^6\);
+the linear coefficient is below \(160\cdot10^6\),
+and the constant is below \(-2\cdot10^6\). Hence
+
+\[
+N_1<10^6(-4000t^2+160t-2)<0.
+\]
+
+The last quadratic has negative leading coefficient and discriminant
+\(160^2-4\cdot4000\cdot2=-6400<0\).
+The denominator in (56) is positive.
+
+Finally, for \(N_2\) put \(t=b-3/5>0\). Its expansion is
+
+\[
+N_2=992089345t^3+576945595t^2
+-\frac{61175968}{5}t+\frac{11114604}{25}.
+\]
+
+Dropping the positive cubic and weakening the other three coefficients
+gives
+
+\[
+N_2>10^6(500t^2-13t+2/5)>0.
+\]
+
+This quadratic has positive leading coefficient and discriminant
+\(13^2-4\cdot500\cdot(2/5)=-631<0\).
+Its denominator in (56) is negative.
+
+Thus all three intervals contradict (52). This closes the final sign
+with \(P\) above \(AD\), and proves Theorem 6. \(\square\)
+
+## 7. Complete exact-six-hull conclusion
+
+**Theorem 7.** A competitive configuration in family N cannot have
+exactly its six prescribed anchors as its complete convex hull.
+
+The exact-hull hypothesis gives one lower point and two upper points
+by [QUADRILATERAL_HULL.md](QUADRILATERAL_HULL.md), Section 4.
+The upper pair cannot share a diagonal sector, by the central-pair
+quadrilateral theorem. Theorem 2 excludes both outer adjacent-sector
+pairs; Theorems 3--4 exclude both opposite-sector pairs.
+Only the two mixed assignments remain.
+
+Choose the empty-\(ABC\) normalization, so the lower point belongs
+to \(AHC\). Theorem 5 and its transpose exclude the mixed \(HCF\)
+assignment completely, and exclude the mixed \(HCD\) assignment when
+the lower point lies in \(HBC\). Its only other position is \(ABH\),
+which Theorem 6 excludes. These cases exhaust the exact six-anchor
+hexagon, proving the theorem. \(\square\)
+
+This conclusion has the explicit **exact convex-hull** hypothesis.
+Configurations in N whose three arbitrary points add further hull
+vertices are not excluded by Theorem 7. The anchor-ear theorem in
+Section 1 has the broader, already stated scope.
 
 
 ## Verification
 
 The optional script [check_six_boundary_hull.py](check_six_boundary_hull.py)
 checks the determinant formulas, the Cauchy differences, exact rational
-gaps, transposition, and all scalar identities in Sections 3--5. The continuous inequalities and
+gaps, transposition, and all scalar identities in Sections 3--6. The continuous inequalities and
 the complete placement exclusions are proved above; no search or
 parameter sampling is used as a premise.
-
