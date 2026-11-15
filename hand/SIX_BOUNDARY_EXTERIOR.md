@@ -358,6 +358,154 @@ the top. Positive minimum area excludes any collinear third point.
 Thus the full hull has exactly these eight vertices, proving the
 theorem. \(\square\)
 
+## 5. An occupied side cap makes the opposite lower ear empty
+
+**Theorem 5.** If an actual free point lies in the lower-right exterior
+cap \(CD(1,0)\), then \([ABH]<3s\), where \(s=7/64\).
+Consequently the actual triangle \(ABH\) contains no further
+configuration point. Transposition gives the companion statement:
+an occupied upper-left exterior cap \(FH(0,1)\) implies
+\([ABC]<3s\), and that lower ear is empty.
+
+**Proof.** Write the cap point as \(X=(x,y)\), and put
+
+\[
+m=c-b,\qquad w=1-c,\qquad b+m+w=1.
+\]
+
+The signed cap costs give
+
+\[
+my=[BCX]\ge s,\qquad
+d(x-c)-wy=-[CDX]\ge s.
+\]
+
+Since \(x\le1\), they imply
+
+\[
+                       d\ge\frac{s}{m}+\frac{s}{w}.      \tag{13}
+\]
+
+Suppose, for a contradiction, that \([ABH]\ge3s\).
+Together with \([ABC]\ge s\), this gives
+
+\[
+                       h\ge\frac{s}{m}+\frac{3s}{b}.     \tag{14}
+\]
+
+The same top budget (6), namely \(wh+(1-w)d\le1-s\),
+therefore requires
+
+\[
+ F(m,w):=\frac1m+\frac{3w}{1-m-w}+\frac1w\le\frac1s.
+                                                               \tag{15}
+\]
+
+Here is the complete scalar contradiction. The bounds \(h,d\le1\)
+in (13)--(14) imply \(m>s\) and
+
+\[
+b\ge b_0:=\frac{3sm}{m-s},\qquad
+\frac{sm}{m-s}\le w\le w_0:=1-m-b_0.
+                                                               \tag{16}
+\]
+
+In particular \(w_0>0\), and summing the first two lower bounds
+in (16) gives
+
+\[
+m^2-(1-3s)m+s\le0,\qquad m>\frac14.                     \tag{17}
+\]
+
+For the latter conclusion, the polynomial on the left decreases on
+\([0,1/4]\) and has value \(1/256>0\) at \(1/4\).
+Furthermore
+
+\[
+b_0-2w_0=
+\frac{2m^2+(7s-2)m+2s}{m-s}>0,                          \tag{18}
+\]
+
+because its numerator has positive leading coefficient and discriminant
+\(-927/4096<0\). Thus throughout the interval (16),
+\(b/w>2>\sqrt{3(1-m)}\), and
+
+\[
+\frac{\partial F}{\partial w}
+=\frac{3(1-m)}{(1-m-w)^2}-\frac1{w^2}<0.
+\]
+
+Consequently \(F(m,w)\ge F(m,w_0)\). Exact simplification gives
+
+\[
+F(m,w_0)-\frac1s
+=-\frac{P(m)}{7(64m^2-50m+7)},
+\qquad
+P(m)=4096m^3-2304m^2+196m+49.                            \tag{19}
+\]
+
+The denominator in (19) is negative, since
+\(w_0=-(64m^2-50m+7)/(64m-7)>0\). The numerator
+\(P(m)\) is positive for \(m>1/4\): putting
+\(z=m-1/3>-1/12\),
+
+\[
+\begin{aligned}
+P(m)&=4096z^3+1792z^2+\frac{76}{3}z+\frac{271}{27}\\
+&\ge\frac{4352}{3}z^2+\frac{76}{3}z+\frac{271}{27}>0.
+\end{aligned}
+\]
+
+The last quadratic has positive leading coefficient and discriminant
+\(-4665584/81<0\). Thus (19) is strictly positive, contradicting
+(15). This proves \([ABH]<3s\). A further actual point inside
+\(ABH\) would divide it into three actual triangles of doubled area
+at least \(s\), which is impossible. The transposed conclusion follows
+by the relabeling in Theorem 3. \(\square\)
+
+This proof uses the same scalar cubic as the occupied-ear estimate in
+[SEVEN_BOUNDARY_CAPS.md](SEVEN_BOUNDARY_CAPS.md), but its hypotheses
+here are the six-contact N normalization and one exterior point. The
+argument above records the independent area conversion for this use.
+
+## 6. Side projection preserves every anchor-pair cost
+
+The following observation isolates the obstruction to a full boundary
+projection; it does not assert that every triangle involving another
+free point is preserved.
+
+**Lemma 6.** Let \(X=(x,y)\in CD(1,0)\), and suppose all triangles
+formed by \(X\) and two of the six anchors have unsigned doubled area
+at least \(s>0\). Then the same is true after replacing \(X\) by
+\(X'=(1,y)\). The transposed statement holds for the upper-left cap.
+
+**Proof.** Positivity gives \(c<x\le1\) and \(0<y<d\le h\).
+As the first coordinate of \(X\) increases, the absolute areas for
+the anchor pairs
+
+\[
+AB,AC,AD,AF,AH,BD,BF,BH,CD,CF,CH,FH
+\]
+
+are nondecreasing, and the \(BC\) area is constant. The signs are
+fixed by \(X\)'s cap placement, \(a\le d\le h\), and
+\(b\le f\le c\). The only decreasing magnitudes are those for
+\(HD\) and \(DF\). But the original \(CDX\) cost says
+
+\[
+(1-c)(d-y)\ge s+d(1-x)\ge s.
+\]
+
+At the endpoint,
+
+\[
+|[HDX']|=d-y\ge s,\qquad
+|[DFX']|=(1-f)(d-y)\ge(1-c)(d-y)\ge s.
+\]
+
+Both decreasing areas therefore remain above the threshold throughout
+the segment as well. This proves the lemma. \(\square\)
+
 ## Verification
 
 The optional exact diagnostic
@@ -366,4 +514,6 @@ checks the area formulas, the two cap reductions, the rational
 simplifications, the one-variable maximization identity, and the strict
 polynomial comparisons in Lemma 1 and Theorem 3. It also checks the
 rational area comparison in Theorem 4; that theorem's support-cell
-classification is the already proved endpoint-triangle analysis.
+classification is the already proved endpoint-triangle analysis. The
+occupied-ear elimination and its scalar polynomials, and all fifteen
+anchor-pair formulas for Lemma 6, are also checked exactly.
