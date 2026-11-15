@@ -39,6 +39,10 @@ cell II, the one-point upper cut, or the whole unbalanced Type-II row.
 from D,E,B when the right hull is nontriangular. This excludes the entire
 C-isolated alternative, including the remaining right support cell II.
 
+**Theorem 4.** Under the same hypotheses, PQ cannot isolate D either.
+Thus in the remaining upper-cut cell II, the line PQ must put D,C on
+the same side and E,B on the other side.
+
 ## 1. The right support cells and their geometric meaning
 
 Apply the support-triangle normalization from `TYPE_II.md`, Section 1,
@@ -392,6 +396,176 @@ It is at least
 Again (9) is contradicted. The two ranges exhaust the C-isolated case,
 proving Theorem 3.
 
+## 6. Complete exclusion of the D-isolated central line
+
+The generic right-quadrilateral condition (9) remains available.
+Suppose PQ isolates D. The second row of `TYPE_II.md`, Section 12,
+gives
+
+\[
+A_D=q-s\{1+(1+b)q\}>0,\qquad
+F_D(q):=A_D^2-4sq(1+bq)\ge0,\qquad b\le\frac27.
+                                                               \tag{11}
+\]
+
+We need one additional inequality that retains the actual EBP area.
+
+### 6.1. A stronger weighted inequality for an isolated D
+
+Reflect the vertical coordinate for this calculation, so
+
+\[
+D=(0,0),\quad C=(1,0),\quad E=(0,q),\quad B=(b,1).
+\]
+
+Write \(P=(p,u)\), \(Q=(r,v)\), and choose their order so that
+\(d_D<0<d_C,d_E,d_B\), where
+\(d_X=\det(Q-P,X-P)\). Every \(|d_X|\ge s\).
+Both points are inside DCE, so \(0<u<q\), and direct expansion gives
+
+\[
+u d_E+(q-u)d_C=\{q(1-p)-u\}(u-v).                       \tag{12}
+\]
+
+The bracket is the positive doubled area of ECP. Hence the positive
+left side forces \(u>v\ge s\), and (12) implies
+
+\[
+qs\le\{q(1-p)-u\}(u-s).
+\]
+
+On the other hand, EBP has positive unsigned doubled area
+\(b(q-u)+(1-q)p\ge s\). Put \(c=1-(1-b)q\) as before.
+Then
+
+\[
+p\ge\frac{s-b(q-u)}{1-q},\qquad
+q(1-p)-u\le\frac{qc-qs-cu}{1-q}.
+\]
+
+Setting \(z=u-s>0\), we conclude that
+
+\[
+qs(1-q)\le z\{qc-s(q+c)-cz\}.
+\]
+
+The linear coefficient in braces must be positive. Maximizing the
+concave quadratic in z therefore proves the additional necessary
+conditions
+
+\[
+\boxed{
+A_*:=qc-s(q+c)>0,\qquad
+F_*(q,c):=A_*^2-4sq(1-q)c\ge0.}                          \tag{13}
+\]
+
+All divisions and multiplications used positive quantities, and the
+positivity of \(A_*\) was established before squaring.
+
+### 6.2. Two effective lower bounds for q
+
+First, (11) implies
+
+\[
+q>q_D(b):=\frac34+\frac{5b}{6}.                          \tag{14}
+\]
+
+Indeed direct substitution gives the useful factorization
+
+\[
+F_D(q_D(b))=
+\frac{(70b^2-3547b-3165)(70b^2-27b+3)}{589824}<0.
+\]
+
+The first factor is negative for \(0\le b\le2/7\).
+The second is positive for every real b, since its discriminant is
+\(27^2-4\cdot70\cdot3=-111<0\). As before, \(F_D\) is an upward
+quadratic in q, negative at the positive zero of \(A_D\). That zero
+is at most \(7/55<3/4\le q_D(b)\). Convexity and \(A_D>0\)
+give (14).
+
+For \(b\le1/6\), (13) improves this to
+
+\[
+\boxed{q>\frac89\qquad(b\le1/6).}                       \tag{15}
+\]
+
+To prove it, suppose \(q\le8/9\). The proof of the q bound in
+Section 3 used only the common central-pair quadratic and \(bq\ge s\),
+so its conclusion \(q>67/80\) applies here as well.
+Also \(c\le C_*(q):=1-5q/6\).
+For fixed q, (13) is an upward quadratic in c, negative at the positive
+zero of \(A_*=c(q-s)-sq\). Thus, with \(A_*>0\), increasing c to
+\(C_*\) preserves the asserted nonnegativity. It would follow that
+
+\[
+0\le F_*(q,C_*)
+=\frac{102400q^4-295040q^3+287281q^2-96180q+1764}{147456}.
+\]
+
+Put \(t=8/9-q\), so \(0\le t<37/720<1/16\). The last expression
+is exactly
+
+\[
+\frac{25}{36}t^4-\frac{4855}{10368}t^3
+-\frac{379093}{3981312}t^2
+-\frac{521759}{26873856}t
+-\frac{49343}{241864704}<0.
+\]
+
+The cubic and quartic together are nonpositive, because
+\((25/36)t-4855/10368\le-4405/10368<0\).
+All other coefficients are negative. This contradiction proves (15).
+
+### 6.3. Both parameter ranges contradict the right ear
+
+For \(s\le b\le1/6\), use \(C_5=1-8w/9>c\). The generic
+necessary sign (9) contradicts
+
+\[
+331776\mathcal N_b(C_5)
+=P_5(b):=262144b^3-132096b^2+15105b-1>0.
+\]
+
+To check the last sign, the upward quadratic \(P_5'(b)\) has values
+
+\[
+P_5'(7/64)=-4383,\qquad P_5'(1/6)=-\frac{21245}{3}.
+\]
+
+It is therefore negative throughout the interval, by convexity.
+Thus \(P_5\) decreases there, and
+\(P_5(b)\ge P_5(1/6)=3283/54>0\).
+
+For \(1/6\le b\le2/7\), use
+\(C_6=1-wq_D(b)>c\). Now
+
+\[
+\begin{aligned}
+36864\mathcal N_b(C_6)
+={}&25600b^5-30720b^4+27456b^3\\
+&\hspace{10mm}-11104b^2+5625b-729.
+\end{aligned}
+\]
+
+With \(t=b-1/6\in[0,5/42]\), this numerator becomes
+
+\[
+25600t^5-\frac{28160}{3}t^4+\frac{126784}{9}t^3
+-\frac{35392}{27}t^2+\frac{303065}{81}t+\frac{3283}{486}.
+\]
+
+Bounding the negative fourth power by \((5/42)t^3\), and the negative
+second power by \((5/42)t\), gives the positive lower bound
+
+\[
+25600t^5+\frac{817088}{63}t^3
++\frac{290425}{81}t+\frac{3283}{486}>0.
+\]
+
+This again contradicts (9). The two ranges exhaust (11), proving
+Theorem 4.
+
 ## Verification and the remaining interaction
 
 [check_unbalanced_right_hull.py](check_unbalanced_right_hull.py) verifies
@@ -402,11 +576,12 @@ positive coefficient bounds. No sampled coordinates enter the proof.
 In the two-point upper cut the only nontriangular right-hull possibility
 left is cell II, where T lies in both BCR and BCS and neither outer ear
 BRS or CRS contains it. Thus the factor three that drives (2)--(5) is
-unavailable in that cell. Theorem 3 additionally excludes its C-isolated
-central-line alternative. The scalar central-pair inequalities alone do
+unavailable in that cell. Theorems 3 and 4 additionally exclude both
+isolated-endpoint central-line alternatives. Hence PQ must put D,C
+together and E,B together on its two sides. The scalar central-pair
+inequalities alone do
 not supply an analogous occupied outer ear. The present argument does
 not control the cross-triangles joining P or Q to the right subset; a
 stronger interaction involving their actual positions is still needed.
-In the one-point upper
-cut, the bound (7) is not available, so this note does not exclude cells
+In the one-point upper cut, the bound (7) is not available, so this note does not exclude cells
 I or III there.
