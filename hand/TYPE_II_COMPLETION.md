@@ -248,10 +248,120 @@ This excludes the entire balanced branch in which the lower central point
 lies on or above \(y=x\). The surviving placements still need a coupled
 area argument; this note does not assert that (5) closes the balanced row.
 
+## 5. The complete triangular-right branch has an empty lower ear
+
+Continue with the balanced placements of Section 4. Suppose the four-point
+right set \(B,C,R,S\) has a triangular hull. Relabel its two free points
+so that \(R=(r,u)\) is the third hull vertex and \(S\) is strictly
+inside \(BCR\). The vertices \(B,C\) must be hull vertices because
+they are extreme vertices of the right container.
+
+Put
+
+\[
+q=1-\lambda,\qquad w=1-b,\qquad K=4+2\sqrt3,
+\qquad s=\frac7{64}.
+\]
+
+Every doubled actual triangle area exceeds \(s\), and weak inequalities
+at \(s\) suffice below. The two points \(L,P\) in \(DCE\) give
+\(q\ge Ks\). The positive doubled area of \(BCR\) is
+
+\[
+g=(r-b)-wu\ge3s,
+\]
+
+because it contains \(S\). Since \(r\le1\), this implies
+
+\[
+u\le1-\frac{3s}{w}.                                      \tag{6}
+\]
+
+**Lemma 4 (the lower ear is empty).** Neither \(Q\) nor \(S\)
+lies in the triangle \(EBR\). Both are strictly inside \(ECR\).
+
+**Proof.** The doubled area of \(EBR\) is positive and equals
+
+\[
+\delta=bu+\lambda(r-b).
+\]
+
+Here \(r\ge b\) because \(R\) lies in the right container. Using
+(6), \(r-b\le w\), and \(q\ge Ks\), we obtain
+
+\[
+\begin{aligned}
+\delta
+&\le b\left(1-\frac{3s}{w}\right)+w(1-q)\\
+&=1-wq-\frac{3sb}{w}\\
+&\le1+3s-s\left(Kw+\frac3w\right)\\
+&\le1-(K-1)s<3s.                                        \tag{7}
+\end{aligned}
+\]
+
+The penultimate inequality follows from the exact square identity
+
+\[
+Kw+\frac3w-(K+2)
+=\frac{[(1+\sqrt3)w-\sqrt3]^2}{w}\ge0.
+\]
+
+For the last strict comparison,
+\((K+2)s=(6+2\sqrt3)(7/64)>66/64>1\), using
+\(\sqrt3>12/7\), whose square comparison is \(147>144\).
+
+The four points \(E,B,R,C\) form a convex quadrilateral in that cyclic
+order. Its diagonal \(BC\) separates \(E\) from \(R\), and
+\(Q\) lies strictly inside \(EBC\), while \(S\) lies strictly
+inside \(BCR\). Thus both are inside the quadrilateral. Its other
+diagonal \(ER\) partitions it into \(EBR\) and \(ECR\).
+If either point lay in \(EBR\), subdivision into three actual triangles
+would give \(\delta\ge3s\), contradicting (7). No point lies on
+\(ER\), since all actual triples are noncollinear. Both therefore lie
+strictly inside \(ECR\). \(\square\)
+
+**Corollary 5 (a four-interior-point quadrilateral).** In this entire
+triangular-right branch, the eight points other than \(B\) have exact
+convex hull \(D,E,R,C\). Its four interior points are \(L,P,Q,S\).
+The diagonal \(EC\) puts \(L,P\) on one side and \(Q,S\) on the
+other. Each side of the other diagonal \(DR\) contains exactly two of
+these four points. In particular,
+
+\[
+\boxed{qr\ge Ks,\qquad 1-u\ge Ks.}                        \tag{8}
+\]
+
+Indeed \(L,P\) are inside \(DCE\), while Lemma 4 puts \(Q,S\)
+inside \(ECR\). This proves the hull and the first diagonal split.
+The actual-triangle capacity theorem permits at most two interior points
+in each of \(DER,DCR\), so the second split is exactly two and two.
+Applying the two-interior-point theorem to those two triangles gives (8).
+
+The left point \(L\) is on the \(E\) side of \(DR\). One direct
+check is that both \(B,E\) are on that side, and \(L\) lies inside
+\(DBE\):
+
+\[
+\det(R-D,B-D)=-(r-b+bu)<0,
+\qquad \det(R-D,E-D)=-qr<0.
+\]
+
+It follows that the four intersections of the two diagonal half-planes
+have precisely one of the following two patterns:
+
+| Position of \(P\) relative to \(DR\) | Diagonal-sector counts |
+|---|---|
+| On the \(E\) side | \(L,P\) occupy the sector at edge \(DE\), and \(Q,S\) occupy the opposite sector at edge \(RC\) |
+| On the \(C\) side | Exactly one point in each of the four sectors |
+
+The proof covers the full triangular-right hull alternative. It does not
+yet exclude either final sector pattern or the quadrilateral-right hull
+alternative.
+
 ## Verification
 
 [check_type_ii_completion.py](check_type_ii_completion.py) verifies the
 algebraic interval formulas, determinant normalizations, the exact gap
 \(7/128<A_0\), and the reduction of interval depth to the 35 four-subset
-tests. The global geometric dependencies and hull alternatives are proved
+tests, and the empty-ear bound (7). The global geometric dependencies and hull alternatives are proved
 above; they are not conclusions of that diagnostic script.

@@ -28,6 +28,20 @@ equal(1 - wy, 1 / (a + c))
 assert 18**2 * 65 - 145**2 == 35
 assert len(list(combinations(range(7), 4))) == 35
 
+# Balanced triangular-right hull: empty lower ear.
+b, q, r, u, w, s = sp.symbols("b q r u w s")
+K = 4 + 2 * sp.sqrt(3)
+equal((b * (1 - 3 * s / (1 - b)) + (1 - b) * (1 - q))
+      .subs(b, 1 - w), 1 - w * q - 3 * s * (1 - w) / w)
+equal(1 - w * K * s - 3 * s * (1 - w) / w,
+      1 + 3 * s - s * (K * w + 3 / w))
+equal(K * w + 3 / w - (K + 2),
+      ((1 + sp.sqrt(3)) * w - sp.sqrt(3))**2 / w)
+equal(sp.det(sp.Matrix([[r, u - 1], [b, -1]])), -(r - b + b * u))
+equal(sp.det(sp.Matrix([[r, u - 1], [0, -q]])), -q * r)
+assert 3 * 7**2 > 12**2
+assert Fraction(66, 64) > 1
+
 
 def by_four_subsets(intervals):
     return all(max(intervals[i][0] for i in subset)
