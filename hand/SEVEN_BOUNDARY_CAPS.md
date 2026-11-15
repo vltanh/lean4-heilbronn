@@ -933,8 +933,9 @@ excludes the asserted pair placements. \(\square\)
 Theorem 8 puts both inside \(CEF\), and Theorem 9 makes \(DF\)
 separate them. Thus one is in \(CEF\cap DEF\), and the other in
 \(CEF\cap CDF\). These are two specified adjacent diagonal sectors
-of the right quadrilateral. Their remaining interaction is not excluded
-by the area bounds alone.
+of the right quadrilateral. Their interaction is completely excluded in
+[SEVEN_BOUNDARY_RIGHT_PAIR.md](SEVEN_BOUNDARY_RIGHT_PAIR.md), using the
+pair-line identities and an explicit rational concavity certificate.
 
 ## Verification
 
