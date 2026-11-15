@@ -1,21 +1,21 @@
-# G6 finite case ledger: complete unrestricted Heilbronn \(n=9\) families
+# G6 finite case ledger: remaining unrestricted Heilbronn \(n=9\) families
 
 For **each case listed separately** (rather than grouped cap counts),
 see [G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md). The
 [221 indexed leaf rows](G6_ITEMIZED_LEAVES.tsv) and
 [deterministic census checker](check_g6_itemized_cases.py) refine the
 62 parent cases by lower-point counts, upper diagonal sectors, radial
-wedges, and N7 sign words. All 62 parent cases are closed;
-the 221 leaves comprise 0 open and 221 covered.
+wedges, and N7 sign words. Currently 2 parent cases are open and
+60 are closed; the 221 leaves comprise 5 open and 216 covered.
 
 This ledger refines [ROADMAP.md](../ROADMAP.md) at the target
 \[
 A_0=\frac{9\sqrt{65}-55}{320}.
 \]
-It describes a **finite, disjoint combinatorial cover** of the low-contact
+It describes a **finite, disjoint combinatorial cover** of the remaining
 continuous parameter families. It is **not** an exhaustive finite numerical
-certificate and does not prove the unrestricted upper bound. Every row is now closed by its linked complete theorem; the final assembly
-is [GLOBAL_THEOREM.md](GLOBAL_THEOREM.md). A listed type need not have a
+certificate and does not prove the unrestricted upper bound. A row labelled
+OPEN is a *necessary candidate type*, not an assertion that the type has a
 feasible realization.
 
 The global normalization in
@@ -65,22 +65,31 @@ n_I=3-n_L-n_T-n_R\ge0,\quad n_L+n_T+n_R\ge1.
 Transpose the square, exchanging \(L,R\), to arrange \(n_L\le n_R\).
 These conditions give **exactly eight** coarse occupancy orbits:
 
-| ID | \((n_L,n_T,n_R;n_I)\) | Complete proof |
+| ID | \((n_L,n_T,n_R;n_I)\) | Specific remaining task |
 |---|---|---|
-| N6-01 | \((0,0,1;2)\) | **CLOSED** — [SIX_BOUNDARY_SINGLE_SIDE](SIX_BOUNDARY_SINGLE_SIDE.md) |
-| N6-02 | \((1,0,1;1)\) | **CLOSED** — [SIX_BOUNDARY_TWO_SIDE_UPPER](SIX_BOUNDARY_TWO_SIDE_UPPER.md) and its lower companion |
-| N6-03 | \((0,1,0;2)\) | **CLOSED** — [SIX_BOUNDARY_SINGLE_TOP_COMPLETION](SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md) |
-| N6-04 | \((0,1,1;1)\) | **CLOSED** — [SIX_BOUNDARY_SIDE_TOP_COMPLETION](SIX_BOUNDARY_SIDE_TOP_COMPLETION.md) |
-| N6-05 | \((1,1,1;0)\) | **CLOSED** — [SIX_BOUNDARY_TWO_SIDE_UPPER](SIX_BOUNDARY_TWO_SIDE_UPPER.md), Corollary 2 |
-| N6-06 | \((0,2,0;1)\) | **CLOSED** — [SIX_BOUNDARY_DOUBLE_TOP_COMPLETION](SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md) |
-| N6-07 | \((0,2,1;0)\) | **CLOSED** — [SIX_BOUNDARY_SIDE_TWO_TOP](SIX_BOUNDARY_SIDE_TWO_TOP.md) |
-| N6-08 | \((0,3,0;0)\) | **CLOSED** — [SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION](SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md) |
+| N6-01 | \((0,0,1;2)\) | One side-cap point; couple it with both inner points |
+| N6-02 | \((1,0,1;1)\) | Opposite side caps; their cross-triangle costs with the inner point |
+| N6-03 | \((0,1,0;2)\) | One top-cap point and two inner points |
+| N6-04 | \((0,1,1;1)\) | Complete sharp theorem and equality in [SIX_BOUNDARY_SIDE_OPPOSITE](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
+| N6-05 | \((1,1,1;0)\) | One point in each outer cap; no inner point |
+| N6-06 | \((0,2,0;1)\) | Two top-cap points and one inner point |
+| N6-07 | \((0,2,1;0)\) | Two top points and one side point |
+| N6-08 | \((0,3,0;0)\) | Three top points; forced common support cell II, eight hull vertices |
 
-**Status: all eight N6 occupancies and all thirteen lower/upper
-refinements are CLOSED.** The sharp alternatives include their complete
-equality classification; their complementary regions have exact rational
-certificates. Equality forces the known eight-boundary configuration,
-so it cannot remain in the stratum with exactly six boundary points.
+**Status:** N6-01, N6-02, N6-03, N6-04, N6-05, N6-07 and N6-08 are **CLOSED**.
+The respective complete proofs are
+[single-side](SIX_BOUNDARY_SINGLE_SIDE.md),
+[both-side and nonagon](SIX_BOUNDARY_TWO_SIDE_UPPER.md),
+[side plus two top](SIX_BOUNDARY_SIDE_TWO_TOP.md), and
+[all three top](SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md).
+The both-side theorem includes its separately proved
+[lower-point branch](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md).
+The full side-and-opposite theorem is
+[SIX_BOUNDARY_SIDE_OPPOSITE.md](SIX_BOUNDARY_SIDE_OPPOSITE.md), including
+its two sharp equality chambers. The single-opposite occupancy is closed by
+[SIX_BOUNDARY_SINGLE_TOP.md](SIX_BOUNDARY_SINGLE_TOP.md), with an
+independently checked 893-cell cover. Only N6-06, with its lower/upper
+alternatives, remains open.
 
 **Second-level finite split (exhaustive, without claiming feasibility).**
 The virtual lower triangle \((0,0)HC\) has capacity one, so among the
@@ -99,9 +108,11 @@ not by a multiset. The eight rows yield **thirteen**
 choices. Sector subsets and line signs are finite refinements; no
 sector is assumed occupied unless proved.
 
-**Closure gate N6: COMPLETE.** Every lower/upper placement, free-point
-sign, and coordinate region is covered by the family theorems above.
-Their finer finite covers include all closed cut boundaries.
+**Closure gate N6:** a continuous strict area bound or a checked
+finite sign/inequality certificate for all eight rows, covering both
+values of \(n_0\) where permitted, every sector subset, cap boundaries,
+and all pair-line signs. Do not substitute the exact-hexagon theorem
+for configurations with exterior hull vertices.
 
 ## G6-N7: seven square-boundary contacts, two free interior points
 
@@ -190,7 +201,7 @@ The entire zero-lower class is now also excluded by
 lower occupancy is closed. The catalogue below is retained as a complete
 closed cover.
 
-For either retained count, set \(m=4-n_0\), and partition the \(m\)
+For a remaining count, set \(m=4-n_0\), and partition the \(m\)
 upper points into
 \[
 L=HF(0,1),\quad T=DF(1,1),\quad R=CD(1,0),
@@ -199,10 +210,7 @@ L=HF(0,1),\quad T=DF(1,1),\quad R=CD(1,0),
 Let \((n_L,n_T,n_R;n_I)\) be their counts. A larger hull has
 \(1\le n_L+n_T+n_R\le m\), and
 \(n_I=m-n_L-n_T-n_R\).
-Use \(n_L\le n_R\) for the historical orbit labels. This is a counting
-convention, not an additional reflection assumption in a proof that
-already imposes \(f\le d\). Those proofs retain the required oriented
-cap patterns explicitly.
+Reflect in \(x=y\) to impose \(n_L\le n_R\).
 The general cap restrictions in [C1_ZERO_LOWER.md](C1_ZERO_LOWER.md)
 apply independently of its zero-lower hypothesis. In the one-lower
 class, [C1_ONE_LOWER_RIGHT_PAIR.md](C1_ONE_LOWER_RIGHT_PAIR.md), together
@@ -242,7 +250,7 @@ sectors \(HCJ,CDJ,DFJ,FHJ\), where \(J=HD\cap CF\).
 The same-sector pair exclusion in ONE_CORNER_COMPLETION.md,
 Theorem 2, applies since \(\operatorname{area}(HCDF)\le1/2\).
 Thus \(n_I\le4\) and upper sector assignments are subsets of four;
-for exterior rows the stronger \(n_I\le3\) follows from exterior
+for the open rows the stronger \(n_I\le3\) follows from exterior
 occupancy. When \(n_0=1\), further split the one lower point \(Z\)
 into the **three** disjoint radial wedges:
 \[
@@ -262,11 +270,17 @@ packages include their geometric bounds, complete sign refinements,
 fixed rational coefficients and exact verifiers. Separate symbolic
 implementations have independently reconstructed their expansions.
 
-## Completion and acceptance criteria
+## Priority and acceptance criteria
 
-N6, N7, C1-0, and C1-1 are all complete. The G7 assembly in
-[GLOBAL_THEOREM.md](GLOBAL_THEOREM.md) proves the unrestricted sharp
-bound and uniqueness and records the boundary and dependency checks.
+1. **N7-M: complete.** Both sides of HC and every pair-line sign
+   are covered by the complete mixed theorems above.
+2. **N6-S:** complete N6-06, including both lower/upper alternatives
+   and both hulls for two opposite-cap points.
+3. **C1: complete.** Retain its 33 historical coarse rows and the
+   separate two-lower theorem as the exhaustive closed cover.
+4. **Final G7 audit.** Recheck the global normalization, all open-row
+   exhaustiveness, strict/equality cases, collinear and cap-boundary
+   transitions, and equality transfer through determinant-one shears.
 
 A case is marked **CLOSED** only if its proof excludes *all*
 continuous parameter values consistent with its stated signs and

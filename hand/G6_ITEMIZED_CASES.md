@@ -1,24 +1,23 @@
 # Itemized G6 case register (individual IDs and statuses)
 
 This file expands [G6_FINITE_CASE_LEDGER.md](G6_FINITE_CASE_LEDGER.md) into
-**individually numbered rows**. It is the closed case register for the unrestricted
-nine-point Heilbronn proof. The complete assembly is
-[GLOBAL_THEOREM.md](GLOBAL_THEOREM.md); the register is *not* itself a proof.
+**individually numbered rows**. It is a working case register for the remaining
+unrestricted nine-point Heilbronn hand proof; it is *not* itself a proof.
 
 Counts, at the present commit:
 
-- **N6:** 13 lower-versus-upper occupancy rows, **all 13 closed**.
+- **N6:** 13 lower-versus-upper occupancy rows, **11 closed, 2 open**.
 - **N7:** 16 four-sign orientation rows, **all 16 closed**.
 - **C1-0:** 21 upper-cap occupancy rows, **all 21 closed**.
 - **C1-1:** 12 upper-cap occupancy rows, **all 12 closed**.
-- **Total:** 62 itemized rows, **0 open** and **62 closed**.
+- **Total:** 62 itemized rows, **2 open** and **60 closed**.
 
 For a more detailed machine-readable list, see
 [G6_ITEMIZED_LEAVES.tsv](G6_ITEMIZED_LEAVES.tsv): it explicitly enumerates
-all **221** occupancy/sector/sign leaves (0 open, 221 covered by complete
+all **221** occupancy/sector/sign leaves (5 open, 216 covered by complete
 class theorems). These are *necessary geometric types*, not claims that each
-leaf has a feasible configuration. The linked complete theorems supply the
-finer free-point sign and coordinate subdivisions, including every case boundary.
+leaf has a feasible configuration. Certain free-point line signs still need
+further subdivision before a proof, and case boundaries must be checked.
 
 ## Notation and exhaustive partition
 
@@ -71,13 +70,13 @@ is assumed.
 | N6-01-L1 | (0,0,1;2) | 1 | 1 | **CLOSED** | [SIX_BOUNDARY_SINGLE_SIDE](SIX_BOUNDARY_SINGLE_SIDE.md) |
 | N6-02-L0 | (1,0,1;1) | 0 | 1 | **CLOSED** | [SIX_BOUNDARY_TWO_SIDE_UPPER](SIX_BOUNDARY_TWO_SIDE_UPPER.md) |
 | N6-02-L1 | (1,0,1;1) | 1 | 0 | **CLOSED** | [SIX_BOUNDARY_TWO_SIDE_COMPLETION](SIX_BOUNDARY_TWO_SIDE_COMPLETION.md) |
-| N6-03-L0 | (0,1,0;2) | 0 | 2 | **CLOSED** | [SIX_BOUNDARY_SINGLE_TOP_COMPLETION](SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md) |
-| N6-03-L1 | (0,1,0;2) | 1 | 1 | **CLOSED** | [SIX_BOUNDARY_SINGLE_TOP_COMPLETION](SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md) |
-| N6-04-L0 | (0,1,1;1) | 0 | 1 | **CLOSED** | [SIX_BOUNDARY_SIDE_TOP_COMPLETION](SIX_BOUNDARY_SIDE_TOP_COMPLETION.md) |
-| N6-04-L1 | (0,1,1;1) | 1 | 0 | **CLOSED** | [SIX_BOUNDARY_SIDE_TOP_LOWER](SIX_BOUNDARY_SIDE_TOP_LOWER.md) |
+| N6-03-L0 | (0,1,0;2) | 0 | 2 | **CLOSED** | [SIX_BOUNDARY_SINGLE_TOP](SIX_BOUNDARY_SINGLE_TOP.md) |
+| N6-03-L1 | (0,1,0;2) | 1 | 1 | **CLOSED** | [SIX_BOUNDARY_SINGLE_TOP](SIX_BOUNDARY_SINGLE_TOP.md) |
+| N6-04-L0 | (0,1,1;1) | 0 | 1 | **CLOSED** | [SIX_BOUNDARY_SIDE_OPPOSITE](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
+| N6-04-L1 | (0,1,1;1) | 1 | 0 | **CLOSED** | [SIX_BOUNDARY_SIDE_OPPOSITE](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
 | N6-05-L0 | (1,1,1;0) | 0 | 0 | **CLOSED** | [SIX_BOUNDARY_TWO_SIDE_UPPER](SIX_BOUNDARY_TWO_SIDE_UPPER.md) |
-| N6-06-L0 | (0,2,0;1) | 0 | 1 | **CLOSED** | [SIX_BOUNDARY_DOUBLE_TOP_COMPLETION](SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md) |
-| N6-06-L1 | (0,2,0;1) | 1 | 0 | **CLOSED** | [SIX_BOUNDARY_DOUBLE_TOP_COMPLETION](SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md) |
+| N6-06-L0 | (0,2,0;1) | 0 | 1 | **OPEN** | Remaining: two top-cap points plus one anchor-interior point |
+| N6-06-L1 | (0,2,0;1) | 1 | 0 | **OPEN** | Remaining: two top-cap points plus one anchor-interior point |
 | N6-07-L0 | (0,2,1;0) | 0 | 0 | **CLOSED** | [SIX_BOUNDARY_SIDE_TWO_TOP](SIX_BOUNDARY_SIDE_TWO_TOP.md) |
 | N6-08-L0 | (0,3,0;0) | 0 | 0 | **CLOSED** | [SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION](SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md) |
 
@@ -85,9 +84,8 @@ All caps and interior classes above are exhaustive *before* selecting the
 specific upper diagonal-sector subset and pair-line signs. In particular
 N6-08-L0 is now completely bounded sharply, with equality forcing the
 additional boundary contacts. Both N6-02 lower/upper subrows are closed.
-All thirteen N6 rows are closed, including every lower/upper placement.
-The final single-top and double-top completions cover both hull alternatives
-and all required free-point signs.
+Only N6-06 remains open in this table. The complete N6-04
+theorem covers both lower and upper anchor-interior points, with equality.
 
 ## B. N7 — all 16 sign words individually marked closed
 
@@ -178,7 +176,7 @@ general cap lemmas; a right-cap pair is excluded by the one-lower
 right-pair theorem. Thus choosing n_L≤n_R in this historical register
 does not introduce an additional assumption into the proofs.
 
-## Completeness and verification scope
+## Completeness, next proof obligations and limits
 
 The complete normalization theorem leaves N6 and C1 (zero/one lower)
 after the independent N7 and corner-family theorems. In these branches
@@ -198,11 +196,11 @@ including every free-point line sign, or prove a new theorem closing the
 entire row at once. Do not mark as closed based on a finite point
 sampling, bounded-degree subcase, or partial feasible-polygon argument.
 
-**Remaining parent rows: none.** All 62 parent cases and all 221 retained
-leaves are closed. The two final N6 families are proved in
-[SIX_BOUNDARY_SINGLE_TOP_COMPLETION](SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md)
-and [SIX_BOUNDARY_DOUBLE_TOP_COMPLETION](SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md).
-The C1 mixed-cap completion is
-[C1_ONE_LOWER_MIXED_CAPS](C1_ONE_LOWER_MIXED_CAPS.md).
-[GLOBAL_THEOREM.md](GLOBAL_THEOREM.md) assembles the unrestricted sharp
-bound, uniqueness, boundary cases, and equality transfer through shears.
+**Remaining parent rows:** N6-06-L0/L1.
+The entire C1 family is closed: the zero-lower and two-lower theorems,
+the lower-triangle capacity bound, and Theorem 2 of
+[C1_ONE_LOWER_MIXED_CAPS](C1_ONE_LOWER_MIXED_CAPS.md) cover every lower
+occupancy. The complete N6-04 theorem, including equality, is
+[SIX_BOUNDARY_SIDE_OPPOSITE](SIX_BOUNDARY_SIDE_OPPOSITE.md).
+After the remaining N6 occupancy closes, audit global normalization,
+equality and boundary transitions to finish G7.

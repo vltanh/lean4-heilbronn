@@ -15,4 +15,6 @@ the last fixed coefficient file. Numerical discovery is not a proof premise.
 
 The completed table now has 616 cubics, 89,897 positive terms and all
 893 cells covered. Its standard-library exact verifier passes. A separate
-symbolic reconstruction is being reviewed before the case ledger closes.
+SymPy reconstruction independently passed all 616 expansions and 893
+reuse applications; its script is `audit_n6_single_top_sympy.py`. The
+complete N6-03 row is now closed in the case ledger.

@@ -1,29 +1,32 @@
-# Nine-point Heilbronn: complete proof and theorem index
+# Nine-point Heilbronn: hand proofs and the remaining global gap
 
-The unrestricted sharp theorem and uniqueness are assembled in
-[GLOBAL_THEOREM.md](GLOBAL_THEOREM.md):
+The **complete eight-boundary theorem** is proved in
+[EIGHT_BOUNDARY.md](EIGHT_BOUNDARY.md): every nine-point configuration in
+the unit square with at least eight boundary points has minimum triangle
+area at most
 
 \[
-H_9=\frac{9\sqrt{65}-55}{320}.
+A_0=\frac{9\sqrt{65}-55}{320},
 \]
 
-The equality configuration is unique up to square symmetry and relabeling.
-It has eight boundary points and one interior point. The proof combines
-geometric arguments and sharp inequalities with fixed exact rational
-certificate tables. Every continuous family in the global reduction is
-covered, including all required sign, coordinate, and equality cases.
+with equality only at the stated construction, up to square symmetry and
+relabeling. No symmetry or orientation chamber is assumed in that theorem.
 
-The stable [parent register](G6_ITEMIZED_CASES.md) has **62 closed rows**;
-the [leaf register](G6_ITEMIZED_LEAVES.tsv) has **221 closed rows**.
-There are **no open cases**. The [itemization checker](check_g6_itemized_cases.py)
-checks this inventory, while the linked proof packages check their finer
-finite covers and exact algebra. The [structural ledger](G6_FINITE_CASE_LEDGER.md)
-explains the occupancy partition.
+**The unrestricted hand proof remains incomplete.** The global normalization
+does not yet force eight boundary points, and the remaining continuous
+families are listed below. The older computational draft is separate.
 
-The new completion packages passed their exact fraction verifiers and
-separate SymPy reconstructions. The global assembly received a separate
-geometric and dependency review. No external peer review, Lean verification,
-or CI run is claimed. The earlier executable draft remains separate.
+For the fully itemized register, see
+[G6_ITEMIZED_CASES.md](G6_ITEMIZED_CASES.md) (62 individually
+numbered parent cases) and [G6_ITEMIZED_LEAVES.tsv](G6_ITEMIZED_LEAVES.tsv)
+(221 lower-point/sector/wedge/sign leaves). The
+[deterministic enumeration checker](check_g6_itemized_cases.py) verifies
+the list; 2 parent cases and 5 leaves remain open.
+For the underlying structural case classification, see
+[G6_FINITE_CASE_LEDGER.md](G6_FINITE_CASE_LEDGER.md). Its unpruned
+occupancy/sign census (8 N6, up to 16 N7, and 21+12 C1 coarse
+classes) is a planning ledger. Its status entries distinguish the
+now-complete N7 cover and the other completed subrows from open cases.
 
 ## Proven results
 
@@ -111,33 +114,44 @@ or CI run is claimed. The earlier executable draft remains separate.
 | Complete N side-plus-opposite-cap occupancy with a lower anchor-interior point (N6-04-L1) | [SIX_BOUNDARY_SIDE_TOP_LOWER.md](SIX_BOUNDARY_SIDE_TOP_LOWER.md) |
 | Complete one-lower C1 with two or three top-cap points; all three parent rows | [C1_ONE_LOWER_TOP_MULTIPLICITY.md](C1_ONE_LOWER_TOP_MULTIPLICITY.md) |
 | Complete C1 one-lower class and the final three mixed-cap placements | [C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md), Theorems 1–2 |
+| Complete single opposite-cap N occupancy, all 893 cells | [SIX_BOUNDARY_SINGLE_TOP.md](SIX_BOUNDARY_SINGLE_TOP.md) |
 | Complete N side-and-opposite occupancy, all 97 words and equality | [SIX_BOUNDARY_SIDE_OPPOSITE.md](SIX_BOUNDARY_SIDE_OPPOSITE.md) |
 | Contributed cubic-only completion of the same N6 side-and-opposite occupancy | [SIX_BOUNDARY_SIDE_TOP_COMPLETION.md](SIX_BOUNDARY_SIDE_TOP_COMPLETION.md) |
 | Simultaneous B/D sharp chamber | [SHARP_BD_MOVING.md](SHARP_BD_MOVING.md) |
 | Simultaneous D/F and E/F sharp chambers under rational bounds | [SHARP_DF_MOVING.md](SHARP_DF_MOVING.md); [SHARP_EF_MOVING.md](SHARP_EF_MOVING.md) |
-| Unrestricted sharp value, uniqueness, and complete global assembly | [GLOBAL_THEOREM.md](GLOBAL_THEOREM.md) |
-| Complete N single-top occupancy with both interior placements | [SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md](SIX_BOUNDARY_SINGLE_TOP_COMPLETION.md) |
-| Complete N double-top occupancy, both cap hulls and sharp equality | [SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md](SIX_BOUNDARY_DOUBLE_TOP_COMPLETION.md) |
-| Simultaneous E/F sharp chamber under the height bound k ≥ 6/7 | [SHARP_EF_HIGH.md](SHARP_EF_HIGH.md) |
-| Preserved alternative complete N single-top proof | [SIX_BOUNDARY_SINGLE_TOP.md](SIX_BOUNDARY_SINGLE_TOP.md) |
-| Preserved alternative convex two-top N proof | [SIX_BOUNDARY_TWO_TOP_CONVEX.md](SIX_BOUNDARY_TWO_TOP_CONVEX.md) |
 
 The original three-family argument is retained in
 [BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md). All strengthened normal forms
 include arbitrary remaining points; they do not assume those points lie in
 an observed numerical pattern.
 
-## Complete assembly and review scope
+## What remains
 
-All N6, N7, C1, C2, Type-II, and Type-III families are closed.
-[GLOBAL_THEOREM.md](GLOBAL_THEOREM.md) supplies the final unrestricted
-bound and uses strict local optimality to transfer the equality
-classification through all normalizing shears.
+- **N with six boundary contacts:** only two opposite-cap points with
+  one anchor-interior point (N6-06) remains. Its triangular and convex
+  top hulls are being assembled and independently checked; both lower
+  and upper placements of the remaining point must be covered.
+- **C1 is complete.** Theorem 2 of
+  [C1_ONE_LOWER_MIXED_CAPS.md](C1_ONE_LOWER_MIXED_CAPS.md) closes the
+  entire one-lower class. Together with the zero-lower, two-lower and
+  lower-triangle capacity theorems, it excludes every C1 configuration.
 
-The geometric review and independent coefficient receipts are indexed in
-[../HANDOFF.md](../HANDOFF.md). External review and Lean formalization
-remain validation work for the completed proof; there is no remaining
-open parent row in the stated cover.
+The entire normalized seven-boundary form is complete, including every
+interior pair, every exterior placement, and equality. Its final assembly
+is Theorem 2 of SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md.
+
+The opposite-corner family C2, the entire three-corner family Type III,
+and the entire adjacent-corner Type-II family are closed by strict
+bounds below \(A_0\).
+For every competitive configuration, even before normalization, every
+actual triangle contains at most two further configuration points. This
+global occupancy theorem is proved but does not exclude all surviving
+order types.
+
+A proof covering these complete families, or a proved boundary-saturation
+reduction to the solved family, would finish the unrestricted theorem.
+A local theorem or a numerical description of the candidate does not supply
+that step. See [../ROADMAP.md](../ROADMAP.md) for the current completion gates.
 
 ## Optional exact diagnostics
 
