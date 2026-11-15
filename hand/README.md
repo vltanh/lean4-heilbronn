@@ -115,6 +115,8 @@ now-complete N7 cover and the other completed subrows from open cases.
 
 | Complete N side-plus-opposite-cap occupancy with a lower anchor-interior point (N6-04-L1) | [SIX_BOUNDARY_SIDE_TOP_LOWER.md](SIX_BOUNDARY_SIDE_TOP_LOWER.md) |
 
+| Complete one-lower C1 with two or three top-cap points; all three parent rows | [C1_ONE_LOWER_TOP_MULTIPLICITY.md](C1_ONE_LOWER_TOP_MULTIPLICITY.md) |
+
 The original three-family argument is retained in
 [BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md). All strengthened normal forms
 include arbitrary remaining points; they do not assume those points lie in
@@ -129,12 +131,12 @@ an observed numerical pattern.
   point (N6-06). N6-03 and N6-06 retain both lower/upper alternatives;
   the full lower mixed-cap row N6-04-L1 is closed by
   [SIX_BOUNDARY_SIDE_TOP_LOWER.md](SIX_BOUNDARY_SIDE_TOP_LOWER.md).
-- **C1:** only the one-lower rows C1-1-04, 07, 10, 11 and 12 remain.
-  They comprise two different occupied caps with one upper interior
-  point, two opposite-cap points with one upper interior point, and
-  the remaining three-exterior-point placements. All zero-lower and
-  two-lower configurations, all single-exterior-point hexagons,
-  every side-cap pair, and all eight-vertex hulls are closed.
+- **C1:** only the one-lower rows C1-1-04 and 07 remain.
+  Both have two different occupied caps and one upper interior point.
+  Every one-lower configuration with two or three top-cap points is
+  completely excluded by the new top-multiplicity theorem. All zero-lower
+  and two-lower configurations, single-exterior-point hexagons, side-cap
+  pairs and eight-vertex hulls are already closed.
 
 The entire normalized seven-boundary form is complete, including every
 interior pair, every exterior placement, and equality. Its final assembly
