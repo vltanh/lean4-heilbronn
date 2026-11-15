@@ -23,7 +23,9 @@ This excludes the entire left-quadrilateral branch of the balanced count
 \((2,2,2)\). The triangular-left branch remains open. Sections 1--3
 exclude two quadrilateral side hulls without using the central points;
 Section 4 excludes the remaining left-quadrilateral case using those
-two points.
+two points. Sections 5--6 further force exactly one central point on
+each side of CE, with L on the D side. These restrictions still leave
+the interaction with the two right points unresolved.
 
 ## 1. The lower vertex in a four-point endpoint quadrilateral
 
@@ -267,6 +269,137 @@ theorem in [ONE_CORNER.md](ONE_CORNER.md) forbids three other points
 inside \(DCE\). In that event \(L\) is inside \(EBC\).
 These cut restrictions do not themselves close the triangular-left
 branch.
+
+## 6. The two central points must lie on opposite sides of CE
+
+The last remaining two-point CE cut can also be excluded at the target
+threshold. For this section use the stronger rational doubled threshold
+
+\[
+s=\frac{79}{720}<s_0=2A_0.
+\]
+
+The comparison is equivalent to \(\sqrt{65}>653/81\), already
+verified by \(65\cdot81^2-653^2=56>0\). Suppose the two central
+points \(P,Q\) both lie in \(DCE\). By the theorem above,
+\(L\) is inside \(DBE\), so, with \(q=1-\lambda\),
+
+\[
+bq\ge3s.                                                \tag{17}
+\]
+
+The corner-triangle theorem in [ONE_CORNER.md](ONE_CORNER.md) forbids
+three points inside \(DCE\). Therefore \(L\) is below CE. Let
+\(T=DB\cap CE\). The left point is strictly inside the triangle
+\(EBT\), and direct solution of the two line equations gives
+
+\[
+T=\left(\frac{bq}{1+bq},\frac{1-q+bq}{1+bq}\right),
+\qquad
+2\operatorname{area}(EBT)
+=\frac{bq[1-(1-b)q]}{1+bq}.                              \tag{18}
+\]
+
+In particular the actual doubled area of \(EBL\) is no greater than
+the expression in (18).
+
+Section 12 of [TYPE_II.md](TYPE_II.md) classifies the line \(PQ\).
+The anchors B,E must be on the same side. If D,C were on opposite
+sides, that section's fixed-threshold bound would give \(b\le2/7\).
+This is incompatible with (17), since \(b\ge3s>2/7\). Thus D,C
+are on the same side of PQ. The same-side calculation in that section
+is valid at a general positive doubled threshold, before its numerical
+specialization. At the present s it gives
+
+\[
+[q-s(q+1)]^2\ge4sq(1+bq),
+\qquad q-s(q+1)>0.
+\]
+
+Equivalently
+
+\[
+b\le B(q):=\frac{[q-s(q+1)]^2}{4sq^2}-\frac1q.           \tag{19}
+\]
+
+Here is an exact one-variable bound for (18). Write
+
+\[
+v(q)=qB(q)=\frac{(1-s)^2}{4s}q-\frac{3-s}{2}+\frac{s}{4q},
+\qquad
+F(q)=v(q)-\frac{qv(q)}{1+v(q)}.
+\]
+
+For fixed \(0<q\le1\), the expression in (18) increases with b:
+on putting \(z=bq>0\), its derivative with respect to z is
+\(1-q/(1+z)^2>0\). Thus (19) bounds it above by \(F(q)\).
+
+By (17), \(q\ge6s>1/2\) and \(v(q)\ge bq\ge3s>3/10\).
+On the full interval from this feasible q to 1,
+
+\[
+v'(q)=\frac{(1-s)^2}{4s}-\frac{s}{4q^2}
+>\frac{(1-s)^2}{4s}-s>\frac53,                           \tag{20}
+\]
+
+where the last inequality follows from \(s<1/9\): the expression
+is \(1/(4s)-1/2-3s/4\), decreasing in s, and equals \(5/3\)
+at \(s=1/9\). Consequently v increases on this interval. Its upper
+endpoint is
+
+\[
+v(1)=B(1)=\frac{22081}{56880}
+             =\frac7{18}-\frac{13}{18960}<1.
+\]
+
+The same interval therefore has \(3/10<v(q)<1\). Differentiating
+F, and using \(q\le1\), yields
+
+\[
+F'(q)=v'(q)\left[1-\frac{q}{(1+v(q))^2}\right]
+              -\frac{v(q)}{1+v(q)}
+>\frac53\cdot\frac{69}{169}-\frac12
+=\frac{61}{338}>0.                                      \tag{21}
+\]
+
+Thus
+
+\[
+2\operatorname{area}(EBL)
+\le F(q)\le F(1)
+=\frac{B(1)^2}{1+B(1)}
+<\frac{(7/18)^2}{1+7/18}
+=\frac{49}{450}<s.                                      \tag{22}
+\]
+
+The last gap is exactly \(1/1200\). This contradicts the minimum
+area and excludes the entire two-central-point cut above CE.
+Together with Section 5, exactly one central point lies on each side
+of CE.
+
+There is one further forced placement. Let P be the central point
+above CE and Q the one below it. The left point L must be above CE.
+Otherwise both L and Q would lie inside EBC. At the earlier threshold
+\(\sigma=7/64\), subdivision of DBE gives \(bq\ge3\sigma\),
+so
+
+\[
+2\operatorname{area}(EBC)=1-(1-b)q
+\le1-3\sigma\frac{1-b}{b}\le1-3\sigma.
+\]
+
+Containing L,Q would require this area to be at least
+\((4+2\sqrt3)\sigma>1-3\sigma\), a contradiction.
+Thus \(DCE\) contains L and P, and its area gives
+
+\[
+q>(52/7)\sigma=13/16,\qquad\lambda<3/16.                 \tag{23}
+\]
+
+The remaining balanced configurations therefore have L strictly
+inside DBE and above CE, one central point P above CE, one central
+point Q below CE, and two points in the right container. No claim of
+an exclusion of these surviving placements is made here.
 
 ## Verification
 

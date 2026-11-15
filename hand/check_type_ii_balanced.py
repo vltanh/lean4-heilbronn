@@ -42,4 +42,26 @@ assert sp.Rational(1, 2) - sp.Rational(7, 44) == sp.Rational(15, 44)
 bound = sp.Rational(15, 44) * sp.Rational(3, 16) + sp.Rational(1, 15) * sp.Rational(9, 16)
 assert bound == sp.Rational(357, 3520)
 assert sigma - bound == sp.Rational(7, 880) > 0
-print("PASS: endpoint-quadrilateral elimination and both left-quadrilateral exclusions")
+
+# The stronger rational threshold in the two-central-point CE cut.
+ss = sp.Rational(79, 720)
+qq = sp.symbols("qq", positive=True)
+tx = b * qq / (1 + b * qq)
+ty = (1 - qq + b * qq) / (1 + b * qq)
+equal(tx, b * (1 - ty))
+equal(ty, 1 - qq + qq * tx)
+equal(b * (ty - (1 - qq)) + (1 - qq) * tx,
+      b * qq * (1 - (1 - b) * qq) / (1 + b * qq))
+bb = (qq - ss * (qq + 1))**2 / (4 * ss * qq**2) - 1 / qq
+vv = (1 - ss)**2 * qq / (4 * ss) - (3 - ss) / 2 + ss / (4 * qq)
+equal(qq * bb, vv)
+equal(sp.diff(vv, qq), (1 - ss)**2 / (4 * ss) - ss / (4 * qq**2))
+assert bb.subs(qq, 1) == sp.Rational(22081, 56880)
+assert sp.Rational(7, 18) - bb.subs(qq, 1) == sp.Rational(13, 18960)
+assert sp.Rational(5, 3) * sp.Rational(69, 169) - sp.Rational(1, 2) == sp.Rational(61, 338) > 0
+assert sp.Rational(7, 18)**2 / (1 + sp.Rational(7, 18)) == sp.Rational(49, 450)
+assert ss - sp.Rational(49, 450) == sp.Rational(1, 1200) > 0
+assert 3 * ss > sp.Rational(2, 7)
+assert 6 * ss > sp.Rational(1, 2)
+assert ss < sp.Rational(1, 9)
+print("PASS: endpoint-quadrilateral elimination, left-hull exclusions, and both-central CE cut")
