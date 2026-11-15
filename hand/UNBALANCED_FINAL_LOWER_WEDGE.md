@@ -292,8 +292,11 @@ normalization has a triangle of area strictly less than
 \(A_0=(9\sqrt{65}-55)/320\).
 
 **Proof.** The count reduction in Section 8 of
-[TYPE_II.md](TYPE_II.md) leaves only the rows \((2,2,2)\) and
-\((1,2,3)\), after the permitted reflection. Theorem 11 of
+[TYPE_II.md](TYPE_II.md) gives either an area-equivalent Type-III
+configuration or one of the rows \((2,2,2)\) and \((1,2,3)\), after
+the permitted reflection. The complete Type-III theorem in
+[CORNER_FAMILIES.md](CORNER_FAMILIES.md) excludes the first alternative.
+Theorem 11 of
 [TYPE_II_COMPLETION.md](TYPE_II_COMPLETION.md) excludes the entire
 balanced row \((2,2,2)\).
 
