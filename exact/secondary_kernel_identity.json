@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "method": "Exact equality of function abstract syntax trees",
+  "functions": {
+    "det": "806d0507930a73dbc4e11cbce8eab24410282f1dbef364a3a078395a0cab5c1c",
+    "maxdet": "f2bfc984bd247db3c70a1a21eb03f8a1c6864126bc8bd0eb2f8bf00440011751",
+    "precompute": "4e7c8164d563a226514d3a50907771b48648afaf8fb71223e5ddb4c02ac6327c",
+    "count_patterns": "a5f5f843a3e04ff30f18a3cbdfac6ac96ebc51c35aa6b5302a2b1b385ef28f55",
+    "contract": "3db266ff17e38da97604f31889c3b374576088e21088943ea5e5acf33f5d7e66",
+    "local_box": "9c249447ddbd53ffc4006e51cc853a002fa2a2dd628d823e42458febfa601118",
+    "prove_box": "d1a493c641bc807fa1e9a85aa603a9ce054d8974e446a4941faf6df0a12fc6b6",
+    "prove_pattern": "a2f3cf309749c36a51abf4a644c72c82aeb245e4dd9e923f562da02ddc1f2b10"
+  }
+}

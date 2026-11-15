@@ -1,0 +1,1 @@
+{"branch_nodes": 15670, "local_leaves": 62, "patterns": 1, "roots": 11424, "search_nodes": 34569, "start": 132220, "status": "RANGE_PASS", "stop": 132221}

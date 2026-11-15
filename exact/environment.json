@@ -1,0 +1,9 @@
+{
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "compile_flags": "-O3 -std=c++17",
+  "ci_used": false,
+  "external_peer_review": false,
+  "lean_formalization": false
+}
