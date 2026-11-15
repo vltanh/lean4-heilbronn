@@ -2,10 +2,11 @@
 
 ## Scope
 
-This note proves new handwritten exclusions for part of Type III,
-and a triangle-occupancy restriction for every competitive configuration.
-It does **not** close Type III or Type II. The Type-III cases with two or three
-free points above the diagonal remain open in this note.
+This note proves handwritten exclusions for every Type-III diagonal count
+except \(3+3\), and a triangle-occupancy restriction for every competitive
+configuration. It does **not** close Type III or Type II. Only the case
+with three free points on each side of the occupied diagonal remains
+open for Type III in this note.
 
 Write
 
@@ -42,6 +43,18 @@ above \(y=x\), then
 Section 6 proves this by a support-triangle normalization and the
 self-contained six-point theorem in [OPPOSITE_CORNERS.md](OPPOSITE_CORNERS.md).
 No external small-point Heilbronn theorem is imported.
+
+**A third Type-III exclusion.** If exactly two of the six free points lie
+above \(y=x\), then a configuration with minimum area at least \(A_0\)
+would satisfy
+
+\[
+t\le\frac{38809}{715084}<\frac7{128}<A_0,
+\]
+
+a contradiction. Sections 8 and 9 prove this using the sharp six-point
+triangular-hull theorem and the four-corner theorem in
+[FOUR_CORNERS.md](FOUR_CORNERS.md).
 
 ## 1. The area cost of a degree-four or degree-five star
 
@@ -273,7 +286,7 @@ The remaining count classes are
 |---:|---:|---|
 | 0 | 6 | Strictly excluded by (9) and the six-point theorem |
 | 1 | 5 | Strictly excluded by (9) and the six-point theorem |
-| 2 | 4 | Open |
+| 2 | 4 | Strictly excluded by Sections 8 and 9 |
 | 3 | 3 | Open |
 | 4, 5, or 6 | 2, 1, or 0 | Strictly excluded by (1) |
 
@@ -694,10 +707,153 @@ r_y\le1-(11+3\sqrt5)A_0.
 \]
 
 Thus the fourth hull vertex lies within \(1-(11+3\sqrt5)A_0\) in each
-coordinate of the missing square corner \(D\). This does not assert that
-\(R=D\), or that the five remaining interior points can be moved to the
-boundary. The \(2+4\) class is reduced to this precise residual family;
-it is not yet excluded.
+coordinate of the missing square corner \(D\). Section 9 excludes this
+entire residual family by a projective change of coordinates with a
+controlled area factor.
+
+## 9. Complete exclusion of the two-upper-point class
+
+The following projective lemma is useful independently of Type III.
+
+**Near-square quadrilateral lemma.** Let nine points have convex hull
+\(ABCR\), where
+
+\[
+A=(0,0),\quad B=(0,1),\quad C=(1,1),\quad
+R=(1-\epsilon,\eta),
+\]
+
+with \(\epsilon,\eta\ge0\) and
+\(r=1-\epsilon-\eta\ge97/100\). Then their minimum triangle area satisfies
+
+\[
+\boxed{t\le\frac{38809}{715084}<\frac7{128}.}               \tag{22}
+\]
+
+To prove this, put
+
+\[
+\alpha=\frac{1-\eta}{1-\epsilon},\qquad
+g=-\frac{\eta(1-\eta)}{r(1-\epsilon)},\qquad
+h=\frac{\epsilon}{r},\qquad
+e=\frac{1-\eta}{r}=1+h,
+\]
+
+and define
+
+\[
+F(x,y)=\left(
+ \frac{\alpha x}{1+gx+hy},
+ \frac{gx+ey}{1+gx+hy}\right).                             \tag{23}
+\]
+
+The linear denominator \(q(x,y)=1+gx+hy\) has the following values
+at the four hull vertices:
+
+\[
+q(A)=1,\qquad q(B)=e,\qquad
+q(C)=\alpha,\qquad q(R)=1-\eta.
+\]
+
+They all lie in \([1-\eta,e]\). Since \(q\) is affine, the same bounds
+hold throughout the quadrilateral, so its denominator never vanishes.
+Direct substitution gives
+
+\[
+F(A)=A,\quad F(B)=B,\quad F(C)=C,\quad F(R)=(1,0).
+\]
+
+The homogeneous matrix of (23) is
+
+\[
+M=\begin{pmatrix}
+\alpha&0&0\\ g&e&0\\ g&h&1
+\end{pmatrix},
+\qquad \det M=\alpha e>0.
+\]
+
+Thus \(F\) is one-to-one. It sends the quadrilateral onto the unit square:
+if a point is a convex combination of its vertices, its image is the
+convex combination of their images with weights proportional to the
+original weights times the positive numbers \(q(A),q(B),q(C),q(R)\).
+Conversely, divide any convex-combination weights in the square by these
+four positive numbers and renormalize to obtain a preimage.
+
+For three points \(P_1,P_2,P_3\), the determinant formula in homogeneous
+coordinates gives
+
+\[
+\frac{\operatorname{area}(F(P_1)F(P_2)F(P_3))}
+     {\operatorname{area}(P_1P_2P_3)}
+=\frac{\det M}{q(P_1)q(P_2)q(P_3)}
+\ge\frac{\alpha}{e^2}
+=\frac{r^2}{(1-\epsilon)(1-\eta)}.                         \tag{24}
+\]
+
+For a zero-area triangle (22) is immediate, so division by its area
+causes no loss. Since \(\epsilon+\eta=1-r\),
+
+\[
+(1-\epsilon)(1-\eta)
+=r+\epsilon\eta
+\le r+\frac{(1-r)^2}{4}
+=\frac{(1+r)^2}{4}.
+\]
+
+Consequently every triangle's area is multiplied by at least
+
+\[
+\frac{4r^2}{(1+r)^2}
+\ge\frac{4(97/100)^2}{(1+97/100)^2}
+=\frac{37636}{38809}.                                    \tag{25}
+\]
+
+The function \(r/(1+r)\) is increasing for \(r>0\), which justifies the
+second inequality. The transformed nine-point configuration contains
+all four square corners. By [FOUR_CORNERS.md](FOUR_CORNERS.md), some
+transformed triangle has area at most \(1/19\). Applying (25) to its
+original triangle proves
+
+\[
+t\le\frac{38809}{19\cdot37636}=\frac{38809}{715084}.
+\]
+
+The strict comparison in (22) follows from
+
+\[
+7\cdot715084-128\cdot38809=38036>0.
+\]
+
+**Application to the entire \(2+4\) class.** Suppose now that a Type-III
+configuration has exactly two upper points and minimum area
+\(t\ge A_0\). Section 8 gives the quadrilateral hull \(ABCR\) and
+
+\[
+r=r_x-r_y\ge(11+3\sqrt5)A_0.
+\]
+
+The elementary rational lower bounds
+
+\[
+\sqrt5>\frac{67}{30},\qquad
+\sqrt{65}>\frac{403}{50},\qquad
+A_0>\frac{877}{16000}
+\]
+
+give
+
+\[
+r>\frac{177}{10}\cdot\frac{877}{16000}
+=\frac{155229}{160000}
+>\frac{97}{100}.
+\]
+
+The two square-root comparisons follow respectively from
+\(67^2<5\cdot30^2\) and \(403^2<65\cdot50^2\).
+Set \(\epsilon=1-r_x\), \(\eta=r_y\), and apply (22). It gives
+\(t<7/128<A_0\), contradicting the competitive hypothesis.
+Thus the \(2+4\) class is completely excluded. Only \(3+3\) remains
+among the Type-III diagonal count classes.
 
 ## Verification
 

@@ -110,10 +110,40 @@ expected = {sp.Integer(1): 1,
             sp.simplify(phi * rratio): 6}
 assert counts == expected, (counts, expected)
 
+# Projective normalization of a quadrilateral with one nearly square corner.
+eps, eta = sp.symbols("eps eta")
+rr = 1 - eps - eta
+alpha = (1 - eta) / (1 - eps)
+gg = -eta * (1 - eta) / (rr * (1 - eps))
+hh = eps / rr
+ee = (1 - eta) / rr
+matrix = sp.Matrix([[alpha, 0, 0], [gg, ee, 0], [gg, hh, 1]])
+assert sp.cancel(ee - 1 - hh) == 0
+assert sp.cancel(alpha - 1 - gg - hh) == 0
+assert sp.cancel(matrix.det() - alpha * ee) == 0
+for original, expected, weight in [
+    ((0, 0), (0, 0), 1),
+    ((0, 1), (0, 1), ee),
+    ((1, 1), (1, 1), alpha),
+    ((1 - eps, eta), (1, 0), 1 - eta),
+]:
+    lifted = matrix * sp.Matrix([original[0], original[1], 1])
+    assert sp.cancel(lifted[2] - weight) == 0
+    assert sp.cancel(lifted[0] / lifted[2] - expected[0]) == 0
+    assert sp.cancel(lifted[1] / lifted[2] - expected[1]) == 0
+assert sp.cancel(alpha / ee**2 - rr**2 / ((1 - eps) * (1 - eta))) == 0
+assert sp.Rational(4) * sp.Rational(97, 100)**2 / sp.Rational(197, 100)**2 == sp.Rational(37636, 38809)
+assert 7 * 715084 - 128 * 38809 == 38036
+assert 67**2 < 5 * 30**2
+assert 403**2 < 65 * 50**2
+assert (9 * sp.Rational(403, 50) - 55) / 320 == sp.Rational(877, 16000)
+assert sp.Rational(177, 10) * sp.Rational(877, 16000) > sp.Rational(97, 100)
+
 print("PASS: degree-four Pluecker identity")
 print("PASS: five cyclic degree-five Pluecker identities")
 print("PASS: all eleven possible diagonal sign words")
 print("PASS: support-triangle coordinates and exact threshold comparison")
 print("PASS: two-interior-point area formulas")
 print("PASS: distributed six-point mesh identities and all 20 attaining areas")
+print("PASS: projective normalization, corner images, and exact area factors")
 print("Written geometric and triangulation arguments remain to be reviewed by a reader.")
