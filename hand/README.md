@@ -113,6 +113,8 @@ now-complete N7 cover and the other completed subrows from open cases.
 | Complete N single-side occupancy with two anchor-interior points | [SIX_BOUNDARY_SINGLE_SIDE.md](SIX_BOUNDARY_SINGLE_SIDE.md) |
 | Complete N occupancy with one side-cap and two opposite-cap points | [SIX_BOUNDARY_SIDE_TWO_TOP.md](SIX_BOUNDARY_SIDE_TWO_TOP.md) |
 
+| Complete N side-plus-opposite-cap occupancy with a lower anchor-interior point (N6-04-L1) | [SIX_BOUNDARY_SIDE_TOP_LOWER.md](SIX_BOUNDARY_SIDE_TOP_LOWER.md) |
+
 The original three-family argument is retained in
 [BOUNDARY_REDUCTION.md](BOUNDARY_REDUCTION.md). All strengthened normal forms
 include arbitrary remaining points; they do not assume those points lie in
@@ -122,9 +124,11 @@ an observed numerical pattern.
 
 - **N with six boundary contacts:** only three cap occupancies remain:
   one opposite-cap point with two anchor-interior points (N6-03), one
-  side-cap point with one opposite-cap point and one anchor-interior
-  point (N6-04), and two opposite-cap points with one anchor-interior
-  point (N6-06). Each includes its lower/upper interior alternatives.
+  side-cap point with one opposite-cap point and one upper anchor-interior
+  point (N6-04-L0), and two opposite-cap points with one anchor-interior
+  point (N6-06). N6-03 and N6-06 retain both lower/upper alternatives;
+  the full lower mixed-cap row N6-04-L1 is closed by
+  [SIX_BOUNDARY_SIDE_TOP_LOWER.md](SIX_BOUNDARY_SIDE_TOP_LOWER.md).
 - **C1:** only the one-lower rows C1-1-04, 07, 10, 11 and 12 remain.
   They comprise two different occupied caps with one upper interior
   point, two opposite-cap points with one upper interior point, and

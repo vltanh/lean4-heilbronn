@@ -150,9 +150,9 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 
 For an itemized, individually numbered list with open/closed flags, see
 [hand/G6_ITEMIZED_CASES.md](hand/G6_ITEMIZED_CASES.md): 62 parent
-rows, 11 open and 51 closed. The 221 explicit
-[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 62
-open leaves and 159 closed by the parent theorems; their census is
+rows, 10 open and 52 closed. The 221 explicit
+[sector/wedge/sign leaf cases](hand/G6_ITEMIZED_LEAVES.tsv) have 61
+open leaves and 160 closed by the parent theorems; their census is
 checked by [hand/check_g6_itemized_cases.py](hand/check_g6_itemized_cases.py).
 These are occupancy/sign partitions, not separately feasible witnesses.
 
@@ -169,9 +169,11 @@ all zero-lower C1 rows and five of the eight coarse N6 occupancies are closed.
 
 - **N with six boundary contacts:** only three cap occupancies remain:
   one opposite-cap point with two anchor-interior points (N6-03), one
-  side-cap point with one opposite-cap point and one anchor-interior
-  point (N6-04), and two opposite-cap points with one anchor-interior
-  point (N6-06). Each includes its lower/upper interior alternatives.
+  side-cap point with one opposite-cap point and one upper anchor-interior
+  point (N6-04-L0), and two opposite-cap points with one anchor-interior
+  point (N6-06). N6-03 and N6-06 retain both lower/upper alternatives;
+  the full lower mixed-cap row N6-04-L1 is closed by
+  [SIX_BOUNDARY_SIDE_TOP_LOWER.md](hand/SIX_BOUNDARY_SIDE_TOP_LOWER.md).
 - **C1:** only the one-lower rows C1-1-04, 07, 10, 11 and 12 remain.
   They comprise two different occupied caps with one upper interior
   point, two opposite-cap points with one upper interior point, and

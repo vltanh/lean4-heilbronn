@@ -6,15 +6,15 @@ unrestricted nine-point Heilbronn hand proof; it is *not* itself a proof.
 
 Counts, at the present commit:
 
-- **N6:** 13 lower-versus-upper occupancy rows, **7 closed, 6 open**.
+- **N6:** 13 lower-versus-upper occupancy rows, **8 closed, 5 open**.
 - **N7:** 16 four-sign orientation rows, **all 16 closed**.
 - **C1-0:** 21 upper-cap occupancy rows, **all 21 closed**.
 - **C1-1:** 12 upper-cap occupancy rows, **7 closed, 5 open**.
-- **Total:** 62 itemized rows, **11 open** and **51 closed**.
+- **Total:** 62 itemized rows, **10 open** and **52 closed**.
 
 For a more detailed machine-readable list, see
 [G6_ITEMIZED_LEAVES.tsv](G6_ITEMIZED_LEAVES.tsv): it explicitly enumerates
-all **221** occupancy/sector/sign leaves (62 open, 159 covered by complete
+all **221** occupancy/sector/sign leaves (61 open, 160 covered by complete
 class theorems). These are *necessary geometric types*, not claims that each
 leaf has a feasible configuration. Certain free-point line signs still need
 further subdivision before a proof, and case boundaries must be checked.
@@ -73,7 +73,7 @@ is assumed.
 | N6-03-L0 | (0,1,0;2) | 0 | 2 | **OPEN** | Remaining: one top cap plus two anchor-interior points |
 | N6-03-L1 | (0,1,0;2) | 1 | 1 | **OPEN** | Remaining: one top cap plus two anchor-interior points |
 | N6-04-L0 | (0,1,1;1) | 0 | 1 | **OPEN** | Remaining: one top cap, one side cap, one anchor-interior point |
-| N6-04-L1 | (0,1,1;1) | 1 | 0 | **OPEN** | Remaining: one top cap, one side cap, one anchor-interior point |
+| N6-04-L1 | (0,1,1;1) | 1 | 0 | **CLOSED** | [SIX_BOUNDARY_SIDE_TOP_LOWER](SIX_BOUNDARY_SIDE_TOP_LOWER.md) |
 | N6-05-L0 | (1,1,1;0) | 0 | 0 | **CLOSED** | [SIX_BOUNDARY_TWO_SIDE_UPPER](SIX_BOUNDARY_TWO_SIDE_UPPER.md) |
 | N6-06-L0 | (0,2,0;1) | 0 | 1 | **OPEN** | Remaining: two top-cap points plus one anchor-interior point |
 | N6-06-L1 | (0,2,0;1) | 1 | 0 | **OPEN** | Remaining: two top-cap points plus one anchor-interior point |
@@ -84,7 +84,7 @@ All caps and interior classes above are exhaustive *before* selecting the
 specific upper diagonal-sector subset and pair-line signs. In particular
 N6-08-L0 is now completely bounded sharply, with equality forcing the
 additional boundary contacts. Both N6-02 lower/upper subrows are closed.
-Only N6-03, N6-04 and N6-06 remain open in this table.
+Only N6-03, N6-04-L0 and N6-06 remain open in this table. The entire lower mixed-cap row N6-04-L1 is closed.
 
 ## B. N7 — all 16 sign words individually marked closed
 
@@ -195,7 +195,7 @@ including every free-point line sign, or prove a new theorem closing the
 entire row at once. Do not mark as closed based on a finite point
 sampling, bounded-degree subcase, or partial feasible-polygon argument.
 
-**Remaining parent rows:** N6-03-L0/L1, N6-04-L0/L1, N6-06-L0/L1,
+**Remaining parent rows:** N6-03-L0/L1, N6-04-L0, N6-06-L0/L1,
 and C1-1-04, C1-1-07, C1-1-10, C1-1-11, C1-1-12. The two-top C1
 rows already have their triangular or eight-vertex subplacements
 closed as specified in the linked manuscripts, but a partial result
