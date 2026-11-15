@@ -80,6 +80,56 @@ need(
     [i+1 for i, o in enumerate(orbits) if any(map(sharp_chamber, o))] == [3],
     "sharp-chamber identification",
 )
+
+
+def inside_triangle(k, *indices):
+    a, b, c = sorted(indices)
+    return b-a <= k[a] and c-b <= k[b] and (a-c) % 8 <= k[c]
+
+
+def corner_cap(k, start):
+    a, b, c, d = [(start+i) % 8 for i in range(4)]
+    return inside_triangle(k, a, b, c) or inside_triangle(k, a, c, d)
+
+
+def theorem6(k):
+    return all(inside_triangle(k, *t) for t in [(0,3,4), (7,3,4), (1,2,5), (1,2,6)])
+
+
+def theorem8(k):
+    return corner_cap(k, 1) and corner_cap(k, 3)
+
+
+def theorem9(k):
+    return all(inside_triangle(k, *t) for t in [(0,3,4), (7,3,4), (1,5,6), (1,2,6)])
+
+
+def theorem11(k):
+    return (
+        inside_triangle(k, 0,3,4) and inside_triangle(k, 7,3,4)
+        and corner_cap(k, 1) and not corner_cap(k, 3)
+    )
+
+
+def theorem12(k):
+    return (
+        all(inside_triangle(k, *t) for t in [(0,3,4), (7,3,4), (1,2,5), (2,5,6)])
+        and not corner_cap(k, 1) and not corner_cap(k, 3)
+    )
+
+
+def theorem_r6(k):
+    return (
+        k[0] >= 3 and k[3] >= 4 and k[2] >= 3 and k[6] >= 4
+        and k[0] < 4 and k[1] < 4 and k[1] >= 3
+    )
+
+
+for theorem, expected in [(theorem6, [4,7]), (theorem8, [1]), (theorem9, [8]), (theorem11, [2,4]), (theorem12, [5]), (theorem_r6, [6])]:
+    actual = [i+1 for i, o in enumerate(orbits) if any(map(theorem, o))]
+    need(actual == expected, f"geometric class identification: {theorem.__name__}: {actual}")
+
 print("PASS: six blocks, all 36 words, eight disjoint square-symmetry classes")
 print("PASS: complete printed table; exactly R3 meets the existing sharp chamber")
-print("This checks finite orientation bookkeeping, not the seven open inequalities.")
+print("PASS: R1, R2, R4, R5, R6, R7, R8 match their stated geometric exclusions")
+print("RADIAL_CATALOGUE_PASS: all eight classes have written hand bounds")

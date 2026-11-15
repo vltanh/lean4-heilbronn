@@ -1,4 +1,4 @@
-# Eight boundary points: eight remaining orientation classes
+# Eight boundary points: complete orientation classification
 
 ## Scope and hypotheses
 
@@ -125,14 +125,14 @@ of each and the size of its orbit among the 36 words.
 
 | Class | \((k_0,k_1,k_2,k_3,k_4,k_5,k_6,k_7)\) | Orbit size | Hand bound currently available |
 |---|---|---:|---|
-| R1 | \((3,2,3,2,5,4,5,4)\) | 4 | Open |
-| R2 | \((3,2,3,3,5,4,4,4)\) | 8 | Open |
+| R1 | \((3,2,3,2,5,4,5,4)\) | 4 | \(21/400<A_0\), `EIGHT_BOUNDARY.md`, Theorem 8 |
+| R2 | \((3,2,3,3,5,4,4,4)\) | 8 | Strictly below \(7/128<A_0\), Theorem 11 |
 | R3 | \((3,2,3,4,5,4,4,3)\) | 4 | Sharp theorem in `HAND_PROOF.md` |
-| R4 | \((3,2,4,3,5,4,3,4)\) | 4 | Open |
-| R5 | \((3,3,3,3,4,4,4,4)\) | 4 | Open |
-| R6 | \((3,3,3,4,4,4,4,3)\) | 4 | Open |
-| R7 | \((3,3,4,3,4,4,3,4)\) | 4 | Open |
-| R8 | \((3,4,3,4,4,3,4,3)\) | 4 | Open |
+| R4 | \((3,2,4,3,5,4,3,4)\) | 4 | \((5-2\sqrt6)/2<A_0\), Theorem 6 |
+| R5 | \((3,3,3,3,4,4,4,4)\) | 4 | Strictly below \(7/128<A_0\), Theorem 12 |
+| R6 | \((3,3,3,4,4,4,4,3)\) | 4 | At most \(7/128<A_0\), [`R6_BOUND.md`](R6_BOUND.md) |
+| R7 | \((3,3,4,3,4,4,3,4)\) | 4 | \((5-2\sqrt6)/2<A_0\), Theorem 6 |
+| R8 | \((3,4,3,4,4,3,4,3)\) | 4 | Strictly below \(1/20<A_0\), Theorem 9 |
 
 Here is the complete table for the 36 block pairs. The row specifies
 \((k_0,k_1,k_4,k_5)\), and the column specifies \((k_2,k_3,k_6,k_7)\).
@@ -166,12 +166,19 @@ the bottom-right corner. These are exactly the five orientation conditions
 of Theorem 1 in `HAND_PROOF.md`. That theorem bounds the minimum area by
 \(A_0\) and forces the candidate at equality.
 
-**Remaining task.** Prove the corresponding upper bound in R1, R2, and
-R4-R8. Once those seven continuous orientation classes are bounded, the
-entire eight-boundary gate is closed. The separate global normalization
-families in `GLOBAL_STRUCTURE.md` still require a theorem forcing the
-needed boundary saturation or direct bounds.
+**Conclusion.** Every one of the eight continuous orientation classes now
+has a written hand bound. Seven have bounds strictly below \(A_0\), and
+R3 has the sharp bound and its equality classification. Together with the
+preceding exterior and side-cap exclusions, this proves the complete
+eight-boundary theorem, stated as Theorem 13 in
+[`EIGHT_BOUNDARY.md`](EIGHT_BOUNDARY.md).
 
-The optional `check_radial.py` verifies the two small printed tables and
-the symmetry action. It is a transcription diagnostic, not a premise
+The separate global normalization families in
+[`GLOBAL_STRUCTURE.md`](GLOBAL_STRUCTURE.md) still require a theorem
+forcing the needed boundary saturation or direct bounds. The completed
+orientation classification does not establish that global step.
+
+The optional `check_radial.py` verifies the two small printed tables,
+the symmetry action, and the matching of each closed class to its stated
+geometric theorem. It is a transcription diagnostic, not a premise
 substituting for the finite derivation above.
