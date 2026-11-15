@@ -39,11 +39,9 @@ above \(y=x\), then
 \boxed{t\le\frac7{128}=0.0546875<A_0.}                       \tag{9}
 \]
 
-Section 6 proves this using an explicitly stated classical theorem of
-Yang and Zeng (1995): seven points in a planar convex body of area \(S\)
-span a triangle of area at most \(S/9\). This established theorem is an
-imported premise; it is not independently reproved in this note. The new
-corner-cut inequality and its application are proved below.
+Section 6 proves this by a support-triangle normalization and the
+self-contained six-point theorem in [OPPOSITE_CORNERS.md](OPPOSITE_CORNERS.md).
+No external small-point Heilbronn theorem is imported.
 
 ## 1. The area cost of a degree-four or degree-five star
 
@@ -273,134 +271,105 @@ The remaining count classes are
 
 | Free points in \(U_s\) | Free points in \(L_s\) | Status here |
 |---:|---:|---|
-| 0 | 6 | Strictly excluded by (9), using the stated classical theorem |
-| 1 | 5 | Strictly excluded by (9), using the stated classical theorem |
+| 0 | 6 | Strictly excluded by (9) and the six-point theorem |
+| 1 | 5 | Strictly excluded by (9) and the six-point theorem |
 | 2 | 4 | Open |
 | 3 | 3 | Open |
 | 4, 5, or 6 | 2, 1, or 0 | Strictly excluded by (1) |
 
 ## 6. At most one upper point: a complete exclusion
 
-### The classical theorem used
+### A support-triangle normalization
 
-We use the following theorem of Lu Yang and Zhenbing Zeng:
+The following lemma uses the self-contained six-point theorem proved as
+Theorem 1 in [OPPOSITE_CORNERS.md](OPPOSITE_CORNERS.md).
 
-> Given seven points in a planar convex body \(K\), one of their triangles
-> has area at most \(\operatorname{area}(K)/9\).
+**Nontriangular-hull lemma.** Suppose at least six points lie in
 
-Reference: L. Yang and Z. Zeng, *Heilbronn Problem for Seven Points in a
-Planar Convex Body*, in *Minimax and Applications*, Nonconvex Optimization
-and Its Applications 4 (1995), pp. 191–218,
-[DOI 10.1007/978-1-4613-3557-3_14](https://doi.org/10.1007/978-1-4613-3557-3_14).
-The exact theorem statement is visible on printed p. 192 in the publisher's
-[two-page preview](https://page-one.springer.com/pdf/preview/10.1007/978-1-4613-3557-3_14).
-Only this theorem statement is imported. Neither the numerical nine-point
-cover nor the exact optimum for seven points in a triangular container is
-used here.
+\[
+T=\operatorname{conv}\{A=(0,0),D=(1,0),C=(1,1)\},
+\]
+
+include \(A,C\), and have nontriangular convex hull. Then their minimum
+triangle area is at most \(7/128\).
+
+If the minimum area is zero there is nothing to prove, so assume it is
+positive. In particular no three of the points are collinear. For each
+point other than \(A,C\), one has \(x>0\), \(y<1\), and \(y<x\). Define
+
+\[
+\rho=\min\frac yx,\qquad
+\eta=\min\frac{1-x}{1-y},
+\]
+
+where both minima range over those other points. Thus
+\(0\le\rho,\eta<1\). Every configuration point satisfies
+
+\[
+\rho x\le y\le x,
+\qquad x\le1-\eta+\eta y.
+\]
+
+These inequalities describe the enclosing triangle \(T'=ACR\), where
+
+\[
+R=\left(\frac{1-\eta}{1-\rho\eta},
+         \frac{\rho(1-\eta)}{1-\rho\eta}\right).              \tag{10}
+\]
+
+The denominator is positive, and \(0\le R_y<R_x\le1\), so \(T'\subseteq T\)
+and \(0<\operatorname{area}(T')\le1/2\).
+
+Let \(P\) attain the first minimum and \(Q\) the second. They are actual
+configuration points on the two supporting legs \(AR\) and \(CR\),
+respectively. Neither is one of the base endpoints by the definition of
+the minima. Each contact is unique, since two contacts on a leg would be
+collinear with its base endpoint.
+
+The contacts are distinct. Otherwise their common point would be \(R\),
+and since all configuration points lie in \(ACR\), their hull would be the
+triangle \(ACR\), contrary to the hypothesis. Moreover neither contact can
+be \(R\): if \(P=R\), the three distinct actual points \(C,R,Q\) would be
+collinear, and similarly if \(Q=R\). Therefore
+
+\[
+P\in\operatorname{relint}(AR),\qquad
+Q\in\operatorname{relint}(CR).
+\]
+
+Choose any two additional configuration points besides \(A,C,P,Q\). There
+are at least two, by the six-point hypothesis. Apply the affine bijection
+from \(T'\) onto \(T\) fixing \(A,C\) and sending \(R\) to \(D\). Its
+absolute determinant is
+
+\[
+\frac{\operatorname{area}(T)}{\operatorname{area}(T')}\ge1.
+\]
+
+The six selected points now have the two diagonal endpoints, distinct
+contacts in the open bottom and right legs, and two further points in
+\(T\). Reflect across \(y=x\). This is exactly the six-point family of
+Theorem 1 in `OPPOSITE_CORNERS.md`, so some transformed triangle has area
+at most \(7/128\). Affine expansion did not decrease any area; consequently
+the corresponding original triangle also has area at most \(7/128\).
+This proves the nontriangular-hull lemma.
 
 ### Seven points below a diagonal, including its two endpoints
 
-**Endpoint lemma.** Suppose seven points lie in
+**Endpoint lemma.** Seven points in \(T\) including \(A,C\) have minimum
+triangle area at most \(7/128\).
 
-\[
-T=\operatorname{conv}\{A=(0,0),D=(1,0),C=(1,1)\}
-\]
-
-and include \(A,C\). Then their minimum triangle area is at most \(7/128\).
-
-Let their minimum area be \(t\). If \(t=0\), the conclusion is immediate.
-Otherwise they are in general position. Let \(K\) be their convex hull.
-If \(K\) is triangular, the triangular-hull lemma gives
+If their minimum area is zero the conclusion is immediate. Otherwise,
+if their hull is nontriangular, apply the preceding lemma. If their hull
+is triangular, apply the triangular-hull lemma of Section 2:
 
 \[
 t\le\frac{1}{14+4\sqrt2}<\frac1{19}<\frac7{128}.
 \]
 
-Suppose instead \(K\) has at least four vertices. The segment \(AC\) is
-a hull edge, and the complementary hull chain from \(A\) to \(C\) contains
-at least two other vertices. Choose two consecutive such vertices, writing
-
-\[
-P=(x,y),\qquad Q=(x+d,y+e).
-\]
-
-Both increments satisfy \(d,e>0\). Here are the geometric details behind
-this assertion. Because \(K\) is convex, contains \(AC\), and lies in
-\(0\le y\le x\le1\), its lower boundary is the graph of a convex piecewise
-linear function \(f\) on \([0,1]\), possibly followed by a vertical segment
-on \(x=1\). Its first slope is nonnegative, since \(f(0)=0\) and
-\(f(x)\ge0\); all subsequent finite slopes are at least as large. Thus
-the chain is nondecreasing in both coordinates. An edge between two free
-vertices cannot be vertical: the only possible vertical part is on \(x=1\),
-which would make those two vertices collinear with \(C\). Nor can such
-an edge be horizontal: by nondecreasing slopes, a horizontal edge forces
-the preceding chain back to \(A\) to lie on \(y=0\), again giving three
-collinear points. Hence both increments are strictly positive.
-
-The supporting line \(PQ\) places \(A,C\) on the \(K\) side and \(D\) on
-the opposite side. In fact the signed doubled area of \(DPQ\) is
-\(-E\), where
-
-\[
-E=dy+e(1-x)>0.
-\]
-
-Consequently the interiors of \(\triangle DPQ\) and \(K\) are disjoint.
-Since both are contained in \(T\),
-
-\[
-\operatorname{area}(K)\le\frac{1-E}{2}.                      \tag{10}
-\]
-
-The triangles \(APQ,CPQ\) have positive doubled areas
-
-\[
-2\operatorname{area}(APQ)=e-E,
-\qquad 2\operatorname{area}(CPQ)=d-E.
-\]
-
-Put \(s=2t\). Both areas are at least \(t\), so
-
-\[
-d,e\ge s+E.
-\]
-
-Also \(y\ge0\) and \(x+d\le1\), whence
-
-\[
-\boxed{E=dy+e(1-x)\ge de\ge(s+E)^2.}                        \tag{11}
-\]
-
-Apply the classical seven-point theorem to \(K\), and combine it with
-(10). This gives
-
-\[
-18t\le1-E.                                                   \tag{12}
-\]
-
-Let \(u=\sqrt E\). Inequalities (11) and (12) give two scalar bounds:
-
-\[
-2t\le u-u^2,
-\qquad 18t\le1-u^2.
-\]
-
-If \(u\le1/8\), the increasing function \(u-u^2\) on \([0,1/8]\)
-gives
-
-\[
-t\le\frac{1/8-1/64}{2}=\frac7{128}.
-\]
-
-If \(u\ge1/8\), the second inequality gives
-
-\[
-t\le\frac{1-1/64}{18}=\frac7{128}.
-\]
-
-This proves the endpoint lemma for the full continuous family, with no
-assumption about the number of hull vertices or their exact incidences
-on the two remaining sides.
+These two hull alternatives are exhaustive. No assertion about the number
+of boundary points, symmetry, or the locations of the other five points
+is assumed.
 
 ### Application to Type III
 
@@ -475,9 +444,7 @@ Let \(l=\min(\lambda,\mu)>1\). The right side is at least
 \ge4+2\sqrt3,
 \]
 
-by the arithmetic-geometric mean inequality. This proves (13).
-The same bound is stated as Proposition 2.1 in the classical source cited
-in Section 6, but the displayed derivation supplies the proof needed here.
+by the arithmetic-geometric mean inequality. This proves (13) directly from the five displayed triangle constraints.
 
 **Upper-triple restriction.** In a Type-III configuration of minimum area
 at least \(A_0\) with exactly three upper points \(P,Q,R\), for every one
@@ -503,6 +470,234 @@ Equation (13) also gives a global restriction applicable to Type I: a
 triangle containing two further configuration points must have area at
 least \((4+2\sqrt3)A_0\) at the competitive threshold. This does not
 complete the remaining global classification.
+
+## 8. The two-upper-point case has a triangular lower hull
+
+Suppose the Type-III configuration has two upper points and four lower
+points, and has minimum area at least \(A_0\). The six-point subset
+consisting of \(A,C\) and the four lower points lies in \(T\).
+By the nontriangular-hull lemma, its convex hull must be triangular.
+Let \(R=(r_x,r_y)\) be its third hull vertex. It is one of the four lower
+points, and the other three are strictly inside \(ACR\).
+
+Thus the global nine-point hull is exactly the quadrilateral \(ABCR\):
+two free points are strictly inside \(ABC\), and three are strictly
+inside \(ACR\). This is a proved reduction of the entire \(2+4\) class,
+not an assumption that an optimizer has this hull pattern.
+
+There is also a quantitative constraint on \(R\), furnished by the
+following exact six-point theorem.
+
+### A sharp six-point theorem for triangular hulls
+
+**Six-point triangular-hull theorem.** If six points are in general
+position, their convex hull is a triangle of area \(S\), and their minimum
+triangle area is \(t\), then
+
+\[
+\boxed{S\ge\Gamma t,\qquad
+       \Gamma=\frac{11+3\sqrt5}{2}.}                         \tag{14}
+\]
+
+The coefficient is sharp. The following proof is independent of an exact
+Heilbronn theorem for points in a triangular *container*: the three hull
+vertices here are actual configuration points.
+
+Let the outer triangle be \(ABC\), in counterclockwise order, and let the
+other three points be interior. If two lie in one of the three triangles
+formed by joining the third to \(A,B,C\), Section 7 gives
+
+\[
+S\ge(6+2\sqrt3)t>\Gamma t.
+\]
+
+For the strict comparison, \(6+2\sqrt3>9\) while \(\Gamma<9\).
+It remains to handle the distributed case: for each interior point, the
+other two lie in distinct triangles of its fan.
+
+**The seven-face mesh.** Label an interior point \(Y\). Relabel the outer
+vertices cyclically, or reverse all orientations if needed, and name the
+other two points so that
+
+\[
+Z\in\operatorname{int}(ABY),\qquad
+X\in\operatorname{int}(BCY).
+\]
+
+The distributed condition forces the additional four containments
+
+\[
+\begin{aligned}
+Y&\in\operatorname{int}(CAZ),&
+X&\in\operatorname{int}(BCZ),\\
+Y&\in\operatorname{int}(CAX),&
+Z&\in\operatorname{int}(ABX).                               \tag{15}
+\end{aligned}
+\]
+
+For clarity, these are deductions, not additional chamber assumptions.
+The point \(Y\) cannot lie in \(ABZ\), because \(Z\) is strictly inside
+\(ABY\). If \(Y\) lay in \(BCZ\), then \(X\in BCY\subset BCZ\), putting
+both \(X,Y\) in the same fan triangle of \(Z\). Thus \(Y\in CAZ\).
+Also \(X\notin ABZ\subset ABY\), and the distributed condition now forces
+\(X\in BCZ\). The same argument at \(X\), using \(Z\in ABY\), gives
+\(Y\in CAX\) and \(Z\in ABX\).
+
+Insert \(Z,X\) into their two fan triangles at \(Y\). The quadrilateral
+\(BZYX\) is convex: the only possible nonconvexity would put \(Y\) inside
+\(BZX\), but \(BZX\subset BCZ\) whereas \(Y\in CAZ\). Its other vertices
+cannot be interior to the other three: \(B\) is an outer hull vertex, and
+\(Z,X\) lie on opposite sides of \(BY\). Flipping \(BY\) to \(ZX\)
+therefore gives a triangulation with seven positively oriented faces.
+Write their areas as
+
+\[
+\begin{array}{lll}
+x=[ABZ],&y=[BCX],&z=[CAY],\\
+a=[AZY],&b=[BXZ],&c=[CYX],\\
+k=[ZXY],
+\end{array}
+\qquad S=x+y+z+a+b+c+k.                                    \tag{16}
+\]
+
+Here \([UVW]=\det(V-U,W-U)/2\) is the signed area. Every bracket in (16)
+is positive and at least \(t\).
+
+Define the six further signed areas
+
+\[
+\begin{array}{lll}
+u_A=[AZX],&u_B=[BXY],&u_C=[CYZ],\\
+v_A=[AXY],&v_B=[BYZ],&v_C=[CZX].
+\end{array}                                               \tag{17}
+\]
+
+All six are positive by the cyclic containments (15), so each is at least
+\(t\). For example \(Z\in ABX\) gives \([AZX]>0\), and \(Y\in CAX\)
+gives \([AXY]>0\); the other four follow cyclically.
+
+**The area identities.** Adding signed triangle areas gives
+
+\[
+a=u_A+v_A-k,\qquad b=u_B+v_B-k,\qquad c=u_C+v_C-k.            \tag{18}
+\]
+
+Three Pluecker identities give
+
+\[
+\begin{aligned}
+xk&=ab-u_Av_B,\\
+yk&=bc-u_Bv_C,\\
+zk&=ca-u_Cv_A.
+\end{aligned}                                               \tag{19}
+\]
+
+These follow directly from determinants; for instance the first is the
+four-vector identity at vertex \(Z\), with its four neighbors
+\(A,B,X,Y\). Every required sign has already been established.
+
+Normalize by \(t\), writing
+
+\[
+\begin{aligned}
+k/t&=1+K,\\
+u_i/t&=1+U_i,&v_i/t&=1+V_i,\\
+a_i/t&=1+T_i,&(a_A,a_B,a_C)&=(a,b,c).
+\end{aligned}
+\]
+
+All \(K,U_i,V_i,T_i\) are nonnegative. Equation (18) says
+
+\[
+T_i=U_i+V_i-K.
+\]
+
+Put \(Z_0=T_A+T_B+T_C\). Sum (19), use \(x+y+z\ge3t\), and expand by
+(18). The result is
+
+\[
+T_AT_B+T_BT_C+T_CT_A+Z_0
+\ge3+6K+(U_AV_B+U_BV_C+U_CV_A)\ge3.                         \tag{20}
+\]
+
+For completeness the expansion before discarding nonnegative terms is
+
+\[
+\frac{k(x+y+z)}{t^2}
+=T_AT_B+T_BT_C+T_CT_A+Z_0-3K
+ -(U_AV_B+U_BV_C+U_CV_A).
+\]
+
+Since \(T_AT_B+T_BT_C+T_CT_A\le Z_0^2/3\), (20) implies
+
+\[
+\frac{Z_0^2}{3}+Z_0\ge3,
+\qquad Z_0\ge\frac{3(\sqrt5-1)}2.
+\]
+
+Finally, (16) yields
+
+\[
+\frac St\ge 3+(3+Z_0)+(1+K)
+\ge7+\frac{3(\sqrt5-1)}2
+=\frac{11+3\sqrt5}{2}.
+\]
+
+This proves (14) for every six-point triangular hull, including both
+possible distributions of the interior points.
+
+**Attainment of the six-point bound.** Put
+
+\[
+\varphi=\frac{1+\sqrt5}{2},\qquad r=\frac1{4+3\varphi}.
+\]
+
+In barycentric coordinates relative to any outer triangle \(ABC\), take
+
+\[
+\begin{aligned}
+Y&=r(\varphi+2,\ 1,\ 2\varphi+1),\\
+Z&=r(2\varphi+1,\ \varphi+2,\ 1),\\
+X&=r(1,\ 2\varphi+1,\ \varphi+2).
+\end{aligned}
+\]
+
+Each row sums to one and has positive entries. The 20 triangle areas,
+normalized by \(S\), are grouped as follows:
+
+| Triangles | Normalized area |
+|---|---:|
+| \(ABC\) | \(1\) |
+| Two outer vertices and one interior vertex | \(r,(\varphi+2)r,(2\varphi+1)r\), each three times |
+| One outer vertex and two interior vertices | \(r\), three times; \(\varphi r\), six times |
+| \(XYZ\) | \(r\) |
+
+The entries follow from the determinant formula and
+\(\varphi^2=\varphi+1\). Thus the minimum is \(rS=S/\Gamma\), as claimed.
+
+### Quantitative conclusion for the fourth hull vertex
+
+Since \(\operatorname{area}(ACR)=(r_x-r_y)/2\), apply (14) to the lower
+six-point subset to obtain
+
+\[
+\boxed{r_x-r_y\ge(11+3\sqrt5)A_0
+       =0.9717553843\ldots.}                                \tag{21}
+\]
+
+The exact expression, not its decimal approximation, is the proved bound.
+In particular
+
+\[
+r_x\ge(11+3\sqrt5)A_0,\qquad
+r_y\le1-(11+3\sqrt5)A_0.
+\]
+
+Thus the fourth hull vertex lies within \(1-(11+3\sqrt5)A_0\) in each
+coordinate of the missing square corner \(D\). This does not assert that
+\(R=D\), or that the five remaining interior points can be moved to the
+boundary. The \(2+4\) class is reduced to this precise residual family;
+it is not yet excluded.
 
 ## Verification
 

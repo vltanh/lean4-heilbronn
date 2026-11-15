@@ -5,7 +5,7 @@ import sympy as sp
 
 
 def bracket(u, v):
-    return (u[0] * v[1] - u[1] * v[0]) / 2
+    return sp.Rational(1, 2) * (u[0] * v[1] - u[1] * v[0])
 
 
 v = [sp.symbols(f"x{i} y{i}") for i in range(5)]
@@ -39,20 +39,13 @@ for mask in range(32):
     words += 1
 assert words == 11
 
-# Doubled-area identities in the endpoint lemma.
-x, y, d, e = sp.symbols("x y d e")
-p, q = (x, y), (x + d, y + e)
-missing = d * y + e * (1 - x)
-assert sp.expand(2 * bracket(p, q) - (e - missing)) == 0
-assert sp.expand(
-    2 * bracket((x - 1, y - 1), (x + d - 1, y + e - 1))
-    - (d - missing)
-) == 0
-assert sp.expand(
-    2 * bracket((x - 1, y), (x + d - 1, y + e)) + missing
-) == 0
-assert (sp.Rational(1, 8) - sp.Rational(1, 64)) / 2 == sp.Rational(7, 128)
-assert (1 - sp.Rational(1, 64)) / 18 == sp.Rational(7, 128)
+# Support-triangle coordinates and exact threshold comparison.
+rho, eta = sp.symbols("rho eta")
+rx = (1 - eta) / (1 - rho * eta)
+ry = rho * rx
+assert sp.cancel(ry - rho * rx) == 0
+assert sp.cancel(rx - (1 - eta + eta * ry)) == 0
+assert sp.cancel(rx - ry - (1 - rho) * (1 - eta) / (1 - rho * eta)) == 0
 assert 18**2 * 65 - 145**2 == 35
 
 # The five areas used in the two-interior-point lemma.
@@ -75,9 +68,52 @@ assert sp.expand(area_signed(ss1, qpoint, ppoint) - (lam - 1) * hh * (qq - pp) /
 assert sp.expand(area_signed(ss2, qpoint, ppoint) - (mu - 1) * hh * (qq - pp) / 2) == 0
 assert sp.expand(area_signed(rr, ss1, ss2) - lam * mu * hh / 2) == 0
 
+# Distributed three-interior-point mesh, with counterclockwise outer triangle.
+outer_a, outer_b, outer_c = (0, 0), (1, 0), (0, 1)
+inner_x = sp.symbols("xx xy")
+inner_y = sp.symbols("yx yy")
+inner_z = sp.symbols("zx zy")
+ears = [area_signed(outer_a, outer_b, inner_z),
+        area_signed(outer_b, outer_c, inner_x),
+        area_signed(outer_c, outer_a, inner_y)]
+connectors = [area_signed(outer_a, inner_z, inner_y),
+              area_signed(outer_b, inner_x, inner_z),
+              area_signed(outer_c, inner_y, inner_x)]
+center = area_signed(inner_z, inner_x, inner_y)
+cross_u = [area_signed(outer_a, inner_z, inner_x),
+           area_signed(outer_b, inner_x, inner_y),
+           area_signed(outer_c, inner_y, inner_z)]
+cross_v = [area_signed(outer_a, inner_x, inner_y),
+           area_signed(outer_b, inner_y, inner_z),
+           area_signed(outer_c, inner_z, inner_x)]
+for i in range(3):
+    assert sp.expand(connectors[i] - cross_u[i] - cross_v[i] + center) == 0
+    assert sp.expand(ears[i] * center - connectors[i] * connectors[(i + 1) % 3]
+                     + cross_u[i] * cross_v[(i + 1) % 3]) == 0
+assert sp.expand(sum(ears) + sum(connectors) + center - sp.Rational(1, 2)) == 0
+
+# Exact attainment: enumerate the 20 areas, after specializing the golden ratio.
+phi = (1 + sp.sqrt(5)) / 2
+rratio = 1 / (4 + 3 * phi)
+bary_y = [rratio * (phi + 2), rratio, rratio * (2 * phi + 1)]
+bary_z = [rratio * (2 * phi + 1), rratio * (phi + 2), rratio]
+bary_x = [rratio, rratio * (2 * phi + 1), rratio * (phi + 2)]
+points = [outer_a, outer_b, outer_c] + [(p[1], p[2]) for p in (bary_x, bary_y, bary_z)]
+counts = {}
+for triple in combinations(points, 3):
+    val = sp.simplify(2 * sp.Abs(area_signed(*triple)))
+    counts[val] = counts.get(val, 0) + 1
+expected = {sp.Integer(1): 1,
+            sp.simplify(rratio): 7,
+            sp.simplify((phi + 2) * rratio): 3,
+            sp.simplify((2 * phi + 1) * rratio): 3,
+            sp.simplify(phi * rratio): 6}
+assert counts == expected, (counts, expected)
+
 print("PASS: degree-four Pluecker identity")
 print("PASS: five cyclic degree-five Pluecker identities")
 print("PASS: all eleven possible diagonal sign words")
-print("PASS: endpoint-lemma area identities and exact threshold comparison")
+print("PASS: support-triangle coordinates and exact threshold comparison")
 print("PASS: two-interior-point area formulas")
+print("PASS: distributed six-point mesh identities and all 20 attaining areas")
 print("Written geometric and triangulation arguments remain to be reviewed by a reader.")
