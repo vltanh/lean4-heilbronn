@@ -178,10 +178,22 @@ mixed cell by a uniform height bound; and
 excludes the bottom cell by a five-area cancellation and weighted-mean
 identity. Theorem 11 assembles these arguments into the **complete
 balanced-row exclusion**.
-In the unbalanced row, at least one central point is above CE; the
-one-point and two-point cuts against the right triple remain open.
-Sections 11--12 of `TYPE_II.md` supply exact necessary parameter bounds
-for those cuts, without claiming they suffice for an exclusion.
+In the unbalanced row, at least one central point is above CE.
+Section 12 of `TYPE_II_COMPLETION.md` now proves that a triangular
+right hull BCR, with S,T inside, has an empty lower ear EBR. Both
+eight-point hulls DBRC and DERC alternate, forcing both central points
+above CE. This closes the entire one-above cut for the triangular
+right hull. The two-above cut remains open with the precise sector,
+triangle-cost, and virtual-container inequalities printed there.
+
+[UNBALANCED_RIGHT_HULL.md](hand/UNBALANCED_RIGHT_HULL.md) proves that
+the nontriangular right hull must be a quadrilateral. If both central
+points are above CE, its occupied outer-ear support cells I and III
+are completely excluded; only the common central cell II remains.
+For exactly one central point above CE, cells I, II, and III remain.
+Thus three explicitly described unbalanced branches still require
+coupled arguments. No scalar necessary condition alone is claimed to
+finish them.
 
 The same new note proves a stronger global container theorem: a triangle
 of area at most \(1/2\) with two actual vertices contains at most five

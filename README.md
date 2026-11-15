@@ -45,6 +45,7 @@ python hand/check_one_corner_completion.py
 python hand/check_four_interior_quadrilaterals.py
 python hand/check_balanced_bottom_inner_sector.py
 python hand/check_balanced_right_mixed.py
+python hand/check_unbalanced_right_hull.py
 python exact/verify_local.py                # standard-library exact local theorem
 cd exact
 g++ -O3 -std=c++17 verify_global.cpp -o verify_global

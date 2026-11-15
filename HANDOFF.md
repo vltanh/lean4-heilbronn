@@ -61,6 +61,11 @@ The final two balanced cells have separate short notes:
 uses a five-area cancellation and weighted-mean identity, and
 [hand/BALANCED_RIGHT_MIXED.md](hand/BALANCED_RIGHT_MIXED.md) proves a
 uniform height bound and a strict rational area gap.
+For unbalanced Type II, Section 12 of `hand/TYPE_II_COMPLETION.md`
+excludes the one-above CE cut when the right hull is triangular.
+[hand/UNBALANCED_RIGHT_HULL.md](hand/UNBALANCED_RIGHT_HULL.md)
+excludes a pentagonal right hull and, in the two-above CE cut,
+both outer support cells of the quadrilateral right hull.
 
 The sharp chamber inequality, positive stress, local proof, and 84-triangle
 attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
@@ -80,10 +85,20 @@ attainment table remain in [hand/HAND_PROOF.md](hand/HAND_PROOF.md).
 - **Type II:** after normalization to \(b\le1/2\), only the occupancy
   class \((\ell,c,r)=(1,2,3)\) remains. The left count consists of the
   prescribed side contact. Type III, the normalization's alternative,
-  and the entire balanced Type-II row are closed. One or two central
-  points are above CE and must be coupled to the right triple. The
-  triangular and nontriangular right-hull alternatives both remain
-  obligations within this single row.
+  and the entire balanced Type-II row are closed. The exact residual
+  cases are:
+
+  1. A triangular right hull BCR with S,T inside: both central points
+     are above CE. The eight-point hulls DBRC and DERC both have the
+     same alternating four interior points. Every right point X obeys
+     \(X_y<\lambda+q^2X_x\), but the required coupled inequality
+     between the central and right pairs remains open.
+  2. A quadrilateral right hull with both central points above CE:
+     only support cell II remains; its right interior point lies in
+     both BCR and BCS, with neither outer ear occupied.
+  3. A quadrilateral right hull with exactly one central point above
+     CE: support cells I, II, and III remain. A pentagonal right hull
+     is excluded in both CE cuts.
 
 No theorem yet forces every competitive configuration to have eight boundary
 points. Moving a single point within its area-feasible polygon may be trapped
@@ -91,7 +106,7 @@ inside the square; do not treat boundary pushing as automatic.
 
 ## Checks and trust boundary
 
-All nineteen hand-proof diagnostics have been run locally: the original identities,
+All twenty hand-proof diagnostics have been run locally: the original identities,
 the eight-boundary inequalities, radial catalogue, R6 derivatives,
 opposite-corner identities, corner-family identities and exact attainment,
 four-corner argument, Type-II identities, quadrilateral-hull formulas,
@@ -99,8 +114,10 @@ one-corner inequalities, seven-boundary cap bounds, the global triangle-capacity
 argument, balanced Type-II exclusions, the new global hull and cap bounds,
 the two-vertex capacity and right-hull arguments, both quadrilateral-pair
 exclusions, the alternating-sector theorem, the second-shear exclusion,
-the four exhaustive final balanced cells, and the inward-moving chamber's
-determinant and scalar identities and all 918 rational coefficient bounds.
+the four exhaustive final balanced cells, the inward-moving chamber's
+determinant and scalar identities and all 918 rational coefficient bounds,
+the unbalanced triangular-right empty-ear reduction, and both
+unbalanced outer-support-cell exclusions.
 The original exact local checker has also passed. The arguments include the
 geometric and sign reasoning that those diagnostics alone cannot establish.
 No external independent review or Lean verification is claimed.
