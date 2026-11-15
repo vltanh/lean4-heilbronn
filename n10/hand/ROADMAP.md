@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 4 — November 15, 2026.
+Checkpoint 5 — November 15, 2026.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -109,10 +109,12 @@ Only the distributed alternative of U3 remains unresolved in this family.
         quadrilateral cannot accommodate all four free points.
         Proof: OPPOSITE_CORNERS.md and C2_SAME_HALF_CORNER.md.
   - [ ] C2-MIXED/CENTRAL. One half has a noncentral point.
-  - [ ] C2-MIXED/SAME. Both halves have noncentral points toward the same
-        occupied corner.
+  - [x] C2-MIXED/SAME. Both halves have noncentral points toward the same
+        occupied corner. Every mixed-half orientation forces both into
+        the same corner triangle, where all pair-line orientations are
+        excluded. Proof: C2_MIXED.md and C2_NONCENTRAL_CUT.md.
   - [ ] C2-MIXED/OPPOSITE. Both halves have noncentral points toward opposite
-        occupied corners. These three alternatives are exhaustive up to
+        occupied corners. These mixed alternatives are exhaustive up to
         square symmetry; see OPPOSITE_CORNERS.md, Sections 1 and 10.
 - [ ] HP11-II. Exclude normalized maximizers with two adjacent corners.
 - [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
@@ -163,10 +165,12 @@ Ordinary averaging is not a justified reduction.
 | CLUSTERED_TRIANGLE.md | Universal exclusion of three clustered interior points; full U3-CLUSTERED exclusion |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds and complete central/central exclusion |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
+| C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
+| C2_NONCENTRAL_CUT.md | Noncentral corner-cut inequality, empty-fan bound, and complete corner-pair exclusion |
 
 ## Next attack and stopping rules
 
-The next targets are the distributed U3 alternative and the three mixed C2
+The next targets are the distributed U3 alternative and the two remaining mixed C2
 families. The stronger occupancy and clustered-triangle bounds also apply
 in the other families. The exact diagnostic in
 `../discovery/ENDPOINT_COVER_LIMIT.md` rules out a threshold-free shortcut;

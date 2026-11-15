@@ -2,8 +2,9 @@
 
 This note closes the complete C2 subfamily in which both free points in
 each diagonal half belong to its central cell II. It also proves uniform
-contact bounds for the entire C2 family. The mixed half-cell alternatives
-listed in Section 10 remain open, so HP11-C2 itself is not yet closed. Every
+contact bounds for the entire C2 family. The same-corner mixed alternative
+is closed in C2_MIXED.md; the other two alternatives listed in Section 10
+remain open, so HP11-C2 itself is not yet closed. Every
 argument below is analytic and independent of the computer cover.
 
 Use the normalized anchors
@@ -624,15 +625,20 @@ central can have minimum ordinary area at least A*.
 The exhaustive half-pair catalogue in Section 1 has three states:
 I+II, II+II, and II+III. Section 9 closes the state II+II in both halves.
 The other states contain a noncentral point. Up to exchanging the two
-halves and simultaneously reflecting I with III, the remaining full
+halves and simultaneously reflecting I with III, the other full
 subfamilies are
 
     mixed/central,
-    mixed/mixed with the I points toward the same occupied corner,
+    mixed/mixed with the I points toward the same occupied corner (closed),
     mixed/mixed with the I points toward opposite occupied corners.
 
-This is an exhaustive quotient of the remaining eight ordered half-state
-pairs. The uniform contact bounds (3) apply to all of them. Sections 3--4
+This is an exhaustive quotient of the other eight ordered half-state pairs.
+The same-corner alternative is completely excluded in
+[C2_MIXED.md](C2_MIXED.md), using the noncentral corner theorem in
+[C2_NONCENTRAL_CUT.md](C2_NONCENTRAL_CUT.md). Exactly the mixed/central and
+opposite-corner mixed/mixed alternatives remain open.
+
+The uniform contact bounds (3) apply to all of them. Sections 3--4
 also exclude their stated central cross-pair corner cuts, but the stronger
 product and central-quadrilateral arguments of Sections 5--9 have the
 explicit central/central hypothesis. No unchecked mixed case is absorbed

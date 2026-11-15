@@ -3,7 +3,7 @@
 
 This script checks polynomial identities and rational comparisons printed in
 TRIANGLE_OCCUPANCY.md, THREE_CORNERS.md, CLUSTERED_TRIANGLE.md and
-SYMMETRIC_CHAMBER.md, plus the two opposite-corner notes.
+SYMMETRIC_CHAMBER.md, plus the opposite-corner notes.
 It does not enumerate configurations
 or prove geometric coverage. The written arguments supply those deductions.
 Run locally with: python3 n10/hand/check_global_geometry.py
@@ -196,10 +196,63 @@ def opposite_corners():
     print("PASS: opposite-corner identities, contact/product bounds, both corner exclusions")
 
 
+def noncentral_corners():
+    q = sp.Rational
+    sigma, cap = q(93, 1000), q(89, 100)
+    J, z, b = sp.symbols("J z b")
+    x0 = sigma/J
+    y0 = sigma*(1-J*J)/(J*(1-J-sigma))
+    N = (-J**5+3*J**4+(4*sigma-3)*J**3
+         +(2*sigma*sigma-6*sigma+1)*J*J
+         +(2*sigma-2*sigma*sigma)*J+2*sigma*sigma-sigma**3)
+    zero(sigma-(y0-x0)*(J-x0-y0)-sigma*N/(J*J*(1-J-sigma)**2))
+    expansion = (q(300087, 5000000000)+q(5793, 12500000)*z
+                 +z*z*(q(305249, 500000)+q(99, 250)*z-q(6, 5)*z*z-z**3))
+    zero(N.subs(J, q(21, 25)+z)-expansion)
+    assert q(149, 20)*sigma-q(83, 100)**2 == q(79, 20000) > 0
+    W = J**3-(1+sigma)*J*J+2*sigma
+    assert W.subs(J, q(83, 100)) == q(48193, 10000000) > 0
+    assert q(300087, 5000000000)-q(5793, 12500000)/100 == q(55383, 1000000000) > 0
+    assert q(305249, 500000)-q(99, 250)/100-q(6, 5)/400-q(1, 8000) == q(603413, 1000000) > 0
+
+    fan_bound = (1-sigma/(1-b))*(b-4*sigma/cap)-sigma*(1+1/b)
+    Nb = -(445000*b**3-631000*b*b+168702*b+41385)/445000
+    zero(b*(1-b)*fan_bound-Nb)
+    expansion = -z**3-q(4103, 4450)*z*z+q(861, 111250)*z-q(1239, 2225000)
+    zero(Nb.subs(b, q(39, 50)+z)-expansion)
+    assert q(4103, 4450)-q(39, 50) == q(316, 2225)
+    assert q(1239, 2225000)-q(861, 111250)**2/(4*q(316, 2225)) == q(3173919, 7031000000) > 0
+    print("PASS: noncentral corner cut polynomial and empty-fan inequality")
+
+
+def mixed_corners():
+    q = sp.Rational
+    sigma, a, c = q(93, 1000), q(69, 100), q(89, 100)
+    beta, h, b, z = sp.symbols("beta h b z")
+    F = beta**3-beta**2+(3*sigma+sigma*sigma)*beta-2*sigma*sigma
+    expansion = z**3+q(7, 20)*z*z-q(4851, 1000000)*z+q(15381, 20000000)
+    zero(F.subs(beta, q(9, 20)+z)-expansion)
+    assert q(4851, 1000000)**2-4*q(1, 5)*q(15381, 20000000) == -q(591707799, 1000000000000)
+    G = h*b+h*sigma-(h*(1-beta)+b)*(1-3*sigma/beta)
+    zero(G.subs({h:a,b:a})-(a*a-2*a-2*a*sigma+a*beta+6*a*sigma/beta))
+    assert G.subs({h:a,b:a,beta:a}) == q(93, 50000) > 0
+    D0 = h+b-h*b
+    zero((D0*(h+b)/h).subs(b,a)-((1-a)*h+a*(2-a)+a*a/h))
+    assert a*a-(1-a)*c*c == q(230549, 1000000) > 0
+    T = (2-c)*(c-sigma)
+    M = (c+a-c*a)*(c+a)/c
+    assert T == q(88467, 100000)
+    assert M == q(763061, 445000)
+    assert 4*sigma*M-(T-sigma)**2 == q(9917547879, 890000000000) > 0
+    print("PASS: mixed-half cubic, both containment bounds, same-corner constants")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
     seven_point_endpoint()
     clustered_triangle()
     opposite_corners()
+    noncentral_corners()
+    mixed_corners()
     symmetric_opposite_orientation()
