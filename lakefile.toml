@@ -15,6 +15,7 @@ rev = "v4.36.0-rc2"
 
 [[lean_lib]]
 name = "Heilbronn"
+globs = ["Heilbronn", "Heilbronn.+"]
 
 # The statement a reader audits. `lake comparator` compares it with the root
 # module `Heilbronn` (comparator.json); build it alone with `lake build Challenge`.
