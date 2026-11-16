@@ -1600,6 +1600,43 @@ def c1_two_lower_three_caps():
     print("PASS: complete C1 two-lower/three-cap quartic box and both strict determinant gaps")
 
 
+def c1_side_top_pair_complete():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);rho=q(347,500)
+    c,d,t=sp.symbols('c d t')
+    E=(1-d)*(1-s-s/(d-s/c)+(1-d)*(1-c-s/(c*d))/(d-s/c))
+    zero(sp.diff(E,c)-(1-d)*(s*s-c*(1-d)*(c*d-2*s))/(c*d-s)**2)
+    B=(417094*d**3-2455*d*d-284067*d+93000)/1000000
+    zero((4*s-E.subs(c,rho))*d*(rho*d-s)-B)
+    nums=[4802739945873,266106562641,4648189333265,20573116806609,50665017531537]
+    zero(B.subs(d,q(437,1000)+q(32,125)*t)-sum(n*sp.binomial(4,i)*t**i*(1-t)**(4-i) for i,n in enumerate(nums))/1500000000000000)
+    assert min(nums)>0
+    note=Path(__file__).with_name('C1_TWO_LOWER_SIDE_TOP_COMPLETE.md').read_text()
+    blocks=re.findall(r'^```c1st-sum\n(.*?)^```$',note,re.M|re.S)
+    assert len(blocks)==4
+    assert sum(len(re.split(r';\s*|\n',block.strip())) for block in blocks)==764
+    traces=re.findall(r'^```c1st-geometry\n(.*?)^```$',note,re.M|re.S)
+    assert len(traces)==4 and sum(len(block.strip().splitlines()) for block in traces)==60
+    bounds=re.findall(r'^Upper bound: `([^`]+)`\.$',note,re.M)
+    assert len(bounds)==4 and all(q(bound)<0 for bound in bounds)
+    print('PASS: complete C1 side/top-pair hull reduction, five positive Bernstein coefficients and four printed cubic rows')
+
+
+def c1_three_top_no_side():
+    q=sp.Rational;s=q(93,1000);G=q(1457,250)
+    assert q(707,500)**2<2 and G==3+2*q(707,500)
+    assert 1-G*s/(1-s)<q(403,1000)
+    assert q(403,1000)*q(360,1000)*q(640,1000)<s
+    assert q(480,1000)**2*q(403,1000)<s
+    assert q(403,1000)-s/q(640,1000)<q(258,1000)
+    assert q(40,1000)*q(628,1000)+q(258,1000)*q(263,1000)==s-q(26,1000000)
+    assert G*s-q(628,1000)*q(644,1000)==q(137572,1000000)>0
+    d,x,y,u,v=sp.symbols('d x y u v')
+    zero(-2*area(sp.Matrix([1,d]),sp.Matrix([x,y]),sp.Matrix([u,v]))-(1-x)*(v-d)-(d-y)*(1-u))
+    print('PASS: complete C1 three-top/no-side exclusion and both strict endpoint-container gaps')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1656,3 +1693,5 @@ if __name__ == "__main__":
     n7_ah_de_and_single_exterior()
     adjacent_133_triangular_right()
     n7_heptagon_two_upper_ear()
+    c1_side_top_pair_complete()
+    c1_three_top_no_side()

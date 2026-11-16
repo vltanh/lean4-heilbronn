@@ -502,6 +502,20 @@ Separate Fraction and SymPy expansions reproduce every exact negative
 bound. Only the all-interior (1,2,0) count remains in N7. The global
 algebra checker now has 55 passing groups.
 
+The complete C1 side/top-pair count (2,0,1,2,0) and its reflection
+are now excluded. C1_TWO_LOWER_SIDE_TOP_PAIR.md gives a monotone
+endpoint-container bound and a five-coefficient positive Bernstein
+identity, forcing a triangular top hull. Four exhaustive rows in
+C1_TWO_LOWER_SIDE_TOP_COMPLETE.md have 60 explicit deductions and
+764 printed terms. A fresh independent reader verifies the complete
+geometry, outward coordinate boxes and every exact negative bound;
+separate Fraction and SymPy expansions pass. In addition,
+C1_THREE_TOP_NO_SIDE.md proves that three top points force both side
+caps empty, using two analytic endpoint containers with exact gaps
+26/1000000 and 137572/1000000. This closes two more count rows.
+The remaining C1 exterior catalogue has 24 rows with at most two
+lower points. The global algebra checker now has 57 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

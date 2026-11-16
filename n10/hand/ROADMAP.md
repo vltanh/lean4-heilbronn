@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 45.
+Checkpoint 46.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -254,7 +254,21 @@ four-corner alternative and all zero-area faces.
         two determinant comparisons then give exact gaps 37/1000000
         and 17639/1000000. The proof includes outer square faces and
         uses no sign enumeration. Proof: C1_TWO_LOWER_THREE_CAPS.md.
-  - [ ] C1-EXTERIOR. Exclude the remaining 27 exterior count rows
+  - [x] C1-TWO-LOWER-SIDE-TOP-PAIR. The entire count (2,0,1,2,0)
+        and its reflection. A monotone endpoint-container bound and
+        five positive Bernstein coefficients force a triangular top
+        hull; four exhaustive rows then have 60 explicit deductions
+        and 764 positive integer products. Independent geometry,
+        outward box checks and separate Fraction/SymPy expansions pass.
+        Proof: C1_TWO_LOWER_SIDE_TOP_PAIR.md and
+        C1_TWO_LOWER_SIDE_TOP_COMPLETE.md.
+  - [x] C1-THREE-TOP-NO-SIDE. Three top-cap points exclude both side
+        caps, independently of the lower points. This closes the two
+        rows (0,1,1,3,0) and (1,0,1,3,0), and their reflections.
+        Two endpoint containers and exact determinant comparisons give
+        gaps 26/1000000 and 137572/1000000.
+        Proof: C1_THREE_TOP_NO_SIDE.md.
+  - [ ] C1-EXTERIOR. Exclude the remaining 24 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -557,6 +571,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_SIDE_AH_DE.md | Entire literal AH/DE side-line class at every height: 56 exhaustive leaves, 19,348 printed terms and two explicit rational boxes |
 | N7_SINGLE_EXTERIOR.md | Complete single-exterior N7 sharp exclusion m<A*, assembling all literal arc positions and four 4/4 edge pairs, including the projected good-word terminal |
 | N7_HEPTAGON_TWO_UPPER_EAR.md | Entire all-interior (0,2,1) count: 64 exhaustive leaves, 58 cubics / 13,979 printed terms, six clustered-triangle exclusions and 2,166 explicit deductions |
+| C1_TWO_LOWER_SIDE_TOP_PAIR.md and C1_TWO_LOWER_SIDE_TOP_COMPLETE.md | Entire side/top-pair count (2,0,1,2,0) and reflection: analytic hull reduction and four exhaustive cubics, 60 deductions and 764 printed terms |
+| C1_THREE_TOP_NO_SIDE.md | Three top points force both side caps empty; two complete exterior count rows close by endpoint-container and determinant inequalities |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
