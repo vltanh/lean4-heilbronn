@@ -505,7 +505,7 @@ theorem pos_of_not_quad {V : Fin 8 → Point} {O : Point} (hO : InPolygon V O) (
 `V₀V₃, V₂V₅, V₄V₇, V₆V₁`; then (2) with `j = 3`).
 `hand/RADIAL_CATALOGUE.md`, lines 58–66.
 Uses: RADIAL_CATALOGUE:claim-encoding. -/
-theorem claim_side_quad_bounds (V : Fin 8 → Point) (O : Point) (hV : IsConvexPolygon V)
+theorem claim_side_quad_bounds (V : Fin 8 → Point) (O : Point) (_hV : IsConvexPolygon V)
     (hO : InPolygon V O) (hnd : RaysNondegenerate V O) (hq : OutsideSideQuads V O) {k : Word}
     (hk : IsRadialWord V O k) : SideQuadBounds k := by
   have hc := complementary_of_isRadialWord hnd hk

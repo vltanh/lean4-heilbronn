@@ -107,8 +107,8 @@ Theorem 13: in the normal form, if the radial word of `O` (no degenerate rays) i
 `hand/EIGHT_BOUNDARY.md`, lines 1026–1035.
 Uses: RADIAL_CATALOGUE:claim-encoding. -/
 theorem claim_class_hypotheses {a b c d e f g h : ℝ} {O : Point}
-    (hA : EightAnchors a b c d e f g h) (hO : InOpenSquare O)
-    (hnd : RaysNondegenerate (octagon a b c d e f g h) O) :
+    (_hA : EightAnchors a b c d e f g h) (_hO : InOpenSquare O)
+    (_hnd : RaysNondegenerate (octagon a b c d e f g h) O) :
     (IsRadialWord (octagon a b c d e f g h) O (rep .R1) →
       InClosedPolygon ![(b, 0), (c, 0), (1, d), (1, e)] O ∧
         InClosedPolygon ![(1, d), (1, e), (f, 1), (g, 1)] O) ∧
