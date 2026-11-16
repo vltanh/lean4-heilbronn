@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 29.
+Checkpoint 30.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -193,8 +193,16 @@ four-corner alternative and all zero-area faces.
             cubic contradictions with 28 and 33 integer terms, maximum 21.
             Proof: TYPE_II_R4_MIXED_III.md.
   - [ ] II-(1,3,3). Its central triple must be distributed.
+  - [x] II-223-CORE. In the entire eight-point side core of (2,2,3),
+        the remaining support point lies in DCH, DCF, and CFP, with
+        vertical clearance at least 2s above F. The complete rational
+        box and six exhaustive placement contradictions have 424 printed
+        integer terms; one row uses seven explicit affine squares.
+        Proof: TYPE_II_223_CORE.md. The two central points are still
+        needed to close the count.
   - [ ] II-(2,2,3). Triangular left hull; nontriangular right hull whose
-        support-normalized additional point is in cell II.
+        support-normalized additional point has the stronger placements
+        of II-223-CORE.
   - [ ] II-(2,3,2). At least one triangular side hull; distributed central
         triple.
 - [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
@@ -205,8 +213,14 @@ four-corner alternative and all zero-area faces.
         3,317 positive integer terms, their strict rational bounds, and
         every geometric derivation are printed. Proof: C1_PENTAGON.md
         and C1_PENTAGON_GEOMETRY.md.
+  - [x] C1-EXTERIOR-CATALOGUE. Side-cap triples and simultaneous side
+        pairs are impossible; a side pair forbids two lower or two top
+        points. The other stated top/lower triple cuts leave exactly
+        32 count rows, up to one transposition. All cuts are analytic.
+        Proof: C1_EXTERIOR_REDUCTION.md.
   - [ ] C1-EXTERIOR. Exclude the remaining placements with an actual
-        hull vertex outside the selected anchor pentagon.
+        hull vertex outside the selected anchor pentagon, in the 32
+        exhaustive count rows of C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
       points and four strictly interior points.
   - [x] N6-PLACEMENTS. The lower-left cap is empty; both anchor regions
@@ -364,8 +378,10 @@ strictly interior points in N6 and N7 requires a separate argument.
 | TYPE_II_R4_MIXED_I.md | Complete I+II support pair, all line orientations, and one fixed physical-contact quartic with 86 integer entries |
 | TYPE_II_R4_MIXED_III.md | Complete II+III support pair, forced DF straddle, and two printed cubics with 61 integer entries |
 | TYPE_II_R4_COMPLETE.md | Complete Type-II count (1,2,4), assembling both hull types and every central placement |
+| TYPE_II_223_CORE.md | Entire (2,2,3) eight-point side core: stronger box, three forced containing triangles, and vertical clearance; six rows, 424 terms |
 | C1_PENTAGON_GEOMETRY.md | Exact-pentagon 3/2 reduction, distributed meshes, rational box, endpoint and fan-capacity inequalities |
 | C1_PENTAGON.md | Entire exact-pentagon C1 child; nine roots, 34 polynomial and eight geometric leaves, 3,317 printed integer entries |
+| C1_EXTERIOR_REDUCTION.md | Complete side-cap and stated top/lower count exclusions; exhaustive 32-row exterior catalogue |
 | TYPE_II_UPPER_PAIR.md | Complete opposite-B/E sign exclusion for the two upper central points, with every right hull allowed |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |

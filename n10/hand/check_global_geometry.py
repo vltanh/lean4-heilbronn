@@ -1093,6 +1093,90 @@ def n7_height_three_five():
     print("PASS: all N7 h>=e long-triangle transfers, uniform ordinate bound, and the five-chain supporting-ray identity")
 
 
+def adjacent_223_core():
+    q=sp.Rational;s=q(93,1000);Om0=q(271,500)
+    b,lam,a,k,c,d,p,y,u,v,Om=sp.symbols("b lam a k c d p y u v Om")
+    D,E,B,H,F,C,P,X=(sp.Matrix(pt) for pt in
+        [(0,1),(0,lam),(b,0),(a,k),(c,d),(1,1),(p,y),(u,v)])
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(E,B,H)-(lam*(a-b)+b*k))
+    zero(det(E,C,P)-(y-lam-(1-lam)*p))
+    zero(det(D,F,X)+det(F,C,X)-(v-d))
+    assert q(7071,5000)**2<2 and 3/q(429,2500)>q(209,50)**2
+    assert 1-q(209,25)*s==q(5563,25000)
+    assert q(141421,100000)**2<2 and q(8579,50000)*Om0<s
+    B0=q(23,50);C0=1-2*s+s/B0;R0=2*s*(1-B0)/B0
+    assert C0==q(5843,5750) and R0==q(2511,11500)
+    assert 4*R0-(C0-s)**2==q(11183711,529000000)>0
+    J=(1-s/Om0)*(1-Om0/(1-b))
+    for bb,aa,want,lower in [
+        (q(279,1000),q(907,1000),q(13919217,245411096),q(56,1000)),
+        (q(295,1000),q(907,1000),q(2789213,46770264),q(59,1000)),
+        (q(296,1000),q(885,1000),q(872211,14046472),q(62,1000))]:
+        assert (s-bb*J.subs(b,bb))/(aa-bb)==want>lower
+    assert s*q(721,1000)<Om0**2 and q(721,1000)**2<Om0
+    assert 3*s/q(944,1000)>q(295,1000)
+    assert 3*s/q(941,1000)>q(296,1000)
+    assert 3*s/q(938,1000)>q(297,1000)
+    m=sp.symbols("m");G=m*(1-m)/(2-m);t0=q(93,704)
+    m0=t0/q(164,1000)
+    assert m0==q(11625,14432)>q(3,4)
+    assert t0-G.subs(m,m0)==q(42687,45235136)>0
+    epsilon=q(115,1000)
+    assert t0-G.subs(m,s/epsilon)==q(24831,11091520)>0
+    assert epsilon*(epsilon+s)/(epsilon-s)==q(299,275)>1
+    assert J.subs(b,q(297,1000))==q(72289,381026)<q(19,100)
+    assert 1-3*s/q(703,1000)<q(604,1000)
+    assert s/q(938,1000)>q(99,1000)
+    assert q(458,1000)-2*s/q(938,1000)<q(26,100)
+    assert q(62,1000)+2*s>q(247,1000)
+    assert 1-(q(99,1000)+s)/q(458,1000)<q(581,1000)
+    qq=sp.symbols("qq");poly=b*qq**2-s*(2*b+1)*qq-s
+    assert poly.subs({b:q(458,1000),qq:q(685,1000)})==-q(15373,10**8)
+    assert s/q(588,1000)>q(158,1000)
+    assert q(297,1000)+q(703,1000)*s/q(588,1000)+s>q(501,1000)
+    assert 1-s/q(836,1000)<q(889,1000)
+    assert (q(889,1000)-q(297,1000)-s)/q(703,1000)<q(71,100)
+    assert q(542,1000)*q(158,1000)+s>q(178,1000)
+    assert q(164,1000)+2*s==q(7,20)
+    assert q(297,1000)+q(703,1000)*q(7,20)+s==q(12721,20000)>q(159,250)
+    print("PASS: Type-II (2,2,3) eight-point core, all exact box bootstraps, and final contact gaps")
+
+
+def c1_exterior_reduction():
+    from pathlib import Path
+    from itertools import product
+    import re
+    q=sp.Rational;s=q(93,1000)
+    c,d,x,y=sp.symbols("c d x y")
+    intercept=(d*x-y)/(d-y)
+    zero(2*area(sp.Matrix([1,d]),sp.Matrix([x,y]),sp.Matrix([intercept,0])))
+    zero((1-c)*(1-s-s/c)-(1-(1-s)*c-s/c))
+    assert s*(1-s)==q(84351,10**6)>q(29,100)**2
+    assert 1-2*q(29,100)==q(21,50)<q(347,500)
+    z=sp.symbols("z");pair=z*z-(1-2*s)*z+s
+    assert pair.subs(z,q(347,500))==q(243,25000)>0
+    assert sp.diff(pair,z).subs(z,q(347,500))>0
+    assert (1-q(347,500))*(1-s)==q(138771,500000)<3*s
+    assert q(4427,500)*s-(1-s)**2==q(773,10**6)>0
+    assert 3*s>q(1,4) and (1-4*s)**2==q(394384,10**6)<5*s
+    triple=z*z-(1-2*s)*z+s*s
+    assert triple.subs(z,q(823,1000))==q(2007,125000)>0
+    assert sp.diff(triple,z).subs(z,q(823,1000))>0
+    manuscript=Path(__file__).with_name("C1_EXTERIOR_REDUCTION.md").read_text()
+    printed={int(k):set(tuple(map(int,rr)) for rr in re.findall(r'\((\d),(\d),(\d),(\d)\)',body))
+        for k,body in re.findall(r'^\| ([0-3]) \| (.+) \|$',manuscript,re.M)}
+    expected={k:set() for k in range(4)}
+    for k,j,r,t,l in product(range(4),range(3),range(3),range(4),range(3)):
+        if k+j+r+t+l!=5 or r<l or (r,l)==(2,2):continue
+        if max(r,l)==2 and (k>1 or t>1):continue
+        if (k==3 or t==3) and r*l:continue
+        if (k,j,r,t,l)==(3,2,0,0,0):continue
+        expected[k].add((j,r,t,l))
+    assert printed==expected and [len(printed[k]) for k in range(4)]==[8,12,8,4]
+    print("PASS: C1 exterior support cuts, all scalar gaps, and the complete 32-row count catalogue")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1130,3 +1214,5 @@ if __name__ == "__main__":
     n7_top_three_five()
     c1_exact_pentagon()
     n7_height_three_five()
+    adjacent_223_core()
+    c1_exterior_reduction()

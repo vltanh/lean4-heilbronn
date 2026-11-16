@@ -192,7 +192,7 @@ proof, write \(Z_0=(b_1+b_2+b_3)/s-3\). Its area identities give
 
 The expression
 \[
- \frac{(442/93-\kappa)^2}{3}+rac{442}{93}-\kappa-6\kappa+3
+ \frac{(442/93-\kappa)^2}{3}+\frac{442}{93}-\kappa-6\kappa+3
 \]
 decreases for \(0\le\kappa\le442/93\), and its value at \(8/5\) is
 \(-87029/648675\). Consequently

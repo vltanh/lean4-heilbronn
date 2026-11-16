@@ -276,6 +276,24 @@ reconstructions pass for every row. The other h<e positions, the 4/4
 line classes, and the all-heptagon-interior placement remain open.
 The global algebra checker now has 36 passing groups.
 
+TYPE_II_223_CORE.md now proves the full eight-point placement theorem
+for the remaining Type-II count (2,2,3). Its analytic support bounds
+and exact bootstraps give one rational box. Six exhaustive placement
+rows, with 424 printed integer terms and seven explicit affine squares,
+force the right support point into DCH, DCF, and CFP and at least 2s
+above F. Root geometry review, separate manuscript-parsed SymPy sums,
+and Fraction arithmetic pass. The count remains open until its two
+central points are incorporated.
+
+C1_EXTERIOR_REDUCTION.md supplies whole analytic exterior-count
+exclusions and exactly 32 remaining count rows. Side triples and two
+side pairs are impossible; a side pair forces at most one lower point
+and at most one top point. Further top/lower triple cuts and the
+completed exact-pentagon theorem finish the catalogue. Its support
+intercepts, strict scalar gaps, boundary-contact cases, and complete
+count table have been independently checked. The global C1 parent
+remains open. The global algebra checker now has 38 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
