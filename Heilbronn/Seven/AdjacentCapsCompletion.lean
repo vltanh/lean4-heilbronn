@@ -55,7 +55,24 @@ theorem claim_R_lt_5_7 {L R B T : ℝ} (hL : 0 < L) (hL1 : L < 1) (hR : 0 < R) (
     (hB : 0 < B) (hT : 0 < T) (hbud : R + 7 / 64 / B + 7 / 64 / T ≤ 1)
     (hBT : B + T ≤ 2 * (1 - 7 / 64 / L - 7 / 64 / R)) :
     R < 5 / 7 := by
-  sorry
+  set K := 1 - 7 / 64 / L - 7 / 64 / R with hK
+  have hK0 : 0 < K := by linarith
+  have hsL : 7 / 64 < 7 / 64 / L := by rw [lt_div_iff₀ hL]; nlinarith
+  -- harmonic mean: `s/B + s/T ≥ 4s/(B+T) ≥ 2s/K`
+  have hHM : 4 * (7 / 64) / (B + T) ≤ 7 / 64 / B + 7 / 64 / T := by
+    rw [div_add_div _ _ hB.ne' hT.ne', div_le_div_iff₀ (by positivity) (by positivity)]
+    nlinarith [sq_nonneg (B - T)]
+  have h1 : 2 * (7 / 64) / K ≤ 4 * (7 / 64) / (B + T) := by
+    rw [div_le_div_iff₀ hK0 (by positivity)]; nlinarith
+  have h3 : 2 * (7 / 64) ≤ (1 - R) * (1 - 7 / 64 - 7 / 64 / R) := by
+    have : 2 * (7 / 64) / K ≤ 1 - R := by linarith
+    rw [div_le_iff₀ hK0] at this
+    nlinarith
+  have hKR : (1 - 7 / 64 - 7 / 64 / R) * R = R - 7 / 64 * R - 7 / 64 := by field_simp
+  have h4 : 2 * (7 / 64) * R ≤ (1 - R) * (R - 7 / 64 * R - 7 / 64) := by
+    rw [← hKR]; nlinarith
+  by_contra hc; push Not at hc
+  nlinarith
 
 /-- **Theorem 1** (`SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION:Theorem1`). With the usual strict side
 orders and `O` as in `AdjacentCapsHyp`, some triangle has area less than `7/128` in each family:

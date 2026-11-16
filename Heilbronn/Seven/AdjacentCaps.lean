@@ -63,7 +63,19 @@ theorem claim_Z_lt_5_7 {Z B₀ T : ℝ} (hZ : 0 < Z) (hZ1 : Z < 1) (hB : 0 < B�
     (hbud : Z + 7 / 64 / B₀ + 7 / 64 / T ≤ 1) (hB₀ : B₀ ≤ 1 - 7 / 64 / Z - 7 / 64)
     (hT₀ : T ≤ 1 - 7 / 64 / Z - 7 / 64) :
     Z < 5 / 7 := by
-  sorry
+  set K := 1 - 7 / 64 / Z - 7 / 64 with hK
+  have hK0 : 0 < K := by linarith
+  have h1 : 7 / 64 / K ≤ 7 / 64 / B₀ := div_le_div_of_nonneg_left (by norm_num) hB hB₀
+  have h2 : 7 / 64 / K ≤ 7 / 64 / T := div_le_div_of_nonneg_left (by norm_num) hT hT₀
+  have h3 : 2 * (7 / 64) ≤ (1 - Z) * K := by
+    have : 2 * (7 / 64) / K ≤ 1 - Z := by
+      rw [show 2 * (7 / 64) / K = 7 / 64 / K + 7 / 64 / K by ring]; linarith
+    rw [div_le_iff₀ hK0] at this; linarith
+  have hKZ : K * Z = Z - 7 / 64 - 7 / 64 * Z := by rw [hK]; field_simp
+  have h4 : 2 * (7 / 64) * Z ≤ (1 - Z) * (Z - 7 / 64 - 7 / 64 * Z) := by
+    rw [← hKZ]; nlinarith
+  by_contra hc; push Not at hc
+  nlinarith
 
 /-- **Theorem 1** (`SEVEN_BOUNDARY_ADJACENT_CAPS:Theorem1`). With the usual strict side orders,
 `O` inside the (convex) octagon, outside its four side quadrilaterals and inside `BDE ∩ DEG`, some
