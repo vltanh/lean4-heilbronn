@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 68.
+Checkpoint 69.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -749,6 +749,16 @@ four-corner alternative and all zero-area faces.
         scalar and endpoint cap, all six chord and ten mesh deductions.
         Separate Fraction/SymPy readers reproduce every exact bound
         and all 41 explicit rational squares. Proof: N7_ONE_LOWER_ABC.md.
+  - [x] N7-CENTRAL-AREA-ORIENTATION. In either central lower cell,
+        neither upper point T can have both AGT>0 and DGT>0.
+        Three Pluecker deductions and an actual-contact comparison
+        give four strict containments. Four fan and five signed-product
+        identities, thirteen proved initial bounds and 72 literal
+        rational updates give the exact contradiction gap 1941/1000000.
+        Independent physical-polynomial, geometry and immutable exact
+        arithmetic checks pass. Proof: N7_CENTRAL_AREA_ORIENTATION.md.
+        This closes the stated orientation chamber in both CA and CB;
+        the other orientations and both central parents remain open.
   - [ ] N7-INTERIOR-REMAINDER. Exclude the two central lower cells
         CA and CB in the sole remaining all-interior heptagon count
         (k,j,q)=(1,2,0). Both lower-ear children are complete above.
@@ -926,6 +936,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_SIDE_PAIR_TOP_BOUNDS.md | Uniform .897 contact ceiling, narrow side-pair box, inner 2/9 barycentric bounds and an explicit actual-area transfer to N6 |
 | N7_ONE_LOWER_SETUP.md | Exhaustive four-cell reduction for the remaining all-interior (1,2,0) count, four proved rational boxes, capacity-ray rule and complete factor definitions |
 | N7_ONE_LOWER_ABH.md | Entire lower-ear ABH child: 58 splits, 55 cubics / 21,373 terms, four geometric terminals, 1,993 deductions and 41 explicit rational squares |
+| N7_CENTRAL_AREA_ORIENTATION.md | In both central lower cells, every upper point T satisfies AGT<0 or DGT<0; four fans, five signed products and 72 exact rational steps give gap 1941/1000000 |
 | N7_ONE_LOWER_ABC.md | Entire lower-ear ABC child: 93 splits, 84 cubics / 37,612 terms, ten geometric terminals, 3,411 deductions and 41 explicit rational squares |
 | N6_TOP_AFFINE_CAPS.md | Actual top-cap contact/apex affine upper bounds and inherited actual-container caps, with all determinant identities |
 | N6_TOP_WEIGHTED_BARYCENTRICS.md | General weighted actual top-fan affine bounds with separately witnessed costs and the exact uniform rational outer cap |
