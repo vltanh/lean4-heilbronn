@@ -49,7 +49,7 @@ theorem c1_exclusion {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
   · interval_cases hn : lowerCount h c W X Y Z
     · exact C1ZeroLower.theorem4 hA hW hX hY hZ hn hmin
     · exact C1OneLowerMixedCaps.theorem2 hA hW hX hY hZ hn hmin
-    · exact C1TwoLowerCompletion.theorem2 (c1Anchors_weak hA) hW hX hY hZ hn hmin
+    · exact C1TwoLowerCompletion.theorem2 hA hW hX hY hZ hn hmin
   · have h2 := OneCorner.claim_C1_at_most_two_lower h c d f hA W X Y Z hW hX hY hZ hmin
     have := lowerCount_le_ncard h c W X Y Z
     omega
