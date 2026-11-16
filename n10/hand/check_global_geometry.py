@@ -818,6 +818,52 @@ def adjacent_lower_p():
     print("PASS: final triangular-right cut, empty EBY cap, ER bounds, quadrilateral barycentric identity")
 
 
+def adjacent_nontriangular_right():
+    q=sp.Rational;s=q(93,1000)
+    b,r,v,h,beta,lam,Om,U,t=sp.symbols("b r v h beta lam Om U t")
+    D0=1-s*(1-b)/b-9*b*s/(1-b)
+    zero(sp.diff(D0,b)-s/b**2+9*s/(1-b)**2)
+    val=(1-s)*D0.subs(b,q(103,1000))
+    assert val==q(262504847,3079700000)
+    assert s-val==q(23907253,3079700000)>0
+    t0=q(31,299);r0=q(843,1000)
+    Q=lambda z:(1+4*t)*z*z-12*t*z+4*t*t
+    assert Q(r0).subs(t,t0)==-q(40450427,89401000000)
+    zero(Q(2*t)-16*t*t*(t-1))
+    assert r0*r0+t0-(1-2*s)==q(98051,299000000)>0
+    D,E,B,C,H,FF=(sp.Matrix(pt) for pt in
+        [(0,1),(0,lam),(b,0),(1,1),
+         (b+h*(r-b),h*v),(r+(1-beta)*(1-r),v+(1-beta)*(1-v))])
+    omega=r-b-(1-b)*v
+    M=2*area(D,H,FF)
+    zero(M-(1-beta+omega*(beta-h*beta)+v*(beta-h)))
+    zero(2*area(E,H,FF)-M+(1-lam)*(FF[0]-H[0]))
+    zero(2*area(D,B,H)-h*(omega+v))
+    general=1-Om*U-(1-Om-v)*beta-v*U/beta
+    zero(sp.diff(general,beta)+(1-Om)-v*(1+U/beta**2))
+    zero(-(1-Om)+q(11,5)*(q(9,10)-Om)/q(9,10)-(q(6,5)-q(13,9)*Om))
+    assert q(6,5)-13*s==-q(9,1000)
+    assert q(177,20)*s-q(9,10)*(1-s)==q(27,4000)>0
+    print("PASS: nontriangular right-hull product bound, physical middle areas, and both fan caps")
+
+
+def exterior_count_budgets():
+    q=sp.Rational;s=q(93,1000)
+    a,b,e,f,p,qq,t,u=sp.symbols("a b e f p qq t u")
+    zero((1-e)*(1-f)+e*(1-b)-(1-b*e-f*(1-e)))
+    assert q(4427,500)*s-(1-s)**2==q(773,1000000)>0
+    assert 3*s-q(1,4)==q(29,1000)>0
+    assert (q(29,5)+5)*s-1==q(11,2500)>0
+    first=p*qq*(1-f*t/((1-f)*(1-p))-(1-f)*t/(f*(1-qq)))-t*(f*qq/(1-f)+(1-f)*p/f)
+    second=p*qq-t*(f*qq/((1-f)*(1-p))+(1-f)*p/(f*(1-qq)))
+    zero(first-second)
+    envelope=u*u*(1-u)/(1+u)
+    zero(sp.diff(envelope,u)-2*u*(1-u-u*u)/(1+u)**2)
+    zero(envelope.subs(u,(sp.sqrt(5)-1)/2)-(5*sp.sqrt(5)-11)/2)
+    assert s-q(1,11)==q(23,11000)>0
+    print("PASS: N6 exterior-count budgets and the complete N7 opposite-upper-cap inequality")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -844,3 +890,5 @@ if __name__ == "__main__":
     adjacent_upper_p_and_two_upper()
     adjacent_one_upper()
     adjacent_lower_p()
+    adjacent_nontriangular_right()
+    exterior_count_budgets()

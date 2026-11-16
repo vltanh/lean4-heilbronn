@@ -129,7 +129,9 @@ reflection, exactly these exterior counts:
 | 1 | 1 | 1 |
 
 The removed (2,1,0) count is completely excluded. The four rows shown
-here are not declared excluded.
+here are not declared excluded by this note. The subsequent
+N7_OPPOSITE_UPPER_CAPS.md excludes (1,1,1) as well, leaving only
+(0,0,3), (1,0,2), and (2,0,1) for global coverage.
 
 There are also useful complete placement consequences. In the row
 (2,0,1), let X be the unique heptagon-interior free point. It is below

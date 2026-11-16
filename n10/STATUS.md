@@ -169,6 +169,15 @@ each side cap, and three in the top cap together with a side-cap point.
 Both notes have independently audited geometry and exact rational gaps;
 their surviving global parents remain unchecked.
 
+N7_OPPOSITE_UPPER_CAPS.md further excludes simultaneous occupancy of
+the two upper exterior caps, using just seven actual points. The
+resulting scalar bound (5sqrt(5)-11)/2<1/11 closes the entire (1,1,1)
+row and leaves only (0,0,3), (1,0,2), and (2,0,1). The nontriangular
+Type-II (1,2,4) branch also has an exact quadrilateral-hull catalogue;
+in its central support-cell pair, both middle fans DHF and EHF are
+empty. Those remaining Type-II fan counts are still open. The exact
+global algebra checker now has 27 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

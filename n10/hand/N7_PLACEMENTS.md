@@ -108,6 +108,8 @@ The subsequent N7_UPPER_OCCUPANCY.md excludes the entire (2,1,0)
 row. Thus at least one free point is inside K, and only the first four
 rows remain for global coverage. That note also proves strict chord
 placements for the unique interior point in the two-exterior rows.
+N7_OPPOSITE_UPPER_CAPS.md then excludes (1,1,1) as well, so only
+(0,0,3), (1,0,2), and (2,0,1) remain.
 
 ## 4. A rational box available in every remaining row
 
