@@ -750,6 +750,21 @@ no lower-region hypothesis is needed. Independent geometry and exact
 symbolic identities check this third mapping. This is a sharp sign
 chamber terminal, not a closure of the entire count.
 
+N6_BTTT_TOP_EARS.md now excludes both complete single-ear
+top-quadrilateral words -++- and ++-+ for the one-lower/three-top
+count. Its two roots have twenty binary splits, 22 cubic leaves,
+9,860 printed positive-integer terms and 549 explicit affine squares.
+Independent geometry checks the entire sixteen-word top catalogue,
+all 923 deductions, both versions of the coordinate box and 25,177
+factor occurrences. Independent Fraction/SymPy expansions reproduce
+every negative bound. The shared setup proves every factor rule.
+N6_TOP_TRIPLE_TRANSPOSE.md additionally gives six explicit label maps
+preserving the residual groups, hence the normalization e<=f and the
+strict .168/.264 contact ceilings. This local lemma is independently
+audited. The remaining top words and the N6 parent stay unchecked;
+the seventeen remaining count rows are unchanged. The exact global
+algebra checker has 84 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

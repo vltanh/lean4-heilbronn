@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 61.
+Checkpoint 62.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -460,6 +460,21 @@ four-corner alternative and all zero-area faces.
         explicit sums of nonnegative products. All have independent geometry and
         exact identity audits; neither is a whole-count closure.
         Proof: N6_CORNER_CONTAINERS.md.
+  - [x] N6-LOWER-TOP-QUADRILATERAL-EARS. Both entire single-ear
+        top-quadrilateral alternatives of the one-lower/three-top
+        count: two roots, twenty exhaustive splits and 22 cubics
+        containing 9,860 printed terms and 549 explicit affine squares.
+        Independent geometry checks the full sixteen-word top catalogue,
+        all 923 deductions, every box and 25,177 factor occurrences;
+        separate Fraction/SymPy readers reproduce every exact bound.
+        Proof: N6_BTTT_TOP_EARS.md and N6_TOP_TRIPLE_SETUP.md.
+        The remaining top words and the two top-triple counts stay open.
+  - [x] N6-TOP-TRANSPOSE. An explicit square transposition and six
+        label maps preserve the residual top-word groups and permit
+        e<=f. Exact square gaps give a,e<.168 in the triangular or
+        single-ear cases and a,e<.264 in the central quadrilateral.
+        Proof: N6_TOP_TRIPLE_TRANSPOSE.md. This is a normalization,
+        not an additional count closure.
   - [x] SIDE-PAIR-TOP-BOUNDS. An occupied top cap gives the uniform
         contact ceiling .897. A side pair then gives a narrow
         bottom-contact interval and three inner-point barycentric
@@ -796,6 +811,9 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_ONE_LOWER_ABH.md | Entire lower-ear ABH child: 58 splits, 55 cubics / 21,373 terms, four geometric terminals, 1,993 deductions and 41 explicit rational squares |
 | C1_ONE_LOWER_SIDE_PAIR_TOP.md | Entire (1,1,2,1,0) count and transpose: 34 splits, 31 cubics / 7,430 terms, four geometric terminals, 908 deductions and 114 interval updates |
 | C1_TWO_LOWER_CENTRAL_SIDE_TOP.md | Entire (2,1,1,1,0) count and transpose: six roots, 205 splits, 193 cubics / 51,388 terms, eighteen geometric terminals, 5,961 deductions and 905 interval updates |
+| N6_TOP_TRIPLE_SETUP.md | Exhaustive sixteen-word top catalogue, continuous boxes, geometry rules, scalar support bounds and complete factor definitions for the two top-triple counts |
+| N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
+| N6_TOP_TRIPLE_TRANSPOSE.md | Explicit transposition and six label maps preserve every residual top group; exact .168/.264 contact ceilings and anchor-span lower bounds |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

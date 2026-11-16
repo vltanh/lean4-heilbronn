@@ -2131,6 +2131,47 @@ def n7_one_lower_abh():
     print('PASS: complete N7 ABH lower-ear child, exhaustive59-leaf trie, all printed sums and41 squares')
 
 
+def n6_bttt_top_ears():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000)
+    assert q(149,20)*s-(1-q(21,125))**2==q(313,500000)>0
+    assert q(1457,250)*s-(1-q(33,125))**2==q(77,250000)>0
+    text=Path(__file__).with_name('N6_BTTT_TOP_EARS.md').read_text()
+    def block(tag):
+        found=re.findall(r'^```n6-top-'+re.escape(tag)+r'\n(.*?)^```$',text,re.M|re.S)
+        assert len(found)==1
+        rows=found[0].strip().splitlines()
+        return [] if rows==['none'] else rows
+    roots=[tuple(row.split()) for row in block('roots')]
+    assert set(roots)=={('BTTT','-++-'),('BTTT','++-+')}
+    leaves=[row.split() for row in block('leaves')]
+    assert len(leaves)==22 and all(row[3]=='P' for row in leaves)
+    trees={root:{} for root in roots}
+    for name,loc,word,kind,path in leaves:
+        node=trees[(loc,word)]
+        for token in path.split(','):node=node.setdefault(token,{})
+        assert not node;node['leaf']=True
+    splits=0
+    def walk(node):
+        nonlocal splits
+        if 'leaf' in node:assert len(node)==1;return
+        assert len(node)==2
+        left,right=sorted(node)
+        assert left[:-1]==right[:-1] and {left[-1],right[-1]}=={'+','-'}
+        splits+=1
+        for child in node.values():walk(child)
+    for tree in trees.values():walk(tree)
+    assert splits==20
+    assert sum(len(block(row[0]+'-sum')) for row in leaves)==9860
+    assert sum(len(block(row[0]+'-trace')) for row in leaves)==923
+    assert sum(len(block(row[0]+'-squares')) for row in leaves)==549
+    assert all(not block(row[0]+'-intervals') for row in leaves)
+    bounds=[q(block(row[0]+'-bound')[0]) for row in leaves]
+    assert max(bounds)==q(-616458368142560988211155430921350313,1661222737115243959638000000000000000)<0
+    print('PASS: complete N6 BTTT single-ear top words, both exhaustive trees and exact transposition ceilings')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -2215,3 +2256,4 @@ if __name__ == "__main__":
     n7_one_lower_abh()
     c1_one_lower_side_pair_top()
     c1_two_lower_central_side_top()
+    n6_bttt_top_ears()
