@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 28.
+Checkpoint 29.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -263,8 +263,15 @@ four-corner alternative and all zero-area faces.
         allowing every inward depth of G. Eleven exhaustive sign rows
         have 3,183 printed cubic terms, with all occupancy and diagonal
         witnesses supplied. Proof: N7_THREE_FIVE_TOP.md.
+  - [x] N7-SINGLE-EXTERIOR-3/5-UPPER-HEIGHT. Every short-arc position
+        when h>=e. The eight projected ears give all long-triangle
+        capacities; seven exhaustive binary ledgers have 71 printed
+        cubic contradictions and two direct sign contradictions.
+        All 22,579 integer terms, rational boxes, and geometric witnesses
+        are printed and independently audited.
+        Proof: N7_THREE_FIVE_UPPER_HEIGHT.md.
   - [ ] Complete the two surviving placement rows outside the proved
-        sign chambers: all of (0,0,3), the other 3/5 short-arc positions,
+        sign chambers: all of (0,0,3), the other 3/5 positions with h<e,
         and the 4/4 line splits of (1,0,2).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
@@ -383,6 +390,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_PROJECTED_SIGNS.md | Complete normalized inward-secondary good-sign chamber without an extra coordinate condition; two cubic rows, 642 printed integer entries |
 | N7_OP_LINE_CAPS.md | Every 1/7 and 2/6 line split in single-exterior N7; exhaustive eight-cap catalogue and five printed sums, 2,254 entries |
 | N7_THREE_FIVE_TOP.md | Entire HGF short-arc 3/5 class in single-exterior N7; eleven exhaustive cubic rows, 3,183 printed entries |
+| N7_THREE_FIVE_UPPER_HEIGHT.md | Every 3/5 short-arc position for h>=e; 71 printed cubic rows, 22,579 integer terms, and two direct sign contradictions |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

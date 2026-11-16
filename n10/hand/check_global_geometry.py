@@ -1069,6 +1069,30 @@ def c1_exact_pentagon():
     print("PASS: C1 exact-pentagon geometry, distributed-mesh ranges, capacity-one fans, and ear bounds")
 
 
+def n7_height_three_five():
+    q=sp.Rational;s=q(93,1000)
+    c,d,e,f,g,h,z,x,y=sp.symbols("c d e f g h z x y")
+    C,D,E,F,G,H,T=(sp.Matrix(pt) for pt in
+        [(c,0),(1,d),(1,e),(f,1),(g,z),(0,h),(x,y)])
+    Gp=sp.Matrix([g,1]);det=lambda A,B,C:2*area(A,B,C)
+    zero(det(F,Gp,T)-det(F,G,T)-(1-z)*(f-x))
+    zero(det(E,F,T)-((1-f)*(1-y)-(1-e)*(x-f)))
+    zero(det(F,Gp,H)-(f-g)*(1-h))
+    zero(det(E,F,Gp)-(f-g)*(1-e))
+    for A,B,co in [(C,D,1-c),(C,H,-c),(D,H,-1)]:
+        zero(sp.diff(det(A,B,G),z)-co)
+    assert s/q(753,1000)==q(31,251)
+    assert s/q(31657,55000)>q(31,251)>q(93,790)>q(7347,69700)
+    p0,q0,r0,t0=sp.symbols("p0 q0 r0 t0")
+    A0,B0,D0,E0=(sp.Matrix(pt) for pt in [(0,0),(p0,q0),(r0,t0),(1,0)])
+    X=det(A0,B0,E0);Y=det(A0,D0,E0);Z=det(A0,B0,D0);Delta=X-Z
+    R1=A0+Y/Delta*(B0-A0);R2=E0+X/Delta*(D0-E0)
+    for coordinate in R1-R2:zero(coordinate)
+    zero(Y-Delta-det(B0,D0,E0))
+    zero(-det(A0,E0,R1)-X*Y/Delta)
+    print("PASS: all N7 h>=e long-triangle transfers, uniform ordinate bound, and the five-chain supporting-ray identity")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1105,3 +1129,4 @@ if __name__ == "__main__":
     n6_exact_hull_reduction()
     n7_top_three_five()
     c1_exact_pentagon()
+    n7_height_three_five()

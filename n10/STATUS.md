@@ -264,6 +264,18 @@ reconstruction verifies every printed sum. The C1 exterior placements
 and the global C1 parent remain open. The global algebra checker now
 has 35 passing groups.
 
+Every single-exterior N7 3/5 OP-line position is now excluded when
+h>=e. N7_THREE_FIVE_UPPER_HEIGHT.md proves the projected-ear and
+long-triangle transfers, a uniform upper ordinate bound, and the
+supporting-ray identity for any five convex actual points. Its seven
+remaining arc positions have an explicit exhaustive 73-leaf ledger:
+71 printed cubic contradictions, with 22,579 positive integer terms,
+and two direct sign contradictions. Root review checked every printed
+sign and conditional witness; separate Fraction and SymPy arithmetic
+reconstructions pass for every row. The other h<e positions, the 4/4
+line classes, and the all-heptagon-interior placement remain open.
+The global algebra checker now has 36 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
