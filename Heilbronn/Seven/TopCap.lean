@@ -142,7 +142,7 @@ area obeys the scalar bound of `EIGHT_BOUNDARY.md` §4, below Lemma 3's `2(1+√
 `hand/SEVEN_BOUNDARY_TOP_CAP.md`, lines 27–100.
 Uses: EIGHT_BOUNDARY:Lemma3, EIGHT_BOUNDARY:claim-scalar-bound. -/
 theorem theorem1 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
-    (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P)
+    (hX : FarCapPoint e f (g, k)) {P : Point} (_hP : InHeptagon a h b c d e f P)
     (hq : InClosedPolygon ![(0, h), (1, e), (g, k), (f, 1)] P) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) P) < 7 / 128 := by
   by_contra hcon
@@ -224,8 +224,8 @@ theorem tc2_bl {b L : ℝ} (hb : 0 < b) (hb1 : b < 1) (hL : 0 < L) (hL1 : L < 1)
   nlinarith
 
 /-- The brace-nonpositive branch of Theorem 2: the bound (3) and the scalar contradiction. -/
-theorem tc2_neg {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1)
-    (hb : 0 < b) (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
+theorem tc2_neg {a h b c d e f g k : ℝ} (_ha : 0 < a) (hah : a < h) (hh : h < 1)
+    (hb : 0 < b) (hbc : b < c) (hc : c < 1) (_hd : 0 < d) (hde : d < e) (he : e < 1)
     (hbf : b ≤ f) (hfg : f < g) (hk1 : k ≤ 1)
     (hABH : 7 / 64 ≤ b * (h - a)) (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
     (hCDE : 7 / 64 ≤ (1 - c) * (e - d)) (hDEX : 7 / 64 ≤ (e - d) * (1 - g))
@@ -279,8 +279,8 @@ theorem tc2_neg {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1
   exact scalar_contra (by linarith) (by positivity) hsZ (four_le_mul_inv hL hR) (by linarith)
 
 /-- The brace-positive branch of Theorem 2: `fT Q ≤ fT((1-L)(1-b) + c(1-R)) - cs`. -/
-theorem tc2_pos {a h b c d e f g k : ℝ} (hah : a < h) (hh : h < 1)
-    (hb1 : b < 1) (hc : 0 < c) (hf0 : 0 < f) (hf1 : f < 1) (hfg : f < g) (hk1 : k ≤ 1)
+theorem tc2_pos {a h b c d e f g k : ℝ} (_hah : a < h) (hh : h < 1)
+    (hb1 : b < 1) (hc : 0 < c) (hf0 : 0 < f) (hf1 : f < 1) (hfg : f < g) (_hk1 : k ≤ 1)
     (hHFX : 7 / 64 ≤ (g - f) * (1 - h) + f * (1 - k))
     (hEFX : 7 / 64 ≤ (g - f) * (1 - e) - (1 - f) * (1 - k))
     (hbr : 0 < f * (1 - b) - c * (1 - f)) :
@@ -341,7 +341,7 @@ the closed quadrilateral `ABCD` at minimum area at least `7/128`.
 `hand/SEVEN_BOUNDARY_TOP_CAP.md`, lines 104–163.
 Uses: EIGHT_BOUNDARY:Lemma3, EIGHT_BOUNDARY:claim-scalar-bound. -/
 theorem theorem2 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
-    (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P)
+    (hX : FarCapPoint e f (g, k)) {P : Point} (_hP : InHeptagon a h b c d e f P)
     (hq : InClosedPolygon ![(0, a), (b, 0), (c, 0), (1, d)] P) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) P) < 7 / 128 := by
   by_contra hcon
@@ -512,7 +512,7 @@ theorem tc3_main {a b f h M T R δ' μ τ ρ : ℝ} (hM : 0 < M) (hT : 0 < T) (h
     (four_le_mul_inv hM hT) hfin
 
 /-- The scalar part of Theorem 3 in the coordinates. -/
-theorem tc3_core {a h b c d e f g k : ℝ} (hah : a < h) (hb : 0 < b) (hbc : b < c)
+theorem tc3_core {a h b c d e f g k : ℝ} (_hah : a < h) (hb : 0 < b) (hbc : b < c)
     (hde : d < e) (he : e < 1) (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g) (hk1 : k ≤ 1)
     (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
     (hCDE : 7 / 64 ≤ (1 - c) * (e - d)) (hDEX : 7 / 64 ≤ (e - d) * (1 - g))
@@ -564,7 +564,7 @@ the closed quadrilateral `FHAB` at minimum area at least `7/128`.
 `hand/SEVEN_BOUNDARY_TOP_CAP.md`, lines 167–256.
 Uses: EIGHT_BOUNDARY:Lemma3, EIGHT_BOUNDARY:claim-scalar-bound. -/
 theorem theorem3 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
-    (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P)
+    (hX : FarCapPoint e f (g, k)) {P : Point} (_hP : InHeptagon a h b c d e f P)
     (hq : InClosedPolygon ![(f, 1), (0, h), (0, a), (b, 0)] P) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) P) < 7 / 128 := by
   by_contra hcon

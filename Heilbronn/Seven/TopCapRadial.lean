@@ -368,8 +368,7 @@ theorem cvx_XFH (H : ConvHyp a h b c d e f g k) : 0 < sarea (g, k) (f, 1) (0, h)
 theorem exterior_convex (H : ConvHyp a h b c d e f g k) :
     IsConvexPolygon (exteriorOctagon a h b c d e f (g, k)) := by
   intro i j l hij hjl
-  fin_cases i <;> fin_cases j <;> (try simp at hij) <;> fin_cases l <;> (try simp at hjl) <;>
-    (try simp at hij)
+  fin_cases i <;> fin_cases j <;> (try simp at hij) <;> fin_cases l <;> (try simp at hjl)
   exacts [cvx_ABC H, cvx_ABD H, cvx_ABE H, cvx_ABX H, cvx_ABF H, cvx_ABH H, cvx_ACD H, cvx_ACE H, cvx_ACX H, cvx_ACF H, cvx_ACH H, cvx_ADE H, cvx_ADX H, cvx_ADF H, cvx_ADH H, cvx_AEX H, cvx_AEF H, cvx_AEH H, cvx_AXF H, cvx_AXH H, cvx_AFH H, cvx_BCD H, cvx_BCE H, cvx_BCX H, cvx_BCF H, cvx_BCH H, cvx_BDE H, cvx_BDX H, cvx_BDF H, cvx_BDH H, cvx_BEX H, cvx_BEF H, cvx_BEH H, cvx_BXF H, cvx_BXH H, cvx_BFH H, cvx_CDE H, cvx_CDX H, cvx_CDF H, cvx_CDH H, cvx_CEX H, cvx_CEF H, cvx_CEH H, cvx_CXF H, cvx_CXH H, cvx_CFH H, cvx_DEX H, cvx_DEF H, cvx_DEH H, cvx_DXF H, cvx_DXH H, cvx_DFH H, cvx_EXF H, cvx_EXH H, cvx_EFH H, cvx_XFH H]
 
 end Convex

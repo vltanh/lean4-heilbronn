@@ -243,7 +243,7 @@ theorem capacity_one {n : ℕ} {P : Fin n → Point} (i₁ i₂ i₃ i₄ i₅ :
 /-! ### §1. The near-side lower ear -/
 
 /-- `x + q/x ≥ 2r` when `r² ≤ q` (rational stand-in for `z + q/z ≥ 2√q`). -/
-theorem amgm_rat {x q r : ℝ} (hx : 0 < x) (hr : 0 ≤ r) (hq : r ^ 2 ≤ q) : 2 * r ≤ x + q / x := by
+theorem amgm_rat {x q r : ℝ} (hx : 0 < x) (_hr : 0 ≤ r) (hq : r ^ 2 ≤ q) : 2 * r ≤ x + q / x := by
   have h1 : r ^ 2 / x ≤ q / x := div_le_div_of_nonneg_right hq hx.le
   have h2 : 2 * r ≤ x + r ^ 2 / x := by
     rw [← sub_nonneg]
@@ -252,11 +252,11 @@ theorem amgm_rat {x q r : ℝ} (hx : 0 < x) (hr : 0 ≤ r) (hq : r ^ 2 ≤ q) : 
   linarith
 
 /-- (5) of `SEVEN_BOUNDARY_CAPS.md` in the weaker form `h > 1 - s`. -/
-theorem thm1_h {a L M : ℝ} (ha : 0 < a) (hL6 : 6 * (7 / 64) ≤ L) (hM : 0 < M)
+theorem thm1_h {a L M : ℝ} (ha : 0 < a) (hL6 : 6 * (7 / 64) ≤ L) (_hM : 0 < M)
     (hML : M * L ≤ (1 - 7 / 64) * L - 3 * (7 / 64)) (hABC : 7 / 64 ≤ a * M) :
     1 - 7 / 64 < a + L := by
   have hL : 0 < L := by linarith
-  have hD : 0 < (1 - 7 / 64) * L - 3 * (7 / 64) := by nlinarith [mul_pos hM hL]
+  have hD : 0 < (1 - 7 / 64) * L - 3 * (7 / 64) := by nlinarith [mul_pos _hM hL]
   have haD : 7 / 64 * L ≤ a * ((1 - 7 / 64) * L - 3 * (7 / 64)) := by
     have := mul_le_mul_of_nonneg_left hML ha.le
     nlinarith
@@ -268,7 +268,7 @@ theorem thm1_h {a L M : ℝ} (ha : 0 < a) (hL6 : 6 * (7 / 64) ≤ L) (hM : 0 < M
   nlinarith
 
 /-- The scalar part of Theorem 1 (`SEVEN_BOUNDARY_CAPS.md` (4)–(8)). -/
-theorem theorem1_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
+theorem theorem1_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (_hh : h < 1) (hb : 0 < b)
     (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1) (hbf : b ≤ f)
     (hf : f ≤ 1 / 2) (hbL : 3 * (7 / 64) ≤ b * (h - a)) (hABC : 7 / 64 ≤ a * (c - b))
     (hBCD : 7 / 64 ≤ d * (c - b)) (hCDE : 7 / 64 ≤ (1 - c) * (e - d))
@@ -659,7 +659,7 @@ theorem thm5_N {α w : ℝ} (hα0 : 0 < α) (hα : α < 5 / 32) (hw : 7 / 64 ≤
 `α = s/(c-b)`, `u = b`, `v = 1 - c`: from `α(u+v) = α - s`, (21) in product form
 `αuv + (1-f)sv + fsu ≤ (1-s)uv`, `(1-α)v > s`, `f ≤ 1/2` and `αf ≥ v + α - αv - 3/16`
 (`G ≥ 13/16`), a contradiction. -/
-theorem thm5_scalar {α u v f : ℝ} (hα0 : 0 < α) (hu : 0 < u) (hv : 0 < v) (hf0 : 0 ≤ f)
+theorem thm5_scalar {α u v f : ℝ} (hα0 : 0 < α) (hu : 0 < u) (hv : 0 < v) (_hf0 : 0 ≤ f)
     (hf : f ≤ 1 / 2) (hsum : α * (u + v) = α - 7 / 64)
     (h21 : α * u * v + (1 - f) * (7 / 64) * v + f * (7 / 64) * u ≤ (1 - 7 / 64) * u * v)
     (hw : 7 / 64 < (1 - α) * v) (hG : v + α - α * v - 3 / 16 ≤ α * f) : False := by
@@ -704,8 +704,8 @@ theorem thm5_scalar {α u v f : ℝ} (hα0 : 0 < α) (hu : 0 < u) (hv : 0 < v) (
     nlinarith [mul_nonpos_of_nonneg_of_nonpos (sq_nonneg (1 - α)) hPhi]
 
 /-- The bound (19) of Theorem 5: `[ACF] = c(1-a) + af < 13/16`. -/
-theorem thm5_bound {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hb : 0 < b) (hbc : b < c)
-    (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1) (hbf : b ≤ f) (hfc : f ≤ c)
+theorem thm5_bound {a h b c d e f : ℝ} (_ha : 0 < a) (_hah : a < h) (hb : 0 < b) (hbc : b < c)
+    (hc : c < 1) (_hd : 0 < d) (_hde : d < e) (he : e < 1) (hbf : b ≤ f) (hfc : f ≤ c)
     (hf : f ≤ 1 / 2) (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
     (hABH : 7 / 64 ≤ b * (h - a)) (hCDE : 7 / 64 ≤ (1 - c) * (e - d))
     (hEFH : 7 / 64 ≤ (1 - f) * (1 - h) + f * (1 - e)) :
@@ -1135,7 +1135,7 @@ theorem thm8_case2 {M b w : ℝ} (hM : 0 < M) (hb : 0 < b) (hw : 0 < w) (hsum : 
 
 /-- The scalar part of Theorem 8 (`SEVEN_BOUNDARY_CAPS.md` (31)–(35)). -/
 theorem theorem8_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
-    (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1) (hbf : b ≤ f)
+    (hbc : b < c) (hc : c < 1) (_hd : 0 < d) (hde : d < e) (he : e < 1) (hbf : b ≤ f)
     (hf : f ≤ 1 / 2) (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
     (hABH : 7 / 64 ≤ b * (h - a)) (hEFH : 7 / 64 ≤ (1 - f) * (1 - h) + f * (1 - e))
     (hneg : 3 * (7 / 64) ≤ (1 - c) * (e - d)) : False := by
@@ -1234,7 +1234,7 @@ theorem eq37 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f)
 
 /-- The bound `[CDF] < 13/16` of (36), (38)–(39). -/
 theorem thm9_CDF {b c d e f : ℝ} (hb8 : 1 / 8 < b) (hb2 : b ≤ 1 / 2) (hbc : b < c) (hc : c < 1)
-    (hbf : b ≤ f) (hfc : f ≤ c) (hd : 0 < d) (hde : d < e) (he : e < 1)
+    (hbf : b ≤ f) (hfc : f ≤ c) (hd : 0 < d) (_hde : d < e) (he : e < 1)
     (hCDE : 7 / 64 ≤ (1 - c) * (e - d))
     (hc0 : b ^ 2 ≤ c * (b - 7 / 64)) (h37' : 0 < b - 7 / 64 - b ^ 2) :
     (1 - c) * (1 - 0) - (d - 0) * (f - c) < 13 / 16 := by
@@ -1478,8 +1478,8 @@ theorem support_bound {U V W H F X : Point} (hS : TypeII.IsSupportTriangle U V W
 weakly below the line `FX` (`(1-x₂)(y₁-f) ≤ (1-y₂)(x₁-f)`), the triangle `F, D, K'` with
 `K' = (1,k)` the right-side intercept of `FX` (`e < k ≤ 1`) is a support triangle with contacts
 `X ∈ (F, K')`, `E ∈ (D, K')` and fifth point `Y`. -/
-theorem far_support {d e f x₁ x₂ y₁ y₂ : ℝ} (hf : f < 1) (hd : 0 < d) (hde : d < e)
-    (he : e < 1) (hx1 : f < x₁) (hx1' : x₁ < 1) (hx2 : x₂ ≤ 1) (hy1 : f < y₁) (hy1' : y₁ < 1)
+theorem far_support {d e f x₁ x₂ y₁ y₂ : ℝ} (hf : f < 1) (_hd : 0 < d) (hde : d < e)
+    (_he : e < 1) (hx1 : f < x₁) (hx1' : x₁ < 1) (hx2 : x₂ ≤ 1) (hy1 : f < y₁) (hy1' : y₁ < 1)
     (hXE : 0 < sarea (f, 1) (1, e) (x₁, x₂)) (hYE : 0 < sarea (f, 1) (1, e) (y₁, y₂))
     (hXY : (1 - x₂) * (y₁ - f) ≤ (1 - y₂) * (x₁ - f)) :
     ∃ k : ℝ, d < k ∧ k ≤ 1 ∧

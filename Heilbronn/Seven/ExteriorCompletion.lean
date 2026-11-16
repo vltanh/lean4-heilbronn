@@ -348,7 +348,7 @@ theorem q_nonneg {V : Fin 8 → Point} {P : Point} {w : Word} (hV : IsConvexPoly
   have hne3 : i ≠ l := Fin.ne_of_lt (hij.trans hjl)
   by_cases hl : (l : ℕ) < 8
   · have hs : sgn w (i, j, l) = true := by simp [sgn, hl]
-    rw [hs, if_pos rfl, one_mul]
+    rw [hs, ite_eq_left rfl, one_mul]
     have eVl : octConfig V P l = V ⟨l, hl⟩ := octConfig_castSucc V P ⟨l, hl⟩
     have hpos : 0 < sarea (octConfig V P i) (octConfig V P j) (octConfig V P l) := by
       rw [eVi, eVj, eVl]
@@ -368,7 +368,7 @@ theorem q_nonneg {V : Fin 8 → Point} {P : Point} {w : Word} (hV : IsConvexPoly
     by_cases hk : (j : ℕ) - i ≤ w ⟨i, hi8⟩
     · have hs : sgn w (i, j, l) = true := by
         unfold sgn; rw [hof]; simp [hl, hk]
-      rw [hs, if_pos rfl, one_mul]
+      rw [hs, ite_eq_left rfl, one_mul]
       have hpos := hw.pos_of ⟨i, hi8⟩ ⟨j, hj8⟩
         (by rw [hsub]; omega) (by rw [hsub]; exact hk)
       have := SevenBoundaryCaps.cost hmin i j l (by rw [eVi, eVj, eVl])

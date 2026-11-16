@@ -101,7 +101,7 @@ end BCert
 
 /-- (2) of `SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`: `Φ(b, f, w) ≤ 1/s`, from the anchor bounds (1) and
 the two upper areas. -/
-theorem tcr_phi {b f w M T h e : ℝ} (hb : 0 < b) (hf0 : 0 ≤ f) (hf1 : f ≤ 1) (hw : 0 < w)
+theorem tcr_phi {b f w M T h e : ℝ} (_hb : 0 < b) (hf0 : 0 ≤ f) (hf1 : f ≤ 1) (_hw : 0 < w)
     (hM : 0 < M) (hT : 0 < T) (hh : 7 / 64 / M + 7 / 64 / b ≤ h) (he : 7 / 64 / M + 7 / 64 / w ≤ e)
     (hup : 7 / 64 ≤ T * ((1 - f) * (1 - h) + f * (1 - e)))
     (hMw : M ≤ 1 - w - b) (hTw : T ≤ 1 - w - f) :
@@ -168,9 +168,9 @@ theorem tcr_P {f w : ℝ} (hw : 0 < w) (hw2 : w < 17 / 20) (hfw : 0 < 1 - f - w)
   exact mul_nonpos_of_nonpos_of_nonneg (by linarith) hD.le
 
 /-- The scalar argument for `b > 3/20` (§1 of `SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`). -/
-theorem tcr_b_core {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1)
-    (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
-    (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g) (hg1 : g < 1) (hk1 : k ≤ 1)
+theorem tcr_b_core {a h b c d e f g k : ℝ} (_ha : 0 < a) (_hah : a < h) (_hh : h < 1)
+    (hbc : b < c) (_hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
+    (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g) (_hg1 : g < 1) (_hk1 : k ≤ 1)
     (hABH : 7 / 64 ≤ b * (h - a)) (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
     (hCDE : 7 / 64 ≤ (1 - c) * (e - d)) (hDEX : 7 / 64 ≤ (e - d) * (1 - g))
     (hHFX : 7 / 64 ≤ (g - f) * (1 - h) + f * (1 - k))
@@ -321,9 +321,9 @@ theorem tcr_k_final {b c g w : ℝ} (hbc : b < c) (hc : c < 1) (hg1 : g < 1) (hb
     linarith
 
 /-- (8) of `SEVEN_BOUNDARY_TOP_CAP_RIGHT.md` under `k ≤ h`. -/
-theorem tcr_k_sum {a h b c d e f g k : ℝ} (hah : a < h) (hh : h < 1) (hbc : b < c)
-    (hde : d < e) (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g)
-    (hBCD : 7 / 64 ≤ d * (c - b)) (hR : 0 < e - d) {w : ℝ} (hwpos : 0 < w)
+theorem tcr_k_sum {a h b c d e f g k : ℝ} (_hah : a < h) (hh : h < 1) (hbc : b < c)
+    (_hde : d < e) (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g)
+    (hBCD : 7 / 64 ≤ d * (c - b)) (_hR : 0 < e - d) {w : ℝ} (hwpos : 0 < w)
     (hRw : 7 / 64 ≤ (e - d) * w)
     (hHFX : 7 / 64 ≤ (g - f) * (1 - h) + f * (1 - k))
     (hEFX : 7 / 64 ≤ (g - f) * (1 - e) - (1 - f) * (1 - k))
@@ -405,7 +405,7 @@ theorem claim_k_gt_h {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
 
 /-- The scalar bound (3)–(4) of `SEVEN_BOUNDARY_TOP_CAP.md` in the strict form used by (11):
 the right side of (3) is below `24s/5 = 21/40` (adapted from `EightBoundary.scalar_bound_core`). -/
-theorem scalar_lt_2140 {X Z : ℝ} (hX : 0 < X) (hZ : 0 < Z) (hsZ : 7 / 64 * Z < 1)
+theorem scalar_lt_2140 {X Z : ℝ} (hX : 0 < X) (_hZ : 0 < Z) (hsZ : 7 / 64 * Z < 1)
     (hXZ : 4 ≤ X * Z) :
     2 - 7 / 64 * Z - 7 / 64 * (2 - 7 / 64 * Z) / (1 - 7 / 64 * Z) - X + 2 * (7 / 64) < 21 / 40 := by
   by_contra hQ
@@ -466,18 +466,18 @@ theorem one_var_pos {e : Cert.Expr} {lo hi : ℚ} {n M : ℕ}
 theorem negC1_pos {u : ℝ} (h1 : 7 / 32 ≤ u) (h2 : u ≤ 13 / 20) :
     0 < 245 - u * (1939 + u * (10240 * u - 9120)) := by
   have := one_var_pos negC1_check (u := u) (by norm_num; linarith) (by norm_num; linarith)
-  simp [negC1poly] at this; norm_num at this; linarith
+  simp [negC1poly] at this; linarith
 
 theorem negC2_pos {u : ℝ} (h1 : 7 / 32 ≤ u) (h2 : u ≤ 35 / 48) :
     0 < 245 - u * (5789 + u * (40960 * u - 43200)) := by
   have := one_var_pos negC2_check (u := u) (by norm_num; linarith) (by norm_num; linarith)
-  simp [negC2poly] at this; norm_num at this; linarith
+  simp [negC2poly] at this; linarith
 
 theorem sextic_pos {u : ℝ} (h1 : 13 / 20 ≤ u) (h2 : u ≤ 35 / 48) :
     0 < (((((655360 * u - 2396160) * u + 2778528) * u - 1205910) * u + 123249) * u +
       28126) * u - 3430 := by
   have := one_var_pos sextic_check (u := u) (by norm_num; linarith) (by norm_num; linarith)
-  simp [sextic] at this; norm_num at this; linarith
+  simp [sextic] at this; linarith
 
 end RCert
 
@@ -652,7 +652,7 @@ theorem tcr_area_uvw {u v w d e k : ℝ} (hu1 : 7 / 32 ≤ u) (hu2 : u ≤ 35 / 
     exact tcr_area_B hu1 hu2 hv0 hw0 hz hδ h1c h1g hQG
 
 /-- The reductions of §3 in the coordinates: `Q = (1-c)(k-d) + (1-g)e < 21/40`. -/
-theorem tcr_area_core {a h b c d e f g k : ℝ} (hah : a < h) (hbc : b < c) (hc : c < 1)
+theorem tcr_area_core {a h b c d e f g k : ℝ} (_hah : a < h) (hbc : b < c) (hc : c < 1)
     (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g) (hg1 : g < 1)
     (hek : e < k) (hk1 : k ≤ 1) (hkh : h < k) (hb3 : 3 / 20 < b)
     (hABH : 7 / 64 ≤ b * (h - a)) (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
