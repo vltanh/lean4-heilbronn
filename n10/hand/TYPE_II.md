@@ -2,8 +2,8 @@
 
 This note normalizes the adjacent-corner family II, proves the endpoint
 bounds used in its count reduction, and closes complete side-hull
-alternatives within the counts (2,2,3) and (2,3,2). It does not yet
-exclude family II. The precise remaining cases are listed in Section 9.
+alternatives within the counts (2,2,3) and (2,3,2). Section 9 links the
+complete count proofs and the full family assembly TYPE_II_COMPLETE.md.
 
 Write
 
@@ -167,7 +167,7 @@ contrary to k<9/50 and sigma>9/100. The inequality k<9/50 follows
 from sqrt(2)>141/100. For c0, use the four-interior-point exclusion in
 TRIANGLE_OCCUPANCY.md. For r, five points together with B,C would
 contradict the seven-point endpoint theorem in THREE_CORNERS.md, since
-TR has area at most 1/2.
+TR has doubled area at most one.
 
 The raw bounds (3) leave five rows. One of them, (2,1,4), is impossible.
 The four-point left endpoint lemma gives b>=3sigma; the six-point right
@@ -415,24 +415,20 @@ Section 2 is (5sqrt(5)-11)/2<1/11. But sigma=93/1000>1/11, a
 contradiction. This excludes all configurations with the two side hulls
 quadrilateral, regardless of their central-point placement.
 
-## 9. Exact remaining scope
+## 9. Complete exclusion
 
-No complete exclusion of Type II is claimed. After the determinant-one
-normalization or the separate Type-III alternative, the residual cases
-are
+The reductions above leave four occupancy rows. Each now has a complete
+hand proof, with all of its hull and central-placement alternatives:
 
-* (ell,c0,r)=(1,3,3);
-* (ell,c0,r)=(2,2,3), with triangular left hull DBE containing P and
-  nontriangular right five-point hull whose support-normalized fifth
-  point is in cell II;
-* (ell,c0,r)=(2,3,2), with at least one triangular side hull.
+| Count (ell,c0,r) | Complete proof |
+|---|---|
+| (1,2,4) | TYPE_II_R4_COMPLETE.md |
+| (1,3,3) | TYPE_II_133_COMPLETE.md |
+| (2,2,3) | TYPE_II_223_COMPLETE.md |
+| (2,3,2) | TYPE_II_232_COMPLETE.md |
 
-For either central-triple row, CLUSTERED_TRIANGLE.md excludes the
-clustered pattern. Its distributed pattern remains part of the displayed
-obligation. None of the count reductions or hull exclusions above checks
-the full HP11-II entry.
-
-The later TYPE_II_R4_COMPLETE.md excludes the entire fourth row
-(1,2,4), including both actual right-hull types and all three
-nontriangular support-cell pairs. Its assembly covers every central
-placement and all positive-minimum boundary cases.
+TYPE_II_COMPLETE.md assembles these proofs with the determinant-one
+normalization, its separate three-corner alternative, all boundary
+cases, and the competitive threshold comparison. It proves that every
+ten-point configuration with two adjacent occupied corners has minimum
+ordinary triangle area strictly below A*. Thus HP11-II is complete.

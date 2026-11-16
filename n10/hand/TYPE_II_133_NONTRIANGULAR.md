@@ -2,9 +2,10 @@
 
 This note gives a complete geometric and rational-box model for the
 nontriangular right-hull child of Type-II (1,3,3). Its three exhaustive
-support cells are I,II,III. Each cell is excluded by its own fixed finite
-appendix when that appendix is provided; the common reduction alone is
-not an exclusion of the child.
+support cells are I,II,III. Each cell is excluded by its fixed finite
+appendix TYPE_II_133_CELL_I.md, TYPE_II_133_CELL_II.md or
+TYPE_II_133_CELL_III.md. TYPE_II_133_COMPLETE.md assembles all three
+with the separate triangular-right-hull proof.
 
 All points are in the closed unit square. Write [UVW]=det(V-U,W-U),
 and assume every actual unsigned doubled triangle area is at least

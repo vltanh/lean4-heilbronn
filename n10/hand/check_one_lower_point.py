@@ -12,4 +12,14 @@ assert sp.expand(det('HBG').subs(z,h*(1-g/c-w))-h*g*(c-b)/c+b*h*w)==0
 assert sp.expand(det('ABG').subs(z,h*(1-g/c-w))-b*(h-a)+(b*h-a*c)*g/c+b*h*w)==0
 assert sp.factor(s+b*s/c+(b*h-a*c)*s*(c+b)/(c*h*(c-b))-s*(c+b)*(h-a)/(h*(c-b)))==0
 assert 12*s>1
-print('PASS: one-lower-point ear areas, central eliminations and exact contact-order cancellation')
+gap=h*c-h*g-c*z-s
+assert sp.expand(c*(det('HBG')-s)+b*gap-(h*(c-b)*g-s*(c+b)))==0
+assert sp.expand(h*(det('ACG')-s)+a*gap-(c*(h-a)*z-s*(h+a)))==0
+P=(h-a)*(c-b);W=3*h*c-a*c-b*h-a*b
+assert sp.expand((c+b)*(h-a)+(h+a)*(c-b)+P-W)==0
+quartic=h*c*P-s*W
+assert sp.expand((c*P-s*W)-quartic-c*(1-h)*P)==0
+assert sp.expand((h*P-s*W)-quartic-h*(1-c)*P)==0
+M=sp.symbols('M')
+assert sp.expand((M*P-s*W)-quartic-(M-h*c)*P)==0
+print('PASS: one-lower-point ears, both ordered central bounds, common central strip and cubic consequences')

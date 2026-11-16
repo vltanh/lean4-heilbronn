@@ -86,3 +86,44 @@ not change the coordinates or labels of any other configuration point.
 
 The equality ac=bh is covered by both derivations. Thus the four
 alternatives and every displayed contact inequality are proved.
+
+## 3. A shared central-strip inequality
+
+In either central row, the positive actual clearances HBG,ACG and
+the negative HC clearance give
+
+    h*g+b*z-b*h>=s,
+    c*z+a*g-a*c>=s,
+    hc-h*g-c*z>=s.
+
+Multiply the first inequality by c and the third by b, then add.
+Multiply the second by h and the third by a, then add. This yields
+
+    h(c-b)g>=s(c+b),
+    c(h-a)z>=s(h+a).                               (4)
+
+All four coefficients and the two differences c-b,h-a are positive.
+Substitute the resulting lower bounds for hg and cz into the third
+actual clearance. Clearing the positive denominator (h-a)(c-b) gives
+
+    hc(h-a)(c-b)>=s(3hc-ac-bh-ab).                  (5)
+
+Indeed
+
+    (c+b)(h-a)+(h+a)(c-b)+(h-a)(c-b)
+      =3hc-ac-bh-ab.
+
+This conclusion is common to both central contact orders; it does
+not require choosing ac>=bh or ac<=bh. Since h,c<=1 and
+(h-a)(c-b)>0, it immediately gives the two cubic inequalities
+
+    c(h-a)(c-b)-s(3hc-ac-bh-ab)>=0,
+    h(h-a)(c-b)-s(3hc-ac-bh-ab)>=0.                  (6)
+
+More generally, any separately proved scalar upper bound hc<=M gives
+
+    M(h-a)(c-b)-s(3hc-ac-bh-ab)>=0.                 (7)
+
+For a fixed rational M this last expression is quadratic. Equations
+(4)--(7) use only the same local five actual points as the lemma and
+are valid in both central alternatives without any new normalization.

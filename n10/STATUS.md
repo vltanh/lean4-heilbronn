@@ -110,7 +110,7 @@ orientations. One violates a reciprocal-product bound; the other forces two
 opposed scalar inequalities whose minimum is strictly negative. Thus the
 entire C2 family is now closed, with boundary degeneracies covered explicitly.
 
-Four global obligations remain: II, C1, N6 and N7. HP14
+Three global obligations remain: C1, N6 and N7. HP14
 (assembly) and HP15 (final manuscript audit) depend on those obligations and remain unchecked. The
 computer-assisted completion above is not a substitute for these hand proofs.
 
@@ -589,6 +589,20 @@ handled. N7_BOTTOM_SPAN_CAP.md proves the contact-only capacity-one
 bound [BCE]<(149/20)s by a positive quartic discriminant argument.
 Neither local reduction is counted as closure of the remaining N7
 family. The global algebra checker now has 67 passing groups.
+
+The adjacent-corner family II is now complete in TYPE_II_COMPLETE.md.
+The last support cell has 120 roots and thirteen refinements, giving
+133 leaves: 44 cubics with 2,219 printed terms and 89 geometric
+exclusions. Independent geometry checks all 4,185 deductions, and
+separate Fraction/SymPy readers reproduce every strict negative bound.
+TYPE_II_133_COMPLETE.md assembles both right-hull alternatives and all
+three nontriangular cells: 310 leaves and 6,462 printed terms. The
+full-family theorem also proves normalization for arbitrary adjacent-
+corner configurations, accounts for the three-corner alternatives,
+and applies all four complete occupancy proofs. Thus every such
+configuration has m<A*. The common central-strip inequality in
+ONE_LOWER_POINT.md now supplies two further cubic contact bounds.
+The global algebra checker has 68 passing groups.
 
 ## Publication and verification correction
 

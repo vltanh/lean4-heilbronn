@@ -1708,7 +1708,16 @@ def one_lower_point():
     zero(2*area(sp.Matrix([0,a]),sp.Matrix([b,0]),G)-b*(h-a)+(b*h-a*c)*g/c+b*h*w)
     zero(s+b*s/c+(b*h-a*c)*s*(c+b)/(c*h*(c-b))-s*(c+b)*(h-a)/(h*(c-b)))
     assert 12*s>1
-    print('PASS: exhaustive one-lower ear catalogue and both central contact-order elimination identities')
+    z,M=sp.symbols('z M');gap=h*c-h*g-c*z-s
+    zero(c*(h*g+b*z-b*h-s)+b*gap-(h*(c-b)*g-s*(c+b)))
+    zero(h*(c*z+a*g-a*c-s)+a*gap-(c*(h-a)*z-s*(h+a)))
+    P=(h-a)*(c-b);W=3*h*c-a*c-b*h-a*b
+    zero((c+b)*(h-a)+(h+a)*(c-b)+P-W)
+    quartic=h*c*P-s*W
+    zero(c*P-s*W-quartic-c*(1-h)*P)
+    zero(h*P-s*W-quartic-h*(1-c)*P)
+    zero(M*P-s*W-quartic-(M-h*c)*P)
+    print('PASS: exhaustive one-lower ear catalogue, both contact-order bounds and shared central-strip cubic identities')
 
 
 def c1_side_pair_opposite_top():
@@ -1816,6 +1825,33 @@ def n7_bottom_span_cap():
     print('PASS: uniform N7 bottom-span capacity-one contact triangle and exact positive quartic discriminant')
 
 
+def adjacent_complete():
+    from pathlib import Path
+    import re
+    q=sp.Rational
+    x,y,y0,t=sp.symbols('x y y0 t')
+    expansion=sp.Matrix([x,(y-y0)/(1-y0)])
+    shear=sp.Matrix([x-t*(1-y),y])
+    zero(expansion.jacobian([x,y]).det()-1/(1-y0))
+    zero(shear.jacobian([x,y]).det()-1)
+    text=Path(__file__).with_name('TYPE_II_133_CELL_II.md').read_text()
+    assert len(re.findall(r'^## Leaf II_',text,re.M))==133
+    prefix=text.split('## Leaf ',1)[0]
+    splits=re.search(r'```text\n(.*?)```',prefix,re.S)[1].strip().splitlines()
+    assert len(splits)==13
+    traces=re.findall(r'^### Sign trace\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(traces)==133 and sum(len(block.strip().splitlines()) for block in traces)==4185
+    sums=re.findall(r'^### Fixed polynomial\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==44 and sum(len(block.strip().splitlines()) for block in sums)==2219
+    assert len(re.findall(r'^Exclusion:',text,re.M))==89
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==44 and max(bounds)==q(-17114036920911,16937500000000000)<0
+    assert 24+60+120+60==264 and 28+0+13+5==46
+    assert 44+24+44+38==150 and 8+36+89+27==160
+    assert 2194+932+2219+1117==6462 and 264+46==150+160
+    print('PASS: complete Type-II cell-II inventory, count assembly and area-preserving normalization identities')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1884,3 +1920,4 @@ if __name__ == "__main__":
     n6_side_pair_opposite()
     quadrilateral_support()
     n7_bottom_span_cap()
+    adjacent_complete()

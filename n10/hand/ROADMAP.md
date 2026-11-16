@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 51.
+Checkpoint 52.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -148,7 +148,10 @@ four-corner alternative and all zero-area faces.
         signs. One remaining orientation contradicts a mate-product bound;
         the other forces two opposed polynomial inequalities that cannot
         both hold. Proof: C2_OPPOSITE_MIXED.md and C2_OPPOSITE_REVERSE.md.
-- [ ] HP11-II. Exclude normalized maximizers with two adjacent corners.
+- [x] HP11-II. Complete the entire adjacent-corner family.
+      TYPE_II_COMPLETE.md proves m<A* for every configuration with two
+      adjacent occupied corners, including arbitrary normalization,
+      the three-corner alternatives and all four occupancy rows.
   - [x] II-REDUCTION. Reduce to four occupancy rows; exclude the left
         quadrilateral hull and the right triangular/noncentral hull
         alternatives in (2,2,3), and the two-quadrilateral-side alternative
@@ -192,7 +195,10 @@ four-corner alternative and all zero-area faces.
             fixes the last D signs; both possible EPQ signs have printed
             cubic contradictions with 28 and 33 integer terms, maximum 21.
             Proof: TYPE_II_R4_MIXED_III.md.
-  - [ ] II-(1,3,3). Its central triple must be distributed.
+  - [x] II-(1,3,3). Complete exclusion of both actual right-hull types.
+        TYPE_II_133_COMPLETE.md assembles 264 initial roots and 46
+        refinements: 150 cubics with 6,462 printed terms and 160
+        geometric exclusions, including all three support cells.
     - [x] II-133-TRIANGULAR-RIGHT. The complete triangular right
           hull, with all central and right-point placements. A
           barycentric selection bounds one actual right point;
@@ -203,8 +209,9 @@ four-corner alternative and all zero-area faces.
           occupancy and mesh factors have independent geometry
           and Fraction/SymPy audits.
           Proof: TYPE_II_133_TRIANGULAR_RIGHT.md and its appendix.
-    - [ ] II-133-NONTRIANGULAR-RIGHT. Exclude every remaining
-          nontriangular right hull and support-cell alternative.
+    - [x] II-133-NONTRIANGULAR-RIGHT. Every nontriangular right hull
+          is covered by the complete three-cell catalogue and the
+          three independently audited appendices below.
       - [x] II-133-CELL-I. The entire first support cell: sixty
             exhaustive ray roots, 36 geometric exclusions and
             24 cubics with 932 printed terms. Independent geometry
@@ -220,7 +227,12 @@ four-corner alternative and all zero-area faces.
             an independent geometry audit; separate Fraction/SymPy
             manuscript readers reproduce the exact negative bounds.
             Proof: TYPE_II_133_CELL_III.md, using the same common model.
-      - [ ] II-133-CELL-II. Exclude the sole remaining support cell.
+      - [x] II-133-CELL-II. The entire second support cell: 120 roots
+            and thirteen refinements give 133 leaves, 44 cubics with
+            2,219 printed terms and 89 geometric exclusions. All
+            4,185 deductions, boxes and factors have independent
+            geometry and Fraction/SymPy audits.
+            Proof: TYPE_II_133_CELL_II.md.
   - [x] II-223-CORE. In the entire eight-point side core of (2,2,3),
         the remaining support point lies in DCH, DCF, and CFP, with
         vertical clearance at least 2s above F. The complete rational
@@ -646,9 +658,12 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_TWO_LOWER_COMPLETE.md | Exhaustive assembly of every k=2 placement from the exact hull, upper/side, upper/top and two-exterior theorems |
 | TYPE_II_133_NONTRIANGULAR.md and TYPE_II_133_CELL_I.md | Exhaustive three-cell right-hull reduction and complete cell-I exclusion: sixty roots, 1,899 deductions, 24 cubics / 932 terms and 36 geometric exclusions |
 | N6_SIDE_PAIR_REDUCTION.md | Every side pair has a triangular cap hull and Gamma2 endpoint cost; a side pair and top pair are incompatible, closing (0,0,2,2,0) and reflection |
-| ONE_LOWER_POINT.md | Four exhaustive local alternatives for one point in HABC, including both central contact-order cubics and the impossible double-ear cell |
+| ONE_LOWER_POINT.md | Four exhaustive local alternatives for one point in HABC, both central contact-order cubics, the impossible double-ear cell, and a shared central-strip inequality with cubic consequences |
 | C1_SIDE_PAIR_OPPOSITE_TOP.md | A side pair, opposite side point and top point are incompatible; two complete count rows close by a cubic box and direct determinant inequalities |
-| TYPE_II_133_CELL_III.md | Complete third nontriangular support cell: sixty roots, five refinements, 65 leaves, 2,012 deductions, 38 cubics / 1,117 terms and 27 geometric exclusions; only cell II remains |
+| TYPE_II_133_CELL_III.md | Complete third nontriangular support cell: sixty roots, five refinements, 65 leaves, 2,012 deductions, 38 cubics / 1,117 terms and 27 geometric exclusions |
+| TYPE_II_133_CELL_II.md | Complete second nontriangular support cell: 120 roots, thirteen refinements, 133 leaves, 4,185 deductions, 44 cubics / 2,219 terms and 89 geometric exclusions |
+| TYPE_II_133_COMPLETE.md | Complete count (1,3,3), assembling both actual right-hull types, 310 leaves and 6,462 printed terms |
+| TYPE_II_COMPLETE.md | Complete strict sharp exclusion for every ten-point configuration with two adjacent occupied corners, including normalization, all four counts and boundary alternatives |
 | C1_TWO_LOWER_BOTH_SIDES.md | Entire (2,1,1,0,1) count: three roots, 19 refinements, 20 cubics / 5,473 terms, two mesh contradictions and 379 deductions |
 | N6_SIDE_PAIR_OPPOSITE.md | A nine-point, 71-term contradiction excludes every side pair with an opposite-side point, closing three complete exterior count rows |
 | QUADRILATERAL_SUPPORT.md | Universal actual-quadrilateral support inequalities with one/two occupants, overlapping opposite-ear costs, central-pair cost and sixteen contact cubics |
@@ -665,8 +680,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 
 ## Next attack and stopping rules
 
-The next targets are the adjacent-corner and one-corner families II and C1,
-together with the N6 and N7 boundary counts.
+The next targets are the one-corner family C1, together with the N6 and
+N7 boundary counts. The adjacent-corner family II is complete.
 The stronger occupancy,
 clustered-triangle and complete opposite-corner theorems also apply
 in the other families. The exact diagnostic in
