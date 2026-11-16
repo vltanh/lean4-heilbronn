@@ -1302,6 +1302,61 @@ def n7_all_three_five():
     print("PASS: complete N7 3/5 lower-height boxes, seven exhaustive binary ledgers, and all fifty-eight five-chain substitutions")
 
 
+def c1_convex_top_pair():
+    q=sp.Rational;s=q(93,1000);rho=q(823,1000)
+    h,c,d,f,x,y=sp.symbols("h c d f x y")
+    H,C,D,F,Z=[sp.Matrix(t) for t in [(0,h),(c,0),(1,d),(f,1),(x,y)]]
+    det=lambda A,B,C:2*area(A,B,C)
+    A=1-c+d*(c-f);U=1-h+f*(h-d);delta=d*f-(1-h)*(1-c)
+    zero(A*(-det(H,F,Z))+U*det(C,D,Z)+delta*(-det(D,F,Z))-A*U)
+    assert q(81,10000)<s*s and rho>(1-s)**2 and rho<q(227,250)**2
+    u,v=sp.symbols("u v")
+    for expr,want in [(A,1-rho/h+v-u*v/rho),(U,1-h+u-u*v/rho),
+                      (delta,u*v/rho-1+h+rho/h-rho)]:
+        zero(expr.subs({c:rho/h,d:v*h/rho,f:u/h},simultaneous=True)-want)
+    print("PASS: C1 convex top-pair cap identity, positive determinant threshold, and scalar boundary substitution")
+
+
+def c1_three_lower_exteriors():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);rho=q(823,1000)
+    assert s/(1-s)-q(177,200)*(1-q(177,200))==q(27603,36280000)>0
+    assert rho/q(177,200)-q(929,1000)==q(167,177000)>0
+    assert s/(rho*(1-rho))-q(319,500)==q(10317,24278500)>0
+    assert q(191,500)-(1-s-s/(1-rho))==q(1,2360)>0
+    assert (1-4*s)*q(191,500)-3*s*(rho+s)==-q(3917,250000)<0
+    specs=[('TWO_TOP','c1tt',[''],4,8,10,2),
+           ('SIDE_TOP','c1st',['RT.','TR.','LT.','TL.'],10,0,19,21),
+           ('ONE_TOP','c1ti',['TU.','UT.'],9,33,47,4),
+           ('ONE_SIDE','c1si',['RU.','UR.','LU.','UL.'],9,25,51,10)]
+    totals=[0]*4
+    for suffix,prefix,models,nroot,nsplit,npoly,ngeo in specs:
+        note=Path(__file__).with_name('C1_THREE_LOWER_'+suffix+'.md').read_text()
+        def block(name):
+            found=re.findall(r'```'+prefix+'-'+name+r'\n(.*?)\n```',note,re.S)
+            assert len(found)<=1
+            return found[0] if found else ''
+        roots=[line.split()[0] for line in block('roots').splitlines()]
+        tree={row[0]:row[1:] for row in map(str.split,block('tree').splitlines())}
+        leaves=set(re.findall(r'^### Leaf ([A-Z0-9.mp]+)$',note,re.M))
+        assert len(roots)==nroot and len(tree)==nsplit and len(leaves)==npoly+ngeo
+        seen=set()
+        def walk(node):
+            assert node not in seen;seen.add(node)
+            if node in tree:
+                tri,neg,pos=tree[node];assert len(set(tri))==3
+                walk(neg);walk(pos)
+            else:assert node in leaves
+        for model in models:
+            for root in roots:walk(model+root)
+        assert seen==set(tree)|leaves
+        assert note.count('```'+prefix+'-sum\n')==npoly and note.count('```'+prefix+'-exclude\n')==ngeo
+        for i,value in enumerate([nroot*len(models),nsplit,npoly,ngeo]):totals[i]+=value
+    assert totals==[98,66,127,37]
+    print("PASS: C1 side-cap rational bounds and all four complete exterior trees; entire three-lower placement catalogue")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1346,3 +1401,5 @@ if __name__ == "__main__":
     adjacent_223_complete()
     n6_exact_hull_complete()
     n7_all_three_five()
+    c1_convex_top_pair()
+    c1_three_lower_exteriors()

@@ -345,6 +345,20 @@ separate Fraction and SymPy readers reproduce every exact bound.
 The remaining N7 tasks are the other 4/4 edge pairs and the all-interior
 placement. The global algebra checker now has 43 passing groups.
 
+All C1 configurations with three lower points are now excluded,
+including the four exterior count rows and both side caps. The convex
+two-top branch has two positive polynomial identities with 150 printed
+coefficients. The remaining top-pair, side/top, central/top and
+central/side children have 98 roots, 66 binary refinements, 127 cubic
+leaves and 37 geometric leaves. All 7,033 positive integer terms are
+printed. Independent geometric replay verifies every containment,
+mesh and guarded implication; separate manuscript-reading Fraction
+and SymPy implementations reproduce all exact bounds. Section 4 of
+C1_THREE_LOWER_ONE_SIDE.md assembles these four exterior theorems
+with the complete exact-pentagon result. The C1 parent retains its
+28 zero-, one- and two-lower exterior count rows. The global algebra
+checker now has 45 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

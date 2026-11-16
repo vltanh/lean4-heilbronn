@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 34.
+Checkpoint 35.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -221,9 +221,18 @@ four-corner alternative and all zero-area faces.
         points. The other stated top/lower triple cuts leave exactly
         32 count rows, up to one transposition. All cuts are analytic.
         Proof: C1_EXTERIOR_REDUCTION.md.
-  - [ ] C1-EXTERIOR. Exclude the remaining placements with an actual
-        hull vertex outside the selected anchor pentagon, in the 32
-        exhaustive count rows of C1-EXTERIOR-CATALOGUE.
+  - [x] C1-THREE-LOWER. Every placement with three free points below
+        HC, including all four exterior count rows and both side caps.
+        The convex top-pair alternative has two positive identities
+        with 150 printed coefficients. The four exterior children have
+        98 roots, 66 binary splits, 127 cubic and 37 geometric leaves;
+        all 7,033 integer entries and geometric deductions are printed.
+        Independent geometry and separate Fraction/SymPy audits pass.
+        C1_THREE_LOWER_ONE_SIDE.md, Section 4 assembles all five
+        placements, including the earlier exact-pentagon theorem.
+  - [ ] C1-EXTERIOR. Exclude the remaining 28 exterior count rows
+        with zero, one or two lower points, from the exhaustive
+        C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
       points and four strictly interior points.
   - [x] N6-PLACEMENTS. The lower-left cap is empty; both anchor regions
@@ -412,6 +421,11 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_PENTAGON_GEOMETRY.md | Exact-pentagon 3/2 reduction, distributed meshes, rational box, endpoint and fan-capacity inequalities |
 | C1_PENTAGON.md | Entire exact-pentagon C1 child; nine roots, 34 polynomial and eight geometric leaves, 3,317 printed integer entries |
 | C1_EXTERIOR_REDUCTION.md | Complete side-cap and stated top/lower count exclusions; exhaustive 32-row exterior catalogue |
+| C1_THREE_LOWER_TOP_PAIR.md | Complete convex two-top-cap exclusion when hc>=823/1000; two fixed positive identities with 150 printed coefficients |
+| C1_THREE_LOWER_TWO_TOP.md | Entire three-lower/two-top count: four roots, eight splits, ten cubic and two geometric leaves, 1,068 integer terms |
+| C1_THREE_LOWER_SIDE_TOP.md | Entire three-lower/side-top count and its reflection: four location models, nineteen cubic and twenty-one geometric leaves, 246 terms |
+| C1_THREE_LOWER_ONE_TOP.md | Entire three-lower/central-top count: both label orders, 47 cubic and four geometric leaves, 3,455 terms |
+| C1_THREE_LOWER_ONE_SIDE.md | Entire three-lower/central-side count and reflection: 51 cubic and ten geometric leaves, 2,264 terms; assembles the complete C1 three-lower subfamily |
 | TYPE_II_UPPER_PAIR.md | Complete opposite-B/E sign exclusion for the two upper central points, with every right hull allowed |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |
