@@ -1,15 +1,16 @@
 # Recovering the exact-JavaScript IIRR discovery
 
-These three files preserve a **partial discovery tree**, not a checked hand-proof
-closure. The frontier is explicit in the JSON. Do not mark N6 IIRR closed merely
-because a search batch completed.
+These files preserve a **complete finite proof candidate**, pending independent
+hand-proof audit. Every branch is covered in the JSON. Discovery completion and
+record replay do not themselves replace the independent mathematical audit.
 
 - n6_js_iirr_engine.js: exact BigInt rational discovery engine.
 - n6_js_iirr_replay.js: separate replay of recorded geometry and arithmetic.
 - n6_js_iirr_frontier.json: immutable-source records plus the unfinished frontier.
 
-The present snapshot has 91 determinant splits, 36 geometric leaves, 51
-scalar-area leaves, and five frontier nodes. Its 9,300 retained arithmetic
+The complete snapshot has 127 determinant splits and 128 leaves: 45 geometric
+exclusions and 83 scalar-area contradictions. All 13,957 retained arithmetic
+updates pass the separate replay. There is no frontier or open leaf. Its 9,300 retained arithmetic
 updates pass the separate replay. No fully refined open relaxation leaf has
 been reached. This snapshot does not cover its five frontier nodes.
 
@@ -60,7 +61,7 @@ Published side-pair facts used here are
 
 The new U bound is the audited no-top strengthening of
 N6_SIDE_PAIR_BOUNDS.md. It gives all barycentric weights of S in CER
-between3/11 and5/11, and each of its three fan areas below5s/3.
+between 3/11 and 5/11, and each of its three fan areas below 5s/3.
 
 Since e>=rho/(1-eps)>.774, HEF<=1-e<3s is empty. Therefore P,Q are
 both in HCE. In particular HEP,HEQ<0. The side-pair use of the two
@@ -85,10 +86,10 @@ The lower c bound follows from the bottom/left paired-ear bound hc>=4s.
 ABC and ABH give a0,a1; BCR gives w>=a0. The cap U>=3s gives w1.
 AHP and AHQ give x0. BC clearances give q,v>=a0. HEP,HEQ give
 q,v<=1-s. For p,u<=1-s, use CET>=s when y_T<=e, or EFT>=s when
-y_T>=e. The inner box follows from the3/11 barycentric bounds.
+y_T>=e. The inner box follows from the 3/11 barycentric bounds.
 The closed endpoints deliberately include limiting faces.
 
-The initial orientation table is all20 positive cyclic anchor triples in
+The initial orientation table is all 20 positive cyclic anchor triples in
 ABCEFH, plus for each T=P,Q,R,S:
 
     ABT+, ACT+, AHT-, BCT+, BHT-, CHT-, EFT+, EHT+, FHT+.
@@ -107,14 +108,15 @@ are impossible by the already checked universal lemmas.
 The actual quadrilateral costs for one,two,at least three known occupants
 are .449,8s,93/91. The first follows from the standard fan identity:
 for P inside convex ABCD, the four fan areas a,b,c,d>=s satisfy
-ac-bd=[ACP][BDP], so |ac-bd|>=s². One opposite product is at least2s²,
-the other pair sums to at least2s, and the perimeter fan sum is at least
+ac-bd=[ACP][BDP], so |ac-bd|>=s². One opposite product is at least 2s²,
+the other pair sums to at least 2s, and the perimeter fan sum is at least
 (2+2sqrt2)s>.449. The last comparison follows from
 2*186²-263²=23>0. The third cost is SQUARE_QUADRILATERAL_THREE.md.
 
-A determinant's upper bound is either1, the exact maximum of its signed
+A determinant's upper bound is either 1, the exact maximum of its signed
 multiaffine polynomial over the displayed coordinate-box vertices, the
-11s/3 outer cap, a5s/3 fan cap, or the published21/50 side-base cap.
+11s/3 outer cap, a5s/3 fan cap, the published 21/50 side-base cap, or the new 3s/2 outer-bottom cap from
+SIDE_PAIR_AREA_REFINEMENTS.md.
 Each box witness stores every nonnegative difference from its claimed
 maximum, so the replay checks the full finite corner calculation.
 
@@ -126,10 +128,18 @@ Indeed N6_SIDE_PAIR_REDUCTION.md gives
 Omega=e(v_R-b)=e|BER|/(e-w)>=Gamma2*s>rho.
 Multiplication by(c-b)(e-w)>0 gives the displayed inequality.
 
+The universal signed four-point identity [ABC]+[ACD]=[ABD]+[BCD] is
+included in both directions whenever its four signs are known; convexity is
+not required. The right-cap area comparisons |AET|>=|CET|, EHT>=|CET|,
+EFT>=|CET| for T=R,S follow from SIDE_PAIR_AREA_REFINEMENTS.md.
+
 The distributed-mesh sign table and rational ear/connect/inner costs are
 the already checked seven-face mesh of C1_PENTAGON_GEOMETRY.md, used
-after an actual affine relabeling. All outer triangles still lie in the
-original square.
+after an actual affine relabeling. A mesh witness requires three actual
+interior points in an actual triangle, together with the two displayed distinct
+fan placements. The global exclusion of a clustered triple makes this a full
+distributed mesh; absence of a detected cluster in a partial sign table is not
+a premise. All outer triangles still lie in the original square.
 
 ## Record format and replay
 
@@ -153,24 +163,24 @@ An area leaf gives a pruned directed acyclic record:
 - updates: immutable source identifiers, the relation, rule, target, and value;
 - end: one actual area (or the zero affine test) with lower bound above upper.
 
-Area updates round lower bounds down and upper bounds up to multiples of10^-6.
+Area updates round lower bounds down and upper bounds up to multiples of 10^-6.
 The replay reconstructs every raw rational expression and its exact rounding.
 It never calls discovery closure, makeArea, or propagate.
 
 Barycentric relation witnesses refer to **weights**, not fan-area floors.
 For any actual line IJ, the signed test D(X)=[IJX] satisfies
 11D(S)=sum_i(11lambda_i)D(V_i), V_i=C,E,R. The coefficients are
-between3 and5 and sum11. Besides the two sign-separated linear bounds,
+between 3 and5 and sum 11. Besides the two sign-separated linear bounds,
 signed intervals l_i<=D(V_i)<=u_i give
 
     3 sum(l_i)+2 min(l_i) <=11D(S)<=3 sum(u_i)+2 max(u_i).
 
 When IJ contains S the target is the exact zero test, not a distinct-point
-triangle. This is represented by the variable ZERO with both initial bounds0.
+triangle. This is represented by the variable ZERO with both initial bounds 0.
 
 ## Persistence and scope
 
 These are repository discovery artifacts. No Python runtime was invoked after
 the environment outage. Exact JavaScript discovery and separate record replay
-were executed. The files are a recoverable continuation checkpoint; they do
-not replace the eventual complete printed hand proof or its independent audit.
+were executed. The files are a recoverable complete proof candidate; they do not replace the
+printed hand proof or its independent audit.

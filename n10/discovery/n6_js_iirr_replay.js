@@ -17,6 +17,7 @@ function cap(t,sg,src){assert(sg===1||sg===-1,"cap sign");const kind=src[0];
  if(kind==="unit")return one;
  if(kind==="side_outer"){assert(t===key("CER")&&src[1]==="CER"&&src[2]==="S","side outer");return s.mul(11).div(3)}
  if(kind==="side_fan"){assert(["CES","CRS","ERS"].map(key).includes(t)&&src[1]==="CER"&&src[2]==="S"&&src[3]===t,"side fan");return s.mul(5).div(3)}
+ if(kind==="outer_bottom"){assert(t===key("BCR")&&src[1]==="CER"&&src[2]==="S","outer bottom cap");return s.mul(3).div(2)}
  if(kind==="side_base"){assert(["BCR","BCS"].map(key).includes(t)&&src[1]===t.slice(-1),"side base");return R("21/50")}
  assert(kind==="box","cap kind");
  const poly=IIRR.polys[t],ids=[...new Set(Object.keys(poly).flatMap(m=>m?m.split(",").map(Number):[]))].sort((a,b)=>a-b);
@@ -58,6 +59,8 @@ function relation(item,kn,meshes){const rel=item.rel,w=item.witness,[kind,...r]=
   if(w[0]==="barycentric"){const[_,base,V,hull,side]=w;assert(V==="S"&&hull==="CER"&&["lower","upper"].includes(side),"linear bary witness");const lower=side==="lower";
    if(!base.includes(V)){assert(sign(kn,base+V)!==0,"linear bary target");plus(key(base+V),(lower?11:-11)*sign(kn,base+V))}
    for(const v of hull)if(!base.includes(v)){const sg=sign(kn,base+v);assert(sg,"linear bary vertex");plus(key(base+v),lower?(sg>0?-3:5):(sg>0?5:-3))}}
+  else if(w[0]==="right_compare"){const[_,T,edge]=w;assert("RS".includes(T)&&T.length===1&&["EF","EH","AE"].includes(edge),"right comparison");assert(sign(kn,"CE"+T)===-1&&sign(kn,edge+T)===(edge==="AE"?-1:1),"right comparison signs");plus(key(edge+T),1);plus(key("CE"+T),-1)}
+  else if(w[0]==="affine_quad"){const[_,word,orientation]=w;assert(word.length===4&&new Set(word).size===4&&[1,-1].includes(orientation),"affine quad witness");const[A,B,C,D]=word;for(const[t,c]of[[A+B+C,1],[A+C+D,1],[A+B+D,-1],[B+C+D,-1]]){assert(sign(kn,t),"affine quad sign");plus(key(t),orientation*c*sign(kn,t))}}
   else{assert(["mesh_ear","mesh_inner","mesh_connect"].includes(w[0])&&meshes.some(m=>m[0]===w[1]&&m[1]===w[2]),"mesh metric premise");const[A,B,C,Y,Z,X]=w[1];
    if(w[0]==="mesh_ear"){assert([A+B+Z,A+C+X,B+C+Y].map(key).includes(w[3]),"mesh ear");plus(key(A+B+C),1);plus(w[3],-1);rhs=s.mul(R("3927/500")).toString()}
    else if(w[0]==="mesh_inner"){plus(key(Y+Z+X),-1);rhs=s.mul(R("-8/5")).toString()}

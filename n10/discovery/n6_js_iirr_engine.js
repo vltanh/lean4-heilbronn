@@ -61,6 +61,7 @@ function capFor(tri,sg){const id=tri+":"+sg;if(capMemo[id])return capMemo[id];
  if(tri===outer&&s.mul(11).div(3).cmp(value)<0){value=s.mul(11).div(3);source=["side_outer","CER","S"]}
  if(fans.includes(tri)&&s.mul(5).div(3).cmp(value)<0){value=s.mul(5).div(3);source=["side_fan","CER","S",tri]}
  if(["BCR","BCS"].map(t=>canon(t)[0]).includes(tri)&&R("21/50").cmp(value)<0){value=R("21/50");source=["side_base",tri.slice(-1)]}
+ if(tri===canon("BCR")[0]&&s.mul(3).div(2).cmp(value)<0){value=s.mul(3).div(2);source=["outer_bottom","CER","S"]}
  return capMemo[id]={value,source}}
 const BASE={};
 for(const tri of choose([...anchors],3))put(BASE,tri.join(""),1);
@@ -105,7 +106,10 @@ function makeArea(kn,meshes){const cont=occupants(kn),lo={},hi={},witness={},rel
  for(const gp of GP){const ss=gp.terms.map(([a,b,c])=>c*get(kn,a)*get(kn,b));if(!ss.every(Boolean))continue;if(new Set(ss).size!==2)throw Error("GP closure missing");
   const odd=ss.findIndex(x=>ss.filter(y=>y===x).length===1),lhs=gp.terms[odd].slice(0,2).map(key).sort(),rhs=gp.terms.filter((_,i)=>i!==odd).map(t=>t.slice(0,2).map(key).sort()).sort((a,b)=>a.join("|").localeCompare(b.join("|")));
   add(["plu",...lhs,...rhs.flat()],["plu",gp.word])}
+ for(const ids of choose([...labels],4)){const[A,B,C,D]=ids,words=[A+B+C,A+C+D,A+B+D,B+C+D];if(words.some(t=>!get(kn,t)))continue;
+  for(const orientation of[1,-1]){const co=Object.fromEntries(words.map((t,i)=>[key(t),(i<2?1:-1)*get(kn,t)*orientation]));add(["linear",co,"0"],["affine_quad",ids.join(""),orientation])}}
  for(const ids of choose([...labels],4))for(const rest of perm(ids.slice(1))){const hull=ids[0]+rest.join("");if(!convex(kn,hull))continue;const pts=[...labels].filter(t=>inside(kn,hull,t));if(pts.length){const[A,B,C,D]=hull,cost=quadCost(pts.length);for(const pair of[[A+B+C,A+C+D],[A+B+D,B+C+D]])add(["quad",...pair.map(key).sort(),cost.toString()],["quad",hull,pts.join("")])}break}
+ for(const T of"RS")for(const edge of["EF","EH","AE"]){const upper=key(edge+T),lower=key("CE"+T);add(["linear",{[upper]:1,[lower]:-1},"0"],["right_compare",T,edge])}
  // Exact endpoint support for B,C,R,E with the inner point S.
  add(["support",key("BCE"),key("BER"),key("BCR"),rho.toString()],["right_pair_support","BCRE","S"]);
  lo.ZERO=z;hi.ZERO=z;witness.lo_ZERO=["zero"];witness.hi_ZERO=["zero"];
