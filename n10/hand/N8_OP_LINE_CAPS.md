@@ -6,7 +6,8 @@ The proof uses actual boundary ears,
 the triangular occupancy bound proved in TRIANGLE_OCCUPANCY.md, and the
 short six-point argument reproduced below. It does not assume the
 candidate's signs or symmetries. The 3/5 pattern is subsequently excluded
-in N8_THREE_FIVE.md. The two 4/4 patterns remain separate obligations.
+in N8_THREE_FIVE.md. N8_COMPLETE.md assembles the separate proofs closing
+both 4/4 alternatives and the sharp equality theorem.
 
 Every area in this note is a DOUBLED area. Put
 
@@ -206,7 +207,7 @@ in Section 1 puts both O,P inside AHGF, hence inside T. The preceding
 capacity statement gives a contradiction. Thus the across-corner pair
 is excluded, completing the second kind of 2/6 pattern.
 
-## Result and remaining sign catalogue
+## Result and exhaustive sign catalogue
 
 For any competitive eight-boundary configuration, each open side of OP
 contains at least three boundary points. Thus the only remaining arc
@@ -221,8 +222,8 @@ positive side of directed OP.
 | Arc sizes | Representative positive vertices | Edges crossed by OP | Remaining obligation |
 |---|---|---|---|
 | 3/5 | H,G,F | AH and EF | Completely excluded in N8_THREE_FIVE.md |
-| 4/4, corner edges | A,H,G,F | AB and EF | Exclude the oblique sign failures described below |
-| 4/4, same-side edges | H,G,F,E | AH and DE | Exclude or bound this one arc class |
+| 4/4, corner edges | A,H,G,F | AB and EF | N8_CORNER_OBLIQUE.md closes the failures described below |
+| 4/4, same-side edges | H,G,F,E | AH and DE | N8_SIDE_CONTAINED.md and N8_SIDE_OUTSIDE.md exclude the whole class |
 
 To see completeness, the boundary edges alternate between same-side
 edges AH,BC,DE,FG and corner edges AB,CD,EF,GH. An arc of three vertices
@@ -255,6 +256,7 @@ If additionally
 the complete sharp theorem in ASYMMETRIC_SIGN_CHAMBER.md applies. Its
 failure alternatives are precisely the corner-edge case with at least
 one of these four oblique signs reversed. N8_THREE_FIVE.md excludes the
-3/5 class. The remaining orientation obligations are the same-side-edge
-4/4 class and those oblique sign failures in the corner-edge 4/4 class.
-No exclusion of either 4/4 obligation is asserted here.
+3/5 class. N8_SIDE_CONTAINED.md and N8_SIDE_OUTSIDE.md exclude the
+same-side-edge 4/4 class, and N8_CORNER_OBLIQUE.md excludes all four
+oblique sign failures in the corner-edge class. These separate arguments
+are assembled with the sharp theorem in N8_COMPLETE.md.

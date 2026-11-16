@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 14.
+Checkpoint 15.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -162,10 +162,10 @@ in this family.
       points and four strictly interior points.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
       points and three strictly interior points.
-- [ ] HP12-N8. Prove the sharp bound and candidate equality classification
-      for the COMPLETE asymmetric eight-boundary domain, including every
-      orientation of the two interior points. Its remaining issue is global
-      orientation coverage, not an assumed averaging step.
+- [x] HP12-N8. Sharp bound and candidate equality classification for the
+      complete asymmetric eight-boundary domain, including every orientation
+      of the two interior points. N8_COMPLETE.md assembles the exhaustive
+      catalogue and all its closures; no symmetry is assumed.
   - [x] N8-OCTAGON. Both interior points lie strictly inside the boundary
         octagon. A point in any empty corner triangle forces a smaller area.
         Proof: N8_OP_LINE_CAPS.md, Section 1.
@@ -186,18 +186,20 @@ in this family.
         actual-sign rows have printed cubic contradictions. All 1,807
         positive integer entries, exact bounds, and occupancy/separation
         premises are supplied. Proof: N8_THREE_FIVE.md.
-  - [ ] N8-4/4-SIDE. The line crosses opposite same-side boundary edges.
+  - [x] N8-4/4-SIDE. The line crosses opposite same-side boundary edges.
     - [x] Both interior points in ABEF or both in CDGH: the complete
           contained subclass is excluded by four printed cubic rows,
           including their symmetry reductions. Proof: N8_SIDE_CONTAINED.md.
-    - [ ] Outside both common quadrilaterals: up to the stated symmetries,
-          AFO+,CHO+ or AFO+,DGP-. No placement is omitted by this split.
-  - [ ] N8-4/4-CORNER-OBLIQUE. The line crosses opposite corner edges,
-        but at least one of ADO+,BGO-,CFP+,EHP+ fails.
+    - [x] Outside both common quadrilaterals: eight double-left rows and
+          five top-adjacent rows exhaust the placement, with all 2,457
+          positive integer entries printed. Proof: N8_SIDE_OUTSIDE.md.
+  - [x] N8-4/4-CORNER-OBLIQUE. All failures of ADO+,BGO-,CFP+,EHP+
+        are reduced by explicit symmetries to seven exhaustive rows, with
+        all 1,442 integer entries printed. Proof: N8_CORNER_OBLIQUE.md.
 
-There are now SIX named unresolved global obligations: the remaining
-exact-three-corner class U3, II, C1, N6, N7 and complete asymmetric N8. These
-are continuous-domain obligations, not six small arithmetic checks. Each must
+There are now FIVE named unresolved global obligations: the remaining
+exact-three-corner class U3, II, C1, N6 and N7. These are continuous-domain
+obligations, not five small arithmetic checks. Each must
 admit a uniform argument or an explicitly exhaustive further subdivision.
 New subdivisions must retain their parent until all children close. No bound
 on the eventual number of smaller subcases is claimed.
@@ -206,9 +208,9 @@ N6 and N7 are not closed sets and can approach the eight-boundary candidate.
 Do not demand a uniform rational gap below A* on those entire domains;
 excluding their attainment by a maximizer is sufficient. The candidate sign
 chamber is now bounded directly without symmetry by ASYMMETRIC_SIGN_CHAMBER.md.
-The eight determinant signs are explicit hypotheses, not consequences of
-normalization. Ordinary averaging is not a justified reduction for the
-remaining orientations.
+For N8, the complete orientation analysis now forces those eight signs
+after all other cases are excluded. Extending that conclusion to the
+strictly interior points in N6 and N7 requires a separate argument.
 
 ## Gate IV — assembly and final scrutiny
 
@@ -245,6 +247,9 @@ remaining orientations.
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |
 | N8_THREE_FIVE.md | Entire 3/5 line class excluded by ten exhaustive cubic rows with all 1,807 integer entries printed |
 | N8_SIDE_CONTAINED.md | Complete ABEF/CDGH-contained side-line subclass, with all four rows and 867 integer entries printed |
+| N8_SIDE_OUTSIDE.md | Every remaining same-side 4/4 placement, with thirteen exhaustive rows and all 2,457 integer entries printed |
+| N8_CORNER_OBLIQUE.md | Every oblique sign failure in the corner-edge 4/4 class, with seven rows and all 1,442 integer entries printed |
+| N8_COMPLETE.md | Complete asymmetric eight-boundary bound and exact candidate equality classification |
 | N8_BOUNDARY_RANGES.md | Stronger uniform coordinate ranges and four definite contact-overlap bounds from the eight ears alone |
 | QUADRILATERAL_SPREAD.md | Two-diagonal spread bound 1-6t for t>=1/11, threshold-free bound 1-(3+2sqrt(2))t, and explicit N8 applications |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
@@ -260,7 +265,7 @@ remaining orientations.
 ## Next attack and stopping rules
 
 The next targets are the distributed U3 alternative and the adjacent-corner
-and one-corner families II and C1, together with the remaining N8 signs.
+and one-corner families II and C1, together with the N6 and N7 boundary counts.
 The stronger occupancy,
 clustered-triangle and complete opposite-corner theorems also apply
 in the other families. The exact diagnostic in

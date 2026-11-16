@@ -110,18 +110,23 @@ orientations. One violates a reciprocal-product bound; the other forces two
 opposed scalar inequalities whose minimum is strictly negative. Thus the
 entire C2 family is now closed, with boundary degeneracies covered explicitly.
 
-Six global obligations remain: III-3C-U3, II, C1, N6, N7,
-and the complete asymmetric N8 domain. HP14 (assembly) and HP15 (final
-manuscript audit) depend on those obligations and remain unchecked. The
+Five global obligations remain: III-3C-U3, II, C1, N6 and N7. HP14
+(assembly) and HP15 (final manuscript audit) depend on those obligations and remain unchecked. The
 computer-assisted completion above is not a substitute for these hand proofs.
 
-Within those remaining parents, the balanced U3 2/2 fan split is now
+The balanced U3 2/2 fan split is now
 excluded in full by seventeen printed cubic inequalities, and the entire
 N8 3/5 line class is excluded by ten. Both complete manuscripts include
 every positive integer coefficient and exact negative bound. The
 manuscript-reading Fraction checkers pass, as do independent SymPy
 expansions of all printed rows. U3 retains only 3/1 and its reflection;
-N8 retains its two explicitly catalogued 4/4 obligations.
+the complete asymmetric N8 theorem is now assembled in N8_COMPLETE.md.
+Its same-side 4/4 class is excluded by four contained-placement rows and
+thirteen outside-placement rows. Seven further rows exclude every
+oblique sign failure in the corner-edge 4/4 class. Together with the ten
+3/5 rows, all 34 rows and 6,573 integer entries are printed and independently
+expanded. The surviving sign chamber has the sharp bound and unique
+candidate equality without a symmetry assumption.
 
 ## Publication and verification correction
 

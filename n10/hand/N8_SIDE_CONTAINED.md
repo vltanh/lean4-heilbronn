@@ -543,6 +543,6 @@ containments is exactly
 
 Up to the half-turn exchanging the two points, the remaining cases are
 one point in both left virtual corner triangles, or one point in each
-of the two upper virtual corner triangles. Their quantitative
-exclusion is a separate obligation. This note claims closure only of
-the complete ABEF/CDGH-contained subclass proved above.
+of the two upper virtual corner triangles. N8_SIDE_OUTSIDE.md supplies
+their complete quantitative exclusion. This note proves the complete
+ABEF/CDGH-contained subclass; N8_COMPLETE.md assembles the full theorem.

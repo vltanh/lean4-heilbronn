@@ -3,8 +3,8 @@
 This note proves that each square-symmetry image of the actual triangle
 AEF contains at most one of the two interior points. It then gives a
 complete placement reduction for the 3/5 line class. N8_THREE_FIVE.md
-uses this reduction to exclude the class. The complete HP12-N8 parent
-still requires the two remaining 4/4 classes.
+uses this reduction to exclude the class. N8_COMPLETE.md assembles it
+with the separate proofs of the two 4/4 classes and the sharp theorem.
 
 All areas below are doubled. Put s=93/1000 and use the literal boundary
 coordinates

@@ -224,4 +224,5 @@ original maximizer was itself a square-symmetry image and relabeling of the
 candidate.
 
 This proves the reversal lemma conditionally. The global equality theorem
-still requires the unproved exclusions and complete N8 argument.
+still requires the unproved U3, II, C1, N6 and N7 exclusions. The complete
+N8 argument is now supplied by N8_COMPLETE.md.

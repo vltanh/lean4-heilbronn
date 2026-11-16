@@ -1,9 +1,9 @@
 # Sharp bound in the full asymmetric candidate sign chamber
 
 This theorem removes the symmetry assumption from one entire eight-boundary
-sign chamber. It is not yet a proof that every competitive eight-boundary
-configuration has these signs. In particular HP12-N8 remains open until the
-other sign patterns are excluded or bounded. No averaging of point positions
+sign chamber. The separate exhaustive orientation analysis in N8_COMPLETE.md
+now proves that every competitive eight-boundary configuration can be put
+in this chamber. No averaging of point positions
 is used, and no numerical optimization is a premise.
 
 Use the exact numbers g,a,A* from ATTAINMENT.md. Throughout this note a
@@ -245,11 +245,11 @@ to M, its bound tends to Psi(M,0)<Psi(M,M)<=2A*. If both tend to zero,
 every OP area tends to zero. Coincident boundary contacts or nonpositive
 s are already covered.
 
-## Remaining global obligation
+## Role in the complete N8 proof
 
 This proves the exact upper bound and equality classification over the
 whole asymmetric domain with the eight stated determinant signs and
 coordinatewise ordering of O,P. It closes no other sign pattern by
-implication. A proof for unrestricted N8 must still establish an exhaustive
-orientation catalogue and close its other alternatives. The boundary
-normalization theorem alone does not supply those signs.
+implication. N8_COMPLETE.md supplies the exhaustive orientation catalogue
+and the proofs closing its other alternatives. Those separate arguments,
+rather than boundary normalization alone, establish the required signs.

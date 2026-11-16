@@ -5,7 +5,8 @@ and each has a fully printed nonnegative cubic whose exact upper bound is
 negative. The tables contain 1,807 entries, all positive integers at most 12,175. Every geometric premise,
 factor formula, and coefficient is supplied here or in the cited hand lemmas;
 no numerical optimizer, adaptive coordinate cover, or external certificate
-file is a premise. The other two N8 line classes remain separate obligations.
+file is a premise. The separate proofs of the two 4/4 line classes are
+assembled with this one in N8_COMPLETE.md.
 
 All areas are doubled. Put s=93/1000 and use
 
@@ -995,5 +996,5 @@ configuration, including every remaining orientation of every triangle
 used in these inequalities. The N8-3/5 class is therefore impossible at
 minimum doubled area s=93/1000.
 
-This closes N8-3/5 in full. It does not close either remaining N8 4/4 class,
+This closes N8-3/5 in full. It does not by itself close either N8 4/4 class,
 nor the complete HP12-N8 parent.
