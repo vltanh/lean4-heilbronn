@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 11.
+Checkpoint 12.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -96,7 +96,11 @@ orientation restriction is now discharged by a complete two-case inequality.
             have 269 small-integer entries in total.
             Proof: U3_FOUR_ONE_SIDE.md.
       - [ ] U3-DISTRIBUTED-3/1 and 1/3. The unbalanced mixed fan splits.
-      - [ ] U3-DISTRIBUTED-2/2. The balanced mixed fan split.
+      - [x] U3-DISTRIBUTED-2/2. The entire balanced mixed fan split.
+            A nine-point geometric reduction leaves sixteen actual sign
+            choices, one split once more by CPS. The seventeen printed
+            cubic contradictions have 1,463 positive integer entries,
+            all at most 284. Proof: U3_TWO_TWO.md.
   - [x] III-3C-U4. Exactly three corners: 4 upper and 3 lower free points.
         Proof: TRIANGLE_OCCUPANCY.md. In fact any triangle containing
         four further points forces m<=1/(15+3 sqrt(5))<A*.
@@ -108,7 +112,8 @@ For the exactly-three-corner split use corners (0,0),(0,1),(1,1), s=2A*, and
 
 The quoted counts are in these two explicit triangles. A competitive point
 cannot lie on the separating diagonal. The count split is proved exhaustive.
-Only the distributed alternative of U3 remains unresolved in this family.
+Only the distributed 3/1 split and its reflected 1/3 split remain unresolved
+in this family.
 
 ### Other corner and corner-free families
 
@@ -223,6 +228,7 @@ remaining orientations.
 | SIX_POINT_ENDPOINT.md | Uniform six-point endpoint bound S/Gamma3; nontriangular hull bound strictly below S/9 |
 | CLUSTERED_TRIANGLE.md | Universal exclusion of three clustered interior points; full U3-CLUSTERED exclusion |
 | U3_FOUR_ONE_SIDE.md | Both 4/0 and 0/4 distributed fan splits; exhaustive hull reduction and six printed cubic contradictions |
+| U3_TWO_TWO.md | Complete balanced 2/2 split; exhaustive seventeen-row cubic proof with all 1,463 integer entries printed |
 | TYPE_II.md | Four-row adjacent-corner reduction and complete stated side-hull exclusions; full II remains open |
 | TYPE_II_R4.md | Complete both-below-CE exclusion in (1,2,4), and uniform empty bottom fan in its both-above cut |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
