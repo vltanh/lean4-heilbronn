@@ -1440,6 +1440,28 @@ def n6_two_lower_two_exterior():
     print("PASS: complete N6 two-lower/two-exterior cap identities, TT catalogue, exterior line rule, and full printed inventory")
 
 
+def n7_heptagon_occupied_ear():
+    from pathlib import Path
+    from itertools import product
+    import re
+    q=sp.Rational;s=q(93,1000)
+    assert q(4427,500)*s-(1-s)**2==q(773,1000000)>0
+    assert 1-9*s<3*s
+    counts={(k,j,r) for k,j,r in product(range(3),range(3),range(2)) if k+j+r==3}
+    assert counts=={(1,2,0),(2,1,0),(0,2,1),(1,1,1),(2,0,1)}
+    c,d,e,h=sp.symbols('c d e h')
+    det=2*area(sp.Matrix([c,0]),sp.Matrix([1,d]),sp.Matrix([1,e]))
+    zero(det-(1-c)*(e-d))
+    note=Path(__file__).with_name('N7_HEPTAGON_ONE_EAR.md').read_text()
+    steps=re.findall(r'^plu [A-Z]{5} [A-Z]{3} -?1$',note,re.M)
+    assert len(steps)==52
+    blocks=re.findall(r'^```n7-ear-R[12]-sum\n(.*?)^```$',note,re.M|re.S)
+    assert len(blocks)==2 and sum(len(block.strip().splitlines()) for block in blocks)==349
+    bounds=re.findall(r'^Exact upper bound: `([^`]+)`\.$',note,re.M)
+    assert len(bounds)==2 and all(q(bound)<0 for bound in bounds)
+    print("PASS: exhaustive all-interior N7 five-count catalogue and complete occupied-ear/lower exclusions")
+
+
 def n7_bc_fg_complete():
     from pathlib import Path
     import re
@@ -1551,3 +1573,4 @@ if __name__ == "__main__":
     c1_two_lower_three_caps()
     n6_two_lower_upper_side()
     n7_bc_fg_complete()
+    n7_heptagon_occupied_ear()

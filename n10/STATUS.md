@@ -447,6 +447,18 @@ the literal AH/DE 4/4 side-line class remains in single-exterior N7;
 the unfinished all-interior placements remain separate. The global
 algebra checker now has 51 passing groups.
 
+The all-interior N7 heptagon now has an exhaustive five-count catalogue
+after the available reflection h>=e, using the regions HABC,HCEF,CDE.
+N7_HEPTAGON_ONE_EAR.md proves their capacities and excludes both
+counts with an occupied right ear and a lower point: (2,0,1) by a
+strict endpoint area budget, and (1,1,1) by two fixed cubic rows.
+All 52 Pluecker sign deductions and 349 positive integer terms are
+printed. Independent geometric review and separate manuscript-reading
+Fraction and SymPy expansions pass. The already-published N6 boundary
+theorem excludes (2,1,0). Only (1,2,0) and (0,2,1) remain in this
+all-interior catalogue. The global algebra checker now has 52 passing
+groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

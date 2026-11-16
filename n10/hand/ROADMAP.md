@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 41.
+Checkpoint 42.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -370,8 +370,16 @@ four-corner alternative and all zero-area faces.
         witnesses and 154 other conditional witnesses. Separate
         Fraction/SymPy manuscript readers reproduce every strict bound.
         Proof: N7_SIDE_BC_FG.md.
+  - [x] N7-INTERIOR-EAR-LOWER. Complete all-interior heptagon count
+        catalogue in HABC,HCEF,CDE after h>=e: (1,2,0),(2,1,0),
+        (0,2,1),(1,1,1),(2,0,1). The occupied-ear/lower counts
+        (2,0,1) and (1,1,1) are excluded by an analytic area budget
+        and two fixed cubic rows, respectively. All 52 Pluecker
+        deductions and 349 integer terms are printed and independently
+        audited. Proof: N7_HEPTAGON_ONE_EAR.md. Together with
+        N7-INTERIOR-TWO-LOWER, only (1,2,0) and (0,2,1) remain.
   - [ ] Complete the two surviving placement rows outside the proved
-        sign chambers: the rest of (0,0,3) and the remaining literal
+        sign chambers: the two stated subcounts of (0,0,3) and the remaining literal
         AH/DE side-edge 4/4 pair of (1,0,2).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
@@ -512,6 +520,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_THREE_FIVE_LOWER_HEIGHT.md | Every remaining h<=e 3/5 position: seven exhaustive trees, 93 cubics, two geometric contradictions, 27,884 printed terms; completes all single-exterior 3/5 cases |
 | N7_CDGH_LINE.md | Complete literal CD/GH 4/4 line class: sixteen oblique words, two refinements, eighteen cubics, 5,926 terms and 23 used explicit squares |
 | N7_SIDE_BC_FG.md | Entire literal BC/FG side-line class at every height: 49 exhaustive leaves, 15,159 printed integer terms and 26 explicit rational squares |
+| N7_HEPTAGON_ONE_EAR.md | Five exhaustive all-interior heptagon counts; complete (2,0,1) and (1,1,1) exclusions by an analytic budget and two cubics, 52 explicit deductions and 349 printed terms |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
