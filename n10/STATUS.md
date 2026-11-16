@@ -359,6 +359,20 @@ with the complete exact-pentagon result. The C1 parent retains its
 28 zero-, one- and two-lower exterior count rows. The global algebra
 checker now has 45 passing groups.
 
+The entire literal CD/GH 4/4 line class of single-exterior N7 is now
+excluded at every height. N7_CDGH_LINE.md has sixteen oblique words,
+two strict-sign refinements, and eighteen fixed cubic contradictions.
+All 5,926 positive integer terms and 24 rational affine-square
+definitions are printed; 23 of the squares occur in row R05c. A fresh
+independent geometric replay validates every actual sign, all 29
+five-chain substitutions, 17 one-interior quadrilateral witnesses,
+and 82 other triangle, quadrilateral and spread witnesses. Separate
+Fraction and SymPy manuscript readers reproduce all exact negative
+bounds and the full branching. The remaining single-exterior N7
+obligations are its two side-edge 4/4 classes; the all-interior N7
+placement also remains open. The global algebra checker now has 46
+passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 35.
+Checkpoint 36.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -322,9 +322,17 @@ four-corner alternative and all zero-area faces.
         witnesses have independent audits.
         Proof: N7_THREE_FIVE_LOWER_HEIGHT.md, together with the two
         previously completed 3/5 notes.
+  - [x] N7-SINGLE-EXTERIOR-4/4-CD/GH. The whole literal CD/GH edge
+        pair, at every height. Its sixteen oblique words and two
+        refinements have eighteen printed cubic contradictions, with
+        5,926 positive integer terms and 23 used explicit square factors.
+        All 29 five-chain substitutions, 17 one-interior quadrilateral
+        witnesses, and 82 other conditional witnesses are independently
+        audited, with separate Fraction/SymPy arithmetic checks.
+        Proof: N7_CDGH_LINE.md.
   - [ ] Complete the two surviving placement rows outside the proved
-        sign chambers: all of (0,0,3) and the other 4/4 edge pairs
-        of (1,0,2).
+        sign chambers: all of (0,0,3) and the two remaining side-edge
+        4/4 pairs of (1,0,2).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -455,6 +463,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_LONG_TRIANGLE_CAPS.md | All eight actual long triangles have capacity one, at every height and independently of OP; eight sums, 3,212 integer terms |
 | N7_CORNER_LINE.md | Complete literal AB/EF line class at every height; all oblique orientations, eighteen cubic sums, 5,641 integer terms |
 | N7_THREE_FIVE_LOWER_HEIGHT.md | Every remaining h<=e 3/5 position: seven exhaustive trees, 93 cubics, two geometric contradictions, 27,884 printed terms; completes all single-exterior 3/5 cases |
+| N7_CDGH_LINE.md | Complete literal CD/GH 4/4 line class: sixteen oblique words, two refinements, eighteen cubics, 5,926 terms and 23 used explicit squares |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

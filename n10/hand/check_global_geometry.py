@@ -1357,6 +1357,33 @@ def c1_three_lower_exteriors():
     print("PASS: C1 side-cap rational bounds and all four complete exterior trees; entire three-lower placement catalogue")
 
 
+def n7_cdgh_complete():
+    from pathlib import Path
+    from itertools import product
+    import re
+    c,d,g,h,z,x,y,u,v=sp.symbols("c d g h z x y u v")
+    C,D,G,H,O,P=[sp.Matrix(t) for t in [(c,0),(1,d),(g,z),(0,h),(x,y),(u,v)]]
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(C,G,O)-det(C,G,P)-z*(u-x)+(c-g)*(y-v))
+    zero(det(D,H,P)-det(D,H,O)-(y-v)+(h-d)*(u-x))
+    zero(det(C,D,G)+det(C,G,H)-z+(c-g)*(h-d))
+    aa,bb,cc,dd,ee,ff,gg,hh=sp.symbols("a0 b0 c0 d0 e0 f0 g0 h0")
+    cross=lambda U,V:U[0]*V[1]-U[1]*V[0]
+    A,B,C,D=[(aa,bb),(cc,dd),(ee,ff),(gg,hh)]
+    zero(cross(A,B)*cross(C,D)-cross(B,C)*cross(D,A)-cross(A,C)*cross(B,D))
+    note=Path(__file__).with_name('N7_CDGH_LINE.md').read_text()
+    rows={row:choices.split(', ') for row,choices in re.findall(r'^\| (R\d+[abc]?) \| ([A-Z+\-, ]+) \|$',note,re.M)}
+    assert len(rows)==18
+    for ss in product('+-',repeat=6):
+        known=dict(zip(['ADP','BGO','CFP','EHO','AFO','BEP'],ss))
+        assert sum(all(known[token[:3]]==token[-1] for token in choices) for choices in rows.values())==1
+    block=re.findall(r'```n7-cdgh-squares\n(.*?)\n```',note,re.S)
+    assert len(block)==1
+    square_rows=[line.split() for line in block[0].splitlines()]
+    assert len(square_rows)==24 and all(len(row)==16 and int(row[1])>0 for row in square_rows)
+    print("PASS: N7 complete CD/GH diagonal and one-interior identities, exhaustive eighteen-row catalogue, and explicit square definitions")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1403,3 +1430,4 @@ if __name__ == "__main__":
     n7_all_three_five()
     c1_convex_top_pair()
     c1_three_lower_exteriors()
+    n7_cdgh_complete()
