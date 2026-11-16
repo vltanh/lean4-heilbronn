@@ -2,25 +2,19 @@ module
 
 public import Heilbronn.Common.Families
 public import Heilbronn.Seven.Setting
+public import Heilbronn.Seven.Interior.Regions
 
 /-! # Mixed placements above the left diagonal (`hand/SEVEN_BOUNDARY_MIXED_ABOVE.md`)
 
-Primary route, as a component: Theorem 1 is the "crossed-cell theorem" used for the three `C`
-entries of the coverage table of `SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md` (lines 229-232, 334).
+In the hand proof, Theorem 1 of this note (the crossed cell) closes the three `C` entries of the
+coverage table of `SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md` (lines 229-232, 334).
 
-**Setting** (lines 3-14). The seven anchors `A = (0,a)`, `H = (0,h)`, `B = (b,0)`, `C = (c,0)`,
-`D = (1,d)`, `E = (1,e)`, `F = (f,1)` with `0 < a < h ≤ 1`, `0 < b < c < 1`, `0 < d < e ≤ 1`,
-`b ≤ f ≤ c` (`SevenAnchorsClosed a h b c d e f`: both upper heights may equal one, and `f ≤ 1/2`
-is not needed). Free points `P, Q`; `s = 7/64`; the standing hypothesis is
-`7/128 ≤ minTriangleArea (sevenConfig a h b c d e f P Q)`.
+**Status.** The corresponding pairs of ray words are closed by kernel-checked certificates of the
+interior cover (`Heilbronn.SevenInterior.interior_false`); Theorem 1 is kept as a corollary of it,
+in the open-side form `SevenNormal` (the note allows `h = 1`, `e = 1` and does not need
+`f ≤ 1/2`; these variants have no consumer on the primary route).
 
-Triangles are written with vertices in the counterclockwise heptagon order `A, B, C, D, E, F, H`
-(so `HCF` is `InTriangle P 𝐂 𝐅 𝐇`, `AHE` is `InTriangle Q 𝐀 𝐄 𝐇`). Local notation: `𝐀 = (0,a)`,
-`𝐇 = (0,h)`, `𝐁 = (b,0)`, `𝐂 = (c,0)`, `𝐃 = (1,d)`, `𝐄 = (1,e)`, `𝐅 = (f,1)`.
-
-**Results.**
-* `theorem1`: there are no actual points with `P ∈ HCF`, `[BEP] < 0`, `Q ∈ AHE ∩ DEF`, for any
-  sign of the line `PQ`.
+**Results.** `theorem1`.
 -/
 
 @[expose] public section
@@ -32,23 +26,19 @@ open SevenBoundary
 
 variable {a h b c d e f : ℝ} {P Q : Point}
 
--- The seven anchors as points.
-local notation "𝐀" => ((0 : ℝ), a)
-local notation "𝐇" => ((0 : ℝ), h)
-local notation "𝐁" => (b, (0 : ℝ))
-local notation "𝐂" => (c, (0 : ℝ))
-local notation "𝐃" => ((1 : ℝ), d)
-local notation "𝐄" => ((1 : ℝ), e)
-local notation "𝐅" => (f, (1 : ℝ))
-
 /-- **Theorem 1** (`SEVEN_BOUNDARY_MIXED_ABOVE:Theorem1`). There cannot be actual points `P, Q`
-with `P ∈ HCF`, `[BEP] < 0` and `Q ∈ AHE ∩ DEF` (1); no sign of the line `PQ` is prescribed.
-Only `b ≤ f ≤ c` is used (not `f ≤ 1/2`), and `h = 1`, `e = 1` are allowed.
-`hand/SEVEN_BOUNDARY_MIXED_ABOVE.md`, lines 16-190.
-Uses: standard fact: barycentric coordinates, standard fact: intermediate value theorem. -/
-theorem theorem1 (hN : SevenAnchorsClosed a h b c d e f)
+with `P ∈ HCF`, `[BEP] < 0` and `Q ∈ AHE ∩ DEF`; no sign of the line `PQ` is prescribed.
+Proof: both points lie in the anchor heptagon; `Heilbronn.SevenInterior.pair_false`.
+`hand/SEVEN_BOUNDARY_MIXED_ABOVE.md`, lines 16-190. -/
+theorem theorem1 (hN : SevenNormal a h b c d e f)
     (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f P Q)) :
-    ¬ (InTriangle P 𝐂 𝐅 𝐇 ∧ sarea 𝐁 𝐄 P < 0 ∧ InTriangle Q 𝐀 𝐄 𝐇 ∧ InTriangle Q 𝐃 𝐄 𝐅) := by
-  sorry
+    ¬ (InTriangle P (c, 0) (f, 1) (0, h) ∧ sarea (b, 0) (1, e) P < 0 ∧
+      InTriangle Q (0, a) (1, e) (0, h) ∧ InTriangle Q (1, d) (1, e) (f, 1)) := by
+  rintro ⟨hP, -, hQ, -⟩
+  exact SevenInterior.pair_false hN hmin
+    (SevenInterior.inHeptagon_of_tri (P := P) (Q := Q) hN (i := 2) (j := 5) (k := 6) (by norm_num)
+      (by norm_num) (by norm_num) (by unfold SevenInterior.Cyc; omega) hP)
+    (SevenInterior.inHeptagon_of_tri (P := P) (Q := Q) hN (i := 0) (j := 4) (k := 6) (by norm_num)
+      (by norm_num) (by norm_num) (by unfold SevenInterior.Cyc; omega) hQ)
 
 end Heilbronn.SevenBoundaryMixedAbove
