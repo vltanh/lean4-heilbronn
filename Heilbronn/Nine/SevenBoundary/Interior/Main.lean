@@ -10,12 +10,13 @@ public import Heilbronn.Nine.SevenBoundary.Caps
 anchor heptagon cannot both keep every triangle of area at least `7/128`.
 
 Each point has one of the 57 ray words (`Comp.word_exists`). A word whose point lies in the ear
-`ABH`, `ABC` or `CDE` or in the overlap `AHF ∩ HCF` is excluded by `SEVEN_BOUNDARY_CAPS`
-Theorems 1, 4, 8, 6; a word whose point lies in the upper triangle `HEF` by its single-point
-tree. Two words whose points share one of the capacity-one triangles `BCF, HCF, HBF, ACF, CDF,
-DEF` are excluded by `SEVEN_BOUNDARY_CAPS` Theorems 2, 5, 9. Every other pair of words, ordered by
-the relabelling `P ↔ Q`, has a kernel-checked tree (`Trees.allCases_ok`), and `Cell.false` closes
-it.
+`ABH`, `ABC` or `CDE` or in the overlap `AHF ∩ HCF` is excluded by `SevenBoundaryCaps.minTriangleArea_lt_of_mem_ABH`,
+`SevenBoundaryCaps.minTriangleArea_lt_of_mem_ABC`, `SevenBoundaryCaps.minTriangleArea_lt_of_mem_CDE` and `SevenBoundaryCaps.minTriangleArea_lt_of_mem_AHF_HCF`; a
+word whose point lies in the upper triangle `HEF` by its single-point tree. Two words whose points
+share one of the capacity-one triangles `BCF, HCF, HBF, ACF, CDF, DEF` are excluded by
+`SevenBoundaryCaps.minTriangleArea_lt_of_pair_mem_BCF_HCF_HBF`, `SevenBoundaryCaps.minTriangleArea_lt_of_pair_mem_ACF` and `SevenBoundaryCaps.minTriangleArea_lt_of_pair_mem_CDF_DEF`. Every
+other pair of words, ordered by the relabelling `P ↔ Q`, has a kernel-checked tree
+(`Trees.allCases_ok`), and `Cell.false` closes it.
 -/
 
 @[expose] public section
@@ -28,9 +29,6 @@ open Cert Cover Model SevenBoundary
 variable {a h b c d e f : ℝ} {P Q : Point}
 
 /-! ### Finite facts -/
-
-theorem lexTriples_valid : ∀ t ∈ lexTriples, t.1 < t.2.1 ∧ t.2.1 < t.2.2 ∧ t.2.2 < 9 := by
-  decide +kernel
 
 theorem badKind_spec : ∀ w < 57,
     (badKind w = 1 → winside w (0, 1, 6) = true) ∧ (badKind w = 2 → winside w (0, 1, 2) = true) ∧
@@ -117,7 +115,7 @@ theorem Comp.cell (H : Comp a h b c d e f P Q) {ks : List ℕ} (hl : ks.length �
   intro g hg
   simp only [baseSigns, List.mem_filterMap, Option.map_eq_some_iff] at hg
   obtain ⟨t, ht, sg, hsg, rfl⟩ := hg
-  obtain ⟨t1, t2, t3⟩ := lexTriples_valid t ht
+  obtain ⟨t1, t2, t3⟩ := mem_lexTriples ht
   refine ⟨t1, t2, t3, ?_⟩
   unfold anchorSign at hsg
   split_ifs at hsg with h7 h7'
@@ -174,18 +172,18 @@ theorem Comp.not_bad (H : Comp a h b c d e f P Q) {w : ℕ} (hw57 : w < 57)
     omega) with hk | hk | hk | hk | hk
   · obtain ⟨s1, s2, s3⟩ := hw.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) (k1 hk)
-    exact H.min₁ (SevenBoundaryCaps.theorem1 hN ⟨s1, s2, s3⟩)
+    exact H.min₁ (SevenBoundaryCaps.minTriangleArea_lt_of_mem_ABH hN ⟨s1, s2, s3⟩)
   · obtain ⟨s1, s2, s3⟩ := hw.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) (k2 hk)
-    exact H.min₁ (SevenBoundaryCaps.theorem4 hN ⟨s1, s2, s3⟩)
+    exact H.min₁ (SevenBoundaryCaps.minTriangleArea_lt_of_mem_ABC hN ⟨s1, s2, s3⟩)
   · obtain ⟨s1, s2, s3⟩ := hw.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) (k3 hk)
-    exact H.min₁ ((SevenBoundaryCaps.theorem8 hN).2 P ⟨s1, s2, s3⟩)
+    exact H.min₁ ((SevenBoundaryCaps.minTriangleArea_lt_of_mem_CDE hN).2 P ⟨s1, s2, s3⟩)
   · obtain ⟨s1, s2, s3⟩ := hw.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) (k4 hk).1
     obtain ⟨t1, t2, t3⟩ := hw.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) (k4 hk).2
-    exact H.min₁ (SevenBoundaryCaps.theorem6 hN ⟨s1, s2, s3⟩ ⟨t3, t1, t2⟩)
+    exact H.min₁ (SevenBoundaryCaps.minTriangleArea_lt_of_mem_AHF_HCF hN ⟨s1, s2, s3⟩ ⟨t3, t1, t2⟩)
   · obtain ⟨T, hT⟩ := tree_of_key (keys_single w hw57 hk)
     exact (H.cell1 hw).false hT
 
@@ -203,39 +201,39 @@ theorem Comp.not_cap (H : Comp a h b c d e f P Q) {p q : ℕ}
       (by norm_num) (by norm_num) hpt
     obtain ⟨t1, t2, t3⟩ := hq.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hqt
-    exact absurd hm (not_le.2 ((SevenBoundaryCaps.theorem2 hN).1 ⟨s1, s2, s3⟩ ⟨t1, t2, t3⟩))
+    exact absurd hm (not_le.2 ((SevenBoundaryCaps.minTriangleArea_lt_of_pair_mem_BCF_HCF_HBF hN).1 ⟨s1, s2, s3⟩ ⟨t1, t2, t3⟩))
   · obtain ⟨s1, s2, s3⟩ := hp.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hpt
     obtain ⟨t1, t2, t3⟩ := hq.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hqt
-    exact absurd hm (not_le.2 ((SevenBoundaryCaps.theorem2 hN).2.1 ⟨s3, s1, s2⟩ ⟨t3, t1, t2⟩))
+    exact absurd hm (not_le.2 ((SevenBoundaryCaps.minTriangleArea_lt_of_pair_mem_BCF_HCF_HBF hN).2.1 ⟨s3, s1, s2⟩ ⟨t3, t1, t2⟩))
   · obtain ⟨s1, s2, s3⟩ := hp.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hpt
     obtain ⟨t1, t2, t3⟩ := hq.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hqt
-    exact absurd hm (not_le.2 ((SevenBoundaryCaps.theorem2 hN).2.2 ⟨s3, s1, s2⟩ ⟨t3, t1, t2⟩))
+    exact absurd hm (not_le.2 ((SevenBoundaryCaps.minTriangleArea_lt_of_pair_mem_BCF_HCF_HBF hN).2.2 ⟨s3, s1, s2⟩ ⟨t3, t1, t2⟩))
   · obtain ⟨s1, s2, s3⟩ := hp.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hpt
     obtain ⟨t1, t2, t3⟩ := hq.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hqt
-    exact absurd hm (not_le.2 ((SevenBoundaryCaps.theorem5 hN).2.2 P Q ⟨s1, s2, s3⟩ ⟨t1, t2, t3⟩))
+    exact absurd hm (not_le.2 ((SevenBoundaryCaps.minTriangleArea_lt_of_pair_mem_ACF hN).2.2 P Q ⟨s1, s2, s3⟩ ⟨t1, t2, t3⟩))
   · obtain ⟨s1, s2, s3⟩ := hp.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hpt
     obtain ⟨t1, t2, t3⟩ := hq.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hqt
-    exact absurd hm (not_le.2 (((SevenBoundaryCaps.theorem9 hN).2 P Q).1 ⟨s1, s2, s3⟩
+    exact absurd hm (not_le.2 (((SevenBoundaryCaps.minTriangleArea_lt_of_pair_mem_CDF_DEF hN).2 P Q).1 ⟨s1, s2, s3⟩
       ⟨t1, t2, t3⟩))
   · obtain ⟨s1, s2, s3⟩ := hp.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hpt
     obtain ⟨t1, t2, t3⟩ := hq.inside (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) hqt
-    exact absurd hm (not_le.2 (((SevenBoundaryCaps.theorem9 hN).2 P Q).2 ⟨s1, s2, s3⟩
+    exact absurd hm (not_le.2 (((SevenBoundaryCaps.minTriangleArea_lt_of_pair_mem_CDF_DEF hN).2 P Q).2 ⟨s1, s2, s3⟩
       ⟨t1, t2, t3⟩))
 
 /-! ### The theorem -/
 
-/-- **Both free points inside the heptagon** (`SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION:claim-interior`,
-by the cover of `Heilbronn.Nine.SevenInterior`): impossible at least area `7/128`. -/
+/-- **Both free points inside the heptagon** are impossible at least area `7/128`, by the cover of
+`Heilbronn.Nine.SevenInterior`. -/
 theorem interior_false (H : Comp a h b c d e f P Q) (hP : InHeptagon a h b c d e f P)
     (hQ : InHeptagon a h b c d e f Q) : False := by
   obtain ⟨p, hp57, hp⟩ := H.word_exists (x := 7) (Or.inl rfl) hP

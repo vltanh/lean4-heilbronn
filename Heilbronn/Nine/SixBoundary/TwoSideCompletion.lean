@@ -5,36 +5,33 @@ public import Heilbronn.Nine.SixBoundary.TwoSideCompletionCert
 public import Heilbronn.Nine.SevenBoundary.MixedAboveCompletion
 
 /-! # Completion of the two-side-cap N family with a lower point
-(`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md`)
 
-Role: primary route. Theorem 1 closes the occupancy N6-02 `(1,0,1;1)` of
-`docs/proof/nine/UNRESTRICTED.md`, Section 4, when the anchor-interior point is below `HC` (the "lower-point
-companion" of `SIX_BOUNDARY_TWO_SIDE_UPPER.md`); it is also used by Corollary 2 there.
+The six-boundary case with one free point in each side cap and the third below `HC`, in the
+closed virtual triangle `(0,0)HC` (the lower-point companion of `SixBoundaryTwoSideUpper`, whose
+assembly `SixBoundaryTwoSideUpper.twoSide_isOptimal_of_A₀_le` uses `twoSideLower_lt_A₀`).
 
-Setting (1): `nConfig a h b c d f X Y Q` with `NAnchors a h b c d f`, `X = (x, y)` in the closed
-cap `CD(1,0)`, `Y = (z, w)` in the closed cap `FH(0,1)`, `Q = (r, t)` in the closed virtual
-triangle `(0,0)HC`; no height-order or joining-line assumption. Competitive: least area at least
-`A₀`, so every doubled area is at least `μ ≥ 2A₀ > s = 7/64`. With `L = h - a`, `M = c - b`.
+Setting (`LowerSetting`): `nConfig a h b c d f X Y Q` with `NAnchors a h b c d f`, `X = (x, y)` in
+the closed cap `CD(1,0)`, `Y = (z, w)` in the closed cap `FH(0,1)`, `Q = (r, t)` in the closed
+virtual triangle `(0,0)HC`; no height-order or joining-line assumption. Competitive: least area
+at least `A₀`, so every doubled area is at least `μ ≥ 2A₀ > s = 7/64`. With `L = h - a`,
+`M = c - b`. The final step uses `SevenBoundaryMixedAboveCompletion.minTriangleArea_nConfig_lt_A₀` (exactly
+seven contacts, strict bound).
 
-The manuscript's citation of `SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md` Theorem 1 (lines 412-414)
-is replaced by `SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md` Theorem 2, in the form
-`SevenBoundaryMixedAboveCompletion.theorem2_nConfig` (exactly seven contacts, strict bound).
-
-Section 1 shows that projecting `x` to `1` keeps every threshold when `(t - a)[AQX] ≤ 0` (3), and
-projecting `w` to `1` keeps every threshold when `(r - b)[BQY] ≥ 0` (4). Sections 2-4 exclude
-the four quadrants of `Q` relative to `(b, a)` in which both fail (5).
+Projecting `x` to `1` keeps every threshold when `(t - a)[AQX] ≤ 0`, and projecting `w` to `1`
+keeps every threshold when `(r - b)[BQY] ≥ 0`. Certificates exclude the four quadrants of `Q`
+relative to `(b, a)` in which both fail (`BadSigns`).
 
 Results:
-* `claim_obstruction`: (3) and (4) are sufficient for the two projections (`proj_X`, `proj_Y`:
-  every triangle through the moved point keeps its doubled area at least the original minimum,
-  `min_le_replace`), and their joint failure (5) forces `sgn(y - a) = sgn(t - a) ≠ 0` and
+* `projection_obstruction`: the two sign conditions are sufficient for the two projections (`proj_X`,
+  `proj_Y`: every triangle through the moved point keeps its doubled area at least the original
+  minimum, `min_le_replace`), and their joint failure forces `sgn(y - a) = sgn(t - a) ≠ 0` and
   `sgn(z - b) = sgn(r - b) ≠ 0`;
-* `claim_quadrant_I`, `claim_mixed_quadrants`, `claim_quadrant_III`: (5) is impossible in each
-  quadrant. Each is closed by a cubic certificate found by linear programming
+* `quadrant_I_false`, `mixed_quadrants_false`, `quadrant_III_false`: the joint failure is
+  impossible in each quadrant. Each is closed by a cubic certificate found by linear programming
   (`Heilbronn.Nine.SixBoundary.TwoSideCompletionCert`, on the doubled-area costs of fourteen
-  triangles with known orientation), replacing the scalar arguments of Sections 2-4 and Lemma 3;
-* `theorem1`: with exactly six contacts the least area is below `A₀` (one projection reaches seven
-  contacts, where `SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md` Theorem 2 is strict).
+  triangles with known orientation);
+* `twoSideLower_lt_A₀`: with exactly six contacts the least area is below `A₀` (one projection reaches seven
+  contacts, where `SevenBoundaryMixedAboveCompletion.minTriangleArea_nConfig_lt_A₀` is strict).
 -/
 
 @[expose] public section
@@ -44,75 +41,17 @@ namespace Heilbronn.Nine.SixBoundaryTwoSideCompletion
 
 open SixBoundary
 
-/-- The standing setting (1) of `docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md` in the competitive
-case: `X ∈ CD(1,0)`, `Y ∈ FH(0,1)`, `Q ∈ (0,0)HC`, least area at least `A₀`. -/
+/-- The standing setting in the competitive case: `X ∈ CD(1,0)`, `Y ∈ FH(0,1)`, `Q ∈ (0,0)HC`,
+least area at least `A₀`. -/
 def LowerSetting (a h b c d f : ℝ) (X Y Q : Point) : Prop :=
   NAnchors a h b c d f ∧ InCapR c d X ∧ InCapL f h Y ∧ Q ∈ unitSquare ∧ InT0 h c Q ∧
     A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Q)
 
-/-- Both sufficient projection conditions fail (5): `(t - a)[AQX] > 0` and `(r - b)[BQY] < 0`. -/
+/-- Both sufficient projection conditions fail: `(t - a)[AQX] > 0` and `(r - b)[BQY] < 0`. -/
 def BadSigns (a b : ℝ) (X Y Q : Point) : Prop :=
   0 < (Q.2 - a) * sarea (ptA a) Q X ∧ (Q.1 - b) * sarea (ptB b) Q Y < 0
 
 /-! ### The points of the configuration by index (`rfl` rewrites at type `Point`) -/
-
-theorem nC_mk0 (a h b c d f : ℝ) (X Y Z : Point) (hk : 0 < 9) :
-    nConfig a h b c d f X Y Z ⟨0, hk⟩ = (0, a) := rfl
-
-theorem nC_mk1 (a h b c d f : ℝ) (X Y Z : Point) (hk : 1 < 9) :
-    nConfig a h b c d f X Y Z ⟨1, hk⟩ = (0, h) := rfl
-
-theorem nC_mk2 (a h b c d f : ℝ) (X Y Z : Point) (hk : 2 < 9) :
-    nConfig a h b c d f X Y Z ⟨2, hk⟩ = (b, 0) := rfl
-
-theorem nC_mk3 (a h b c d f : ℝ) (X Y Z : Point) (hk : 3 < 9) :
-    nConfig a h b c d f X Y Z ⟨3, hk⟩ = (c, 0) := rfl
-
-theorem nC_mk4 (a h b c d f : ℝ) (X Y Z : Point) (hk : 4 < 9) :
-    nConfig a h b c d f X Y Z ⟨4, hk⟩ = (1, d) := rfl
-
-theorem nC_mk5 (a h b c d f : ℝ) (X Y Z : Point) (hk : 5 < 9) :
-    nConfig a h b c d f X Y Z ⟨5, hk⟩ = (f, 1) := rfl
-
-theorem nC_mk6 (a h b c d f : ℝ) (X Y Z : Point) (hk : 6 < 9) :
-    nConfig a h b c d f X Y Z ⟨6, hk⟩ = X := rfl
-
-theorem nC_mk7 (a h b c d f : ℝ) (X Y Z : Point) (hk : 7 < 9) :
-    nConfig a h b c d f X Y Z ⟨7, hk⟩ = Y := rfl
-
-theorem nC_mk8 (a h b c d f : ℝ) (X Y Z : Point) (hk : 8 < 9) :
-    nConfig a h b c d f X Y Z ⟨8, hk⟩ = Z := rfl
-
-theorem nC_0 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 0 = (0, a) := rfl
-
-theorem nC_1 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 1 = (0, h) := rfl
-
-theorem nC_2 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 2 = (b, 0) := rfl
-
-theorem nC_3 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 3 = (c, 0) := rfl
-
-theorem nC_4 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 4 = (1, d) := rfl
-
-theorem nC_5 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 5 = (f, 1) := rfl
-
-theorem nC_6 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 6 = X := rfl
-
-theorem nC_7 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 7 = Y := rfl
-
-theorem nC_8 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 8 = Z := rfl
-
-theorem aP_0 (a h b c d f : ℝ) : anchorPts a h b c d f 0 = (0, a) := rfl
-
-theorem aP_1 (a h b c d f : ℝ) : anchorPts a h b c d f 1 = (0, h) := rfl
-
-theorem aP_2 (a h b c d f : ℝ) : anchorPts a h b c d f 2 = (b, 0) := rfl
-
-theorem aP_3 (a h b c d f : ℝ) : anchorPts a h b c d f 3 = (c, 0) := rfl
-
-theorem aP_4 (a h b c d f : ℝ) : anchorPts a h b c d f 4 = (1, d) := rfl
-
-theorem aP_5 (a h b c d f : ℝ) : anchorPts a h b c d f 5 = (f, 1) := rfl
-
 
 /-! ### Replacing one point -/
 
@@ -142,18 +81,6 @@ theorem abs_sarea_swap₂₃ (p q r : Point) : |sarea p r q| = |sarea p q r| := 
 
 theorem abs_sarea_swap₁₂ (p q r : Point) : |sarea q p r| = |sarea p q r| := by
   rw [sarea_swap₁₂, abs_neg]
-
-/-- The pair bound of the replaced point, from the ordered pairs. -/
-theorem pair_bound_symm {P : Fin 9 → Point} {k : Fin 9} {μ : ℝ}
-    (h : ∀ i j : Fin 9, i < j → i ≠ k → j ≠ k → μ ≤ |sarea (P i) (P j) (P k)|) :
-    ∀ i j, i ≠ k → j ≠ k → i ≠ j → μ / 2 ≤ triangleArea (P i) (P j) (P k) := by
-  intro i j hi hj hij
-  rw [triangleArea_eq]
-  rcases lt_or_gt_of_ne hij with h1 | h1
-  · linarith [h i j h1 hi hj]
-  · have := h j i h1 hj hi
-    rw [abs_sarea_swap₁₂] at this
-    linarith
 
 /-- The indices other than `6`: an anchor, `Y` (`7`) or `Q` (`8`). -/
 theorem idx6 (a h b c d f : ℝ) (X Y Q : Point) (i : Fin 9) (hi : i ≠ 6) :
@@ -224,8 +151,8 @@ theorem anchorPair_ne {a h b c d f μ : ℝ} {M : Point}
   · exact hB l₁ l₂ h1
   · rw [abs_sarea_swap₁₂]; exact hB l₂ l₁ h1
 
-/-- **Section 1, projection of `X`**: under (3) the least area does not decrease as `x` moves
-to `x' ∈ [x, 1]`. -/
+/-- **Projection of `X`**: under `(t - a)[AQX] ≤ 0` the least area does not decrease as `x`
+moves to `x' ∈ [x, 1]`. -/
 theorem proj_X {a h b c d f : ℝ} {X Y Q : Point} (hS : LowerSetting a h b c d f X Y Q)
     (h3 : (Q.2 - a) * sarea (ptA a) Q X ≤ 0) (x' : ℝ) (hxx : X.1 ≤ x') (hx1 : x' ≤ 1) :
     minTriangleArea (nConfig a h b c d f X Y Q) ≤
@@ -235,8 +162,8 @@ theorem proj_X {a h b c d f : ℝ} {X Y Q : Point} (hS : LowerSetting a h b c d 
   have hμ : 7 / 64 ≤ 2 * m := by linarith [A₀_bounds.1]
   have hmin' : 2 * m / 2 ≤ minTriangleArea (nConfig a h b c d f X Y Q) := by linarith
   obtain ⟨XA, XQ, XA0⟩ :=
-    (SixBoundaryTwoSideProjection.claim_X_projection hN hX hY hQ hQT hμ hmin').1 x' hxx hx1
-  obtain ⟨XYa, XYq⟩ := SixBoundaryTwoSideProjection.claim_XY_pairs hN hX hY hQ hQT hμ hmin' x'
+    (SixBoundaryTwoSideProjection.sideCap_projection hN hX hY hQ hQT hμ hmin').1 x' hxx hx1
+  obtain ⟨XYa, XYq⟩ := SixBoundaryTwoSideProjection.pair_projection hN hX hY hQ hQT hμ hmin' x'
     Y.2 hxx hx1 le_rfl hY.1.2.2.2
   have bAU : ∀ l : Fin 6, 2 * m ≤ |sarea (anchorPts a h b c d f l) Y (x', X.2)| := fun l => by
     rw [abs_sarea_swap₂₃]; exact XYa l
@@ -273,8 +200,8 @@ theorem proj_X {a h b c d f : ℝ} {X Y Q : Point} (hS : LowerSetting a h b c d 
     rw [triangleArea_eq, show nConfig a h b c d f (x', X.2) Y Q 6 = (x', X.2) from rfl]
     linarith
 
-/-- **Section 1, projection of `Y`**: under (4) the least area does not decrease as `w` moves
-to `w' ∈ [w, 1]`. -/
+/-- **Projection of `Y`**: under `(r - b)[BQY] ≥ 0` the least area does not decrease as `w`
+moves to `w' ∈ [w, 1]`. -/
 theorem proj_Y {a h b c d f : ℝ} {X Y Q : Point} (hS : LowerSetting a h b c d f X Y Q)
     (h4 : 0 ≤ (Q.1 - b) * sarea (ptB b) Q Y) (w' : ℝ) (hww : Y.2 ≤ w') (hw1 : w' ≤ 1) :
     minTriangleArea (nConfig a h b c d f X Y Q) ≤
@@ -284,8 +211,8 @@ theorem proj_Y {a h b c d f : ℝ} {X Y Q : Point} (hS : LowerSetting a h b c d 
   have hμ : 7 / 64 ≤ 2 * m := by linarith [A₀_bounds.1]
   have hmin' : 2 * m / 2 ≤ minTriangleArea (nConfig a h b c d f X Y Q) := by linarith
   obtain ⟨YA, YQ, YB⟩ :=
-    (SixBoundaryTwoSideProjection.claim_X_projection hN hX hY hQ hQT hμ hmin').2 w' hww hw1
-  obtain ⟨XYa, XYq⟩ := SixBoundaryTwoSideProjection.claim_XY_pairs hN hX hY hQ hQT hμ hmin' X.1
+    (SixBoundaryTwoSideProjection.sideCap_projection hN hX hY hQ hQT hμ hmin').2 w' hww hw1
+  obtain ⟨XYa, XYq⟩ := SixBoundaryTwoSideProjection.pair_projection hN hX hY hQ hQT hμ hmin' X.1
     w' le_rfl hX.1.2.1 hww hw1
   have bAU : ∀ l : Fin 6, 2 * m ≤ |sarea (anchorPts a h b c d f l) X (Y.1, w')| := fun l =>
     XYa l
@@ -321,16 +248,11 @@ theorem proj_Y {a h b c d f : ℝ} {X Y Q : Point} (hS : LowerSetting a h b c d 
     rw [triangleArea_eq, show nConfig a h b c d f X (Y.1, w') Q 7 = (Y.1, w') from rfl]
     linarith
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_COMPLETION:claim-obstruction`). In the setting (1):
-if `(t - a)[AQX] ≤ 0` (3), moving `x` to any `x' ∈ [x, 1]` does not decrease the least area;
-if `(r - b)[BQY] ≥ 0` (4), moving `w` to any `w' ∈ [w, 1]` does not decrease it; and if both
-fail (5), then `(y - a)(t - a) > 0` and `(z - b)(r - b) > 0` (so `t ≠ a`, `r ≠ b`, and `Q` lies
-in one of four open quadrants relative to `(b, a)`).
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md`, lines 52-110.
-Uses: SIX_BOUNDARY_TWO_SIDE_PROJECTION:Lemma2, SIX_BOUNDARY_TWO_SIDE_PROJECTION:claim-BQX-sign,
-SIX_BOUNDARY_TWO_SIDE_PROJECTION:claim-X-projection,
-SIX_BOUNDARY_TWO_SIDE_PROJECTION:claim-XY-pairs, SIX_BOUNDARY_EXTERIOR:Lemma6 -/
-theorem claim_obstruction {a h b c d f : ℝ} {X Y Q : Point}
+/-- In `LowerSetting`: if `(t - a)[AQX] ≤ 0`, moving `x` to any `x' ∈ [x, 1]` does not decrease
+the least area; if `(r - b)[BQY] ≥ 0`, moving `w` to any `w' ∈ [w, 1]` does not decrease it; and
+if both fail, then `(y - a)(t - a) > 0` and `(z - b)(r - b) > 0` (so `t ≠ a`, `r ≠ b`, and `Q`
+lies in one of four open quadrants relative to `(b, a)`). -/
+theorem projection_obstruction {a h b c d f : ℝ} {X Y Q : Point}
     (hS : LowerSetting a h b c d f X Y Q) :
     ((Q.2 - a) * sarea (ptA a) Q X ≤ 0 → ∀ x' : ℝ, X.1 ≤ x' → x' ≤ 1 →
       minTriangleArea (nConfig a h b c d f X Y Q) ≤
@@ -361,7 +283,7 @@ def zeta (a h b c d f x y z w r t : ℝ) : ℕ → ℝ
   | 0 => a | 1 => h | 2 => b | 3 => c | 4 => d | 5 => f | 6 => x | 7 => y
   | 8 => z | 9 => w | 10 => r | 11 => t | _ => 0
 
-/-- The real facts of the setting (1) behind the common atoms of the quadrant certificates. -/
+/-- The real facts of `LowerSetting` behind the common atoms of the quadrant certificates. -/
 structure LowerFacts (a h b c d f x y z w r t : ℝ) : Prop where
   ha : 0 < a
   hah : a < h
@@ -498,7 +420,7 @@ theorem quad_III (H : LowerFacts a h b c d f x y z w r t) (ht : t ≤ a) (hr : r
 
 end Quadrants
 
-/-- The cap costs of the setting (1). -/
+/-- The cap costs of `LowerSetting`. -/
 theorem lower_areas1 {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y)
     (h7 : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
@@ -545,7 +467,7 @@ theorem lower_areas2 {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c 
       (area_of_le_min h7 0 2 8)
     simp only [sarea] at this; linarith
 
-/-- The facts of the setting (1), from a competitive configuration. -/
+/-- The facts of `LowerSetting`, from a competitive configuration. -/
 theorem lowerFacts_of {a h b c d f : ℝ} {X Y Q : Point} (hS : LowerSetting a h b c d f X Y Q) :
     LowerFacts a h b c d f X.1 X.2 Y.1 Y.2 Q.1 Q.2 := by
   obtain ⟨hN, hX, hY, hQ, hQT, hmin⟩ := hS
@@ -554,7 +476,7 @@ theorem lowerFacts_of {a h b c d f : ℝ} {X Y Q : Point} (hS : LowerSetting a h
   obtain ⟨⟨hxc, hy, hyd⟩, ⟨hzf, hz, hhw⟩, ⟨hr0, ht0, hT⟩⟩ :=
     SixBoundaryTwoSideProjection.orders hN hX hY hQ hQT hpos
   obtain ⟨hABC, hABH, hHDF, hCDF⟩ := SixBoundaryHull.anchor_areas hN h7
-  have hABQ := (SixBoundaryExterior.theorem2 hN hX.1 hY.1 hQ hmin).2.2
+  have hABQ := (SixBoundaryExterior.not_inCap00 hN hX.1 hY.1 hQ hmin).2.2
   simp only [InCap00, not_and, not_le] at hABQ
   obtain ⟨hBCX, hAHY, hCDX, hFHY⟩ := lower_areas1 hN hX hY h7
   obtain ⟨hAHQ, hBCQ, hHCQ, hABQ2⟩ := lower_areas2 hN hQ hQT (hABQ hQ) h7
@@ -608,21 +530,18 @@ theorem bad_bounds {a h b c d f : ℝ} {X Y Q : Point} (hS : LowerSetting a h b 
       by_contra hc; push Not at hc; nlinarith
     rw [abs_of_pos this] at bB; exact bB
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_COMPLETION:claim-quadrant-I`). In the setting (1), the
-joint failure (5) is impossible with `t > a`, `r > b` (certificate `QuadCert.qI_check`; the
-manuscript's argument gives `s ≤ q³(1 - q) ≤ 27/256 < 7/64` with `q = √(hc)`).
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md`, lines 112-162. -/
-theorem claim_quadrant_I {a h b c d f : ℝ} {X Y Q : Point}
+/-- In `LowerSetting`, the joint failure of the two projection conditions is impossible with
+`t > a`, `r > b` (certificate `QuadCert.qI_check`). -/
+theorem quadrant_I_false {a h b c d f : ℝ} {X Y Q : Point}
     (hS : LowerSetting a h b c d f X Y Q) (hbad : BadSigns a b X Y Q) (ht : a < Q.2)
     (hr : b < Q.1) : False := by
   have B := bad_bounds hS hbad
   exact quad_I (lowerFacts_of hS) ht.le hr.le (B.1 ht) (B.2.2.1 hr)
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_COMPLETION:claim-mixed-quadrants`). In the setting (1), the
-joint failure (5) is impossible with `t > a`, `r < b`, and with `t < a`, `r > b` (certificates
-`QuadCert.qM1_check`, `QuadCert.qM2_check`). `docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md`,
-lines 164-240. -/
-theorem claim_mixed_quadrants {a h b c d f : ℝ} {X Y Q : Point}
+/-- In `LowerSetting`, the joint failure of the two projection conditions is impossible with
+`t > a`, `r < b`, and with `t < a`, `r > b` (certificates `QuadCert.qM1_check`,
+`QuadCert.qM2_check`). -/
+theorem mixed_quadrants_false {a h b c d f : ℝ} {X Y Q : Point}
     (hS : LowerSetting a h b c d f X Y Q) (hbad : BadSigns a b X Y Q)
     (hq : (a < Q.2 ∧ Q.1 < b) ∨ (Q.2 < a ∧ b < Q.1)) : False := by
   have B := bad_bounds hS hbad
@@ -630,53 +549,44 @@ theorem claim_mixed_quadrants {a h b c d f : ℝ} {X Y Q : Point}
   · exact quad_M1 (lowerFacts_of hS) ht.le hr.le (B.1 ht) (B.2.2.2 hr)
   · exact quad_M2 (lowerFacts_of hS) ht.le hr.le (B.2.1 ht) (B.2.2.1 hr)
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_COMPLETION:claim-quadrant-III`). In the setting (1), the
-joint failure (5) is impossible with `t < a`, `r < b` (certificate `QuadCert.qIII_check`; the
-manuscript's argument goes through (13), (14) and Lemma 3, which are not needed here).
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md`, lines 242-306, 388. -/
-theorem claim_quadrant_III {a h b c d f : ℝ} {X Y Q : Point}
+/-- In `LowerSetting`, the joint failure of the two projection conditions is impossible with
+`t < a`, `r < b` (certificate `QuadCert.qIII_check`). -/
+theorem quadrant_III_false {a h b c d f : ℝ} {X Y Q : Point}
     (hS : LowerSetting a h b c d f X Y Q) (hbad : BadSigns a b X Y Q) (ht : Q.2 < a)
     (hr : Q.1 < b) : False := by
   have B := bad_bounds hS hbad
   exact quad_III (lowerFacts_of hS) ht.le hr.le (B.2.1 ht) (B.2.2.2 hr)
 
-/-- **Theorem 1** (`SIX_BOUNDARY_TWO_SIDE_COMPLETION:Theorem1`), in the six-contact form used by
-the assembly: a configuration with one free point `X` in the cap `CD(1,0)`, one `Y` in the cap
-`FH(0,1)`, the third `Q` in the virtual triangle `(0,0)HC`, and exactly six boundary contacts, has
-least area below `A₀`. (One of the conditions (3), (4) holds; projecting that cap point to its
-side keeps the least area and gives exactly seven contacts, where
-`SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md` Theorem 2 is strict.)
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_COMPLETION.md`, lines 21-35, 390-421.
-Uses: SIX_BOUNDARY_TWO_SIDE_COMPLETION:claim-obstruction,
-SIX_BOUNDARY_TWO_SIDE_COMPLETION:claim-quadrant-I,
-SIX_BOUNDARY_TWO_SIDE_COMPLETION:claim-mixed-quadrants,
-SIX_BOUNDARY_TWO_SIDE_COMPLETION:claim-quadrant-III, SIX_BOUNDARY_EXTERIOR:Theorem2,
-SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION:Theorem2 -/
-theorem theorem1 {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
+/-- A configuration with one free point `X` in the cap `CD(1,0)`, one `Y` in the cap `FH(0,1)`,
+the third `Q` in the virtual triangle `(0,0)HC`, and exactly six boundary contacts, has least area
+below `A₀`. (One of the two projection conditions holds; projecting that cap point to its side
+keeps the least area and gives exactly seven contacts, where
+`SevenBoundaryMixedAboveCompletion.minTriangleArea_nConfig_lt_A₀` is strict.) -/
+theorem twoSideLower_lt_A₀ {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y) (hQ : Q ∈ unitSquare) (hQT : InT0 h c Q)
     (hsix : ExactlySixContacts X Y Q) :
     minTriangleArea (nConfig a h b c d f X Y Q) < A₀ := by
   by_contra hge
   push Not at hge
   have hS : LowerSetting a h b c d f X Y Q := ⟨hN, hX, hY, hQ, hQT, hge⟩
-  obtain ⟨o3, o4, o5⟩ := claim_obstruction hS
+  obtain ⟨o3, o4, o5⟩ := projection_obstruction hS
   obtain ⟨⟨x0, x1, y0, y1⟩, ⟨z0, z1, w0, w1⟩, ⟨q0, q1, q2, q3⟩⟩ := hsix
-  have opY : SevenBoundaryMixedAboveCompletion.InOpenSquare Y := ⟨z0, z1, w0, w1⟩
-  have opQ : SevenBoundaryMixedAboveCompletion.InOpenSquare Q := ⟨q0, q1, q2, q3⟩
-  have opX : SevenBoundaryMixedAboveCompletion.InOpenSquare X := ⟨x0, x1, y0, y1⟩
+  have opY : InOpenSquare Y := ⟨z0, z1, w0, w1⟩
+  have opQ : InOpenSquare Q := ⟨q0, q1, q2, q3⟩
+  have opX : InOpenSquare X := ⟨x0, x1, y0, y1⟩
   by_cases h3 : (Q.2 - a) * sarea (ptA a) Q X ≤ 0
   · have k := o3 h3 1 x1.le le_rfl
     have h7 : SevenBoundaryMixedAboveCompletion.ExactlySevenContacts ((1 : ℝ), X.2) Y Q :=
       Or.inl ⟨⟨⟨by norm_num, le_rfl, y0.le, y1.le⟩, Or.inr (Or.inl rfl), fun ⟨_, h⟩ => by
         rcases h with h | h <;> simp only at h <;> linarith⟩, opY, opQ⟩
-    have := SevenBoundaryMixedAboveCompletion.theorem2_nConfig hN h7
+    have := SevenBoundaryMixedAboveCompletion.minTriangleArea_nConfig_lt_A₀ hN h7
     linarith
   by_cases h4 : 0 ≤ (Q.1 - b) * sarea (ptB b) Q Y
   · have k := o4 h4 1 w1.le le_rfl
     have h7 : SevenBoundaryMixedAboveCompletion.ExactlySevenContacts X (Y.1, (1 : ℝ)) Q :=
       Or.inr (Or.inl ⟨opX, ⟨⟨z0.le, z1.le, by norm_num, le_rfl⟩, Or.inr (Or.inr (Or.inr rfl)),
         fun ⟨h, _⟩ => by rcases h with h | h <;> simp only at h <;> linarith⟩, opQ⟩)
-    have := SevenBoundaryMixedAboveCompletion.theorem2_nConfig hN h7
+    have := SevenBoundaryMixedAboveCompletion.minTriangleArea_nConfig_lt_A₀ hN h7
     linarith
   push Not at h3 h4
   have hbad : BadSigns a b X Y Q := ⟨h3, h4⟩
@@ -684,9 +594,9 @@ theorem theorem1 {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
   have hta : Q.2 ≠ a := fun e => by rw [e] at hya; simp at hya
   have hrb : Q.1 ≠ b := fun e => by rw [e] at hzb; simp at hzb
   rcases lt_or_gt_of_ne hta with ht | ht <;> rcases lt_or_gt_of_ne hrb with hr | hr
-  · exact claim_quadrant_III hS hbad ht hr
-  · exact claim_mixed_quadrants hS hbad (Or.inr ⟨ht, hr⟩)
-  · exact claim_mixed_quadrants hS hbad (Or.inl ⟨ht, hr⟩)
-  · exact claim_quadrant_I hS hbad ht hr
+  · exact quadrant_III_false hS hbad ht hr
+  · exact mixed_quadrants_false hS hbad (Or.inr ⟨ht, hr⟩)
+  · exact mixed_quadrants_false hS hbad (Or.inl ⟨ht, hr⟩)
+  · exact quadrant_I_false hS hbad ht hr
 
 end Heilbronn.Nine.SixBoundaryTwoSideCompletion

@@ -2,21 +2,21 @@ module
 
 public import Heilbronn.Nine.Corners.CornerFamilies.Mesh
 
-/-! # Corner families, §12: the three-upper-point class (`docs/proof/nine/CORNER_FAMILIES.md`,
-lines 1169–1459)
+/-! # Corner families: the three-upper-point class
 
-Part of `CORNER_FAMILIES.md` (module `Heilbronn.Nine.Corners.CornerFamilies`). In the physical frame
-of §11 (`A = (0,0)`, `B = (0,1)`, `C = (1,1)`, labelled distributed upper triple `X, Y, Z`), the
-line `BY` splits the lower points into the A-side (`D(B,Y,R) ≤ -s`) and the C-side
-(`D(B,Y,R) ≥ s`); each side holds at most one lower point, which excludes the `3+3` class.
+Part of `Heilbronn.Nine.Corners.CornerFamilies`. In the physical frame of
+`CornerFamilies/Mesh.lean` (`A = (0,0)`, `B = (0,1)`, `C = (1,1)`, labelled distributed upper
+triple `X, Y, Z`), the line `BY` splits the lower points into the A-side (`D(B,Y,R) ≤ -s`) and
+the C-side (`D(B,Y,R) ≥ s`); each side holds at most one lower point, which excludes the `3+3`
+class.
 
-The A-side argument (feasible triangle (37)–(39), bounds (40)–(45)) is stated with the rectangle
-parameters `s, L, M` of §11 (see `Mesh.lean`), since `ONE_CORNER.md` §4 reuses it with a displaced
-base and, by the reflection across `x + y = 1`, for the other side of `BY`. The C-side argument
-is the manuscript's own (after the reflection making `u ≥ h`, i.e. `u + v ≥ 1`), at `s = 7/64`.
+The A-side argument (the feasible triangle of the A-side points and the bounds on its vertex
+pairs) is stated with the rectangle parameters `s, L, M` of `Mesh.lean`, so that it also covers a
+displaced base. The C-side capacity follows by the reflection across `x + y = 1`, which exchanges
+the two sides of `BY`.
 
-**Results.** `claim_C_side_capacity_one`, `claim_A_side_capacity_one`, the polynomial facts
-`eq41` and `eq45` (reused verbatim by `ONE_CORNER.md` (9)–(10)), `typeIII_3plus3`.
+**Results.** `A_side_capacity_one`, `C_side_general`, the polynomial facts `G1_scalar`,
+`G0_scalar` and `polyN_pos`, `typeIII_3plus3`.
 -/
 
 @[expose] public section
@@ -24,34 +24,15 @@ is the manuscript's own (after the reflection making `u ≥ h`, i.e. `u + v ≥ 
 noncomputable section
 namespace Heilbronn.Nine.CornerFamilies
 
-/-- The polynomial `N(γ, ρ)` of (45). -/
+/-- The cubic polynomial `N(γ, ρ)` of the vertex-pair bound `G0_scalar`. -/
 def polyN (γ ρ : ℝ) : ℝ :=
   49 * γ ^ 3 + 448 * γ ^ 2 * ρ + 749 * γ ^ 2 + 350 * γ * ρ ^ 2 - 2248 * γ * ρ + 252 * γ -
     49 * ρ ^ 3 + 252 * ρ ^ 2 + 252 * ρ - 49
 
-/-- **Claim** (`CORNER_FAMILIES:claim-A-side-capacity-one`), equation (41): for `ρ = Q/s > 0`,
-`(17/8)(64/7 - 21/5 - ρ - 17/(5ρ))/(ρ + 6/5) < 1`, equivalently
-`875ρ² - 2605ρ + 2023 > 0` (discriminant `-294475`). `docs/proof/nine/CORNER_FAMILIES.md`,
-lines 1306–1323. -/
-theorem eq41 (ρ : ℝ) (hρ : 0 < ρ) :
-    17 / 8 * (64 / 7 - 21 / 5 - ρ - 17 / (5 * ρ)) / (ρ + 6 / 5) < 1 ∧
-      0 < 875 * ρ ^ 2 - 2605 * ρ + 2023 := by
-  have hq : 0 < 875 * ρ ^ 2 - 2605 * ρ + 2023 := by nlinarith [sq_nonneg (ρ - 2605 / 1750)]
-  refine ⟨?_, hq⟩
-  rw [div_lt_one (by linarith)]
-  have e : 17 / 8 * (64 / 7 - 21 / 5 - ρ - 17 / (5 * ρ)) =
-      17 / 8 * (64 / 7 - 21 / 5 - ρ) - 289 / 40 / ρ := by field_simp; ring
-  rw [e, sub_lt_iff_lt_add]
-  have : 17 / 8 * (64 / 7 - 21 / 5 - ρ) - (ρ + 6 / 5) < 289 / 40 / ρ := by
-    rw [lt_div_iff₀ hρ]; nlinarith
-  linarith
-
-/-- **Claim** (`CORNER_FAMILIES:claim-A-side-capacity-one`), equation (45): the polynomial
-`N(γ, ρ)` is positive for `γ ≥ 6/5` and `1 ≤ ρ ≤ 96/35`. Proof: with `t = γ - 6/5 ≥ 0`, `N` is a
-cubic in `t` with leading coefficient `49` whose lower coefficients `N(6/5, ρ)`, `N_γ(6/5, ρ)`,
-`N_γγ(6/5, ρ)/2` are positive on the range (lines 1369–1426). `docs/proof/nine/CORNER_FAMILIES.md`,
-lines 1369–1426. -/
-theorem eq45 (γ ρ : ℝ) (hγ : 6 / 5 ≤ γ) (hρ : 1 ≤ ρ) (hρ' : ρ ≤ 96 / 35) : 0 < polyN γ ρ := by
+/-- The polynomial `N(γ, ρ)` is positive for `γ ≥ 6/5` and `1 ≤ ρ ≤ 96/35`. Proof: with
+`t = γ - 6/5 ≥ 0`, `N` is a cubic in `t` with leading coefficient `49` whose lower coefficients
+`N(6/5, ρ)`, `N_γ(6/5, ρ)`, `N_γγ(6/5, ρ)/2` are positive on the range. -/
+theorem polyN_pos (γ ρ : ℝ) (hγ : 6 / 5 ≤ γ) (hρ : 1 ≤ ρ) (hρ' : ρ ≤ 96 / 35) : 0 < polyN γ ρ := by
   set t := γ - 6 / 5 with ht
   have ht0 : 0 ≤ t := by linarith
   have e : polyN γ ρ = (-6125 * ρ ^ 3 + 84000 * ρ ^ 2 - 225060 * ρ + 177079) / 125 +
@@ -69,10 +50,9 @@ theorem eq45 (γ ρ : ℝ) (hγ : 6 / 5 ≤ γ) (hρ : 1 ≤ ρ) (hρ' : ρ ≤ 
   have := mul_nonneg (by norm_num : (0 : ℝ) ≤ 49) (pow_nonneg ht0 3)
   linarith
 
-/-! ### The A-side feasible triangle (37)–(45), with the parameters of `ONE_CORNER.md` §4 -/
+/-! ### The A-side feasible triangle, with the rectangle parameters -/
 
-/-- The bound `G₁ < s` (41), scaled: `(s + K)N₀ < skQ` with `N₀ = Q·H₀`,
-`k = Q + J` (lines 1296–1323; `ONE_CORNER.md` (9)). -/
+/-- The vertex-pair bound `G₁ < s`, scaled: `(s + K)N₀ < skQ` with `N₀ = Q·H₀`, `k = Q + J`. -/
 theorem G1_scalar {Q J K a s M N₀ : ℝ} (hs : 7 / 64 ≤ s) (hQ : s ≤ Q) (hJ : 6 / 5 * s < J)
     (ha : s ≤ a) (hK0 : s ≤ K) (hK : K ≤ 109 / 98 * s) (hM : M ≤ 64 / 7 * s)
     (hN : N₀ = Q * (M - a - Q - J - 2 * s) - s * (a + 2 * J)) :
@@ -99,9 +79,9 @@ theorem G1_scalar {Q J K a s M N₀ : ℝ} (hs : 7 / 64 ≤ s) (hQ : s ≤ Q) (h
   have e6 := mul_lt_mul_of_pos_left e5 hs0
   nlinarith
 
-/-- The bound `G₀ < s` (42)–(45), scaled: `(q + δ)N₀ < s h k` with `h = Q + J + a`,
-`k = Q + J` (lines 1325–1426; `ONE_CORNER.md` (10)). Here `qd = q + δ` satisfies (42):
-`J·qd ≤ J(M - 2s) - s(s + Q)`. -/
+/-- The vertex-pair bound `G₀ < s`, scaled: `(q + δ)N₀ < s h k` with `h = Q + J + a`,
+`k = Q + J`, where `qd = q + δ` satisfies `J·qd ≤ J(M - 2s) - s(s + Q)`; the proof uses the
+positivity of `polyN` (`polyN_pos`). -/
 theorem G0_scalar {Q J a s M N₀ qd : ℝ} (hs : 7 / 64 ≤ s) (hQ : s ≤ Q) (hQ' : Q ≤ 96 / 35 * s)
     (hJ : 6 / 5 * s < J) (ha : s ≤ a) (hM : M ≤ 64 / 7 * s) (hqd : 0 < qd)
     (h42 : J * qd ≤ J * (M - 2 * s) - s * (s + Q))
@@ -126,7 +106,7 @@ theorem G0_scalar {Q J a s M N₀ qd : ℝ} (hs : 7 / 64 ≤ s) (hQ : s ≤ Q) (
   have hJq : 0 < J * qd := mul_pos hJ0 hqd
   have c1 : J * qd * N₀ ≤ B₁ * N₁ := mul_le_mul hB e2 h0.le (by linarith)
   -- the polynomial `N(γ, ρ)` at `γ = J/s`, `ρ = Q/s`
-  have hN45 := eq45 (J / s) (Q / s) (by rw [le_div_iff₀ hs0]; linarith)
+  have hN45 := polyN_pos (J / s) (Q / s) (by rw [le_div_iff₀ hs0]; linarith)
     (by rw [le_div_iff₀ hs0]; linarith) (by rw [div_le_iff₀ hs0]; linarith)
   have hNU : 0 < 49 * J ^ 3 + 448 * J ^ 2 * Q + 749 * J ^ 2 * s + 350 * J * Q ^ 2 -
       2248 * J * Q * s + 252 * J * s ^ 2 - 49 * Q ^ 3 + 252 * Q ^ 2 * s + 252 * Q * s ^ 2 -
@@ -152,9 +132,7 @@ theorem G0_scalar {Q J a s M N₀ qd : ℝ} (hs : 7 / 64 ≤ s) (hQ : s ≤ Q) (
   have : J * (qd * N₀) < J * (s * (Q + J + a) * (Q + J)) := by nlinarith
   exact lt_of_mul_lt_mul_left this hJ0.le
 
-
-
-/-- The three vertex-pair bounds of the feasible triangle (39)–(45), scaled by `hkQ`:
+/-- The three vertex-pair bounds of the A-side feasible triangle, scaled by `hkQ`:
 `cᵢⱼ N₀ < s·hkQ` for `c₁₂ = (q + δ)Q`, `c₁₃ = (s + K)h`, `c₂₃ = (P - s)k` (`δ = M - 1`,
 `N₀ = Q(v + δ) - s(k + h)`). -/
 theorem A_bounds {u v p q c a s M : ℝ} (H : MeshHyps u v p q c a s) (hM : 1 ≤ M)
@@ -296,11 +274,11 @@ theorem A_final {w₁ w₂ w₃ w₁' w₂' w₃' c₁₂ c₁₃ c₂₃ N₀ F
   · have := mul_pos hm0 hT0
     nlinarith
 
-/-- The A-side capacity in coordinates (lines 1234–1447, `ONE_CORNER.md` §4): two points
-`R₁, R₂` of the feasible triangle (37) (`y ≥ 1 - M`, `D(B,Y,R) ≤ -s`, `D(X,Y,R) ≥ s`) span with
-`Z` a triangle of doubled area `< s`. With `wᵢ = (kℓ₁, hℓ₂, Qℓ₃)` (nonnegative, sum `N₀`), the
-determinant is `hkQN₀·D(Z,R₁,R₂) = Σ_{i<j} (wᵢw'ⱼ - wⱼw'ᵢ)cᵢⱼ` with `cᵢⱼN₀ < s·hkQ`
-(`cᵢⱼ` the scaled vertex-pair determinants `G₀, G₁, G₂` of (39)). -/
+/-- The A-side capacity in coordinates: two points `R₁, R₂` of the feasible triangle
+(`y ≥ 1 - M`, `D(B,Y,R) ≤ -s`, `D(X,Y,R) ≥ s`) span with `Z` a triangle of doubled area `< s`.
+With `wᵢ = (kℓ₁, hℓ₂, Qℓ₃)` (nonnegative, sum `N₀`), the determinant is
+`hkQN₀·D(Z,R₁,R₂) = Σ_{i<j} (wᵢw'ⱼ - wⱼw'ᵢ)cᵢⱼ` with `cᵢⱼN₀ < s·hkQ` (`cᵢⱼ` the scaled
+vertex-pair determinants `G₀, G₁, G₂`, bounded in `A_bounds`). -/
 theorem A_core {u v p q c a s M x₁ y₁ x₂ y₂ : ℝ} (H : MeshHyps u v p q c a s) (hM : 1 ≤ M)
     (hsM : 7 / 64 * M ≤ s) (hy₁ : 1 - M ≤ y₁) (hA₁ : (1 - v) * x₁ - u * (1 - y₁) ≤ -s)
     (hX₁ : s ≤ (c - u) * (1 - y₁) + (1 - v - a) * x₁ - ((1 - v) * c - a * u))
@@ -382,16 +360,12 @@ theorem sarea_XY (X Y R : Point) : sarea X Y R = (X.1 - Y.1) * (1 - R.2) +
     (1 - Y.2 - (1 - X.2)) * R.1 - ((1 - Y.2) * X.1 - (1 - X.2) * Y.1) := by
   simp only [sarea]; ring
 
-/-- **Claim** (`CORNER_FAMILIES:claim-A-side-capacity-one`), with the rectangle parameters of
-`ONE_CORNER.md` §4 (CORNER_FAMILIES: `L = M = 1`, `s = 7/64`): two lower points `R₁, R₂` of the
-rectangle `[0, L] × [1 - M, 1]` (`L, M ≥ 1`, `7/64 · L ≤ s`, `7/64 · M ≤ s`), with all doubled
-areas of the eight points at least `s`, cannot both be A-side points (`D(B,Y,R) ≤ -s`): the
-A-side points lie in the feasible triangle (37), and every triangle formed by `Z` and two of its
-points has doubled area `< s` by (39)–(45). `docs/proof/nine/CORNER_FAMILIES.md`, lines 1234–1447.
-
-Uses: CORNER_FAMILIES:UniformSigns, CORNER_FAMILIES:QuantitativeMeshLemma,
-CORNER_FAMILIES:SixPointTriangularHullTheorem (19) -/
-theorem claim_A_side_capacity_one (X Y Z R₁ R₂ : Point) (s L M : ℝ) (hL : 1 ≤ L) (hM : 1 ≤ M)
+/-- **A-side capacity one**: two lower points `R₁, R₂` of the rectangle `[0, L] × [1 - M, 1]`
+(`L, M ≥ 1`, `7/64 · L ≤ s`, `7/64 · M ≤ s`), with all doubled areas of the eight points at
+least `s`, cannot both be A-side points (`D(B,Y,R) ≤ -s`): the A-side points lie in the feasible
+triangle, and every triangle formed by `Z` and two of its points has doubled area `< s`
+(`A_core`). The Type-III case is `L = M = 1`, `s = 7/64`. -/
+theorem A_side_capacity_one (X Y Z R₁ R₂ : Point) (s L M : ℝ) (hL : 1 ≤ L) (hM : 1 ≤ M)
     (hsL : 7 / 64 * L ≤ s) (hsM : 7 / 64 * M ≤ s)
     (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z) (hR₁ : R₁ ∈ rectangle L M)
     (hR₂ : R₂ ∈ rectangle L M) (hl₁ : R₁.2 < R₁.1) (hl₂ : R₂.2 < R₂.1)
@@ -418,8 +392,7 @@ theorem claim_A_side_capacity_one (X Y Z R₁ R₂ : Point) (s L M : ℝ) (hL : 
   rw [e] at hZ
   linarith
 
-/-- The C-side capacity with the rectangle parameters (`ONE_CORNER.md` §4, last paragraph):
-two lower points with `D(B,Y,R) ≥ s` are impossible, by the A-side capacity of the configuration
+/-- The C-side capacity with the rectangle parameters: two lower points with `D(B,Y,R) ≥ s` are impossible, by the A-side capacity of the configuration
 reflected across `x + y = 1` (which exchanges `L, M` and `X, Z`). -/
 theorem C_side_general (X Y Z R₁ R₂ : Point) (s L M : ℝ) (hL : 1 ≤ L) (hM : 1 ≤ M)
     (hsL : 7 / 64 * L ≤ s) (hsM : 7 / 64 * M ≤ s)
@@ -475,38 +448,21 @@ theorem C_side_general (X Y Z R₁ R₂ : Point) (s L M : ℝ) (hL : 1 ≤ L) (h
   rw [e, abs_neg] at hX
   linarith
 
-/-- **Claim** (`CORNER_FAMILIES:claim-C-side-capacity-one`): with every area greater than `7/128`
-(doubled threshold `s = 7/64`), after the reflection making `u ≥ h` (`u + v ≥ 1`), two lower
-points of the square cannot both be C-side points (`D(B,Y,R) ≥ s`): the six points
-`B, C, Y, X, R, S` lie in the container `BCD`; a nontriangular hull contradicts the
-nontriangular-hull lemma, a triangular hull `BCT` gives `(Γ + 1)s ≤ 1`, false.
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 1178–1232.
-
-Uses: CORNER_FAMILIES:NontriangularHullLemma, CORNER_FAMILIES:SixPointTriangularHullTheorem -/
-theorem claim_C_side_capacity_one (X Y Z R₁ R₂ : Point)
-    (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z) (_huh : 1 ≤ Y.1 + Y.2)
-    (hR₁ : R₁ ∈ unitSquare) (hR₂ : R₂ ∈ unitSquare) (hl₁ : R₁.2 < R₁.1) (hl₂ : R₂.2 < R₂.1)
-    (hmin : 7 / 128 < minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z, R₁, R₂]) :
-    ¬ (7 / 64 ≤ sarea (0, 1) Y R₁ ∧ 7 / 64 ≤ sarea (0, 1) Y R₂) :=
-  C_side_general X Y Z R₁ R₂ (7 / 64) 1 1 le_rfl le_rfl (by norm_num) (by norm_num) hm
-    ⟨hR₁.1, hR₁.2.1, by linarith [hR₁.2.2.1], hR₁.2.2.2⟩
-    ⟨hR₂.1, hR₂.2.1, by linarith [hR₂.2.2.1], hR₂.2.2.2⟩ hl₁ hl₂ (by linarith)
-
-/-- The containments (15) in the physical (clockwise) frame, from the reversed counterclockwise
-mesh. -/
+/-- The labelled mesh in the physical (clockwise) frame, from the reversed counterclockwise mesh
+(`meshLabelled_of_distributed`). -/
 theorem mesh_phys {X Y Z : Point} (hd : Distributed (0, 0) (0, 1) (1, 1) X Y Z)
     (hgp : 0 < minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z])
     (hZ : InsideTriangle Z (0, 0) (0, 1) Y) (hX : InsideTriangle X (0, 1) (1, 1) Y) :
     MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z := by
   have hd' : Distributed (1, 1) (0, 1) (0, 0) Z Y X :=
     distributed_swap (distributed_cyc (distributed_cyc (distributed_rev hd)))
-  have hm := eq15 (1, 1) (0, 1) (0, 0) Z Y X (by simp only [sarea]; norm_num) hd'
+  have hm := meshLabelled_of_distributed (1, 1) (0, 1) (0, 0) Z Y X (by simp only [sarea]; norm_num) hd'
     (lt_of_lt_of_le hgp (min_sub (le_refl _) _ ![2, 1, 0, 5, 4, 3] (by norm_num) (by decide)
       (by intro i; fin_cases i <;> simp))) (inside_swap12.1 hX) (inside_swap12.1 hZ)
   exact meshLabelled_reverse hm
 
 /-- The `3+3` class with a labelled upper triple: each lower point lies on one side of `BY`,
-and each side holds at most one (lines 1169–1459). -/
+and each side holds at most one. -/
 theorem three_three_core {X Y Z L₁ L₂ L₃ : Point} {s Lr Mr : ℝ} (hL : 1 ≤ Lr) (hM : 1 ≤ Mr)
     (hsL : 7 / 64 * Lr ≤ s) (hsM : 7 / 64 * Mr ≤ s)
     (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z)
@@ -525,7 +481,7 @@ theorem three_three_core {X Y Z L₁ L₂ L₃ : Point} {s Lr Mr : ℝ} (hL : 1 
   have A2 := fun (L L' : Point) (hL' : L ∈ rectangle Lr Mr) (hL'' : L' ∈ rectangle Lr Mr)
       (lL : L.2 < L.1) (lL' : L'.2 < L'.1)
       (hm8 : s / 2 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z, L, L']) =>
-    claim_A_side_capacity_one X Y Z L L' s Lr Mr hL hM hsL hsM hm hL' hL'' lL lL' hm8
+    A_side_capacity_one X Y Z L L' s Lr Mr hL hM hsL hsM hm hL' hL'' lL lL' hm8
   have C2 := fun (L L' : Point) (hL' : L ∈ rectangle Lr Mr) (hL'' : L' ∈ rectangle Lr Mr)
       (lL : L.2 < L.1) (lL' : L'.2 < L'.1)
       (hm8 : s / 2 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z, L, L']) =>
@@ -563,7 +519,7 @@ theorem three_three_upper {P Q R L₁ L₂ L₃ : Point} {s Lr Mr : ℝ} (hL : 1
   have hgp : 0 < minTriangleArea ![(0, 0), (0, 1), (1, 1), P, Q, R] :=
     lt_of_lt_of_le (by linarith) (min_sub hmin' _ ![0, 1, 2, 3, 4, 5] (by norm_num) (by decide)
       (by intro i; fin_cases i <;> simp))
-  obtain ⟨σ, hZ, hX⟩ := claim_mesh_labelling _ _ _ P Q R hd hgp
+  obtain ⟨σ, hZ, hX⟩ := exists_mesh_labelling _ _ _ P Q R hd hgp
   have hperm : ∀ i j k : Fin 3, i ≠ j → j ≠ k → i ≠ k →
       (i = 0 ∧ j = 1 ∧ k = 2) ∨ (i = 0 ∧ j = 2 ∧ k = 1) ∨ (i = 1 ∧ j = 0 ∧ k = 2) ∨
         (i = 1 ∧ j = 2 ∧ k = 0) ∨ (i = 2 ∧ j = 0 ∧ k = 1) ∨ (i = 2 ∧ j = 1 ∧ k = 0) := by
@@ -606,13 +562,8 @@ theorem three_three_upper {P Q R L₁ L₂ L₃ : Point} {s Lr Mr : ℝ} (hL : 1
       (min_sub hmin' _ ![0, 1, 2, 5, 4, 3, 6, 7, 8] (by norm_num) (by decide)
         (by intro i; fin_cases i <;> simp))
 
-/-- **Type-III exclusion, `3+3` class** (`CORNER_FAMILIES:TypeIII-3+3`): a Type-III configuration
-with exactly three free points above `y = x` has minimum area at most `7/128` (`< A₀`).
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 59–68, 1169–1459.
-
-Uses: CORNER_FAMILIES:UpperTripleRestriction, CORNER_FAMILIES:QuantitativeMeshLemma,
-CORNER_FAMILIES:UniformSigns, CORNER_FAMILIES:claim-C-side-capacity-one,
-CORNER_FAMILIES:claim-A-side-capacity-one -/
+/-- **Type-III exclusion, `3+3` class**: a Type-III configuration with exactly three free points
+above `y = x` has minimum area at most `7/128` (`< A₀`). -/
 theorem typeIII_3plus3 (U V W X Y Z : Point) (hU : U ∈ unitSquare) (hV : V ∈ unitSquare)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (h3 : upperCount U V W X Y Z = 3) :
@@ -689,7 +640,7 @@ theorem typeIII_3plus3 (U V W X Y Z : Point) (hU : U ∈ unitSquare) (hV : V ∈
     have h6 : minTriangleArea P ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), F u₁, F u₂, F u₃] :=
       h9.trans (min_sub (le_refl _) _ ![0, 1, 2, 3, 4, 5] (by norm_num) (by decide)
         (by intro i; fin_cases i <;> simp))
-    have := claim_nondistributed_bound (0, 0) (0, 1) (1, 1) (F u₁) (F u₂) (F u₃)
+    have := triangleArea_ge_of_not_distributed (0, 0) (0, 1) (1, 1) (F u₁) (F u₂) (F u₃)
       (Or.inr (upper_inside hU hV hW hX hY hZ hpos u₁ hu₁))
       (Or.inr (upper_inside hU hV hW hX hY hZ hpos u₂ hu₂))
       (Or.inr (upper_inside hU hV hW hX hY hZ hpos u₃ hu₃)) _ hpos h6 hnd

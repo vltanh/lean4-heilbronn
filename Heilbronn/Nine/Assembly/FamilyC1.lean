@@ -8,11 +8,11 @@ public import Heilbronn.Nine.Corners.OneCorner
 /-!
 # Assembly: the one-corner family C1
 
-`docs/proof/nine/UNRESTRICTED.md`, Section 3 (the table of lower counts). Let `n₀` be the number of the four
-free points of a C1 configuration strictly inside the lower anchor triangle `OHC`
-(`C1.lowerCount`). The cases `n₀ = 0, 1, 2` are `C1ZeroLower.theorem4`,
-`C1OneLowerMixedCaps.theorem2` and `C1TwoLowerCompletion.theorem2`; `n₀ ≥ 3` is impossible by the
-corner-triangle occupancy theorem (`OneCorner.claim_C1_at_most_two_lower`), whose count of points
+Let `n₀` be the number of the four free points of a C1 configuration strictly inside the lower
+anchor triangle `OHC`
+(`C1.lowerCount`). The cases `n₀ = 0, 1, 2` are `C1ZeroLower.lowerCount_eq_zero_false`,
+`C1OneLowerMixedCaps.lowerCount_eq_one_false` and `C1TwoLowerCompletion.lowerCount_eq_two_false`; `n₀ ≥ 3` is impossible by the
+corner-triangle occupancy theorem (`OneCorner.c1_ncard_inside_OHC_le_two`), whose count of points
 inside `OHC` is at least `n₀` (`lowerCount_le_ncard`).
 -/
 
@@ -25,32 +25,32 @@ open C1
 
 /-- The lower count `n₀` of `C1Setting` is at most the count of `OneCorner`: a point strictly
 inside the counterclockwise triangle `O C H` is strictly inside the triangle `O H C` in the sense
-of `CornerFamilies.InsideTriangle` (either orientation). -/
+of `InsideTriangle` (either orientation). -/
 theorem lowerCount_le_ncard (h c : ℝ) (W X Y Z : Point) :
     lowerCount h c W X Y Z ≤
-      {i : Fin 4 | CornerFamilies.InsideTriangle (![W, X, Y, Z] i) (0, 0) (0, h) (c, 0)}.ncard := by
+      {i : Fin 4 | InsideTriangle (![W, X, Y, Z] i) (0, 0) (0, h) (c, 0)}.ncard := by
   classical
   unfold lowerCount countFree
-  have hset : {i : Fin 4 | CornerFamilies.InsideTriangle (![W, X, Y, Z] i) (0, 0) (0, h) (c, 0)} =
+  have hset : {i : Fin 4 | InsideTriangle (![W, X, Y, Z] i) (0, 0) (0, h) (c, 0)} =
       ↑(Finset.univ.filter fun i : Fin 4 =>
-        CornerFamilies.InsideTriangle (![W, X, Y, Z] i) (0, 0) (0, h) (c, 0)) := by
+        InsideTriangle (![W, X, Y, Z] i) (0, 0) (0, h) (c, 0)) := by
     ext i; simp
   rw [hset, Set.ncard_coe_finset]
   convert Finset.card_le_card (Finset.monotone_filter_right _ ?_)
   intro i _ hi
   exact Or.inr hi
 
-/-- **Family C1 is excluded** (`docs/proof/nine/UNRESTRICTED.md`, Section 3): no C1 configuration in the
-square has least area at least `A₀`. -/
+/-- **Family C1 is excluded**: no C1 configuration in the square has least area at least
+`A₀`. -/
 theorem c1_exclusion {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) : False := by
   rcases Nat.lt_or_ge (lowerCount h c W X Y Z) 3 with h3 | h3
   · interval_cases hn : lowerCount h c W X Y Z
-    · exact C1ZeroLower.theorem4 hA hW hX hY hZ hn hmin
-    · exact C1OneLowerMixedCaps.theorem2 hA hW hX hY hZ hn hmin
-    · exact C1TwoLowerCompletion.theorem2 hA hW hX hY hZ hn hmin
-  · have h2 := OneCorner.claim_C1_at_most_two_lower h c d f hA W X Y Z hW hX hY hZ hmin
+    · exact C1ZeroLower.lowerCount_eq_zero_false hA hW hX hY hZ hn hmin
+    · exact C1OneLowerMixedCaps.lowerCount_eq_one_false hA hW hX hY hZ hn hmin
+    · exact C1TwoLowerCompletion.lowerCount_eq_two_false hA hW hX hY hZ hn hmin
+  · have h2 := OneCorner.c1_ncard_inside_OHC_le_two h c d f hA W X Y Z hW hX hY hZ hmin
     have := lowerCount_le_ncard h c W X Y Z
     omega
 

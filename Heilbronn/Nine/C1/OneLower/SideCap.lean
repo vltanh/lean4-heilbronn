@@ -3,25 +3,25 @@ module
 public import Heilbronn.Nine.C1.OneLower.TopCap
 public import Heilbronn.Nine.C1.OneLower.SideCapTrees
 
-/-! # The one-lower C1 hexagon with a single side-cap point (`docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`)
+/-! # The one-lower C1 hexagon with a single side-cap point
 
-**Role.** A component of the one-lower C1 class: `C1_ONE_LOWER_MIXED_CAPS:Theorem2` uses
-Theorem 1 for the occupancy with exactly one exterior point in the left cap, and (by reflection)
-in the right cap. Corollary 2 restates the part of that assembly with at most one exterior point.
-Section 4 (the strengthened occupancy rule, `eq9`) is cited by `C1_ONE_LOWER_TOP_TRIANGLE.md`.
+A component of the one-lower C1 class: `C1OneLowerMixedCaps.lowerCount_eq_one_false` uses `sideCap_placement_false` for the
+occupancy with exactly one exterior point in the left cap, and (by reflection) in the right cap.
+`two_le_countFree_caps` restates the part of that assembly with at most one exterior point. The module also
+proves the strengthened occupancy rule `occupancyBound_le_abs_sarea`.
 
 **Setting.** The C1 anchors with `0 < d ≤ h < 1`, `0 < f ≤ c < 1` and minimum triangle area at
 least `A₀`; the free points `L ∈ OHC`, `P, Q ∈ HCDF` and `X = (g, k)` in the left cap
 `HF(0,1) \ HF`, in the configuration `c1Config h c d f L P Q X`. No relation between `f` and `d`
-is imposed (lines 38-39), so that the right cap follows by transposition. Thresholds
+is imposed, so that the right cap follows by transposition. Thresholds
 `s = 8/73`, `ρ = 49/60` (local notations). The full hull is the hexagon `O, C, D, F, X, H`.
 
 **Results.**
-* `theorem1` (`C1_ONE_LOWER_SIDE_CAP:Theorem1`), with the reflection `transpose_right`.
-* `corollary2` (`C1_ONE_LOWER_SIDE_CAP:Corollary2`): a competitive one-lower configuration has at
-  least two free points outside the anchor pentagon. FLAG: its proof's bound "`W ≥ 10s`".
-* `eq1`–`eq6`: the bounds of Sections 1–2; `claim_cap1` (four capacity-one triangles);
-  `claim_cover` (the 153 cells); `eq9` (strengthened occupancy costs); `eq10` (the certificate
+* `sideCap_placement_false`: the placement is impossible, with the reflection `transpose_right`.
+* `two_le_countFree_caps`: a competitive one-lower configuration has at least two free points outside the
+  anchor pentagon.
+* `left_cap_area_bounds`–`upperQuadArea_bounds_leftCap`: the anchor, cap and coordinate bounds; `atMostInside_one_OFH_CDF_FXH_OXH` (four capacity-one triangles);
+  `exists_sideCapCases` (the 153 cells); `occupancyBound_le_abs_sarea` (strengthened occupancy costs); `sideCapCases_false` (the certificate
   package).
 -/
 
@@ -32,7 +32,7 @@ namespace Heilbronn.Nine.C1OneLowerSideCap
 
 open Heilbronn.Nine.C1
 open Heilbronn.Nine.C1OneLowerTopCap (HullWord hullSign hullInside HasHullWord hullTriples insideCount
-  AtMostInside sameSector upperPairConflict ConvexPolygon)
+  AtMostInside sameSector upperPairConflict)
 
 /-- `s = 8/73 < 2A₀`. -/
 local notation "s" => (8 / 73 : ℝ)
@@ -42,12 +42,12 @@ local notation "ρ" => (49 / 60 : ℝ)
 
 /-! ### The placement -/
 
-/-- The hull hexagon `V₀, …, V₅ = O, C, D, F, X, H` (Section 3). -/
+/-- The hull hexagon `V₀, …, V₅ = O, C, D, F, X, H`. -/
 def hexagon (h c d f : ℝ) (X : Point) : Fin 6 → Point := ![ptO, ptC c, ptD d, ptF f, X, ptH h]
 
 /-- The 18 upper words for the hexagon `O, C, D, F, X, H` (edge tests of `HCDF`, now with
-`F = V₃`: `(5,1), (1,2), (2,3), (3,5)`), indexed from zero as in the table of Section 3. The
-lower words are those of the top-cap note, `C1OneLowerTopCap.lowerWord`. -/
+`F = V₃`: `(5,1), (1,2), (2,3), (3,5)`), indexed from zero. The lower words are those of the
+top-cap hexagon, `C1OneLowerTopCap.lowerWord`. -/
 def upperWord : Fin 18 → HullWord 6 :=
   ![![1, 1, 4, 4, 3, 2], ![1, 2, 4, 3, 3, 2], ![1, 3, 4, 3, 2, 2], ![2, 1, 1, 4, 4, 3],
     ![2, 1, 2, 4, 3, 3], ![2, 1, 3, 4, 3, 2], ![2, 2, 1, 3, 4, 3], ![2, 2, 2, 3, 3, 3],
@@ -55,7 +55,7 @@ def upperWord : Fin 18 → HullWord 6 :=
     ![3, 2, 2, 2, 3, 3], ![3, 2, 3, 2, 3, 2], ![3, 3, 2, 2, 2, 3], ![3, 3, 3, 2, 2, 2],
     ![4, 3, 2, 2, 1, 3], ![4, 3, 3, 2, 1, 2]]
 
-/-- The placement of Theorem 1 with the left cap: C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1`
+/-- The placement of `sideCap_placement_false` with the left cap: C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1`
 (no order between `f` and `d`); minimum triangle area at least `A₀`; `L` strictly inside `OHC`;
 `P, Q` strictly inside `HCDF`; `X = (g, k)` in the left cap beyond `HF` (possibly on a side of the
 square). The configuration is `c1Config h c d f L P Q X`. -/
@@ -68,7 +68,6 @@ structure Placement (h c d f : ℝ) (L P Q X : Point) : Prop where
   left : InLeftCap f h X
   leftSq : X ∈ unitSquare
 
-
 /-- Helper: transposition maps the right cap beyond `CD` to the left cap of the transposed
 anchors (`[F'H'X'] = -[DCX] = [CDX]`). -/
 theorem right_swap {c d : ℝ} {X : Point} (hX : InRightCap c d X) : InLeftCap d c X.swap := by
@@ -76,9 +75,9 @@ theorem right_swap {c d : ℝ} {X : Point} (hX : InRightCap c d X) : InLeftCap d
     at hX ⊢
   linarith
 
-/-- Helper (the reflection in Theorem 1): transposing the square, `(x, y) ↦ (y, x)`, maps a
+/-- Helper (the reflection in `sideCap_placement_false`): transposing the square, `(x, y) ↦ (y, x)`, maps a
 placement with `X` in the right cap `CD(1,0)` and parameters `(h, c, d, f)` to a left-cap
-placement with parameters `(c, h, f, d)`. `docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 22-23. -/
+placement with parameters `(c, h, f, d)`. -/
 theorem transpose_right {h c d f : ℝ} {L P Q X : Point} (hA : C1Anchors h c d f)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f L P Q X)) (hL : InLower h c L)
     (hP : InUpperQuad h c d f P) (hQ : InUpperQuad h c d f Q) (hXsq : X ∈ unitSquare)
@@ -87,8 +86,7 @@ theorem transpose_right {h c d f : ℝ} {L P Q X : Point} (hA : C1Anchors h c d 
     C1OneLowerTopCap.lower_swap hL, C1OneLowerTopCap.upper_swap hP,
     C1OneLowerTopCap.upper_swap hQ, right_swap hX, C1OneLowerTopCap.sq_swap hXsq⟩
 
-
-/-! ### Sections 1–2: bounds -/
+/-! ### Bounds -/
 
 section
 
@@ -118,10 +116,9 @@ theorem left_x_pos (hS : Placement h c d f L P Q X) : 0 < X.1 := by
   by_contra hn; push Not at hn
   nlinarith [mul_nonneg (show (0:ℝ) ≤ h by linarith) (neg_nonneg.2 hn)]
 
-/-- **Claim** (`C1_ONE_LOWER_SIDE_CAP:(1)`). From `r = [HFX] = f(k-h) - (1-h)g ≥ s` and
-`[OXH] = hg ≥ s`: `hf(k-h) ≥ s` and `fh(1-h) ≥ s` (using only `k ≤ 1`; no occupancy
-hypothesis). `docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 46-63. -/
-theorem eq1 (hS : Placement h c d f L P Q X) :
+/-- From `r = [HFX] = f(k-h) - (1-h)g ≥ s` and `[OXH] = hg ≥ s`: `hf(k-h) ≥ s` and `fh(1-h) ≥ s`
+(using only `k ≤ 1`; no occupancy hypothesis). -/
+theorem left_cap_area_bounds (hS : Placement h c d f L P Q X) :
     s ≤ h * f * (X.2 - h) ∧ s ≤ f * h * (1 - h) := by
   obtain ⟨e1, e2⟩ := left_raw hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
@@ -133,12 +130,11 @@ theorem eq1 (hS : Placement h c d f L P Q X) :
   refine ⟨k6, ?_⟩
   nlinarith [mul_nonneg (mul_nonneg h0 hf.le) (sub_nonneg.2 hS.leftSq.2.2.2)]
 
-/-- **Claim** (`C1_ONE_LOWER_SIDE_CAP:(2)`). With `s ≤ [CDF] = 1 - c + d(c-f) ≤ 1 - f`: `f ≤ 1 - s`,
-`f ≥ 4s`, `h(1-h) ≥ 8/65 > 6/49` and `1/7 < h < 6/7`. `docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines
-64-81. Uses: C1_ONE_LOWER_SIDE_CAP:(1). -/
-theorem eq2 (hS : Placement h c d f L P Q X) :
+/-- With `s ≤ [CDF] = 1 - c + d(c-f) ≤ 1 - f`: `f ≤ 1 - s`, `f ≥ 4s`, `h(1-h) ≥ 8/65 > 6/49` and
+`1/7 < h < 6/7`. -/
+theorem f_h_bounds (hS : Placement h c d f L P Q X) :
     f ≤ 1 - s ∧ 4 * s ≤ f ∧ 8 / 65 ≤ h * (1 - h) ∧ 1 / 7 < h ∧ h < 6 / 7 := by
-  obtain ⟨-, k1⟩ := eq1 hS
+  obtain ⟨-, k1⟩ := left_cap_area_bounds hS
   obtain ⟨-, -, -, a4, -, -, -⟩ := C1OneLowerTopCap.base_raw hS.anchors hS.min hS.lower
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have hf1 : f ≤ 1 - s := by
@@ -157,13 +153,11 @@ theorem eq2 (hS : Placement h c d f L P Q X) :
   · by_contra hn; push Not at hn
     nlinarith [mul_nonneg (sub_nonneg.2 hn) (show (0:ℝ) ≤ h - 1 / 7 by linarith)]
 
-/-- **Claim** (`C1_ONE_LOWER_SIDE_CAP:(3)`). `h ≥ 3s`, `c ≥ f ≥ 4s`, `d ≥ s`, `d ≤ h`, and
-`g ≥ s/h > 7s/6`. `docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 83-90.
-Uses: C1_ONE_LOWER_SIDE_CAP:(2). -/
-theorem eq3 (hS : Placement h c d f L P Q X) :
+/-- `h ≥ 3s`, `c ≥ f ≥ 4s`, `d ≥ s`, `d ≤ h`, and `g ≥ s/h > 7s/6`. -/
+theorem anchor_bounds_of_left_cap (hS : Placement h c d f L P Q X) :
     3 * s ≤ h ∧ 4 * s ≤ c ∧ 4 * s ≤ f ∧ s ≤ d ∧ d ≤ h ∧ s ≤ h * X.1 ∧ 7 * s / 6 < X.1 := by
   obtain ⟨-, a2, -, -, a5, a6, a7⟩ := C1OneLowerTopCap.base_raw hS.anchors hS.min hS.lower
-  obtain ⟨-, f4, -, -, h67⟩ := eq2 hS
+  obtain ⟨-, f4, -, -, h67⟩ := f_h_bounds hS
   obtain ⟨-, e2⟩ := left_raw hS
   have hx := left_x_pos hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
@@ -173,16 +167,14 @@ theorem eq3 (hS : Placement h c d f L P Q X) :
   · nlinarith [mul_nonneg hd.le (sub_nonneg.2 hc.le)]
   · nlinarith [mul_lt_mul_of_pos_right h67 hx]
 
-/-- **Claim** (`C1_ONE_LOWER_SIDE_CAP:(4)`). The cap area is also `r = (1-h)(f-g) - f(1-k)`; hence
-`f - g ≥ s/(1-h) ≥ 8/49`, `k - h ≥ s/f ≥ 8/65`, `g ≤ 1 - 2s` and `k ≥ 4s`.
-`docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 92-107. Uses: C1_ONE_LOWER_SIDE_CAP:(2),
-C1_ONE_LOWER_SIDE_CAP:(3). -/
-theorem eq4 (hS : Placement h c d f L P Q X) :
+/-- The cap area is also `r = (1-h)(f-g) - f(1-k)`; hence `f - g ≥ s/(1-h) ≥ 8/49`,
+`k - h ≥ s/f ≥ 8/65`, `g ≤ 1 - 2s` and `k ≥ 4s`. -/
+theorem left_cap_point_bounds (hS : Placement h c d f L P Q X) :
     sarea (ptH h) (ptF f) X = (1 - h) * (f - X.1) - f * (1 - X.2) ∧
       8 / 49 ≤ f - X.1 ∧ 8 / 65 ≤ X.2 - h ∧ X.1 ≤ 1 - 2 * s ∧ 4 * s ≤ X.2 := by
   obtain ⟨e1, -⟩ := left_raw hS
-  obtain ⟨hf1, -, -, -, -⟩ := eq2 hS
-  obtain ⟨hh3, -, -, -, -, -, -⟩ := eq3 hS
+  obtain ⟨hf1, -, -, -, -⟩ := f_h_bounds hS
+  obtain ⟨hh3, -, -, -, -, -, -⟩ := anchor_bounds_of_left_cap hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   obtain ⟨x0, x1, y0, y1⟩ := hS.leftSq
   have h1 : (0:ℝ) ≤ 1 - h := by linarith
@@ -199,18 +191,17 @@ theorem eq4 (hS : Placement h c d f L P Q X) :
   refine ⟨?_, g1, g2, by linarith, by linarith⟩
   simp only [sarea, ptH, ptF]; ring
 
-/-- **Claim** (`C1_ONE_LOWER_SIDE_CAP:(5)`). Interior-point bounds (Section 2 of the top-cap note
+/-- Interior-point bounds (`C1OneLowerTopCap.lower_bounds`, `C1OneLowerTopCap.upper_bounds`
 with `h < 6/7`): `ℓ_x ≥ 7s/6`, `ℓ_y ≥ s`, `c - ℓ_x ≥ 7s/3`, `h - ℓ_y ≥ 2s`, `ℓ_x + ℓ_y ≤ 1 - s`;
-`7s/6 ≤ p_x, q_x ≤ 1 - s`; `s ≤ p_y, q_y ≤ 1 - s`. `docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines
-109-129. Uses: C1_ONE_LOWER_TOP_CAP:(8), C1_ONE_LOWER_TOP_CAP:(9), C1_ONE_LOWER_SIDE_CAP:(2). -/
-theorem eq5 (hS : Placement h c d f L P Q X) :
+`7s/6 ≤ p_x, q_x ≤ 1 - s`; `s ≤ p_y, q_y ≤ 1 - s`. -/
+theorem interior_point_bounds (hS : Placement h c d f L P Q X) :
     (7 * s / 6 ≤ L.1 ∧ s ≤ L.2 ∧ 7 * s / 3 ≤ c - L.1 ∧ 2 * s ≤ h - L.2 ∧ L.1 + L.2 ≤ 1 - s) ∧
       (7 * s / 6 ≤ P.1 ∧ P.1 ≤ 1 - s ∧ s ≤ P.2 ∧ P.2 ≤ 1 - s) ∧
       (7 * s / 6 ≤ Q.1 ∧ Q.1 ≤ 1 - s ∧ s ≤ Q.2 ∧ Q.2 ≤ 1 - s) := by
   have H := hS.comp
   obtain ⟨-, -, -, -, a5, a6, a7⟩ := C1OneLowerTopCap.base_raw hS.anchors hS.min hS.lower
   obtain ⟨l1, l2, l3, l4, l5⟩ := C1OneLowerTopCap.lower_bounds hS.anchors hS.min hS.lower
-  obtain ⟨-, -, -, -, h67⟩ := eq2 hS
+  obtain ⟨-, -, -, -, h67⟩ := f_h_bounds hS
   obtain ⟨p1, p2, p3, p4⟩ := C1OneLowerTopCap.upper_bounds H 1 hS.upperP
   obtain ⟨q1, q2, q3, q4⟩ := C1OneLowerTopCap.upper_bounds H 2 hS.upperQ
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
@@ -230,29 +221,26 @@ theorem eq5 (hS : Placement h c d f L P Q X) :
   have hcl : 0 ≤ c - L.1 := by linarith
   nlinarith [mul_le_mul_of_nonneg_right h67.le hcl]
 
-/-- **Claim** (`C1_ONE_LOWER_SIDE_CAP:(6)`). The six points `H, C, D, F, P, Q` give
-`8s ≤ W = 2 area(HCDF) = 1 - (h-d)(c-f) ≤ 1`. `docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 131-136.
-Uses: QUADRILATERAL_HULL:Theorem1. -/
-theorem eq6 (hS : Placement h c d f L P Q X) :
+/-- The six points `H, C, D, F, P, Q` give `8s ≤ W = 2 area(HCDF) = 1 - (h-d)(c-f) ≤ 1`. -/
+theorem upperQuadArea_bounds_leftCap (hS : Placement h c d f L P Q X) :
     8 * s ≤ upperQuadArea h c d f ∧ upperQuadArea h c d f ≤ 1 :=
   C1OneLowerTopCap.quad_W hS.comp hS.upperP hS.upperQ
 
-/-- **Claim** (`C1_ONE_LOWER_SIDE_CAP:claim-cap1`). The actual triangles `OFH` (`hf ≤ 390/511`),
+/-- The actual triangles `OFH` (`hf ≤ 390/511`),
 `CDF` (`≤ 1 - 4s`), `FXH` (`≤ f(1-h) ≤ 1 - 3s`) and `OXH` (`hg < hf`) have doubled area below
 `ρ`, hence capacity at most one (two-interior-point bound `Ks > ρ`): none contains two free
-points. `docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 138-150.
-Uses: C1_ONE_LOWER_SIDE_CAP:(2), C1_ONE_LOWER_SIDE_CAP:(3), CORNER_FAMILIES:TwoInteriorPointLemma.
+points.
 -/
-theorem claim_cap1 (hS : Placement h c d f L P Q X) :
+theorem atMostInside_one_OFH_CDF_FXH_OXH (hS : Placement h c d f L P Q X) :
     AtMostInside 1 ptO (ptF f) (ptH h) (freePt L P Q X) ∧
       AtMostInside 1 (ptC c) (ptD d) (ptF f) (freePt L P Q X) ∧
       AtMostInside 1 (ptF f) X (ptH h) (freePt L P Q X) ∧
       AtMostInside 1 ptO X (ptH h) (freePt L P Q X) := by
   have H := hS.comp
   obtain ⟨e1, -⟩ := left_raw hS
-  obtain ⟨hf1, f4, -, -, h67⟩ := eq2 hS
-  obtain ⟨hh3, -, -, -, -, -, -⟩ := eq3 hS
-  obtain ⟨-, g1, -, -, -⟩ := eq4 hS
+  obtain ⟨hf1, f4, -, -, h67⟩ := f_h_bounds hS
+  obtain ⟨hh3, -, -, -, -, -, -⟩ := anchor_bounds_of_left_cap hS
+  obtain ⟨-, g1, -, -, -⟩ := left_cap_point_bounds hS
   have hx := left_x_pos hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   obtain ⟨x0, x1, y0, y1⟩ := hS.leftSq
@@ -287,7 +275,7 @@ theorem claim_cap1 (hS : Placement h c d f L P Q X) :
 
 end
 
-/-! ### Section 3: the 153 radial cells -/
+/-! ### The 153 radial cells -/
 
 /-- Helper: the edge tests of the hull hexagon `O, C, D, F, X, H` for a point `X = (g, k)` of the
 square in the left cap with `g > 0`: every vertex is strictly to the left of every edge not
@@ -343,10 +331,9 @@ theorem hexagon_edges {h c d f : ℝ} (hA : C1Anchors h c d f) {X : Point} (hX :
   · exact mul_pos h0h hf
   · exact mul_pos h0h hx
 
-/-- Helper (implicit in the manuscript: "Number the convex hexagon cyclically as
-`O, C, D, F, X, H`", lines 154-157): the hull hexagon is convex (counterclockwise). -/
+/-- Helper: the hull hexagon `O, C, D, F, X, H` is convex (counterclockwise). -/
 theorem convex_hexagon {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X) :
-    ConvexPolygon (hexagon h c d f X) := by
+    IsConvexPolygon (hexagon h c d f X) := by
   have hm : A₀ ≤ triangleArea ptO (ptH h) X := area_of_le_min hS.min 0 4 8
   rw [triangleArea_eq] at hm
   have hx : 0 < X.1 := by
@@ -359,12 +346,12 @@ theorem convex_hexagon {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f
   exact C1OneLowerTopCap.convex_of_edges (by norm_num)
     (hexagon_edges hS.anchors hS.left hS.leftSq hx)
 
-/-- The four capacity-one triangles of Section 2 as index triples of the hexagon
+/-- The four capacity-one triangles of `atMostInside_one_OFH_CDF_FXH_OXH` as index triples of the hexagon
 `O, C, D, F, X, H`: `OFH, CDF, FXH, OXH`. -/
 def capacityOneTriangles : List (Fin 6 × Fin 6 × Fin 6) :=
   [(0, 3, 5), (1, 2, 3), (3, 4, 5), (0, 4, 5)]
 
-/-- The preliminary tests of Section 3 for a word triple `(i, j, ℓ)` of `(L, P, Q)`: not in the
+/-- The preliminary tests for a word triple `(i, j, ℓ)` of `(L, P, Q)`: not in the
 same sector of both diagonals (`H, C, D, F = V₅, V₁, V₂, V₃`); no hull triangle contains all
 three points; no triangle of `capacityOneTriangles` contains two of them (189 triples with
 `j ≤ ℓ`). -/
@@ -374,7 +361,7 @@ def prelimTest (i : Fin 4) (j l : Fin 18) : Bool :=
     (hullTriples 6).all (fun t => decide (insideCount ws t ≤ 2)) &&
     capacityOneTriangles.all (fun t => decide (insideCount ws t ≤ 1))
 
-/-- The 153 cells of Section 3: the word triples `(i, j, ℓ)`, `j ≤ ℓ`, passing `prelimTest`
+/-- The 153 cells: the word triples `(i, j, ℓ)`, `j ≤ ℓ`, passing `prelimTest`
 (189) without a conflict between the upper-pair rule and the ray-order rule (36 conflicts). No
 further split is used. -/
 def sideCapCases : List (Fin 4 × Fin 18 × Fin 18) :=
@@ -394,8 +381,8 @@ theorem hexagon_idx (h c d f : ℝ) (L P Q X : Point) (a : Fin 6) :
     hexagon h c d f X a = c1Config h c d f L P Q X (hexIdx a) := by
   fin_cases a <;> rfl
 
-/-- Helper: the words of (7) passing the four edge tests of `HCDF` with `F = V₃`
-(`r₃, r₅ ≥ 2`), for `r₀ = 1`, are upper words (kernel enumeration). -/
+/-- Helper: the words satisfying `HullAntisymm` and passing the four edge tests of `HCDF` with
+`F = V₃` (`r₃, r₅ ≥ 2`), for `r₀ = 1`, are upper words (kernel enumeration). -/
 theorem upper_cover₁ : ∀ a1 a2 a4 : Fin 4, ∀ a3 a5 : Fin 3,
     C1OneLowerTopCap.HullAntisymm
       (C1OneLowerTopCap.mkW 1 (a1.val + 1) (a2.val + 1) (a3.val + 2) (a4.val + 1) (a5.val + 2)) →
@@ -489,8 +476,8 @@ theorem upperPairSign_cases (p q : HullWord 6) (v : Fin 6) (b : Bool)
 
 open Cover in
 /-- Helper (the conflict test): if every forced upper-pair sign of `[PQV_v]` holds, the upper-pair
-rule does not conflict with the ray order (8) (`C1OneLowerTopCap.eq14`). -/
-theorem no_conflict {V : Fin 6 → Point} (hV : ConvexPolygon V) {iF : Fin 6} {R S : Point}
+rule does not conflict with the ray order (`C1OneLowerTopCap.sarea_pos_of_hullWord_lt`). -/
+theorem no_conflict {V : Fin 6 → Point} (hV : IsConvexPolygon V) {iF : Fin 6} {R S : Point}
     {p q : HullWord 6} (hR : HasHullWord V R p) (hS : HasHullWord V S q)
     (hbp : ∀ i, 1 ≤ p i ∧ p i ≤ 4) (hbq : ∀ i, 1 ≤ q i ∧ q i ≤ 4)
     (hsign : ∀ v b, C1OneLowerTopCap.upperPairSign 5 1 2 iF p q v = some b →
@@ -506,10 +493,10 @@ theorem no_conflict {V : Fin 6 → Point} (hV : ConvexPolygon V) {iF : Fin 6} {R
     simp only [Bool.and_eq_true, bne_iff_ne, ne_eq, not_and]
     intro hne
     rcases lt_or_gt_of_ne hne with hlt | hgt
-    · have := C1OneLowerTopCap.eq14 hV hR hS hbp hbq hlt
+    · have := C1OneLowerTopCap.sarea_pos_of_hullWord_lt hV hR hS hbp hbq hlt
       rw [(C1OneLowerTopCap.orient_iff ho).1 this]
       simp [hlt]
-    · have h1 := C1OneLowerTopCap.eq14 hV hS hR hbq hbp hgt
+    · have h1 := C1OneLowerTopCap.sarea_pos_of_hullWord_lt hV hS hR hbq hbp hgt
       have h2 : ¬ 0 < sarea (V v) R S := by rw [sarea_swap₂₃] at h1; linarith
       have hb : b = false := by
         cases b
@@ -536,18 +523,14 @@ theorem mem_sideCapCases {i : Fin 4} {j l : Fin 18} : (i, j, l) ∈ sideCapCases
       upperPairConflict 5 1 2 3 (upperWord j) (upperWord l) = false := by
   simp [sideCapCases, List.mem_flatMap, List.mem_filter, List.mem_map, and_assoc]
 
-/-- **Claim** (`C1_ONE_LOWER_SIDE_CAP:claim-cover`). Every placement is covered by the 153 cells:
-after relabelling `P, Q`, the words of `L, P, Q` for the hexagon `O, C, D, F, X, H` (definition
-and complement relation (7), 26 words) are a lower word `i` and upper words `j ≤ ℓ` with
-`(i, j, ℓ) ∈ sideCapCases`. The exclusions are: a hull triangle containing all three interior
-points (capacity two), a triangle of `claim_cap1` containing two, both upper points in the same
-sector of both diagonals (Theorem 2 of `ONE_CORNER_COMPLETION.md`, with (6)), and a conflict of the
-upper-pair signs (the rules (15) and the isolated-vertex table of the top-cap note, with `F = V₃`)
-with the ray order (8). `docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 152-220.
-Uses: C1_ONE_LOWER_TOP_CAP:(12)-(13), C1_ONE_LOWER_TOP_CAP:(14), C1_ONE_LOWER_TOP_CAP:(15),
-ONE_CORNER:GlobalC1OccupancyCorollary, ONE_CORNER_COMPLETION:Theorem2,
-ONE_CORNER_COMPLETION:Theorem3, C1_ONE_LOWER_SIDE_CAP:claim-cap1, C1_ONE_LOWER_SIDE_CAP:(6). -/
-theorem claim_cover {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X) :
+/-- Every placement is covered by the 153 cells: after relabelling `P, Q`, the words of `L, P, Q`
+for the hexagon `O, C, D, F, X, H` (with the complement relation `HullAntisymm`, 26 words) are a
+lower word `i` and upper words `j ≤ ℓ` with `(i, j, ℓ) ∈ sideCapCases`. The exclusions are: a hull
+triangle containing all three interior points (capacity two), a triangle of `atMostInside_one_OFH_CDF_FXH_OXH` containing
+two, both upper points in the same sector of both diagonals (`C1ZeroLower.sectors_of`, with `upperQuadArea_bounds_leftCap`),
+and a conflict of the upper-pair signs (`C1OneLowerTopCap.upperPairSign`, with `F = V₃`) with the
+ray order (`C1OneLowerTopCap.sarea_pos_of_hullWord_lt`). -/
+theorem exists_sideCapCases {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X) :
     ∃ i j l, (i, j, l) ∈ sideCapCases ∧
       HasHullWord (hexagon h c d f X) L (C1OneLowerTopCap.lowerWord i) ∧
       ((HasHullWord (hexagon h c d f X) P (upperWord j) ∧
@@ -578,7 +561,7 @@ theorem claim_cover {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L 
   obtain ⟨j0, hP⟩ := up P 6 rfl (by decide) hS.upperP
   obtain ⟨l0, hQ⟩ := up Q 7 rfl (by decide) hS.upperQ
   -- the preliminary tests
-  obtain ⟨k1, k2, k3, k4⟩ := claim_cap1 hS
+  obtain ⟨k1, k2, k3, k4⟩ := atMostInside_one_OFH_CDF_FXH_OXH hS
   have pre : prelimTest i j0 l0 = true :=
     C1OneLowerTopCap.prelim_of H hexIdx (by decide) hidx (by decide) (by decide) (iF := 3) rfl rfl
       rfl rfl (by decide) hS.upperP hS.upperQ hL hP hQ capacityOneTriangles (by
@@ -615,14 +598,14 @@ theorem claim_cover {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L 
   · refine ⟨i, l0, j0, mem_sideCapCases.2 ⟨hjl, ?_, nc'⟩, hL, Or.inr ⟨hQ, hP⟩⟩
     rw [prelimTest_comm]; exact pre
 
-/-! ### Sections 4–5: strengthened costs and the certificate package -/
+/-! ### Strengthened costs and the certificate package -/
 
 /-- Helper (elementary subdivision): a triangle of configuration points with a further
 configuration point strictly inside, in either orientation, has doubled area at least `6A₀`. -/
 theorem one_inside {P : Fin 9 → Point}
     (ar : ∀ x y z : Fin 9, x ≠ y → y ≠ z → x ≠ z → 2 * A₀ ≤ |sarea (P x) (P y) (P z)|)
     {a b e j : Fin 9} (hab : a ≠ b) (hbe : b ≠ e) (hae : a ≠ e) (ja : j ≠ a) (jb : j ≠ b)
-    (je : j ≠ e) (hin : InsideTri (P j) (P a) (P b) (P e)) :
+    (je : j ≠ e) (hin : InsideTriangle (P j) (P a) (P b) (P e)) :
     6 * A₀ ≤ |sarea (P a) (P b) (P e)| := by
   rcases hin with ⟨i1, i2, i3⟩ | ⟨i1, i2, i3⟩
   · have q1 := ar a b j hab (Ne.symm jb) (Ne.symm ja)
@@ -639,15 +622,14 @@ theorem one_inside {P : Fin 9 → Point}
     rw [abs_of_pos i1] at q4; rw [abs_of_pos i2] at q5; rw [abs_of_pos i3] at q6
     rw [abs_of_neg (by linarith)]; linarith
 
-/-- **Claim** (`C1_ONE_LOWER_SIDE_CAP:(9)`). The strengthened occupancy costs: in a configuration
-of minimum triangle area at least `A₀`, an actual triangle strictly containing `k ≤ 2` further
-configuration points (in either orientation; in the packages they are certified by three known
-edge signs) has doubled area at least `s, 3s, ρ` for `k = 0, 1, 2` (`occupancyBound`): by the
-area threshold, elementary subdivision, or the two-interior-point triangle theorem.
-`docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 250-286. Uses: CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem eq9 {P : Fin 9 → Point} (hmin : A₀ ≤ minTriangleArea P) {a b e : Fin 9} (hab : a ≠ b)
+/-- The strengthened occupancy costs: in a configuration of minimum triangle area at least `A₀`, an
+actual triangle strictly containing `k ≤ 2` further configuration points (in either orientation; in
+the packages they are certified by three known edge signs) has doubled area at least `s, 3s, ρ` for
+`k = 0, 1, 2` (`occupancyBound`): by the area threshold, elementary subdivision (`one_inside`), or
+the two-interior-point lemma (`twoInteriorPointLemma`). -/
+theorem occupancyBound_le_abs_sarea {P : Fin 9 → Point} (hmin : A₀ ≤ minTriangleArea P) {a b e : Fin 9} (hab : a ≠ b)
     (hbe : b ≠ e) (hae : a ≠ e) (S : Finset (Fin 9))
-    (hS : ∀ j ∈ S, j ≠ a ∧ j ≠ b ∧ j ≠ e ∧ InsideTri (P j) (P a) (P b) (P e)) (hk : S.card ≤ 2) :
+    (hS : ∀ j ∈ S, j ≠ a ∧ j ≠ b ∧ j ≠ e ∧ InsideTriangle (P j) (P a) (P b) (P e)) (hk : S.card ≤ 2) :
     occupancyBound S.card ≤ |sarea (P a) (P b) (P e)| := by
   have ar : ∀ x y z : Fin 9, x ≠ y → y ≠ z → x ≠ z → 2 * A₀ ≤ |sarea (P x) (P y) (P z)| :=
     fun x y z h1 h2 h3 => by
@@ -673,10 +655,10 @@ theorem eq9 {P : Fin 9 → Point} (hmin : A₀ ≤ minTriangleArea P) {a b e : F
         intro z; fin_cases z <;> rfl
       rw [ez, ez, ez]
       exact area_of_le_min hmin _ _ _ (hι.ne hxy.ne) (hι.ne hyw.ne) (hι.ne (hxy.trans hyw).ne)
-    have := CornerFamilies.twoInteriorPointLemma _ _ _ _ _ h1 h2 A₀ A₀_pos hm
+    have := twoInteriorPointLemma _ _ _ _ _ h1 h2 A₀ A₀_pos hm
     rw [triangleArea_eq] at this
     norm_num [occupancyBound]
-    linarith [C1ZeroLower.rho_lt]
+    linarith [Package.rho_lt]
 
 /-! ### The certificate cells -/
 
@@ -718,7 +700,8 @@ theorem keys3 : ∀ j l : Fin 18, j ≤ l → prelimTest 3 j l = true →
     ((3 : ℕ), (j : ℕ), (l : ℕ)) ∈ C1OneLowerHex.TreesSideCap.caseKeys := by
   decide +kernel
 
-/-- The cells of the note are cases of the certificate package. -/
+/-- Every triple of `sideCapCases` is a case of the certificate package
+(`C1OneLowerHex.TreesSideCap.caseKeys`). -/
 theorem cases_keys {i : Fin 4} {j l : Fin 18} (hc : (i, j, l) ∈ sideCapCases) :
     ((i : ℕ), (j : ℕ), (l : ℕ)) ∈ C1OneLowerHex.TreesSideCap.caseKeys := by
   obtain ⟨h1, h2, h3⟩ := mem_sideCapCases.1 hc
@@ -734,18 +717,18 @@ theorem ptEval_side (h c d f : ℝ) (L P Q X : Point) (n : ℕ) (hn : n < 9) :
 variable {h c d f : ℝ} {L P Q X : Point}
 
 theorem Placement.areaOK (hS : Placement h c d f L P Q X) :
-    C1OneLower.AreaOK (cfg9 (hexagon h c d f X) L P Q) :=
+    Package.AreaOK (cfg9 (hexagon h c d f X) L P Q) :=
   C1OneLowerHex.areaOK_cfg9 hS.min _ _ _ _ ![0, 1, 2, 3, 8, 4, 5, 6, 7] (by decide)
     (by intro a; fin_cases a <;> rfl)
 
 theorem Placement.factors (hS : Placement h c d f L P Q X) :
     ∀ e ∈ C1OneLowerHex.Model.factors true ++ [C1OneLowerHex.Model.wCost],
       0 ≤ e.eval (zeta h c d f X L P Q) := by
-  obtain ⟨a1, a2, -, a4, a5⟩ := eq2 hS
-  obtain ⟨b1, b2, b3, b4, b5, -, b7⟩ := eq3 hS
-  obtain ⟨-, c2, c3, c4, c5⟩ := eq4 hS
-  obtain ⟨⟨l1, l2, l3, l4, l5⟩, ⟨p1, p2, p3, p4⟩, ⟨q1, q2, q3, q4⟩⟩ := eq5 hS
-  obtain ⟨w1, -⟩ := eq6 hS
+  obtain ⟨a1, a2, -, a4, a5⟩ := f_h_bounds hS
+  obtain ⟨b1, b2, b3, b4, b5, -, b7⟩ := anchor_bounds_of_left_cap hS
+  obtain ⟨-, c2, c3, c4, c5⟩ := left_cap_point_bounds hS
+  obtain ⟨⟨l1, l2, l3, l4, l5⟩, ⟨p1, p2, p3, p4⟩, ⟨q1, q2, q3, q4⟩⟩ := interior_point_bounds hS
+  obtain ⟨w1, -⟩ := upperQuadArea_bounds_leftCap hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   obtain ⟨-, x1, -, x2⟩ := hS.leftSq
   unfold upperQuadArea at w1
@@ -757,7 +740,7 @@ theorem Placement.factors (hS : Placement h c d f L P Q X) :
   push_cast
   and_intros <;> linarith
 
-/-- The upper-pair rule (15) for the side-cap hexagon (`F = V₃`). -/
+/-- The upper-pair rule (`C1OneLowerTopCap.upperPairSign_sound`) for the side-cap hexagon (`F = V₃`). -/
 theorem upper_sign (hS : Placement h c d f L P Q X) {j l : Fin 18}
     (hP : HasHullWord (hexagon h c d f X) P (upperWord j))
     (hQ : HasHullWord (hexagon h c d f X) Q (upperWord l)) {v : Fin 6} {b : Bool}
@@ -787,17 +770,11 @@ theorem upper_sign (hS : Placement h c d f L P Q X) {j l : Fin 18}
 
 end
 
-/-- **Claim** (`C1_ONE_LOWER_SIDE_CAP:(10)`). The certificate package: no placement has word
-triple `(i, j, ℓ) ∈ sideCapCases`. For each of the 153 cells one of 70 fixed positive combinations
-of products of the 28 affine factors (Section 4) and the costs `W - 8s` and (9) (every known
-triple in lexicographic order) is nonnegative, while its unit-cube bound (10) is at most `-3/4`
-(largest `-170969015277097/172160375869440`). Coverage is by the reuse rule.
-`docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 222-328 (data `c1_one_lower_side_cap_certificates.json`,
-checker `check_c1_one_lower_side_cap.py`).
-Uses: C1_ONE_LOWER_SIDE_CAP:(2), C1_ONE_LOWER_SIDE_CAP:(3), C1_ONE_LOWER_SIDE_CAP:(4),
-C1_ONE_LOWER_SIDE_CAP:(5), C1_ONE_LOWER_SIDE_CAP:(6), C1_ONE_LOWER_SIDE_CAP:(9),
-C1_ONE_LOWER_TOP_CAP:(14), C1_ONE_LOWER_TOP_CAP:(15). -/
-theorem eq10 {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X) {i : Fin 4}
+/-- The certificate package: no placement has word triple `(i, j, ℓ) ∈ sideCapCases`. On each cell
+of the kernel-checked tree a fixed positive combination of products of the 28 affine factors
+(`Placement.factors`) and of the costs `W - 8s` and `occupancyBound_le_abs_sarea` (every known triple in lexicographic
+order) is nonnegative, while its bound on the unit cube is negative. -/
+theorem sideCapCases_false {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X) {i : Fin 4}
     {j l : Fin 18} (hcase : (i, j, l) ∈ sideCapCases)
     (hL : HasHullWord (hexagon h c d f X) L (C1OneLowerTopCap.lowerWord i))
     (hP : HasHullWord (hexagon h c d f X) P (upperWord j))
@@ -832,19 +809,16 @@ theorem eq10 {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X) 
   · intro v hv b hb
     have hb' := (upperPairSide_eq j l ⟨v, hv⟩).symm.trans hb
     have hiff := upper_sign hS hP hQ hb'
-    have hne := C1OneLowerHex.area_ne_of H (a := v) (b := 7) (e := 8) (by omega) (by norm_num)
+    have hne := H.ne_zero (a := v) (b := 7) (e := 8) (by omega) (by norm_num)
       (by norm_num) (by omega) (by norm_num) (by omega)
     rw [C1OneLowerHex.cfg9_hex _ _ _ _ v hv] at hne ⊢
     exact C1OneLowerHex.orient_of_iff hiff hne
 
-/-- **Theorem 1** (`C1_ONE_LOWER_SIDE_CAP:Theorem1`). There is no competitive C1 configuration whose
-four free points are one lower point `L ∈ OHC`, two points `P, Q ∈ HCDF`, and a point `X` beyond
-`HF` in the left exterior cap `HF(0,1)`; reflection gives the same exclusion for a single point in
-the right exterior cap `CD(1,0)`. All containments are strict; `X` may lie on a side of the square;
-no relation between `f` and `d` is imposed.
-`docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 18-23, 37-39 and 326-328.
-Uses: C1_ONE_LOWER_SIDE_CAP:claim-cover, C1_ONE_LOWER_SIDE_CAP:(10). -/
-theorem theorem1 {h c d f : ℝ} {L P Q X : Point} (hA : C1Anchors h c d f)
+/-- There is no competitive C1 configuration whose four free points are one lower point `L ∈ OHC`,
+two points `P, Q ∈ HCDF`, and a point `X` beyond `HF` in the left exterior cap `HF(0,1)`; reflection
+gives the same exclusion for a single point in the right exterior cap `CD(1,0)`. All containments
+are strict; `X` may lie on a side of the square; no relation between `f` and `d` is imposed. -/
+theorem sideCap_placement_false {h c d f : ℝ} {L P Q X : Point} (hA : C1Anchors h c d f)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f L P Q X)) (hL : InLower h c L)
     (hP : InUpperQuad h c d f P) (hQ : InUpperQuad h c d f Q) (hXsq : X ∈ unitSquare)
     (hX : InLeftCap f h X ∨ InRightCap c d X) : False := by
@@ -855,38 +829,13 @@ theorem theorem1 {h c d f : ℝ} {L P Q X : Point} (hA : C1Anchors h c d f)
       have e : c1Config h c d f L Q P X = c1Config h c d f L P Q X ∘ Equiv.swap (6 : Fin 9) 7 := by
         funext k; fin_cases k <;> rfl
       rw [e, minTriangleArea_comp_perm]; exact hS.min
-    obtain ⟨i, j, l, hc, hL, hPQ⟩ := claim_cover hS
+    obtain ⟨i, j, l, hc, hL, hPQ⟩ := exists_sideCapCases hS
     rcases hPQ with ⟨hP, hQ⟩ | ⟨hQ, hP⟩
-    · exact eq10 hS hc hL hP hQ
-    · exact eq10 swapPQ hc hL hQ hP
+    · exact sideCapCases_false hS hc hL hP hQ
+    · exact sideCapCases_false swapPQ hc hL hQ hP
   rcases hX with hl | hr
   · exact left ⟨hA, hmin, hL, hP, hQ, hl, hXsq⟩
   · exact left (transpose_right hA hmin hL hP hQ hXsq hr)
-
-/-- Helper: a point strictly inside `OHC` is strictly on the inner side of `CD`, `DF` and `FH`
-(barycentric identity `[OCH][ABL] = [CHL][ABO] + [HOL][ABC] + [OCL][ABH]`). -/
-theorem lower_not_cap {h c d f : ℝ} (hA : C1Anchors h c d f) {L : Point} (hL : InLower h c L) :
-    ¬ (InRightCap c d L ∨ InTopCap d f L ∨ InLeftCap f h L) := by
-  obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA
-  obtain ⟨l1, l2, l3⟩ := hL
-  simp only [ptO, ptC, ptH] at l1 l2 l3
-  have key : ∀ A B : Point, 0 < sarea A B (0, 0) → 0 ≤ sarea A B (c, 0) →
-      0 ≤ sarea A B (0, h) → 0 < sarea A B L := by
-    intro A B h1 h2 h3
-    have e : (c * h) * sarea A B L = sarea (c, 0) (0, h) L * sarea A B (0, 0) +
-        sarea (0, h) (0, 0) L * sarea A B (c, 0) + sarea (0, 0) (c, 0) L * sarea A B (0, h) := by
-      simp only [sarea]; ring
-    have : 0 < (c * h) * sarea A B L := by
-      rw [e]; nlinarith [mul_pos l2 h1, mul_nonneg l3.le h2, mul_nonneg l1.le h3]
-    exact pos_of_mul_pos_right this (by nlinarith)
-  have k1 := key (c, 0) (1, d) (by simp only [sarea]; nlinarith) (by simp only [sarea]; nlinarith)
-    (by simp only [sarea]; nlinarith)
-  have k2 := key (1, d) (f, 1) (by simp only [sarea]; nlinarith) (by simp only [sarea]; nlinarith)
-    (by simp only [sarea]; nlinarith)
-  have k3 := key (f, 1) (0, h) (by simp only [sarea]; nlinarith) (by simp only [sarea]; nlinarith)
-    (by simp only [sarea]; nlinarith)
-  unfold InRightCap InTopCap InLeftCap ptC ptD ptF ptH
-  rintro (h1 | h1 | h1) <;> linarith
 
 /-- Helper (the region partition): a free point of a competitive configuration not in `OHC` lies
 in `HCDF` or in one of the three caps. -/
@@ -929,16 +878,12 @@ theorem partition {h c d f : ℝ} {Q4 : Fin 4 → Point} (H : C1ZeroLower.Comp h
   exact ⟨hHC, lt_of_le_of_ne (not_lt.1 hR) (Ne.symm n12), lt_of_le_of_ne (not_lt.1 hT) (Ne.symm n23),
     lt_of_le_of_ne (not_lt.1 hL) (Ne.symm n34)⟩
 
-/-- **Corollary 2** (`C1_ONE_LOWER_SIDE_CAP:Corollary2`). In every competitive C1 configuration
-with exactly one free point in `OHC`, at least two of the four free points lie outside the
-five-anchor pentagon (in one of the three exterior caps). The proof: `HCDF` cannot contain three
-free points (seven-point quadrilateral theorem, `W > 1`), and with exactly one exterior point
-Theorem 1 and `C1_ONE_LOWER_TOP_CAP:Theorem` exclude all three caps.
-FLAG: the proof (line 31) says the seven-point theorem "would give `W ≥ 10s > 1`"; that theorem
-gives only `W ≥ (13 + 3√5)/2 · 2A₀ ≈ 1.0815 < 10s ≈ 1.0959`, which still exceeds `W ≤ 1`.
-`docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, lines 25-35.
-Uses: C1_ONE_LOWER_SIDE_CAP:Theorem1, C1_ONE_LOWER_TOP_CAP:Theorem, QUADRILATERAL_HULL:Theorem2. -/
-theorem corollary2 {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
+/-- In every competitive C1 configuration with exactly one free point in `OHC`, at least two of the
+four free points lie outside the five-anchor pentagon (in one of the three exterior caps). The
+proof: `HCDF` cannot contain three free points (`C1ZeroLower.Comp.quad_three`: the seven-point
+quadrilateral bound forces `W > 1`, while `W ≤ 1`), and with exactly one exterior point `sideCap_placement_false`
+and `C1OneLowerTopCap.topCap_placement_false` exclude all three caps. -/
+theorem two_le_countFree_caps {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hn : lowerCount h c W X Y Z = 1)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) :
@@ -982,9 +927,9 @@ theorem corollary2 {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
     have H' := H.relabel (Equiv.ofBijective _ ⟨hinj, Finite.surjective_of_injective hinj⟩)
     have hmin' : A₀ ≤ minTriangleArea (c1Config h c d f (P l) (P p) (P q) (P x)) := H'.hmin
     rcases hx with hR | hT | hLc
-    · exact theorem1 hA hmin' hlL hp hq (H.hQ x) (Or.inr hR)
-    · exact C1OneLowerTopCap.mainTheorem ⟨hA, hmin', hlL, hp, hq, hT, H.hQ x⟩
-    · exact theorem1 hA hmin' hlL hp hq (H.hQ x) (Or.inl hLc)
+    · exact sideCap_placement_false hA hmin' hlL hp hq (H.hQ x) (Or.inr hR)
+    · exact C1OneLowerTopCap.topCap_placement_false ⟨hA, hmin', hlL, hp, hq, hT, H.hQ x⟩
+    · exact sideCap_placement_false hA hmin' hlL hp hq (H.hQ x) (Or.inl hLc)
   obtain ⟨a, b, e, hab, hae, hbe, hal, hbl, hel⟩ := (by decide : ∀ l : Fin 4, ∃ a b e : Fin 4,
     a ≠ b ∧ a ≠ e ∧ b ≠ e ∧ a ≠ l ∧ b ≠ l ∧ e ≠ l) l
   rcases reg a hal with ha | ha <;> rcases reg b hbl with hb | hb <;>

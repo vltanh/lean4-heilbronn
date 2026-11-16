@@ -1,24 +1,24 @@
 module
 
-public import Heilbronn.Common.Cover
+public import Heilbronn.Common.SignTable
 
-/-! # The certificate model of the exact six-anchor hull (`docs/proof/nine/SIX_BOUNDARY_HULL.md`, Theorem 7)
+/-! # The certificate model of the exact six-anchor hull
 
-Computable model, for the kernel check of the cover (`Heilbronn.Common.Cover`), of the occupancy
-`(0,0,0;3)`: all three free points strictly inside the anchor hexagon `A, B, C, D, F, H`. It
-replaces the hand case analysis of Sections 2-6 (sector assignments, Theorems 3-6) by one cover
-over the radial words of the three free points, found by linear programming
-(`scripts/nine/six_hull/`). Everything is indexed by natural numbers:
+Computable model, for the kernel check of the cover (`Heilbronn.Common.Cover`, sign tables from
+`Heilbronn.Common.SignTable`), of the case with
+all three free points strictly inside the anchor hexagon `A, B, C, D, F, H` (used by
+`SixBoundaryHull.false_of_all_inHexagon`): one cover over the radial words of the three free points, found by
+linear programming. Everything is indexed by natural numbers:
 
 * points `0, …, 5` are the anchors `A, B, C, D, F, H` in counterclockwise hexagon order, `6` is
   the free point `Q` below `HC`, `7, 8` the free points `P, R` above `HC`; the twelve variables
   `0, …, 11` are `a, h, b, c, d, f, q_x, q_y, p_x, p_y, r_x, r_y` (`pt`);
 * `factors`: the box factors `v_i, 1 - v_i`, the N orders, `W - 7/8` with
-  `W = 1 - (h-d)(c-f)` (`QUADRILATERAL_HULL.md` (15)) and `13/16 - [ear]` for the six anchor
-  ears (Theorem 1);
+  `W = 1 - (h-d)(c-f)` (from `QuadrilateralHull.inNHexagon_one_below_HC`) and `13/16 - [ear]` for the six
+  anchor ears (`SixBoundaryHull.ears_sarea_lt_atMostOne`);
 * the facts are signed triangles; `base` holds the twenty hexagon triangles, the edge signs of the
   three free points, `Q` below `HC` and `P, R` above it, `[A C Q] > 0` (the ear `ABC` is empty,
-  after `QUADRILATERAL_HULL.md` Lemma 5 and transposition) and `[H P R] > 0` (the labels of `P, R`);
+  after `QuadrilateralHull.lower_ears_not_both_occupied` and transposition) and `[H P R] > 0` (the labels of `P, R`);
 * `atoms fs`: the factors, then for each of the 84 increasing triples (lexicographic) its cost
   `±[abc] - bnd n` strengthened by the number `n` of free points certified inside (`s`, `3s`,
   `102/125 ≤ (4+2√3)s`; an unknown sign gives the atom `0`);
@@ -63,52 +63,21 @@ def factors : List Expr :=
 inside points. -/
 def bnd (n : ℕ) : ℚ := if n = 0 then 7 / 64 else if n = 1 then 21 / 64 else 102 / 125
 
-/-- The increasing index triples of `0, …, 8`, in lexicographic order. -/
-def lexTriples : List (ℕ × ℕ × ℕ) :=
-  (List.range 9).flatMap fun a => (List.range 9).flatMap fun b => (List.range 9).filterMap
-    fun c => if a < b ∧ b < c then some (a, b, c) else none
-
-/-- The signed triangle of the ordered triple `(a, b, c)` with orientation `sg`, stored on the
-sorted triple (flipped for an odd permutation). -/
-def orient (a b c : ℕ) (sg : Bool) : SFact :=
-  if a < b ∧ b < c then ((a, b, c), sg)
-  else if b < c ∧ c < a then ((b, c, a), sg)
-  else if c < a ∧ a < b then ((c, a, b), sg)
-  else if b < a ∧ a < c then ((b, a, c), !sg)
-  else if a < c ∧ c < b then ((a, c, b), !sg)
-  else ((c, b, a), !sg)
-
 /-- The free points. -/
 def free : List ℕ := [6, 7, 8]
 
 /-- The initial facts: the hexagon triangles, the edge signs `[V_i V_{i+1} X] > 0` of the free
 points, `[H C Q] < 0`, `[H C P] > 0`, `[H C R] > 0`, `[A C Q] > 0` and `[H P R] > 0`. -/
 def base : List SFact :=
-  lexTriples.filterMap (fun t => if t.2.2 < 6 then some (t, true) else none) ++
+  (lexTriples 9).filterMap (fun t => if t.2.2 < 6 then some (t, true) else none) ++
     free.flatMap (fun p => (List.range 6).map fun i => orient i ((i + 1) % 6) p true) ++
     [orient 5 2 6 false, orient 5 2 7 true, orient 5 2 8 true, orient 0 2 6 true,
       orient 5 7 8 true]
 
-/-- The strengthened costs of the 84 triples (the atom `0` for an unknown sign). -/
-def costs (tb : List SFact) : List Expr :=
-  lexTriples.map fun t => match lookup tb t with
-    | some sg => costAtom pt bnd (t, sg) (insideList tb free (t, sg)).length
-    | none => k 0
-
-/-- The atoms of the case with the extra facts `fs`. -/
+/-- The atoms of the case with the extra facts `fs`: the factors and the strengthened costs of the
+84 triples (`lookupCosts`; the atom `0` for an unknown sign). -/
 def atoms (fs : List SFact) : List Expr :=
-  factors ++ costs (base ++ fs)
-
-/-- The signs at `V_i` of the word entry `val` of the free point `p`: `[V_i V_{i+j} p] > 0` iff
-`j ≤ val`. -/
-def branchFacts (p i val : ℕ) : List SFact :=
-  (List.range 5).map fun j => orient i ((i + (j + 1)) % 6) p (decide (j + 1 ≤ val))
-
-/-- The facts `b` agree with the table `tb` wherever both know a sign. -/
-def consistent (tb b : List SFact) : Bool :=
-  b.all fun f => match lookup tb f.1 with
-    | some sg => sg == f.2
-    | none => true
+  factors ++ lookupCosts 9 pt bnd free (base ++ fs)
 
 /-- The sign of `[V_i p q]` forced by a separating ray: the first `j ∈ {1, …, 4}` for which the
 table knows `[V_i V_{i+j} p]` and `[V_i V_{i+j} q]` with different signs; then the sign is the
@@ -133,7 +102,8 @@ def signed (tb : List SFact) (f : Bool → SFact) (cands : List Bool) : List (Li
 def branches (fs : List SFact) : Split → List (List SFact)
   | .vertex p i => if i < 6 ∧ 6 ≤ p ∧ p < 9 then
       ((List.range 4).map (· + 1)).filterMap fun val =>
-        if consistent (base ++ fs) (branchFacts p i val) then some (branchFacts p i val) else none
+        if consistent (base ++ fs) (branchFacts 6 p i val) then some (branchFacts 6 p i val)
+        else none
     else [[]]
   | .pair i p q => if i < 6 ∧ 6 ≤ p ∧ p < q ∧ q < 9 then
       match pairSign (base ++ fs) i p q with

@@ -5,42 +5,34 @@ public import Heilbronn.Nine.SevenBoundary.TopCapRight
 public import Heilbronn.Nine.Global.GlobalCompletion
 public import Heilbronn.Nine.Sharp.GMovingProjection
 
-/-! # All sharp radial orientations of the seven-boundary exterior case (`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP_RADIAL.md`)
+/-! # All sharp radial orientations of the seven-boundary exterior case
 
-**Role.** Primary-route component of `SEVEN_BOUNDARY_EXTERIOR_COMPLETION:Theorem1` (lines 30–31,
-296–305): the 36-word cover of `RADIAL_CATALOGUE.md` for the exterior octagon, and the sharp
-bound with its equality case for the four words of class R3.
+The exterior case: `SevenNormal a h b c d e f`, the far-cap point `X = (g,k)`
+(`FarCapPoint e f (g, k)`) and the companion point `P` inside the heptagon. At minimum area at
+least `7/128`, the results of `SevenBoundaryTopCap` and `SevenBoundaryTopCapRight` give `k > h`,
+the convex hull octagon `V₀, …, V₇ = A, B, C, D, E, X, F, H`
+(`exteriorOctagon a h b c d e f (g, k)`), and exclude `P` from its four side quadrilaterals
+`ABCD, CDEX, EXFH, FHAB`. The radial word of `P` is that of `RadialCatalogue` with respect to this
+octagon.
 
-**Setting.** `SevenNormal a h b c d e f`, the far-cap point `X = (g,k)` (`FarCapPoint e f (g, k)`),
-the companion point `P` inside the heptagon. At minimum area at least `7/128` the preceding notes
-give `k > h` (`SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-k-gt-h`), the convex hull octagon
-`V₀, …, V₇ = A, B, C, D, E, X, F, H` (`exteriorOctagon a h b c d e f (g, k)`, (1)), and exclude
-`P` from its four side quadrilaterals `ABCD, CDEX, EXFH, FHAB` (2). The radial word `r` of `P`
-is that of `RadialCatalogue` with respect to this octagon.
+## Main results
 
-**Results.**
-* `claim_octagon_cover` (§1): the radial word of `P` is well defined and is one of the 36 words
-  of the catalogue (the eight classes and the action (6) are those of `RADIAL_CATALOGUE.md`);
-* `theorem1`: every exterior configuration whose radial word is in R3 has minimum area at most
-  `A₀`; equality forces `k = 1` and the construction; the word `(3,4,5,4,4,3,3,2)` gives `< 7/128`.
+* `radialWord_mem_catalogue`: the radial word of `P` is well defined and is one of the 36 words of
+  `RadialCatalogue.catalogue`;
+* `minTriangleArea_le_A₀_of_inClass_R3`: every exterior configuration whose radial word is in class `R3` has minimum area at
+  most `A₀`; equality forces `k = 1` and the known configuration; the word `(3,4,5,4,4,3,3,2)`
+  gives `< 7/128`.
 
-The four transformations of §2 (sending each R3 word to the representative `(3,2,3,4,5,4,4,3)`):
-identity (`F' = X`, `GLOBAL_COMPLETION` §5, F-moving chamber); `(x,y) ↦ (1-x,y)` with labels
-`V_{3-i}` (`G' = (1-g,k)`, `SHARP_G_MOVING_PROJECTION`, strict); `(x,y) ↦ (x,1-y)` with labels
-`V_{7-i}` (`C' = (g,1-k)`, `SHARP_BC_MOVING` Theorem 2); the half-turn with labels `V_{i+4}`
-(`B' = (1-g,1-k)`, `SHARP_BC_MOVING` Theorem 3). They are the lemmas `r3_row1`, …, `r3_row4`:
-each writes the sharp chamber configuration as `φ ∘ sevenConfig ∘ σ` (`transfer_chamber`: same
-least area, and the construction pulls back to `IsOptimal`), checks the eleven chamber signs from
-the convexity of the octagon and the radial word, and applies the external chamber theorem.
+## Implementation notes
 
-Naming note: this note calls `(x,y) ↦ (1-x,y)` the "vertical reflection" and `(x,y) ↦ (x,1-y)`
-the "horizontal reflection"; `SEVEN_BOUNDARY_CAPS.md` calls `x ↦ 1-x` "horizontal". Explicit maps
-are used above.
-
-Implicit in the manuscript: §1 is stated under "minimum area at least `A₀`" (line 12); its inputs
-(`SEVEN_BOUNDARY_TOP_CAP` Theorems 1–3, `SEVEN_BOUNDARY_TOP_CAP_RIGHT:Theorem`) hold at `7/128`,
-and `SEVEN_BOUNDARY_EXTERIOR_COMPLETION` uses the cover at that threshold, so
-`claim_octagon_cover` is stated at minimum area at least `7/128`.
+Four transformations send the `R3` words to the representative `(3,2,3,4,5,4,4,3)`: the identity
+(`F' = X`, the moving-`F` chamber of `GlobalCompletion.movingF_chamber_le`); `(x,y) ↦ (1-x,y)` with labels
+`V_{3-i}` (`G' = (1-g,k)`, `SharpGMovingProjection.gMoving_chamber_lt`, strict); `(x,y) ↦ (x,1-y)` with
+labels `V_{7-i}` (`C' = (g,1-k)`, `SharpBCMoving.cMoving_chamber_le`); the half-turn with labels `V_{i+4}`
+(`B' = (1-g,1-k)`, `SharpBCMoving.bMoving_chamber_le`). They are the lemmas `r3_row1`, …, `r3_row4`: each
+writes the sharp chamber configuration as `φ ∘ sevenConfig ∘ σ` (`transfer_chamber`: same least
+area, and the construction pulls back to `IsOptimal`), checks the eleven chamber signs from the
+convexity of the octagon and the radial word, and applies the chamber theorem.
 -/
 
 @[expose] public section
@@ -424,18 +416,11 @@ theorem raysNondegenerate_of_min {a h b c d e f g k : ℝ} {P : Point}
   have h8 : ∀ m : Fin 8, (8 : Fin 9) ≠ octIdx m := by decide
   exact sarea_ne_zero_of_min_pos hmin 8 (octIdx i) (octIdx j) (h8 i) (hinj.ne hij) (h8 j)
 
-/-- **Claim** (`SEVEN_BOUNDARY_TOP_CAP_RADIAL:claim-octagon-cover`). In the exterior case at
-minimum area at least `7/128`: the octagon `A, B, C, D, E, X, F, H` is strictly convex, `P` is
-strictly inside it, no rays from `P` are degenerate, `P` is outside the four closed side
-quadrilaterals `ABCD, CDEX, EXFH, FHAB`, and the radial word of `P` satisfies (1) and belongs to
-the 36-word catalogue.
-`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP_RADIAL.md`, lines 19–34, 45–69.
-Uses: SEVEN_BOUNDARY_TOP_CAP:Theorem1, SEVEN_BOUNDARY_TOP_CAP:Theorem2,
-SEVEN_BOUNDARY_TOP_CAP:Theorem3, SEVEN_BOUNDARY_TOP_CAP_RIGHT:Theorem,
-SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-k-gt-h, RADIAL_CATALOGUE:claim-encoding,
-RADIAL_CATALOGUE:claim-ear-bounds, RADIAL_CATALOGUE:claim-side-quad-bounds,
-RADIAL_CATALOGUE:claim-six-blocks, RADIAL_CATALOGUE:claim-36-cover. -/
-theorem claim_octagon_cover {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case at minimum area at least `7/128`: the octagon `A, B, C, D, E, X, F, H` is
+strictly convex, `P` is strictly inside it, no rays from `P` are degenerate, `P` is outside the
+four closed side quadrilaterals `ABCD, CDEX, EXFH, FHAB`, and the radial word of `P` satisfies
+`IsRadialWord` and belongs to the 36-word catalogue. -/
+theorem radialWord_mem_catalogue {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P)
     (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f (g, k) P)) :
     IsConvexPolygon (exteriorOctagon a h b c d e f (g, k)) ∧
@@ -446,7 +431,7 @@ theorem claim_octagon_cover {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c 
         (radialWord (exteriorOctagon a h b c d e f (g, k)) P) ∧
       radialWord (exteriorOctagon a h b c d e f (g, k)) P ∈ catalogue := by
   have hmin₁ := hmin.trans SevenBoundaryCaps.min₁_left
-  have hkh := SevenBoundaryTopCapRight.claim_k_gt_h hN hX hmin₁
+  have hkh := SevenBoundaryTopCapRight.h_lt_k hN hX hmin₁
   have hV := exterior_convex (convHyp hN hX hkh)
   obtain ⟨hEX, hXF⟩ := heptagon_ext_edges hN hX hkh hP
   have hP' := hP
@@ -457,18 +442,18 @@ theorem claim_octagon_cover {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c 
   have hnd := raysNondegenerate_of_min (lt_of_lt_of_le (by norm_num) hmin)
   have hq : OutsideSideQuads (exteriorOctagon a h b c d e f (g, k)) P := by
     refine ⟨fun hq => ?_, fun hq => ?_, fun hq => ?_, fun hq => ?_⟩
-    · have := SevenBoundaryTopCap.theorem2 hN hX hP hq; linarith
-    · have := (SevenBoundaryTopCapRight.mainTheorem hN hX).2 P hP hq; linarith
-    · have := SevenBoundaryTopCap.theorem1 hN hX hP (inClosedPolygon_rot4 hq); linarith
-    · have := SevenBoundaryTopCap.theorem3 hN hX hP hq; linarith
-  obtain ⟨hk, hc⟩ := claim_encoding _ P hV hO hnd
-  refine ⟨hV, hO, hnd, hq, hk, claim_36_cover _ ⟨hc, ?_, ?_⟩⟩
-  · exact claim_ear_bounds _ P hV hO hnd hq hk
-  · exact claim_side_quad_bounds _ P hV hO hnd hq hk
+    · have := SevenBoundaryTopCap.minTriangleArea_lt_of_mem_ABCD hN hX hP hq; linarith
+    · have := (SevenBoundaryTopCapRight.minTriangleArea_lt_of_mem_CDEX hN hX).2 P hP hq; linarith
+    · have := SevenBoundaryTopCap.minTriangleArea_lt_of_mem_HEXF hN hX hP (inClosedPolygon_rot4 hq); linarith
+    · have := SevenBoundaryTopCap.minTriangleArea_lt_of_mem_FHAB hN hX hP hq; linarith
+  obtain ⟨hk, hc⟩ := radialWord_spec _ P hV hO hnd
+  refine ⟨hV, hO, hnd, hq, hk, mem_catalogue_of_admissible _ ⟨hc, ?_, ?_⟩⟩
+  · exact earBounds_of_outsideSideQuads _ P hV hO hnd hq hk
+  · exact sideQuadBounds_of_outsideSideQuads _ P hV hO hnd hq hk
 
-/-! ### §2. The four R3 words and the sharp chambers -/
+/-! ### The four `R3` words and the sharp chambers -/
 
-/-- The four words of class R3 (the orbit of the representative). -/
+/-- The four words of class `R3` (the orbit of the representative). -/
 theorem r3_words {w : Word} (hc : InClass .R3 w) :
     w = ![3, 2, 3, 4, 5, 4, 4, 3] ∨ w = ![3, 4, 5, 4, 4, 3, 3, 2] ∨
       w = ![4, 3, 3, 2, 3, 4, 5, 4] ∨ w = ![5, 4, 4, 3, 3, 2, 3, 4] := by
@@ -508,7 +493,8 @@ theorem transfer_chamber {S T : Fin 9 → Point} (φ : SquareSymmetry) (σ : Equ
     simp only [Function.comp_apply] at this
     rw [this, hinv]
 
-/-- The relabellings of the four rows of the table of §2 (sevenConfig indices). -/
+/-- The relabellings, as `sevenConfig` indices, of the four transformations `r3_row1`, …,
+`r3_row4`. -/
 def r3Perm : Fin 4 → Equiv.Perm (Fin 9)
   | 0 => Equiv.ofBijective ![0, 2, 3, 4, 5, 7, 6, 1, 8] (by decide)
   | 1 => Equiv.ofBijective ![4, 3, 2, 0, 1, 6, 7, 5, 8] (by decide)
@@ -518,12 +504,12 @@ def r3Perm : Fin 4 → Equiv.Perm (Fin 9)
 section R3
 variable {a h b c d e f g k x y : ℝ}
 
-/-- The common data of the R3 rows at minimum area at least `7/128`. -/
+/-- The common data of the `R3` rows at minimum area at least `7/128`. -/
 structure R3Data (a h b c d e f g k x y : ℝ) : Prop where
   conv : ConvHyp a h b c d e f g k
   sq : ((x, y) : Point) ∈ unitSquare
 
-/-- Row 1 (identity, `F' = X`): `GLOBAL_COMPLETION` Theorem 3. -/
+/-- Row 1 (identity, `F' = X`): `GlobalCompletion.movingF_chamber_le`. -/
 theorem r3_row1 (D : R3Data a h b c d e f g k x y)
     (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) (x, y) ![3, 2, 3, 4, 5, 4, 4, 3]) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) ≤ A₀ ∧
@@ -545,10 +531,10 @@ theorem r3_row1 (D : R3Data a h b c d e f g k x y)
   have w5 := hw.pos_of 2 5 (by decide) (by decide)
   simp only [exteriorOctagon, Matrix.cons_val] at w1 w2 w3 w4 w5
   simp only [sarea] at f1 f2 f3 f4 f5 f6 w1 w2 w3 w4 w5
-  have hch : HandProof.InChamber T := by
+  have hch : Chamber.InChamber T := by
     intro i
     fin_cases i <;>
-      simp [hTdef, HandProof.chamberSarea, HandProof.chamberTriangles,
+      simp [hTdef, Chamber.chamberSarea, Chamber.chamberTriangles,
         GlobalCompletion.movingFConfig, sarea] <;>
       linarith
   obtain ⟨pa, phA, ph1, pb, pcb, pc1, pd, ped, pe1, pfb, pcf, pgf, pg1, pke, pkh, pk1, pf2,
@@ -556,15 +542,15 @@ theorem r3_row1 (D : R3Data a h b c d e f g k x y)
   have hyp : GlobalCompletion.MovingFHyp a b c d e g f h k x y :=
     ⟨⟨pa, by linarith, by linarith, pb, by linarith, by linarith, pd, by linarith, by linarith,
       by linarith, by linarith, by linarith⟩, by linarith, by linarith, D.sq⟩
-  obtain ⟨⟨i, hi⟩, heq⟩ := GlobalCompletion.theorem3 hyp hch
-  have hle : ∀ j, minTriangleArea S ≤ HandProof.chamberArea T j := fun j =>
-    hmT ▸ HandProof.minTriangleArea_le_chamberArea T j
+  obtain ⟨⟨i, hi⟩, heq⟩ := GlobalCompletion.movingF_chamber_le hyp hch
+  have hle : ∀ j, minTriangleArea S ≤ Chamber.chamberArea T j := fun j =>
+    hmT ▸ Chamber.minTriangleArea_le_chamberArea T j
   refine ⟨(hle i).trans hi, fun hm => ?_⟩
   obtain ⟨hk1, hTo⟩ := heq fun j => hm ▸ hle j
   exact ⟨hk1, hopt hTo⟩
 
 /-- Row 2 (`(x,y) ↦ (1-x,y)`, labels `V_{3-i}`, `G' = (1-g,k)`):
-`SHARP_G_MOVING_PROJECTION` Theorem 1, strictly below `7/128`. -/
+`SharpGMovingProjection.gMoving_chamber_lt`, strictly below `7/128`. -/
 theorem r3_row2 (D : R3Data a h b c d e f g k x y)
     (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) (x, y) ![3, 4, 5, 4, 4, 3, 3, 2]) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) < 7 / 128 := by
@@ -585,10 +571,10 @@ theorem r3_row2 (D : R3Data a h b c d e f g k x y)
   have w5 := hw.pos_of 6 1 (by decide) (by decide)
   simp only [exteriorOctagon, Matrix.cons_val] at w1 w2 w3 w4 w5
   simp only [sarea] at f1 f2 f3 f4 f5 f6 w1 w2 w3 w4 w5
-  have hch : HandProof.InChamber T := by
+  have hch : Chamber.InChamber T := by
     intro i
     fin_cases i <;>
-      simp [hTdef, HandProof.chamberSarea, HandProof.chamberTriangles,
+      simp [hTdef, Chamber.chamberSarea, Chamber.chamberTriangles,
         SharpGMovingProjection.gMovingConfig, SharpBCMoving.sharpConfig, sarea] <;>
       linarith
   obtain ⟨pa, phA, ph1, pb, pcb, pc1, pd, ped, pe1, pfb, pcf, pgf, pg1, pke, pkh, pk1, pf2,
@@ -599,10 +585,10 @@ theorem r3_row2 (D : R3Data a h b c d e f g k x y)
     ⟨⟨pd, by linarith, by linarith, by linarith, by linarith, by linarith, pa, by linarith,
       by linarith, by linarith, by linarith, by linarith⟩, by linarith, by linarith,
       by linarith, by linarith, ⟨by simp only; linarith, by simp only; linarith, hy0, hy1⟩⟩
-  obtain ⟨⟨i, hi⟩, -⟩ := SharpGMovingProjection.theorem1 hyp hch
-  exact lt_of_le_of_lt (hmT ▸ HandProof.minTriangleArea_le_chamberArea T i) hi
+  obtain ⟨⟨i, hi⟩, -⟩ := SharpGMovingProjection.gMoving_chamber_lt hyp hch
+  exact lt_of_le_of_lt (hmT ▸ Chamber.minTriangleArea_le_chamberArea T i) hi
 
-/-- Row 3 (`(x,y) ↦ (x,1-y)`, labels `V_{7-i}`, `C' = (g,1-k)`): `SHARP_BC_MOVING` Theorem 2. -/
+/-- Row 3 (`(x,y) ↦ (x,1-y)`, labels `V_{7-i}`, `C' = (g,1-k)`): `SharpBCMoving.cMoving_chamber_le`. -/
 theorem r3_row3 (D : R3Data a h b c d e f g k x y)
     (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) (x, y) ![4, 3, 3, 2, 3, 4, 5, 4]) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) ≤ A₀ ∧
@@ -625,10 +611,10 @@ theorem r3_row3 (D : R3Data a h b c d e f g k x y)
   have w5 := hw.pos_of 2 5 (by decide) (by decide)
   simp only [exteriorOctagon, Matrix.cons_val] at w1 w2 w3 w4 w5
   simp only [sarea] at f1 f2 f3 f4 f5 f6 w1 w2 w3 w4 w5
-  have hch : HandProof.InChamber T := by
+  have hch : Chamber.InChamber T := by
     intro i
     fin_cases i <;>
-      simp [hTdef, HandProof.chamberSarea, HandProof.chamberTriangles,
+      simp [hTdef, Chamber.chamberSarea, Chamber.chamberTriangles,
         SharpBCMoving.cMovingConfig, SharpBCMoving.sharpConfig, sarea] <;>
       linarith
   obtain ⟨pa, phA, ph1, pb, pcb, pc1, pd, ped, pe1, pfb, pcf, pgf, pg1, pke, pkh, pk1, pf2,
@@ -638,14 +624,14 @@ theorem r3_row3 (D : R3Data a h b c d e f g k x y)
     ⟨⟨by linarith, by linarith, by linarith, by linarith, by linarith, by linarith, by linarith,
       by linarith, by linarith, pb, by linarith, by linarith⟩, by linarith, by linarith,
       ⟨hx0, hx1, by simp only; linarith, by simp only; linarith⟩⟩
-  obtain ⟨⟨i, hi⟩, heq⟩ := SharpBCMoving.theorem2 hyp hch
-  have hle : ∀ j, minTriangleArea S ≤ HandProof.chamberArea T j := fun j =>
-    hmT ▸ HandProof.minTriangleArea_le_chamberArea T j
+  obtain ⟨⟨i, hi⟩, heq⟩ := SharpBCMoving.cMoving_chamber_le hyp hch
+  have hle : ∀ j, minTriangleArea S ≤ Chamber.chamberArea T j := fun j =>
+    hmT ▸ Chamber.minTriangleArea_le_chamberArea T j
   refine ⟨(hle i).trans hi, fun hm => ?_⟩
   obtain ⟨ht, hTo⟩ := heq fun j => hm ▸ hle j
   exact ⟨by linarith, hopt hTo⟩
 
-/-- Row 4 (half-turn, labels `V_{i+4}`, `B' = (1-g,1-k)`): `SHARP_BC_MOVING` Theorem 3. -/
+/-- Row 4 (half-turn, labels `V_{i+4}`, `B' = (1-g,1-k)`): `SharpBCMoving.bMoving_chamber_le`. -/
 theorem r3_row4 (D : R3Data a h b c d e f g k x y)
     (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) (x, y) ![5, 4, 4, 3, 3, 2, 3, 4]) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) ≤ A₀ ∧
@@ -668,10 +654,10 @@ theorem r3_row4 (D : R3Data a h b c d e f g k x y)
   have w5 := hw.pos_of 6 1 (by decide) (by decide)
   simp only [exteriorOctagon, Matrix.cons_val] at w1 w2 w3 w4 w5
   simp only [sarea] at f1 f2 f3 f4 f5 f6 w1 w2 w3 w4 w5
-  have hch : HandProof.InChamber T := by
+  have hch : Chamber.InChamber T := by
     intro i
     fin_cases i <;>
-      simp [hTdef, HandProof.chamberSarea, HandProof.chamberTriangles,
+      simp [hTdef, Chamber.chamberSarea, Chamber.chamberTriangles,
         SharpBCMoving.bMovingConfig, SharpBCMoving.sharpConfig, sarea] <;>
       linarith
   obtain ⟨pa, phA, ph1, pb, pcb, pc1, pd, ped, pe1, pfb, pcf, pgf, pg1, pke, pkh, pk1, pf2,
@@ -683,25 +669,20 @@ theorem r3_row4 (D : R3Data a h b c d e f g k x y)
       by linarith, by linarith, by linarith, by linarith, by linarith⟩, by linarith, by linarith,
       ⟨by simp only; linarith, by simp only; linarith, by simp only; linarith,
         by simp only; linarith⟩⟩
-  obtain ⟨⟨i, hi⟩, heq⟩ := SharpBCMoving.theorem3 hyp hch
-  have hle : ∀ j, minTriangleArea S ≤ HandProof.chamberArea T j := fun j =>
-    hmT ▸ HandProof.minTriangleArea_le_chamberArea T j
+  obtain ⟨⟨i, hi⟩, heq⟩ := SharpBCMoving.bMoving_chamber_le hyp hch
+  have hle : ∀ j, minTriangleArea S ≤ Chamber.chamberArea T j := fun j =>
+    hmT ▸ Chamber.minTriangleArea_le_chamberArea T j
   refine ⟨(hle i).trans hi, fun hm => ?_⟩
   obtain ⟨ht, hTo⟩ := heq fun j => hm ▸ hle j
   exact ⟨by linarith, hopt hTo⟩
 
 end R3
 
-/-- **Theorem 1** (`SEVEN_BOUNDARY_TOP_CAP_RADIAL:Theorem1`). Every configuration of the exterior
-case whose radial word (with respect to `A, B, C, D, E, X, F, H`) belongs to class R3 has minimum
-area at most `A₀`; equality forces `k = 1` and the known eight-boundary construction up to square
-symmetry and relabelling; and for the R3 word `(3,4,5,4,4,3,3,2)` the minimum area is strictly
-below `7/128`.
-`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP_RADIAL.md`, lines 36–147.
-Uses: SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-k-gt-h, RADIAL_CATALOGUE:claim-symmetry-action,
-RADIAL_CATALOGUE:claim-R3-chamber, GLOBAL_COMPLETION:Theorem3,
-SHARP_G_MOVING_PROJECTION:Theorem1, SHARP_BC_MOVING:Theorem2, SHARP_BC_MOVING:Theorem3. -/
-theorem theorem1 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- Every configuration of the exterior case whose radial word (with respect to
+`A, B, C, D, E, X, F, H`) belongs to class `R3` has minimum area at most `A₀`; equality forces
+`k = 1` and the known eight-boundary construction up to square symmetry and relabelling; and for
+the `R3` word `(3,4,5,4,4,3,3,2)` the minimum area is strictly below `7/128`. -/
+theorem minTriangleArea_le_A₀_of_inClass_R3 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P) {w : Word}
     (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) P w) (hc : InClass .R3 w) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) P) ≤ A₀ ∧
@@ -717,7 +698,7 @@ theorem theorem1 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
           k = 1 ∧ IsOptimal (sevenConfig a h b c d e f (g, k) (x, y)))) ∧
       w ≠ ![3, 4, 5, 4, 4, 3, 3, 2] := by
     intro hmin
-    have hkh := SevenBoundaryTopCapRight.claim_k_gt_h hN hX (hmin.trans SevenBoundaryCaps.min₁_left)
+    have hkh := SevenBoundaryTopCapRight.h_lt_k hN hX (hmin.trans SevenBoundaryCaps.min₁_left)
     have D : R3Data a h b c d e f g k x y := ⟨convHyp hN hX hkh, heptagon_mem_square hN hP⟩
     rcases r3_words hc with rfl | rfl | rfl | rfl
     · exact ⟨r3_row1 D hw, by decide⟩

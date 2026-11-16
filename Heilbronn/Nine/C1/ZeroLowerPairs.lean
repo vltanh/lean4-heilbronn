@@ -3,14 +3,16 @@ module
 public import Heilbronn.Nine.C1.ZeroLower
 public import Heilbronn.Nine.C1.ZeroLowerModel
 
-/-! # Zero-lower C1: two upper points, and the three-top-cap seeds (`docs/proof/nine/C1_ZERO_LOWER.md` §5)
+/-! # Zero-lower C1: two upper points, and the three-top-cap seeds
 
-The initial signs of §5 that involve two free points beyond the radial rule:
+The initial signs of the zero-lower cover that involve two free points beyond the radial rule:
 * `Comp.upper_pair`: two points of the upper quadrilateral `HCDF` lie in different sectors of
-  its diagonals `HD, CF` (ONE_CORNER_COMPLETION Theorem 2), and the signs `[V P Q]` at the four
-  vertices are those of the checker's `upper_pair_signs`: (13) when a diagonal separates them,
-  and the isolated middle vertex (ONE_CORNER_COMPLETION Theorem 3) when only one does;
-* `Comp.three_seeds`: for three top-cap points (16), Lemma 3 and the seeds (17).
+  its diagonals `HD, CF` (`OneCornerCompletion.minTriangleArea_lt_of_centralPair_of_le_half`), and the signs `[V P Q]` at
+  the four vertices are those of `upperPair`: the crossing rule `cross` when a diagonal separates
+  them, and the isolated middle vertex (`OneCornerCompletion.isolates_of_mixed_pair`) when only one does;
+* `Comp.three_top`: three top-cap points have two outer points `R, S` with `D, R, S, F` in convex
+  position and the third in `DRF ∩ DSF`; `Comp.three_seeds`: hence, for three top-cap points
+  (`topThreeCases`), the seeds `seedRaw` of one choice of the inner cap point hold.
 -/
 
 @[expose] public section
@@ -18,20 +20,15 @@ The initial signs of §5 that involve two free points beyond the radial rule:
 noncomputable section
 namespace Heilbronn.Nine.C1ZeroLower
 
-open Heilbronn.Nine.C1 Cover Model
+open Heilbronn.Nine.C1 Heilbronn.Nine.Package Cover Model
 
 variable {h c d f : ℝ} {Q : Fin 4 → Point}
 
-/-- A signed triangle with increasing indices below `9`, holding for the configuration. -/
-def FHolds (P : ℕ → Point) (f : SFact) : Prop :=
-  f.1.1 < f.1.2.1 ∧ f.1.2.1 < f.1.2.2 ∧ f.1.2.2 < 9 ∧ SFact.Holds P f
-
-/-- `X` has the anchor-ray word `w` (`C1_ZERO_LOWER.md` (11)): `[VᵤVᵥX] > 0` exactly when
-`wsign w u v`. -/
+/-- `X` has the anchor-ray word `w`: `[VᵤVᵥX] > 0` exactly when `wsign w u v`. -/
 def WordAt (P : ℕ → Point) (X : Point) (w : ℕ) : Prop :=
   ∀ u v : ℕ, u < 5 → v < 5 → u ≠ v → (0 < sarea (P u) (P v) X ↔ wsign w u v = true)
 
-/-- The sector of an upper word for the diagonals `HD`, `CF` (checker `upper_sector`). -/
+/-- The sector of an upper word for the diagonals `HD`, `CF`. -/
 def sector (w : ℕ) : Bool × Bool := (wsign w 4 2, wsign w 1 3)
 
 theorem WordAt.pos {P : ℕ → Point} {X : Point} {w u v : ℕ} (hw : WordAt P X w) (hu : u < 5)
@@ -55,7 +52,7 @@ theorem word_upper : ∀ w : Fin 11, cat w = 0 →
     wsign w 4 1 = true ∧ wsign w 1 2 = true ∧ wsign w 2 3 = true ∧ wsign w 3 4 = true := by
   decide +kernel
 
-/-- **(13)**, the crossing rule at an endpoint `A` of a diagonal `AB` of a convex quadrilateral,
+/-- The crossing rule at an endpoint `A` of a diagonal `AB` of a convex quadrilateral,
 `X₁` the vertex after `A`: if `X, Y` (inside, so on the positive side of `AX₁`) are separated by
 the line `AB`, then `[XYA]` has the sign opposite to `[ABX]`. Identity:
 `[AX₁B][AYX] = [ABX][AX₁Y] - [ABY][AX₁X]`. -/
@@ -84,12 +81,12 @@ theorem cross {A X1 B X Y : Point} (h1 : 0 < sarea A X1 B) (hX : 0 < sarea A X1 
     nlinarith
 
 /-- Two points in the same diagonal sector of a convex quadrilateral of area at most `1/2`
-contradict the least area `A₀` (ONE_CORNER_COMPLETION Theorem 2). -/
+contradict the least area `A₀` (`OneCornerCompletion.minTriangleArea_lt_of_centralPair_of_le_half`). -/
 theorem central_false {A B C D X Y : Point} (hq : CornerFamilies.ConvexQuad A B C D)
     (hS : sarea A B C + sarea A C D ≤ 1) (hmin : A₀ ≤ minTriangleArea ![A, B, C, D, X, Y])
     (h1 : InTriangle X A B C) (h2 : InTriangle X A B D) (h3 : InTriangle Y A B C)
     (h4 : InTriangle Y A B D) : False := by
-  have := OneCornerCompletion.theorem2_of_le_half A B C D X Y (Or.inl hq)
+  have := OneCornerCompletion.minTriangleArea_lt_of_centralPair_of_le_half A B C D X Y (Or.inl hq)
     ⟨Or.inl h1, Or.inl h2, Or.inl h3, Or.inl h4⟩ (by
       unfold OneCornerCompletion.quadArea
       rw [abs_of_pos (by linarith [hq.1, (show 0 < sarea A C D by
@@ -99,13 +96,13 @@ theorem central_false {A B C D X Y : Point} (hq : CornerFamilies.ConvexQuad A B 
   have := hmin.trans this.le
   linarith [hA.1]
 
-/-- The isolated middle vertex (ONE_CORNER_COMPLETION Theorem 3): `P, Q ∈ ABC`, `P ∈ BCD`,
+/-- The isolated middle vertex (`OneCornerCompletion.isolates_of_mixed_pair`): `P, Q ∈ ABC`, `P ∈ BCD`,
 `Q ∈ ABD` in a convex quadrilateral of area at most `1/2`: the line `PQ` isolates `B`. -/
 theorem iso_of {A B C D P Q : Point} (hq : CornerFamilies.ConvexQuad A B C D)
     (hS : sarea A B C + sarea A C D ≤ 1) (hmin : A₀ ≤ minTriangleArea ![A, B, C, D, P, Q])
     (hP : InTriangle P A B C) (hQ : InTriangle Q A B C) (hPBCD : InTriangle P B C D)
     (hQABD : InTriangle Q A B D) : OneCornerCompletion.Isolates P Q B A C D := by
-  refine OneCornerCompletion.theorem3 A B C D P Q (Or.inl hq) ?_ (Or.inl hP) (Or.inl hQ)
+  refine OneCornerCompletion.isolates_of_mixed_pair A B C D P Q (Or.inl hq) ?_ (Or.inl hP) (Or.inl hQ)
     (Or.inl hPBCD) (Or.inl hQABD)
   unfold OneCornerCompletion.quadArea OneCornerCompletion.quadConfig
   have hA := A₀_bounds
@@ -165,14 +162,11 @@ theorem quad_facts (hA : C1Anchors h c d f) :
   refine ⟨⟨aHCD, aCDF, aDFH, aFHC⟩, ⟨aCDF, aDFH, aFHC, aHCD⟩, ⟨aDFH, aFHC, aHCD, aCDF⟩,
     ⟨aFHC, aHCD, aCDF, aDFH⟩, ?_, ?_, ?_, ?_⟩ <;> simp only [sarea] <;> nlinarith
 
-theorem sarea_self₁₂' (p r : Point) : sarea p p r = 0 := by unfold sarea; ring
-theorem sarea_self₁₃' (p q : Point) : sarea p q p = 0 := by unfold sarea; ring
-
 theorem sw' (p q R : Point) : sarea q p R = -sarea p q R := sarea_swap₁₂ p q R
 
 theorem xy' (X Y V : Point) : sarea Y X V = -sarea X Y V := by unfold sarea; ring
 
-/-- (13) at both ends of the diagonal `HD`. -/
+/-- The crossing rule `cross` at both ends of the diagonal `HD`. -/
 theorem sepHD_of (hA : C1Anchors h c d f) {X Y : Point} (ux : UpperPt h c d f X)
     (uy : UpperPt h c d f Y) (hs : sarea (0, h) (1, d) X * sarea (0, h) (1, d) Y < 0) :
     sarea X Y (0, h) * sarea (0, h) (1, d) X < 0 ∧
@@ -184,7 +178,7 @@ theorem sepHD_of (hA : C1Anchors h c d f) {X Y : Point} (ux : UpperPt h c d f X)
   have := cross q3.1 ux.df uy.df hs2
   rw [sw' (0, h) (1, d) X, mul_neg] at this; linarith
 
-/-- (13) at both ends of the diagonal `CF`. -/
+/-- The crossing rule `cross` at both ends of the diagonal `CF`. -/
 theorem sepCF_of (hA : C1Anchors h c d f) {X Y : Point} (ux : UpperPt h c d f X)
     (uy : UpperPt h c d f Y) (hs : sarea (c, 0) (f, 1) X * sarea (c, 0) (f, 1) Y < 0) :
     sarea X Y (c, 0) * sarea (c, 0) (f, 1) X < 0 ∧
@@ -293,7 +287,7 @@ theorem isoD_of (hA : C1Anchors h c d f) {X Y : Point} (ux : UpperPt h c d f X)
   · exact iso_of q2 w2 m'.cdfh ⟨uy.cd, uy.df, by rw [sw']; linarith⟩
       ⟨ux.cd, ux.df, by rw [sw']; linarith⟩ ⟨uy.df, uy.fh, hP⟩ ⟨ux.cd, hR, ux.hc⟩
 
-/-- Two upper points are in different sectors (ONE_CORNER_COMPLETION Theorem 2). -/
+/-- Two upper points are in different sectors (`central_false`). -/
 theorem sectors_of (hA : C1Anchors h c d f) {X Y : Point} (ux : UpperPt h c d f X)
     (uy : UpperPt h c d f Y) (m : QuadMin h c d f X Y) {a b : Bool}
     (xHD : OrientHolds a (sarea (0, h) (1, d) X)) (xCF : OrientHolds b (sarea (c, 0) (f, 1) X))
@@ -314,7 +308,7 @@ theorem sectors_of (hA : C1Anchors h c d f) {X Y : Point} (ux : UpperPt h c d f 
       ⟨uy.fh, uy.hc, yCF⟩ ⟨uy.fh, yHD, uy.df⟩
 
 set_option maxHeartbeats 1000000 in
-/-- The signs of `upperPair` (the checker's `upper_pair_signs`), from (13) and the isolation. -/
+/-- The signs of `upperPair`, from the crossing rule and the isolation. -/
 theorem upper_signs (hA : C1Anchors h c d f) {X Y : Point} (ux : UpperPt h c d f X)
     (uy : UpperPt h c d f Y) (m : QuadMin h c d f X Y) (m' : QuadMin h c d f Y X)
     {wi wj : ℕ} (hsec : sector wi ≠ sector wj)
@@ -349,8 +343,7 @@ theorem upper_signs (hA : C1Anchors h c d f) {X Y : Point} (ux : UpperPt h c d f
     simp (config := { decide := true }) only [cfg, ite_true, ite_false, OrientHolds] <;>
     nlinarith
 
-/-- **Two upper points** (`C1_ZERO_LOWER.md` §5, (13), ONE_CORNER_COMPLETION Theorems 2–3): two
-free points of `HCDF` with upper words lie in different diagonal sectors, and every sign
+/-- Two free points of `HCDF` with upper words lie in different diagonal sectors, and every sign
 predicted by `upperPair` holds. -/
 theorem Comp.upper_pair (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j) {wi wj : ℕ}
     (hwi : wi < 11) (hwj : wj < 11) (ci : cat wi = 0) (cj : cat wj = 0)
@@ -396,7 +389,7 @@ theorem Comp.upper_pair (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j) {wi w
     (sarea_cycle _ _ _).symm]
   exact upper_signs H.hA ux uy (mm i j hij) (mm j i hij.symm) hsec xHD xCF yHD yCF Q v hv sg hsg
 
-/-! ### Lemma 3: three top-cap points -/
+/-! ### Three top-cap points -/
 
 /-- A closed half-plane `ℓ(p) ≥ m` (`ℓ` affine) contains the convex hull of a set it contains. -/
 theorem hull_le {S : Set Point} (α β γ m : ℝ) (hS : ∀ p ∈ S, m ≤ α * p.1 + β * p.2 + γ) :
@@ -430,7 +423,7 @@ theorem inside_of_hull {A B C X : Point} (hABC : 0 < sarea A B C)
       simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hp
       rcases hp with rfl | rfl | rfl <;> linarith [hge.1, hge.2.1, hge.2.2]) X hX
     rwa [← sarea_affine] at this
-  have z13 : ∀ p q : Point, sarea p q p ≥ 0 := fun p q => le_of_eq (sarea_self₁₃' p q).symm
+  have z13 : ∀ p q : Point, sarea p q p ≥ 0 := fun p q => le_of_eq (sarea_self₁₃ p q).symm
   have z23 : ∀ p q : Point, sarea p q q ≥ 0 := fun p q => by
     rw [show sarea p q q = 0 by unfold sarea; ring]
   have c1 : sarea B C A = sarea A B C := sarea_cycle A B C
@@ -501,28 +494,6 @@ theorem Comp.tri_false (H : Comp h c d f Q) {k s t : Fin 4} (hks : k ≠ s) (hkt
     (by linarith) (by norm_num)
   nlinarith
 
-theorem orient_holds {P : ℕ → Point} {a b e : ℕ} {sg : Bool} (ha : a < 9) (hb : b < 9)
-    (he : e < 9) (hs : OrientHolds sg (sarea (P a) (P b) (P e))) : FHolds P (orient a b e sg) := by
-  have hne : sarea (P a) (P b) (P e) ≠ 0 := by
-    cases sg <;> simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at hs <;>
-      [exact hs.ne; exact hs.ne']
-  have n1 : a ≠ b := by rintro rfl; exact hne (sarea_self₁₂' _ _)
-  have n2 : b ≠ e := by rintro rfl; exact hne (by unfold sarea; ring)
-  have n3 : a ≠ e := by rintro rfl; exact hne (sarea_self₁₃' _ _)
-  have c1 := sarea_cycle (P a) (P b) (P e)
-  have c2 := sarea_cycle (P b) (P e) (P a)
-  unfold orient
-  split_ifs with h1 h2 h3 h4 h5
-  · exact ⟨h1.1, h1.2, he, hs⟩
-  · exact ⟨h2.1, h2.2, ha, by simp only [SFact.Holds]; rw [c1]; exact hs⟩
-  · exact ⟨h3.1, h3.2, hb, by simp only [SFact.Holds]; rw [c2, c1]; exact hs⟩
-  · refine ⟨h4.1, h4.2, he, ?_⟩
-    simp only [SFact.Holds]; rw [sarea_swap₁₂, orientHolds_not]; exact hs
-  · refine ⟨h5.1, h5.2, hb, ?_⟩
-    simp only [SFact.Holds]; rw [sarea_swap₂₃, orientHolds_not]; exact hs
-  · refine ⟨by simp only; omega, by simp only; omega, ha, ?_⟩
-    simp only [SFact.Holds]; rw [sarea_swap₁₃, orientHolds_not]; exact hs
-
 /-- The line `RS` of two top-cap points with `D, F` on its positive side and `E = (1,1)` beyond
 it: every point of the square on the pentagon side of `DF` is on its positive side
 (`Ω₀ ℓ(P) = (1-f)(1-y)ℓ(D) + (1-d)(1-x)ℓ(F) - [DFP]ℓ(E)`). -/
@@ -548,35 +519,22 @@ theorem inj5 {s0 s1 s2 : ℕ} (h0 : 5 ≤ s0) (h1 : 5 ≤ s1) (h2 : 5 ≤ s2) (h
   intro x y hxy
   fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> omega
 
-set_option maxHeartbeats 2000000 in
-/-- **Lemma 3 and the seeds (17)** (`C1_ZERO_LOWER:Lemma3`): in a three-top-cap case (16), with
-the free points labelled by angle from `O` among equal words, the seeds of one choice of the
-inner cap point hold. -/
-theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
-    (hks : ks ∈ topThreeCases) (hw : ∀ a : Fin 4, WordAt (cfg h c d f Q) (Q a) (kw ks a))
-    (horder : ∀ a b : Fin 4, a < b → kw ks a = kw ks b → 0 < sarea (0, 0) (Q a) (Q b)) :
-    ∃ i, i < 3 ∧ AllHold (FHolds (cfg h c d f Q)) (seedRaw ks i) := by
+/-- Three top-cap points: if `Q 0, Q 1, Q 2` are in the top cap, then for some ordering `σ` the
+outer points `R = Q (σ 1)`, `S = Q (σ 0)` have `[DRS] > 0` and `[RSF] > 0` (`D, R, S, F` in convex
+position, with `E = (1, 1)` beyond the line `RS`), and the inner point `Q (σ 2)` lies in `DRF` and
+in `DSF`. -/
+theorem Comp.three_top (H : Comp h c d f Q)
+    (topc : ∀ k : Fin 3, InTopCap d f (Q k.castSucc)) :
+    ∃ σ : Equiv.Perm (Fin 3),
+      0 < sarea (ptD d) (Q (σ 1).castSucc) (Q (σ 0).castSucc) ∧
+      0 < sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (ptF f) ∧
+      InTriangle (Q (σ 2).castSucc) (ptD d) (Q (σ 1).castSucc) (ptF f) ∧
+      InTriangle (Q (σ 2).castSucc) (ptD d) (Q (σ 0).castSucc) (ptF f) ∧
+      sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (1, 1) < 0 := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
   have t0 := two_A₀
   obtain ⟨-, -, a3, a4⟩ := H.anchor_bounds
   obtain ⟨-, -, p3, p4⟩ := H.params_ge
-  have hk : kw ks 0 = 3 ∧ kw ks 1 = 3 ∧ kw ks 2 = 3 ∧ cat (kw ks 3) = 0 ∧ kw ks 3 < 11 ∧
-      caps ks = [5, 6, 7] := by
-    simp only [topThreeCases, List.mem_cons, List.not_mem_nil, or_false] at hks
-    rcases hks with rfl | rfl | rfl | rfl <;> decide
-  obtain ⟨k0, k1, k2, k3, k3', hcaps⟩ := hk
-  have top : ∀ a : Fin 4, kw ks a = 3 → InTopCap d f (Q a) := fun a ha =>
-    H.word_neg (u := 2) (v := 3) (hw a) (by norm_num) (by norm_num) (by norm_num)
-      (by rw [ha]; decide)
-  have topc : ∀ k : Fin 3, InTopCap d f (Q k.castSucc) := by
-    intro k; fin_cases k
-    exacts [top 0 k0, top 1 k1, top 2 k2]
-  have U3 : UpperPt h c d f (Q 3) := by
-    obtain ⟨r1, r2, r3, r4⟩ := word_upper ⟨kw ks 3, k3'⟩ k3
-    exact ⟨(hw 3).pos (by norm_num) (by norm_num) (by norm_num) r1,
-      (hw 3).pos (by norm_num) (by norm_num) (by norm_num) r2,
-      (hw 3).pos (by norm_num) (by norm_num) (by norm_num) r3,
-      (hw 3).pos (by norm_num) (by norm_num) (by norm_num) r4⟩
   have hull : ∀ k : Fin 3, Q k.castSucc ∈ convexHull ℝ ({(f, 1), (1, d), ptE} : Set Point) := by
     intro k
     have := top_mem_hull H.hA (H.hQ _) (topc k)
@@ -649,7 +607,7 @@ theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
   have e5 : (fun x => cfg h c d f Q (![3, 2, 5, 6, 7] x)) = ![(f, 1), (1, d), Q 0, Q 1, Q 2] := by
     funext x; fin_cases x <;> rfl
   rw [e5] at hm5
-  obtain ⟨W', σ, hS, harea⟩ := TypeII.claim_support_normalization hFDE (hull 0) (hull 1) (hull 2)
+  obtain ⟨W', σ, hS, harea⟩ := TypeII.exists_isSupportTriangle hFDE (hull 0) (hull 1) (hull 2)
     (lt_of_lt_of_le A₀_pos hm5) hnt
   have hQσ : ∀ k : Fin 3, ![Q (0 : Fin 3).castSucc, Q (1 : Fin 3).castSucc,
       Q (2 : Fin 3).castSucc] k = Q k.castSucc := by intro k; fin_cases k <;> rfl
@@ -728,6 +686,50 @@ theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
       by_contra hne; have := mul_pos (mul_pos d1 (sub_pos.2 (lt_of_le_of_ne u1 hne))) lF; linarith
     have : Q (σ 1).castSucc = Q (σ 0).castSucc := Prod.ext (by rw [rx, sx]) (by rw [ry, sy])
     rw [this] at lD; simp [sarea] at lD
+  have cyc : ∀ V R S : Point, sarea V R S = sarea R S V := fun V R S => (sarea_cycle V R S).symm
+  refine ⟨σ, by rw [cyc]; exact lD, lF, ⟨hTR.2.1, hTR.2.2, hTR.1⟩, ⟨hTS.2.1, hTS.2.2, hTS.1⟩,
+    lE⟩
+
+set_option maxHeartbeats 2000000 in
+/-- Three top-cap points: in a three-top-cap case (`topThreeCases`), with the free points
+labelled by angle from `O` among equal words, the seeds `seedRaw ks i` of one choice `i < 3` of
+the inner cap point hold. (Two of the cap points, `R` and `S`, have `D, R, S, F` in convex
+position, and the third lies in `DRF ∩ DSF`.) -/
+theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
+    (hks : ks ∈ topThreeCases) (hw : ∀ a : Fin 4, WordAt (cfg h c d f Q) (Q a) (kw ks a))
+    (horder : ∀ a b : Fin 4, a < b → kw ks a = kw ks b → 0 < sarea (0, 0) (Q a) (Q b)) :
+    ∃ i, i < 3 ∧ AllHold (FHolds 9 (cfg h c d f Q)) (seedRaw ks i) := by
+  obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
+  have t0 := two_A₀
+  obtain ⟨-, -, a3, a4⟩ := H.anchor_bounds
+  obtain ⟨-, -, p3, p4⟩ := H.params_ge
+  have hk : kw ks 0 = 3 ∧ kw ks 1 = 3 ∧ kw ks 2 = 3 ∧ cat (kw ks 3) = 0 ∧ kw ks 3 < 11 ∧
+      caps ks = [5, 6, 7] := by
+    simp only [topThreeCases, List.mem_cons, List.not_mem_nil, or_false] at hks
+    rcases hks with rfl | rfl | rfl | rfl <;> decide
+  obtain ⟨k0, k1, k2, k3, k3', hcaps⟩ := hk
+  have top : ∀ a : Fin 4, kw ks a = 3 → InTopCap d f (Q a) := fun a ha =>
+    H.word_neg (u := 2) (v := 3) (hw a) (by norm_num) (by norm_num) (by norm_num)
+      (by rw [ha]; decide)
+  have topc : ∀ k : Fin 3, InTopCap d f (Q k.castSucc) := by
+    intro k; fin_cases k
+    exacts [top 0 k0, top 1 k1, top 2 k2]
+  have U3 : UpperPt h c d f (Q 3) := by
+    obtain ⟨r1, r2, r3, r4⟩ := word_upper ⟨kw ks 3, k3'⟩ k3
+    exact ⟨(hw 3).pos (by norm_num) (by norm_num) (by norm_num) r1,
+      (hw 3).pos (by norm_num) (by norm_num) (by norm_num) r2,
+      (hw 3).pos (by norm_num) (by norm_num) (by norm_num) r3,
+      (hw 3).pos (by norm_num) (by norm_num) (by norm_num) r4⟩
+  obtain ⟨σ, cD, cF, iR, iS, lE⟩ := H.three_top topc
+  have lD : 0 < sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (1, d) := by
+    rw [sarea_cycle (1, d)]; exact cD
+  have lF : 0 < sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (f, 1) := cF
+  obtain ⟨gR1, gR2, -⟩ := iR
+  obtain ⟨gS1, gS2, -⟩ := iS
+  have hTR1 : 0 < sarea (1, d) (Q (σ 1).castSucc) (Q (σ 2).castSucc) := gR1
+  have hTR2 : 0 < sarea (Q (σ 1).castSucc) (f, 1) (Q (σ 2).castSucc) := gR2
+  have hTS1 : 0 < sarea (1, d) (Q (σ 0).castSucc) (Q (σ 2).castSucc) := gS1
+  have hTS2 : 0 < sarea (Q (σ 0).castSucc) (f, 1) (Q (σ 2).castSucc) := gS2
   have pos : ∀ P : Point, P ∈ unitSquare → 0 < sarea (1, d) (f, 1) P →
       0 < sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) P := fun P hP hDF =>
     ell_pos H.hA lD lF lE hP hDF
@@ -745,19 +747,19 @@ theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
           sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (f, 1) := by unfold sarea; ring
     have dR : sarea (1, d) (f, 1) (Q (σ 1).castSucc) < 0 := topc (σ 1)
     by_contra hn; push Not at hn
-    nlinarith [mul_nonneg_of_nonpos_of_nonpos dR.le hn, mul_pos hTR.2.2 lD, mul_pos hTR.2.1 lF]
+    nlinarith [mul_nonneg_of_nonpos_of_nonpos dR.le hn, mul_pos hTR2 lD, mul_pos hTR1 lF]
   have cyc : ∀ V R S : Point, sarea V R S = sarea R S V := fun V R S => (sarea_cycle V R S).symm
   have fO : 0 < sarea (0, 0) (Q (σ 1).castSucc) (Q (σ 0).castSucc) := by rw [cyc]; exact lO
   have fC : 0 < sarea (c, 0) (Q (σ 1).castSucc) (Q (σ 0).castSucc) := by rw [cyc]; exact lC
   have fD : 0 < sarea (1, d) (Q (σ 1).castSucc) (Q (σ 0).castSucc) := by rw [cyc]; exact lD
   have fF : 0 < sarea (f, 1) (Q (σ 1).castSucc) (Q (σ 0).castSucc) := by rw [cyc]; exact lF
   have fH : 0 < sarea (0, h) (Q (σ 1).castSucc) (Q (σ 0).castSucc) := by rw [cyc]; exact lH
-  have gDR : 0 < sarea (1, d) (Q (σ 1).castSucc) (Q (σ 2).castSucc) := hTR.2.1
+  have gDR : 0 < sarea (1, d) (Q (σ 1).castSucc) (Q (σ 2).castSucc) := hTR1
   have gFR : sarea (f, 1) (Q (σ 1).castSucc) (Q (σ 2).castSucc) < 0 := by
-    rw [sw']; linarith [hTR.2.2]
-  have gDS : 0 < sarea (1, d) (Q (σ 0).castSucc) (Q (σ 2).castSucc) := hTS.2.1
+    rw [sw']; linarith [hTR2]
+  have gDS : 0 < sarea (1, d) (Q (σ 0).castSucc) (Q (σ 2).castSucc) := hTS1
   have gFS : sarea (f, 1) (Q (σ 0).castSucc) (Q (σ 2).castSucc) < 0 := by
-    rw [sw']; linarith [hTS.2.2]
+    rw [sw']; linarith [hTS2]
   -- the labels: `R` comes before `S` (angle from `O`)
   have kw3 : ∀ k : Fin 3, kw ks k.castSucc = 3 := by intro k; fin_cases k; exacts [k0, k1, k2]
   have hord : σ 1 < σ 0 := by
@@ -779,7 +781,7 @@ theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
     rw [e] at hg
     simp only [List.mem_cons, List.not_mem_nil, or_false] at hg
     rcases hg with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
-      apply orient_holds (by norm_num) (by norm_num) (by norm_num) <;>
+      apply fholds_orient (by norm_num) (by norm_num) (by norm_num) <;>
       simp only [OrientHolds, ite_true, ite_false, Bool.false_eq_true] <;>
       first | exact fO | exact fC | exact fD | exact fF | exact fH | exact lT | exact lX |
         exact gDR | exact gFR | exact gDS | exact gFS
@@ -791,7 +793,7 @@ theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
     rw [e] at hg
     simp only [List.mem_cons, List.not_mem_nil, or_false] at hg
     rcases hg with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
-      apply orient_holds (by norm_num) (by norm_num) (by norm_num) <;>
+      apply fholds_orient (by norm_num) (by norm_num) (by norm_num) <;>
       simp only [OrientHolds, ite_true, ite_false, Bool.false_eq_true] <;>
       first | exact fO | exact fC | exact fD | exact fF | exact fH | exact lT | exact lX |
         exact gDR | exact gFR | exact gDS | exact gFS
@@ -803,7 +805,7 @@ theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
     rw [e] at hg
     simp only [List.mem_cons, List.not_mem_nil, or_false] at hg
     rcases hg with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
-      apply orient_holds (by norm_num) (by norm_num) (by norm_num) <;>
+      apply fholds_orient (by norm_num) (by norm_num) (by norm_num) <;>
       simp only [OrientHolds, ite_true, ite_false, Bool.false_eq_true] <;>
       first | exact fO | exact fC | exact fD | exact fF | exact fH | exact lT | exact lX |
         exact gDR | exact gFR | exact gDS | exact gFS

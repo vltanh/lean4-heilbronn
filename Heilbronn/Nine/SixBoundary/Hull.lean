@@ -5,37 +5,33 @@ public import Heilbronn.Nine.SixBoundary.HullTrees
 public import Heilbronn.Nine.Corners.CornerFamilies.SixPoint
 public import Heilbronn.Nine.Hulls.QuadrilateralHull
 
-/-! # The exact six-anchor hull in family N (`docs/proof/nine/SIX_BOUNDARY_HULL.md`)
+/-! # The exact six-anchor hull in family N
 
-Role: primary route. Theorem 7 closes the six-boundary occupancy `(0,0,0;3)` of
-`docs/proof/nine/UNRESTRICTED.md`, Section 4 (all three free points inside the anchor hexagon, so that the
-six anchors are the whole convex hull). Theorem 1 (the six anchor ears have doubled area below
+The case where all three free points are strictly inside the anchor hexagon, so that the six
+anchors are the whole convex hull. The bound on the six anchor ears (doubled area below
 `ρ = 13/16`, hence capacity one) holds throughout family N and is used by the other six-boundary
-manuscripts (single side, single top, side opposite, two top).
+cases (single side, single top, side opposite, two top).
 
 Setting: `nConfig a h b c d f Q P R` with `NAnchors a h b c d f`; for the exact hull the lower
 free point is `Q` (in `HABC`) and the upper points are `P, R` (in `HCDF`). Thresholds: `s = 7/64`
 (doubled; hypothesis `7/128 ≤ minTriangleArea`), `ρ = 13/16 < Ks`, `K = 4 + 2√3`.
 
-**Simplification.** Sections 3-6 of the manuscript (the sector assignments (9), Theorems 3-6 and
-the claims of the proof of Theorem 4, which work at `σ = 8/73` and import internal steps of
-`ONE_CORNER`, `ONE_CORNER_COMPLETION` and `TYPE_II`) are replaced by one certificate cover over
-the radial words of the three free points on the anchor hexagon
-(`Heilbronn.Nine.SixBoundary.HullModel`, kernel checks in `Heilbronn.Nine.SixBoundary.HullTrees*`,
-found by linear programming in `scripts/nine/six_hull/`: 1,209 leaves, 35,869 terms, degree at most
-four). Its only geometric inputs are Theorem 1, `QUADRILATERAL_HULL.md` (14)-(15) (exactly one free
-point below `HC`, `W ≥ 16A₀ > 7/8`), Lemma 5 of `QUADRILATERAL_HULL.md` with the transposition (the
-ear `ABC` empty), subdivision, the two-interior-point lemma and the radial-word sign rules of
-`SixBoundary`.
+The exact hull is excluded by one certificate cover over the radial words of the three free
+points on the anchor hexagon (`Heilbronn.Nine.SixBoundary.HullModel`, kernel checks in
+`Heilbronn.Nine.SixBoundary.HullTrees*`, found by linear programming: 1,209 leaves, 35,869 terms,
+degree at most four). Its only geometric inputs are `ears_sarea_lt_atMostOne`, `QuadrilateralHull.inNHexagon_one_below_HC`
+(exactly one free point below `HC`, `W ≥ 16A₀ > 7/8`), `QuadrilateralHull.lower_ears_not_both_occupied` with the
+transposition (the ear `ABC` empty), subdivision, the two-interior-point lemma and the
+radial-word sign rules of `SixBoundary`.
 
-Results:
-* `theorem1`: the six ears `ABH, ABC, BCD, CDF, DFH, FHA` have doubled area `< 13/16`, and each
+Main results:
+* `ears_sarea_lt_atMostOne`: the six ears `ABH, ABC, BCD, CDF, DFH, FHA` have doubled area `< 13/16`, and each
   contains at most one free point;
-* `theorem2`: two upper points in `HDF`, or two in `CDF`, are impossible;
+* `not_upperPair_HDF_CDF`: two upper points in `HDF`, or two in `CDF`, are impossible;
 * `HullCase.false`: the normalized exact-hull case is impossible (the cover);
-* `theorem7`: no competitive N configuration has exactly the six anchors as its convex hull.
+* `false_of_all_inHexagon`: no competitive N configuration has exactly the six anchors as its convex hull.
 
-The transposition used throughout (lines 127-135) is `SixBoundary.claim_transposition`.
+The transposition used throughout is `SixBoundary.transpose_invariant`.
 -/
 
 @[expose] public section
@@ -94,7 +90,7 @@ theorem anchor_triples {a h b c d f : ℝ} (hN : NAnchors a h b c d f) :
       mul_pos (by linarith : (0:ℝ) < h) hf]
   · nlinarith [mul_nonneg hf.le hhd]
 
-/-! ### Section 1: the anchor ears -/
+/-! ### The anchor ears -/
 
 /-- Two free points strictly inside an actual triangle of a configuration of least area at least
 `t > 0` force its doubled area to be at least `2(4 + 2√3)t` (the two-interior-point lemma). -/
@@ -106,7 +102,7 @@ theorem two_inside_sarea {P : Fin 9 → Point} {t : ℝ} (ht : 0 < t) (hmin : t 
   have e1 : P ∘ ![a, b, e, j₁, j₂] = ![P a, P b, P e, P j₁, P j₂] := by
     funext x; fin_cases x <;> rfl
   rw [e1] at hm
-  have k := CornerFamilies.twoInteriorPointLemma _ _ _ _ _ (Or.inl h₁) (Or.inl h₂) t ht hm
+  have k := twoInteriorPointLemma _ _ _ _ _ (Or.inl h₁) (Or.inl h₂) t ht hm
   have hpos : 0 < sarea (P a) (P b) (P e) := by
     obtain ⟨t1, t2, t3⟩ := h₁
     have := sarea_add_sarea_add_sarea (P a) (P b) (P e) (P j₁)
@@ -120,7 +116,7 @@ theorem rho_lt_Ks : (13 / 16 : ℝ) < 2 * ((4 + 2 * Real.sqrt 3) * (7 / 128)) :=
     rw [Real.lt_sqrt (by norm_num)]; norm_num
   linarith
 
-/-- The Cauchy-Schwarz step (4)-(5): `s/a + s/L ≤ 1` gives `a + sL ≥ s(21/16)² = 3087/16384`. -/
+/-- Cauchy-Schwarz: `s/a + s/L ≤ 1` gives `a + sL ≥ s(21/16)² = 3087/16384`. -/
 theorem ear_scalar {a L : ℝ} (ha : 0 < a) (hL : 0 < L) (h : 7 / 64 * (a + L) ≤ a * L) :
     3087 / 16384 ≤ a + 7 / 64 * L := by
   have key : (441 / 256) * (a * L) ≤ (a + 7 / 64 * L) * (a + L) := by
@@ -129,8 +125,8 @@ theorem ear_scalar {a L : ℝ} (ha : 0 < a) (hL : 0 < L) (h : 7 / 64 * (a + L) �
   have : (441 / 256) * (7 / 64 * (a + L)) ≤ (a + 7 / 64 * L) * (a + L) := by nlinarith
   nlinarith
 
-/-- The scalar part of Theorem 1: the six ears are below `ρ = 13/16`. -/
-theorem theorem1_ears {a h b c d f : ℝ} (hN : NAnchors a h b c d f)
+/-- The scalar part of `ears_sarea_lt_atMostOne`: the six ears are below `ρ = 13/16`. -/
+theorem ears_sarea_lt {a h b c d f : ℝ} (hN : NAnchors a h b c d f)
     (hABC : 7 / 64 ≤ a * (c - b)) (hABH : 7 / 64 ≤ b * (h - a))
     (hHDF : 7 / 64 ≤ 1 - h + f * (h - d)) (hCDF : 7 / 64 ≤ 1 - c + d * (c - f)) :
     sarea (ptA a) (ptB b) (ptH h) < 13 / 16 ∧ sarea (ptA a) (ptB b) (ptC c) < 13 / 16 ∧
@@ -219,14 +215,11 @@ theorem anchor_areas {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c 
     simp only [sarea] at this; linarith
 
 set_option linter.unusedVariables false in
-/-- **Theorem 1** (`SIX_BOUNDARY_HULL:Theorem1`). Under the N normalization, if every doubled
-area is at least `s = 7/64`, each of the six cyclic anchor ears `ABH, ABC, BCD, CDF, DFH, FHA`
-has doubled area strictly below `ρ = 13/16`; consequently none of them contains two free points
-(two interior points need doubled area at least `(4 + 2√3)s > ρ`).
-Valid throughout family N, without the exact-hull hypothesis.
-`docs/proof/nine/SIX_BOUNDARY_HULL.md`, lines 36-142.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, SIX_BOUNDARY_HULL:claim-transposition -/
-theorem theorem1 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- Under the N normalization, if every doubled area is at least `s = 7/64`, each of the six
+cyclic anchor ears `ABH, ABC, BCD, CDF, DFH, FHA` has doubled area strictly below `ρ = 13/16`;
+consequently none of them contains two free points (two interior points need doubled area at
+least `(4 + 2√3)s > ρ`). Valid throughout family N, without the exact-hull hypothesis. -/
+theorem ears_sarea_lt_atMostOne {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     (sarea (ptA a) (ptB b) (ptH h) < 13 / 16 ∧ sarea (ptA a) (ptB b) (ptC c) < 13 / 16 ∧
@@ -239,7 +232,7 @@ theorem theorem1 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
       AtMostOne (fun P => InTriangle P (ptD d) (ptF f) (ptH h)) X Y Z ∧
       AtMostOne (fun P => InTriangle P (ptF f) (ptH h) (ptA a)) X Y Z) := by
   obtain ⟨hABC, hABH, hHDF, hCDF⟩ := anchor_areas hN hmin
-  have ears := theorem1_ears hN hABC hABH hHDF hCDF
+  have ears := ears_sarea_lt hN hABC hABH hHDF hCDF
   refine ⟨ears, ?_⟩
   exact ⟨ear_cap (i := 0) (j := 2) (k := 1) hmin ears.1 (by decide) (by decide) (by decide),
     ear_cap (i := 0) (j := 2) (k := 3) hmin ears.2.1 (by decide) (by decide) (by decide),
@@ -248,34 +241,31 @@ theorem theorem1 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     ear_cap (i := 4) (j := 5) (k := 1) hmin ears.2.2.2.2.1 (by decide) (by decide) (by decide),
     ear_cap (i := 5) (j := 1) (k := 0) hmin ears.2.2.2.2.2 (by decide) (by decide) (by decide)⟩
 
-/-! ### Section 2: the upper pair -/
+/-! ### The upper pair -/
 
 set_option linter.unusedVariables false in
-/-- **Theorem 2** (`SIX_BOUNDARY_HULL:Theorem2`). With the lower free point `Q` in `HABC` and the
-upper points `P, R` in `HCDF` (the exact-hull placement), and every doubled area at least
-`7/64`, the placements `P, R ∈ HDF` and `P, R ∈ CDF` are impossible (Theorem 1).
-`docs/proof/nine/SIX_BOUNDARY_HULL.md`, lines 144-161.
-Uses: QUADRILATERAL_HULL:claim-(14)(15), SIX_BOUNDARY_HULL:Theorem1 -/
-theorem theorem2 {a h b c d f : ℝ} {Q P R : Point} (hN : NAnchors a h b c d f)
+/-- With the lower free point `Q` in `HABC` and the upper points `P, R` in `HCDF` (the exact-hull
+placement), and every doubled area at least `7/64`, the placements `P, R ∈ HDF` and
+`P, R ∈ CDF` are impossible (by `ears_sarea_lt_atMostOne`). -/
+theorem not_upperPair_HDF_CDF {a h b c d f : ℝ} {Q P R : Point} (hN : NAnchors a h b c d f)
     (hQ : Q ∈ unitSquare) (hP : P ∈ unitSquare) (hR : R ∈ unitSquare)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f Q P R))
     (hQl : InLowerQuad a h b c Q) (hPu : InUpperQuad h c d f P) (hRu : InUpperQuad h c d f R) :
     ¬ (InTriangle P (ptH h) (ptD d) (ptF f) ∧ InTriangle R (ptH h) (ptD d) (ptF f)) ∧
       ¬ (InTriangle P (ptC c) (ptD d) (ptF f) ∧ InTriangle R (ptC c) (ptD d) (ptF f)) := by
-  obtain ⟨-, ⟨-, -, -, hCDF, hDFH, -⟩⟩ := theorem1 hN hQ hP hR hmin
+  obtain ⟨-, ⟨-, -, -, hCDF, hDFH, -⟩⟩ := ears_sarea_lt_atMostOne hN hQ hP hR hmin
   have perm : ∀ W : Point, InTriangle W (ptH h) (ptD d) (ptF f) ↔
       InTriangle W (ptD d) (ptF f) (ptH h) := fun W => by
     unfold InTriangle; tauto
   refine ⟨fun ⟨h1, h2⟩ => hDFH.2.2 ⟨(perm P).1 h1, (perm R).1 h2⟩, fun ⟨h1, h2⟩ => hCDF.2.2 ⟨h1, h2⟩⟩
 
-/-! ### Section 3: the exact hull by a certificate cover
+/-! ### The exact hull by a certificate cover
 
-Sections 3-6 of the manuscript (the sector assignments (9), Theorems 3-6 and the claims of
-Section 4) are replaced by one cover over the radial words of the three free points on the anchor
-hexagon (`Heilbronn.Nine.SixBoundary.HullModel`, trees in `Heilbronn.Nine.SixBoundary.HullTrees*`):
-1,209 leaves, 35,869 certificate terms, found by linear programming (`scripts/nine/six_hull/`). The
-inputs are Theorem 1 (the six ear bounds), `QUADRILATERAL_HULL.md` (14)-(15) (exactly one free point
-below `HC`, `W ≥ 16A₀`) and Lemma 5 (the ear `ABC` empty after transposition). -/
+One cover over the radial words of the three free points on the anchor hexagon
+(`Heilbronn.Nine.SixBoundary.HullModel`, trees in `Heilbronn.Nine.SixBoundary.HullTrees*`):
+1,209 leaves, 35,869 certificate terms, found by linear programming. The inputs are `ears_sarea_lt_atMostOne`
+(the six ear bounds), `QuadrilateralHull.inNHexagon_one_below_HC` (exactly one free point below `HC`,
+`W ≥ 16A₀`) and `QuadrilateralHull.lower_ears_not_both_occupied` (the ear `ABC` empty after transposition). -/
 
 open Cert Cert.Expr Cover
 
@@ -330,22 +320,6 @@ theorem cfg_area (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f Q P R)
   rw [triangleArea_eq] at this
   linarith
 
-theorem mem_lexTriples {t : ℕ × ℕ × ℕ} (ht : t ∈ Model.lexTriples) :
-    t.1 < t.2.1 ∧ t.2.1 < t.2.2 ∧ t.2.2 < 9 := by
-  simp only [Model.lexTriples, List.mem_flatMap, List.mem_range, List.mem_filterMap,
-    Option.ite_none_right_eq_some, Option.some.injEq] at ht
-  obtain ⟨a, _, b, _, c, hc, ⟨hab, hbc⟩, rfl⟩ := ht
-  exact ⟨hab, hbc, hc⟩
-
-theorem orient_ne_zero {sg : Bool} {x : ℝ} (h : OrientHolds sg x) : x ≠ 0 := by
-  cases sg <;> simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at h <;>
-    [exact h.ne; exact h.ne']
-
-theorem orient_idx_ne {X : ℕ → Point} {sg : Bool} {i j k : ℕ}
-    (hs : OrientHolds sg (sarea (X i) (X j) (X k))) : i ≠ j ∧ j ≠ k ∧ i ≠ k := by
-  have hne := orient_ne_zero hs
-  refine ⟨?_, ?_, ?_⟩ <;> rintro rfl <;> apply hne <;> simp only [sarea] <;> ring
-
 /-- `102/125 ≤ (4 + 2√3) · 7/64`. -/
 theorem rho_le : (102 / 125 : ℝ) ≤ (4 + 2 * Real.sqrt 3) * (7 / 64) := by
   have h3 : (1.7303 : ℝ) < Real.sqrt 3 := by rw [Real.lt_sqrt (by norm_num)]; norm_num
@@ -356,9 +330,9 @@ theorem rho_le : (102 / 125 : ℝ) ≤ (4 + 2 * Real.sqrt 3) * (7 / 64) := by
 theorem cfg_two_inside (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f Q P R))
     {i j k j₁ j₂ : ℕ} (hi : i < 9) (hj : j < 9) (hk : k < 9) (hj₁ : j₁ < 9) (hj₂ : j₂ < 9)
     (hd : [i, j, k, j₁, j₂].Nodup)
-    (h₁ : CornerFamilies.InsideTriangle (cfg a h b c d f Q P R j₁) (cfg a h b c d f Q P R i)
+    (h₁ : InsideTriangle (cfg a h b c d f Q P R j₁) (cfg a h b c d f Q P R i)
       (cfg a h b c d f Q P R j) (cfg a h b c d f Q P R k))
-    (h₂ : CornerFamilies.InsideTriangle (cfg a h b c d f Q P R j₂) (cfg a h b c d f Q P R i)
+    (h₂ : InsideTriangle (cfg a h b c d f Q P R j₂) (cfg a h b c d f Q P R i)
       (cfg a h b c d f Q P R j) (cfg a h b c d f Q P R k)) :
     102 / 125 ≤ |sarea (cfg a h b c d f Q P R i) (cfg a h b c d f Q P R j)
       (cfg a h b c d f Q P R k)| := by
@@ -375,105 +349,33 @@ theorem cfg_two_inside (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f 
     have := cfg_area hmin (hι x) (hι y) (hι z) (hinj.ne hxy.ne) (hinj.ne hyz.ne)
       (hinj.ne (hxy.trans hyz).ne)
     rw [triangleArea_eq, e, e, e]; linarith
-  have := CornerFamilies.twoInteriorPointLemma _ _ _ _ _ h₁ h₂ (7 / 128) (by norm_num) hm
+  have := twoInteriorPointLemma _ _ _ _ _ h₁ h₂ (7 / 128) (by norm_num) hm
   rw [triangleArea_eq] at this
   linarith [rho_le]
 
 theorem free_nodup : Model.free.Nodup := by decide
 
-/-- The strengthened cost of a known triangle is nonnegative: `s`, `3s` with one free point
-certified inside (subdivision), `102/125` with two (the two-interior-point lemma). -/
-theorem cost_nonneg (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f Q P R))
-    {tb : List SFact} (htb : AllHold (SFact.Holds (cfg a h b c d f Q P R)) tb)
-    {t : ℕ × ℕ × ℕ} (ht : t ∈ Model.lexTriples) {sg : Bool} (hl : lookup tb t = some sg) :
-    0 ≤ (costAtom Model.pt Model.bnd (t, sg) (insideList tb Model.free (t, sg)).length).eval
-      (zeta a h b c d f Q P R) := by
-  rw [eval_costAtom]
-  simp only [ptEval_zeta]
-  set X := cfg a h b c d f Q P R
-  obtain ⟨h1, h2, h3⟩ := mem_lexTriples ht
-  have hs := lookup_sound htb hl
-  have harea := cfg_area hmin (i := t.1) (j := t.2.1) (k := t.2.2) (by omega) (by omega) h3
-    (by omega) (by omega) (by omega)
-  rw [← sgArea_eq_abs hs] at harea
-  have hLnd : (insideList tb Model.free (t, sg)).Nodup := List.Nodup.filter _ free_nodup
-  have hmem : ∀ j ∈ insideList tb Model.free (t, sg), j < 9 := fun j hj => by
-    have := (insideList_sound htb hj).1
-    simp only [Model.free, List.mem_cons, List.not_mem_nil, or_false] at this
+theorem bnd_zero : Model.bnd 0 = 7 / 64 := by norm_num [Model.bnd]
+
+theorem bnd_one : Model.bnd 1 = 21 / 64 := by norm_num [Model.bnd]
+
+theorem bnd_add_two (n : ℕ) : Model.bnd (n + 2) = 102 / 125 := by
+  have h1 : ¬(n + 2 = 1) := by omega
+  simp [Model.bnd, h1]
+
+/-- The cost premises (`Cover.CostHyp`): every model triangle has doubled area at least
+`s = 7/64`, and `102/125` with two free points inside (the two-interior-point lemma). -/
+theorem cfg_costHyp (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f Q P R)) :
+    CostHyp 9 Model.free Model.bnd (cfg a h b c d f Q P R) := by
+  refine CostHyp.of_inside (fun j hj => ?_) free_nodup
+    (fun i j k hi hj hk hij hjk hik => ?_) ?_ (ρ := 102 / 125) (fun n => ?_)
+    (fun i j k j₁ j₂ hi hj hk hj₁ hj₂ hd h₁ h₂ => cfg_two_inside hmin hi hj hk hj₁ hj₂ hd h₁ h₂)
+  · simp only [Model.free, List.mem_cons, List.not_mem_nil, or_false] at hj
     omega
-  rcases hn : (insideList tb Model.free (t, sg)).length with _ | _ | n
-  · simp only [Model.bnd, ite_true]; push_cast; linarith
-  · obtain ⟨j, hj⟩ := List.exists_mem_of_length_pos
-      (show 0 < (insideList tb Model.free (t, sg)).length by omega)
-    obtain ⟨-, o1, o2, o3⟩ := insideList_sound htb hj
-    have hj9 := hmem j hj
-    obtain ⟨-, n1, n2⟩ := orient_idx_ne o1
-    obtain ⟨-, n3, -⟩ := orient_idx_ne o2
-    have q1 := cfg_area hmin (i := t.1) (j := t.2.1) (k := j) (by omega) (by omega) hj9
-      (by omega) n1 n2
-    have q2 := cfg_area hmin (i := t.2.1) (j := t.2.2) (k := j) (by omega) h3 hj9
-      (by omega) n3 (by omega)
-    have q3 := cfg_area hmin (i := t.2.2) (j := t.1) (k := j) h3 (by omega) hj9
-      (by omega) (by omega) (by omega)
-    have := three_le_sgArea (e := 7 / 64) o1 o2 o3 q1 q2 q3
-    simp only [Model.bnd]; norm_num; linarith
-  · obtain ⟨j₁, j₂, rest, hL⟩ : ∃ j₁ j₂ rest, insideList tb Model.free (t, sg) = j₁ :: j₂ :: rest := by
-      rcases hL : insideList tb Model.free (t, sg) with _ | ⟨j₁, _ | ⟨j₂, rest⟩⟩
-      · rw [hL] at hn; simp at hn
-      · rw [hL] at hn; simp at hn
-      · exact ⟨j₁, j₂, rest, rfl⟩
-    have hj₁ : j₁ ∈ insideList tb Model.free (t, sg) := by rw [hL]; simp
-    have hj₂ : j₂ ∈ insideList tb Model.free (t, sg) := by rw [hL]; simp
-    have h12 : j₁ ≠ j₂ := by
-      rw [hL] at hLnd; simp only [List.nodup_cons, List.mem_cons, not_or] at hLnd
-      exact hLnd.1.1
-    obtain ⟨-, o1, o2, o3⟩ := insideList_sound htb hj₁
-    obtain ⟨-, p1, p2, p3⟩ := insideList_sound htb hj₂
-    dsimp only at o1 o2 o3 p1 p2 p3
-    obtain ⟨-, n1, n2⟩ := orient_idx_ne o1
-    obtain ⟨-, n3, -⟩ := orient_idx_ne o2
-    obtain ⟨-, m1, m2⟩ := orient_idx_ne p1
-    obtain ⟨-, m3, -⟩ := orient_idx_ne p2
-    have := cfg_two_inside (i := t.1) (j := t.2.1) (k := t.2.2) (j₁ := j₁) (j₂ := j₂) hmin
-      (by omega) (by omega) h3 (hmem _ hj₁) (hmem _ hj₂)
-      (by simp only [List.nodup_cons, List.mem_cons, List.not_mem_nil, or_false, not_or,
-        List.nodup_nil, and_true, not_false_eq_true]; omega)
-      (inTriangle_of_orient o1 o2 o3) (inTriangle_of_orient p1 p2 p3)
-    rw [← sgArea_eq_abs hs] at this
-    simp only [Model.bnd]; norm_num; linarith
-
-set_option linter.unusedVariables false in
-/-- The facts of an oriented triple hold. -/
-theorem holds_orient {X : ℕ → Point} {i j k : ℕ} {sg : Bool} (hij : i ≠ j) (hjk : j ≠ k)
-    (hik : i ≠ k) :
-    SFact.Holds X (Model.orient i j k sg) ↔ OrientHolds sg (sarea (X i) (X j) (X k)) := by
-  unfold Model.orient
-  have c1 := sarea_cycle (X i) (X j) (X k)
-  have c2 := sarea_cycle (X j) (X k) (X i)
-  have s1 := sarea_swap₁₂ (X i) (X j) (X k)
-  have s2 := sarea_swap₂₃ (X i) (X j) (X k)
-  have s3 := sarea_swap₁₃ (X i) (X j) (X k)
-  split_ifs <;> simp only [SFact.Holds] <;>
-    first
-    | rw [c1]
-    | rw [c2, c1]
-    | rw [s1, orientHolds_not]
-    | rw [s2, orientHolds_not]
-    | rw [s3, orientHolds_not]
-
-theorem consistent_of_holds {X : ℕ → Point} {tb b : List SFact} (htb : AllHold (SFact.Holds X) tb)
-    (hb : AllHold (SFact.Holds X) b) : Model.consistent tb b = true := by
-  unfold Model.consistent
-  rw [List.all_eq_true]
-  intro f hf
-  rcases hl : lookup tb f.1 with _ | sg
-  · rfl
-  · have h1 := lookup_sound htb hl
-    have h2 := hb f hf
-    simp only [SFact.Holds] at h2
-    cases sg <;> cases hsg : f.2 <;> rw [hsg] at h2 <;>
-      simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at h1 h2 <;>
-      first | rfl | (exfalso; linarith)
+  · have := cfg_area hmin hi hj hk hij hjk hik
+    rw [bnd_zero]; push_cast; linarith
+  · rw [bnd_one, bnd_zero]; norm_num
+  · rw [bnd_add_two]; norm_num
 
 /-- A one-fact branch that holds is among the consistent candidates. -/
 theorem signed_exhaustive {X : ℕ → Point} {tb : List SFact} (htb : AllHold (SFact.Holds X) tb)
@@ -489,7 +391,7 @@ theorem signed_exhaustive {X : ℕ → Point} {tb : List SFact} (htb : AllHold (
 /-- A nonzero area has a sign. -/
 theorem holds_of_ne {X : ℕ → Point} {i j k : ℕ} (hij : i ≠ j) (hjk : j ≠ k) (hik : i ≠ k)
     (hne : sarea (X i) (X j) (X k) ≠ 0) :
-    ∃ sg ∈ [false, true], SFact.Holds X (Model.orient i j k sg) := by
+    ∃ sg ∈ [false, true], SFact.Holds X (orient i j k sg) := by
   rcases lt_or_gt_of_ne hne with h | h
   · exact ⟨false, by simp, (holds_orient hij hjk hik).2 (by simpa [OrientHolds] using h)⟩
   · exact ⟨true, by simp, (holds_orient hij hjk hik).2 (by simpa [OrientHolds] using h)⟩
@@ -504,7 +406,7 @@ structure Cell (a h b c d f : ℝ) (Q P R : Point) : Prop where
   hN : NAnchors a h b c d f
   sq : Q ∈ unitSquare ∧ P ∈ unitSquare ∧ R ∈ unitSquare
   hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f Q P R)
-  conv : IsConvexCCW (hexagon a h b c d f)
+  conv : IsConvexPolygon (hexagon a h b c d f)
   poly : ∀ p, 6 ≤ p → p < 9 → InPolygon (hexagon a h b c d f) (cfg a h b c d f Q P R p)
 
 section Cells
@@ -524,15 +426,15 @@ theorem Cell.gen (H : Cell a h b c d f Q P R) {p : ℕ} (hp6 : 6 ≤ p) (hp9 : p
 theorem Cell.word (H : Cell a h b c d f Q P R) {p : ℕ} (hp6 : 6 ≤ p) (hp9 : p < 9) :
     ∃ r : Fin 6 → ℕ, HasRadialWord (hexagon a h b c d f) (cfg a h b c d f Q P R p) r ∧
       IsRadialWord r :=
-  claim_radial_word _ _ (by norm_num) H.conv (H.poly p hp6 hp9) (H.gen hp6 hp9)
+  exists_radialWord _ _ (by norm_num) H.conv (H.poly p hp6 hp9) (H.gen hp6 hp9)
 
 /-- The facts of the word entry `r_i` of the free point `p` hold. -/
 theorem branch_holds {X : ℕ → Point} {V : Fin 6 → Point} (hXV : ∀ i : Fin 6, X i = V i)
     {p : ℕ} (hp : 6 ≤ p) {r : Fin 6 → ℕ} (hr : HasRadialWord V (X p) r)
     (hne : ∀ i j : Fin 6, i ≠ j → sarea (V i) (V j) (X p) ≠ 0) (i : ℕ) (hi : i < 6) :
-    AllHold (SFact.Holds X) (Model.branchFacts p i (r ⟨i, hi⟩)) := by
+    AllHold (SFact.Holds X) (branchFacts 6 p i (r ⟨i, hi⟩)) := by
   intro f hf
-  simp only [Model.branchFacts, List.mem_map, List.mem_range] at hf
+  simp only [branchFacts, List.mem_map, List.mem_range] at hf
   obtain ⟨j, hj, rfl⟩ := hf
   have hm : (i + (j + 1)) % 6 < 6 := Nat.mod_lt _ (by norm_num)
   have him : i ≠ (i + (j + 1)) % 6 := by omega
@@ -551,8 +453,8 @@ theorem branch_holds {X : ℕ → Point} {V : Fin 6 → Point} (hXV : ∀ i : Fi
     exact lt_of_le_of_ne (not_lt.1 fun h => hjq (k.1 h)) hne'
 
 set_option linter.unusedVariables false in
-/-- The pair-line sign forced by a separating ray is the true sign (`claim_pair_line_sign`). -/
-theorem pairSign_sound {X : ℕ → Point} {V : Fin 6 → Point} (hV : IsConvexCCW V)
+/-- The pair-line sign forced by a separating ray is the true sign (`sarea_sign_of_radialWord`). -/
+theorem pairSign_sound {X : ℕ → Point} {V : Fin 6 → Point} (hV : IsConvexPolygon V)
     (hXV : ∀ i : Fin 6, X i = V i) {p q : ℕ} (hp : 6 ≤ p) (hq : 6 ≤ q)
     (hPp : InPolygon V (X p)) (hPq : InPolygon V (X q)) {rp rq : Fin 6 → ℕ}
     (hrp : HasRadialWord V (X p) rp) (hrq : HasRadialWord V (X q) rq)
@@ -584,7 +486,7 @@ theorem pairSign_sound {X : ℕ → Point} {V : Fin 6 → Point} (hV : IsConvexC
   simp only [cyc_val] at e1 e2
   have kp := hrp ⟨i, hi⟩ j hj1 hj5
   have kq := hrq ⟨i, hi⟩ j hj1 hj5
-  have pl := claim_pair_line_sign V (X p) (X q) (by norm_num) hV hPp hPq rp rq hrp hrq ⟨i, hi⟩
+  have pl := sarea_sign_of_radialWord V (X p) (X q) (by norm_num) hV hPp hPq rp rq hrp hrq ⟨i, hi⟩
   rw [← e1, ← e2] at kp kq
   rw [← e1] at pl
   cases sp <;> cases sq
@@ -596,7 +498,7 @@ theorem pairSign_sound {X : ℕ → Point} {V : Fin 6 → Point} (hV : IsConvexC
   · exact absurd rfl hpq
 
 end Cells
-/-! ### The cover and Theorem 7 -/
+/-! ### The cover and the exact-hull exclusion -/
 
 /-- The normalized exact-hull case: `Q` below `HC`, `P, R` above, all three strictly inside the
 hexagon, `[A C Q] > 0` (`Q ∉ ABC`), `[H P R] > 0`, every doubled area at least `7/64` and
@@ -617,7 +519,7 @@ section Cover
 
 variable {a h b c d f : ℝ} {Q P R : Point}
 
-theorem hexagon_convex (hN : NAnchors a h b c d f) : IsConvexCCW (hexagon a h b c d f) := by
+theorem hexagon_convex (hN : NAnchors a h b c d f) : IsConvexPolygon (hexagon a h b c d f) := by
   obtain ⟨t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18,
     t19⟩ := anchor_triples hN
   intro i j k hij hjk
@@ -684,7 +586,7 @@ theorem HullCase.atoms_nonneg (H : HullCase a h b c d f Q P R) {fs : List SFact}
     (hfs : AllHold (SFact.Holds (cfg a h b c d f Q P R)) (Model.base ++ fs)) :
     ∀ e ∈ Model.atoms fs, 0 ≤ e.eval (zeta a h b c d f Q P R) := by
   obtain ⟨⟨eABH, eABC, eBCD, eCDF, eDFH, eFHA⟩, -⟩ :=
-    theorem1 H.hN H.sq.1 H.sq.2.1 H.sq.2.2 H.hmin
+    ears_sarea_lt_atMostOne H.hN H.sq.1 H.sq.2.1 H.sq.2.2 H.hmin
   simp only [ptA, ptB, ptC, ptD, ptF, ptH] at eABH eABC eBCD eCDF eDFH eFHA
   have hW := H.hW
   have hz := H.zeta_mem
@@ -716,11 +618,7 @@ theorem HullCase.atoms_nonneg (H : HullCase a h b c d f Q P R) {fs : List SFact}
     · linarith
     · linarith
     · linarith
-  · simp only [Model.costs, List.mem_map] at he
-    obtain ⟨t, ht, rfl⟩ := he
-    rcases hl : lookup (Model.base ++ fs) t with _ | sg
-    · simp
-    · exact cost_nonneg H.hmin hfs ht hl
+  · exact (cfg_costHyp H.hmin).lookupCosts_nonneg (fun i _ => ptEval_zeta i) hfs e he
 
 /-- Every split of the cover has a branch whose facts hold. -/
 theorem HullCase.branch (H : HullCase a h b c d f Q P R) {fs : List SFact}
@@ -740,7 +638,7 @@ theorem HullCase.branch (H : HullCase a h b c d f Q P R) {fs : List SFact}
     · obtain ⟨hi, hp6, hp9⟩ := hv
       obtain ⟨r, hr, hrw⟩ := C.word hp6 hp9
       have hb := branch_holds hXV hp6 hr (C.gen hp6 hp9) i hi
-      refine ⟨Model.branchFacts p i (r ⟨i, hi⟩), ?_, hb⟩
+      refine ⟨branchFacts 6 p i (r ⟨i, hi⟩), ?_, hb⟩
       rw [List.mem_filterMap]
       obtain ⟨r1, r4⟩ := hrw.1 ⟨i, hi⟩
       refine ⟨r ⟨i, hi⟩, List.mem_map.2 ⟨r ⟨i, hi⟩ - 1, List.mem_range.2 (by omega), by omega⟩, ?_⟩
@@ -813,8 +711,8 @@ theorem hull_step1 {a h b c d f : ℝ} {Q P R : Point} (hN : NAnchors a h b c d 
     linarith
   · exact HullCase.false ⟨hN, hsq, hex, hmin, hW, hHCQ, hHCP, hHCR, hACQ, hs⟩
 
-/-- The empty-`ABC` normalization: if `Q ∈ ABC`, then `Q ∉ ABH` (Lemma 5 of
-`QUADRILATERAL_HULL.md`) and the transposition exchanges the two ears. -/
+/-- The empty-`ABC` normalization: if `Q ∈ ABC`, then `Q ∉ ABH` (`QuadrilateralHull.lower_ears_not_both_occupied`) and
+the transposition exchanges the two ears. -/
 theorem hull_step2 {a h b c d f : ℝ} {Q P R : Point} (hN : NAnchors a h b c d f)
     (hsq : Q ∈ unitSquare ∧ P ∈ unitSquare ∧ R ∈ unitSquare)
     (hex : InHexagon a h b c d f Q ∧ InHexagon a h b c d f P ∧ InHexagon a h b c d f R)
@@ -832,7 +730,7 @@ theorem hull_step2 {a h b c d f : ℝ} {Q P R : Point} (hN : NAnchors a h b c d 
     have hs' : sarea (0, a) (c, 0) Q < 0 := hs
     linarith
   have hABC : InTriangle Q (0, a) (b, 0) (c, 0) := ⟨hex.1.1, hex.1.2.1, hCAQ⟩
-  have L := (QuadrilateralHull.lemma5 hN (by linarith : 1 / 24 < minTriangleArea
+  have L := (QuadrilateralHull.lower_ears_not_both_occupied hN (by linarith : 1 / 24 < minTriangleArea
     (nConfig a h b c d f Q P R))).1
   have hBHQ : sarea (ptB b) (ptH h) Q < 0 := by
     by_contra hc
@@ -840,9 +738,9 @@ theorem hull_step2 {a h b c d f : ℝ} {Q P R : Point} (hN : NAnchors a h b c d 
     have h0 : sarea (ptB b) (ptH h) Q ≠ 0 := sarea_ne_zero_of_min_pos hpos 2 1 6
     exact L ⟨⟨6, hex.1.1, lt_of_le_of_ne hc (Ne.symm h0), hex.1.2.2.2.2.2⟩, ⟨6, hABC⟩⟩
   -- the transposed configuration
-  have T := claim_transposition a h b c d f Q P R
-  have TP := claim_transposition a h b c d f P Q R
-  have TR := claim_transposition a h b c d f R Q P
+  have T := transpose_invariant a h b c d f Q P R
+  have TP := transpose_invariant a h b c d f P Q R
+  have TR := transpose_invariant a h b c d f R Q P
   refine hull_step1 (T.1.1 hN) ⟨T.2.1.1 hsq.1, TP.2.1.1 hsq.2.1, TR.2.1.1 hsq.2.2⟩
     ⟨T.2.2.2.2.2.2.2.2.2.1.1 hex.1, TP.2.2.2.2.2.2.2.2.2.1.1 hex.2.1,
       TR.2.2.2.2.2.2.2.2.2.1.1 hex.2.2⟩ (by rw [T.2.2.1]; exact hmin)
@@ -852,20 +750,16 @@ theorem hull_step2 {a h b c d f : ℝ} {Q P R : Point} (hN : NAnchors a h b c d 
   · simp only [transpose, sarea] at hHCR ⊢; linarith
   · simp only [transpose, sarea] at hBHQ ⊢; linarith
 
-/-- **Theorem 7** (`SIX_BOUNDARY_HULL:Theorem7`). A competitive configuration (least area at
-least `A₀`) in family N cannot have exactly its six anchors as its convex hull, that is, all
-three free points strictly inside the anchor hexagon. This closes the occupancy `(0,0,0;3)`.
-(Proved by the certificate cover `HullCase.false` instead of the hand Sections 3-6.)
-`docs/proof/nine/SIX_BOUNDARY_HULL.md`, lines 1299-1321.
-Uses: QUADRILATERAL_HULL:claim-(14)(15), QUADRILATERAL_HULL:Lemma5, SIX_BOUNDARY_HULL:Theorem1,
-SIX_BOUNDARY_HULL:claim-transposition -/
-theorem theorem7 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- A competitive configuration (least area at least `A₀`) in family N cannot have exactly its
+six anchors as its convex hull, that is, all three free points strictly inside the anchor
+hexagon. Proved by the certificate cover `HullCase.false`. -/
+theorem false_of_all_inHexagon {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z))
     (hXI : InHexagon a h b c d f X) (hYI : InHexagon a h b c d f Y)
     (hZI : InHexagon a h b c d f Z) :
     False := by
-  obtain ⟨hlow, hW16⟩ := QuadrilateralHull.claim_14_15 hN hXI hYI hZI hmin
+  obtain ⟨hlow, hW16⟩ := QuadrilateralHull.inNHexagon_one_below_HC hN hXI hYI hZI hmin
   have hW : 7 / 8 ≤ 1 - (h - d) * (c - f) := by linarith [A₀_bounds.1]
   have h7 : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Z) := by
     linarith [A₀_bounds.1]

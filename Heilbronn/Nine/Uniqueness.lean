@@ -11,19 +11,33 @@ public import Heilbronn.Nine.Assembly.Corners
 /-!
 # Nine points: uniqueness, and the optimum
 
-`docs/proof/nine/UNRESTRICTED.md`, Theorem 1. Everything reduces to one statement about maximizers
-(`maximizer_congruent`): a configuration in the square whose least triangle area is largest and at
-least `A₀` is a relabelling of the image of the construction under a symmetry of the square. With
-the construction (`Heilbronn/Nine/Construction.lean`) it gives the optimum of nine points,
-`optimum : Optimum 9`, from which `Heilbronn/Common/Optimum.lean` derives the three theorems of
-the Palomar entry of nine points (`Palomar/Nine/Challenge.lean`): `optimal_value`,
-`heilbronn_number` and `optimal_configurations`.
+Everything reduces to one statement about maximizers (`maximizer_congruent`): a configuration in
+the square whose least triangle area is largest and at least `A₀` is a relabelling of the image of
+the construction under a symmetry of the square. With the construction
+(`Heilbronn/Nine/Construction.lean`) it gives the optimum of nine points, `optimum : Optimum 9`,
+from which `Heilbronn/Common/Optimum.lean` derives the three theorems of the Palomar entry of nine
+points (`Palomar/Nine/Challenge.lean`): `optimal_value`, `heilbronn_number` and
+`optimal_configurations`.
 
-`maximizer_congruent` normalizes the maximizer (`GlobalStructure.theorem3`, Section 2) into one of
-the five families, excludes the corner families (Section 3: `Assembly.isC1_exclusion`,
-`Assembly.c2_exclusion`, `Assembly.typeII_exclusion`, `Assembly.typeIII_exclusion`), proves the
-family N optimal (Section 4: `Assembly.isN_isOptimal`), and transfers optimality back to the
-original configuration (Section 5, part of `GlobalStructure.theorem3`).
+`maximizer_congruent` proceeds in four steps.
+* **Normalization** (`Heilbronn/Nine/Normalization/`): feasible shears, square symmetries and
+  relabellings bring the maximizer into one of the five families of
+  `Heilbronn/Nine/Setup/Families.lean` (`GlobalStructure.normalize`).
+* **The corner families are excluded** (`Heilbronn/Nine/Assembly/FamilyC1.lean`,
+  `Heilbronn/Nine/Assembly/Corners.lean`: `Assembly.isC1_exclusion`, `Assembly.c2_exclusion`,
+  `Assembly.typeII_exclusion`, `Assembly.typeIII_exclusion`), with the proofs in
+  `Heilbronn/Nine/C1/`, `Heilbronn/Nine/Corners/` and `Heilbronn/Nine/TypeII/`.
+* **The family N is optimal** (`Heilbronn/Nine/Assembly/FamilyN.lean`: `Assembly.isN_isOptimal`),
+  split by the number of boundary points: at least eight (`Heilbronn/Nine/EightBoundary/`),
+  exactly seven (`Heilbronn/Nine/SevenBoundary/`) and exactly six (`Heilbronn/Nine/SixBoundary/`,
+  assembled in `Heilbronn/Nine/Assembly/SixContacts.lean`). The equality cases end in the sharp
+  chambers of `Heilbronn.Nine.Local.Chamber`, `Heilbronn/Nine/Sharp/` and
+  `Heilbronn/Nine/Global/`.
+* **Optimality transfers back** to the original configuration (`GlobalStructure.isOptimal_of_normalizes`, part of
+  `GlobalStructure.normalize`), by the strict local optimality of the construction
+  (`Chamber.strict_local_max`).
+
+The hull bounds of `Heilbronn/Nine/Hulls/` serve both the corner families and family N.
 -/
 
 @[expose] public section
@@ -31,12 +45,13 @@ original configuration (Section 5, part of `GlobalStructure.theorem3`).
 noncomputable section
 namespace Heilbronn.Nine
 
-/-- **Every maximizer is the construction** (`docs/proof/nine/UNRESTRICTED.md`, Sections 2–5). -/
+/-- **Every maximizer is the construction**: a maximizer whose least triangle area is at least
+`(9√65 - 55)/320` is optimal. -/
 theorem maximizer_congruent (P : Fin 9 → Point) (hP : IsMaximizer P)
     (hA : (9 * Real.sqrt 65 - 55) / 320 ≤ minTriangleArea P) : IsOptimal P := by
   have hA' : A₀ ≤ minTriangleArea P := hA
   obtain ⟨Q, -, -, -, hQmin, hQopt, -, hfam⟩ :=
-    GlobalStructure.theorem3 hP (A₀_pos.trans_le hA')
+    GlobalStructure.normalize hP (A₀_pos.trans_le hA')
   rw [← hQmin] at hA'
   apply hQopt
   rcases hfam with hN | hC1 | hC2 | hII | hIII
@@ -46,13 +61,9 @@ theorem maximizer_congruent (P : Fin 9 → Point) (hP : IsMaximizer P)
   · exact (Assembly.typeII_exclusion hII hA').elim
   · exact (Assembly.typeIII_exclusion hIII hA').elim
 
-/-- `IsOptimal` is congruence to the optimal configuration. -/
-theorem isOptimal_iff_congruent (P : Fin 9 → Point) :
-    IsOptimal P ↔ Congruent P optimalConfiguration := Iff.rfl
-
-/-- **The optimum of nine points** (`docs/proof/nine/UNRESTRICTED.md`, Theorem 1): the value
-`(9√65 - 55)/320`, attained by the construction (`docs/proof/nine/HAND_PROOF.md`, appendix),
-and every maximizer congruent to the construction (`maximizer_congruent`). -/
+/-- **The optimum of nine points**: the value `(9√65 - 55)/320`, attained by the construction
+(`minTriangleArea_optimalConfiguration`), and every maximizer congruent to the construction
+(`maximizer_congruent`). -/
 def optimum : Optimum 9 where
   value := (9 * Real.sqrt 65 - 55) / 320
   models := {optimalConfiguration}

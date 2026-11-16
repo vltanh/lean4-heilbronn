@@ -3,19 +3,19 @@ module
 public import Heilbronn.Nine.C1.OneLower.CoverCommon
 
 /-! # The certificate model of the one-lower single-cap hexagons
-(`docs/proof/nine/C1_ONE_LOWER_TOP_CAP.md`, `docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`)
 
-Computable mirror of `docs/proof/nine/check_c1_one_lower_top_cap.py` (`side = false`) and
-`docs/proof/nine/check_c1_one_lower_side_cap.py` (`side = true`). The nine points are the hull hexagon and
+Computable cover packages for a hexagonal hull with one cap point: the top cap (`side = false`)
+and the left cap (`side = true`). The nine points are the hull hexagon and
 the interior points `L, P, Q` (indices `6, 7, 8`), in the variables `h, c, d, f, g, k, ℓ_x, ℓ_y,
 p_x, p_y, q_x, q_y` (`0, …, 11`, `X = (g, k)` the cap point):
 * top cap: `O, C, D, X, F, H, L, P, Q` (`ptTop`);
 * left cap: `O, C, D, F, X, H, L, P, Q` (`ptSide`).
 
 A case is a triple `(i, j, ℓ)` of word indices of `L, P, Q` (a lower word and two upper words of
-the hexagon). Its initial table `baseSigns` (the checkers' known signs): hull triples positive,
+the hexagon). Its initial table `baseSigns` (the signs known from the words): hull triples positive,
 two hull vertices and an interior point from the word (`hsign`), and an interior pair at a hull
-vertex from the ray order (14) or, for `P, Q`, the upper-pair rule (15) (`upperPair`, equal to
+vertex from the ray order (`C1OneLowerTopCap.sarea_pos_of_hullWord_lt`) or, for `P, Q`, the upper-pair rule
+(`C1OneLowerTopCap.upperPairSign_sound`; `upperPair`, equal to
 `C1OneLowerTopCap.upperPairSign` on the words). The atoms (`spec`): the 28 affine factors, the
 cost `W - 8s` (`wCost`), and the strengthened triangle costs of the table (and of the split signs
 along the tree path).
@@ -82,14 +82,14 @@ def upperSide : List (List ℕ) :=
 /-- The upper words of a package. -/
 def upperW (side : Bool) : List (List ℕ) := if side then upperSide else upperTop
 
-/-- The checkers' `sign(word, i, j)`: `(j - i) mod 6 ≤ word[i]`. -/
+/-- The sign of `[V_i V_j Z]` read off the radial word `w` of `Z`: `(j - i) mod 6 ≤ w[i]`. -/
 def hsign (w : List ℕ) (i j : ℕ) : Bool := ((j + 6 - i) % 6).ble (w.getD i 0)
 
 /-- The words of `L, P, Q` in the case `(i, j, ℓ)`. -/
 def caseWords (side : Bool) (i j l : ℕ) : List (List ℕ) :=
   [lowerW.getD i [], (upperW side).getD j [], (upperW side).getD l []]
 
-/-- The upper-pair rule (15) (`C1OneLowerTopCap.upperPairSign` with `H, C, D, F` at hexagon
+/-- The upper-pair rule (`C1OneLowerTopCap.upperPairSign` with `H, C, D, F` at hexagon
 indices `5, 1, 2, iF`). -/
 def upperPair (side : Bool) (p q : List ℕ) (v : ℕ) : Option Bool :=
   let pHD := hsign p 5 2
@@ -109,7 +109,7 @@ def upperPair (side : Bool) (p q : List ℕ) (v : ℕ) : Option Bool :=
     let sd := if pCF then !pHD else pHD
     some (if v = iso then sd else !sd)
 
-/-- The initial sign of `[V_v Z_a Z_b]` (`a < b` among `L, P, Q`): the ray order (14), or the
+/-- The initial sign of `[V_v Z_a Z_b]` (`a < b` among `L, P, Q`): the ray order, or the
 upper-pair rule for `P, Q`. -/
 def pairSign (side : Bool) (ws : List (List ℕ)) (a b v : ℕ) : Option Bool :=
   let wa := ws.getD a []
@@ -123,14 +123,15 @@ def pairs3 : List (ℕ × ℕ) := [(0, 1), (0, 2), (1, 2)]
 
 /-- The initial signed triangles of a case. -/
 def baseSigns (side : Bool) (ws : List (List ℕ)) : List SFact :=
-  lexTriples.filterMap (fun t =>
+  (lexTriples 9).filterMap (fun t =>
     if t.2.2 < 6 then some (t, true)
     else if t.2.1 < 6 then some (t, hsign (ws.getD (t.2.2 - 6) []) t.1 t.2.1)
     else none) ++
   pairs3.flatMap fun p => (List.range 6).filterMap fun v =>
     (pairSign side ws p.1 p.2 v).map fun sg => ((v, p.1 + 6, p.2 + 6), sg)
 
-/-- The 28 affine factors of the top-cap note (Section 4). -/
+/-- The 28 affine factors of the top-cap package: the bounds on `h, c, d, f, g, k` and on the
+interior points `L, P, Q`. -/
 def factorsTop : List Expr :=
   [v 0 - k (24 / 73), v 1 - k (24 / 73), 1 - v 0, 1 - v 1, v 2 - k (8 / 73), k (57 / 65) - v 2,
     v 3 - k (8 / 73), k (67 / 100) - v 3, v 0 - v 2, v 1 - v 3, v 2 - v 3,
@@ -140,7 +141,8 @@ def factorsTop : List Expr :=
     v 8 - k (8 / 73), k (65 / 73) - v 8, v 9 - k (8 / 73), k (65 / 73) - v 9,
     v 10 - k (8 / 73), k (65 / 73) - v 10, v 11 - k (8 / 73), k (65 / 73) - v 11]
 
-/-- The 28 affine factors of the side-cap note (Section 4). -/
+/-- The 28 affine factors of the side-cap package: the bounds on `h, c, d, f, g, k` and on the
+interior points `L, P, Q`. -/
 def factorsSide : List Expr :=
   [v 0 - k (24 / 73), v 1 - k (32 / 73), k (6 / 7) - v 0, 1 - v 1, v 2 - k (8 / 73),
     v 0 - v 2, v 3 - k (32 / 73), k (65 / 73) - v 3, v 1 - v 3, v 4 - k (28 / 219),
@@ -159,7 +161,7 @@ def wCost : Expr := 1 - (v 0 - v 2) * (v 1 - v 3) - k (64 / 73)
 
 /-- The cover package of a case. -/
 def spec (side : Bool) (i j l : ℕ) : Spec SFact Split :=
-  tableSpec (factors side ++ [wCost]) [] (pt side) [6, 7, 8]
-    (baseSigns side (caseWords side i j l))
+  tableSpec (pt side) Package.bnd [6, 7, 8] (factors side ++ [wCost]) []
+    (baseSigns side (caseWords side i j l)) triBranches
 
 end Heilbronn.Nine.C1OneLowerHex.Model

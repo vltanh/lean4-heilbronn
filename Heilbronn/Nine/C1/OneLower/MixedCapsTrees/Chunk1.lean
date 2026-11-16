@@ -15,15 +15,15 @@ open Cover
 
 /-- The tree of the cell `(0, 0, 5)`. -/
 noncomputable def tree1_0 : Cover.Tree MSplit :=
-  .node (.tri 4 5 8) [.cert (term_rows% "../../../../../data/nine/c1_one_lower_mc/m014.txt"), .node (.tri 3 7 8) [.cert (term_rows% "../../../../../data/nine/c1_one_lower_mc/m015.txt"), .cert (term_rows% "../../../../../data/nine/c1_one_lower_mc/m016.txt")]]
+  .node (.tri 4 5 8) [.cert (term_rows% "../../../Data/c1_one_lower_mc/m014.txt"), .node (.tri 3 7 8) [.cert (term_rows% "../../../Data/c1_one_lower_mc/m015.txt"), .cert (term_rows% "../../../Data/c1_one_lower_mc/m016.txt")]]
 
 /-- The tree of the cell `(0, 0, 6)`. -/
 noncomputable def tree1_1 : Cover.Tree MSplit :=
-  .cert (term_rows% "../../../../../data/nine/c1_one_lower_mc/m017.txt")
+  .cert (term_rows% "../../../Data/c1_one_lower_mc/m017.txt")
 
 /-- The tree of the cell `(0, 0, 7)`. -/
 noncomputable def tree1_2 : Cover.Tree MSplit :=
-  .node (.tri 4 5 8) [.cert (term_rows% "../../../../../data/nine/c1_one_lower_mc/m018.txt"), .cert (term_rows% "../../../../../data/nine/c1_one_lower_mc/m019.txt")]
+  .node (.tri 4 5 8) [.cert (term_rows% "../../../Data/c1_one_lower_mc/m018.txt"), .cert (term_rows% "../../../Data/c1_one_lower_mc/m019.txt")]
 
 /-- The cells of chunk 1 with their trees. -/
 noncomputable def chunk1 : List ((ℕ × ℕ × ℕ) × Cover.Tree MSplit) :=
@@ -32,6 +32,6 @@ noncomputable def chunk1 : List ((ℕ × ℕ × ℕ) × Cover.Tree MSplit) :=
     ((0, 0, 7), tree1_2)]
 
 theorem chunk1_ok : chunk1.all (fun p => checkTree (spec p.1) [] p.2) = true := by
-  decide +kernel
+  tree_decide
 
 end Heilbronn.Nine.C1OneLowerMixedCaps.Model

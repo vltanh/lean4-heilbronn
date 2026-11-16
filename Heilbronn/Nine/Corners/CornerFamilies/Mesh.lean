@@ -2,31 +2,29 @@ module
 
 public import Heilbronn.Nine.Corners.CornerFamilies.SixPoint
 
-/-! # Corner families, §§10–11: quantitative mesh lemma and uniform signs
-(`docs/proof/nine/CORNER_FAMILIES.md`, lines 862–1167)
+/-! # Corner families: quantitative mesh lemma and uniform signs
 
-Part of `CORNER_FAMILIES.md` (module `Heilbronn.Nine.Corners.CornerFamilies`). The quantitative
-rigidity of a distributed six-point triangle of doubled area one (§10) and the forced signs of a
-lower point with respect to the upper triple (§11).
+Part of `Heilbronn.Nine.Corners.CornerFamilies`. The quantitative rigidity of a distributed
+six-point triangle of doubled area one, and the forced signs of a lower point with respect to the
+upper triple.
 
-**Parameters.** The manuscript proves §§10–12 at the doubled threshold `s = 7/64` with the lower
-points in the unit square. `ONE_CORNER.md` §§2–4 reuses them for every `s ≥ 7/64` and for lower
-points in a rectangle `[0, L] × [1 - M, 1]` with `L, M ≥ 1` and `L, M ≤ s/σ`, `σ = 7/64`
-(its displaced base `y ≥ -δ`, `δ = M - 1`, and by reflection `x ≤ L`). These statements carry
-`s`, `L`, `M` as parameters with exactly those hypotheses (`7/64 · L ≤ s`, `7/64 · M ≤ s`); the
-Type-III case is `L = M = 1`, `s = 7/64`. (Inventory 02, `ONE_CORNER` gap 2: each use of the
-fixed threshold in §10 was checked to remain valid for `s ≥ 7/64`.)
+**Parameters.** The statements hold for every doubled threshold `s ≥ 7/64` and for lower points
+in a rectangle `[0, L] × [1 - M, 1]` with `L, M ≥ 1`, `7/64 · L ≤ s` and `7/64 · M ≤ s`, and carry
+`s`, `L`, `M` as parameters. The Type-III case is `L = M = 1`, `s = 7/64`; the one-corner case
+(`Heilbronn.Nine.Corners.OneCorner`) uses the rectangle of its normalization (a displaced base
+`y ≥ -δ`, `δ = M - 1`, and by reflection `x ≤ L`).
 
-**Physical frame** (§11). `A = (0,0)`, `B = (0,1)`, `C = (1,1)` (clockwise), the distributed upper
+**Physical frame.** `A = (0,0)`, `B = (0,1)`, `C = (1,1)` (clockwise), the distributed upper
 triple labelled `Y = (u, v)`, `Z = (p, q)`, `X = (c, 1 - a)` with `Z ∈ ABY`, `X ∈ BCY`
 (`MeshLabelled (0,0) (0,1) (1,1) X Y Z`), and `h = 1 - v`, `z = 1 - q`, `f = v - u`,
 `k = h - a`, `Q = hc - au` (doubled `[BXY]`), `K` the doubled central area.
 `D(P, Q, R) = det(Q - P, R - P) = sarea P Q R`.
 
-Definitions: `rectangle L M`.
+Definitions: `rectangle L M`, `MeshHyps`.
 
-**Results.** `quantitativeMeshLemma` (26)–(27) (general triangle, `s ≥ 7/64`); `eq33`; `eq36`;
-`uniformSigns` (34).
+**Results.** `quant_ccw`, the quantitative mesh lemma (central area at most `(109/98)s`,
+connectors above `(6/5)s`, ears bounded; any counterclockwise triangle, `s ≥ 7/64`);
+`meshHyps_of` (its form in the physical frame); `uniformSigns`.
 -/
 
 @[expose] public section
@@ -34,19 +32,20 @@ Definitions: `rectangle L M`.
 noncomputable section
 namespace Heilbronn.Nine.CornerFamilies
 
-/-- The rectangle `[0, L] × [1 - M, 1]`, the image of the unit square under the normalization of
-`ONE_CORNER.md` (2); `rectangle 1 1` is the unit square. -/
+/-- The rectangle `[0, L] × [1 - M, 1]`, the image of the unit square under the one-corner
+normalization; `rectangle 1 1` is the unit square. -/
 def rectangle (L M : ℝ) : Set Point := {p | 0 ≤ p.1 ∧ p.1 ≤ L ∧ 1 - M ≤ p.2 ∧ p.2 ≤ 1}
 
-/-! ### §10. Quantitative rigidity of a distributed six-point triangle
+/-! ### Quantitative rigidity of a distributed six-point triangle
 
 The estimates are first proved for thirteen real numbers normalized by `s` (all at least `1`,
-with the identities (18)–(19) and total at most `64/7`), then transported to a labelled mesh. -/
+with the identities of `mesh_connector_identities` and `mesh_plucker_identities` and total at most `64/7`), then transported to a
+labelled mesh. -/
 
-/-- Inequality (30), normalized (lines 948–975): from the three product inequalities of (19)
+/-- The connector inequality, normalized: from the three product inequalities of `mesh_plucker_identities`
 with the outer ears at least one, `CAB + A(V - κ)(V + 1) + B(U - κ)(U + 1) ≥ (1 + κ)UV + κ(C + κ + 1)`
 for a connector `C ≤ 6/5` with cross areas `U + V = C + κ`. -/
-theorem conn_30 {A B C κ U V uA vA uB vB : ℝ} (_hA : 1 ≤ A) (hB : 1 ≤ B) (_hC1 : 1 ≤ C)
+theorem connector_ineq_normalized {A B C κ U V uA vA uB vB : ℝ} (_hA : 1 ≤ A) (hB : 1 ≤ B) (_hC1 : 1 ≤ C)
     (hC : C ≤ 6 / 5) (hk1 : 1 ≤ κ) (hU : 1 ≤ U) (hV : 1 ≤ V)
     (hUV : U + V = C + κ) (huA : 1 ≤ uA) (_hvB : 1 ≤ vB) (_hA' : A ≤ 22 / 7) (hB' : B ≤ 22 / 7)
     (hx : uA * vB ≤ A * B - κ) (hy : uB * V ≤ B * C - κ)
@@ -78,7 +77,8 @@ theorem conn_30 {A B C κ U V uA vA uB vB : ℝ} (_hA : 1 ≤ A) (hB : 1 ≤ B) 
   have := mul_neg_of_pos_of_neg (by linarith : (0 : ℝ) < κ) (sub_neg.2 hD)
   linarith
 
-/-- `4C·F(C, κ) < 0` on `[1, 6/5] × [1, 9/8]` (32). -/
+/-- The polynomial `708/49·C² - 356/7·Cκ + 228/7·C + (κ - 2)²` is negative on the box
+`[1, 6/5] × [1, 9/8]`. -/
 theorem conn_box {C κ : ℝ} (hC1 : 1 ≤ C) (hC : C ≤ 6 / 5) (hk1 : 1 ≤ κ) (hk : κ ≤ 9 / 8) :
     708 / 49 * C ^ 2 - 356 / 7 * C * κ + 228 / 7 * C + (κ - 2) ^ 2 < 0 := by
   nlinarith [mul_nonneg (by linarith : (0 : ℝ) ≤ 6 / 5 - C) (by linarith : (0 : ℝ) ≤ κ - 1),
@@ -86,7 +86,8 @@ theorem conn_box {C κ : ℝ} (hC1 : 1 ≤ C) (hC : C ≤ 6 / 5) (hk1 : 1 ≤ κ
     mul_nonneg (by linarith : (0 : ℝ) ≤ κ - 1) (by linarith : (0 : ℝ) ≤ 9 / 8 - κ),
     mul_nonneg (by linarith : (0 : ℝ) ≤ C - 1) (by linarith : (0 : ℝ) ≤ κ - 1)]
 
-/-- The end of the connector estimate (lines 976–1035): (30) is impossible on the box. -/
+/-- The end of the connector estimate: the inequality of `connector_ineq_normalized` is impossible on the box
+`[1, 6/5] × [1, 9/8]`. -/
 theorem conn_final {A B C κ U V : ℝ} (hA : 1 ≤ A) (hB : 1 ≤ B) (hC1 : 1 ≤ C) (hC : C ≤ 6 / 5)
     (hk1 : 1 ≤ κ) (hk : κ ≤ 9 / 8) (hU : 1 ≤ U) (hV : 1 ≤ V) (hUV : U + V = C + κ)
     (hsum : A + B ≤ 43 / 7 - κ - C)
@@ -128,17 +129,17 @@ theorem conn_final {A B C κ U V : ℝ} (hA : 1 ≤ A) (hB : 1 ≤ B) (hC1 : 1 �
   clear_value α β M
   linarith
 
-/-- The connector estimate (26), normalized: a connector `C ≤ 6/5` with cross areas `U, V`
-(`U + V = C + κ`) is impossible (lines 906–1035). -/
+/-- The connector estimate, normalized: a connector `C ≤ 6/5` with cross areas `U, V`
+(`U + V = C + κ`) is impossible. -/
 theorem conn_norm {A B C κ U V uA vA uB vB : ℝ} (hA : 1 ≤ A) (hB : 1 ≤ B) (hC1 : 1 ≤ C)
     (hC : C ≤ 6 / 5) (hk1 : 1 ≤ κ) (hk : κ ≤ 9 / 8) (hU : 1 ≤ U) (hV : 1 ≤ V)
     (hUV : U + V = C + κ) (huA : 1 ≤ uA) (hvB : 1 ≤ vB)
     (hsum : A + B ≤ 43 / 7 - κ - C) (hx : uA * vB ≤ A * B - κ) (hy : uB * V ≤ B * C - κ)
     (hz : U * vA ≤ C * A - κ) (h18A : A = uA + vA - κ) (h18B : B = uB + vB - κ) : False :=
   conn_final hA hB hC1 hC hk1 hk hU hV hUV hsum
-    (conn_30 hA hB hC1 hC hk1 hU hV hUV huA hvB (by linarith) (by linarith) hx hy hz h18A h18B)
+    (connector_ineq_normalized hA hB hC1 hC hk1 hU hV hUV huA hvB (by linarith) (by linarith) hx hy hz h18A h18B)
 
-/-- The central estimate of (26), normalized: `κ ≤ 109/98` (lines 893–902). -/
+/-- The central estimate, normalized: `κ ≤ 109/98`. -/
 theorem kappa_norm {x y z a b c k uA uB uC vA vB vC : ℝ} (hx : 1 ≤ x) (hy : 1 ≤ y) (hz : 1 ≤ z)
     (ha : 1 ≤ a) (hb : 1 ≤ b) (hc : 1 ≤ c) (hk : 1 ≤ k)
     (huA : 1 ≤ uA) (huB : 1 ≤ uB) (huC : 1 ≤ uC) (hvA : 1 ≤ vA) (hvB : 1 ≤ vB) (hvC : 1 ≤ vC)
@@ -161,7 +162,7 @@ theorem kappa_norm {x y z a b c k uA uB uC vA vB vC : ℝ} (hx : 1 ≤ x) (hy : 
   nlinarith [mul_nonneg (by linarith : (0 : ℝ) ≤ 36 / 7 - (a + b + c))
     (by linarith : (0 : ℝ) ≤ (a + b + c) + 36 / 7 - 3)]
 
-/-- The quantitative mesh estimates (26), normalized: `κ ≤ 109/98` and every connector exceeds
+/-- The quantitative mesh estimates, normalized: `κ ≤ 109/98` and every connector exceeds
 `6/5`. -/
 theorem quant_norm {x y z a b c k uA uB uC vA vB vC : ℝ} (hx : 1 ≤ x) (hy : 1 ≤ y) (hz : 1 ≤ z)
     (ha : 1 ≤ a) (hb : 1 ≤ b) (hc : 1 ≤ c) (hk : 1 ≤ k)
@@ -189,7 +190,7 @@ theorem quant_norm {x y z a b c k uA uB uC vA vB vC : ℝ} (hx : 1 ≤ x) (hy : 
       (by linarith) (by nlinarith) (by nlinarith) (by nlinarith) h18a h18b
 
 /-- The quantitative mesh estimates for thirteen areas at least `s ≥ 7/64` with total `1`
-(unnormalized form of `quant_norm`, plus the ear bound (27)). -/
+(unnormalized form of `quant_norm`, plus the ear bound `≤ 1 - (3φ + 3)s`, `φ = (1 + √5)/2`). -/
 theorem quant_scaled {x y z a b c k uA uB uC vA vB vC s : ℝ} (hs : 7 / 64 ≤ s)
     (hx : s ≤ x) (hy : s ≤ y) (hz : s ≤ z) (ha : s ≤ a) (hb : s ≤ b) (hc : s ≤ c) (hk : s ≤ k)
     (huA : s ≤ uA) (huB : s ≤ uB) (huC : s ≤ uC) (hvA : s ≤ vA) (hvB : s ≤ vB) (hvC : s ≤ vC)
@@ -238,8 +239,8 @@ theorem quant_ccw {A B C X Y Z : Point} {s : ℝ} (hs : 7 / 64 ≤ s) (hABC : sa
   have ht : 0 < s / 2 := by linarith
   have e : ∀ {p q r : Point}, 0 < sarea p q r → s / 2 ≤ triangleArea p q r → s ≤ sarea p q r :=
     fun h h' => by have := ge_of_pos ht h' h; linarith
-  obtain ⟨h18a, h18b, h18c⟩ := eq18 A B C X Y Z
-  obtain ⟨h19a, h19b, h19c⟩ := eq19 A B C X Y Z
+  obtain ⟨h18a, h18b, h18c⟩ := mesh_connector_identities A B C X Y Z
+  obtain ⟨h19a, h19b, h19c⟩ := mesh_plucker_identities A B C X Y Z
   have tiling : sarea A B Z + sarea B C X + sarea C A Y + sarea A Z Y + sarea B X Z +
       sarea C Y X + sarea Z X Y = 1 := by
     rw [← hABC]; unfold sarea; ring
@@ -253,62 +254,12 @@ theorem quant_ccw {A B C X Y Z : Point} {s : ℝ} (hs : 7 / 64 ≤ s) (hABC : sa
     h18a h18b h18c h19a h19b h19c tiling
   exact ⟨k1, k2, k3, k4, k5, k6, k7, k8⟩
 
-/-- **Quantitative mesh lemma** (`CORNER_FAMILIES:QuantitativeMeshLemma`), (26)–(27): for a
-triangle `ABC` of doubled area one with a labelled distributed triple `X, Y, Z` and all doubled
-areas of the six points at least `s`, `s ≥ 7/64`: the doubled central area is `K ≤ (109/98)s`,
-each connector exceeds `(6/5)s`, and each ear is at most `1 - (3φ + 3)s < 55/384`.
-The manuscript states it at `s = 7/64`; `ONE_CORNER:claim-mesh-all-s` observes that it holds for
-all `s ≥ 7/64`, the generality stated here. `docs/proof/nine/CORNER_FAMILIES.md`, lines 862–1035.
-
-Uses: CORNER_FAMILIES:SixPointTriangularHullTheorem (16)–(20) -/
-theorem quantitativeMeshLemma (A B C X Y Z : Point) (s : ℝ) (hs : 7 / 64 ≤ s)
-    (hABC : |sarea A B C| = 1) (hm : MeshLabelled A B C X Y Z)
-    (hmin : s / 2 ≤ minTriangleArea ![A, B, C, X, Y, Z]) :
-    |sarea Z X Y| ≤ 109 / 98 * s ∧
-      6 / 5 * s < |sarea A Z Y| ∧ 6 / 5 * s < |sarea B X Z| ∧ 6 / 5 * s < |sarea C Y X| ∧
-      |sarea A B Z| ≤ 1 - (3 * ((1 + Real.sqrt 5) / 2) + 3) * s ∧
-      |sarea B C X| ≤ 1 - (3 * ((1 + Real.sqrt 5) / 2) + 3) * s ∧
-      |sarea C A Y| ≤ 1 - (3 * ((1 + Real.sqrt 5) / 2) + 3) * s ∧
-      1 - (3 * ((1 + Real.sqrt 5) / 2) + 3) * s < 55 / 384 := by
-  rcases le_or_gt 0 (sarea A B C) with hp | hn
-  · have h1 : sarea A B C = 1 := by rw [abs_of_nonneg hp] at hABC; exact hABC
-    obtain ⟨g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13⟩ :=
-      mesh_ccw (by rw [h1]; norm_num) hm
-    obtain ⟨k1, k2, k3, k4, k5, k6, k7, k8⟩ := quant_ccw hs h1 hm hmin
-    rw [abs_of_pos g7, abs_of_pos g4, abs_of_pos g5, abs_of_pos g6, abs_of_pos g1, abs_of_pos g2,
-      abs_of_pos g3]
-    exact ⟨k1, k2, k3, k4, k5, k6, k7, k8⟩
-  · have h1 : sarea C B A = 1 := by
-      rw [abs_of_neg hn] at hABC; linarith [sarea_swap₁₃ A B C]
-    have hm' := meshLabelled_reverse hm
-    obtain ⟨g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13⟩ :=
-      mesh_ccw (by rw [h1]; norm_num) hm'
-    obtain ⟨k1, k2, k3, k4, k5, k6, k7, k8⟩ := quant_ccw hs h1 hm'
-      (min_sub hmin _ ![2, 1, 0, 5, 4, 3] (by norm_num) (by decide)
-        (by intro i; fin_cases i <;> simp))
-    have r1 : |sarea Z X Y| = sarea X Z Y := by
-      rw [sarea_swap₁₂ X Z Y, abs_neg, abs_of_pos g7]
-    have r2 : |sarea A Z Y| = sarea A Y Z := by
-      rw [sarea_swap₂₃ A Y Z, abs_neg, abs_of_pos g6]
-    have r3 : |sarea B X Z| = sarea B Z X := by
-      rw [sarea_swap₂₃ B Z X, abs_neg, abs_of_pos g5]
-    have r4 : |sarea C Y X| = sarea C X Y := by
-      rw [sarea_swap₂₃ C X Y, abs_neg, abs_of_pos g4]
-    have r5 : |sarea A B Z| = sarea B A Z := by
-      rw [sarea_swap₁₂ B A Z, abs_neg, abs_of_pos g2]
-    have r6 : |sarea B C X| = sarea C B X := by
-      rw [sarea_swap₁₂ C B X, abs_neg, abs_of_pos g1]
-    have r7 : |sarea C A Y| = sarea A C Y := by
-      rw [sarea_swap₁₂ A C Y, abs_neg, abs_of_pos g3]
-    rw [r1, r2, r3, r4, r5, r6, r7]
-    exact ⟨k1, k4, k3, k2, k6, k5, k7, k8⟩
-
 /-! ### The labelled upper triple in the physical frame
 
 `A = (0,0)`, `B = (0,1)`, `C = (1,1)` (clockwise), `Y = (u, v)`, `Z = (p, q)`, `X = (c, 1 - a)`.
 `MeshHyps u v p q c a s` collects, as polynomial inequalities in these coordinates, the thirteen
 mesh areas (at least `s`), the ear bounds `≤ E = 55/384`, the central bound `K ≤ (109/98)s` and the
-connector bounds `J, [AZY] > (6/5)s` (§10). Names: `h = 1 - v`, `z = 1 - q`, `f = v - u`,
+connector bounds `J, [AZY] > (6/5)s` (`quant_ccw`). Names: `h = 1 - v`, `z = 1 - q`, `f = v - u`,
 `k = h - a`, `Q = hc - au` (`[BXY]`), `J = k - Q` (`[CYX]`), `e = u(1 - a) - cv` (`[AYX]`),
 `P = uz - hp` (`[BYZ]`), `W = cz - ap` (`[BXZ]`), `V = [CXZ]`, `K = Q + z(u - c) - pk` (central). -/
 
@@ -333,8 +284,8 @@ structure MeshHyps (u v p q c a s : ℝ) : Prop where
   hJ : 6 / 5 * s < (1 - v) * (1 - c) - a * (1 - u)
   hAZY : 6 / 5 * s < u * q - v * p
 
-/-- The mesh facts of a labelled upper triple in the physical frame (§§10–11): from the reversed
-counterclockwise mesh `(C, B, A; Z, Y, X)` and the quantitative mesh lemma. -/
+/-- The mesh facts of a labelled upper triple in the physical frame: from the reversed
+counterclockwise mesh `(C, B, A; Z, Y, X)` and the quantitative mesh lemma `quant_ccw`. -/
 theorem meshHyps_of {X Y Z : Point} {s : ℝ} (hs : 7 / 64 ≤ s)
     (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z)
     (hmin : s / 2 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z]) :
@@ -369,55 +320,9 @@ theorem meshHyps_of {X Y Z : Point} {s : ℝ} (hs : 7 / 64 ≤ s)
     by linarith, by linarith, by linarith, by linarith, by linarith, by linarith, by linarith,
     by linarith, by linarith, by linarith, by linarith⟩
 
-/-! ### §11. Uniform signs for an additional lower point -/
+/-! ### Uniform signs for an additional lower point -/
 
-
-/-- **Claim** (`CORNER_FAMILIES:UniformSigns`), the bounds (33) in the physical frame, for every
-`s ≥ 7/64` (also `ONE_CORNER.md` (4)): with `E = 55/384`,
-`s ≤ p, a, f ≤ E`, `u, h, c, z, 1 - c - a, 1 - p - z ≥ 3s`, `k ≥ 3s - E`, and `Q ≥ s`.
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 1041–1071.
-
-Uses: CORNER_FAMILIES:QuantitativeMeshLemma -/
-theorem eq33 (X Y Z : Point) (s : ℝ) (hs : 7 / 64 ≤ s)
-    (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z)
-    (hmin : s / 2 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z]) :
-    let u := Y.1
-    let v := Y.2
-    let p := Z.1
-    let q := Z.2
-    let c := X.1
-    let a := 1 - X.2
-    let h := 1 - v
-    let z := 1 - q
-    let f := v - u
-    let k := h - a
-    let Q := h * c - a * u
-    s ≤ p ∧ p ≤ 55 / 384 ∧ s ≤ a ∧ a ≤ 55 / 384 ∧ s ≤ f ∧ f ≤ 55 / 384 ∧
-      3 * s ≤ u ∧ 3 * s ≤ h ∧ 3 * s ≤ c ∧ 3 * s ≤ z ∧ 3 * s ≤ 1 - c - a ∧
-      3 * s ≤ 1 - p - z ∧ 3 * s - 55 / 384 ≤ k ∧ s ≤ Q := by
-  have H := meshHyps_of hs hm hmin
-  intro u v p q c a h z f k Q
-  obtain ⟨-, hp, ha, hf, hpE, haE, hfE, hQ, he, hP, hW, hV, hCZY, hAXZ, -, -, hJ, hAZY⟩ := H
-  refine ⟨hp, hpE, ha, haE, hf, hfE, by linarith, by linarith, by linarith, by linarith,
-    by linarith, by linarith, by linarith, hQ⟩
-
-/-- **Claim** (`CORNER_FAMILIES:UniformSigns`), identities (36) in the physical frame: for
-`R = (x, 1 - b)`, `D(X, Y, R) = (c - u)b + kx - Q`, and the doubled central area
-`K = -D(X, Y, Z)` equals `Q + z(u - c) - pk` (all points). `docs/proof/nine/CORNER_FAMILIES.md`,
-lines 1112–1116. -/
-theorem eq36 (X Y Z R : Point) :
-    let u := Y.1
-    let c := X.1
-    let a := 1 - X.2
-    let h := 1 - Y.2
-    let k := h - a
-    let Q := h * c - a * u
-    sarea X Y R = (c - u) * (1 - R.2) + k * R.1 - Q ∧
-      -sarea X Y Z = Q + (1 - Z.2) * (u - c) - Z.1 * k := by
-  intro u c a h k Q
-  constructor <;> simp only [sarea, u, c, a, h, k, Q] <;> ring
-
-/-- The first sign of (34) (lines 1080–1096, `ONE_CORNER.md` lines 113–140): `D(B, Z, R) ≥ s`,
+/-- The first sign of `uniformSigns`: `D(B, Z, R) ≥ s`,
 since `D(A, Z, R) < 0` gives `x ≥ (s - pδ)/q` and the opposite sign `x ≤ (pM - s)/z`, which
 together need `p(q + δ) ≥ s`, while `p(q + δ) ≤ E·(43/7)s < s`. -/
 theorem sign_BZ {u v p q c a s M x y : ℝ} (H : MeshHyps u v p q c a s) (hM : 1 ≤ M)
@@ -449,8 +354,8 @@ theorem sign_BZ {u v p q c a s M x y : ℝ} (H : MeshHyps u v p q c a s) (hM : 1
   have m3 := mul_le_mul hpE (by linarith : q - y ≤ M - 3 * s) hqy (by norm_num)
   linarith
 
-/-- The second sign of (34): `D(B, X, R) ≤ -s` (the reflection of `sign_BZ` across `x + y = 1`,
-written out: `D(C, X, R) > 0` and the opposite sign force `a(x - c) ≥ s`, while
+/-- The second sign of `uniformSigns`: `D(B, X, R) ≤ -s` (the reflection of `sign_BZ` across
+`x + y = 1`, written out: `D(C, X, R) > 0` and the opposite sign force `a(x - c) ≥ s`, while
 `a(L - c) ≤ E·(43/7)s < s`). -/
 theorem sign_BX {u v p q c a s L x y : ℝ} (H : MeshHyps u v p q c a s) (hL : 1 ≤ L)
     (hsL : 7 / 64 * L ≤ s) (hxL : x ≤ L) (hyx : y < x) (hBC : s ≤ 1 - y)
@@ -481,7 +386,7 @@ theorem sign_BX {u v p q c a s L x y : ℝ} (H : MeshHyps u v p q c a s) (hL : 1
   have m3 := mul_le_mul haE (by linarith : x - c ≤ L - 3 * s) hxc (by norm_num)
   linarith
 
-/-- `F > -s` at the vertex `b₀` (case `Q ≥ K` of lines 1129–1160). -/
+/-- `F > -s` at the vertex `b₀` (the case `Q ≥ K` of `sign_XY`). -/
 theorem sign_XY_case1 {u v p q c a s x y : ℝ} (H : MeshHyps u v p q c a s)
     (hAC : s ≤ x - y) (hBZ : s ≤ (1 - q) * x - p * (1 - y))
     (hQK : (1 - v) * c - a * u + (1 - q) * (u - c) - p * (1 - v - a) ≤ (1 - v) * c - a * u) :
@@ -517,7 +422,7 @@ theorem sign_XY_case1 {u v p q c a s x y : ℝ} (H : MeshHyps u v p q c a s)
   have := mul_nonpos_of_nonneg_of_nonpos hpz0.le (by linarith : F + s ≤ 0)
   linarith
 
-/-- `F > -s` at the corner `b = M` (case `Q ≤ K`, `ONE_CORNER.md` (5)). -/
+/-- `F > -s` at the corner `b = M` (the case `Q ≤ K` of `sign_XY`). -/
 theorem sign_XY_case2 {u v p q c a s M x y : ℝ} (H : MeshHyps u v p q c a s) (hM : 1 ≤ M)
     (hsM : 7 / 64 * M ≤ s) (hyM : 1 - M ≤ y) (hBZ : s ≤ (1 - q) * x - p * (1 - y))
     (hQK : (1 - v) * c - a * u ≤ (1 - v) * c - a * u + (1 - q) * (u - c) - p * (1 - v - a)) :
@@ -551,7 +456,7 @@ theorem sign_XY_case2 {u v p q c a s M x y : ℝ} (H : MeshHyps u v p q c a s) (
   have := mul_nonpos_of_nonneg_of_nonpos hz0.le (by linarith : F + s ≤ 0)
   linarith
 
-/-- The third sign of (34) (lines 1098–1167, `ONE_CORNER.md` (5)): `D(X, Y, R) ≥ s`. With
+/-- The third sign of `uniformSigns`: `D(X, Y, R) ≥ s`. With
 `b = 1 - y`, `F = D(X, Y, R) = (c - u)b + kx - Q` is bounded below on the region
 `x ≥ 1 + s - b`, `zx - pb ≥ s`, `b ≤ M` by its value at a vertex. -/
 theorem sign_XY {u v p q c a s M x y : ℝ} (H : MeshHyps u v p q c a s) (hM : 1 ≤ M)
@@ -568,14 +473,11 @@ theorem sign_XY {u v p q c a s M x y : ℝ} (H : MeshHyps u v p q c a s) (hM : 1
   · rwa [abs_of_nonneg h] at hXY
   · rw [abs_of_nonpos h] at hXY; linarith
 
-/-- **Uniform signs** (`CORNER_FAMILIES:UniformSigns`), equation (34), with the rectangle
-parameters of `ONE_CORNER.md` §3: a lower point `R` (`y < x`) of the rectangle
-`[0, L] × [1 - M, 1]`, `L, M ≥ 1`, `7/64 · L ≤ s`, `7/64 · M ≤ s`, such that all doubled areas
-of `A, B, C, X, Y, Z, R` are at least `s`, satisfies `D(B,Z,R) ≥ s`, `D(B,X,R) ≤ -s` and
-`D(X,Y,R) ≥ s`. (CORNER_FAMILIES: `L = M = 1`, `s = 7/64`; ONE_CORNER (6): `s = 7LM/64`.)
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 1073–1167.
-
-Uses: CORNER_FAMILIES:UniformSigns (33), (35)–(36), CORNER_FAMILIES:QuantitativeMeshLemma -/
+/-- **Uniform signs**: for a labelled upper triple `X, Y, Z` in the physical frame, a lower point
+`R` (`y < x`) of the rectangle `[0, L] × [1 - M, 1]`, `L, M ≥ 1`, `7/64 · L ≤ s`,
+`7/64 · M ≤ s`, such that all doubled areas of `A, B, C, X, Y, Z, R` are at least `s`, satisfies
+`D(B,Z,R) ≥ s`, `D(B,X,R) ≤ -s` and `D(X,Y,R) ≥ s`. (The Type-III case is `L = M = 1`,
+`s = 7/64`; the one-corner case uses `s = 7LM/64`.) -/
 theorem uniformSigns (X Y Z R : Point) (s L M : ℝ) (hL : 1 ≤ L) (hM : 1 ≤ M)
     (hsL : 7 / 64 * L ≤ s) (hsM : 7 / 64 * M ≤ s)
     (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z) (hR : R ∈ rectangle L M)

@@ -2,9 +2,10 @@ module
 
 public import Heilbronn.Nine.C1.OneLower.ModelB
 
-/-! # The certificate model of `docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md` (Theorem 1)
+/-! # The certificate model of the mixed-cap cells
 
-Computable mirror of `docs/proof/nine/check_c1_one_lower_mixed_caps.py`. The nine points are
+A computable model of the cells `C1OneLowerMixedCaps.MCell` (one lower C1 point, two cap points in
+different caps). The nine points are
 `O, C, D, F, H, X, Y, L, Q` (the zero-lower points `C1ZeroLower.Model.pt`, variables
 `h, c, d, f, x₀, y₀, …, x₃, y₃`). A case key `(kind, i, j)` has `kind = 0, 1, 2` for the classes
 `RT, RL, TL`, lower word `i` and upper word `j`. The five-anchor words of the four free points are
@@ -16,8 +17,7 @@ The facts of a leaf are signed triangles; a fact with first index `9` records th
 `factors key ++ cutAtoms fs ++ qcosts key ++ costs (baseSigns key ++ realFacts fs) ++ cubics key`.
 The two `inconsistent` leaves are `.closed 0`, `.closed 1`: a line `ab` whose sign alternates on
 four hull vertices `A, B, C, D` (convex by their recorded areas) is impossible (`quadTest`). The
-certificates are exported by `scripts/nine/c1_one_lower_b/mixed_caps.py` and checked in
-`Heilbronn.Nine.C1.OneLower.MixedCapsTrees`.
+certificates are checked in `Heilbronn.Nine.C1.OneLower.MixedCapsTrees`.
 -/
 
 @[expose] public section
@@ -72,8 +72,8 @@ def capFactors (kind cat x y : ℕ) : List Expr :=
   else
     [v 3 - v x - k (8 / 41), 1 - v y, v y - v 0 - k (8 / 65), v x - k (28 / 219)])
 
-/-- The affine factors (checker `factors`, with the whole-word strengthening (15) of the cases
-`(kind, 1, 3)`, `(kind, 1, 5)`). -/
+/-- The affine factors, with the strengthening `h ≥ ρ`, `f ≤ 803/1920` in the cases
+`(kind, 1, 3)`, `(kind, 1, 5)` (`C1OneLowerMixedCaps.MPre.doubleOD`). -/
 def factors (key : ℕ × ℕ × ℕ) : List Expr :=
   [v 0 - k (24 / 73), v 1 - k (24 / 73), 1 - v 0, 1 - v 1, v 2 - k (8 / 73), k (65 / 73) - v 2,
     v 3 - k (8 / 73), k (65 / 73) - v 3, v 0 - v 2, v 1 - v 3, v 2 - v 3, v 2 - k (32 / 73)] ++
@@ -87,7 +87,7 @@ def factors (key : ℕ × ℕ × ℕ) : List Expr :=
   (if key.2.1 = 1 ∧ (key.2.2 = 3 ∨ key.2.2 = 5) then [v 0 - k (49 / 60), k (803 / 1920) - v 3]
     else [])
 
-/-- The quadratic costs (checker `costs`, before the triangle costs). -/
+/-- The quadratic costs (listed before the triangle costs). -/
 def qcosts (key : ℕ × ℕ × ℕ) : List Expr :=
   [v 0 * v 1 - k (24 / 73), 1 - (v 0 - v 2) * (v 1 - v 3) - k (32 / 73),
     k (41 / 73) - esarea (pt 2) (pt 3) (pt 4),
@@ -100,7 +100,7 @@ where
   /-- The zero-lower points. -/
   pt := C1ZeroLower.Model.pt
 
-/-- The cubic costs (8). -/
+/-- The cubic costs `dc(1-c) - s` (right cap) and `fh(1-h) - s` (left cap). -/
 def cubics (key : ℕ × ℕ × ℕ) : List Expr :=
   (if hasR key.1 then [v 2 * v 1 * (1 - v 1) - k (8 / 73)] else []) ++
   (if hasL key.1 then [v 3 * v 0 * (1 - v 0) - k (8 / 73)] else [])
@@ -119,7 +119,7 @@ def realFacts (fs : List SFact) : List SFact := fs.filter fun f => !isCut f
 def atoms (key : ℕ × ℕ × ℕ) (fs : List SFact) : List Expr :=
   let tb := baseSigns key ++ realFacts fs
   factors key ++ cutAtoms fs ++ qcosts key ++
-    tb.map (fun f => costAtom C1ZeroLower.Model.pt C1ZeroLower.Model.bnd f (insideList tb [5, 6, 7, 8] f).length) ++
+    tableCosts C1ZeroLower.Model.pt Package.bnd [5, 6, 7, 8] tb ++
     cubics key
 
 /-- The split labels: the orientation of a triangle, or the cut `q_x = 5/8`. -/

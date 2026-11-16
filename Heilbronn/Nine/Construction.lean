@@ -7,8 +7,8 @@ public import Heilbronn.Nine.Construction.Areas
 
 `optimalConfiguration` lies in the unit square (`optimalConfiguration_mem`), and its least
 triangle area is exactly `A₀ = (9√65 - 55)/320` (`minTriangleArea_optimalConfiguration`): every
-one of its 84 triangles has area at least `A₀`, and `ABC` has area exactly `A₀`. This is the
-appendix of `docs/proof/nine/HAND_PROOF.md` and equation (1) of `docs/proof/nine/UNRESTRICTED.md`.
+one of its 84 triangles has area at least `A₀` (`Construction.le_area`), and `ABC` has area
+exactly `A₀`.
 -/
 
 @[expose] public section
@@ -22,7 +22,7 @@ open Construction
 theorem p₀_bounds : 0.1734 < p₀ ∧ p₀ < 0.1735 := by
   unfold p₀; constructor <;> linarith [sqrt65_gt, sqrt65_lt]
 
-/-- **The construction lies in the square** (`docs/proof/nine/UNRESTRICTED.md`, (1)). -/
+/-- **The construction lies in the square.** -/
 theorem optimalConfiguration_mem (i : Fin 9) : optimalConfiguration i ∈ unitSquare := by
   have h := p₀_bounds
   fin_cases i <;>
@@ -37,8 +37,8 @@ theorem sarea_ABC :
   simp only [optimalConfiguration, sarea, p₀, Matrix.cons_val]
   linear_combination (-1 / 160 : ℝ) * sqrt65_sq
 
-/-- **The construction attains `A₀`** (`docs/proof/nine/HAND_PROOF.md`, appendix): the least triangle area
-of the optimal configuration is `(9√65 - 55)/320`. -/
+/-- **The construction attains `A₀`**: the least triangle area of the optimal configuration is
+`(9√65 - 55)/320`. -/
 theorem minTriangleArea_optimalConfiguration :
     minTriangleArea optimalConfiguration = (9 * Real.sqrt 65 - 55) / 320 := by
   apply le_antisymm

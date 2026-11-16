@@ -4,24 +4,23 @@ public import Heilbronn.Nine.C1.TopCapCommonCell
 public import Heilbronn.Nine.C1.TwoLower.ContainmentCert
 
 /-! # The containment pair-line case is impossible in the C1 top cap
-(`docs/proof/nine/C1_TOP_CAP_CONTAINMENT_PAIR.md`)
 
-Role: a component on the primary route: `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md` Theorem 2, step 5
-(the middle, or containment, pair-line case).
+The middle (containment) pair-line case of the common-cell placement, used by
+`C1TwoLowerCompletion.commonCellSetting_false`.
 
-Setting (lines 3-26): the common-cell placement of `docs/proof/nine/C1_TOP_CAP_COMMON_CELL.md`
-(`CommonCellSetting`): weak C1 anchors (the note writes `0 < f < c ≤ 1`; `f < c` follows from
-`f < x < c`), two lower points `L, M ∈ OHC ∩ OCF`, a top-cap point `X = (x, Y)`, the ninth point
-in `OCX`, a competitive configuration, `s = 8/73`, `ρ = 49/60`, `p = hc ≥ ρ`, `cY ≥ ρ`,
+Setting: the common-cell placement `CommonCellSetting` of `Heilbronn.Nine.C1.TopCapOfSplit`:
+weak C1 anchors, two lower points `L, M ∈ OHC ∩ OCF`, a top-cap point `X = (x, Y)`, the ninth
+point in `OCX`, a competitive configuration, `s = 8/73`, `ρ = 49/60`, `p = hc ≥ ρ`, `cY ≥ ρ`,
 `z = hf/c ≥ s`, `f < x < c`, `L` on the `H`-side and `M` on the `C`-side of `OX`. The pair-line
 signs are `d_V = [LMV]`.
 
 Results:
-* `claim_certificate`: `R(h, c, f) < 0` on `c²/(2p) ≤ f ≤ c - s`, `ρ ≤ p ≤ c ≤ 1`;
-* `eq6`: `s ≤ z < 1/2` (any pair-line case);
-* `eq7_10`: under the signs (1), `y > t`, the inequalities (8) and the reduced system (10);
-* `claim_scalar`: the system (10) has no solution;
-* `theorem_main` (**Theorem**): the sign pattern `d_O, d_H < 0 < d_C, d_F` (1) is impossible.
+* `capR_neg_of_sq_div_le`: `R(h, c, f) < 0` on `c²/(2p) ≤ f ≤ c - s`, `ρ ≤ p ≤ c ≤ 1`;
+* `hf_div_c_bounds`: `s ≤ z < 1/2` (any pair-line case);
+* `containment_reduced_system`: under the containment signs `d_O, d_H < 0 < d_C, d_F`: `y > t`, the bounds
+  `𝓕(h, p, z, v) ≥ 0`, `(1 + z)v ≤ p - s(1 + h)`, and the reduced system in `(p, z, v)`;
+* `calF_neg`: the reduced system has no solution;
+* `theorem_main`: the sign pattern `d_O, d_H < 0 < d_C, d_F` is impossible.
 -/
 
 @[expose] public section
@@ -31,13 +30,13 @@ namespace Heilbronn.Nine.C1TopCapContainmentPair
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1TopCapOfSplit Heilbronn.Nine.C1TwoLower Heilbronn.Nine.C1TopCapConvexPair
 
-/-- `𝓕(h, p, z, v) = (v - s){(1 - h + z)(p - v) - s(1 - h)} - ps(1 + h) + 2hsv` of (8),
+/-- `𝓕(h, p, z, v) = (v - s){(1 - h + z)(p - v) - s(1 - h)} - ps(1 + h) + 2hsv`,
 `s = 8/73`. -/
 def calF (h p z v : ℝ) : ℝ :=
   (v - 8 / 73) * ((1 - h + z) * (p - v) - 8 / 73 * (1 - h)) - p * (8 / 73) * (1 + h) +
     2 * h * (8 / 73) * v
 
-/-- `V(p, z) = (p - s(1 + p))/(1 + z)` of (10). -/
+/-- The upper end `V(p, z) = (p - s(1 + p))/(1 + z)` of the range of `v`, `s = 8/73`. -/
 def upperV (p z : ℝ) : ℝ := (p - 8 / 73 * (1 + p)) / (1 + z)
 
 /-- The five coefficients `N_k` are negative on the parameter square. -/
@@ -53,12 +52,10 @@ theorem ct_N_neg {H0 C0 : ℝ} (h0 : 0 ≤ H0) (h1 : H0 ≤ 1) (c0 : 0 ≤ C0) (
   · exact Quart.sound_rect ContainmentCert.chk3_0 hb1 hb2
   · exact Quart.sound_rect ContainmentCert.chk4_0 hb1 hb2
 
-/-- **Claim** (`C1_TOP_CAP_CONTAINMENT_PAIR:claim-certificate`, made-up id). `R(h, c, f) < 0`
-throughout (4): `c²/(2p) ≤ f ≤ c - s`, `ρ ≤ p ≤ c ≤ 1`, `h = p/c`. In the manuscript: with
-`f = (c² + W₀θ)/(2p)`, all `385` tensor Bernstein coefficients of the five `N_k(p, c)` (5) are
-below `-1/250` on one rectangle; checked by `docs/proof/nine/check_c1_top_cap_containment_pair.py`.
-`docs/proof/nine/C1_TOP_CAP_CONTAINMENT_PAIR.md`, lines 88-138. -/
-theorem claim_certificate (p c f : ℝ) (hp : 49 / 60 ≤ p) (hpc : p ≤ c) (hc : c ≤ 1)
+/-- `R(h, c, f) < 0` with `h = p/c` throughout `c²/(2p) ≤ f ≤ c - s`, `ρ ≤ p ≤ c ≤ 1`. Writing
+`f = (c² + Wθ)/(2p)` with `W = 2p(c - s) - c²` and `θ ∈ [0, 1]`, this follows from the
+negativity of the five coefficients `N_k(p, c)` (`ct_N_neg`, by Bernstein certificates). -/
+theorem capR_neg_of_sq_div_le (p c f : ℝ) (hp : 49 / 60 ≤ p) (hpc : p ≤ c) (hc : c ≤ 1)
     (hf : c ^ 2 / (2 * p) ≤ f) (hf' : f ≤ c - 8 / 73) :
     capR (p / c) c f < 0 := by
   have c0 : 0 < c := by linarith
@@ -110,15 +107,13 @@ theorem claim_certificate (p c f : ℝ) (hp : 49 / 60 ≤ p) (hpc : p ≤ c) (hc
   have := mul_nonneg hpos.le hn
   linarith
 
-/-- **Claim** (`C1_TOP_CAP_CONTAINMENT_PAIR:eq6`). In the common-cell placement (any pair-line
-case), `z = hf/c` satisfies `s ≤ z < 1/2` (6), `s = 8/73`. `docs/proof/nine/C1_TOP_CAP_CONTAINMENT_PAIR.md`,
-lines 42-142.
-Uses: C1_TOP_CAP_OF_SPLIT:eq7-10, C1_TOP_CAP_OF_SPLIT:claim-x-lt-c,
-C1_TOP_CAP_CONTAINMENT_PAIR:claim-certificate. -/
-theorem eq6 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P) :
+/-- In the common-cell placement (any pair-line case), `z = hf/c` satisfies `s ≤ z < 1/2`,
+`s = 8/73`: otherwise `c²/(2p) ≤ f`, and `capR_neg_of_sq_div_le` contradicts `R(h, c, f) ≥ 0`
+(`C1TopCapOfSplit.oneCap_capR_nonneg`). -/
+theorem hf_div_c_bounds {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P) :
     8 / 73 ≤ h * f / c ∧ h * f / c < 1 / 2 := by
   obtain ⟨hk, hkY, hhf, hfx, hxc, hfcs, -, -, kgt⟩ := C1TopCapCommonCell.cc_facts hS
-  obtain ⟨-, -, -, -, hR⟩ := C1TopCapOfSplit.eq7_10 hS.toOneCapSetting
+  obtain ⟨-, -, -, -, hR⟩ := C1TopCapOfSplit.oneCap_capR_nonneg hS.toOneCapSetting
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have h0 : 0 < h := by nlinarith
   have c0 : 0 < c := by nlinarith
@@ -128,12 +123,13 @@ theorem eq6 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L 
   have hp : 49 / 60 ≤ h * c := by linarith
   have hfl : c ^ 2 / (2 * (h * c)) ≤ f := by
     rw [div_le_iff₀ (by positivity)]; nlinarith
-  have := claim_certificate (h * c) c f hp (by nlinarith) hc hfl hfcs
+  have := capR_neg_of_sq_div_le (h * c) c f hp (by nlinarith) hc hfl hfcs
   have e : h * c / c = h := by field_simp
   rw [e] at this
   linarith
 
-/-- (7)–(8) in scalar form, for `L = (ℓ, y)`, `M = (m, t)`. -/
+/-- The bounds `𝓕(h, p, z, v) ≥ 0` and `(1 + z)v ≤ p - s(1 + h)` (with `p = hc`, `z = hf/c`,
+`v = cy`) in scalar form, for `L = (ℓ, y)`, `M = (m, t)`. -/
 theorem cont_8 {h c f l y m t : ℝ} (h0 : 0 < h) (c0 : 0 < c) (hh1 : h ≤ 1) (hy0 : 0 < y)
     (hyh : y < h) (hyt : t < y)
     (hH : 8 / 73 ≤ -((h - y) * (m - l) - l * (y - t)))
@@ -170,7 +166,7 @@ theorem cont_8 {h c f l y m t : ℝ} (h0 : 0 < h) (c0 : 0 < c) (hh1 : h ≤ 1) (
     nlinarith
 
 set_option linter.unusedVariables false in
-/-- (9): decreasing `h` to `p` preserves (8), and `v ≤ V(p, z)`. -/
+/-- Decreasing `h` to `p` preserves `𝓕 ≥ 0`, and `v ≤ V(p, z)`. -/
 theorem cont_10 {h p z v : ℝ} (hp : 49 / 60 ≤ p) (hp1 : p ≤ 1) (hph : p ≤ h) (hz : 8 / 73 ≤ z)
     (hv : 8 / 73 < v) (hF : 0 ≤ calF h p z v) (hV : (1 + z) * v ≤ p - 8 / 73 * (1 + h)) :
     0 ≤ calF p p z v ∧ v ≤ upperV p z := by
@@ -206,7 +202,7 @@ theorem cont_10 {h p z v : ℝ} (hp : 49 / 60 ≤ p) (hp1 : p ≤ 1) (hph : p �
     linarith
   · unfold upperV; rw [le_div_iff₀ (by linarith)]; linarith
 
-/-- The coordinate facts of the containment signs (1). -/
+/-- The coordinate facts of the containment signs `[LMO], [LMH] < 0 < [LMC], [LMF]`. -/
 theorem cont_data {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
     (hO : sarea L M ptO < 0) (hH : sarea L M (ptH h) < 0) (hC : 0 < sarea L M (ptC c))
     (hF : 0 < sarea L M (ptF f)) :
@@ -250,14 +246,12 @@ theorem cont_data {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c 
   have hp1 : h * c ≤ 1 := by nlinarith
   exact ⟨h0, c0, hh, hy0, hyh, hyt, eH, eF, eOCM, eHCL, hFOL, hbr, by linarith, hp1⟩
 
-/-- **Claim** (`C1_TOP_CAP_CONTAINMENT_PAIR:eq7-10`). In the common-cell placement with the
-signs (1) `[LMO], [LMH] < 0 < [LMC], [LMF]`, writing `L = (ℓ, y)`, `M = (m, t)`, `p = hc`,
-`z = hf/c`, `v = cy`: `y > t`; `𝓕(h, p, z, v) ≥ 0` and `(1 + z)v ≤ p - s(1 + h)` (8);
-and, after decreasing `h` to `p` (9), the system (10): `F(p, z, v) = 𝓕(p, p, z, v) ≥ 0`,
-`s < v ≤ V(p, z)`, `ρ ≤ p ≤ 1`, `s ≤ z ≤ 1/2`. `docs/proof/nine/C1_TOP_CAP_CONTAINMENT_PAIR.md`,
-lines 144-229.
-Uses: C1_TOP_CAP_CONTAINMENT_PAIR:eq6. -/
-theorem eq7_10 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
+/-- In the common-cell placement with the containment signs `[LMO], [LMH] < 0 < [LMC], [LMF]`,
+writing `L = (ℓ, y)`, `M = (m, t)`, `p = hc`, `z = hf/c`, `v = cy`: `y > t`;
+`𝓕(h, p, z, v) ≥ 0` and `(1 + z)v ≤ p - s(1 + h)`; and, after decreasing `h` to `p`, the
+reduced system `F(p, z, v) = 𝓕(p, p, z, v) ≥ 0`, `s < v ≤ V(p, z)`, `ρ ≤ p ≤ 1`,
+`s ≤ z ≤ 1/2`. -/
+theorem containment_reduced_system {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
     (hO : sarea L M ptO < 0) (hH : sarea L M (ptH h) < 0) (hC : 0 < sarea L M (ptC c))
     (hF : 0 < sarea L M (ptF f)) :
     M.2 < L.2 ∧ 0 ≤ calF h (h * c) (h * f / c) (c * L.2) ∧
@@ -265,7 +259,7 @@ theorem eq7_10 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f
       0 ≤ calF (h * c) (h * c) (h * f / c) (c * L.2) ∧
       8 / 73 < c * L.2 ∧ c * L.2 ≤ upperV (h * c) (h * f / c) ∧
       49 / 60 ≤ h * c ∧ h * c ≤ 1 ∧ 8 / 73 ≤ h * f / c ∧ h * f / c ≤ 1 / 2 := by
-  obtain ⟨hz0, hz1⟩ := eq6 hS
+  obtain ⟨hz0, hz1⟩ := hf_div_c_bounds hS
   obtain ⟨h0, c0, hh, hy0, hyh, hyt, eH, eF, eOCM, eHCL, hFOL, hbr, hk, hp1⟩ :=
     cont_data hS hO hH hC hF
   obtain ⟨g1, g2⟩ := cont_8 h0 c0 hh hy0 hyh hyt eH eF eOCM eHCL hFOL hbr
@@ -310,11 +304,10 @@ theorem T_pos {p z : ℝ} (hp : 49 / 60 ≤ p) (hp1 : p ≤ 1) (hz : 8 / 73 ≤ 
 end ET
 
 set_option linter.unusedVariables false in
-/-- **Claim** (`C1_TOP_CAP_CONTAINMENT_PAIR:claim-scalar`, made-up id; §3). The system (10) has
-no solution: for `ρ ≤ p ≤ 1`, `s ≤ z ≤ 1/2` and `s < v ≤ V(p, z)`, `F(p, z, v) < 0` (`F` is
-concave in `v` and increasing up to `V`, and `(1 + z)²F(p, z, V) = -pT(p, z)/5329` with
-`T > 0`). `docs/proof/nine/C1_TOP_CAP_CONTAINMENT_PAIR.md`, lines 230-304. -/
-theorem claim_scalar (p z v : ℝ) (hp : 49 / 60 ≤ p) (hp' : p ≤ 1) (hz : 8 / 73 ≤ z)
+/-- The reduced system has no solution: for `ρ ≤ p ≤ 1`, `s ≤ z ≤ 1/2` and `s < v ≤ V(p, z)`,
+`F(p, z, v) < 0` (`F` is concave in `v` and increasing up to `V`, and
+`(1 + z)²F(p, z, V) = -pT(p, z)/5329` with `T > 0`). -/
+theorem calF_neg (p z v : ℝ) (hp : 49 / 60 ≤ p) (hp' : p ≤ 1) (hz : 8 / 73 ≤ z)
     (hz' : z ≤ 1 / 2) (hv : 8 / 73 < v) (hv' : v ≤ upperV p z) :
     calF p p z v < 0 := by
   have hz0 : 0 < 1 + z := by linarith
@@ -346,16 +339,13 @@ theorem claim_scalar (p z v : ℝ) (hp : 49 / 60 ≤ p) (hp' : p ≤ 1) (hz : 8 
     (show (0 : ℝ) ≤ Fd + a * (V - v) by nlinarith)
   linarith
 
-/-- **Theorem** (`C1_TOP_CAP_CONTAINMENT_PAIR:Theorem`). In the common-cell placement, the
-line-sign placement `d_O, d_H < 0 < d_C, d_F` (1), `d_V = [LMV]`, is impossible.
-`docs/proof/nine/C1_TOP_CAP_CONTAINMENT_PAIR.md`, lines 28-40 and 232-304.
-Uses: C1_TOP_CAP_CONTAINMENT_PAIR:eq6, C1_TOP_CAP_CONTAINMENT_PAIR:eq7-10,
-C1_TOP_CAP_CONTAINMENT_PAIR:claim-scalar. -/
+/-- In the common-cell placement, the line-sign pattern `d_O, d_H < 0 < d_C, d_F`,
+`d_V = [LMV]`, is impossible. -/
 theorem theorem_main {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
     (hO : sarea L M ptO < 0) (hH : sarea L M (ptH h) < 0) (hC : 0 < sarea L M (ptC c))
     (hF : 0 < sarea L M (ptF f)) : False := by
-  obtain ⟨-, -, -, g3, hv, g4, hp, hp1, hz, hz1⟩ := eq7_10 hS hO hH hC hF
-  have := claim_scalar (h * c) (h * f / c) (c * L.2) hp hp1 hz hz1 hv g4
+  obtain ⟨-, -, -, g3, hv, g4, hp, hp1, hz, hz1⟩ := containment_reduced_system hS hO hH hC hF
+  have := calF_neg (h * c) (h * f / c) (c * L.2) hp hp1 hz hz1 hv g4
   linarith
 
 end Heilbronn.Nine.C1TopCapContainmentPair

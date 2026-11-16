@@ -1,36 +1,35 @@
 module
 
 public import Heilbronn.Nine.C1.OneLower.EightHull
-public import Heilbronn.Nine.C1.OneLower.ThreeTopB
+public import Heilbronn.Nine.C1.OneLower.HullB
 public import Heilbronn.Nine.C1.OneLower.ConvexTopTrees
 
-/-! # The two remaining convex top hulls with one lower C1 point (`docs/proof/nine/C1_ONE_LOWER_CONVEX_TOP.md`)
+/-! # The two remaining convex top hulls with one lower C1 point
 
-**Role.** A component of the one-lower C1 class: `C1_ONE_LOWER_MIXED_CAPS:Theorem2` uses the
-Theorem for the occupancy row `(U, R, T, L_cap) = (1, 0, 2, 0)` with a quadrilateral top hull
-(mode `upper`) and for the row `(0, 0, 3, 0)` (three top-cap points, mode `cap`). Its lower-word
-list (9) is reused by `C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`.
+Used by `C1OneLowerMixedCaps.lowerCount_eq_one_false` for the occupancy row `(U, R, T, L_cap) = (1, 0, 2, 0)`
+with a quadrilateral top hull (mode `upper`) and for the row `(0, 0, 3, 0)` (three top-cap points,
+mode `cap`).
 
 **Setting.** The C1 anchors with `0 < d ≤ h < 1`, `0 < f ≤ c < 1`, minimum triangle area at least
 `A₀`; configuration `c1Config h c d f X Y L Q` with `L ∈ OHC` and
 
-* placement 1 (`Upper`): `Q ∈ HCDF`, `X, Y` in the top cap with `D, X, Y, F` convex in this
+* `Upper` (mode `upper`): `Q ∈ HCDF`, `X, Y` in the top cap with `D, X, Y, F` convex in this
   cyclic order;
-* placement 2 (`ThreeTop`): `X, Y, Q` in the top cap, in any order; by Lemma 3 of
-  `C1_ZERO_LOWER.md` they can be named (`Cap`) so that `D, X, Y, F` is the convex top hull and
-  `Q ∈ DFX ∩ DFY`.
+* `ThreeTop` (mode `cap`): `X, Y, Q` in the top cap, in any order; by `C1ZeroLower.Comp.three_top`
+  they can be named so that `D, X, Y, F` is the convex top hull and `Q ∈ DFX ∩ DFY`.
 
-In both modes the full hull is the heptagon `O, C, D, X, Y, F, H` (1) with interior points `L, Q`.
-The proof assumes `f ≤ d` (after transposition). Thresholds `s = 8/73`, `ρ = 49/60`.
+In both modes the full hull is the heptagon `O, C, D, X, Y, F, H` (`heptagon`) with interior
+points `L, Q`. The proof assumes `f ≤ d` (after transposition). Thresholds `s = 8/73`,
+`ρ = 49/60`.
 
 **Results.**
-* `mainTheorem` (`C1_ONE_LOWER_CONVEX_TOP:Theorem`), under `f ≤ d` (the caller,
-  `C1_ONE_LOWER_MIXED_CAPS:Theorem2`, transposes first).
-* `Cell` (a cell of either mode), `Upper.cell`, `claim_hull` (placement 2 renamed to mode `cap`
-  by Lemma 3 of `C1_ZERO_LOWER.md`, `C1OneLowerB.three_top`), `params` (the table), `Cell.omega`
-  (`Ω ≥ 4s` / `Ω > 7/11`), `Cell.common`, `Cell.factors_nonneg` ((4)–(7)), `Cell.cap1`
-  (`claim-cap1`), `Cell.convex`, `claim_cover` (the words and the capacity filter),
-  `eq12` (the certificate package, kernel-checked in `Heilbronn.Nine.C1.OneLower.ConvexTopTrees`).
+* `upper_or_threeTop_false`, under `f ≤ d` (the caller, `C1OneLowerMixedCaps.lowerCount_eq_one_false`, transposes first).
+* `Cell` (a cell of either mode), `Upper.cell`, `exists_cap_cell_of_threeTop` (a renaming of `ThreeTop` is a cell
+  of mode `cap`, by `C1ZeroLower.Comp.three_top`), `params` (bounds on the anchors), `Cell.omega`
+  (`Ω ≥ 4s` / `Ω > 7/11`), `Cell.common`, `Cell.factors_nonneg` (the affine factors),
+  `Cell.cap1` (the capacity-one triangles), `Cell.convex`, `exists_caseKey_hullWords` (the words and the
+  capacity filter), `heptagon_cell_false` (the certificate package, kernel-checked in
+  `Heilbronn.Nine.C1.OneLower.ConvexTopTrees`).
 -/
 
 @[expose] public section
@@ -39,7 +38,8 @@ noncomputable section
 namespace Heilbronn.Nine.C1OneLowerConvexTop
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1ZeroLower Heilbronn.Nine.C1OneLowerB Cover Cert Cert.Expr
-open Heilbronn.Nine.C1OneLowerTopCap (HullWord HasHullWord ConvexPolygon)
+open Heilbronn.Nine.Package Heilbronn.Nine.C1OneLower
+open Heilbronn.Nine.C1OneLowerTopCap (HullWord HasHullWord)
 
 /-- `s = 8/73 < 2A₀`. -/
 local notation "s" => (8 / 73 : ℝ)
@@ -49,8 +49,8 @@ local notation "ρ" => (49 / 60 : ℝ)
 
 /-! ### The placements -/
 
-/-- Placement 1 (mode `upper`): C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1`; minimum triangle area
-at least `A₀` for `c1Config h c d f X Y L Q`; `L` strictly inside `OHC`; `Q` strictly inside
+/-- The placement of mode `upper`: C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1`; minimum triangle
+area at least `A₀` for `c1Config h c d f X Y L Q`; `L` strictly inside `OHC`; `Q` strictly inside
 `HCDF`; `X, Y` in the top cap (possibly on a side of the square) with convex hull `D, X, Y, F` in
 this counterclockwise order (`[DXY] > 0`, `[XYF] > 0`). -/
 structure Upper (h c d f : ℝ) (X Y L Q : Point) : Prop where
@@ -65,9 +65,9 @@ structure Upper (h c d f : ℝ) (X Y L Q : Point) : Prop where
   convexDXY : 0 < sarea (ptD d) X Y
   convexXYF : 0 < sarea X Y (ptF f)
 
-/-- Placement 2: C1 anchors; minimum triangle area at least `A₀` for `c1Config h c d f X Y L Q`;
-`L` strictly inside `OHC`; the other three free points `X, Y, Q` in the top cap (in any order,
-possibly on a side of the square). -/
+/-- The three-top placement: C1 anchors; minimum triangle area at least `A₀` for
+`c1Config h c d f X Y L Q`; `L` strictly inside `OHC`; the other three free points `X, Y, Q` in the
+top cap (in any order, possibly on a side of the square). -/
 structure ThreeTop (h c d f : ℝ) (X Y L Q : Point) : Prop where
   anchors : C1Anchors h c d f
   min : A₀ ≤ minTriangleArea (c1Config h c d f X Y L Q)
@@ -79,25 +79,16 @@ structure ThreeTop (h c d f : ℝ) (X Y L Q : Point) : Prop where
   topQ : InTopCap d f Q
   topQSq : Q ∈ unitSquare
 
-/-- Mode `cap`: placement 2 with the names of Section 1: `D, X, Y, F` is the convex top hull
-(`[DXY] > 0`, `[XYF] > 0`) and `Q ∈ DFX ∩ DFY` (2). -/
-structure Cap (h c d f : ℝ) (X Y L Q : Point) : Prop extends ThreeTop h c d f X Y L Q where
-  convexDXY : 0 < sarea (ptD d) X Y
-  convexXYF : 0 < sarea X Y (ptF f)
-  innerX : InTriangle Q (ptD d) X (ptF f)
-  innerY : InTriangle Q (ptD d) Y (ptF f)
-
-/-- The hull heptagon (1), `V₀, …, V₆ = O, C, D, X, Y, F, H`. -/
+/-- The hull heptagon `V₀, …, V₆ = O, C, D, X, Y, F, H`. -/
 def heptagon (h c d f : ℝ) (X Y : Point) : Fin 7 → Point :=
   ![ptO, ptC c, ptD d, X, Y, ptF f, ptH h]
 
-/-! ### Section 2: bounds from the occupied top hull -/
+/-! ### Bounds from the occupied top hull -/
 
-/-- **Claims** (`C1_ONE_LOWER_CONVEX_TOP:(3)` and the table of Section 2), with an actual-area
-bound `t > s`: `hc ≥ 3t`, `hf, cd ≥ t` give `h, c ≥ 3s`, `d, f ≥ s`; with `f ≤ d` and
-`Ω = (1-d)(1-f) ≥ 4t` (mode `upper`), `d ≤ 33/65`, `f < 17/50`; with `Ω > 7/11` (mode `cap`),
-`d ≤ 204/715`, `f < 13/64` (`Ω ≤ (1-s)(1-d)`, `Ω ≤ (1-f)²`).
-`docs/proof/nine/C1_ONE_LOWER_CONVEX_TOP.md`, lines 49-67. -/
+/-- Bounds on the anchors from an actual-area bound `t > s`: `hc ≥ 3t`, `hf, cd ≥ t` give
+`h, c ≥ 3s`, `d, f ≥ s`; with `f ≤ d` and `Ω = (1-d)(1-f) ≥ 4t` (mode `upper`), `d ≤ 33/65`,
+`f ≤ 17/50`; with `Ω > 7/11` (mode `cap`), `d ≤ 204/715`, `f ≤ 13/64` (`Ω ≤ (1-s)(1-d)`,
+`Ω ≤ (1-f)²`). -/
 theorem params {t h c d f : ℝ} (ht : 8 / 73 < t) (hd : 0 < d) (hh : h < 1) (hf : 0 < f)
     (hc : c < 1) (hfd : f ≤ d) (hdh : d ≤ h) (hfc : f ≤ c)
     (hc3 : 3 * t ≤ h * c) (aHF : t ≤ h * f) (_aCD : t ≤ c * d) :
@@ -202,7 +193,7 @@ theorem Cell.sq (C : Cell m h c d f X Y L Q) :
   ⟨C.comp.hQ 0, C.comp.hQ 1, C.comp.hQ 2, C.comp.hQ 3⟩
 
 theorem Cell.areaOK (C : Cell m h c d f X Y L Q) : AreaOK (pts h c d f X Y L Q) :=
-  (comp_areaOK C.comp).comp idx idx_lt idx_inj
+  C.comp.areaOK.comp idx idx_lt idx_inj
 
 theorem Cell.uv (C : Cell m h c d f X Y L Q) : 0 < X.1 - Y.1 ∧ 0 < Y.2 - X.2 := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := C.comp.hA
@@ -217,9 +208,9 @@ theorem heptagon_table : ∀ i j k : Fin 7, i < j → j < k →
       some true := by
   decide +kernel
 
-/-- Helper (`C1_ONE_LOWER_CONVEX_TOP:claim-hull`, mode-independent part): the hull heptagon
-`O, C, D, X, Y, F, H` is convex (counterclockwise). -/
-theorem Cell.convex (C : Cell m h c d f X Y L Q) : ConvexPolygon (heptagon h c d f X Y) := by
+/-- The hull heptagon `O, C, D, X, Y, F, H` of a cell (of either mode) is convex
+(counterclockwise). -/
+theorem Cell.convex (C : Cell m h c d f X Y L Q) : IsConvexPolygon (heptagon h c d f X Y) := by
   have H := C.comp
   have tb := comp_capTable_holds H (ms := [(5, 3), (6, 3)]) (by
     intro p hp
@@ -321,10 +312,9 @@ theorem Cell.areasCap (C : Cell true h c d f X Y L Q) :
   · convert a2 using 1; unfold sarea; ring
   · convert a3 using 1; unfold sarea; ring
 
-/-- **Claim** (`C1_ONE_LOWER_CONVEX_TOP:table`). The four-point convex endpoint lemma (mode
-`upper`): `Ω = (1-d)(1-f) ≥ 8A₀ = 4 · 2A₀`; the five-point endpoint theorem (mode `cap`):
-`Ω > 7/11`. `docs/proof/nine/C1_ONE_LOWER_CONVEX_TOP.md`, lines 49-67.
-Uses: TYPE_II:FourPointEndpointLemma, TYPE_II:EndpointTriangleTheorem. -/
+/-- The top corner area `Ω = (1-d)(1-f)`: in mode `upper`, `Ω ≥ 8A₀ = 4 · 2A₀` by the four-point
+convex endpoint lemma (`TypeII.fourPointEndpointLemma`); in mode `cap`, `Ω > 7/11` by the
+endpoint-triangle bound for three top-cap points (`C1ZeroLower.Comp.top_three`). -/
 theorem Cell.omega (C : Cell m h c d f X Y L Q) :
     (m = false → 4 * (2 * A₀) ≤ (1 - d) * (1 - f)) ∧ (m = true → 7 / 11 < (1 - d) * (1 - f)) := by
   have H := C.comp
@@ -376,7 +366,7 @@ theorem Cell.common (C : Cell m h c d f X Y L Q) :
     m0 aL1 aL2 aL3
   exact ⟨b1, b2, b3, b4, cx1, cx2, cy1, cy2, g1, g2, e1, e2, e3, e4, e5, bu, bc⟩
 
-/-- **The atoms of Section 4 are nonnegative** (mode `upper`): the 30 affine factors (11) and
+/-- The atoms of mode `upper` are nonnegative: the 30 affine factors `Model.factors false` and
 `Ω - 4s`. -/
 theorem Cell.factors_upper (C : Cell false h c d f X Y L Q) :
     ∀ e ∈ Model.factors false ++ [Model.q0 false], 0 ≤ e.eval (zeta h c d f X Y L Q) := by
@@ -402,7 +392,7 @@ theorem Cell.factors_upper (C : Cell false h c d f X Y L Q) :
   and_intros
   all_goals linarith
 
-/-- **The atoms of Section 4 are nonnegative** (mode `cap`): the 30 affine factors (11) and
+/-- The atoms of mode `cap` are nonnegative: the 30 affine factors `Model.factors true` and
 `Ω - 7/11`. -/
 theorem Cell.factors_cap (C : Cell true h c d f X Y L Q) :
     ∀ e ∈ Model.factors true ++ [Model.q0 true], 0 ≤ e.eval (zeta h c d f X Y L Q) := by
@@ -436,11 +426,9 @@ theorem Cell.factors_nonneg (C : Cell m h c d f X Y L Q) :
 
 /-! ### The capacity-one triangles -/
 
-/-- **Claim** (`C1_ONE_LOWER_CONVEX_TOP:claim-cap1`). Under `f ≤ d`: `[OCD] = cd ≤ d < ρ`,
-`[OFH] = fh ≤ f < ρ` (the table) and `[HDF] < ρ` (`C1_ZERO_LOWER.md` §4), so none of the
-triangles `OCD, OFH, HDF` (heptagon indices `(0,1,2), (0,5,6), (2,5,6)`) contains both `L` and
-`Q` (two-interior-point lemma). `docs/proof/nine/C1_ONE_LOWER_CONVEX_TOP.md`, lines 111-115.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, C1_ZERO_LOWER:claim-HDF-capacity-one. -/
+/-- Under `f ≤ d`: `[OCD] = cd ≤ d < ρ`, `[OFH] = fh ≤ f < ρ` (`params`) and `[HDF] < ρ`
+(`C1ZeroLower.Comp.hdf_lt`), so none of the triangles `OCD, OFH, HDF` (heptagon indices
+`(0,1,2), (0,5,6), (2,5,6)`) contains both `L` and `Q` (two-interior-point lemma). -/
 theorem Cell.cap1 (C : Cell m h c d f X Y L Q) {a b e : ℕ}
     (ht : (a, b, e) = (0, 1, 2) ∨ (a, b, e) = (0, 5, 6) ∨ (a, b, e) = (2, 5, 6))
     (hL : InTriangle L (pts h c d f X Y L Q a) (pts h c d f X Y L Q b) (pts h c d f X Y L Q e))
@@ -478,28 +466,30 @@ theorem Cell.cap1 (C : Cell m h c d f X Y L Q) {a b e : ℕ}
 
 end
 
-/-! ### Section 3: the radial and pair-line cover -/
+/-! ### The radial and pair-line cover -/
 
-/-- The enumeration of the words (8) inside `OCH`: the five lower words (9). -/
+/-- The enumeration of the radial words of a point inside `OCH`: the five lower words
+`Model.lowerW`. -/
 theorem enum_lower :
     enumW 7 5 (fun w => !(hinside 7 w 0 1 6) || decide (w ∈ Model.lowerW)) 7 [] = true := by
   decide +kernel
 
-/-- The enumeration of the words (8) of `HCDF`: the 33 `Q`-words of mode `upper`. -/
+/-- The enumeration of the radial words of a point of `HCDF`: the 33 `Q`-words of mode
+`upper`. -/
 theorem enum_upper :
     enumW 7 5 (fun w => !(hsign 7 w 6 1 && hsign 7 w 1 2 && hsign 7 w 2 5 && hsign 7 w 5 6) ||
       decide (w ∈ Model.upperW)) 7 [] = true := by
   decide +kernel
 
-/-- The enumeration of the words (8) in `DXF ∩ DYF` beyond `DF`: the 10 `Q`-words of mode
-`cap`. -/
+/-- The enumeration of the radial words of a point of `DXF ∩ DYF` beyond `DF`: the 10 `Q`-words
+of mode `cap`. -/
 theorem enum_cap :
     enumW 7 5 (fun w => !(hinside 7 w 2 3 5 && hinside 7 w 2 4 5 && !hsign 7 w 2 5) ||
       decide (w ∈ Model.capW)) 7 [] = true := by
   decide +kernel
 
-/-- The capacity filter of `C1_ONE_LOWER_CONVEX_TOP.md` §3: the words do not place both points in
-one of the capacity-one triangles `(0,5,6), (0,1,2), (2,5,6)`. -/
+/-- The capacity filter: the words do not place both points in one of the capacity-one
+triangles `(0,5,6), (0,1,2), (2,5,6)`. -/
 def capFilter (wl wq : List ℕ) : Bool :=
   !((hinside 7 wl 0 5 6 && hinside 7 wq 0 5 6) || (hinside 7 wl 0 1 2 && hinside 7 wq 0 1 2) ||
     (hinside 7 wl 2 5 6 && hinside 7 wq 2 5 6))
@@ -520,13 +510,11 @@ theorem cases_keys (m : Bool) {i j : ℕ} (hi : i < 5) (hj : j < (Model.qW m).le
   rw [hc] at this
   simpa using this
 
-/-- **Claim** (`C1_ONE_LOWER_CONVEX_TOP:claim-cover`). Under `f ≤ d`, the words of `L, Q` for the
-heptagon (1) (entries `1 ≤ rᵢ ≤ 5`, complement relation (8); 57 words) are a lower word (9) and a
-`Q`-word of the mode, forming a base pair that passes the capacity filter (`claim_cap1`); the pairs
-listed in the table of Section 3 are split further by all signs of the listed actual triangles (in
-the trees of the package). `docs/proof/nine/C1_ONE_LOWER_CONVEX_TOP.md`, lines 117-173.
-Uses: C1_ONE_LOWER_TOP_CAP:(12)-(13), C1_ONE_LOWER_CONVEX_TOP:claim-cap1. -/
-theorem claim_cover {m : Bool} {h c d f : ℝ} {X Y L Q : Point} (C : Cell m h c d f X Y L Q) :
+/-- The radial words of `L, Q` for the hull heptagon (entries `1 ≤ rᵢ ≤ 5`) are a lower word of
+`Model.lowerW` and a `Q`-word of the mode, forming a base pair that passes the capacity filter
+(by `Cell.cap1`), so it is a key of `Model.caseKeys`. Some of these pairs are split further, in
+the trees of the package, by the signs of actual triangles. -/
+theorem exists_caseKey_hullWords {m : Bool} {h c d f : ℝ} {X Y L Q : Point} (C : Cell m h c d f X Y L Q) :
     ∃ i j, (m, i, j) ∈ Model.caseKeys ∧
       HasHullWord (heptagon h c d f X Y) L (fun v => (Model.lowerW.getD i []).getD v.val 0) ∧
       HasHullWord (heptagon h c d f X Y) Q (fun v => ((Model.qW m).getD j []).getD v.val 0) ∧
@@ -618,21 +606,15 @@ theorem claim_cover {m : Bool} {h c d f : ℝ} {X Y L Q : Point} (C : Cell m h c
   · obtain ⟨i1, i2⟩ := ins (a := 2) (b := 5) (e := 6) (by decide) (by decide) (by decide) h1 h2
     exact C.cap1 (Or.inr (Or.inr rfl)) i1 i2
 
-/-! ### Sections 4–5: the certificate package -/
+/-! ### The certificate package -/
 
-/-- **Claim** (`C1_ONE_LOWER_CONVEX_TOP:(12)`). The certificate package: under `f ≤ d`, no cell of
-either mode exists. Each of the 168 and 52 terminal cells (the split pairs divided by the signs of
-the listed actual triangles) is excluded by a fixed positive combination (one of the 155
-certificates, converted to the atoms of the cell) of products of the 30 affine factors (11), the
-cost `(1-d)(1-f) - ω` and the signed actual-triangle areas minus `s, 3s, ρ` by certified
-occupancy, whose unit-cube bound is negative (kernel check `Model.allCases_ok`).
-`docs/proof/nine/C1_ONE_LOWER_CONVEX_TOP.md`, lines 175-231 (data `c1_one_lower_convex_top_certificates.json`,
-checker `check_c1_one_lower_convex_top.py`).
-Uses: C1_ONE_LOWER_CONVEX_TOP:table, C1_ONE_LOWER_CONVEX_TOP:(4), C1_ONE_LOWER_CONVEX_TOP:(5),
-C1_ONE_LOWER_CONVEX_TOP:(6), C1_ONE_LOWER_CONVEX_TOP:(7), C1_ONE_LOWER_TOP_CAP:(14),
-CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem eq12 {m : Bool} {h c d f : ℝ} {X Y L Q : Point} (C : Cell m h c d f X Y L Q) : False := by
-  obtain ⟨i, j, hk, hL, hQ, bL, bQ⟩ := claim_cover C
+/-- The certificate package: under `f ≤ d`, no cell of either mode exists. Each of the 168
+(`upper`) and 52 (`cap`) terminal cells (the base pairs divided by the signs of the listed actual
+triangles) is excluded by a fixed positive combination of products of the 30 affine factors
+`Model.factors`, the cost `(1-d)(1-f) - ω` and the signed actual-triangle areas minus `s, 3s, ρ`
+by certified occupancy, whose unit-cube bound is negative (kernel check `Model.allCases_ok`). -/
+theorem heptagon_cell_false {m : Bool} {h c d f : ℝ} {X Y L Q : Point} (C : Cell m h c d f X Y L Q) : False := by
+  obtain ⟨i, j, hk, hL, hQ, bL, bQ⟩ := exists_caseKey_hullWords C
   have HC : HullCell 7 (heptagon h c d f X Y) (pts h c d f X Y L Q)
       [Model.lowerW.getD i [], (Model.qW m).getD j []] := by
     refine ⟨by norm_num, rfl, C.convex, pts_heptagon, fun k hk => ?_, fun k hk => ?_, C.areaOK⟩
@@ -654,9 +636,9 @@ theorem eq12 {m : Bool} {h c d f : ℝ} {X Y L Q : Point} (C : Cell m h c d f X 
   rcases v with _ | _ | _ | _ | _ | _ | _ | _ | _ | _ | _ | _ | v <;> simp only [zeta] <;>
     constructor <;> linarith
 
-/-! ### Section 1 and the Theorem -/
+/-! ### The two placements -/
 
-/-- Placement 1 is a cell of mode `upper`. -/
+/-- The placement `Upper` is a cell of mode `upper`. -/
 theorem Upper.cell {h c d f : ℝ} {X Y L Q : Point} (hS : Upper h c d f X Y L Q) (hfd : f ≤ d) :
     Cell false h c d f X Y L Q := by
   obtain ⟨a0, a1, a2, a3, a4⟩ := sq_anchor hS.anchors
@@ -674,11 +656,10 @@ theorem Upper.cell {h c d f : ℝ} {X Y L Q : Point} (hS : Upper h c d f X Y L Q
   exact ⟨⟨hS.anchors, fun i => by fin_cases i; exacts [hS.topXSq, hS.topYSq, hL, hQ], hS.min⟩,
     hfd, hS.lower, hS.topX, hS.topY, hS.convexDXY, hS.convexXYF, hS.upper⟩
 
-/-- **Claim** (`C1_ONE_LOWER_CONVEX_TOP:claim-hull`). In placement 2, Lemma 3 of `C1_ZERO_LOWER.md`
-(which needs no zero-lower hypothesis) names the three top points so that `D, X, Y, F` is the
-convex top hull and the third point lies in `DFX ∩ DFY`: some renaming of placement 2 is a cell
-of mode `cap`. `docs/proof/nine/C1_ONE_LOWER_CONVEX_TOP.md`, lines 27-45. Uses: C1_ZERO_LOWER:Lemma3. -/
-theorem claim_hull {h c d f : ℝ} {X Y L Q : Point} (hS : ThreeTop h c d f X Y L Q) (hfd : f ≤ d) :
+/-- In the placement `ThreeTop`, `C1ZeroLower.Comp.three_top` names the three top points so that
+`D, X, Y, F` is the convex top hull and the third point lies in `DFX ∩ DFY`: some renaming of the
+placement is a cell of mode `cap`. -/
+theorem exists_cap_cell_of_threeTop {h c d f : ℝ} {X Y L Q : Point} (hS : ThreeTop h c d f X Y L Q) (hfd : f ≤ d) :
     ∃ X' Y' Q' : Point, Cell true h c d f X' Y' L Q' := by
   obtain ⟨a0, a1, a2, a3, a4⟩ := sq_anchor hS.anchors
   have hL : L ∈ unitSquare := inSquare_of_inTriangle hS.lower a0 a1 a4
@@ -691,7 +672,7 @@ theorem claim_hull {h c d f : ℝ} {X Y L Q : Point} (hS : ThreeTop h c d f X Y 
   have topc : ∀ k : Fin 3, InTopCap d f (![X, Y, Q, L] k.castSucc) := by
     intro k; fin_cases k
     exacts [hS.topX, hS.topY, hS.topQ]
-  obtain ⟨σ, c1, c2, i1, i2⟩ := three_top H topc
+  obtain ⟨σ, c1, c2, i1, i2, -⟩ := H.three_top topc
   set Q4 : Fin 4 → Point := ![X, Y, Q, L] with hQ4
   set ι : Fin 4 → Fin 4 := ![(σ 1).castSucc, (σ 0).castSucc, 3, (σ 2).castSucc] with hι
   have hinj : Function.Injective ι := by
@@ -709,18 +690,14 @@ theorem claim_hull {h c d f : ℝ} {X Y L Q : Point} (hS : ThreeTop h c d f X Y 
   convert H' using 1
   funext i; fin_cases i <;> rfl
 
-/-- **Theorem** (`C1_ONE_LOWER_CONVEX_TOP:Theorem`). Neither placement is competitive (under
-`f ≤ d`; `C1_ONE_LOWER_MIXED_CAPS:Theorem2` transposes first):
-(1) `L ∈ OHC`, `Q ∈ HCDF`, and two top-cap points `X, Y` with convex hull `D, X, Y, F` in that
-cyclic order; (2) `L ∈ OHC` and the other three free points in the top cap.
-`docs/proof/nine/C1_ONE_LOWER_CONVEX_TOP.md`, lines 13-21 and 224-231.
-Uses: C1_ONE_LOWER_CONVEX_TOP:claim-hull, C1_ONE_LOWER_CONVEX_TOP:claim-cover,
-C1_ONE_LOWER_CONVEX_TOP:(12). -/
-theorem mainTheorem {h c d f : ℝ} {X Y L Q : Point} (hfd : f ≤ d)
+/-- Under `f ≤ d`, neither placement is competitive: `Upper` (`L ∈ OHC`, `Q ∈ HCDF`, and two
+top-cap points `X, Y` with convex hull `D, X, Y, F` in that cyclic order) and `ThreeTop`
+(`L ∈ OHC` and the other three free points in the top cap). -/
+theorem upper_or_threeTop_false {h c d f : ℝ} {X Y L Q : Point} (hfd : f ≤ d)
     (hS : Upper h c d f X Y L Q ∨ ThreeTop h c d f X Y L Q) : False := by
   rcases hS with hS | hS
-  · exact eq12 (hS.cell hfd)
-  · obtain ⟨X', Y', Q', C⟩ := claim_hull hS hfd
-    exact eq12 C
+  · exact heptagon_cell_false (hS.cell hfd)
+  · obtain ⟨X', Y', Q', C⟩ := exists_cap_cell_of_threeTop hS hfd
+    exact heptagon_cell_false C
 
 end Heilbronn.Nine.C1OneLowerConvexTop

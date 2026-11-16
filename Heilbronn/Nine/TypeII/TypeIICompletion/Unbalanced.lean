@@ -4,30 +4,28 @@ public import Heilbronn.Nine.TypeII.TypeII
 public import Heilbronn.Nine.TypeII.TypeIICompletion.Capacity
 public import Heilbronn.Nine.TypeII.TypeIICompletion.Sectors
 
-/-! # The unbalanced triangular-right branch (`docs/proof/nine/TYPE_II_COMPLETION.md`, §§12–14)
+/-! # The unbalanced triangular-right branch
 
-`TYPE_II_COMPLETION.md` lines 1373–1931. The count row `(1,2,3)`: the left point is `E`, the
-central points are `P, Q`, the right points `R, S, T`. In the branch treated here the five right
-points `B, C, R, S, T` have triangular hull `BCR`, with `S, T` strictly inside
-(`UnbalancedTriRight`). `R = (r, u)`, `q = 1 - λ`, `w = 1 - b`, `v = 1 - u`,
-`g = r - b - wu`, `δ = [EBR] = bu + λ(r - b)`.
+The count row `(1,2,3)`: the left point is `E`, the central points are `P, Q`, the right points
+`R, S, T`. In the branch treated here the five right points `B, C, R, S, T` have triangular hull
+`BCR`, with `S, T` strictly inside (`UnbalancedTriRight`). `R = (r, u)`, `q = 1 - λ`,
+`w = 1 - b`, `v = 1 - u`, `g = r - b - wu`, `δ = [EBR] = bu + λ(r - b)`.
 
-* `theorem12` (**Theorem 12**): the ear `EBR` is empty; the eight points without `E`, resp.
-  without `B`, have quadrilateral hulls `DBRC`, `DERC` with interior points `P, Q, S, T`; both
-  central points are above `CE`;
-* `claim_sector_ledger` (§12.3): the labelling by `DR` and the sector assignments of both
-  quadrilaterals, with the two-interior costs at `σ = 8/73`;
-* `eq42` ((42), off-route): `X_y < λ + q² X_x` for the right points;
-* `theorem13` (**Theorem 13**): the half-square normal form with two points in cell II has a
-  triangle of doubled area `< 3/28`;
-* `supportMap`, `claim_support_map` ((52)), `eq53`: the affine map `D, R, W ↦ (0,0), (1,1),
-  (0,1)` of §14 (`W = DE ∩ BR`) and its scale `Λ < 65/64`;
-* `theorem14` (**Theorem 14**): no competitive configuration of count `(1,2,3)` has a triangular
-  right five-point hull.
+* `unbalancedTriRight_structure`: the ear `EBR` is empty; the eight points without `E`, resp. without `B`, have
+  quadrilateral hulls `DBRC`, `DERC` with interior points `P, Q, S, T`; both central points are
+  above `CE`;
+* `t12_sectors`: the sector assignments of `DERC`, with `P, Q` on opposite sides of `DR`, and
+  likewise `S, T`;
+* `minTriangleArea_lt_of_two_in_cellII`: the half-square normal form with two points in cell II has a triangle of doubled
+  area `< 3/28`;
+* `supportMap`, `supportMap_spec`, `supportMap_scale_bounds`: the affine map `D, R, W ↦ (0,0), (1,1), (0,1)`
+  (`W = DE ∩ BR`) and its scale `Λ < 65/64`;
+* `minTriangleArea_lt_A₀_of_triangular_right`: no competitive configuration of count `(1,2,3)` has a triangular right
+  five-point hull.
 
-Thresholds: §12 uses the doubled threshold `σ = 8/73 < 2A₀` together with least area `A₀` (for
-`FOUR_INTERIOR_QUADRILATERALS.md`), as stated in the manuscript; Theorem 13 is at the normalized
-doubled threshold `τ = 3/28`.
+Thresholds: `unbalancedTriRight_structure` uses the doubled threshold `σ = 8/73 < 2A₀` together with least area
+`A₀` (for `FourInteriorQuadrilaterals.ncard_inQuad_le_four`); `minTriangleArea_lt_of_two_in_cellII` is at the normalized doubled
+threshold `τ = 3/28`.
 -/
 
 @[expose] public section
@@ -37,16 +35,17 @@ namespace Heilbronn.Nine.TypeIICompletion
 
 open Heilbronn.Nine.TypeII
 
-/-- The unbalanced triangular-right branch: (5), the free points in the square, `P, Q` central,
-`R` a right point, and `S, T` strictly inside the right triangle `BCR` (so the five right points
-`B, C, R, S, T` have triangular hull `BCR`). -/
+/-- The unbalanced triangular-right branch: the Type-II data (`TypeIIData`, which includes the
+free points in the square), `P, Q` central, `R` a right point, and `S, T` strictly inside the
+right triangle `BCR` (so the five right points `B, C, R, S, T` have triangular hull `BCR`). -/
 def UnbalancedTriRight (l b : ℝ) (P Q R S T : Point) : Prop :=
   TypeIIData l b P Q R S T ∧ IsCentral b P ∧ IsCentral b Q ∧ IsRight b R ∧
     InTriangle S (ptB b) R ptC ∧ InTriangle T (ptB b) R ptC
 
-/-! ### §12: the lower ear and the two quadrilaterals -/
+/-! ### The lower ear and the two quadrilaterals -/
 
-/-- The scalar bound (41): `δ ≤ bu + λ(r-b) < 3σ` at `σ = 8/73` from (39). -/
+/-- The scalar bound on the ear: from `g = r - b - (1-b)u ≥ Kσ`, `bq ≥ σ` and `r ≤ 1`,
+`δ = bu + λ(r-b) < 3σ`, at `σ = 8/73`. -/
 theorem t12_delta {b l r u : ℝ} (hb : 0 < b) (hl : 0 < l) (hrb : 0 ≤ r - b) (hr1 : r ≤ 1)
     (hu0 : 0 ≤ u) (hg : Ktwo * (8 / 73) ≤ r - b - (1 - b) * u) (hbq : 8 / 73 ≤ b * (1 - l)) :
     b * u + l * (r - b) < 3 * (8 / 73) := by
@@ -98,14 +97,14 @@ theorem ur_basic {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P 
   have hu1' : R.2 < 1 := by nlinarith
   have hg : Ktwo * (8 / 73) ≤ sarea (ptB b) R ptC := by
     have h5 : (8 / 73 : ℝ) / 2 ≤ minTriangleArea ![ptB b, R, ptC, S, T] :=
-      tc_min_sub h146 _ ![3, 6, 1, 7, 8] ![0, 2, 0, 0, 0, 0, 1, 3, 4] (by norm_num) (by decide)
+      min_sub' h146 _ ![3, 6, 1, 7, 8] ![0, 2, 0, 0, 0, 0, 1, 3, 4] (by norm_num) (by decide)
         (by intro i; fin_cases i <;> rfl)
     exact tc_two_int (by norm_num) hS hT h5
   have hDEB : 0 < sarea ptD (ptE l) (ptB b) := by simp only [sarea, ptD, ptE, ptB]; nlinarith
-  have hbq := tc_ge_of_pos hs2 h146 0 2 3 hDEB
+  have hbq := sarea_ge_of_le_min_of_pos hs2 h146 0 2 3 hDEB
   have hδ : 0 < sarea (ptE l) (ptB b) R := by
     simp only [sarea, ptE, ptB]; nlinarith [mul_pos hl (show 0 < R.1 - b by linarith)]
-  have hδs := tc_ge_of_pos hs2 h146 2 3 6 hδ
+  have hδs := sarea_ge_of_le_min_of_pos hs2 h146 2 3 6 hδ
   simp only [typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero]
     at hbq hδs
   have hbq' : 8 / 73 ≤ b * (1 - l) := by
@@ -130,7 +129,7 @@ theorem ur_inECR {l b : ℝ} {R X : Point} (hb : 0 < b) (hb1 : b < 1) (hl : 0 < 
       nlinarith
   have hERX : 0 < sarea (ptE l) R X := by
     by_contra hcon; push Not at hcon
-    exact hXn (tc_mem_hull_of_sarea hδpos hX.1.le (by rw [sarea_swap₁₂]; linarith) hEBX.le)
+    exact hXn (mem_convexHull_of_sarea hδpos hX.1.le (by rw [sarea_swap₁₂]; linarith) hEBX.le)
   have hCEX : 0 < sarea ptC (ptE l) X := by
     refine tc_pos_of_inTri hX ?_ hCER ?_ ?_ <;> simp only [sarea, ptB, ptC, ptE] at hCER ⊢ <;>
       nlinarith
@@ -151,12 +150,12 @@ theorem ur_inDERC {l b : ℝ} {R X : Point} (hb : 0 < b) (hl : 0 < l) (hl1 : l <
       nlinarith
   have hERX : 0 < sarea (ptE l) R X := by
     by_contra hcon; push Not at hcon
-    exact hXn (tc_mem_hull_of_sarea hδpos hBRX.le (by rw [sarea_swap₁₂]; linarith) hEBX.le)
+    exact hXn (mem_convexHull_of_sarea hδpos hBRX.le (by rw [sarea_swap₁₂]; linarith) hEBX.le)
   have hDEX : 0 < sarea ptD (ptE l) X := by
     refine tc_pos_of_inTri hX ?_ ?_ ?_ ?_ <;> simp only [sarea, ptD, ptE, ptB, ptC] <;> nlinarith
   exact ⟨hDEX, hERX, RC_pos_of_central hb hX hR hu1, hX.2.2⟩
 
-/-- Theorem 12 (a)–(c): the empty ear and the two quadrilaterals. -/
+/-- The first parts of `unbalancedTriRight_structure`: the empty ear and the two quadrilaterals. -/
 theorem t12_quads {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P Q R S T)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T)) :
     (P ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) ∧
@@ -177,23 +176,23 @@ theorem t12_quads {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P
   have hs2 : (0 : ℝ) < 8 / 73 / 2 := by norm_num
   have hδ' : sarea (ptE l) (ptB b) R < 3 * (2 * (8 / 73 / 2)) := by linarith
   have nP : P ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) :=
-    not_mem_ear hδ' hδpos (fun h => tc_ge_of_pos hs2 h146 3 6 4 h)
-      (fun h => tc_ge_of_pos hs2 h146 6 2 4 h) (fun h => tc_ge_of_pos hs2 h146 2 3 4 h)
+    not_mem_ear hδ' hδpos (fun h => sarea_ge_of_le_min_of_pos hs2 h146 3 6 4 h)
+      (fun h => sarea_ge_of_le_min_of_pos hs2 h146 6 2 4 h) (fun h => sarea_ge_of_le_min_of_pos hs2 h146 2 3 4 h)
       (sarea_ne_zero_of_min_pos hpos 3 6 4) (sarea_ne_zero_of_min_pos hpos 6 2 4)
       (sarea_ne_zero_of_min_pos hpos 2 3 4)
   have nQ : Q ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) :=
-    not_mem_ear hδ' hδpos (fun h => tc_ge_of_pos hs2 h146 3 6 5 h)
-      (fun h => tc_ge_of_pos hs2 h146 6 2 5 h) (fun h => tc_ge_of_pos hs2 h146 2 3 5 h)
+    not_mem_ear hδ' hδpos (fun h => sarea_ge_of_le_min_of_pos hs2 h146 3 6 5 h)
+      (fun h => sarea_ge_of_le_min_of_pos hs2 h146 6 2 5 h) (fun h => sarea_ge_of_le_min_of_pos hs2 h146 2 3 5 h)
       (sarea_ne_zero_of_min_pos hpos 3 6 5) (sarea_ne_zero_of_min_pos hpos 6 2 5)
       (sarea_ne_zero_of_min_pos hpos 2 3 5)
   have nS : S ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) :=
-    not_mem_ear hδ' hδpos (fun h => tc_ge_of_pos hs2 h146 3 6 7 h)
-      (fun h => tc_ge_of_pos hs2 h146 6 2 7 h) (fun h => tc_ge_of_pos hs2 h146 2 3 7 h)
+    not_mem_ear hδ' hδpos (fun h => sarea_ge_of_le_min_of_pos hs2 h146 3 6 7 h)
+      (fun h => sarea_ge_of_le_min_of_pos hs2 h146 6 2 7 h) (fun h => sarea_ge_of_le_min_of_pos hs2 h146 2 3 7 h)
       (sarea_ne_zero_of_min_pos hpos 3 6 7) (sarea_ne_zero_of_min_pos hpos 6 2 7)
       (sarea_ne_zero_of_min_pos hpos 2 3 7)
   have nT : T ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) :=
-    not_mem_ear hδ' hδpos (fun h => tc_ge_of_pos hs2 h146 3 6 8 h)
-      (fun h => tc_ge_of_pos hs2 h146 6 2 8 h) (fun h => tc_ge_of_pos hs2 h146 2 3 8 h)
+    not_mem_ear hδ' hδpos (fun h => sarea_ge_of_le_min_of_pos hs2 h146 3 6 8 h)
+      (fun h => sarea_ge_of_le_min_of_pos hs2 h146 6 2 8 h) (fun h => sarea_ge_of_le_min_of_pos hs2 h146 2 3 8 h)
       (sarea_ne_zero_of_min_pos hpos 3 6 8) (sarea_ne_zero_of_min_pos hpos 6 2 8)
       (sarea_ne_zero_of_min_pos hpos 2 3 8)
   -- `D, B, R, C`
@@ -213,15 +212,15 @@ theorem t12_quads {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P
     simp only [sarea, ptD, ptE]; nlinarith [mul_pos (show 0 < 1 - l by linarith)
       (show 0 < R.1 by linarith)]
   have hCDE : 0 < sarea ptC ptD (ptE l) := by simp only [sarea, ptD, ptC, ptE]; nlinarith
-  have hconvE : ConvexQuad ptD (ptE l) R ptC := ⟨hDER, tc_inTri_area_pos hSE, hRCD, hCDE⟩
+  have hconvE : ConvexQuad ptD (ptE l) R ptC := ⟨hDER, inTri_pos hSE, hRCD, hCDE⟩
   exact ⟨⟨nP, nQ, nS, nT⟩, ⟨hconvB, inQuad_of_tri1 hconvB hP, inQuad_of_tri1 hconvB hQ,
     inQuad_of_tri2 hconvB hS, inQuad_of_tri2 hconvB hT⟩,
     ⟨hconvE, ur_inDERC hb hl hl1 hR hu0 hu1 hδpos hP nP, ur_inDERC hb hl hl1 hR hu0 hu1 hδpos hQ nQ, inQuad_of_tri2 hconvE hSE,
       inQuad_of_tri2 hconvE hTE⟩, hSE, hTE⟩
 
-/-- Theorem 12 (d): one point in each diagonal sector of `D, E, R, C`
-(`FOUR_INTERIOR_QUADRILATERALS.md`); the sectors at `DE` and `CD` hold `P` and `Q`, which are
-therefore above `CE`, one on each side of `DR`. -/
+/-- The last part of `unbalancedTriRight_structure`: one point in each diagonal sector of `D, E, R, C`
+(`FourInteriorQuadrilaterals.ncard_inQuad_le_four`); the sectors at `DE` and `CD` hold `P` and `Q`, which are
+therefore above `CE`, one on each side of `DR`; `S` and `T` are also on opposite sides of `DR`. -/
 theorem t12_sectors {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P Q R S T)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T)) :
     0 < sarea (ptE l) ptC P ∧ 0 < sarea (ptE l) ptC Q ∧
@@ -236,7 +235,7 @@ theorem t12_sectors {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b
     lt_of_lt_of_le A₀_pos hmin
   set Pc := typeIIConfig l b P Q R S T with hPc
   have hcq : QuadrilateralHull.ConvexQuad (Pc 0) (Pc 2) (Pc 6) (Pc 1) := hconvE
-  obtain ⟨hle4, h4⟩ := FourInteriorQuadrilaterals.theorem1 hsq hmin hcq
+  obtain ⟨hle4, h4⟩ := FourInteriorQuadrilaterals.ncard_inQuad_le_four hsq hmin hcq
   have hge4 : 4 ≤ Set.ncard {m | QuadrilateralHull.InQuad (Pc m) (Pc 0) (Pc 2) (Pc 6) (Pc 1)} := by
     have hsub : ((({4, 5, 7, 8} : Finset (Fin 9))) : Set (Fin 9)) ⊆
         {m | QuadrilateralHull.InQuad (Pc m) (Pc 0) (Pc 2) (Pc 6) (Pc 1)} := by
@@ -338,15 +337,12 @@ theorem t12_sectors {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b
   · subst h'; exact ⟨hmE', hmE, Or.inl ⟨hmR', hmR⟩, hST⟩
   · subst h'; exact absurd hmR (not_lt.2 hmR'.le)
 
-/-- **Theorem 12** (`TYPE_II_COMPLETION:Theorem12`). In the unbalanced triangular-right branch,
-at least area `A₀` (doubled threshold `σ = 8/73`): the closed actual triangle `EBR` contains no
-further configuration point (its doubled area is below `3σ`, (39)–(41)); the eight points other
-than `E` have quadrilateral hull `DBRC`, the eight points other than `B` have quadrilateral hull
-`DERC`, both with the interior points `P, Q, S, T`; and both central points lie above `CE`.
-`docs/proof/nine/TYPE_II_COMPLETION.md`, lines 1373–1506.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, FOUR_INTERIOR_QUADRILATERALS:Theorem1. -/
-theorem theorem12 {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P Q R S T)
+/-- In the unbalanced triangular-right branch, at least area `A₀` (doubled threshold
+`σ = 8/73`): the closed actual triangle `EBR` contains no further configuration point (its
+doubled area is below `3σ`, `t12_delta`); the eight points other than `E` have quadrilateral hull
+`DBRC`, the eight points other than `B` have quadrilateral hull `DERC`, both with the interior
+points `P, Q, S, T`; and both central points lie above `CE`. -/
+theorem unbalancedTriRight_structure {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P Q R S T)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T)) :
     (P ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) ∧
       Q ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) ∧
@@ -361,164 +357,10 @@ theorem theorem12 {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P
   obtain ⟨h4, h5, -, -⟩ := t12_sectors hu hmin
   exact ⟨h1, h2, h3, h4, h5⟩
 
-/-- **Claim** (`TYPE_II_COMPLETION:claim-sector-ledger`, made up; §12.3). In the setting of
-Theorem 12, the line `DR` separates `P` from `Q` and `S` from `T`. Labelled so that `P, S` are on
-its `C` side and `Q, T` on its `B` side, the sector assignments are `Q` at `DB`, `T` at `BR`, `S`
-at `RC`, `P` at `CD` in `D, B, R, C`, and `Q` at `DE`, `T` at `ER`, `S` at `RC`, `P` at `CD` in
-`D, E, R, C`; with `σ = 8/73` and `K = 4 + 2√3` the two-interior costs are `q ≥ Kσ` (`DCE`),
-`g ≥ Kσ` (`BCR`), `qr ≥ Kσ` (`DER`), `r - b + bu ≥ Kσ` (`DBR`), `v ≥ Kσ` (`DCR`),
-`v - q(1-r) ≥ Kσ` (`ECR`); moreover `bq ≥ σ`, `σ ≤ δ < 3σ`, and (39):
-`u ≤ 1 - Kσ/w`, `b ≤ 1 - Kσ < 3/16`, `λ ≤ 1 - σ/b`. `docs/proof/nine/TYPE_II_COMPLETION.md`,
-lines 1507–1532 (and 1408–1441).
+/-! ### Two points in cell II: scalar steps (`τ = 3/28`, `β = 1 - f`) -/
 
-Uses: TYPE_II_COMPLETION:Theorem12, FOUR_INTERIOR_QUADRILATERALS:Theorem1,
-CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_sector_ledger {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P Q R S T)
-    (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T)) :
-    ((0 < sarea ptD R P ∧ sarea ptD R Q < 0) ∨ (sarea ptD R P < 0 ∧ 0 < sarea ptD R Q)) ∧
-    ((0 < sarea ptD R S ∧ sarea ptD R T < 0) ∨ (sarea ptD R S < 0 ∧ 0 < sarea ptD R T)) ∧
-    (0 < sarea ptD R P → sarea ptD R Q < 0 → 0 < sarea ptD R S → sarea ptD R T < 0 →
-      let σ : ℝ := 8 / 73
-      let q := 1 - l
-      let r := R.1
-      let u := R.2
-      DiagSector ptD (ptB b) R ptC Q ∧ DiagSector (ptB b) R ptC ptD T ∧
-        DiagSector R ptC ptD (ptB b) S ∧ DiagSector ptC ptD (ptB b) R P ∧
-        DiagSector ptD (ptE l) R ptC Q ∧ DiagSector (ptE l) R ptC ptD T ∧
-        DiagSector R ptC ptD (ptE l) S ∧ DiagSector ptC ptD (ptE l) R P ∧
-        Ktwo * σ ≤ q ∧ Ktwo * σ ≤ r - b - (1 - b) * u ∧ Ktwo * σ ≤ q * r ∧
-        Ktwo * σ ≤ r - b + b * u ∧ Ktwo * σ ≤ 1 - u ∧ Ktwo * σ ≤ (1 - u) - q * (1 - r) ∧
-        σ ≤ b * q ∧ σ ≤ b * u + l * (r - b) ∧ b * u + l * (r - b) < 3 * σ ∧
-        u ≤ 1 - Ktwo * σ / (1 - b) ∧ b ≤ 1 - Ktwo * σ ∧ 1 - Ktwo * σ < 3 / 16 ∧
-        l ≤ 1 - σ / b) := by
-  obtain ⟨hPce, hQce, hPQ, hST⟩ := t12_sectors hu hmin
-  refine ⟨hPQ, hST, fun hP' hQ' hS' hT' => ?_⟩
-  dsimp only
-  obtain ⟨-, ⟨-, qPB, qQB, qSB, qTB⟩, ⟨-, qP, qQ, qS, qT⟩, hSE, hTE⟩ := t12_quads hu hmin
-  obtain ⟨hg, hbq, hδpos, hδs, hδ3, hrb, hu1'⟩ := ur_basic hu hmin
-  obtain ⟨⟨hb, hb1, hl, hl1, hPsq, hQsq, ⟨hr0, hr1, hu0, hu1⟩, hSsq, hTsq⟩, hP, hQ, hR, hS, hT⟩ := hu
-  have h146 : (8 / 73 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by
-    linarith [A₀_bounds.2.1]
-  have hσ : (0 : ℝ) < 8 / 73 := by norm_num
-  have sw : ∀ X : Point, sarea ptD R X < 0 → 0 < sarea R ptD X := fun X h => by
-    linarith [sarea_swap₁₂ ptD R X]
-  have hKs : (13 / 16 : ℝ) < Ktwo * (8 / 73) := by linarith [tc_Ktwo_bounds.1]
-  have eg : sarea (ptB b) R ptC = R.1 - b - (1 - b) * R.2 := by simp only [sarea, ptB, ptC]; ring
-  have eδ : sarea (ptE l) (ptB b) R = b * R.2 + l * (R.1 - b) := by
-    simp only [sarea, ptE, ptB]; ring
-  rw [eg] at hg
-  rw [eδ] at hδs hδ3
-  -- two-interior costs
-  have cDEC : Ktwo * (8 / 73) ≤ 1 - l := by
-    have h5 : (8 / 73 : ℝ) / 2 ≤ minTriangleArea ![ptD, ptE l, ptC, P, Q] :=
-      tc_min_sub h146 _ ![0, 2, 1, 4, 5] ![0, 2, 1, 0, 3, 4, 0, 0, 0] (by norm_num) (by decide)
-        (by intro i; fin_cases i <;> rfl)
-    have := tc_two_int hσ (pos_P hb hl1 hP hPce) (pos_P hb hl1 hQ hQce) h5
-    simp only [sarea, ptD, ptE, ptC] at this; linarith
-  have cDER : Ktwo * (8 / 73) ≤ (1 - l) * R.1 := by
-    have h5 : (8 / 73 : ℝ) / 2 ≤ minTriangleArea ![ptD, ptE l, R, Q, T] :=
-      tc_min_sub h146 _ ![0, 2, 6, 5, 8] ![0, 0, 1, 0, 0, 3, 2, 0, 4] (by norm_num) (by decide)
-        (by intro i; fin_cases i <;> rfl)
-    have := tc_two_int hσ ⟨qQ.1, qQ.2.1, sw Q hQ'⟩ ⟨qT.1, qT.2.1, sw T hT'⟩ h5
-    simp only [sarea, ptD, ptE] at this; linarith
-  have cDBR : Ktwo * (8 / 73) ≤ R.1 - b + b * R.2 := by
-    have h5 : (8 / 73 : ℝ) / 2 ≤ minTriangleArea ![ptD, ptB b, R, Q, T] :=
-      tc_min_sub h146 _ ![0, 3, 6, 5, 8] ![0, 0, 0, 1, 0, 3, 2, 0, 4] (by norm_num) (by decide)
-        (by intro i; fin_cases i <;> rfl)
-    have := tc_two_int hσ ⟨hQ.1, qQB.2.1, sw Q hQ'⟩ ⟨qTB.1, hT.1, sw T hT'⟩ h5
-    simp only [sarea, ptD, ptB] at this; linarith
-  have cDRC : Ktwo * (8 / 73) ≤ 1 - R.2 := by
-    have h5 : (8 / 73 : ℝ) / 2 ≤ minTriangleArea ![ptD, R, ptC, P, S] :=
-      tc_min_sub h146 _ ![0, 6, 1, 4, 7] ![0, 2, 0, 0, 3, 0, 1, 4, 0] (by norm_num) (by decide)
-        (by intro i; fin_cases i <;> rfl)
-    have := tc_two_int hσ ⟨hP', qP.2.2.1, hP.2.2⟩ ⟨hS', hS.2.1, qS.2.2.2⟩ h5
-    simp only [sarea, ptD, ptC] at this; linarith
-  have cECR : Ktwo * (8 / 73) ≤ (1 - R.2) - (1 - l) * (1 - R.1) := by
-    have h5 : (8 / 73 : ℝ) / 2 ≤ minTriangleArea ![ptE l, R, ptC, S, T] :=
-      tc_min_sub h146 _ ![2, 6, 1, 7, 8] ![0, 2, 0, 0, 0, 0, 1, 3, 4] (by norm_num) (by decide)
-        (by intro i; fin_cases i <;> rfl)
-    have := tc_two_int hσ hSE hTE h5
-    simp only [sarea, ptE, ptC] at this; linarith
-  have hw : 0 < 1 - b := by linarith
-  refine ⟨⟨hQ.1, hQ.2.1, sw Q hQ'⟩, ⟨hT.1, sw T hT', hT.2.2⟩, ⟨hS.2.1, hS.2.2, hS'⟩,
-    ⟨hP.2.2, hP', hP.2.1⟩, ⟨qQ.1, hQce, sw Q hQ'⟩, ⟨hTE.1, sw T hT', hTE.2.2⟩,
-    ⟨hSE.2.1, hSE.2.2, hS'⟩, ⟨hP.2.2, hP', hPce⟩, cDEC, hg, cDER, cDBR, cDRC, cECR, hbq, hδs,
-    hδ3, ?_, ?_, by linarith, ?_⟩
-  · rw [le_sub_iff_add_le, ← le_sub_iff_add_le', div_le_iff₀ hw]
-    nlinarith
-  · nlinarith [mul_nonneg hw.le hu0]
-  · rw [le_sub_iff_add_le, ← le_sub_iff_add_le', div_le_iff₀ hb]
-    linarith
-
-/-- **Equation (42)** (`TYPE_II_COMPLETION:claim-42`). In the setting of Theorem 12 every right
-point `X ∈ {R, S, T}` satisfies `X_y < λ + q² X_x`: the closed triangle `D, E, (1/q, 1)` of area
-`1/2` already contains `C, P, Q`. Off-route (not used later). `docs/proof/nine/TYPE_II_COMPLETION.md`,
-lines 1534–1545.
-
-Uses: TYPE_II_COMPLETION:Theorem1, TYPE_II_COMPLETION:Theorem12. -/
-theorem eq42 {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P Q R S T)
-    (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T)) :
-    R.2 < l + (1 - l) ^ 2 * R.1 ∧ S.2 < l + (1 - l) ^ 2 * S.1 ∧ T.2 < l + (1 - l) ^ 2 * T.1 := by
-  classical
-  obtain ⟨hPce, hQce, -, -⟩ := t12_sectors hu hmin
-  have hsq := config_sq hu.1
-  obtain ⟨⟨hb, hb1, hl, hl1, hPsq, hQsq, hRsq, hSsq, hTsq⟩, -⟩ := hu
-  set Pc := typeIIConfig l b P Q R S T with hPc
-  have hq : 0 < 1 - l := by linarith
-  set W : Point := (1 / (1 - l), 1) with hW
-  have hΔ : sarea (Pc 0) (Pc 2) W = 1 := by
-    simp only [Pc, typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero, sarea, ptD, ptE, hW]
-    field_simp; ring
-  have harea : triangleArea (Pc 0) (Pc 2) W ≤ 1 / 2 := by
-    rw [triangleArea_eq, hΔ]; norm_num
-  have hmem : ∀ p : Point, p ∈ unitSquare → l + (1 - l) ^ 2 * p.1 ≤ p.2 →
-      p ∈ convexHull ℝ ({Pc 0, Pc 2, W} : Set Point) := by
-    intro p hp hpl
-    obtain ⟨h1, h2, h3, h4⟩ := hp
-    refine tc_mem_hull_of_sarea (by rw [hΔ]; norm_num) ?_ ?_ ?_
-    · have e : sarea (Pc 2) W p = (p.2 - l - (1 - l) ^ 2 * p.1) / (1 - l) := by
-        simp only [Pc, typeIIConfig_eq, Matrix.cons_val, sarea, ptE, hW]
-        field_simp; ring
-      rw [e]; exact div_nonneg (by linarith) hq.le
-    · have e : sarea W (Pc 0) p = (1 - p.2) / (1 - l) := by
-        simp only [Pc, typeIIConfig_eq, Matrix.cons_val_zero, sarea, ptD, hW]
-        field_simp; ring
-      rw [e]; exact div_nonneg (by linarith) hq.le
-    · simp only [Pc, typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero, sarea, ptD, ptE]
-      nlinarith
-  have habove : ∀ X : Point, X ∈ unitSquare → 0 < sarea (ptE l) ptC X →
-      l + (1 - l) ^ 2 * X.1 ≤ X.2 := by
-    intro X hX hce
-    obtain ⟨h1, h2, h3, h4⟩ := hX
-    simp only [sarea, ptE, ptC] at hce
-    nlinarith [mul_nonneg (mul_nonneg hq.le hl.le) h1]
-  have key : ∀ k : Fin 9, 6 ≤ k.val → (Pc k).2 < l + (1 - l) ^ 2 * (Pc k).1 := by
-    intro k hk
-    by_contra hcon
-    push Not at hcon
-    have hsub : ({1, 4, 5, k} : Finset (Fin 9)) ⊆ Finset.univ.filter fun k' =>
-        k' ≠ 0 ∧ k' ≠ 2 ∧ Pc k' ∈ convexHull ℝ ({Pc 0, Pc 2, W} : Set Point) := by
-      intro k' hk'
-      simp only [Finset.mem_insert, Finset.mem_singleton] at hk'
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and]
-      rcases hk' with rfl | rfl | rfl | rfl
-      · refine ⟨by decide, by decide, hmem _ (hsq 1) ?_⟩
-        show l + (1 - l) ^ 2 * 1 ≤ 1; nlinarith
-      · exact ⟨by decide, by decide, hmem _ hPsq (habove P hPsq hPce)⟩
-      · exact ⟨by decide, by decide, hmem _ hQsq (habove Q hQsq hQce)⟩
-      · refine ⟨fun h => ?_, fun h => ?_, hmem _ (hsq _) hcon⟩
-        · rw [h] at hk; simp at hk
-        · rw [h] at hk; simp at hk
-    have h4 : ({1, 4, 5, k} : Finset (Fin 9)).card = 4 := by
-      have : ∀ k : Fin 9, 6 ≤ k.val → ({1, 4, 5, k} : Finset (Fin 9)).card = 4 := by decide
-      exact this k hk
-    have := (Finset.card_le_card hsub).trans (theorem1 Pc hsq hmin 0 2 (by decide) W harea)
-    omega
-  exact ⟨key 6 (by decide), key 7 (by decide), key 8 (by decide)⟩
-
-/-! ### Theorem 13: scalar steps (`τ = 3/28`, `β = 1 - f`) -/
-
-/-- (46) gives `hβ ≥ 36/49` (§13.3, through `1/h + 1/β ≤ 7/3`). -/
+/-- The quadratic condition `4τ·hβ(h + β - hβ) ≤ (hβ - τ(h+β))²`, with `hβ > τ(h+β)`, gives
+`hβ ≥ 36/49` (through `1/h + 1/β ≤ 7/3`). -/
 theorem t13_U {h β : ℝ} (hh : 0 < h) (hβ : 0 < β)
     (hB : 0 < h * β - 3 / 28 * (h + β))
     (h46 : 4 * (3 / 28) * (h * β) * (h + β - h * β) ≤ (h * β - 3 / 28 * (h + β)) ^ 2) :
@@ -530,7 +372,7 @@ theorem t13_U {h β : ℝ} (hh : 0 < h) (hβ : 0 < β)
       (show 0 < 28 * (h * β) - 3 * (h + β) by linarith)]
   nlinarith [sq_nonneg (h - β)]
 
-/-- The distance cap (45) with `m ≥ 21/25` gives `w ≤ W₀ = 477/2800` (51). -/
+/-- The distance cap `τ ≤ (1-m)(m-w)` with `21/25 ≤ m ≤ 1` gives `w ≤ W₀ = 477/2800`. -/
 theorem t13_cap {m w : ℝ} (hm : 21 / 25 ≤ m) (hm1 : m ≤ 1) (h : 3 / 28 ≤ (1 - m) * (m - w)) :
     w ≤ 477 / 2800 := by
   by_contra hcon; push Not at hcon
@@ -539,8 +381,8 @@ theorem t13_cap {m w : ℝ} (hm : 21 / 25 ≤ m) (hm1 : m ≤ 1) (h : 3 / 28 ≤
   · nlinarith [mul_lt_mul_of_pos_left hcon (show 0 < 1 - m by linarith),
       mul_nonneg (show 0 ≤ m - 21 / 25 by linarith) (show 0 ≤ m - 925 / 2800 by linarith)]
 
-/-- The same-side case (§13.2, (48)): with `d_A, d_Z < 0` for the line `X → Y`, (46) holds and
-`hβτ ≤ (hβ - τ(h+β)) v - (h+β-hβ) v²` for `v = min(w, z) ≥ τ`. -/
+/-- The same-side case: with `d_A, d_Z < 0` for the line `X → Y`, the quadratic condition of
+`t13_U` holds, and `hβτ ≤ (hβ - τ(h+β)) v - (h+β-hβ) v²` for `v = w` or `v = z` (both `≥ τ`). -/
 theorem t13_same {h β x w y z : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
     (_hx : 0 ≤ x) (_hy : 0 ≤ y) (hw : 3 / 28 ≤ w) (hz : 3 / 28 ≤ z)
     (hlX : 3 / 28 ≤ β * x - (1 - β) * w) (_hkX : 3 / 28 ≤ h * (1 - x) - w)
@@ -587,7 +429,9 @@ theorem disc_of_quad {A C K t : ℝ} (hC : 0 ≤ C) (ht : 0 ≤ t) (hK : 0 < K)
   · nlinarith [sq_nonneg (A - 2 * C * t), mul_le_mul_of_nonneg_left h
       (show (0 : ℝ) ≤ 4 * C by linarith)]
 
-/-- The `t`-quadratic of the isolated case (§13.2, (50)), `t = w - τ`. -/
+/-- The isolated case `d_H, d_Z ≥ τ`: from the identity
+`w d_H + (h - w) d_Z = (h(1-x) - w)(w - z)`, the `t`-quadratic
+`hβτ ≤ (hβ - τ(2h + β - hβ)) t - (h+β-hβ) t²` holds for `t = w - τ`, and `w ≥ 2τ`. -/
 theorem t13_pp_quad {h β x w z dH dZ : ℝ} (hh : 0 < h) (hβ : 0 < β) (hβ1 : β < 1)
     (hx : 0 ≤ x) (hw : 3 / 28 ≤ w) (hz : 3 / 28 ≤ z)
     (hlX : 3 / 28 ≤ β * x - (1 - β) * w) (hkX : 3 / 28 ≤ h * (1 - x) - w)
@@ -616,7 +460,8 @@ theorem t13_pp_quad {h β x w z dH dZ : ℝ} (hh : 0 < h) (hβ : 0 < β) (hβ1 :
     nlinarith
   · nlinarith [mul_le_mul_of_nonneg_right hkh (show (0 : ℝ) ≤ w - 3 / 28 by linarith)]
 
-/-- (46) from the isolated case: `B ≥ A' > 0`. -/
+/-- The quadratic condition of `t13_U` from the `t`-quadratic of the isolated case
+(`t13_pp_quad`). -/
 theorem t13_46_of_quad {h β t : ℝ} (hh : 0 < h) (_hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
     (ht : 0 ≤ t)
     (hA : h * β * (3 / 28) ≤ (h * β - 3 / 28 * (h + (h + β - h * β))) * t -
@@ -631,7 +476,8 @@ theorem t13_46_of_quad {h β t : ℝ} (hh : 0 < h) (_hh1 : h < 1) (hβ : 0 < β)
   have h5 := pow_le_pow_left₀ hA0.le hAB 2
   exact ⟨by linarith, by linarith⟩
 
-/-- The containment case `(-,+)` (§13.4): `X` inside `HFY` forces `-N(Y) ≥ 3τ`, impossible. -/
+/-- The containment case, line signs `(d_H, d_F) = (-,+)`: `X` inside `HFY` would force
+`(1-β)h - (1-β)z - (h-β)y ≥ 3τ`, which the anchor bounds of `Y` exclude. -/
 theorem t13_contain {h β y z : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
     (_hy : 0 ≤ y) (hz : 3 / 28 ≤ z)
     (hlY : 3 / 28 ≤ β * y - (1 - β) * z) (hkY : 3 / 28 ≤ h * (1 - y) - z)
@@ -652,7 +498,8 @@ theorem t13_contain {h β y z : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (
           (show (0 : ℝ) ≤ 1 - h by linarith))]
     nlinarith [mul_nonneg hβ.le (hq h hh hh1.le).le, mul_nonneg (show 0 ≤ 1 - β by linarith) hh.le]
 
-/-- The distance cap (45) for one point, in both orders of `h, β`. -/
+/-- The distance cap for one point, in both orders of `h, β`: `τ ≤ (1-β)(β-w)` if `β ≤ h`, and
+`τ ≤ (1-h)(h-w)` if `h ≤ β`. -/
 theorem t13_W {h β x w : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (_hβ1 : β < 1)
     (hlX : 3 / 28 ≤ β * x - (1 - β) * w) (hkX : 3 / 28 ≤ h * (1 - x) - w)
     (hN : 3 / 28 ≤ (1 - β) * h - (1 - β) * w - (h - β) * x) :
@@ -671,7 +518,8 @@ theorem t13_W {h β x w : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (_hβ1 
     by_contra hcon; push Not at hcon
     nlinarith [mul_pos hβ (show 0 < 3 / 28 - (1 - h) * (h - w) by linarith)]
 
-/-- From (46), the caps of both points give `w, z ≤ W₀`. -/
+/-- With `hβ ≥ 36/49` (`t13_U`) and `h(1-β), (1-h)β ≥ τ`, the distance cap of a point gives
+`w ≤ W₀ = 477/2800`. -/
 theorem t13_caps {h β w : ℝ} (_hh : 0 < h) (hh1 : h < 1) (_hβ : 0 < β) (hβ1 : β < 1)
     (hU : 36 / 49 ≤ h * β) (h44a : 3 / 28 ≤ h * (1 - β)) (h44b : 3 / 28 ≤ (1 - h) * β)
     (hW : (β ≤ h → 3 / 28 ≤ (1 - β) * (β - w)) ∧ (h ≤ β → 3 / 28 ≤ (1 - h) * (h - w))) :
@@ -680,7 +528,8 @@ theorem t13_caps {h β w : ℝ} (_hh : 0 < h) (hh1 : h < 1) (_hβ : 0 < β) (hβ
   · exact t13_cap (m := β) (by nlinarith) hβ1.le (hW.1 hbh)
   · exact t13_cap (m := h) (by nlinarith) hh1.le (hW.2 hhb)
 
-/-- The final contradiction of the same-side case (§13.3). -/
+/-- The final contradiction of the same-side case: the quadratic in `v` of `t13_same` fails for
+`τ ≤ v ≤ W₀`. -/
 theorem t13_same_final {h β v : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
     (hv : 3 / 28 ≤ v) (hvW : v ≤ 477 / 2800)
     (hq : h * β * (3 / 28) ≤ (h * β - 3 / 28 * (h + β)) * v - (h + β - h * β) * v ^ 2) :
@@ -697,7 +546,7 @@ theorem t13_same_final {h β v : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) 
   nlinarith [mul_nonneg (show 0 ≤ 477 / 2800 - v by linarith)
     (show 0 ≤ 1 - 2 * (3 / 28) - v - 477 / 2800 by linarith)]
 
-/-- The anchor areas (43) of a free point in cell II, at doubled threshold `τ = 3/28`
+/-- The anchor areas of a free point in cell II, at doubled threshold `τ = 3/28`
 (`x = P.1`, `w = P.2 - P.1`, `f = 1 - β`). -/
 theorem t13_pt {h β : ℝ} {P Q : Point} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
     (hPH : InTriangle P hsA hsE (hsH h)) (hPF : InTriangle P hsA hsE (hsF (1 - β)))
@@ -707,11 +556,11 @@ theorem t13_pt {h β : ℝ} {P Q : Point} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < 
       3 / 28 ≤ β * P.1 - (1 - β) * (P.2 - P.1) ∧
       3 / 28 ≤ (1 - β) * h - (1 - β) * (P.2 - P.1) - (h - β) * P.1 := by
   have ht : (0 : ℝ) < 3 / 56 := by norm_num
-  have g1 := tc_ge_of_pos ht hmin 0 1 4 hPH.1
-  have g2 := tc_ge_of_pos ht hmin 1 2 4 hPH.2.1
-  have g3 := tc_ge_of_pos ht hmin 2 0 4 hPH.2.2
-  have g4 := tc_ge_of_pos ht hmin 1 3 4 hPF.2.1
-  have g5 := tc_ge_of_pos ht hmin 3 0 4 hPF.2.2
+  have g1 := sarea_ge_of_le_min_of_pos ht hmin 0 1 4 hPH.1
+  have g2 := sarea_ge_of_le_min_of_pos ht hmin 1 2 4 hPH.2.1
+  have g3 := sarea_ge_of_le_min_of_pos ht hmin 2 0 4 hPH.2.2
+  have g4 := sarea_ge_of_le_min_of_pos ht hmin 1 3 4 hPF.2.1
+  have g5 := sarea_ge_of_le_min_of_pos ht hmin 3 0 4 hPF.2.2
   simp only [Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_one] at g1 g2 g3 g4 g5
   simp only [sarea, hsA, hsE, hsH, hsF] at g1 g2 g3 g4 g5
   have hx : 0 ≤ P.1 := by nlinarith
@@ -726,7 +575,8 @@ theorem t13_pt {h β : ℝ} {P Q : Point} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < 
   simp only [sarea, hsH, hsF] at g6
   refine ⟨hx, by linarith, by linarith, by linarith, by linarith, by linarith⟩
 
-/-- The sign pair `(d_H, d_F) = (+,-)` is impossible (49). -/
+/-- The sign pair `(d_H, d_F) = (+,-)` is impossible, by the linear identities `i1`–`i3`
+expressing `W d_H` and `W d_F` through positive quantities. -/
 theorem t13_pm {W K HX B0 Lm NN u0 e0 dH dF : ℝ} (_hK : 0 < K) (hHX : 0 < HX) (hB0 : 0 < B0)
     (_hLm : 0 < Lm) (hW : 0 < W) (hNN : 0 < NN) (hu0 : 0 < u0) (he0 : 0 < e0) (hdH : 0 < dH)
     (hdF : dF < 0) (i1 : W * dH = K * u0 - HX * e0) (i2 : W * dF = B0 * u0 - Lm * e0)
@@ -739,8 +589,9 @@ theorem t13_pm {W K HX B0 Lm NN u0 e0 dH dF : ℝ} (_hK : 0 < K) (hHX : 0 < HX) 
   have h4 := lt_of_mul_lt_mul_right this (by positivity)
   nlinarith [mul_pos hW hNN]
 
-/-- The scalar core of Theorem 13: the point facts (43)–(44), the line values `d_V`, and the
-identities (49), (50) exclude every line-sign alternative with `d_A < 0`. -/
+/-- The scalar core of `minTriangleArea_lt_of_two_in_cellII`: the anchor bounds of the two points, `h(1-β), (1-h)β ≥ τ`,
+the line values `d_V` and the linear identities between them exclude every line-sign alternative
+with `d_A < 0`. -/
 theorem t13_core {h β x w y z dA dZ dH dF : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β)
     (hβ1 : β < 1)
     (hx0 : 0 ≤ x) (hwX : 3 / 28 ≤ w) (hkX : 3 / 28 ≤ h * (1 - x) - w)
@@ -796,7 +647,7 @@ theorem t13_core {h β x w y z dA dZ dH dF : ℝ} (hh : 0 < h) (hh1 : h < 1) (h�
     obtain ⟨cX, cY⟩ := fin46 hB h46
     exact t13_same_final hh hh1 hβ hβ1 hv (by rcases hvwz with rfl | rfl <;> assumption) hq
 
-/-- The ordered main step of Theorem 13: with `d_A = [XYA] < 0`, every line-sign alternative is
+/-- The ordered main step of `minTriangleArea_lt_of_two_in_cellII`: with `d_A = [XYA] < 0`, every line-sign alternative is
 impossible. -/
 theorem t13_ordered {h β : ℝ} {X Y : Point} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β)
     (hβ1 : β < 1) (hXH : InTriangle X hsA hsE (hsH h)) (hXF : InTriangle X hsA hsE (hsF (1 - β)))
@@ -831,7 +682,7 @@ theorem t13_ordered {h β : ℝ} {X Y : Point} (hh : 0 < h) (hh1 : h < 1) (hβ :
       linarith
     · left
       have : 2 * (3 / 56) ≤ sarea X Y (![hsA, hsE, hsH h, hsF (1 - β), X, Y] V) :=
-        tc_ge_of_pos ht hmin 4 5 V g (by decide)
+        sarea_ge_of_le_min_of_pos ht hmin 4 5 V g (by decide)
           (by intro h'; rw [← h'] at hV; simp at hV) (by intro h'; rw [← h'] at hV; simp at hV)
       linarith
   have sA := ab 0 (by decide)
@@ -855,11 +706,10 @@ theorem t13_ordered {h β : ℝ} {X Y : Point} (hh : 0 < h) (hh1 : h < 1) (hβ :
     (by simp only [sarea, hsA, hsE, hsF]; ring) (by simp only [sarea, hsE, hsH]; ring)
     (by simp only [sarea, hsA, hsF]; ring) (by linarith)
 
-/-- **Theorem 13** (`TYPE_II_COMPLETION:Theorem13`). Let `A = (0,0)`, `Z = (1,1)`, `H = (0,h)`,
-`F = (f,1)`, `0 < h, f < 1`, and let two further points `X, Y` lie strictly inside both
-triangles `AZH` and `AZF` (cell II). Then some triangle on these six points has unsigned doubled
-area strictly less than `τ = 3/28`. `docs/proof/nine/TYPE_II_COMPLETION.md`, lines 1552–1845. -/
-theorem theorem13 {h f : ℝ} {X Y : Point} (hh : 0 < h) (hh1 : h < 1) (hf : 0 < f) (hf1 : f < 1)
+/-- Let `A = (0,0)`, `Z = (1,1)`, `H = (0,h)`, `F = (f,1)`, `0 < h, f < 1`, and let two further
+points `X, Y` lie strictly inside both triangles `AZH` and `AZF` (cell II). Then some triangle on
+these six points has unsigned doubled area strictly less than `τ = 3/28`. -/
+theorem minTriangleArea_lt_of_two_in_cellII {h f : ℝ} {X Y : Point} (hh : 0 < h) (hh1 : h < 1) (hf : 0 < f) (hf1 : f < 1)
     (hXH : InTriangle X hsA hsE (hsH h)) (hXF : InTriangle X hsA hsE (hsF f))
     (hYH : InTriangle Y hsA hsE (hsH h)) (hYF : InTriangle Y hsA hsE (hsF f)) :
     minTriangleArea ![hsA, hsE, hsH h, hsF f, X, Y] < 3 / 56 := by
@@ -869,7 +719,7 @@ theorem theorem13 {h f : ℝ} {X Y : Point} (hh : 0 < h) (hh1 : h < 1) (hf : 0 <
   by_contra hcon
   push Not at hcon
   have hcon' : 3 / 56 ≤ minTriangleArea ![hsA, hsE, hsH h, hsF (1 - β), Y, X] :=
-    tc_min_sub hcon _ ![0, 1, 2, 3, 5, 4] ![0, 1, 2, 3, 5, 4] (by norm_num) (by decide)
+    min_sub' hcon _ ![0, 1, 2, 3, 5, 4] ![0, 1, 2, 3, 5, 4] (by norm_num) (by decide)
       (by intro i; fin_cases i <;> rfl)
   have hpos : 0 < minTriangleArea ![hsA, hsE, hsH h, hsF (1 - β), X, Y] := by linarith
   have hne : sarea X Y hsA ≠ 0 := sarea_ne_zero_of_min_pos hpos 4 5 0
@@ -878,20 +728,19 @@ theorem theorem13 {h f : ℝ} {X Y : Point} (hh : 0 < h) (hh1 : h < 1) (hf : 0 <
   · exact t13_ordered hh hh1 hβ hβ1 hYH hYF hXH hXF hcon' hcon
       (by rw [sarea_swap₁₂]; linarith)
 
-/-- The affine map of `TYPE_II_COMPLETION.md` §14 sending `D = (0,1)`, `R = (r,u)` and
-`W = DE ∩ BR = (0, -bu/(r-b))` to `(0,0)`, `(1,1)`, `(0,1)`:
-`(x, y) ↦ (x/r, ((κ + u - 1)/(κr)) x - (y - 1)/κ)` with `κ = (r - b + bu)/(r - b)`. -/
+/-- The affine map sending `D = (0,1)`, `R = (r,u)` and `W = DE ∩ BR = (0, -bu/(r-b))` to
+`(0,0)`, `(1,1)`, `(0,1)`: `(x, y) ↦ (x/r, ((κ + u - 1)/(κr)) x - (y - 1)/κ)` with
+`κ = (r - b + bu)/(r - b)`. -/
 def supportMap (b r u : ℝ) : Point → Point :=
   let κ := (r - b + b * u) / (r - b)
   affineMap (1 / r) 0 ((κ + u - 1) / (κ * r)) (-1 / κ) 0 (1 / κ)
 
-/-- **Claim** (`TYPE_II_COMPLETION:claim-support-map`, made up; (52)). For `0 < b < r`, `0 ≤ u`,
-`0 < λ < 1`: the map `supportMap b r u` sends `D, R, W` to `(0,0), (1,1), (0,1)`, `E` to
-`(0, h)` and `B` to `(f, 1)` with `h = q(r-b)/(r-b+bu) ∈ (0,1)`, `f = b/r ∈ (0,1)`; it divides
-every doubled area by `Λ = r(r-b+bu)/(r-b)`, the doubled area of `DRW`, reversing orientation;
-and it maps the interiors of `DBR` and `DER` into those of `AZF` and `AZH`.
-`docs/proof/nine/TYPE_II_COMPLETION.md`, lines 1858–1886. -/
-theorem claim_support_map {l b r u : ℝ} (hb : 0 < b) (hbr : b < r) (hu : 0 ≤ u) (hl : 0 < l)
+/-- For `0 < b < r`, `0 ≤ u`, `0 < λ < 1`: the map `supportMap b r u` sends `D, R, W` to
+`(0,0), (1,1), (0,1)`, `E` to `(0, h)` and `B` to `(f, 1)` with `h = q(r-b)/(r-b+bu) ∈ (0,1)`,
+`f = b/r ∈ (0,1)`; it divides every doubled area by `Λ = r(r-b+bu)/(r-b)`, the doubled area of
+`DRW`, reversing orientation; and it maps the interiors of `DBR` and `DER` into those of `AZF` and
+`AZH`. -/
+theorem supportMap_spec {l b r u : ℝ} (hb : 0 < b) (hbr : b < r) (hu : 0 ≤ u) (hl : 0 < l)
     (hl1 : l < 1) :
     let φ := supportMap b r u
     let Λ := r * (r - b + b * u) / (r - b)
@@ -975,14 +824,12 @@ theorem claim_support_map {l b r u : ℝ} (hb : 0 < b) (hbr : b < r) (hu : 0 ≤
       have := div_neg_of_neg_of_pos this hΛ
       linarith
 
-/-- **Equation (53)** (`TYPE_II_COMPLETION:eq53`). If `g = r - b - (1-b)u > 13/16`, `r ≤ 1`,
-`0 < b < 1`, `0 ≤ u`, then `r - b > 13/16`, `b + (1-b)u < 3/16`, `b < 3/16`, `bu < 9/832`, and the
-scale satisfies `Λ = r(r-b+bu)/(r-b) < 1 + 9/676 < 65/64`. `docs/proof/nine/TYPE_II_COMPLETION.md`,
-lines 1888–1913.
+/-- If `g = r - b - (1-b)u > 13/16`, `r ≤ 1`, `0 < b < 1`, `0 ≤ u`, then `r - b > 13/16`,
+`b + (1-b)u < 3/16`, `b < 3/16`, `bu < 9/832`, and the scale of `supportMap` satisfies
+`Λ = r(r-b+bu)/(r-b) < 1 + 9/676 < 65/64`.
 
-Statement change: the hypothesis `b < 1` (true in the setting, `0 < b < 1`) is added; without it
-the statement is false (`b = 2`, `u = 10`, `r = 1` give `g = 9` but `r - b = -1`). -/
-theorem eq53 {b r u : ℝ} (hb : 0 < b) (hb1 : b < 1) (hu : 0 ≤ u) (hr : r ≤ 1)
+The hypothesis `b < 1` is needed: `b = 2`, `u = 10`, `r = 1` give `g = 9` but `r - b = -1`. -/
+theorem supportMap_scale_bounds {b r u : ℝ} (hb : 0 < b) (hb1 : b < 1) (hu : 0 ≤ u) (hr : r ≤ 1)
     (hg : 13 / 16 < r - b - (1 - b) * u) :
     13 / 16 < r - b ∧ b + (1 - b) * u < 3 / 16 ∧ b < 3 / 16 ∧ b * u < 9 / 832 ∧
       r * (r - b + b * u) / (r - b) < 1 + 9 / 676 ∧ (1 + 9 / 676 : ℝ) < 65 / 64 := by
@@ -997,7 +844,7 @@ theorem eq53 {b r u : ℝ} (hb : 0 < b) (hb1 : b < 1) (hu : 0 ≤ u) (hr : r ≤
   have hbu0 : 0 ≤ b * u := mul_nonneg hb.le hu
   nlinarith [mul_le_mul_of_nonneg_right hr hbu0]
 
-/-! ### Theorem 14 -/
+/-! ### The triangular right five-point hull is excluded -/
 
 /-- A point of a closed triangle that is a strict minimum of a linear function over the three
 vertices (unless equal to one of them) is one of the vertices. -/
@@ -1011,7 +858,7 @@ theorem vertex_of_extreme {p A1 A2 A3 : Point} (c1 c2 : ℝ)
   have g1 := (h A1 (Or.inl rfl)).resolve_left (Ne.symm n1)
   have g2 := (h A2 (Or.inr (Or.inl rfl))).resolve_left (Ne.symm n2)
   have g3 := (h A3 (Or.inr (Or.inr rfl))).resolve_left (Ne.symm n3)
-  obtain ⟨a, b, c, ha, hb, hc, habc, hpe⟩ := tc_exists_bary hp
+  obtain ⟨a, b, c, ha, hb, hc, habc, hpe⟩ := exists_bary_of_mem_convexHull hp
   have e1 : p.1 = a * A1.1 + b * A2.1 + c * A3.1 := by rw [hpe]
   have e2 : p.2 = a * A1.2 + b * A2.2 + c * A3.2 := by rw [hpe]
   set φ := c1 * p.1 + c2 * p.2 with hφ
@@ -1053,7 +900,7 @@ theorem inTri_of_hullBC {n : ℕ} {V : Fin n → Point} (hpos : 0 < minTriangleA
     ext x; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; tauto
   rw [hset] at hZ
   have hΔ : 0 < sarea (V i0) (V iY) (V i1) := by linarith [sarea_swap₂₃ (V i0) (V i1) (V iY)]
-  obtain ⟨g1, g2, g3⟩ := tc_sarea_nonneg_of_mem_hull hΔ.le hZ
+  obtain ⟨g1, g2, g3, -⟩ := sarea_nonneg_of_mem_convexHull hΔ.le hZ
   exact ⟨lt_of_le_of_ne g3 (Ne.symm (sarea_ne_zero_of_min_pos hpos i0 iY iZ h0Y hYZ h0Z)),
     lt_of_le_of_ne g1 (Ne.symm (sarea_ne_zero_of_min_pos hpos iY i1 iZ (Ne.symm h1Y) h1Z hYZ)),
     lt_of_le_of_ne g2 (Ne.symm (sarea_ne_zero_of_min_pos hpos i1 i0 iZ (Ne.symm h01) h0Z h1Z))⟩
@@ -1122,14 +969,14 @@ theorem tri5_apex {b : ℝ} {R S T : Point} (hb : 0 < b) (hb1 : b < 1) (hRsq : R
   have hBCT : sarea (V 0) (V 1) (V 4) < 0 := hT
   fin_cases mY
   · exfalso
-    obtain ⟨a', _, _, _, _, _, _, h, _, _⟩ := tc_sarea_of_mem_hull (hall' 2)
+    obtain ⟨a', _, _, _, _, _, _, h, _, _⟩ := sarea_of_mem_convexHull (hall' 2)
     change sarea (V 1) (V 0) (V 2) = a' * sarea (V 0) (V 1) (V 0) at h
     have z : sarea (V 0) (V 1) (V 0) = 0 := by unfold sarea; ring
     rw [z, mul_zero] at h
     rw [sarea_swap₁₂] at h
     linarith
   · exfalso
-    obtain ⟨_, _, c', _, _, _, _, _, _, h⟩ := tc_sarea_of_mem_hull (hall' 2)
+    obtain ⟨_, _, c', _, _, _, _, _, _, h⟩ := sarea_of_mem_convexHull (hall' 2)
     change sarea (V 0) (V 1) (V 2) = c' * sarea (V 0) (V 1) (V 1) at h
     have z : sarea (V 0) (V 1) (V 1) = 0 := by unfold sarea; ring
     rw [z, mul_zero] at h
@@ -1150,8 +997,8 @@ theorem tri5_apex {b : ℝ} {R S T : Point} (hb : 0 < b) (hb1 : b < 1) (hRsq : R
       inTri_of_hullBC hpos (iY := 4) (iZ := 3) (by decide) (by decide) (by decide)
         (by decide) (by decide) (by decide) hBCT (hall' 3)⟩
 
-/-- Theorem 14 with the labels of §12.3 (`P, S` on the `C` side of `DR`, `Q, T` on the `B` side):
-the support map of §14 and Theorem 13. -/
+/-- `minTriangleArea_lt_A₀_of_triangular_right` with fixed labels (`P, S` on the `C` side of `DR`, `Q, T` on the `B` side):
+`supportMap` and `minTriangleArea_lt_of_two_in_cellII`. -/
 theorem t14_labeled {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P Q R S T)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hQ' : sarea ptD R Q < 0) (hT' : sarea ptD R T < 0) : False := by
@@ -1165,8 +1012,8 @@ theorem t14_labeled {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b
   have iQE : InTriangle Q ptD (ptE l) (R.1, R.2) := ⟨qQ.1, qQ.2.1, sw Q hQ'⟩
   have iTE : InTriangle T ptD (ptE l) (R.1, R.2) := ⟨qT.1, qT.2.1, sw T hT'⟩
   obtain ⟨eD, eR, -, eE, eB, hh0, hh1, hf0, hf1, -, hDBR, hDER⟩ :=
-    claim_support_map (r := R.1) (u := R.2) hb hrb hu0 hl hl1
-  have h13 := theorem13 hh0 hh1 hf0 hf1 (hDER Q iQE) (hDBR Q iQB) (hDER T iTE) (hDBR T iTB)
+    supportMap_spec (r := R.1) (u := R.2) hb hrb hu0 hl hl1
+  have h13 := minTriangleArea_lt_of_two_in_cellII hh0 hh1 hf0 hf1 (hDER Q iQE) (hDBR Q iQB) (hDER T iTE) (hDBR T iTB)
   set r := R.1 with hr
   set u := R.2 with hu
   have hrb' : 0 < r - b := by linarith
@@ -1193,14 +1040,14 @@ theorem t14_labeled {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b
     rw [show 1 / r * (-1 / ((r - b + b * u) / (r - b))) = -((r - b) / (r * (r - b + b * u))) by
       field_simp, abs_neg, abs_of_pos (by positivity)]
   have h6 : A₀ ≤ minTriangleArea ![ptD, (r, u), ptE l, ptB b, Q, T] :=
-    tc_min_sub hmin _ ![0, 6, 2, 3, 5, 8] ![0, 0, 2, 3, 0, 4, 1, 0, 5] (by norm_num) (by decide)
+    min_sub' hmin _ ![0, 6, 2, 3, 5, 8] ![0, 0, 2, 3, 0, 4, 1, 0, 5] (by norm_num) (by decide)
       (by intro i; fin_cases i <;> rfl)
   rw [e6, hscale] at h13
   have hg' : 13 / 16 < r - b - (1 - b) * u := by
     have : sarea (ptB b) R ptC = r - b - (1 - b) * u := by
       simp only [sarea, ptB, ptC, hr, hu]; ring
     linarith [tc_Ktwo_bounds.1]
-  obtain ⟨-, -, -, -, hΛ, -⟩ := eq53 hb hb1 hu0 hr1 hg'
+  obtain ⟨-, -, -, -, hΛ, -⟩ := supportMap_scale_bounds hb hb1 hu0 hr1 hg'
   have hΛ' : r * (r - b + b * u) / (r - b) < 65 / 64 := by linarith
   have hA := A₀_bounds.1
   have hpos : 0 < (r - b) / (r * (r - b + b * u)) := by positivity
@@ -1251,15 +1098,11 @@ theorem t14_core {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P 
   · exact t14_labeled (ur_swapPQ hu) (by rw [mPQ]; exact hmin) hP' hT'
   · exact t14_labeled (ur_swapST (ur_swapPQ hu)) (by rw [mST, mPQ]; exact hmin) hP' hS'
 
-/-- **Theorem 14** (`TYPE_II_COMPLETION:Theorem14`). No competitive Type-II configuration of
-count `(1,2,3)` has a triangular right five-point hull: with `P, Q` central and `R, S, T` right,
-if `B, C, R, S, T` have triangular hull then some actual triangle has area less than `A₀`.
-`docs/proof/nine/TYPE_II_COMPLETION.md`, lines 1847–1924.
-
-Uses: TYPE_II_COMPLETION:Theorem12, TYPE_II_COMPLETION:claim-sector-ledger,
-TYPE_II_COMPLETION:claim-support-map, TYPE_II_COMPLETION:eq53, TYPE_II_COMPLETION:Theorem13,
-CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem theorem14 {l b : ℝ} {P Q R S T : Point} (hd : TypeIIData l b P Q R S T)
+/-- No competitive Type-II configuration of count `(1,2,3)` has a triangular right five-point
+hull: with `P, Q` central and `R, S, T` right, if `B, C, R, S, T` have triangular hull then some
+actual triangle has area less than `A₀`. The proof combines `unbalancedTriRight_structure`, `t12_sectors`,
+`supportMap_spec`, `supportMap_scale_bounds` and `minTriangleArea_lt_of_two_in_cellII`. -/
+theorem minTriangleArea_lt_A₀_of_triangular_right {l b : ℝ} {P Q R S T : Point} (hd : TypeIIData l b P Q R S T)
     (hP : IsCentral b P) (hQ : IsCentral b Q) (hR : IsRight b R) (hS : IsRight b S)
     (hT : IsRight b T) (htri : TriangularHull ![ptB b, ptC, R, S, T]) :
     minTriangleArea (typeIIConfig l b P Q R S T) < A₀ := by
@@ -1267,7 +1110,7 @@ theorem theorem14 {l b : ℝ} {P Q R S T : Point} (hd : TypeIIData l b P Q R S T
   push Not at hcon
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := lt_of_lt_of_le A₀_pos hcon
   have h5 : 0 < minTriangleArea ![ptB b, ptC, R, S, T] :=
-    lt_of_lt_of_le hpos (tc_min_sub le_rfl _ ![3, 1, 6, 7, 8] ![0, 1, 0, 0, 0, 0, 2, 3, 4]
+    lt_of_lt_of_le hpos (min_sub' le_rfl _ ![3, 1, 6, 7, 8] ![0, 1, 0, 0, 0, 0, 2, 3, 4]
       (by norm_num) (by decide) (by intro i; fin_cases i <;> rfl))
   obtain ⟨hb, hb1, hl, hl1, hPsq, hQsq, hRsq, hSsq, hTsq⟩ := hd
   rcases tri5_apex hb hb1 hRsq hSsq hTsq hR hS hT h5 htri with ⟨h1, h2⟩ | ⟨h1, h2⟩ | ⟨h1, h2⟩

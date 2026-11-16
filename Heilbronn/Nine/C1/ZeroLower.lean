@@ -6,32 +6,34 @@ public import Heilbronn.Nine.Corners.OneCornerCompletion
 public import Heilbronn.Nine.Hulls.QuadrilateralHull
 public import Heilbronn.Nine.TypeII.TypeII.EndpointTriangle
 public import Heilbronn.Nine.TypeII.TypeIICompletion.Capacity
+public import Heilbronn.Nine.Setup.Package
 
-/-! # The C1 configuration with no point in the lower anchor triangle, §§1–4
-(`docs/proof/nine/C1_ZERO_LOWER.md`)
+/-! # The C1 configuration with no point in the lower anchor triangle: geometric facts
 
-Role: on the primary route, `docs/proof/nine/UNRESTRICTED.md` row `n₀ = 0` closes with Theorem 4
-(`Heilbronn.Nine.C1ZeroLower.theorem4`, in `Heilbronn.Nine.C1.ZeroLowerCover`). This file holds the
-geometric facts of §§1–4 in the form the certificate cover uses: every statement is about one,
-two or three labelled free points of a competitive C1 configuration and the region (cap or upper
+The C1 configurations with no free point in the lower anchor triangle `OHC` are excluded by
+`Heilbronn.Nine.C1ZeroLower.lowerCount_eq_zero_false` (in `Heilbronn.Nine.C1.ZeroLowerCover`). This file holds the
+geometric facts in the form the certificate cover uses: every statement is about one, two or three
+labelled free points of a competitive C1 configuration and the region (cap or upper
 quadrilateral) they lie in, rather than about region counts.
 
 Setting: `Comp h c d f Q` — the anchors `C1Anchors h c d f` (`0 < d ≤ h < 1`, `0 < f ≤ c < 1`),
 free points `Q 0, …, Q 3` in the closed square, least triangle area at least `A₀`. The nine
 points are `cfg h c d f Q i` (`i = 0, …, 8` for `O, C, D, F, H, Q 0, …, Q 3`). Doubled areas are
-compared with `t = 2A₀ > s = 8/73`. The normalization (1) `f ≤ d` is a hypothesis `hfd` where it
-is used.
+compared with `t = 2A₀ > s = 8/73`. The normalization `f ≤ d` (reached by transposition,
+`Comp.transpose`) is a hypothesis `hfd` where it is used.
 
-Results (manuscript labels in brackets):
-* `Comp.area`, `Comp.min_sub`: every actual triangle has doubled area at least `2A₀`;
-* `Comp.anchor_bounds` [eq2]: `hf, cd ≥ t`, `d, f ≤ 1 - t`; `Comp.coord_ge`: `x, y ≥ t`;
-* region rows [claim-region-bounds, eq5-6]: `Comp.upper_row`, `Comp.right_row`, `Comp.top_row`,
-  `Comp.left_row`;
-* top cap [eq7, eq7-table]: `Comp.top_two`, `Comp.top_three`, `Comp.top_four`;
-* upper quadrilateral [claim-Q0-capacity, (19)]: `Comp.quad_two`, `Comp.quad_three`;
-* fans [eq4]: `Comp.fan_below`, `Comp.fan_above`;
-* inside counts [(18)]: `Comp.two_inside`, `Comp.three_inside`;
-* `HDF` [claim-HDF-capacity-one]: `Comp.hdf_lt`.
+Results:
+* `Comp.area`, `Comp.areaOK` (`Package.AreaOK`), `Comp.min_sub`: every actual triangle has
+  doubled area at least `2A₀`;
+* `Comp.anchor_bounds`: `hf, cd ≥ t`, `d, f ≤ 1 - t`; `Comp.coord_ge`: `x, y ≥ t`;
+* region rows: `Comp.upper_row`, `Comp.right_row`, `Comp.top_row`, `Comp.left_row`;
+* top cap: `Comp.top_two`, `Comp.top_three`, `Comp.top_four`;
+* upper quadrilateral: `Comp.quad_two`, `Comp.quad_three`;
+* fans: `Comp.fan_below`, `Comp.fan_above`;
+* two points inside a triangle: `Comp.two_inside`;
+* `HDF`: `Comp.hdf_lt`;
+* two right-cap points: `Comp.right_pair_bounds`, `Comp.right_pair_signs`; two left-cap points:
+  `Comp.left_pair`.
 -/
 
 @[expose] public section
@@ -39,7 +41,7 @@ Results (manuscript labels in brackets):
 noncomputable section
 namespace Heilbronn.Nine.C1ZeroLower
 
-open Heilbronn.Nine.C1
+open Heilbronn.Nine.C1 Heilbronn.Nine.Package
 
 /-! ### The setting -/
 
@@ -90,6 +92,10 @@ theorem Comp.area (H : Comp h c d f Q) (i j l : ℕ) (hi : i < 9 := by norm_num)
   simp only at e1 e2 e3
   rw [e1, e2, e3]; linarith
 
+/-- The nine points of a competitive configuration satisfy `AreaOK`. -/
+theorem Comp.areaOK (H : Comp h c d f Q) : AreaOK (cfg h c d f Q) :=
+  fun a b e ha hb he hab hbe hae => H.area a b e ha hb he hab hbe hae
+
 /-- The same, with a free point given by its label. -/
 theorem Comp.areaF (H : Comp h c d f Q) (a b : ℕ) (i : Fin 4) (ha : a < 5 := by norm_num)
     (hb : b < 5 := by norm_num) (hab : a ≠ b := by norm_num) :
@@ -107,11 +113,8 @@ theorem Comp.areaFF (H : Comp h c d f Q) (a : ℕ) (i j : Fin 4) (ha : a < 5) (h
 /-- A sub-configuration of distinct points of the nine has least area at least `A₀`. -/
 theorem Comp.min_sub (H : Comp h c d f Q) {m : ℕ} (hm : 3 ≤ m) (ι : Fin m → ℕ)
     (hι : ∀ a, ι a < 9) (hinj : Function.Injective ι) :
-    A₀ ≤ minTriangleArea (fun a => cfg h c d f Q (ι a)) := by
-  refine le_minTriangleArea hm _ fun a b e hab hbe => ?_
-  have h1 := H.area (ι a) (ι b) (ι e) (hι a) (hι b) (hι e) (hinj.ne hab.ne) (hinj.ne hbe.ne)
-    (hinj.ne (hab.trans hbe).ne)
-  rw [triangleArea_eq]; linarith
+    A₀ ≤ minTriangleArea (fun a => cfg h c d f Q (ι a)) :=
+  H.areaOK.min_sub hm ι hι hinj
 
 theorem le_of_le_abs_of_nonneg {t x : ℝ} (h : t ≤ |x|) (hx : 0 ≤ x) : t ≤ x := by
   rwa [abs_of_nonneg hx] at h
@@ -122,9 +125,9 @@ theorem le_neg_of_le_abs_of_nonpos {t x : ℝ} (h : t ≤ |x|) (hx : x ≤ 0) : 
 theorem Comp.sq (H : Comp h c d f Q) (i : Fin 4) :
     0 ≤ (Q i).1 ∧ (Q i).1 ≤ 1 ∧ 0 ≤ (Q i).2 ∧ (Q i).2 ≤ 1 := H.hQ i
 
-/-! ### §1. Anchor parameters and coordinates (eq2) -/
+/-! ### Anchor parameters and coordinates -/
 
-/-- **(2)**: `hf, cd ≥ 2A₀`, `d, f ≤ 1 - 2A₀`. -/
+/-- `hf, cd ≥ 2A₀` and `d, f ≤ 1 - 2A₀`. -/
 theorem Comp.anchor_bounds (H : Comp h c d f Q) :
     2 * A₀ ≤ h * f ∧ 2 * A₀ ≤ c * d ∧ 2 * A₀ ≤ 1 - d ∧ 2 * A₀ ≤ 1 - f := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
@@ -159,9 +162,10 @@ theorem Comp.coord_ge (H : Comp h c d f Q) (i : Fin 4) :
   · have := le_neg_of_le_abs_of_nonpos e1 (by nlinarith); nlinarith
   · have := le_of_le_abs_of_nonneg e2 (by nlinarith); nlinarith
 
-/-! ### §§1, 4. The region rows -/
+/-! ### The region rows -/
 
-/-- An upper-quadrilateral point has `x, y ≤ 1 - 2A₀` (identities (10)). -/
+/-- An upper-quadrilateral point has `x, y ≤ 1 - 2A₀` (from area identities such as
+`(1 - f)[CDX] + (1 - c)[DFX] = [CDF](1 - x)`). -/
 theorem Comp.upper_row (H : Comp h c d f Q) (i : Fin 4)
     (hU : InUpperQuad h c d f (Q i)) : (Q i).1 ≤ 1 - 2 * A₀ ∧ (Q i).2 ≤ 1 - 2 * A₀ := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
@@ -180,7 +184,7 @@ theorem Comp.upper_row (H : Comp h c d f Q) (i : Fin 4)
   · nlinarith [mul_nonneg (sub_nonneg.2 hdh) (sub_nonneg.2 y1), mul_nonneg (sub_nonneg.2 hh.le)
       u3.le, mul_nonneg hf.le (sub_nonneg.2 y1)]
 
-/-- A right-cap point: `x ≤ 1`, `d - y ≥ 2A₀`, `x - c ≥ 2A₀` (§4), and (5) `cd(x - c) ≥ 2A₀`,
+/-- A right-cap point: `x ≤ 1`, `d - y ≥ 2A₀`, `x - c ≥ 2A₀`, `cd(x - c) ≥ 2A₀` and
 `dc(1 - c) ≥ 2A₀`. -/
 theorem Comp.right_row (H : Comp h c d f Q) (i : Fin 4) (hR : InRightCap c d (Q i))
     (hOD : sarea ptO (ptD d) (Q i) < 0) :
@@ -275,8 +279,8 @@ theorem left_ineqs {h d f x y t : ℝ} (ht : 8 / 73 < t) (hd : 0 < d) (hdh : d �
     nlinarith [mul_le_mul_of_nonneg_right (show f ≤ 65 / 73 by linarith) this.le]
   · nlinarith
 
-/-- A left-cap point (under (1) `f ≤ d`): (6) `fh(1 - h) ≥ 2A₀`, and `f - x ≥ 8/41`,
-`y - h ≥ 8/65`, `x > 7s/6`, `f ≥ 4s`, `1/7 < h < 6/7` (§§1, 4). -/
+/-- A left-cap point (under `f ≤ d`): `fh(1 - h) ≥ 2A₀`, `f - x ≥ 8/41`, `y - h ≥ 8/65`,
+`x > 7s/6`, `f ≥ 4s` and `1/7 < h < 6/7`. -/
 theorem Comp.left_row (H : Comp h c d f Q) (hfd : f ≤ d) (i : Fin 4)
     (hL : InLeftCap f h (Q i)) :
     2 * A₀ ≤ f * h * (1 - h) ∧ 8 / 41 ≤ f - (Q i).1 ∧ 8 / 65 ≤ (Q i).2 - h ∧
@@ -354,15 +358,6 @@ theorem four_le_card {p : Fin 9 → Prop} [DecidablePred p] {a b e g : Fin 9} (h
 theorem fin9_ne {a : ℕ} (ha : a < 9) {b : Fin 9} (h : a ≠ b.val) : (⟨a, ha⟩ : Fin 9) ≠ b :=
   fun e => h (by rw [← e])
 
-/-- The values of the configuration at numerals. -/
-theorem c1Config_apply (h c d f : ℝ) (Q : Fin 4 → Point) :
-    c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 0 = (0, 0) ∧
-    c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 1 = (c, 0) ∧
-    c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 2 = (1, d) ∧
-    c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 3 = (f, 1) ∧
-    c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 4 = (0, h) :=
-  ⟨rfl, rfl, rfl, rfl, rfl⟩
-
 theorem c1Config_free (h c d f : ℝ) (Q : Fin 4 → Point) (i : Fin 4) :
     c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) (⟨i.val + 5, by omega⟩ : Fin 9) = Q i := by
   fin_cases i <;> rfl
@@ -380,7 +375,7 @@ theorem Comp.config_sq (H : Comp h c d f Q) (k : Fin 9) :
        simp only [c1Config, unitSquare, Set.mem_ofPred_eq]
        refine ⟨?_, ?_, ?_, ?_⟩ <;> simp <;> linarith)
 
-/-! ### §1. The top cap (7) -/
+/-! ### The top cap -/
 
 /-- The top-cap corner `(1, 1)`. -/
 abbrev ptE : Point := (1, 1)
@@ -400,7 +395,8 @@ theorem top_mem_hull (hA : C1Anchors h c d f) {X : Point} (hX : X ∈ unitSquare
   · nlinarith
   · nlinarith
 
-/-- **(7)**, two top-cap points: `Ω₀ ≥ 6A₀ > 3s` (the four-point endpoint lemma). -/
+/-- Two top-cap points: `Ω₀ ≥ 6A₀ > 3s` (the four-point endpoint lemma
+`TypeII.fourPointEndpointLemma`). -/
 theorem Comp.top_two (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
     (hi : InTopCap d f (Q i)) (hj : InTopCap d f (Q j)) : 6 * A₀ ≤ topCapArea d f := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
@@ -419,8 +415,8 @@ theorem Comp.top_two (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
   rw [abs_of_nonpos (by nlinarith)] at this
   nlinarith
 
-/-- **(7)**, three top-cap points: `Ω₀ > 7/11` (the endpoint-triangle theorem,
-`Ω₀ ≥ 2A₀/(3 - 2√2)`). -/
+/-- Three top-cap points: `Ω₀ > 7/11` (the endpoint-triangle theorem
+`TypeII.endpointTriangleTheorem`, `Ω₀ ≥ 2A₀/(3 - 2√2)`). -/
 theorem Comp.top_three (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil : i ≠ l)
     (hjl : j ≠ l) (hi : InTopCap d f (Q i)) (hj : InTopCap d f (Q j))
     (hl : InTopCap d f (Q l)) : 7 / 11 < topCapArea d f := by
@@ -450,12 +446,12 @@ theorem Comp.top_three (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil
   have := mul_le_mul_of_nonneg_left hn k0
   nlinarith
 
-/-- **(7)**, four top-cap points are impossible (two-vertex capacity, TYPE_II_COMPLETION
-Theorem 1, on `D, F, (1, 1)`). -/
+/-- Four top-cap points are impossible (the two-vertex capacity bound
+`TypeIICompletion.card_mem_triangle_le_three` on `D, F, (1, 1)`). -/
 theorem Comp.top_four (H : Comp h c d f Q) (hT : ∀ i, InTopCap d f (Q i)) : False := by
   classical
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
-  have := TypeIICompletion.theorem1 _ H.config_sq H.hmin 2 3 (by decide) ptE (by
+  have := TypeIICompletion.card_mem_triangle_le_three _ H.config_sq H.hmin 2 3 (by decide) ptE (by
     rw [triangleArea_eq]
     simp only [c1Config, sarea, Matrix.cons_val]
     gcongr; rw [abs_le]; constructor <;> nlinarith)
@@ -471,9 +467,9 @@ theorem Comp.top_four (H : Comp h c d f Q) (hT : ∀ i, InTopCap d f (Q i)) : Fa
   convert this.trans_lt' h4 using 0
   simp
 
-/-! ### §3. The upper quadrilateral -/
+/-! ### The upper quadrilateral -/
 
-/-- Two upper-quadrilateral points: `W ≥ 16A₀ > 8s` (QUADRILATERAL_HULL Theorem 1). -/
+/-- Two upper-quadrilateral points: `W ≥ 16A₀ > 8s` (`QuadrilateralHull.minTriangleArea_six_le_quadArea_div_eight`). -/
 theorem Comp.quad_two (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
     (hi : InUpperQuad h c d f (Q i)) (hj : InUpperQuad h c d f (Q j)) :
     16 * A₀ ≤ upperQuadArea h c d f := by
@@ -483,7 +479,7 @@ theorem Comp.quad_two (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
     refine ⟨?_, ?_, ?_, ?_⟩ <;> nlinarith
   have hc' : ∀ X, InUpperQuad h c d f X → QuadrilateralHull.InClosedQuad X (0, h) (c, 0) (1, d)
       (f, 1) := fun X hX => ⟨hX.1.le, hX.2.1.le, hX.2.2.1.le, hX.2.2.2.le⟩
-  have := (QuadrilateralHull.theorem1 hq (hc' _ hi) (hc' _ hj)).1
+  have := (QuadrilateralHull.minTriangleArea_six_le_quadArea_div_eight hq (hc' _ hi) (hc' _ hj)).1
   have hm := H.min_sub (by norm_num) ![4, 1, 2, 3, i.val + 5, j.val + 5]
     (by intro a; fin_cases a <;> simp <;> omega)
     (by
@@ -496,7 +492,7 @@ theorem Comp.quad_two (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
   simp only [QuadrilateralHull.quadArea, sarea, upperQuadArea] at this ⊢
   nlinarith
 
-/-- Three upper-quadrilateral points are impossible (QUADRILATERAL_HULL Corollary 3, since
+/-- Three upper-quadrilateral points are impossible (`QuadrilateralHull.ncard_inQuad_le_two`, since
 `W ≤ 1`). -/
 theorem Comp.quad_three (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil : i ≠ l)
     (hjl : j ≠ l) (hi : InUpperQuad h c d f (Q i)) (hj : InUpperQuad h c d f (Q j))
@@ -507,7 +503,7 @@ theorem Comp.quad_three (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hi
       (c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 3) := by
     unfold QuadrilateralHull.ConvexQuad; simp only [c1Config, sarea, Matrix.cons_val]
     refine ⟨?_, ?_, ?_, ?_⟩ <;> nlinarith
-  have := QuadrilateralHull.corollary3 H.hmin hq (by
+  have := QuadrilateralHull.ncard_inQuad_le_two H.hmin hq (by
     simp only [QuadrilateralHull.quadArea, c1Config, sarea, Matrix.cons_val]
     nlinarith [mul_nonneg (sub_nonneg.2 hdh) (sub_nonneg.2 hfc)])
   have hmem : ∀ k : Fin 4, InUpperQuad h c d f (Q k) →
@@ -524,9 +520,9 @@ theorem Comp.quad_three (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hi
     (by simp [Fin.ext_iff]; omega) (Set.toFinite _)
   omega
 
-/-! ### §1. The fans (4) -/
+/-! ### The fans -/
 
-/-- At most two free points lie below `OD` (TYPE_II_COMPLETION Theorem 1 on `O, D, (1, 0)`). -/
+/-- At most two free points lie below `OD` (`TypeIICompletion.card_mem_triangle_le_three` on `O, D, (1, 0)`). -/
 theorem Comp.fan_below (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil : i ≠ l)
     (hjl : j ≠ l) (hi : BelowOD d (Q i)) (hj : BelowOD d (Q j)) (hl : BelowOD d (Q l)) :
     False := by
@@ -540,7 +536,7 @@ theorem Comp.fan_below (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil
       ext p; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; tauto
     rw [this]
     apply mem_convexHull_of_sarea <;> simp only [sarea] at hb ⊢ <;> nlinarith
-  have := TypeIICompletion.theorem1 _ H.config_sq H.hmin 0 2 (by decide) (1, 0) (by
+  have := TypeIICompletion.card_mem_triangle_le_three _ H.config_sq H.hmin 0 2 (by decide) (1, 0) (by
     rw [triangleArea_eq]
     simp only [c1Config, sarea, Matrix.cons_val]
     gcongr; rw [abs_le]; constructor <;> nlinarith)
@@ -566,7 +562,7 @@ theorem Comp.fan_below (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil
   convert this.trans_lt' h4 using 0
   simp
 
-/-- At most two free points lie above `OF` (TYPE_II_COMPLETION Theorem 1 on `O, F, (0, 1)`). -/
+/-- At most two free points lie above `OF` (`TypeIICompletion.card_mem_triangle_le_three` on `O, F, (0, 1)`). -/
 theorem Comp.fan_above (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil : i ≠ l)
     (hjl : j ≠ l) (hi : AboveOF f (Q i)) (hj : AboveOF f (Q j)) (hl : AboveOF f (Q l)) :
     False := by
@@ -577,7 +573,7 @@ theorem Comp.fan_above (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil
     intro X hX hb
     obtain ⟨x0, x1, y0, y1⟩ := hX
     apply mem_convexHull_of_sarea <;> simp only [sarea] at hb ⊢ <;> nlinarith
-  have := TypeIICompletion.theorem1 _ H.config_sq H.hmin 0 3 (by decide) (0, 1) (by
+  have := TypeIICompletion.card_mem_triangle_le_three _ H.config_sq H.hmin 0 3 (by decide) (0, 1) (by
     rw [triangleArea_eq]
     simp only [c1Config, sarea, Matrix.cons_val]
     gcongr; rw [abs_le]; constructor <;> nlinarith)
@@ -603,40 +599,22 @@ theorem Comp.fan_above (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil
   convert this.trans_lt' h4 using 0
   simp
 
-/-! ### Inside counts (18) -/
-
-/-- `ρ = 49/60 < 2KA₀`. -/
-theorem rho_lt : 49 / 60 < 2 * ((4 + 2 * Real.sqrt 3) * A₀) := by
-  have h3 : (1.732 : ℝ) < Real.sqrt 3 := by rw [Real.lt_sqrt (by norm_num)]; norm_num
-  have := A₀_bounds
-  nlinarith
+/-! ### Inside counts -/
 
 /-- An actual triangle with two further free points strictly inside has doubled area at least
-`2KA₀ > ρ` (the two-interior-point lemma). -/
+`2KA₀ > ρ` (the two-interior-point lemma `twoInteriorPointLemma`). -/
 theorem Comp.two_inside (H : Comp h c d f Q) {a b e j₁ j₂ : ℕ} (ha : a < 9) (hb : b < 9)
     (he : e < 9) (hj₁ : j₁ < 9) (hj₂ : j₂ < 9) (hd : [a, b, e, j₁, j₂].Nodup)
     (h₁ : InTriangle (cfg h c d f Q j₁) (cfg h c d f Q a) (cfg h c d f Q b) (cfg h c d f Q e) ∨
       InTriangle (cfg h c d f Q j₁) (cfg h c d f Q a) (cfg h c d f Q e) (cfg h c d f Q b))
     (h₂ : InTriangle (cfg h c d f Q j₂) (cfg h c d f Q a) (cfg h c d f Q b) (cfg h c d f Q e) ∨
       InTriangle (cfg h c d f Q j₂) (cfg h c d f Q a) (cfg h c d f Q e) (cfg h c d f Q b)) :
-    49 / 60 ≤ |sarea (cfg h c d f Q a) (cfg h c d f Q b) (cfg h c d f Q e)| := by
-  have hm := H.min_sub (by norm_num) ![a, b, e, j₁, j₂]
-    (by intro x; fin_cases x <;> simpa)
-    (by
-      intro x y hxy
-      simp only [List.nodup_cons, List.mem_cons, List.not_mem_nil, or_false, not_or] at hd
-      fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> omega)
-  have e1 : (fun x => cfg h c d f Q (![a, b, e, j₁, j₂] x)) = ![cfg h c d f Q a,
-      cfg h c d f Q b, cfg h c d f Q e, cfg h c d f Q j₁, cfg h c d f Q j₂] := by
-    funext x; fin_cases x <;> rfl
-  rw [e1] at hm
-  have := CornerFamilies.twoInteriorPointLemma _ _ _ _ _ h₁ h₂ A₀ A₀_pos hm
-  rw [triangleArea_eq] at this
-  linarith [rho_lt]
+    49 / 60 ≤ |sarea (cfg h c d f Q a) (cfg h c d f Q b) (cfg h c d f Q e)| :=
+  H.areaOK.two_inside ha hb he hj₁ hj₂ hd h₁ h₂
 
-/-! ### §4. `HDF` -/
+/-! ### `HDF` -/
 
-/-- Under (1) `f ≤ d`, `U = [DFH] < ρ = 49/60`. -/
+/-- Under `f ≤ d`, `U = [DFH] < ρ = 49/60`. -/
 theorem Comp.hdf_lt (H : Comp h c d f Q) (hfd : f ≤ d) :
     sarea (1, d) (f, 1) (0, h) < 49 / 60 := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
@@ -649,12 +627,12 @@ theorem Comp.hdf_lt (H : Comp h c d f Q) (hfd : f ≤ d) :
     nlinarith [mul_nonneg (mul_nonneg hf.le hd.le) hf.le]
   nlinarith [mul_le_mul_of_nonneg_right hn hf.le]
 
-/-! ### Support triangles (`TYPE_II.md` §1) -/
+/-! ### Support triangles -/
 
-/-- **The support-cell analysis** (`TYPE_II.md` §1, cells I–V): for a counterclockwise support
-triangle `UVW` (`[UVW] ≤ 1`) with contacts `H ∈ (U, W)`, `F ∈ (V, W)` and fifth point `X`, whose
-five points have least area at least `A₀`, the normalized doubled minimum is at least `2A₀ > 1/10`,
-so cells IV and V are impossible; cells I and III force `[UVW] ≥ 2KA₀`. -/
+/-- The support-cell analysis (`TypeII.hsNormal_five_cells`, cells I–V): for a counterclockwise
+support triangle `UVW` (`[UVW] ≤ 1`) with contacts `H ∈ (U, W)`, `F ∈ (V, W)` and fifth point `X`,
+whose five points have least area at least `A₀`, the normalized doubled minimum is at least
+`2A₀ > 1/10`, so cells IV and V are impossible; cells I and III force `[UVW] ≥ 2KA₀`. -/
 theorem support_cells {U V W H F X : Point} (hS : TypeII.IsSupportTriangle U V W H F X)
     (harea : sarea U V W ≤ 1) (hmin : A₀ ≤ minTriangleArea ![U, V, H, F, X]) :
     (InTriangle X U F H ∧ InTriangle X U V H ∧ 2 * ((4 + 2 * Real.sqrt 3) * A₀) ≤ sarea U V W) ∨
@@ -662,7 +640,7 @@ theorem support_cells {U V W H F X : Point} (hS : TypeII.IsSupportTriangle U V W
       (InTriangle X V F H ∧ InTriangle X U V F ∧
         2 * ((4 + 2 * Real.sqrt 3) * A₀) ≤ sarea U V W) := by
   obtain ⟨m1, m2, m3, m4, e1, e2, h₀, f₀, hdet, hA', hE', -, hH', hF', hN⟩ :=
-    TypeII.claim_support_affine hS
+    TypeII.exists_affineMap_hsNormal hS
   have hS0 : 0 < sarea U V W := hS.1
   have hdet0 : 0 < m1 * m4 - m2 * m3 := by rw [hdet]; positivity
   set φ := affineMap m1 m2 m3 m4 e1 e2
@@ -681,7 +659,7 @@ theorem support_cells {U V W H F X : Point} (hS : TypeII.IsSupportTriangle U V W
   have hσ : 2 * A₀ ≤ 2 * A₀ * (m1 * m4 - m2 * m3) := by
     rw [hdet, le_mul_iff_one_le_right (by linarith [A₀_pos]), le_div_iff₀ hS0]; linarith
   have t0 := two_A₀
-  have five := TypeII.claim_five_cells hN hs hmin'
+  have five := TypeII.hsNormal_five_cells hN hs hmin'
   have tr : ∀ P₁ P₂ P₃ : Point, sarea (φ P₁) (φ P₂) (φ P₃) =
       (m1 * m4 - m2 * m3) * sarea P₁ P₂ P₃ := fun _ _ _ => sarea_affineMap _ _ _ _ _ _ _ _ _
   have back : ∀ {P₁ P₂ P₃ : Point}, 0 < sarea (φ P₁) (φ P₂) (φ P₃) → 0 < sarea P₁ P₂ P₃ :=
@@ -702,7 +680,7 @@ theorem support_cells {U V W H F X : Point} (hS : TypeII.IsSupportTriangle U V W
     rw [← hA', ← hF'] at a1; rw [← hF', ← hH'] at a2; rw [← hH', ← hA'] at a3
     rw [← hA', ← hE'] at b1; rw [← hE', ← hH'] at b2; rw [← hH', ← hA'] at b3
     exact ⟨⟨back a1, back a2, back a3⟩, ⟨back b1, back b2, back b3⟩,
-      bound (TypeII.claim_cell_I_bound hN hs hmin' hI).2⟩
+      bound (TypeII.inCellI_bound hN hs hmin' hI).2⟩
   · right; left
     obtain ⟨⟨a1, a2, a3⟩, ⟨b1, b2, b3⟩⟩ := five.2.2.1 hII
     rw [← hA', ← hE'] at a1; rw [← hE', ← hF'] at a2; rw [← hF', ← hA'] at a3
@@ -713,11 +691,11 @@ theorem support_cells {U V W H F X : Point} (hS : TypeII.IsSupportTriangle U V W
     rw [← hE', ← hF'] at a1; rw [← hF', ← hH'] at a2; rw [← hH', ← hE'] at a3
     rw [← hA', ← hE'] at b1; rw [← hE', ← hF'] at b2; rw [← hF', ← hA'] at b3
     exact ⟨⟨back a1, back a2, back a3⟩, ⟨back b1, back b2, back b3⟩,
-      bound (TypeII.claim_cell_III_bound hN hs hmin' hIII).2⟩
-  · have := TypeII.claim_cell_IV_bound hN hs hmin' hIV; linarith
-  · have := (TypeII.eq3 hN hs hmin' hV).2; linarith
+      bound (TypeII.inCellIII_bound hN hs hmin' hIII).2⟩
+  · have := TypeII.inCellIV_bound hN hs hmin' hIV; linarith
+  · have := (TypeII.inCellV_bound hN hs hmin' hV).2; linarith
 
-/-! ### Lemma 1: two points in the right cap -/
+/-! ### Two points in the right cap -/
 
 /-- The support triangle of a right-cap pair: if `X = (x, y)`, `Y` are right-cap points below
 `OD` and `[DXY] < 0`, then `D, O, P` (`P` the bottom intercept of `DX`) is a support triangle
@@ -756,8 +734,8 @@ theorem right_support (hA : C1Anchors h c d f) {x y : ℝ} {Y : Point} (x1 : x �
     · have : 0 < sarea (p, 0) (1, d) Y * (d - y) := by rw [hPDY]; nlinarith
       exact (pos_of_mul_pos_left this hdy.le).le
 
-/-- The core of **Lemma 1**: if `X = Q i`, `Y = Q j` are right-cap points below `OD` and `X` is the
-outer one (`[DXY] < 0`, its line from `D` meets the bottom side farther from `O`), then `Y` lies
+/-- The core of `Comp.right_pair_signs`: if `X = Q i`, `Y = Q j` are right-cap points below `OD` and `X` is
+the outer one (`[DXY] < 0`, its line from `D` meets the bottom side farther from `O`), then `Y` lies
 strictly in `DCX ∩ DOX` and `d ≥ 2KA₀ > ρ`. The support triangle is `D, O, P` with `P` the bottom
 intercept of `DX`, contacts `X` (on `DP`) and `C` (on `OP`); `Y` is beyond `CD`, so not in
 `DOC` (cells II, III), and cell I gives the containments and the bound. -/
@@ -796,7 +774,7 @@ theorem Comp.right_pair_core (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
     simp only [sarea] at a2 hjC ⊢; nlinarith
   · simp only [sarea] at a2 hjC; nlinarith
 
-/-- The bounds of **Lemma 1** (3): two right-cap points below `OD` give `d ≥ 2KA₀ > ρ` and
+/-- Two right-cap points below `OD` give `d ≥ 2KA₀ > ρ` and
 `d(1 - c) ≥ 6A₀ > 3s` (subdivision of `CDX` at `Y`, and `[DCX] ≤ d(1 - c)`). -/
 theorem Comp.right_pair_bounds (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
     (hi : InRightCap c d (Q i)) (hj : InRightCap c d (Q j))
@@ -830,10 +808,10 @@ theorem Comp.right_pair_bounds (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j
   · exact key hij hi hj hiOD hjOD hD
   · exact key hij.symm hj hi hjOD hiOD (by rw [sarea_swap₂₃]; linarith)
 
-/-- **Lemma 1** (`C1_ZERO_LOWER:Lemma1`), in the labelled form used by the cover: two right-cap
-points `Q i, Q j` with `[O Qᵢ Qⱼ] > 0` (the labelling order) have `[C Qᵢ Qⱼ] > 0 > [D Qᵢ Qⱼ]`
-((15): `Qⱼ` lies in `CDQᵢ ∩ ODQᵢ`). -/
-theorem Comp.lemma1 (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
+/-- Two right-cap points, in the labelled form used by the cover: right-cap points `Q i, Q j`
+with `[O Qᵢ Qⱼ] > 0` (the labelling order) have `[C Qᵢ Qⱼ] > 0 > [D Qᵢ Qⱼ]`, that is, `Qⱼ` lies in
+`CDQᵢ ∩ ODQᵢ`. -/
+theorem Comp.right_pair_signs (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
     (hi : InRightCap c d (Q i)) (hj : InRightCap c d (Q j))
     (hiOD : sarea ptO (ptD d) (Q i) < 0) (hjOD : sarea ptO (ptD d) (Q j) < 0)
     (hO : 0 < sarea (0, 0) (Q i) (Q j)) :
@@ -864,8 +842,8 @@ theorem c1Config_tr (h c d f : ℝ) (Q : Fin 4 → Point) (k : Fin 9) :
       tr (c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) (trIdx k)) := by
   fin_cases k <;> rfl
 
-/-- **Transposition** (`C1_ZERO_LOWER.md` (1)): `(h, c, d, f) ↦ (c, h, f, d)` with the free points
-transposed is again a competitive C1 configuration. -/
+/-- Transposition: `(h, c, d, f) ↦ (c, h, f, d)` with the free points transposed is again a
+competitive C1 configuration. -/
 theorem Comp.transpose (H : Comp h c d f Q) : Comp c h f d (fun i => tr (Q i)) := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
   refine ⟨⟨hf, hfc, hc, hd, hdh, hh⟩, fun i => ?_, ?_⟩
@@ -877,9 +855,8 @@ theorem Comp.transpose (H : Comp h c d f Q) : Comp c h f d (fun i => tr (Q i)) :
     exact area_of_le_min H.hmin _ _ _ (hinj.ne hab.ne) (hinj.ne hbe.ne)
       (hinj.ne (hab.trans hbe).ne)
 
-/-- **Theorem 2 (i)** (`C1_ZERO_LOWER:Theorem2`): under (1) `f ≤ d`, two left-cap points (above
-`OF`) are impossible (Lemma 1 for the transposed configuration gives `f ≥ ρ` and
-`f(1 - h) ≥ 6A₀`, while `f ≤ d ≤ h`). -/
+/-- Under `f ≤ d`, two left-cap points (above `OF`) are impossible: `Comp.right_pair_bounds` for
+the transposed configuration gives `f ≥ ρ` and `f(1 - h) ≥ 6A₀`, while `f ≤ d ≤ h`. -/
 theorem Comp.left_pair (H : Comp h c d f Q) (hfd : f ≤ d) {i j : Fin 4} (hij : i ≠ j)
     (hi : InLeftCap f h (Q i)) (hj : InLeftCap f h (Q j)) (hiOF : AboveOF f (Q i))
     (hjOF : AboveOF f (Q j)) : False := by

@@ -4,38 +4,32 @@ public import Heilbronn.Nine.SixBoundary.Hull
 public import Heilbronn.Nine.Hulls.QuadrilateralHull
 public import Heilbronn.Nine.TypeII.TypeII.EndpointTriangle
 
-/-! # Exterior restrictions for larger hulls in family N (`docs/proof/nine/SIX_BOUNDARY_EXTERIOR.md`)
+/-! # Exterior restrictions for larger hulls in family N
 
-Role: primary-route component. Theorem 2 (the double-contact cap `(0,0)AB` is empty) and
-Theorem 3 (each side cap `R = CD(1,0)`, `L = FH(0,1)` has capacity one) define the occupancy
-table of `docs/proof/nine/UNRESTRICTED.md`, Section 4. Theorem 4 (three points in the opposite cap force an
-eight-vertex hull) is used by `SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md`; Theorem 5 (an occupied
-side cap empties the opposite lower ear) by the single-side, side-opposite and side-top notes;
-Lemma 6 (side projection keeps the anchor-pair costs) by the two-side projection.
+Restrictions on the free points outside the anchor hexagon, valid throughout family N with any
+number of additional hull vertices.
 
-Setting: `nConfig a h b c d f X Y Z` with `NAnchors a h b c d f` (the manuscript allows
-`h ≤ 1`, `c ≤ 1`; the strict N conditions are used here), no exact-hull hypothesis, free points
-anywhere in the square (extra boundary contacts allowed). Thresholds: `A₀` (Theorem 2,
-via Lemma 1's `1/20`), `s = 7/64` doubled (Theorems 3-5).
+Setting: `nConfig a h b c d f X Y Z` with `NAnchors a h b c d f`, no exact-hull hypothesis, free
+points anywhere in the square (extra boundary contacts allowed). Thresholds: least area `A₀` for
+`not_inCap00` (through the bound `hc/20` of `cap00_triangle_lt`), and every doubled area at least `s = 7/64`
+for `atMostOne_sideCaps`, `oppositeCap_octagon` and `occupiedSideCap_ear_lt` (the proof of `occupiedSideCap_ear_lt` uses the costs
+`[BCX], [CDX], [ABC], [HDF] ≥ s`).
 
-Implicit in the manuscript: Theorem 5 assumes, as Theorems 3-4 do, that every doubled area is at
-least `s = 7/64` (its proof uses the actual costs `[BCX], [CDX], [ABC], [HDF] ≥ s`).
-
-Results:
-* `lemma1`: a point of the closed cap `(0,0)AB` makes one of `AHX, BCX, ABX` smaller than
+Main results:
+* `cap00_triangle_lt`: a point of the closed cap `(0,0)AB` makes one of `AHX, BCX, ABX` smaller than
   `hc/20`;
-* `theorem2`: in a competitive configuration the closed cap `(0,0)AB` contains no free point;
-* `claim_exterior_partition`: the open square is the anchor hexagon together with the four
+* `not_inCap00`: in a competitive configuration the closed cap `(0,0)AB` contains no free point;
+* `exterior_partition`: the open square is the anchor hexagon together with the four
   closed caps; a free point of `T₀` lies in `HABC`; `T₀` holds at most one free point; and with
   exactly six contacts some free point lies in `R ∪ T ∪ L`;
-* `theorem3`: each side cap contains at most one free point;
-* `theorem4`: three free points in the opposite cap form, with `D, F`, a convex quadrilateral
+* `atMostOne_sideCaps`: each side cap `R = CD(1,0)`, `L = FH(0,1)` contains at most one free point;
+* `oppositeCap_octagon`: three free points in the opposite cap form, with `D, F`, a convex quadrilateral
   `D, E, G, F` with the third point `O ∈ DEF ∩ DGF`, the direction `E → G` points strictly left
   and up, and the full hull is the octagon `A, B, C, D, E, G, F, H` (proved through the support
-  triangle of `TYPE_II.md` §1, `support_apex`, and its five cells: `support_cell_II`,
-  `support_direction`; the octagon signs by `cap_triples`, `chord_triples`, `octagon_convex`);
-* `theorem5`: an occupied side cap `R` gives `[ABH] < 3s` (transposed: `L` gives `[ABC] < 3s`);
-* `lemma6`: projecting a side-cap point onto its square side keeps every anchor-pair cost.
+  triangle `TypeII.support_apex` and its five cells: `support_cell_II`, `support_direction`; the
+  octagon signs by `cap_triples`, `chord_triples`, `octagon_convex`);
+* `occupiedSideCap_ear_lt`: an occupied side cap `R` gives `[ABH] < 3s` (transposed: `L` gives `[ABC] < 3s`);
+* `anchorPairBound_slide`: projecting a side-cap point onto its square side keeps every anchor-pair cost.
 -/
 
 @[expose] public section
@@ -45,11 +39,11 @@ namespace Heilbronn.Nine.SixBoundaryExterior
 
 open SixBoundary
 
-/-! ### Section 1: the double-contact cap -/
+/-! ### The double-contact cap -/
 
-/-- The scalar core of Lemma 1: `10αβ(1-α)(1-β) < 1 - αβ` on `(0,1)²` (via `t = √(αβ)`,
+/-- The scalar core of `cap00_triangle_lt`: `10αβ(1-α)(1-β) < 1 - αβ` on `(0,1)²` (via `t = √(αβ)`,
 `(1-α)(1-β) ≤ (1-t)²` and `10t³ - 10t² + t + 1 > 0`). -/
-theorem lemma1_scalar {α β : ℝ} (ha : 0 < α) (ha1 : α < 1) (hb : 0 < β) (hb1 : β < 1) :
+theorem cap00_scalar {α β : ℝ} (ha : 0 < α) (ha1 : α < 1) (hb : 0 < β) (hb1 : β < 1) :
     10 * α * β * (1 - α) * (1 - β) < 1 - α * β := by
   have hab : 0 < α * β := mul_pos ha hb
   obtain ⟨t, ht0, ht2⟩ : ∃ t : ℝ, 0 < t ∧ t ^ 2 = α * β :=
@@ -66,12 +60,12 @@ theorem lemma1_scalar {α β : ℝ} (ha : 0 < α) (ha1 : α < 1) (hb : 0 < β) (
   have h2 : 10 * t ^ 2 * (1 - t) ^ 2 < 1 - t ^ 2 := by nlinarith
   linarith
 
-/-- Lemma 1 in unnormalized form: `10ab(h-a)(c-b) < hc(hc - ab)`. -/
-theorem lemma1_scalar' {a h b c : ℝ} (ha : 0 < a) (hah : a < h) (hb : 0 < b) (hbc : b < c) :
+/-- `cap00_scalar` in unnormalized form: `10ab(h-a)(c-b) < hc(hc - ab)`. -/
+theorem cap00_scalar' {a h b c : ℝ} (ha : 0 < a) (hah : a < h) (hb : 0 < b) (hbc : b < c) :
     10 * (a * b) * ((h - a) * (c - b)) < h * c * (h * c - a * b) := by
   have hh : 0 < h := by linarith
   have hc : 0 < c := by linarith
-  have k := lemma1_scalar (α := a / h) (β := b / c) (by positivity)
+  have k := cap00_scalar (α := a / h) (β := b / c) (by positivity)
     (by rw [div_lt_one hh]; exact hah) (by positivity) (by rw [div_lt_one hc]; exact hbc)
   have e1 : 10 * (a * b) * ((h - a) * (c - b)) =
       (h * c) ^ 2 * (10 * (a / h) * (b / c) * (1 - a / h) * (1 - b / c)) := by
@@ -82,11 +76,10 @@ theorem lemma1_scalar' {a h b c : ℝ} (ha : 0 < a) (hah : a < h) (hb : 0 < b) (
   exact mul_lt_mul_of_pos_left k (by positivity)
 
 set_option linter.unusedVariables false in
-/-- **Lemma 1** (`SIX_BOUNDARY_EXTERIOR:Lemma1`). Let `A = (0,a)`, `H = (0,h)`, `B = (b,0)`,
-`C = (c,0)` with `0 < a < h ≤ 1`, `0 < b < c ≤ 1`, and let `X` lie in the closed triangle
-`conv{(0,0), A, B}`. Then one of the triangles `AHX, BCX, ABX` has ordinary area strictly less
-than `hc/20 ≤ 1/20`. `docs/proof/nine/SIX_BOUNDARY_EXTERIOR.md`, lines 28-82. -/
-theorem lemma1 {a h b c : ℝ} {X : Point} (ha : 0 < a) (hah : a < h) (hh : h ≤ 1) (hb : 0 < b)
+/-- Let `A = (0,a)`, `H = (0,h)`, `B = (b,0)`, `C = (c,0)` with `0 < a < h ≤ 1`, `0 < b < c ≤ 1`,
+and let `X` lie in the closed triangle `conv{(0,0), A, B}`. Then one of the triangles
+`AHX, BCX, ABX` has ordinary area strictly less than `hc/20 ≤ 1/20`. -/
+theorem cap00_triangle_lt {a h b c : ℝ} {X : Point} (ha : 0 < a) (hah : a < h) (hh : h ≤ 1) (hb : 0 < b)
     (hbc : b < c) (hc : c ≤ 1) (hX1 : 0 ≤ X.1) (hX2 : 0 ≤ X.2)
     (hXAB : sarea (ptA a) (ptB b) X ≤ 0) :
     triangleArea (ptA a) (ptH h) X < h * c / 20 ∨ triangleArea (ptB b) (ptC c) X < h * c / 20 ∨
@@ -117,16 +110,14 @@ theorem lemma1 {a h b c : ℝ} {X : Point} (ha : 0 < a) (hah : a < h) (hh : h �
   have key : S * (h * c - a * b) ≤ (a * b) * ((h - a) * (c - b)) := by
     nlinarith [mul_le_mul_of_nonneg_left g1 pa, mul_le_mul_of_nonneg_left g2 pb,
       mul_le_mul_of_nonneg_left g3 pab]
-  have k := lemma1_scalar' ha hah hb hbc
+  have k := cap00_scalar' ha hah hb hbc
   rw [hS] at key
   linarith
 
 set_option linter.unusedVariables false in
-/-- **Theorem 2** (`SIX_BOUNDARY_EXTERIOR:Theorem2`). In a competitive configuration (least area
-at least `A₀`) of family N, the closed exterior cap `conv{(0,0), A, B}` contains no free point.
-`docs/proof/nine/SIX_BOUNDARY_EXTERIOR.md`, lines 84-91.
-Uses: SIX_BOUNDARY_EXTERIOR:Lemma1 -/
-theorem theorem2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- In a competitive configuration (least area at least `A₀`) of family N, the closed exterior
+cap `conv{(0,0), A, B}` contains no free point. -/
+theorem not_inCap00 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     ¬ InCap00 a b X ∧ ¬ InCap00 a b Y ∧ ¬ InCap00 a b Z := by
@@ -137,7 +128,7 @@ theorem theorem2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
   have key : ∀ i : Fin 9, 6 ≤ i.val → ¬ InCap00 a b (nConfig a h b c d f X Y Z i) := by
     intro i hi ⟨hW, hWc⟩
     have hne : ∀ j : Fin 9, j.val < 6 → j ≠ i := fun j hj e => by subst e; omega
-    rcases lemma1 ha hah hh.le hb hbc hc.le hW.1 hW.2.2.1 hWc with h1 | h1 | h1
+    rcases cap00_triangle_lt ha hah hh.le hb hbc hc.le hW.1 hW.2.2.1 hWc with h1 | h1 | h1
     · have := area_of_le_min hmin 0 1 i (by decide) (hne 1 (by decide)) (hne 0 (by decide))
       exact absurd (this.trans_lt h1) (by linarith)
     · have := area_of_le_min hmin 2 3 i (by decide) (hne 3 (by decide)) (hne 2 (by decide))
@@ -146,17 +137,15 @@ theorem theorem2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
       exact absurd (this.trans_lt h1) (by linarith)
   exact ⟨key 6 (by decide), key 7 (by decide), key 8 (by decide)⟩
 
-/-! ### Section 2: consequences for the larger-hull cases -/
+/-! ### Consequences for the larger-hull cases -/
 
-/-- **Claim** (`SIX_BOUNDARY_EXTERIOR:claim-exterior-partition`). (i) A point of the open square
-lies strictly inside the anchor hexagon or in one of the four closed corner caps `(0,0)AB`, `R`,
-`T`, `L`. In a competitive configuration (least area at least `A₀`): (ii) a free point of the
-virtual triangle `T₀ = (0,0)HC` lies inside `HABC` (Theorem 2); (iii) `T₀` contains at most one
-free point (`QUADRILATERAL_HULL.md`, Theorem 4); (iv) with exactly six contacts, some free point
-lies in `R ∪ T ∪ L` (Theorem 2 and the exact-hull exclusion).
-`docs/proof/nine/SIX_BOUNDARY_EXTERIOR.md`, lines 99-123.
-Uses: SIX_BOUNDARY_EXTERIOR:Theorem2, QUADRILATERAL_HULL:Theorem4, SIX_BOUNDARY_HULL:Theorem7 -/
-theorem claim_exterior_partition {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- (i) A point of the open square lies strictly inside the anchor hexagon or in one of the four
+closed corner caps `(0,0)AB`, `R`, `T`, `L`. In a competitive configuration (least area at least
+`A₀`): (ii) a free point of the virtual triangle `T₀ = (0,0)HC` lies inside `HABC` (by
+`not_inCap00`); (iii) `T₀` contains at most one free point (by `QuadrilateralHull.nConfig_two_in_T0_exclusion`);
+(iv) with exactly six contacts, some free point lies in `R ∪ T ∪ L` (by `not_inCap00` and the
+exact-hull exclusion `SixBoundaryHull.false_of_all_inHexagon`). -/
+theorem exterior_partition {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare) :
     (∀ W : Point, InOpenSquare W →
       InHexagon a h b c d f W ∨ InCap00 a b W ∨ InCapR c d W ∨ InCapT d f W ∨ InCapL f h W) ∧
@@ -187,7 +176,7 @@ theorem claim_exterior_partition {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnch
     · simp only [sarea]; nlinarith
     · simp only [sarea]; nlinarith
   refine ⟨part, fun hmin => ?_⟩
-  have h0 := theorem2 hN hX hY hZ hmin
+  have h0 := not_inCap00 hN hX hY hZ hmin
   have hpos : 0 < minTriangleArea (nConfig a h b c d f X Y Z) := lt_of_lt_of_le A₀_pos hmin
   -- a free point of `T₀` is inside `HABC`
   have lower : ∀ i : Fin 9, 6 ≤ i.val → nConfig a h b c d f X Y Z i ∈ unitSquare →
@@ -224,11 +213,11 @@ theorem claim_exterior_partition {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnch
   have hlt : minTriangleArea (nConfig a h b c d f X Y Z) < A₀ → False := fun h => by linarith
   refine ⟨lower 6 (by decide) hX h0.1, lower 7 (by decide) hY h0.2.1, lower 8 (by decide) hZ h0.2.2,
     ⟨fun hh => hlt ?_, fun hh => hlt ?_, fun hh => hlt ?_⟩, fun hsix => ?_⟩
-  · have k := QuadrilateralHull.theorem4 hN hX hY hZ (Or.inl ⟨toQH _ hh.1, toQH _ hh.2⟩)
+  · have k := QuadrilateralHull.nConfig_two_in_T0_exclusion hN hX hY hZ (Or.inl ⟨toQH _ hh.1, toQH _ hh.2⟩)
     linarith [k.1, k.2.1, k.2.2]
-  · have k := QuadrilateralHull.theorem4 hN hX hY hZ (Or.inr (Or.inl ⟨toQH _ hh.1, toQH _ hh.2⟩))
+  · have k := QuadrilateralHull.nConfig_two_in_T0_exclusion hN hX hY hZ (Or.inr (Or.inl ⟨toQH _ hh.1, toQH _ hh.2⟩))
     linarith [k.1, k.2.1, k.2.2]
-  · have k := QuadrilateralHull.theorem4 hN hX hY hZ (Or.inr (Or.inr ⟨toQH _ hh.1, toQH _ hh.2⟩))
+  · have k := QuadrilateralHull.nConfig_two_in_T0_exclusion hN hX hY hZ (Or.inr (Or.inr ⟨toQH _ hh.1, toQH _ hh.2⟩))
     linarith [k.1, k.2.1, k.2.2]
   · by_contra hcon
     push Not at hcon
@@ -242,12 +231,12 @@ theorem claim_exterior_partition {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnch
     have hexZ : InHexagon a h b c d f Z := by
       rcases part Z hsix.2.2 with h1 | h1 | h1 | h1 | h1
       exacts [h1, absurd h1 h0.2.2, absurd h1 zR, absurd h1 zT, absurd h1 zL]
-    exact SixBoundaryHull.theorem7 hN hX hY hZ hmin hexX hexY hexZ
+    exact SixBoundaryHull.false_of_all_inHexagon hN hX hY hZ hmin hexX hexY hexZ
 
-/-! ### Section 3: side caps have capacity one -/
+/-! ### Side caps have capacity one -/
 
-/-- (11): `B(u) = k(1-u)² + u - 1/u < 1` on `(0, 1)`, `k = 57/7`. -/
-theorem theorem3_B {u : ℝ} (hu : 0 < u) (hu1 : u < 1) : 57 / 7 * (1 - u) ^ 2 + u - 1 / u < 1 := by
+/-- `B(u) = k(1-u)² + u - 1/u < 1` on `(0, 1)`, `k = 57/7`. -/
+theorem sideCap_B_lt_one {u : ℝ} (hu : 0 < u) (hu1 : u < 1) : 57 / 7 * (1 - u) ^ 2 + u - 1 / u < 1 := by
   have hcub : 57 * u ^ 3 - 107 * u ^ 2 + 50 * u - 7 < 0 := by
     nlinarith [mul_nonneg (sq_nonneg (u - 3 / 10)) (sub_nonneg.2 hu1.le),
       sq_nonneg (u - 3 / 10 - 119 / 3160)]
@@ -257,19 +246,19 @@ theorem theorem3_B {u : ℝ} (hu : 0 < u) (hu1 : u < 1) : 57 / 7 * (1 - u) ^ 2 +
     div_neg_of_neg_of_pos hcub (by positivity)
   linarith
 
-theorem theorem3_eB {u : ℝ} (hu : 0 < u) (hu1 : u < 1) :
+theorem sideCap_B_eq {u : ℝ} (hu : 0 < u) (hu1 : u < 1) :
     (57 / 7 - 1 / u - 1 / (1 - u)) * (1 - u) ^ 2 - (1 - u) = 57 / 7 * (1 - u) ^ 2 + u - 1 / u := by
   have : (1 - u) ≠ 0 := by linarith
   field_simp; ring
 
-theorem theorem3_caseA {u v D : ℝ} (hu : 0 < u) (hu1 : u < 1) (hv : 0 < v) (hD : D ≤ 57 / 7)
+theorem sideCap_scalar_of_add_le_one {u v D : ℝ} (hu : 0 < u) (hu1 : u < 1) (hv : 0 < v) (hD : D ≤ 57 / 7)
     (h7 : 1 ≤ (D - 1 / u - 1 / v) * (1 - u) ^ 2 - (1 - u)) (huv : u + v ≤ 1) : False := by
   have h1 : 1 / (1 - u) ≤ 1 / v := one_div_le_one_div_of_le hv (by linarith)
   have : (D - 1 / u - 1 / v) * (1 - u) ^ 2 ≤ (57 / 7 - 1 / u - 1 / (1 - u)) * (1 - u) ^ 2 :=
     mul_le_mul_of_nonneg_right (by linarith) (sq_nonneg _)
-  linarith [theorem3_eB hu hu1, theorem3_B hu hu1]
+  linarith [sideCap_B_eq hu hu1, sideCap_B_lt_one hu hu1]
 
-theorem theorem3_gbound {u v D : ℝ} (hu : 0 < u) (hv : 0 < v)
+theorem sideCap_g_le {u v D : ℝ} (hu : 0 < u) (hv : 0 < v)
     (hbud : D * (u + v) - (1 / u + 1 / v) * (u + v - 1) ≤ 57 / 7) :
     D - 1 / u - 1 / v ≤ 57 / 7 / (u + v) - 1 / (u * v) := by
   have huv0 : 0 < u + v := by linarith
@@ -281,7 +270,7 @@ theorem theorem3_gbound {u v D : ℝ} (hu : 0 < u) (hv : 0 < v)
   refine le_of_mul_le_mul_right ?_ huv0
   rw [e1, e2]; linarith
 
-theorem theorem3_h10 {u v W : ℝ} (hu : 0 < u) (hv : 0 < v) (hW2 : W ^ 2 = 57 / 7 * u) :
+theorem sideCap_g_le_sq {u v W : ℝ} (hu : 0 < u) (hv : 0 < v) (hW2 : W ^ 2 = 57 / 7 * u) :
     57 / 7 / (u + v) - 1 / (u * v) ≤ (W - 1) ^ 2 / u ^ 2 := by
   have hpos : 0 < u ^ 2 * v * (u + v) := by positivity
   have e1 : (57 / 7 / (u + v) - 1 / (u * v)) * (u ^ 2 * v * (u + v)) =
@@ -294,7 +283,7 @@ theorem theorem3_h10 {u v W : ℝ} (hu : 0 < u) (hv : 0 < v) (hW2 : W ^ 2 = 57 /
   rw [e1, e2]
   nlinarith [sq_nonneg ((W - 1) * v - u)]
 
-theorem theorem3_small {u g W : ℝ} (hu : 0 < u) (hu1 : u < 1) (hW1 : 1 < W)
+theorem sideCap_mul_sq_le_one {u g W : ℝ} (hu : 0 < u) (hu1 : u < 1) (hW1 : 1 < W)
     (h10 : g ≤ (W - 1) ^ 2 / u ^ 2) (hWp : W * (1 - u) ≤ 1) : g * (1 - u) ^ 2 ≤ 1 := by
   have hq : (W - 1) * (1 - u) ≤ u := by linarith
   have hq0 : 0 ≤ (W - 1) * (1 - u) := mul_nonneg (by linarith) (by linarith)
@@ -309,7 +298,7 @@ theorem theorem3_small {u g W : ℝ} (hu : 0 < u) (hu1 : u < 1) (hW1 : 1 < W)
       · rw [div_le_one hu]; exact hq
 
 set_option linter.unusedVariables false in
-theorem theorem3_mono {u v W : ℝ} (hu : 0 < u) (hu1 : u < 1) (hv : 0 < v) (hW0 : 0 ≤ W)
+theorem sideCap_g_mono {u v W : ℝ} (hu : 0 < u) (hu1 : u < 1) (hv : 0 < v) (hW0 : 0 ≤ W)
     (hW2 : W ^ 2 = 57 / 7 * u) (hvp : 1 - u < v) (hWp : 1 < W * (1 - u)) :
     57 / 7 / (u + v) - 1 / (u * v) ≤ 57 / 7 - 1 / u - 1 / (1 - u) := by
   set p := 1 - u with hp
@@ -334,14 +323,14 @@ theorem theorem3_mono {u v W : ℝ} (hu : 0 < u) (hu1 : u < 1) (hv : 0 < v) (hW0
       positivity
   linarith
 
-/-- The scalar contradiction of Theorem 3, in the variables `u = s/(md)`, `v = s/(bd)` and
-`D = d/s` (`s = 7/64`, `k = 57/7`): (4) in the form (7) and the budget (5)-(6). -/
-theorem theorem3_scalar {u v D : ℝ} (hu : 0 < u) (hu1 : u < 1) (hv : 0 < v) (hD : D ≤ 57 / 7)
+/-- The scalar contradiction behind `atMostOne_sideCaps`, in the variables `u = s/(md)`, `v = s/(bd)` and
+`D = d/s` (`s = 7/64`, `k = 57/7`): the cost bound `h7` and the budget `hbud` are incompatible. -/
+theorem sideCap_scalar {u v D : ℝ} (hu : 0 < u) (hu1 : u < 1) (hv : 0 < v) (hD : D ≤ 57 / 7)
     (h7 : 1 ≤ (D - 1 / u - 1 / v) * (1 - u) ^ 2 - (1 - u))
     (hbud : D * (u + v) - (1 / u + 1 / v) * (u + v - 1) ≤ 57 / 7) : False := by
   rcases le_or_gt (u + v) 1 with huv | huv
-  · exact theorem3_caseA hu hu1 hv hD h7 huv
-  have hg0 := theorem3_gbound hu hv hbud
+  · exact sideCap_scalar_of_add_le_one hu hu1 hv hD h7 huv
+  have hg0 := sideCap_g_le hu hv hbud
   set g := 57 / 7 / (u + v) - 1 / (u * v) with hg
   have hmain : 1 ≤ g * (1 - u) ^ 2 - (1 - u) := by
     have := mul_le_mul_of_nonneg_right hg0 (sq_nonneg (1 - u))
@@ -354,16 +343,17 @@ theorem theorem3_scalar {u v D : ℝ} (hu : 0 < u) (hu1 : u < 1) (hv : 0 < v) (h
   obtain ⟨W, hW0, hW2⟩ : ∃ W : ℝ, 0 ≤ W ∧ W ^ 2 = 57 / 7 * u :=
     ⟨Real.sqrt (57 / 7 * u), Real.sqrt_nonneg _, Real.sq_sqrt (by positivity)⟩
   have hW1 : 1 < W := by nlinarith
-  have h10 := theorem3_h10 hu hv hW2
+  have h10 := sideCap_g_le_sq hu hv hW2
   rcases le_or_gt (W * (1 - u)) 1 with hWp | hWp
-  · have := theorem3_small hu hu1 hW1 h10 hWp
+  · have := sideCap_mul_sq_le_one hu hu1 hW1 h10 hWp
     linarith
-  · have hgp := theorem3_mono hu hu1 hv hW0 hW2 (by linarith) hWp
+  · have hgp := sideCap_g_mono hu hu1 hv hW0 hW2 (by linarith) hWp
     have := mul_le_mul_of_nonneg_right hgp (sq_nonneg (1 - u))
-    linarith [theorem3_eB hu hu1, theorem3_B hu hu1]
+    linarith [sideCap_B_eq hu hu1, sideCap_B_lt_one hu hu1]
 
-/-- (3)-(4) of Theorem 3 in polynomial form: `s d m² ≤ (wdm - sm - ws)(dm - s)`. -/
-theorem theorem3_T1 {s m w d p1 p2 q2 : ℝ} (hm0 : 0 < m) (hw0 : 0 < w) (hd0 : 0 < d)
+/-- The cost bounds `[BCP], [BCQ], [CDP] ≥ s` and `(1 - p₁)(d - q₂) ≥ s` of two right-cap points
+`P, Q`, in polynomial form: `s d m² ≤ (wdm - sm - ws)(dm - s)`. -/
+theorem sideCap_poly_bound {s m w d p1 p2 q2 : ℝ} (hm0 : 0 < m) (hw0 : 0 < w) (hd0 : 0 < d)
     (hp1 : p1 ≤ 1) (hBCP : s ≤ m * p2) (hBCQ : s ≤ m * q2) (hq2d : q2 ≤ d)
     (hCDP : s ≤ w * d - d * (1 - p1) - w * p2) (hA : s ≤ (1 - p1) * (d - q2)) :
     s * d * m ^ 2 ≤ (w * d * m - s * m - w * s) * (d * m - s) := by
@@ -382,8 +372,10 @@ theorem theorem3_T1 {s m w d p1 p2 q2 : ℝ} (hm0 : 0 < m) (hw0 : 0 < w) (hd0 : 
     linarith
   linarith
 
-/-- The conversion of (4)-(6) of Theorem 3 to the scalar variables `u, v, D`. -/
-theorem theorem3_conv {m w b c d h : ℝ} (hm0 : 0 < m) (hw0 : 0 < w) (hb : 0 < b) (hd0 : 0 < d)
+/-- The polynomial bound of `sideCap_poly_bound` and the budget bounds `s/m + s/b ≤ h`,
+`wh + cd ≤ 1 - s` are incompatible: their conversion to the scalar variables `u, v, D` of
+`sideCap_scalar`. -/
+theorem sideCap_scalar_reduction {m w b c d h : ℝ} (hm0 : 0 < m) (hw0 : 0 < w) (hb : 0 < b) (hd0 : 0 < d)
     (hc : c = m + b) (hw : w = 1 - c)
     (hT1 : 7 / 64 * d * m ^ 2 ≤ (w * d * m - 7 / 64 * m - w * (7 / 64)) * (d * m - 7 / 64))
     (hd1 : d ≤ 1 - 7 / 64) (h5 : 7 / 64 / m + 7 / 64 / b ≤ h) (h6 : w * h + c * d ≤ 1 - 7 / 64)
@@ -396,7 +388,7 @@ theorem theorem3_conv {m w b c d h : ℝ} (hm0 : 0 < m) (hw0 : 0 < w) (hb : 0 < 
   have hu0 : 0 < u := by positivity
   have hu1 : u < 1 := by rw [hu, div_lt_one (by positivity)]; exact hmd
   have hv0 : 0 < v := by positivity
-  refine theorem3_scalar (D := D) hu0 hu1 hv0 ?_ ?_ ?_
+  refine sideCap_scalar (D := D) hu0 hu1 hv0 ?_ ?_ ?_
   · rw [hD, div_le_iff₀ hs0]; norm_num [hs] at hd1 ⊢; linarith
   · have e1 : D - 1 / u - 1 / v = w * d / s := by
       rw [hD, hu, hv, hw, hc]; field_simp; ring
@@ -415,9 +407,9 @@ theorem theorem3_conv {m w b c d h : ℝ} (hm0 : 0 < m) (hw0 : 0 < w) (hb : 0 < 
     norm_num [hs] at this h6 ⊢; linarith
 
 set_option linter.unusedVariables false in
-/-- The reduction of Theorem 3 to the scalar contradiction, after choosing the larger of the
-two terms of `[DPQ]` (here `(1 - p₁)(d - q₂) ≥ s`, (3)-(4)). -/
-theorem theorem3_core' {a h b c d f p1 p2 q1 q2 : ℝ} (hN : NAnchors a h b c d f) (hp1 : p1 ≤ 1)
+/-- The reduction of `sideCap_core` to the scalar contradiction, in the case where the term
+`(1 - p₁)(d - q₂)` of `[DPQ]` is the one that is at least `s`. -/
+theorem sideCap_core' {a h b c d f p1 p2 q1 q2 : ℝ} (hN : NAnchors a h b c d f) (hp1 : p1 ≤ 1)
     (hBCP : 7 / 64 ≤ (c - b) * p2) (hBCQ : 7 / 64 ≤ (c - b) * q2)
     (hCDP : 7 / 64 ≤ d * (p1 - c) - (1 - c) * p2) (hCDQ : 7 / 64 ≤ d * (q1 - c) - (1 - c) * q2)
     (hq1 : q1 ≤ 1) (hA : 7 / 64 ≤ (1 - p1) * (d - q2)) (hABC : 7 / 64 ≤ a * (c - b))
@@ -430,7 +422,7 @@ theorem theorem3_core' {a h b c d f p1 p2 q1 q2 : ℝ} (hN : NAnchors a h b c d 
     have : d * (q1 - c) ≤ d * (1 - c) := mul_le_mul_of_nonneg_left (by linarith) hd0.le
     nlinarith
   have hmd : 7 / 64 < (c - b) * d := by nlinarith
-  have hT1 := theorem3_T1 hm0 hw0 hd0 hp1 hBCP hBCQ hq2d.le (by linarith) hA
+  have hT1 := sideCap_poly_bound hm0 hw0 hd0 hp1 hBCP hBCQ hq2d.le (by linarith) hA
   have hd1 : d ≤ 1 - 7 / 64 := by
     nlinarith [mul_le_mul_of_nonneg_right (by linarith : f ≤ 1) (sub_nonneg.2 hdh)]
   have h5 : 7 / 64 / (c - b) + 7 / 64 / b ≤ h := by
@@ -439,10 +431,11 @@ theorem theorem3_core' {a h b c d f p1 p2 q1 q2 : ℝ} (hN : NAnchors a h b c d 
     linarith
   have h6 : (1 - c) * h + c * d ≤ 1 - 7 / 64 := by
     nlinarith [mul_le_mul_of_nonneg_right hfc (sub_nonneg.2 hdh)]
-  exact theorem3_conv hm0 hw0 hb hd0 (by ring) rfl hT1 hd1 h5 h6 hmd
+  exact sideCap_scalar_reduction hm0 hw0 hb hd0 (by ring) rfl hT1 hd1 h5 h6 hmd
 
-/-- Theorem 3 for two points `(p₁, p₂)`, `(q₁, q₂)` of the right cap, in scalar form. -/
-theorem theorem3_core {a h b c d f p1 p2 q1 q2 : ℝ} (hN : NAnchors a h b c d f) (hp1 : p1 ≤ 1)
+/-- Two points `(p₁, p₂)`, `(q₁, q₂)` of the right cap whose relevant doubled areas are all at
+least `s = 7/64` cannot coexist: the scalar form of `atMostOne_sideCaps`. -/
+theorem sideCap_core {a h b c d f p1 p2 q1 q2 : ℝ} (hN : NAnchors a h b c d f) (hp1 : p1 ≤ 1)
     (hq1 : q1 ≤ 1) (hBCP : 7 / 64 ≤ (c - b) * p2) (hBCQ : 7 / 64 ≤ (c - b) * q2)
     (hCDP : 7 / 64 ≤ d * (p1 - c) - (1 - c) * p2) (hCDQ : 7 / 64 ≤ d * (q1 - c) - (1 - c) * q2)
     (hDPQ : 7 / 64 ≤ |(1 - p1) * (d - q2) - (d - p2) * (1 - q1)|) (hABC : 7 / 64 ≤ a * (c - b))
@@ -458,16 +451,14 @@ theorem theorem3_core {a h b c d f p1 p2 q1 q2 : ℝ} (hN : NAnchors a h b c d f
   have hA0 : 0 ≤ (1 - p1) * (d - q2) := mul_nonneg (by linarith) hq2
   have hB0 : 0 ≤ (d - p2) * (1 - q1) := mul_nonneg hp2 (by linarith)
   rcases le_abs'.1 hDPQ with h1 | h1
-  · exact theorem3_core' hN hq1 hBCQ hBCP hCDQ hCDP hp1 (by linarith) hABC hABH hHDF
-  · exact theorem3_core' hN hp1 hBCP hBCQ hCDP hCDQ hq1 (by linarith) hABC hABH hHDF
+  · exact sideCap_core' hN hq1 hBCQ hBCP hCDQ hCDP hp1 (by linarith) hABC hABH hHDF
+  · exact sideCap_core' hN hp1 hBCP hBCQ hCDP hCDQ hq1 (by linarith) hABC hABH hHDF
 
 set_option linter.unusedVariables false in
-/-- **Theorem 3** (`SIX_BOUNDARY_EXTERIOR:Theorem3`). If every doubled area is at least
-`s = 7/64`, each of the closed side caps `conv{(1,0), C, D}` and `conv{(0,1), F, H}` contains at
-most one free point. This holds throughout family N, with any number of additional hull
-vertices. `docs/proof/nine/SIX_BOUNDARY_EXTERIOR.md`, lines 125-292.
-Uses: SIX_BOUNDARY_HULL:claim-transposition -/
-theorem theorem3 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- If every doubled area is at least `s = 7/64`, each of the closed side caps
+`conv{(1,0), C, D}` and `conv{(0,1), F, H}` contains at most one free point. This holds
+throughout family N, with any number of additional hull vertices. -/
+theorem atMostOne_sideCaps {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     AtMostOne (InCapR c d) X Y Z ∧ AtMostOne (InCapL f h) X Y Z := by
@@ -520,7 +511,7 @@ theorem theorem3 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
           (1 - (P i).1) * (d - (P j).2) - (d - (P i).2) * (1 - (P j).1) := by
         simp only [hPdef, sarea]; simp only [nConfig, Fin.isValue, Matrix.cons_val]; ring
       rw [e] at this; linarith
-    exact theorem3_core hN x1 x1' (bc i hi y0) (bc j hj y0') (cd i hi ci) (cd j hj cj) dpq hABC
+    exact sideCap_core hN x1 x1' (bc i hi y0) (bc j hj y0') (cd i hi ci) (cd j hj cj) dpq hABC
       hABH hHDF
   have pairL : ∀ i j : Fin 9, 6 ≤ i.val → 6 ≤ j.val → i ≠ j → InCapL f h (P i) →
       InCapL f h (P j) → False := by
@@ -546,7 +537,7 @@ theorem theorem3 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
           -((1 - (P i).2) * (f - (P j).1) - (f - (P i).1) * (1 - (P j).2)) := by
         simp only [hPdef, sarea]; simp only [nConfig, Fin.isValue, Matrix.cons_val]; ring
       rw [e, abs_neg] at this; linarith
-    exact theorem3_core hNt y1 y1' (ah i hi x0) (ah j hj x0') (fh i hi ci) (fh j hj cj) fpq
+    exact sideCap_core hNt y1 y1' (ah i hi x0) (ah j hj x0') (fh i hi ci) (fh j hj cj) fpq
       hABH hABC hCDF
   refine ⟨⟨fun ⟨h1, h2⟩ => pairR 6 7 (by decide) (by decide) (by decide) h1 h2,
     fun ⟨h1, h2⟩ => pairR 6 8 (by decide) (by decide) (by decide) h1 h2,
@@ -555,7 +546,7 @@ theorem theorem3 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     fun ⟨h1, h2⟩ => pairL 6 8 (by decide) (by decide) (by decide) h1 h2,
     fun ⟨h1, h2⟩ => pairL 7 8 (by decide) (by decide) (by decide) h1 h2⟩⟩
 
-/-! ### Section 4: three points in the opposite cap -/
+/-! ### Three points in the opposite cap -/
 
 /-- The anchors and three opposite-cap points `E, G, O` in the hull order `A, B, C, D, E, G, F, H`
 (the last point `O` interior). -/
@@ -689,8 +680,7 @@ theorem chord_triples {a h b c d f : ℝ} (hN : NAnchors a h b c d f) {E G : Poi
   · nlinarith [mul_pos m (by linarith : (0:ℝ) < d), mul_pos n (by linarith : (0:ℝ) < 1 - c)]
   · nlinarith [mul_pos m (by linarith : (0:ℝ) < 1 - h), mul_pos n (by linarith : (0:ℝ) < f)]
 
-/-- A point of the square strictly beyond `DF` is strictly right of `f` and strictly above `d`
-(SIX_BOUNDARY_OPPOSITE_CAP (6) with threshold `0`). -/
+/-- A point of the square strictly beyond `DF` is strictly right of `f` and strictly above `d`. -/
 theorem cap_coords {d f : ℝ} (hd : d < 1) (hf : f < 1) {Z : Point} (hZ : Z ∈ unitSquare)
     (hZc : sarea (ptD d) (ptF f) Z < 0) : f < Z.1 ∧ d < Z.2 := by
   obtain ⟨z0, z1, w0, w1⟩ := hZ
@@ -705,7 +695,7 @@ theorem octagon_convex {a h b c d f : ℝ} (hN : NAnchors a h b c d f) {E G : Po
     (hE : E ∈ unitSquare) (hG : G ∈ unitSquare) (hEc : sarea (ptD d) (ptF f) E < 0)
     (hGc : sarea (ptD d) (ptF f) G < 0) (hDEG : 0 < sarea (ptD d) E G)
     (hEGF : 0 < sarea E G (ptF f)) (hm : G.1 < E.1) (hn : E.2 < G.2) :
-    IsConvexCCW (octagonDEGF a h b c d f E G) := by
+    IsConvexPolygon (octagonDEGF a h b c d f E G) := by
   have hN' := hN
   obtain ⟨-, -, hh1, -, -, hc1, -, hdh, -, hfc⟩ := hN'
   have hd1 : d < 1 := by linarith
@@ -809,10 +799,10 @@ theorem octagon_inPolygon {a h b c d f : ℝ} (hN : NAnchors a h b c d f) {E G O
   · show 0 < sarea (ptF f) (ptH h) O; exact o67
   · show 0 < sarea (ptH h) (ptA a) O; exact o70
 
-/-- The triangular-hull alternative of Theorem 4: if one cap point `O` is extreme as seen from
+/-- The triangular-hull alternative of `oppositeCap_octagon`: if one cap point `O` is extreme as seen from
 both `F` and `D`, the other two are strictly inside `FDO`, whose doubled area is at most
-`(1-d)(1-f) < 13/16`, against the two-interior-point lemma. -/
-theorem theorem4_tri {a h b c d f : ℝ} {E G O : Point} (hN : NAnchors a h b c d f)
+`(1-d)(1-f) < 13/16`, against the two-interior-point bound `SixBoundaryHull.two_inside_sarea`. -/
+theorem oppositeCap_not_triangular {a h b c d f : ℝ} {E G O : Point} (hN : NAnchors a h b c d f)
     (hE : InCapT d f E) (hG : InCapT d f G) (hO : InCapT d f O)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O))
     (hFE : sarea (ptF f) O E < 0) (hFG : sarea (ptF f) O G < 0)
@@ -860,14 +850,14 @@ theorem inTriangle_of_affine {a b c d e g : ℝ} (hdet : 0 < a * d - b * c) {X A
 
 /-- The cell analysis of a support triangle `UVW'` of doubled area below `13/16` (contacts `H` on
 the leg `UW'`, `F` on the leg `VW'`, fifth point `X`), at least area `7/128`: cells I, III, IV and
-V of `TYPE_II.md` §1 need doubled area at least `Ks`, `12s`, `10s` (`s = 7/64`), so `X` is in
-cell II, `X ∈ UVF ∩ UVH`. -/
+V of the support triangle (`TypeII.hsNormal_five_cells`) need doubled area at least `Ks`, `12s`,
+`10s` (`s = 7/64`), so `X` is in cell II, `X ∈ UVF ∩ UVH`. -/
 theorem support_cell_II {U V W' H F X : Point} (hS : TypeII.IsSupportTriangle U V W' H F X)
     (hsmall : sarea U V W' < 13 / 16) (hmin5 : 7 / 128 ≤ minTriangleArea ![U, V, H, F, X]) :
     InTriangle X U V F ∧ InTriangle X U V H := by
   have hW'pos := hS.1
   obtain ⟨α, β, γ, δ, ε, ζ, h₀, f₀, hdet, hU, hV, -, hH', hF', hNrm⟩ :=
-    TypeII.claim_support_affine hS
+    TypeII.exists_affineMap_hsNormal hS
   have hcomp : affineMap α β γ δ ε ζ ∘ ![U, V, H, F, X] =
       TypeII.hsConfig h₀ f₀ (affineMap α β γ δ ε ζ X) := by
     funext i; fin_cases i <;> simp [TypeII.hsConfig, hU, hV, hH', hF']
@@ -881,25 +871,25 @@ theorem support_cell_II {U V W' H F X : Point} (hS : TypeII.IsSupportTriangle U 
     exact mul_le_mul_of_nonneg_left hmin5 (by positivity)
   have hKs : 13 / 16 < TypeII.Ktwo * (7 / 64) := by
     have := SixBoundaryHull.rho_lt_Ks; unfold TypeII.Ktwo; linarith
-  have cells := TypeII.claim_five_cells hNrm hsn0 hsmin
+  have cells := TypeII.hsNormal_five_cells hNrm hsn0 hsmin
   have hII : TypeII.InCellII TypeII.hsA TypeII.hsE (TypeII.hsH h₀) (TypeII.hsF f₀)
       (affineMap α β γ δ ε ζ X) := by
     rcases cells.1 with hc | hc | hc | hc | hc
     · exfalso
-      have k := (TypeII.claim_cell_I_bound hNrm hsn0 hsmin hc).2
+      have k := (TypeII.inCellI_bound hNrm hsn0 hsmin hc).2
       rw [hsn, div_le_div_iff₀ hW'pos TypeII.Ktwo_pos] at k
       linarith only [k, hsmall, hKs]
     · exact hc
     · exfalso
-      have k := (TypeII.claim_cell_III_bound hNrm hsn0 hsmin hc).2
+      have k := (TypeII.inCellIII_bound hNrm hsn0 hsmin hc).2
       rw [hsn, div_le_div_iff₀ hW'pos TypeII.Ktwo_pos] at k
       linarith only [k, hsmall, hKs]
     · exfalso
-      have k := TypeII.claim_cell_IV_bound hNrm hsn0 hsmin hc
+      have k := TypeII.inCellIV_bound hNrm hsn0 hsmin hc
       rw [hsn, div_le_div_iff₀ hW'pos (by norm_num)] at k
       linarith only [k, hsmall]
     · exfalso
-      obtain ⟨-, k1, k2⟩ := TypeII.eq3 hNrm hsn0 hsmin hc
+      obtain ⟨-, k1, k2⟩ := TypeII.inCellV_bound hNrm hsn0 hsmin hc
       have k := k1.trans k2.le
       rw [hsn, div_le_div_iff₀ hW'pos (by norm_num)] at k
       linarith only [k, hsmall]
@@ -915,7 +905,7 @@ theorem support_direction {d f : ℝ} (hd1 : d < 1) (hf1 : f < 1) {E G W' : Poin
     (hGseg : G ∈ openSegment ℝ (ptF f) W') (hEseg : E ∈ openSegment ℝ (ptD d) W')
     (hW'mem : W' ∈ convexHull ℝ ({ptF f, ptD d, (1, 1)} : Set Point)) :
     G.1 < E.1 ∧ E.2 < G.2 := by
-  obtain ⟨p, q, r, hp, hq, hr, hpqr, hW'eq⟩ := TypeII.exists_bary_of_mem_convexHull hW'mem
+  obtain ⟨p, q, r, hp, hq, hr, hpqr, hW'eq⟩ := exists_bary_of_mem_convexHull hW'mem
   obtain ⟨μ₁, ν₁, hμ₁, hν₁, hμν₁, hG'⟩ := hGseg
   obtain ⟨μ₂, ν₂, hμ₂, hν₂, hμν₂, hE'⟩ := hEseg
   have gx : G.1 = μ₁ * f + ν₁ * W'.1 := by rw [← hG']; simp [ptF]
@@ -950,7 +940,7 @@ theorem support_direction {d f : ℝ} (hd1 : d < 1) (hf1 : f < 1) {E G W' : Poin
 
 /-- The quadrilateral `D, E, G, F` is convex when its four triangles are positive. -/
 theorem quad_convex {D E G F : Point} (h1 : 0 < sarea D E G) (h2 : 0 < sarea D E F)
-    (h3 : 0 < sarea D G F) (h4 : 0 < sarea E G F) : IsConvexCCW ![D, E, G, F] := by
+    (h3 : 0 < sarea D G F) (h4 : 0 < sarea E G F) : IsConvexPolygon ![D, E, G, F] := by
   intro i j k hij hjk
   fin_cases i <;> fin_cases j <;> simp only [Fin.reduceFinMk, Fin.reduceLT, Fin.isValue] at hij ⊢ <;>
     fin_cases k <;> simp only [Fin.reduceFinMk, Fin.reduceLT, Fin.isValue] at hjk ⊢
@@ -959,17 +949,17 @@ theorem quad_convex {D E G F : Point} (h1 : 0 < sarea D E G) (h2 : 0 < sarea D E
   · exact h3
   · exact h4
 
-/-- The support alternative of Theorem 4: with `G` extreme as seen from `F` and `E` extreme as
+/-- The support alternative of `oppositeCap_octagon`: with `G` extreme as seen from `F` and `E` extreme as
 seen from `D`, the support triangle `F D W'` (apex `W'` in the cap) carries `G, E` on its legs and
-the five cells of `TYPE_II.md` §1 leave only cell II: `O ∈ FDE ∩ FDG`. -/
-theorem theorem4_core {a h b c d f : ℝ} {E G O : Point} (hN : NAnchors a h b c d f)
+its five cells (`TypeII.hsNormal_five_cells`) leave only cell II: `O ∈ FDE ∩ FDG`. -/
+theorem oppositeCap_octagon_of_support {a h b c d f : ℝ} {E G O : Point} (hN : NAnchors a h b c d f)
     (hE : InCapT d f E) (hG : InCapT d f G) (hO : InCapT d f O)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O))
     (hFGE : sarea (ptF f) G E < 0) (hFGO : sarea (ptF f) G O < 0)
     (hDEG : 0 < sarea (ptD d) E G) (hDEO : 0 < sarea (ptD d) E O) :
-    IsConvexCCW ![ptD d, E, G, ptF f] ∧ InTriangle O (ptD d) E (ptF f) ∧
+    IsConvexPolygon ![ptD d, E, G, ptF f] ∧ InTriangle O (ptD d) E (ptF f) ∧
       InTriangle O (ptD d) G (ptF f) ∧ G.1 < E.1 ∧ E.2 < G.2 ∧
-      IsConvexCCW (octagonDEGF a h b c d f E G) ∧ InPolygon (octagonDEGF a h b c d f E G) O := by
+      IsConvexPolygon (octagonDEGF a h b c d f E G) ∧ InPolygon (octagonDEGF a h b c d f E G) O := by
   have hpos : 0 < minTriangleArea (nConfig a h b c d f E G O) := by linarith
   obtain ⟨hABC, hABH, -, -⟩ := SixBoundaryHull.anchor_areas hN hmin
   have hN' := hN
@@ -1028,26 +1018,23 @@ theorem theorem4_core {a h b c d f : ℝ} {E G O : Point} (hN : NAnchors a h b c
     octagon_convex hN hE.1 hG.1 cE cG hDEG hEGF hdir.1 hdir.2,
     octagon_inPolygon hN hO.1 cO hDEG hEGF hDEF k1 k2⟩
 
-/-- **Theorem 4** (`SIX_BOUNDARY_EXTERIOR:Theorem4`). Suppose all three free points are in the
-closed opposite cap `conv{D, F, (1,1)}` and every doubled area is at least `s = 7/64`. Then
-they can be named `E, G, O` (a permutation of `X, Y, Z`) so that `D, E, G, F` is a strictly
-convex quadrilateral in this counterclockwise order and `O ∈ DFE ∩ DFG` (written with the
-counterclockwise triangles `DEF`, `DGF`); moreover the direction `E → G` points strictly left and
-strictly up (`g_x < e_x`, `e_y < g_y`, from the support apex). Consequently the full hull is the
-strictly convex octagon `A, B, C, D, E, G, F, H` with `O` its sole interior point; every
-triangular cap hull and every other support-cell placement is impossible.
-`docs/proof/nine/SIX_BOUNDARY_EXTERIOR.md`, lines 298-362.
-Uses: TYPE_II:EndpointTriangleTheorem, CORNER_FAMILIES:TwoInteriorPointLemma,
-CORNER_FAMILIES:NontriangularHullLemma -/
-theorem theorem4 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- Suppose all three free points are in the closed opposite cap `conv{D, F, (1,1)}` and every
+doubled area is at least `s = 7/64`. Then they can be named `E, G, O` (a permutation of
+`X, Y, Z`) so that `D, E, G, F` is a strictly convex quadrilateral in this counterclockwise order
+and `O ∈ DFE ∩ DFG` (written with the counterclockwise triangles `DEF`, `DGF`); moreover the
+direction `E → G` points strictly left and strictly up (`g_x < e_x`, `e_y < g_y`, from the support
+apex). Consequently the full hull is the strictly convex octagon `A, B, C, D, E, G, F, H` with `O`
+its sole interior point; every triangular cap hull and every other support-cell placement is
+impossible. -/
+theorem oppositeCap_octagon {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : InCapT d f X) (hY : InCapT d f Y) (hZ : InCapT d f Z)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     ∃ σ : Equiv.Perm (Fin 3),
-      IsConvexCCW ![ptD d, ![X, Y, Z] (σ 0), ![X, Y, Z] (σ 1), ptF f] ∧
+      IsConvexPolygon ![ptD d, ![X, Y, Z] (σ 0), ![X, Y, Z] (σ 1), ptF f] ∧
       InTriangle (![X, Y, Z] (σ 2)) (ptD d) (![X, Y, Z] (σ 0)) (ptF f) ∧
       InTriangle (![X, Y, Z] (σ 2)) (ptD d) (![X, Y, Z] (σ 1)) (ptF f) ∧
       (![X, Y, Z] (σ 1)).1 < (![X, Y, Z] (σ 0)).1 ∧ (![X, Y, Z] (σ 0)).2 < (![X, Y, Z] (σ 1)).2 ∧
-      IsConvexCCW (octagonDEGF a h b c d f (![X, Y, Z] (σ 0)) (![X, Y, Z] (σ 1))) ∧
+      IsConvexPolygon (octagonDEGF a h b c d f (![X, Y, Z] (σ 0)) (![X, Y, Z] (σ 1))) ∧
       InPolygon (octagonDEGF a h b c d f (![X, Y, Z] (σ 0)) (![X, Y, Z] (σ 1)))
         (![X, Y, Z] (σ 2)) := by
   set V : Fin 3 → Point := ![X, Y, Z] with hV
@@ -1089,18 +1076,18 @@ theorem theorem4 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
   obtain ⟨j, hj⟩ := TypeII.exists_extreme_right (ptF f) (ptD d) V gpos nV
   -- the generic support case, for `E = V (σ 0)`, `G = V (σ 1)`, `O = V (σ 2)`
   have supp : ∀ σ : Equiv.Perm (Fin 3), σ 1 = i → σ 0 = j → ∃ τ : Equiv.Perm (Fin 3),
-      IsConvexCCW ![ptD d, V (τ 0), V (τ 1), ptF f] ∧
+      IsConvexPolygon ![ptD d, V (τ 0), V (τ 1), ptF f] ∧
       InTriangle (V (τ 2)) (ptD d) (V (τ 0)) (ptF f) ∧
       InTriangle (V (τ 2)) (ptD d) (V (τ 1)) (ptF f) ∧
       (V (τ 1)).1 < (V (τ 0)).1 ∧ (V (τ 0)).2 < (V (τ 1)).2 ∧
-      IsConvexCCW (octagonDEGF a h b c d f (V (τ 0)) (V (τ 1))) ∧
+      IsConvexPolygon (octagonDEGF a h b c d f (V (τ 0)) (V (τ 1))) ∧
       InPolygon (octagonDEGF a h b c d f (V (τ 0)) (V (τ 1))) (V (τ 2)) := by
     intro σ h1 h0
     have n01 : σ 0 ≠ σ 1 := fun e => absurd (σ.injective e) (by decide)
     have n21 : σ 2 ≠ σ 1 := fun e => absurd (σ.injective e) (by decide)
     have n10 : σ 1 ≠ σ 0 := fun e => absurd (σ.injective e) (by decide)
     have n20 : σ 2 ≠ σ 0 := fun e => absurd (σ.injective e) (by decide)
-    refine ⟨σ, theorem4_core hN (hcap _) (hcap _) (hcap _) (hperm σ) ?_ ?_ ?_ ?_⟩
+    refine ⟨σ, oppositeCap_octagon_of_support hN (hcap _) (hcap _) (hcap _) (hperm σ) ?_ ?_ ?_ ?_⟩
     · rw [h1]; exact hi _ (by rw [← h1]; exact n01)
     · rw [h1]; exact hi _ (by rw [← h1]; exact n21)
     · rw [h0]; exact hj _ (by rw [← h0]; exact n10)
@@ -1111,7 +1098,7 @@ theorem theorem4 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     subst hij
     have n02 : σ 0 ≠ σ 2 := fun e => absurd (σ.injective e) (by decide)
     have n12 : σ 1 ≠ σ 2 := fun e => absurd (σ.injective e) (by decide)
-    refine theorem4_tri hN (hcap _) (hcap _) (hcap _) (hperm σ) ?_ ?_ ?_ ?_
+    refine oppositeCap_not_triangular hN (hcap _) (hcap _) (hcap _) (hperm σ) ?_ ?_ ?_ ?_
     · rw [h2]; exact hi _ (by rw [← h2]; exact n02)
     · rw [h2]; exact hi _ (by rw [← h2]; exact n12)
     · rw [h2]; exact hj _ (by rw [← h2]; exact n02)
@@ -1127,12 +1114,12 @@ theorem theorem4 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
   · exact supp (Equiv.swap 0 2 * Equiv.swap 0 1) (by decide) (by decide)
   · exact (tri 1 (by decide) rfl).elim
 
-/-! ### Section 5: an occupied side cap empties the opposite lower ear -/
+/-! ### An occupied side cap empties the opposite lower ear -/
 
-/-- The scalar core of Theorem 5 (15)-(19): with `m + w + b = 1`, `mw ≥ s(m + w)` and
-`mb ≥ s(b + 3m)` (`s = 7/64`), `F(m,w) = 1/m + 3w/b + 1/w > 1/s`, in polynomial form. (A
-polynomial certificate found by linear programming replaces the monotonicity argument.) -/
-theorem theorem5_scalar {m w b : ℝ} (hm : 0 < m) (hw : 0 < w) (hb : 0 < b)
+/-- The scalar core of `occupiedSideCap_ear_lt`: with `m + w + b = 1`, `mw ≥ s(m + w)` and `mb ≥ s(b + 3m)`
+(`s = 7/64`), `F(m,w) = 1/m + 3w/b + 1/w > 1/s`, in polynomial form (proved by a polynomial
+certificate found by linear programming). -/
+theorem occupiedSideCap_scalar {m w b : ℝ} (hm : 0 < m) (hw : 0 < w) (hb : 0 < b)
     (hsum : m + w + b = 1) (h1 : 7 / 64 * (m + w) ≤ m * w) (h2 : 7 / 64 * (b + 3 * m) ≤ b * m) :
     64 * (m * b * w) < 7 * (b * w + 3 * m * w ^ 2 + b * m) := by
   obtain rfl : b = 1 - m - w := by linarith
@@ -1148,8 +1135,8 @@ theorem theorem5_scalar {m w b : ℝ} (hm : 0 < m) (hw : 0 < w) (hb : 0 < b)
     mul_nonneg (sq_nonneg (3 * m - 1)) (sq_nonneg (3 * m - 1))]
 
 set_option linter.unusedVariables false in
-/-- The scalar form of Theorem 5: an occupied right cap and `[ABH] ≥ 3s` are incompatible. -/
-theorem theorem5_core {a h b c d f x y : ℝ} (hN : NAnchors a h b c d f) (hx1 : x ≤ 1)
+/-- The scalar form of `occupiedSideCap_ear_lt`: an occupied right cap and `[ABH] ≥ 3s` are incompatible. -/
+theorem occupiedSideCap_core {a h b c d f x y : ℝ} (hN : NAnchors a h b c d f) (hx1 : x ≤ 1)
     (hy0 : 0 ≤ y) (hBCX : 7 / 64 ≤ (c - b) * y) (hCDX : 7 / 64 ≤ d * (x - c) - (1 - c) * y)
     (hABC : 7 / 64 ≤ a * (c - b)) (hHDF : 7 / 64 ≤ 1 - h + f * (h - d))
     (hABH : 3 * (7 / 64) ≤ b * (h - a)) : False := by
@@ -1159,20 +1146,20 @@ theorem theorem5_core {a h b c d f x y : ℝ} (hN : NAnchors a h b c d f) (hx1 :
   have hm0 : 0 < m := by linarith
   have hw0 : 0 < w := by linarith
   have hd0 : 0 ≤ d := by linarith
-  -- (13) `dmw ≥ s(w + m)`
+  -- `dmw ≥ s(w + m)`
   have e13 : 7 / 64 * (w + m) ≤ d * m * w := by
     have : d * (x - c) ≤ d * w := mul_le_mul_of_nonneg_left (by linarith) hd0
     nlinarith [mul_le_mul_of_nonneg_left hBCX hw0.le]
-  -- (14) `hmb ≥ s(b + 3m)`
+  -- `hmb ≥ s(b + 3m)`
   have e14 : 7 / 64 * (b + 3 * m) ≤ h * m * b := by
     nlinarith [mul_le_mul_of_nonneg_left hABC hb.le, mul_le_mul_of_nonneg_left hABH hm0.le]
-  -- (6) `wh + (1-w)d ≤ 1 - s`
+  -- `wh + (1-w)d ≤ 1 - s`
   have e6 : w * h + (1 - w) * d ≤ 1 - 7 / 64 := by
     nlinarith [mul_le_mul_of_nonneg_right hfc (sub_nonneg.2 hdh)]
   have hmw : 7 / 64 * (m + w) ≤ m * w := by nlinarith [mul_pos hm0 hw0]
   have hmb : 7 / 64 * (b + 3 * m) ≤ b * m := by nlinarith [mul_pos hm0 hb]
-  have key := theorem5_scalar hm0 hw0 hb (by ring) hmw hmb
-  -- the budget (6) gives `mbw ≥ s(bw + 3mw² + bm)`
+  have key := occupiedSideCap_scalar hm0 hw0 hb (by ring) hmw hmb
+  -- the budget `e6` gives `mbw ≥ s(bw + 3mw² + bm)`
   have hbud : 7 / 64 * (b * w + 3 * m * w ^ 2 + b * m) ≤ m * b * w := by
     have hmbw : 0 < m * b * w := by positivity
     nlinarith [mul_le_mul_of_nonneg_left e6 hmbw.le, mul_le_mul_of_nonneg_left e14 (sq_nonneg w),
@@ -1194,13 +1181,10 @@ theorem three_s_of_inTriangle {n : ℕ} {P : Fin n → Point} (hmin : 7 / 128 �
   linarith
 
 set_option linter.unusedVariables false in
-/-- **Theorem 5** (`SIX_BOUNDARY_EXTERIOR:Theorem5`). Assume every doubled area is at least
-`s = 7/64` (implicit in the manuscript). If a free point `X` lies in the lower-right cap
-`CD(1,0)`, then `[ABH] < 3s`, so `ABH` contains no further point. Transposed: if `X` lies in the
-upper-left cap `FH(0,1)`, then `[ABC] < 3s` and `ABC` contains no further point.
-`docs/proof/nine/SIX_BOUNDARY_EXTERIOR.md`, lines 364-472.
-Uses: SIX_BOUNDARY_HULL:claim-transposition -/
-theorem theorem5 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- Assume every doubled area is at least `s = 7/64`. If a free point `X` lies in the lower-right
+cap `CD(1,0)`, then `[ABH] < 3s`, so `ABH` contains no further point. Transposed: if `X` lies in
+the upper-left cap `FH(0,1)`, then `[ABC] < 3s` and `ABC` contains no further point. -/
+theorem occupiedSideCap_ear_lt {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     (InCapR c d X →
@@ -1243,7 +1227,7 @@ theorem theorem5 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     have hlt : sarea (ptA a) (ptB b) (ptH h) < 3 * (7 / 64) := by
       by_contra hge
       push Not at hge
-      exact theorem5_core hN x1 y0 hBCX hCDX hABC hHDF (by simp only [sarea] at hge; linarith)
+      exact occupiedSideCap_core hN x1 y0 hBCX hCDX hABC hHDF (by simp only [sarea] at hge; linarith)
     refine ⟨hlt, fun hY => ?_, fun hZ => ?_⟩
     · have := three_s_of_inTriangle (P := nConfig a h b c d f X Y Z) (i := 0) (j := 2) (k := 1)
         (l := 7) hmin (by decide) (by decide) (by decide) (by decide) (by decide) (by decide) hY
@@ -1264,7 +1248,7 @@ theorem theorem5 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     have hlt : sarea (ptA a) (ptB b) (ptC c) < 3 * (7 / 64) := by
       by_contra hge
       push Not at hge
-      exact theorem5_core hNt y1 x0 hAHX hFHX hABH hCDF (by simp only [sarea] at hge; linarith)
+      exact occupiedSideCap_core hNt y1 x0 hAHX hFHX hABH hCDF (by simp only [sarea] at hge; linarith)
     refine ⟨hlt, fun hY => ?_, fun hZ => ?_⟩
     · have := three_s_of_inTriangle (P := nConfig a h b c d f X Y Z) (i := 0) (j := 2) (k := 3)
         (l := 7) hmin (by decide) (by decide) (by decide) (by decide) (by decide) (by decide) hY
@@ -1273,7 +1257,7 @@ theorem theorem5 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
         (l := 8) hmin (by decide) (by decide) (by decide) (by decide) (by decide) (by decide) hZ
       exact absurd this (not_le.2 hlt)
 
-/-! ### Section 6: side projection keeps every anchor-pair cost -/
+/-! ### Side projection keeps every anchor-pair cost -/
 
 /-- Every triangle formed by `X` and two of the six anchors has unsigned doubled area at least
 `μ`. -/
@@ -1286,8 +1270,9 @@ theorem absP {μ A B : ℝ} (h : μ ≤ |A|) (hA : 0 ≤ A) (hAB : A ≤ B) : μ
 theorem absN {μ A B : ℝ} (h : μ ≤ |A|) (hA : A ≤ 0) (hAB : B ≤ A) : μ ≤ |B| := by
   rw [abs_of_nonpos hA] at h; rw [abs_of_nonpos (hAB.trans hA)]; linarith
 
-/-- Lemma 6 for the right cap. -/
-theorem lemma6R {a h b c d f μ : ℝ} (hN : NAnchors a h b c d f) (hμ : 0 < μ) (X : Point)
+/-- The right-cap half of `anchorPairBound_slide`: moving a point of the cap `CD(1,0)` horizontally towards the
+side `x = 1` keeps the anchor-pair bound. -/
+theorem anchorPairBound_slide_capR {a h b c d f μ : ℝ} (hN : NAnchors a h b c d f) (hμ : 0 < μ) (X : Point)
     (hX : InCapR c d X) (hB : AnchorPairBound a h b c d f μ X) (t : ℝ) (hxt : X.1 ≤ t)
     (ht1 : t ≤ 1) : AnchorPairBound a h b c d f μ (t, X.2) := by
   obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN
@@ -1422,20 +1407,19 @@ theorem anchorPairBound_transpose {a h b c d f μ : ℝ} {X : Point}
     refine this.trans (le_of_eq ?_)
     rw [abs_eq_abs]; left; ring1
 
-/-- **Lemma 6** (`SIX_BOUNDARY_EXTERIOR:Lemma6`). Let `X = (x, y)` lie in the cap `CD(1,0)` and
-`μ > 0`. If every triangle of `X` with two of the six anchors has unsigned doubled area at least
-`μ`, the same holds for `(t, y)` for every `x ≤ t ≤ 1`, in particular for `X' = (1, y)` (the
-proof shows the property along the whole segment). Transposed: for `Y = (z, w)` in `FH(0,1)`,
-the same holds for `(z, t)`, `w ≤ t ≤ 1`. `docs/proof/nine/SIX_BOUNDARY_EXTERIOR.md`, lines 474-510. -/
-theorem lemma6 {a h b c d f μ : ℝ} (hN : NAnchors a h b c d f) (hμ : 0 < μ) :
+/-- Let `X = (x, y)` lie in the cap `CD(1,0)` and `μ > 0`. If every triangle of `X` with two of
+the six anchors has unsigned doubled area at least `μ`, the same holds for `(t, y)` for every
+`x ≤ t ≤ 1`, in particular for `X' = (1, y)`. Transposed: for `Y = (z, w)` in `FH(0,1)`, the same
+holds for `(z, t)`, `w ≤ t ≤ 1`. -/
+theorem anchorPairBound_slide {a h b c d f μ : ℝ} (hN : NAnchors a h b c d f) (hμ : 0 < μ) :
     (∀ X : Point, InCapR c d X → AnchorPairBound a h b c d f μ X →
       ∀ t : ℝ, X.1 ≤ t → t ≤ 1 → AnchorPairBound a h b c d f μ (t, X.2)) ∧
     (∀ Y : Point, InCapL f h Y → AnchorPairBound a h b c d f μ Y →
       ∀ t : ℝ, Y.2 ≤ t → t ≤ 1 → AnchorPairBound a h b c d f μ (Y.1, t)) := by
-  refine ⟨fun X hX hB t ht ht1 => lemma6R hN hμ X hX hB t ht ht1, fun Y hY hB t ht ht1 => ?_⟩
-  have hN' : NAnchors b c a h f d := (claim_transposition a h b c d f Y Y Y).1.1 hN
-  have hY' : InCapR h f (transpose Y) := (claim_transposition a h b c d f Y Y Y).2.2.2.2.2.2.1.1 hY
-  have k := lemma6R hN' hμ (transpose Y) hY' (anchorPairBound_transpose hB) t ht ht1
+  refine ⟨fun X hX hB t ht ht1 => anchorPairBound_slide_capR hN hμ X hX hB t ht ht1, fun Y hY hB t ht ht1 => ?_⟩
+  have hN' : NAnchors b c a h f d := (transpose_invariant a h b c d f Y Y Y).1.1 hN
+  have hY' : InCapR h f (transpose Y) := (transpose_invariant a h b c d f Y Y Y).2.2.2.2.2.2.1.1 hY
+  have k := anchorPairBound_slide_capR hN' hμ (transpose Y) hY' (anchorPairBound_transpose hB) t ht ht1
   have k2 := anchorPairBound_transpose k
   have e : transpose (t, (transpose Y).2) = (Y.1, t) := rfl
   rwa [e] at k2

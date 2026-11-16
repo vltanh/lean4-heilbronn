@@ -3,13 +3,12 @@ module
 public import Heilbronn.Nine.Setup.Value
 public import Heilbronn.Nine.EightBoundary.Setting
 
-/-! # Boundary incidences (`docs/proof/nine/EIGHT_BOUNDARY.md` §1)
+/-! # Boundary incidences
 
-The counting argument of Lemma 1 and the relabelling into the normal form, used by
-`EightBoundary.lemma1` and `EightBoundary.claim_normal_form`
-(`Heilbronn/Nine/EightBoundary/Basic.lean`).
+The counting argument behind `EightBoundary.two_on_each_side` and the relabelling into the normal form
+behind `EightBoundary.exists_perm_eq_eightConfig` (`Heilbronn/Nine/EightBoundary/Basic.lean`).
 
-* `lemma1_core`: a closed side holds at most two points; counting point–side incidences, at least
+* `two_on_each_side_card`: a closed side holds at most two points; counting point–side incidences, at least
   eight boundary points force exactly eight, no corner, and two points on each side;
 * `normal_form_core`: ordering the two points of each side and the ninth point gives the
   permutation onto `eightConfig`.
@@ -47,7 +46,7 @@ theorem incidence_count (q : Point) (hq : q ∈ unitSquare) :
   by_cases hx0 : x = 0 <;> by_cases hx1 : x = 1 <;> by_cases hy0 : y = 0 <;>
     by_cases hy1 : y = 1 <;> simp [hx0, hx1, hy0, hy1, hq] <;> split_ifs <;> omega
 
-theorem lemma1_core (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare)
+theorem two_on_each_side_card (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare)
     (hncol : ∀ i j k, i ≠ j → j ≠ k → i ≠ k → sarea (P i) (P j) (P k) ≠ 0)
     (h8 : 8 ≤ (univ.filter fun i => OnSquareBoundary (P i)).card) :
     (univ.filter fun i => OnSquareBoundary (P i)).card = 8 ∧ (∀ i, ¬ IsCorner (P i)) ∧
@@ -93,7 +92,7 @@ theorem normal_form_core (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare)
     (h8 : 8 ≤ (univ.filter fun i => OnSquareBoundary (P i)).card) :
     ∃ (a b c d e f g h : ℝ) (O : Point) (σ : Equiv.Perm (Fin 9)),
       EightAnchors a b c d e f g h ∧ InOpenSquare O ∧ P ∘ σ = eightConfig a b c d e f g h O := by
-  obtain ⟨hbd, hcor, hL, hB, hR, hT⟩ := lemma1_core P hP hncol h8
+  obtain ⟨hbd, hcor, hL, hB, hR, hT⟩ := two_on_each_side_card P hP hncol h8
   -- points with a common coordinate on a side are distinct in the other coordinate
   have hinj : ∀ i j, i ≠ j → P i ≠ P j := by
     intro i j hij hPij

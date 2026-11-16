@@ -5,30 +5,29 @@ public import Heilbronn.Nine.C1.TwoLower.Basic
 public import Heilbronn.Nine.C1.TwoLower.ConvexPairCert
 
 /-! # Two C1 top-cap points cannot form a convex quadrilateral with the cap base
-(`docs/proof/nine/C1_TOP_CAP_CONVEX_PAIR.md`)
 
-Role: a component on the primary route: `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md` Theorem 2, step 3
-(lines 249-254), together with `docs/proof/nine/C1_TOP_CAP_TRIANGULAR_PAIR.md`. Its §§1, 3, 4 are reused
-by `docs/proof/nine/C1_TOP_CAP_SIDE_EARS.md` and `docs/proof/nine/C1_TOP_CAP_TRIANGULAR_PAIR.md`.
+`theorem_main` is used by `C1TopCapTriangularPair.theorem_main`, which completes the case of two
+top-cap points; the anchor expressions, the cap-cost bounds and the reduced parametrization are
+reused by `C1TopCapSideEars` and `C1TopCapTriangularPair`.
 
-Setting (lines 3-38): the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`,
+Setting: the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`,
 a competitive nine-point configuration (least area at least `A₀`, so every doubled area is at
 least `s = 8/73`), two free points `L, M` inside `OHC`, and the other two `X, Y` in the closed
 top cap `conv{D, F, (1,1)}`. The lower points enter only through `hc ≥ Ks > ρ = 49/60`; the
 scalar part is proved under the relaxed `hc ≥ ρ`.
 
-Definitions: the anchor expressions `areaA = [CDF]`, `areaU = [HDF]`, `areaΔ` (1); the bracket
-`bracketB` and discriminant `discrG` of (6); the reduced parametrization (9) at `hc = ρ`
-(`reducedHCDF`).
+Definitions: the anchor expressions `areaA = [CDF]`, `areaU = [HDF]`, `areaΔ`; the bracket
+`bracketB` and discriminant `discrG`; the reduced parametrization at `hc = ρ` (`reducedHCDF`).
 
 Results:
-* `eq1_2`: `W = A + U + Δ`, and `Δ > 0` when `hc ≥ ρ`, `hf, cd ≥ s`;
-* `eq3_5`: the cap costs `a_Z, b_Z, r_Z ≥ s`, the identity `A a_Z + U b_Z + Δ r_Z = AU` (3) and the
-  barycentric bounds (5);
-* `eq6`: if `D, F` are on one side of `XY` then `B > 0` and `G ≥ 0`;
-* `claim_reduction`: (7), (8), and the reduction of (6) to the box (10) at `hc = ρ`;
-* `claim_certificate`: (6) has no solution in the box (10) (36 Bernstein leaves);
-* `theorem_main` (**Theorem**): the line `XY` separates `D, F`.
+* `area_sum_and_areaΔ_pos`: `W = A + U + Δ`, and `Δ > 0` when `hc ≥ ρ`, `hf, cd ≥ s`;
+* `topCap_cost_bounds`: the cap costs `a_Z, b_Z, r_Z ≥ s`, the identity `A a_Z + U b_Z + Δ r_Z = AU` and the
+  barycentric bounds;
+* `bracketB_discrG_of_sameSide`: if `D, F` are on one side of `XY` then `B > 0` and `G ≥ 0`;
+* `exists_box_of_bracketB_pos`: `A + U > 4s`, `s²/ρ < df < ρ`, and the reduction of `B > 0`, `G ≥ 0` to a
+  box at `hc = ρ`;
+* `not_bracketB_pos_and_discrG_nonneg`: `B > 0`, `G ≥ 0` has no solution in that box (36 Bernstein leaves);
+* `theorem_main`: the line `XY` separates `D, F`.
 -/
 
 @[expose] public section
@@ -38,32 +37,31 @@ namespace Heilbronn.Nine.C1TopCapConvexPair
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1TwoLower
 
-/-- `A = [CDF] = 1 - c + d(c - f)` (1). -/
+/-- `A = [CDF] = 1 - c + d(c - f)`. -/
 def areaA (c d f : ℝ) : ℝ := 1 - c + d * (c - f)
 
-/-- `U = [HDF] = 1 - h + f(h - d)` (1). -/
+/-- `U = [HDF] = 1 - h + f(h - d)`. -/
 def areaU (h d f : ℝ) : ℝ := 1 - h + f * (h - d)
 
-/-- `Δ = df - (1 - h)(1 - c)` (1). -/
+/-- `Δ = df - (1 - h)(1 - c)`, so that `[HCDF] = A + U + Δ`. -/
 def areaΔ (h c d f : ℝ) : ℝ := d * f - (1 - h) * (1 - c)
 
-/-- `B = AU - s(A + U)` of (6), `s = 8/73`. -/
+/-- The bracket `B = AU - s(A + U)`, `s = 8/73`. -/
 def bracketB (h c d f : ℝ) : ℝ :=
   areaA c d f * areaU h d f - 8 / 73 * (areaA c d f + areaU h d f)
 
-/-- `G = B² - 4sAUΔ` of (6), `s = 8/73`. -/
+/-- The discriminant `G = B² - 4sAUΔ`, `s = 8/73`. -/
 def discrG (h c d f : ℝ) : ℝ :=
   bracketB h c d f ^ 2 - 4 * (8 / 73) * areaA c d f * areaU h d f * areaΔ h c d f
 
-/-- The reduced parameters (9) at `hc = ρ = 49/60`: with `u = hf`, `v = cd`, the anchors are
+/-- The reduced parameters at `hc = ρ = 49/60`: with `u = hf`, `v = cd`, the anchors are
 `(h, c, d, f) = (h, ρ/h, vh/ρ, u/h)`; then `A = 1 - ρ/h + v - uv/ρ`, `U = 1 - h + u - uv/ρ`,
 `Δ = uv/ρ - 1 + h + ρ/h - ρ`. -/
 def reducedHCDF (h u v : ℝ) : ℝ × ℝ × ℝ × ℝ := (h, 49 / 60 / h, v * h / (49 / 60), u / h)
 
-/-- **Claim** (`C1_TOP_CAP_CONVEX_PAIR:eq1-2`). For the weak anchor conditions,
-`W = A + U + Δ = 1 - (h - d)(c - f)`; and if `hc ≥ ρ = 49/60` and `hf, cd ≥ s = 8/73`, then
-`Δ > 0` (2). `docs/proof/nine/C1_TOP_CAP_CONVEX_PAIR.md`, lines 40-69. -/
-theorem eq1_2 {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) :
+/-- For the weak anchor conditions, `W = A + U + Δ = 1 - (h - d)(c - f)`; and if
+`hc ≥ ρ = 49/60` and `hf, cd ≥ s = 8/73`, then `Δ > 0`. -/
+theorem area_sum_and_areaΔ_pos {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) :
     areaA c d f + areaU h d f + areaΔ h c d f = 1 - (h - d) * (c - f) ∧
       (49 / 60 ≤ h * c → 8 / 73 ≤ h * f → 8 / 73 ≤ c * d → 0 < areaΔ h c d f) := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA
@@ -154,20 +152,18 @@ theorem cap_costs {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hd1 : d < 1) (hf
   · have := ar_neg e1 (by linarith); linarith
   · have := ar_neg e3 hDF; linarith
 
-/-- The identity (3). -/
+/-- The cap identity `A·(-[HFV]) + U·[CDV] + Δ·(-[DFV]) = AU`, for every point `V`. -/
 theorem cap_identity (h c d f : ℝ) (V : Point) :
     areaA c d f * -sarea (ptH h) (ptF f) V + areaU h d f * sarea (ptC c) (ptD d) V
       + areaΔ h c d f * -sarea (ptD d) (ptF f) V = areaA c d f * areaU h d f := by
   simp only [sarea, ptH, ptF, ptC, ptD, areaA, areaU, areaΔ]; ring
 
-/-- **Claim** (`C1_TOP_CAP_CONVEX_PAIR:eq3-5`). In a C1 configuration with the weak anchor
-conditions and least area at least `A₀`: `A, U, hf, cd ≥ s` (`s = 8/73`); every point `Z`
-satisfies `A·a_Z + U·b_Z + Δ·r_Z = AU` (3), where `a_Z = -[HFZ]`, `b_Z = [CDZ]`, `r_Z = -[DFZ]`;
-every free point `Z` in the closed top cap has `a_Z, b_Z, r_Z ≥ s`; and, when `Δ > 0`, with the
-area `S = AU/Δ` (4) of the triangle `a, b, r ≥ 0` and the barycentric coordinates
-`q = b_Z/A`, `t = r_Z`, `s/A ≤ q ≤ 1 - s/U - t/S` (5). `docs/proof/nine/C1_TOP_CAP_CONVEX_PAIR.md`,
-lines 71-111. -/
-theorem eq3_5 {h c d f : ℝ} {W X Y Z : Point} (hA : C1AnchorsWeak h c d f)
+/-- In a C1 configuration with the weak anchor conditions and least area at least `A₀`:
+`A, U, hf, cd ≥ s` (`s = 8/73`); every point `Z` satisfies `A·a_Z + U·b_Z + Δ·r_Z = AU`, where
+`a_Z = -[HFZ]`, `b_Z = [CDZ]`, `r_Z = -[DFZ]`; every free point `Z` in the closed top cap has
+`a_Z, b_Z, r_Z ≥ s`; and, when `Δ > 0`, with the area `S = AU/Δ` of the triangle `a, b, r ≥ 0`
+and the barycentric coordinates `q = b_Z/A`, `t = r_Z`: `s/A ≤ q ≤ 1 - s/U - t/S`. -/
+theorem topCap_cost_bounds {h c d f : ℝ} {W X Y Z : Point} (hA : C1AnchorsWeak h c d f)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) :
     8 / 73 ≤ areaA c d f ∧ 8 / 73 ≤ areaU h d f ∧ 8 / 73 ≤ h * f ∧ 8 / 73 ≤ c * d ∧
@@ -212,10 +208,10 @@ theorem eq3_5 {h c d f : ℝ} {W X Y Z : Point} (hA : C1AnchorsWeak h c d f)
     linarith
 
 set_option linter.unusedVariables false in
-/-- The scalar core of (6): two cap points with costs `a, b, r ≥ s`, the identity (3), the
+/-- The scalar core of `bracketB_discrG_of_sameSide`: two cap points with costs `a, b, r ≥ s`, the cap identity, the
 identities of the pair-line signs `A[XYD] = b_Y r_X - b_X r_Y`, `U[XYF] = a_X r_Y - a_Y r_X`,
 `r_Y ≤ r_X`, and `D, F` on one side of `XY` give `s A U ≤ B r_Y - Δ r_Y²`. -/
-theorem eq6_core {A U Δ s aX bX rX aY bY rY dD dF : ℝ} (hA : 0 < A) (hU : 0 < U) (hΔ : 0 < Δ)
+theorem height_ineq_of_sameSide {A U Δ s aX bX rX aY bY rY dD dF : ℝ} (hA : 0 < A) (hU : 0 < U) (hΔ : 0 < Δ)
     (hs : 0 ≤ s)
     (idX : A * aX + U * bX + Δ * rX = A * U) (idY : A * aY + U * bY + Δ * rY = A * U)
     (haX : s ≤ aX) (hbX : s ≤ bX) (haY : s ≤ aY) (hbY : s ≤ bY) (hrY : 0 ≤ rY)
@@ -260,19 +256,17 @@ theorem bg_of_t {A U Δ s B t : ℝ} (hA : 0 < A) (hU : 0 < U) (hΔ : 0 < Δ) (h
   refine ⟨hB, ?_⟩
   nlinarith [sq_nonneg (B - 2 * Δ * t), mul_le_mul_of_nonneg_left h (by linarith : (0 : ℝ) ≤ 4 * Δ)]
 
-/-- **Claim** (`C1_TOP_CAP_CONVEX_PAIR:eq6`). In a C1 configuration `c1Config h c d f L M X Y`
-with the weak anchor conditions, least area at least `A₀`, `hc ≥ ρ = 49/60`, and `X, Y` in the
-closed top cap: if `D, F` lie on the same side of `XY`, then `B = AU - s(A + U) > 0` and
-`G = B² - 4sAUΔ ≥ 0` (6). `docs/proof/nine/C1_TOP_CAP_CONVEX_PAIR.md`, lines 113-154.
-Uses: C1_TOP_CAP_CONVEX_PAIR:eq1-2, C1_TOP_CAP_CONVEX_PAIR:eq3-5. -/
-theorem eq6 {h c d f : ℝ} {L M X Y : Point} (hA : C1AnchorsWeak h c d f)
+/-- In a C1 configuration `c1Config h c d f L M X Y` with the weak anchor conditions, least area
+at least `A₀`, `hc ≥ ρ = 49/60`, and `X, Y` in the closed top cap: if `D, F` lie on the same side
+of `XY`, then `B = AU - s(A + U) > 0` and `G = B² - 4sAUΔ ≥ 0`. -/
+theorem bracketB_discrG_of_sameSide {h c d f : ℝ} {L M X Y : Point} (hA : C1AnchorsWeak h c d f)
     (hL : L ∈ unitSquare) (hM : M ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f L M X Y)) (hhc : 49 / 60 ≤ h * c)
     (hXc : sarea (ptD d) (ptF f) X ≤ 0) (hYc : sarea (ptD d) (ptF f) Y ≤ 0)
     (hDF : SameSide X Y (ptD d) (ptF f)) :
     0 < bracketB h c d f ∧ 0 ≤ discrG h c d f := by
-  obtain ⟨b1, b2, b3, b4, -, hcap⟩ := eq3_5 hA hL hM hX hY hmin
-  have hΔ := (eq1_2 hA).2 hhc b3 b4
+  obtain ⟨b1, b2, b3, b4, -, hcap⟩ := topCap_cost_bounds hA hL hM hX hY hmin
+  have hΔ := (area_sum_and_areaΔ_pos hA).2 hhc b3 b4
   obtain ⟨aX, bX, rX, -⟩ := hcap 2 hXc
   obtain ⟨aY, bY, rY, -⟩ := hcap 3 hYc
   simp only [freePt, Matrix.cons_val] at aX bX rX aY bY rY
@@ -304,7 +298,7 @@ theorem eq6 {h c d f : ℝ} {L M X Y : Point} (hA : C1AnchorsWeak h c d f)
     unfold bracketB
     rcases le_total (-sarea (ptD d) (ptF f) Y) (-sarea (ptD d) (ptF f) X) with hrr | hrr
     · rw [min_eq_right hrr]
-      exact eq6_core hApos hUpos hΔ (by norm_num) idX idY aX bX aY bY (by linarith) hI1 hI2 hrr hcase
+      exact height_ineq_of_sameSide hApos hUpos hΔ (by norm_num) idX idY aX bX aY bY (by linarith) hI1 hI2 hrr hcase
     · rw [min_eq_left hrr]
       have hI1' : areaA c d f * sarea Y X (ptD d) =
           sarea (ptC c) (ptD d) X * -sarea (ptD d) (ptF f) Y -
@@ -320,7 +314,7 @@ theorem eq6 {h c d f : ℝ} {L M X Y : Point} (hA : C1AnchorsWeak h c d f)
         rcases hcase with ⟨h1, h2⟩ | ⟨h1, h2⟩
         · exact Or.inr ⟨by linarith, by linarith⟩
         · exact Or.inl ⟨by linarith, by linarith⟩
-      exact eq6_core hApos hUpos hΔ (by norm_num) idY idX aY bY aX bX (by linarith) hI1' hI2' hrr hcase'
+      exact height_ineq_of_sameSide hApos hUpos hΔ (by norm_num) idY idX aY bY aX bX (by linarith) hI1' hI2' hrr hcase'
   have ht : 0 < min (-sarea (ptD d) (ptF f) X) (-sarea (ptD d) (ptF f) Y) :=
     lt_min (by linarith) (by linarith)
   obtain ⟨hB, hG⟩ := bg_of_t hApos hUpos hΔ (by norm_num) ht key
@@ -335,9 +329,9 @@ theorem gt_of_B {A U : ℝ} (hA : 0 ≤ A) (hU : 0 ≤ U) (hB : 0 < A * U - 8 / 
   · by_contra hn; push Not at hn
     nlinarith [mul_le_mul_of_nonneg_left hn hA]
 
-/-- **Monotonicity of (6)** ("larger root"): if `B > 0`, `G ≥ 0` at `(A, U, Δ)` with `A, U, Δ > 0`,
-then also at `(A', U', Δ')` with `A' ≥ A`, `U' ≥ U`, `0 < Δ' ≤ Δ`. Via the height `t = B/(2Δ)`:
-`B t - Δ t² ≥ sAU` is `t - st/A - st/U - Δt²/(AU) ≥ s`, monotone in `A, U, Δ`. -/
+/-- Monotonicity of `B > 0`, `G ≥ 0` ("larger root"): if they hold at `(A, U, Δ)` with
+`A, U, Δ > 0`, then also at `(A', U', Δ')` with `A' ≥ A`, `U' ≥ U`, `0 < Δ' ≤ Δ`. Via the height
+`t = B/(2Δ)`: `B t - Δ t² ≥ sAU` is `t - st/A - st/U - Δt²/(AU) ≥ s`, monotone in `A, U, Δ`. -/
 theorem bg_mono {A U Δ A' U' Δ' : ℝ} (hA : 0 < A) (hU : 0 < U) (hΔ : 0 < Δ) (hAA : A ≤ A')
     (hUU : U ≤ U') (hΔ' : 0 < Δ') (hΔΔ : Δ' ≤ Δ) (hB : 0 < A * U - 8 / 73 * (A + U))
     (hG : 0 ≤ (A * U - 8 / 73 * (A + U)) ^ 2 - 4 * (8 / 73) * A * U * Δ) :
@@ -382,9 +376,9 @@ theorem reduced_eq {h c d f : ℝ} (hh : 0 < h) (hhc : h * c = 49 / 60) :
   · rw [div_eq_iff (by norm_num), show c * d * h = d * (h * c) by ring, hhc]
   · field_simp
 
-/-- The endpoint of the decreasing path of §3: with `d, f` fixed, a point `(h', c')` with
+/-- The endpoint of the decreasing path: with `d, f` fixed, a point `(h', c')` with
 `h'c' = ρ`, `h' ≤ h`, `c' ≤ c`, `h' ≥ max(d, s/f)`, `c' ≥ max(f, s/d)` (explicitly
-`h' = max(h_min, ρ/c)`, `c' = ρ/h'`), which exists by (8). -/
+`h' = max(h_min, ρ/c)`, `c' = ρ/h'`), which exists since `s²/ρ < df < ρ`. -/
 theorem path_endpoint {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8 / 73 ≤ h * f)
     (hcd : 8 / 73 ≤ c * d) (hhc : 49 / 60 ≤ h * c) (h8l : (8 / 73) ^ 2 / (49 / 60) < d * f)
     (h8u : d * f < 49 / 60) :
@@ -443,7 +437,8 @@ theorem path_endpoint {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8 / 73
     rw [div_le_iff₀ hd] at cm2
     nlinarith
 
-/-- (7) and (8) of §3, and `A, U > s`. -/
+/-- If `B > 0` (with `hf, cd ≥ s`, `hc ≥ ρ`): `A, U > s`, `A + U > 4s` and
+`s²/ρ < df < ρ`. -/
 theorem df_bounds {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8 / 73 ≤ h * f)
     (hcd : 8 / 73 ≤ c * d) (hhc : 49 / 60 ≤ h * c) (hB : 0 < bracketB h c d f) :
     8 / 73 < areaA c d f ∧ 8 / 73 < areaU h d f ∧
@@ -456,7 +451,7 @@ theorem df_bounds {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8 / 73 ≤
     unfold areaU; nlinarith [mul_nonneg hf.le (show (0 : ℝ) ≤ h - d by linarith)]
   unfold bracketB at hB
   obtain ⟨aS, uS⟩ := gt_of_B a0 u0 hB
-  -- (7)
+  -- `A + U > 4s`
   have h7 : 4 * (8 / 73) < areaA c d f + areaU h d f := by
     nlinarith [sq_nonneg (areaA c d f - areaU h d f)]
   have hAf : areaA c d f ≤ 1 - f := by
@@ -465,12 +460,12 @@ theorem df_bounds {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8 / 73 ≤
   have hUd : areaU h d f ≤ 1 - d := by
     unfold areaU; nlinarith [mul_le_mul_of_nonneg_right (show f ≤ 1 by linarith)
       (show (0 : ℝ) ≤ h - d by linarith)]
-  -- (8), upper
+  -- `df < ρ`
   have h8u : d * f < 49 / 60 := by
     by_contra hn; push Not at hn
     have : 9 / 5 < d + f := by nlinarith [sq_nonneg (d - f)]
     linarith
-  -- (8), lower
+  -- `df > s²/ρ`
   have hsum : 1807 / 1000 ≤ h + c := by nlinarith [sq_nonneg (h - c)]
   have h8l : (8 / 73) ^ 2 / (49 / 60) < d * f := by
     by_contra hn; push Not at hn
@@ -499,8 +494,9 @@ theorem df_bounds {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8 / 73 ≤
     linarith
   exact ⟨aS, uS, h7, h8l, h8u⟩
 
-/-- The end of §3: from (6) at `(h, c, d, f)` and an endpoint `(h', c')` of the decreasing
-path, (6) at a point of the box (10), after the transposition making `h ≤ c`. -/
+/-- From `B > 0`, `G ≥ 0` at `(h, c, d, f)` and an endpoint `(h', c')` of the decreasing path,
+`B > 0`, `G ≥ 0` at a point of the reduced box `ρ ≤ h ≤ 113/125`, `s ≤ u, v ≤ ρ`, after the
+transposition making `h ≤ c`. -/
 theorem endpoint_box {h c d f h' c' : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8 / 73 ≤ h * f)
     (hcd : 8 / 73 ≤ c * d) (hhc : 49 / 60 ≤ h * c) (hB : 0 < bracketB h c d f)
     (hG : 0 ≤ discrG h c d f) (aS : 8 / 73 < areaA c d f) (uS : 8 / 73 < areaU h d f)
@@ -514,8 +510,8 @@ theorem endpoint_box {h c d f h' c' : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8
         (reducedHCDF h' u v).2.2.2 := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA
   have hA' : C1AnchorsWeak h' c' d f := ⟨hd, h'd, h'h.trans hh, hf, c'f, c'c.trans hc⟩
-  have hΔ' := (eq1_2 hA').2 hc'h'.symm.le h'f c'd
-  have hΔ := (eq1_2 ⟨hd, hdh, hh, hf, hfc, hc⟩).2 hhc hhf hcd
+  have hΔ' := (area_sum_and_areaΔ_pos hA').2 hc'h'.symm.le h'f c'd
+  have hΔ := (area_sum_and_areaΔ_pos ⟨hd, hdh, hh, hf, hfc, hc⟩).2 hhc hhf hcd
   have mA : areaA c d f ≤ areaA c' d f := by
     unfold areaA; nlinarith [mul_le_mul_of_nonneg_left c'c (show (0 : ℝ) ≤ 1 - d by linarith)]
   have mU : areaU h d f ≤ areaU h' d f := by
@@ -550,15 +546,12 @@ theorem endpoint_box {h c d f h' c' : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8
       rw [e1, e2, e3]
       exact ⟨by linarith, by linarith⟩
 
-
-/-- **Claim** (`C1_TOP_CAP_CONVEX_PAIR:claim-reduction`, made-up id). Scalar reduction of §3:
-if the weak anchor conditions hold with `hf, cd ≥ s`, `hc ≥ ρ`, and (6) `B > 0`, `G ≥ 0`, then
-`A + U > 4s` (7) and `s²/ρ < df < ρ` (8); decreasing `h, c` at fixed `d, f` to `hc = ρ`
-preserves (6), and after the transposition `h ≤ c`, (6) holds at a point of the box (10):
-`ρ ≤ h ≤ √ρ < 113/125`, `s ≤ u, v ≤ ρ`, in the parametrization (9). Here `s = 8/73`,
-`ρ = 49/60`. `docs/proof/nine/C1_TOP_CAP_CONVEX_PAIR.md`, lines 156-248.
-Uses: C1_TOP_CAP_CONVEX_PAIR:eq1-2. -/
-theorem claim_reduction {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8 / 73 ≤ h * f)
+/-- Scalar reduction: if the weak anchor conditions hold with `hf, cd ≥ s`, `hc ≥ ρ`, `B > 0` and
+`G ≥ 0`, then `A + U > 4s` and `s²/ρ < df < ρ`; decreasing `h, c` at fixed `d, f` to `hc = ρ`
+preserves `B > 0`, `G ≥ 0`, and after the transposition `h ≤ c` they hold at a point of the box
+`ρ ≤ h ≤ √ρ < 113/125`, `s ≤ u, v ≤ ρ` of the reduced parametrization `reducedHCDF`. Here
+`s = 8/73`, `ρ = 49/60`. -/
+theorem exists_box_of_bracketB_pos {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8 / 73 ≤ h * f)
     (hcd : 8 / 73 ≤ c * d) (hhc : 49 / 60 ≤ h * c) (hB : 0 < bracketB h c d f)
     (hG : 0 ≤ discrG h c d f) :
     4 * (8 / 73) < areaA c d f + areaU h d f ∧ (8 / 73) ^ 2 / (49 / 60) < d * f ∧
@@ -578,12 +571,10 @@ theorem claim_reduction {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8 / 
   exact endpoint_box ⟨hd, hdh, hh, hf, hfc, hc⟩ hhf hcd hhc hB hG aS uS hc'h' h'0 h'd h'h c'f c'c
     h'f c'd
 
-/-- **Claim** (`C1_TOP_CAP_CONVEX_PAIR:claim-certificate`, made-up id). The system (6) has no
-solution in the box (10), `ρ ≤ h ≤ 113/125`, `s ≤ u, v ≤ ρ`, in the parametrization (9). In the
-manuscript: 36 fixed dyadic boxes in the unit-cube coordinates `(H, U₀, V)`, each with all tensor
-Bernstein coefficients of `P = hB` nonpositive or of `Q = h²G` negative; checked by
-`docs/proof/nine/check_c1_top_cap_convex_pair.py`. `docs/proof/nine/C1_TOP_CAP_CONVEX_PAIR.md`, lines 250-319. -/
-theorem claim_certificate (h u v : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 113 / 125)
+/-- `B > 0`, `G ≥ 0` has no solution in the box `ρ ≤ h ≤ 113/125`, `s ≤ u, v ≤ ρ` of the
+reduced parametrization `reducedHCDF`: on each of 36 boxes either `P = hB ≤ 0` or `Q = h²G < 0`,
+by Bernstein certificates (`ConvexPairCert.check`). -/
+theorem not_bracketB_pos_and_discrG_nonneg (h u v : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 113 / 125)
     (hu : 8 / 73 ≤ u) (hu' : u ≤ 49 / 60) (hv : 8 / 73 ≤ v) (hv' : v ≤ 49 / 60) :
     ¬ (0 < bracketB (reducedHCDF h u v).1 (reducedHCDF h u v).2.1 (reducedHCDF h u v).2.2.1
           (reducedHCDF h u v).2.2.2 ∧
@@ -622,13 +613,10 @@ theorem claim_certificate (h u v : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 113 / 
   · simp only [Cert.Expr.eval_minus, Cert.Expr.eval_zero, eQ] at hpos
     nlinarith [pow_pos h0 2]
 
-/-- **Theorem** (`C1_TOP_CAP_CONVEX_PAIR:Theorem`). In a competitive nine-point C1 configuration
-`c1Config h c d f L M X Y` (weak anchor conditions, least area at least `A₀`) with `L, M`
-strictly inside `OHC` and `X, Y` in the closed top cap `conv{D, F, (1,1)}`, the line `XY`
-separates `D, F`: the four points `D, F, X, Y` are not in convex position.
-`docs/proof/nine/C1_TOP_CAP_CONVEX_PAIR.md`, lines 31-34 and 321-323.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, C1_TOP_CAP_CONVEX_PAIR:eq6,
-C1_TOP_CAP_CONVEX_PAIR:claim-reduction, C1_TOP_CAP_CONVEX_PAIR:claim-certificate. -/
+/-- In a competitive nine-point C1 configuration `c1Config h c d f L M X Y` (weak anchor
+conditions, least area at least `A₀`) with `L, M` strictly inside `OHC` and `X, Y` in the closed
+top cap `conv{D, F, (1,1)}`, the line `XY` separates `D, F`: the four points `D, F, X, Y` are not
+in convex position. The lower points give `hc ≥ (4 + 2√3)s > ρ` (`C1TwoLower.two_in`). -/
 theorem theorem_main {h c d f : ℝ} {L M X Y : Point} (hA : C1AnchorsWeak h c d f)
     (hL : L ∈ unitSquare) (hM : M ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f L M X Y))
@@ -649,10 +637,10 @@ theorem theorem_main {h c d f : ℝ} {L M X Y : Point} (hA : C1AnchorsWeak h c d
   have hne : sarea X Y (ptD d) * sarea X Y (ptF f) ≠ 0 :=
     mul_ne_zero (ar_ne (by norm_num) eD) (ar_ne (by norm_num) eF)
   have hSS : SameSide X Y (ptD d) (ptF f) := lt_of_le_of_ne hn (Ne.symm hne)
-  obtain ⟨hB, hG⟩ := eq6 hA hL hM hX hY hmin hhc hXc hYc hSS
-  obtain ⟨-, -, b3, b4, -, -⟩ := eq3_5 hA hL hM hX hY hmin
+  obtain ⟨hB, hG⟩ := bracketB_discrG_of_sameSide hA hL hM hX hY hmin hhc hXc hYc hSS
+  obtain ⟨-, -, b3, b4, -, -⟩ := topCap_cost_bounds hA hL hM hX hY hmin
   obtain ⟨-, -, -, h', u, v, a1, a2, a3, a4, a5, a6, a7, a8⟩ :=
-    claim_reduction hA b3 b4 hhc hB hG
-  exact claim_certificate h' u v a1 a2 a3 a4 a5 a6 ⟨a7, a8⟩
+    exists_box_of_bracketB_pos hA b3 b4 hhc hB hG
+  exact not_bracketB_pos_and_discrG_nonneg h' u v a1 a2 a3 a4 a5 a6 ⟨a7, a8⟩
 
 end Heilbronn.Nine.C1TopCapConvexPair

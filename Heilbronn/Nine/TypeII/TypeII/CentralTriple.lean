@@ -3,39 +3,36 @@ module
 public import Heilbronn.Nine.TypeII.TypeII.Chamber
 public import Heilbronn.Nine.TypeII.TypeII.Normalization
 
-/-! # Type II: three central points and its affine versions (`docs/proof/nine/TYPE_II.md`, §§7, 9, 10)
+/-! # Type II: three central points and its affine versions
 
-`TYPE_II.md` lines 538–814 and 831–1090.
-
-* `centralTripleTheorem` (**Central-triple theorem**, §7): with `b ≤ 1/2`, three points
-  strictly inside `DCB` force a triangle of area `< 7/128` among the seven points `D, C, E, B`
-  and these three; `claim_exclude_central_three`: hence the rows `(1,3,2)` and `(2,3,1)` are
-  excluded at least area `A₀`.
-* `claim_mesh_kstar` ((23)–(25)): the bounds on the distributed central mesh, for a doubled
-  threshold `s ≥ 7/64` (§10 notes that their proofs only need `s ≥ 7/64`).
-* `claim_chamber_extension` (§9): the chamber lemma of §6 for `b ≤ 11/20` and `0 ≤ λ < 1`.
-* `affineCorollary` (**Affine corollary**, §9): an actual triangle `ABC` containing three
-  further points and an actual point `E` with barycentric coordinates `(α, q, -p)`,
-  `0 < q ≤ 1`, `0 < p ≤ 11q/20`, force a triangle of area `< (7/64) S`.
-* `coupledAffineCorollary` (**Coupled affine corollary**, §10) for `q ≤ 30/29` at a normalized
+* `centralTripleTheorem` (the central-triple theorem): with `b ≤ 1/2`, three points strictly
+  inside `DCB` force a triangle of area `< 7/128` among the seven points `D, C, E, B` and these
+  three; `typeIICounts_ne_central_three`: hence the rows `(1,3,2)` and `(2,3,1)` are excluded at
+  least area `A₀`.
+* `distributed_mesh_bounds`: the bounds on the distributed central mesh, for a doubled threshold
+  `s ≥ 7/64` (their proofs only need `s ≥ 7/64`).
+* `twoPointChamberLemma_of_le_eleven_twentieths`: the two-point chamber lemma for `b ≤ 11/20` and `0 ≤ λ < 1`.
+* `affineCorollary` (the affine corollary): an actual triangle `ABC` containing three further
+  points and an actual point `E` with barycentric coordinates `(α, q, -p)`, `0 < q ≤ 1`,
+  `0 < p ≤ 11q/20`, force a triangle of area `< (7/64) S`.
+* `coupledAffineCorollary` (the coupled affine corollary) for `q ≤ 30/29` at a normalized
   doubled threshold `s ≥ s₀ max(1, q)`, `s₀ = 2A₀`, and its geometric form
   `coupledAffineCorollary_geometric`.
 
 Barycentric coordinates: `bary A B C α β γ` is the affine combination `αA + βB + γC`
-(with `α + β + γ = 1`). The off-route remark of lines 920–934 (a maximum-area triangle with three
-interior points) is not stated.
+(with `α + β + γ = 1`).
 
-Proof structure. The §7 argument is proved once, in the generality of §9: `centralTriple_core`
-and `centralTriple_gen` take `0 < b ≤ 11/20`, `0 ≤ λ < 1` (`centralTripleTheorem` is the case
-`b ≤ 1/2`, `λ > 0`); `central_cut_gen` is the `CE` cut for any `λ < 1` with `[EBC] > 0`.
-`affine_frame` is the affine map `A, B, C ↦ D, (p/q, 0), C` (so `E ↦ (0, 1-q)`), and
-`affine_physical` the physical form; together they give `affineCorollary`. For `1 < q ≤ 30/29`
-(`λ ∈ [-1/29, 0)`) the core is `coupled_core` at a general threshold `s`: `EBC` cannot hold two
-points, the three-point cut fails by (24) (`coupled_three_scalar`), and the two-point cut by
-(29) (`ct_K_contra_gen`) or by the chamber case below the bottom edge, (33)–(34)
-(`chamber_neg`, `chamber_neg_core`, `chamber_neg_scalar`); `mesh_dispatch` runs the mesh
-labelling for any permutation-invariant property and `coupled_physical` assembles the case.
-Only `s > (79/720) q` (from `s ≥ 2A₀ q`) and `s ≥ 7/64` are used.
+Proof structure. The central-triple argument is proved once, in the generality of the affine
+corollary: `centralTriple_core` and `centralTriple_gen` take `0 < b ≤ 11/20`, `0 ≤ λ < 1`
+(`centralTripleTheorem` is the case `b ≤ 1/2`, `λ > 0`); `central_cut_gen` is the `CE` cut for
+any `λ < 1` with `[EBC] > 0`. `affine_frame` is the affine map `A, B, C ↦ D, (p/q, 0), C` (so
+`E ↦ (0, 1-q)`), and `affine_physical` the physical form; together they give `affineCorollary`.
+For `1 < q ≤ 30/29` (`λ ∈ [-1/29, 0)`) the core is `coupled_core` at a general threshold `s`:
+`EBC` cannot hold two points, the three-point cut fails by the ear bound of `distributed_mesh_bounds`
+(`coupled_three_scalar`), and the two-point cut by `ct_K_contra_gen` or by the chamber case below
+the bottom edge (`chamber_neg`, `chamber_neg_core`, `chamber_neg_scalar`); `mesh_dispatch` runs
+the mesh labelling for any permutation-invariant property and `coupled_physical` assembles the
+case. Only `s > (79/720) q` (from `s ≥ 2A₀ q`) and `s ≥ 7/64` are used.
 -/
 
 @[expose] public section
@@ -48,10 +45,9 @@ coordinates `(α, β, γ)` in the triangle `ABC`. -/
 def bary (A B C : Point) (α β γ : ℝ) : Point :=
   (α * A.1 + β * B.1 + γ * C.1, α * A.2 + β * B.2 + γ * C.2)
 
-
-/-- The scalar core of `claim_mesh_kstar`: from the seven-face sum, the identities (18), the
-summed Plücker identities (19) and all thirteen areas at least `s ≥ 7/64`. With
-`σ = a + b + c`, (22) reads `σ²/3 - sσ + 3s² ≥ 6sk` and `1 ≥ 3s + σ + k`. -/
+/-- The scalar core of `distributed_mesh_bounds`: from the seven-face sum `h7`, the cross-area identity
+`h18`, the summed Plücker identity `h19` and all thirteen areas at least `s ≥ 7/64`. With
+`σ = a + b + c`, the Plücker inequalities read `σ²/3 - sσ + 3s² ≥ 6sk`, and `1 ≥ 3s + σ + k`. -/
 theorem mesh_alg {x y z a b c k uA uB uC vA vB vC s : ℝ} (hs : 7 / 64 ≤ s)
     (h7 : x + y + z + a + b + c + k = 1)
     (h18 : uA + vA + uB + vB + uC + vC = a + b + c + 3 * k)
@@ -62,7 +58,7 @@ theorem mesh_alg {x y z a b c k uA uB uC vA vB vC s : ℝ} (hs : 7 / 64 ≤ s)
     k < 9 / 8 * s ∧ Γsix * s + (x - s) ≤ 1 ∧ Γsix * s + (y - s) ≤ 1 ∧
       Γsix * s + (z - s) ≤ 1 := by
   have hs0 : 0 < s := by linarith
-  -- (22): `σ²/3 - sσ + 3s² ≥ 6sk`
+  -- the Plücker inequalities: `σ²/3 - sσ + 3s² ≥ 6sk`
   have e1 : s * (uA + vB) - s ^ 2 ≤ uA * vB := by
     nlinarith [mul_nonneg (sub_nonneg.2 huA) (sub_nonneg.2 hvB)]
   have e2 : s * (uB + vC) - s ^ 2 ≤ uB * vC := by
@@ -101,16 +97,14 @@ theorem mesh_alg {x y z a b c k uA uB uC vA vB vC s : ℝ} (hs : 7 / 64 ≤ s)
     nlinarith only [mul_nonneg (sub_nonneg.2 hσ3) (sub_nonneg.2 hT), h22, hk', hs2]
   all_goals unfold Γsix; linarith [hears.1, hears.2.1, hears.2.2]
 
-/-- **Claim** (`TYPE_II:claim-mesh-kstar`). The distributed central mesh: in a triangle `ABC` of
-signed doubled area `1`, three points `X, Y, Z` whose seven mesh areas `x = ⟨ABZ⟩`,
-`y = ⟨BCX⟩`, `z = ⟨CAY⟩`, `a = ⟨AZY⟩`, `b* = ⟨BXZ⟩`, `c* = ⟨CYX⟩`, `k* = ⟨ZXY⟩` and six cross
-areas `u_A = ⟨AZX⟩`, `u_B = ⟨BXY⟩`, `u_C = ⟨CYZ⟩`, `v_A = ⟨AXY⟩`, `v_B = ⟨BYZ⟩`,
-`v_C = ⟨CZX⟩` (signed doubled areas) are all at least `s ≥ 7/64` satisfy `k* < 9s/8` (23) and,
-for each ear `e ∈ {x, y, z}`, `1 ≥ Γs + (e - s)` (24); at `s = 7/64` moreover `x < 23/128`
-(25). `docs/proof/nine/TYPE_II.md`, lines 570–641 (the restriction `s ≥ 7/64`: lines 963–964).
-
-Uses: CORNER_FAMILIES:eq20 (the Plücker inequalities (22)), the seven-face sum. -/
-theorem claim_mesh_kstar {A B C X Y Z : Point} {s : ℝ} (hs : 7 / 64 ≤ s)
+/-- The distributed central mesh: in a triangle `ABC` of signed doubled area `1`, three points
+`X, Y, Z` whose seven mesh areas `x = ⟨ABZ⟩`, `y = ⟨BCX⟩`, `z = ⟨CAY⟩`, `a = ⟨AZY⟩`,
+`b* = ⟨BXZ⟩`, `c* = ⟨CYX⟩`, `k* = ⟨ZXY⟩` and six cross areas `u_A = ⟨AZX⟩`, `u_B = ⟨BXY⟩`,
+`u_C = ⟨CYZ⟩`, `v_A = ⟨AXY⟩`, `v_B = ⟨BYZ⟩`, `v_C = ⟨CZX⟩` (signed doubled areas) are all at
+least `s ≥ 7/64` satisfy `k* < 9s/8` and, for each ear `e ∈ {x, y, z}`, `1 ≥ Γs + (e - s)`; at
+`s = 7/64` moreover `x < 23/128`. The proof combines the seven-face sum with the Plücker
+inequalities (`mesh_alg`). -/
+theorem distributed_mesh_bounds {A B C X Y Z : Point} {s : ℝ} (hs : 7 / 64 ≤ s)
     (hABC : sarea A B C = 1)
     (hx : s ≤ sarea A B Z) (hy : s ≤ sarea B C X) (hz : s ≤ sarea C A Y)
     (ha : s ≤ sarea A Z Y) (hb : s ≤ sarea B X Z) (hc : s ≤ sarea C Y X) (hk : s ≤ sarea Z X Y)
@@ -135,8 +129,8 @@ theorem claim_mesh_kstar {A B C X Y Z : Point} {s : ℝ} (hs : 7 / 64 ≤ s)
   unfold Γsix at h2
   nlinarith
 
-/-- `G(b, z) > 0` for `0 ≤ b ≤ 11/20`, `3/4 ≤ z ≤ 1` (`TYPE_II.md` lines 860–874): `G` lies above
-its chord in `b` on `[0, 11/20]`, `G(0,z) > 0` and `G(11/20,z) > 0`. -/
+/-- `G(b, z) > 0` for `0 ≤ b ≤ 11/20`, `3/4 ≤ z ≤ 1`: `G` lies above its chord in `b` on
+`[0, 11/20]`, `G(0,z) > 0` and `G(11/20,z) > 0`. -/
 theorem chamberG_pos_ext {b z : ℝ} (hb : 0 ≤ b) (hb2 : b ≤ 11 / 20) (hz : 3 / 4 ≤ z)
     (hz1 : z ≤ 1) : 0 < chamberG b z := by
   have hG0 : 0 < 399 * z ^ 2 - 847 * z + 644 := by nlinarith [sq_nonneg (z - 847 / 798)]
@@ -157,12 +151,9 @@ theorem chamberG_pos_ext {b z : ℝ} (hb : 0 ≤ b) (hb2 : b ≤ 11 / 20) (hz : 
   · subst h0; nlinarith
   · nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ 1 - 20 / 11 * b) hG0.le, mul_pos h0 hGm]
 
-/-- **Claim** (`TYPE_II:claim-chamber-extension`, made up). The needed extension of §6 in §9:
-the two-point chamber lemma holds for `0 < b ≤ 11/20` and `0 ≤ λ < 1` (the endpoint `λ = 0`,
-`q = 1`, included). `docs/proof/nine/TYPE_II.md`, lines 855–877 and 915–917.
-
-Uses: TYPE_II:claim-chamber-general. -/
-theorem claim_chamber_extension {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤ 11 / 20)
+/-- The two-point chamber lemma holds for `0 < b ≤ 11/20` and `0 ≤ λ < 1` (the endpoint `λ = 0`,
+`q = 1`, included): `minTriangleArea_lt_of_chamberG_pos` with `chamberG_pos_ext`. -/
+theorem twoPointChamberLemma_of_le_eleven_twentieths {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤ 11 / 20)
     (hl : 0 ≤ l) (hl1 : l < 1)
     (hPB : InTriangle P ptD (ptB b) ptC) (hPE : InTriangle P ptD (ptE l) ptC)
     (hQB : InTriangle Q ptD (ptB b) ptC) (hQE : InTriangle Q ptD (ptE l) ptC)
@@ -171,7 +162,7 @@ theorem claim_chamber_extension {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b 
   by_contra hcon
   push Not at hcon
   have hz := chamber_z_bound hPE hQE hcon
-  exact absurd (claim_chamber_general hb (by linarith) hl hl1 hPB hPE hQB hQE hBPQ hEPQ
+  exact absurd (minTriangleArea_lt_of_chamberG_pos hb (by linarith) hl hl1 hPB hPE hQB hQE hBPQ hEPQ
     (chamberG_pos_ext hb.le hb2 (by linarith) (by linarith))) (not_lt.2 hcon)
 
 /-! ### The central triple in the physical frame `A = D`, `B = B`, `C = C` (`⟨DBC⟩ = 1`) -/
@@ -181,7 +172,7 @@ section CentralTripleProof
 variable {l b : ℝ} {X Y Z : Point}
 
 /-- A central point is inside `DCE` when above `CE` and inside `EBC` when below it, for any
-`λ < 1` with `[EBC] = b + λ(1-b) > 0` (`λ ≤ 0` allowed, as in §§9–10). -/
+`λ < 1` with `[EBC] = b + λ(1-b) > 0` (`λ ≤ 0` allowed, as in the affine corollaries). -/
 theorem central_cut_gen {l b : ℝ} {X : Point} (hb : 0 < b) (hq : 0 < 1 - l)
     (hα : 0 < b + l * (1 - b)) (hX : IsCentral b X) :
     (0 < sarea (ptE l) ptC X → InTriangle X ptD (ptE l) ptC) ∧
@@ -200,7 +191,7 @@ theorem central_cut_gen {l b : ℝ} {X : Point} (hb : 0 < b) (hq : 0 < 1 - l)
   refine ⟨fun h => ⟨hDE, h, h3⟩, fun h => ⟨hEB, h2, ?_⟩⟩
   rw [show sarea ptC (ptE l) X = -sarea (ptE l) ptC X by unfold sarea; ring]; linarith
 
-/-- The scalar end of the two-point and one-point cuts: (29)/(30) give
+/-- The scalar end of the two-point and one-point cuts: the cut bounds give
 `k(1+p) ≥ s(1 + p + 2s)`, impossible with `k < 9s/8`, `p ≤ 11/20`, `s = 7/64`. -/
 theorem ct_K_contra {k p : ℝ} (hk : k < 9 / 8 * (7 / 64)) (hp0 : 0 ≤ p) (hp : p ≤ 11 / 20)
     (h : 7 / 64 * (1 + p + 2 * (7 / 64)) ≤ k * (1 + p)) : False := by
@@ -256,7 +247,7 @@ theorem centralTriple_core (hb : 0 < b) (hb2 : b ≤ 11 / 20) (hl : 0 ≤ l) (hl
   have hvB := ge pvB (le_abs_sarea_of_le_min hm 3 5 6)
   have hvC := ge pvC (le_abs_sarea_of_le_min hm 1 6 4)
   have hABC : sarea ptD (ptB b) ptC = 1 := by simp [sarea, ptD, ptB, ptC]
-  obtain ⟨hk98, hex, hey, -, -⟩ := claim_mesh_kstar le_rfl hABC hx hy hz ha hb' hc hk huA huB
+  obtain ⟨hk98, hex, hey, -, -⟩ := distributed_mesh_bounds le_rfl hABC hx hy hz ha hb' hc hk huA huB
     huC hvA hvB hvC
   -- `p = bq ≥ s` from `DEB`
   have hp : 7 / 64 ≤ b * (1 - l) := by
@@ -368,7 +359,7 @@ theorem centralTriple_core (hb : 0 < b) (hb2 : b ≤ 11 / 20) (hl : 0 ≤ l) (hl
       have hsub : 7 / 128 ≤ minTriangleArea ![ptE l, ptB b, ptC, X, Z] :=
         hmin.trans (min_le_min_reindex (by norm_num) _ _ ![2, 3, 1, 4, 6] (by decide)
           (by funext m; fin_cases m <;> rfl))
-      have h2 := CornerFamilies.twoInteriorPointLemma (ptE l) (ptB b) ptC X Z
+      have h2 := twoInteriorPointLemma (ptE l) (ptB b) ptC X Z
         (Or.inl ((cut ⟨xC, xA, xB⟩).2 sX)) (Or.inl ((cut ⟨zC, zA, zB⟩).2 sZ)) (7 / 128)
         (by norm_num) hsub
       have hEBC : sarea (ptE l) (ptB b) ptC = 1 + b * (1 - l) - (1 - l) := by
@@ -393,7 +384,7 @@ theorem centralTriple_core (hb : 0 < b) (hb2 : b ≤ 11 / 20) (hl : 0 ≤ l) (hl
     · have hsub : 7 / 128 ≤ minTriangleArea ![ptD, ptC, ptE l, ptB b, Y, Z] :=
         hmin.trans (min_le_min_reindex (by norm_num) _ _ ![0, 1, 2, 3, 5, 6] (by decide)
           (by funext m; fin_cases m <;> rfl))
-      have := claim_chamber_extension hb hb2 hl hl1 ⟨yC, yA, yB⟩ ((cut ⟨yC, yA, yB⟩).1 sY)
+      have := twoPointChamberLemma_of_le_eleven_twentieths hb hb2 hl hl1 ⟨yC, yA, yB⟩ ((cut ⟨yC, yA, yB⟩).1 sY)
         ⟨zC, zA, zB⟩ ((cut ⟨zC, zA, zB⟩).1 sZ) pvB sYZ
       linarith only [this, hsub]
     · rw [abs_of_pos sYZ] at eYZ
@@ -459,23 +450,23 @@ theorem centralTriple_labelled {l b : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b
     (hl : 0 ≤ l) (hl1 : l < 1) (hX : IsCentral b X) (hY : IsCentral b Y) (hZ : IsCentral b Z)
     (hd : CornerFamilies.Distributed ptD (ptB b) ptC X Y Z)
     (hgp : 0 < minTriangleArea ![ptD, ptB b, ptC, X, Y, Z])
-    (h1 : CornerFamilies.InsideTriangle Z ptD (ptB b) Y)
-    (h2 : CornerFamilies.InsideTriangle X (ptB b) ptC Y)
+    (h1 : InsideTriangle Z ptD (ptB b) Y)
+    (h2 : InsideTriangle X (ptB b) ptC Y)
     (hmin : 7 / 128 ≤ minTriangleArea ![ptD, ptC, ptE l, ptB b, X, Y, Z]) : False := by
   have hABC : sarea ptD (ptB b) ptC = 1 := by simp [sarea, ptD, ptB, ptC]
   have hm : CornerFamilies.MeshLabelled ptD (ptB b) ptC X Y Z := by
     first
-      | exact CornerFamilies.eq15 _ _ _ _ _ _ hd hgp h1 h2
-      | exact CornerFamilies.eq15 _ _ _ _ _ _ (by rw [hABC]; norm_num) hd hgp h1 h2
-  have h17 := CornerFamilies.eq16_17 ptD (ptB b) ptC X Y Z hm
+      | exact CornerFamilies.meshLabelled_of_distributed _ _ _ _ _ _ hd hgp h1 h2
+      | exact CornerFamilies.meshLabelled_of_distributed _ _ _ _ _ _ (by rw [hABC]; norm_num) hd hgp h1 h2
+  have h17 := CornerFamilies.meshLabelled_signs_and_area_sum ptD (ptB b) ptC X Y Z hm
   rw [hABC] at h17
   simp only [one_mul] at h17
   obtain ⟨px, py, pz, pa, pb, pc, pk, puA, puB, puC, pvA, pvB, pvC, -⟩ := h17
   exact centralTriple_core hb hb2 hl hl1 hX hY hZ hmin px py pz pa pb pc pk puA puB puC pvA pvB
     pvC
 
-/-- The central-triple theorem in the generality of §9: `0 < b ≤ 11/20`, `0 ≤ λ < 1`
-(`TYPE_II.md` lines 849–918). -/
+/-- The central-triple theorem in the generality of the affine corollary: `0 < b ≤ 11/20`,
+`0 ≤ λ < 1`. -/
 theorem centralTriple_gen {l b : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤ 11 / 20)
     (hl : 0 ≤ l) (hl1 : l < 1) (hX : IsCentral b X) (hY : IsCentral b Y) (hZ : IsCentral b Z) :
     minTriangleArea ![ptD, ptC, ptE l, ptB b, X, Y, Z] < 7 / 128 := by
@@ -492,13 +483,13 @@ theorem centralTriple_gen {l b : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤ 
   have hmin6 := sub6 X Y Z ![0, 3, 1, 4, 5, 6] (by decide) (by funext m; fin_cases m <;> rfl)
   have hd : CornerFamilies.Distributed ptD (ptB b) ptC X Y Z := by
     by_contra hnd
-    have := CornerFamilies.claim_nondistributed_bound ptD (ptB b) ptC X Y Z (Or.inl hX)
+    have := CornerFamilies.triangleArea_ge_of_not_distributed ptD (ptB b) ptC X Y Z (Or.inl hX)
       (Or.inl hY) (Or.inl hZ) (7 / 128) (by norm_num) hmin6 hnd
     rw [triangleArea_eq] at this
     simp [sarea, ptD, ptB, ptC] at this
     nlinarith [sqrt_three_gt]
   have hgp : 0 < minTriangleArea ![ptD, ptB b, ptC, X, Y, Z] := by linarith
-  obtain ⟨σ, h1, h2⟩ := CornerFamilies.claim_mesh_labelling ptD (ptB b) ptC X Y Z hd hgp
+  obtain ⟨σ, h1, h2⟩ := CornerFamilies.exists_mesh_labelling ptD (ptB b) ptC X Y Z hd hgp
   rcases perm3_cases σ with ⟨e0, e1, e2⟩ | ⟨e0, e1, e2⟩ | ⟨e0, e1, e2⟩ | ⟨e0, e1, e2⟩ |
       ⟨e0, e1, e2⟩ | ⟨e0, e1, e2⟩ <;>
     simp only [e0, e1, e2, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
@@ -530,24 +521,22 @@ theorem centralTriple_gen {l b : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤ 
             (by funext m; fin_cases m <;> rfl); linarith) h1 h2
       (sub7 Z Y X ![0, 1, 2, 3, 6, 5, 4] (by decide) (by funext m; fin_cases m <;> rfl))
 
-/-- **Central-triple theorem** (`TYPE_II:CentralTripleTheorem`). Suppose (5) holds with
-`b ≤ 1/2` and three further points lie in the interior of `DCB`. Then among these seven points
-some triangle has area less than `7/128`. `docs/proof/nine/TYPE_II.md`, lines 538–814.
+/-- The central-triple theorem. Suppose the Type-II anchor conditions hold with `b ≤ 1/2` and
+three further points lie in the interior of `DCB`. Then among these seven points some triangle
+has area less than `7/128`.
 
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma (non-distributed case `(6+2√3)s > 1`),
-CORNER_FAMILIES:SixPointTriangularHullTheorem (§8, mesh and (20)), TYPE_II:claim-mesh-kstar,
-TYPE_II:claim-central-cut, CORNER_FAMILIES:TwoInteriorPointLemma, TYPE_II:TwoPointChamberLemma. -/
+A non-distributed triple is excluded by `CornerFamilies.triangleArea_ge_of_not_distributed`
+(`(6+2√3)s > 1`); a distributed one, labelled by `CornerFamilies.exists_mesh_labelling`, by the
+mesh bounds `distributed_mesh_bounds`, the `CE` cut and the two-point chamber lemma
+(`centralTriple_gen`). -/
 theorem centralTripleTheorem {l b : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤ 1 / 2)
     (hl : 0 < l) (hl1 : l < 1) (hX : IsCentral b X) (hY : IsCentral b Y) (hZ : IsCentral b Z) :
     minTriangleArea ![ptD, ptC, ptE l, ptB b, X, Y, Z] < 7 / 128 :=
   centralTriple_gen hb (hb2.trans (by norm_num)) hl.le hl1 hX hY hZ
 
-/-- **Claim** (`TYPE_II:claim-exclude-central-three`, made up). Consequently the rows `(1,3,2)`
-and `(2,3,1)` of §5 are excluded: at least area `A₀` with `b ≤ 1/2`, the central count is not
-three. `docs/proof/nine/TYPE_II.md`, lines 542–543.
-
-Uses: TYPE_II:CentralTripleTheorem, TYPE_II:eq7. -/
-theorem claim_exclude_central_three {l b : ℝ} {V W X Y Z : Point}
+/-- Consequently the rows `(1,3,2)` and `(2,3,1)` are excluded: at least area `A₀` with
+`b ≤ 1/2`, the central count is not three. -/
+theorem typeIICounts_ne_central_three {l b : ℝ} {V W X Y Z : Point}
     (hd : TypeIIData l b V W X Y Z) (hb2 : b ≤ 1 / 2)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b V W X Y Z)) :
     typeIICounts b V W X Y Z ≠ (1, 3, 2) ∧ typeIICounts b V W X Y Z ≠ (2, 3, 1) := by
@@ -576,9 +565,9 @@ theorem claim_exclude_central_three {l b : ℝ} {V W X Y Z : Point}
     linarith
   constructor <;> intro h <;> simp only [typeIICounts, Prod.mk.injEq] at h <;> exact key h.2.1
 
-/-- The physical form of the affine corollary (§9): `0 < b ≤ 11/20`, `0 ≤ λ < 1`, and three points
-of the closed triangle `DBC` force a triangle of area `< 7/128` (points on an edge of `DBC` give
-a zero-area triangle). -/
+/-- The physical form of the affine corollary: `0 < b ≤ 11/20`, `0 ≤ λ < 1`, and three points of
+the closed triangle `DBC` force a triangle of area `< 7/128` (points on an edge of `DBC` give a
+zero-area triangle). -/
 theorem affine_physical {l b : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤ 11 / 20) (hl : 0 ≤ l)
     (hl1 : l < 1) (hX : X ∈ convexHull ℝ ({ptD, ptB b, ptC} : Set Point))
     (hY : Y ∈ convexHull ℝ ({ptD, ptB b, ptC} : Set Point))
@@ -603,11 +592,11 @@ theorem affine_physical {l b : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤ 11
     (sarea_ne_zero_of_min_pos hpos 0 3 6)
   exact absurd (centralTriple_gen hb hb2 hl hl1 cX cY cZ) (not_lt.2 hcon)
 
-/-- The affine frame of §9: for a nondegenerate triangle `ABC` and `E = (α, q, -p)` with `q > 0`,
-the affine map `T` sending `A, B, C` to `D, (p/q, 0), C` sends `E` to `(0, 1-q)`, the closed
-triangle `ABC` into the closed triangle `D (p/q,0) C`, and divides every doubled area by `[ABC]`;
-so the least area of the seven points is at most `|[ABC]|` times that of the image
-configuration, in the order of `typeIIConfig`. -/
+/-- The affine frame of the affine corollary: for a nondegenerate triangle `ABC` and
+`E = (α, q, -p)` with `q > 0`, the affine map `T` sending `A, B, C` to `D, (p/q, 0), C` sends `E`
+to `(0, 1-q)`, the closed triangle `ABC` into the closed triangle `D (p/q,0) C`, and divides
+every doubled area by `[ABC]`; so the least area of the seven points is at most `|[ABC]|` times
+that of the image configuration, in the order of `typeIIConfig`. -/
 theorem affine_frame {A B C : Point} {α q p : ℝ} (hS : 0 < triangleArea A B C) (hq : 0 < q)
     (hp : 0 < p) (hsum : α + q - p = 1) :
     ∃ (T : Point → Point) (k : ℝ), k = |sarea A B C| ∧ T A = ptD ∧ T B = ptB (p / q) ∧
@@ -659,17 +648,13 @@ theorem affine_frame {A B C : Point} {α q p : ℝ} (hS : 0 < triangleArea A B C
   rw [div_mul_eq_mul_div, one_mul, div_le_iff₀ hpos] at hle
   linarith
 
-/-- **Affine corollary** (`TYPE_II:AffineCorollary`). Let an actual triangle `ABC` of area
-`S > 0` contain three further actual points `X, Y, Z`, and let another actual point `E` have
-barycentric coordinates `(α, q, -p)`, `0 < q ≤ 1`, `0 < p ≤ (11/20) q`, `α + q - p = 1`. Then
-among the seven points some triangle has area less than `(7/64) S`. `docs/proof/nine/TYPE_II.md`,
-lines 836–918.
+/-- The affine corollary. Let an actual triangle `ABC` of area `S > 0` contain three further
+actual points `X, Y, Z`, and let another actual point `E` have barycentric coordinates
+`(α, q, -p)`, `0 < q ≤ 1`, `0 < p ≤ (11/20) q`, `α + q - p = 1`. Then among the seven points some
+triangle has area less than `(7/64) S`.
 
-Implicit in the manuscript: the triangle `ABC` is nondegenerate (`S > 0`); the containment is
-closed (points on an edge give a zero-area triangle).
-
-Uses: TYPE_II:claim-chamber-extension, TYPE_II:CentralTripleTheorem (its proof, with the
-constants of lines 879–914), TYPE_II:claim-mesh-kstar. -/
+The triangle `ABC` is nondegenerate (`S > 0`); the containment is closed (points on an edge give
+a zero-area triangle). The proof is `affine_frame` followed by `affine_physical`. -/
 theorem affineCorollary {A B C X Y Z : Point} {α q p : ℝ} (hS : 0 < triangleArea A B C)
     (hX : X ∈ convexHull ℝ ({A, B, C} : Set Point))
     (hY : Y ∈ convexHull ℝ ({A, B, C} : Set Point))
@@ -687,13 +672,13 @@ theorem affineCorollary {A B C X Y Z : Point} {α q p : ℝ} (hS : 0 < triangleA
   rw [triangleArea_eq, ← hk]
   nlinarith [mul_lt_mul_of_pos_left key hk0]
 
-/-! ### The coupled corollary past `q = 1` (§10) -/
+/-! ### The coupled corollary past `q = 1` -/
 
 set_option linter.unusedTactic false in
 set_option linter.unreachableTactic false in
-/-- Generic dispatch over the mesh labelling of `CORNER_FAMILIES.md` §8: if a property `Qp` of
-three central points, symmetric under their permutations, contradicts every labelled mesh, then it
-fails for any distributed triple. -/
+/-- Generic dispatch over the mesh labelling of a distributed triple
+(`CornerFamilies.exists_mesh_labelling`): if a property `Qp` of three central points, symmetric under
+their permutations, contradicts every labelled mesh, then it fails for any distributed triple. -/
 theorem mesh_dispatch {b : ℝ} {X Y Z : Point} (Qp : Point → Point → Point → Prop)
     (hQ1 : ∀ {X Y Z : Point}, Qp X Y Z → Qp Y X Z) (hQ2 : ∀ {X Y Z : Point}, Qp X Y Z → Qp Y Z X)
     (hcore : ∀ {X Y Z : Point}, Qp X Y Z →
@@ -706,14 +691,14 @@ theorem mesh_dispatch {b : ℝ} {X Y Z : Point} (Qp : Point → Point → Point 
   have hABC : sarea ptD (ptB b) ptC = 1 := by simp [sarea, ptD, ptB, ptC]
   have lab : ∀ {X Y Z : Point}, Qp X Y Z → CornerFamilies.Distributed ptD (ptB b) ptC X Y Z →
       0 < minTriangleArea ![ptD, ptB b, ptC, X, Y, Z] →
-      CornerFamilies.InsideTriangle Z ptD (ptB b) Y →
-      CornerFamilies.InsideTriangle X (ptB b) ptC Y → False := by
+      InsideTriangle Z ptD (ptB b) Y →
+      InsideTriangle X (ptB b) ptC Y → False := by
     intro X Y Z hq hd hgp h1 h2
     have hm : CornerFamilies.MeshLabelled ptD (ptB b) ptC X Y Z := by
       first
-        | exact CornerFamilies.eq15 _ _ _ _ _ _ hd hgp h1 h2
-        | exact CornerFamilies.eq15 _ _ _ _ _ _ (by rw [hABC]; norm_num) hd hgp h1 h2
-    have h17 := CornerFamilies.eq16_17 ptD (ptB b) ptC X Y Z hm
+        | exact CornerFamilies.meshLabelled_of_distributed _ _ _ _ _ _ hd hgp h1 h2
+        | exact CornerFamilies.meshLabelled_of_distributed _ _ _ _ _ _ (by rw [hABC]; norm_num) hd hgp h1 h2
+    have h17 := CornerFamilies.meshLabelled_signs_and_area_sum ptD (ptB b) ptC X Y Z hm
     rw [hABC] at h17
     simp only [one_mul] at h17
     obtain ⟨px, py, pz, pa, pb, pc, pk, puA, puB, puC, pvA, pvB, pvC, -⟩ := h17
@@ -722,7 +707,7 @@ theorem mesh_dispatch {b : ℝ} {X Y Z : Point} (Qp : Point → Point → Point 
       ![ptD, ptB b, ptC, P, Q, R] = ![ptD, ptB b, ptC, X, Y, Z] ∘ f →
       0 < minTriangleArea ![ptD, ptB b, ptC, P, Q, R] := fun P Q R f hf hPQR =>
     lt_of_lt_of_le hgp (min_le_min_reindex (by norm_num) _ _ f hf hPQR)
-  obtain ⟨σ, h1, h2⟩ := CornerFamilies.claim_mesh_labelling ptD (ptB b) ptC X Y Z hd hgp
+  obtain ⟨σ, h1, h2⟩ := CornerFamilies.exists_mesh_labelling ptD (ptB b) ptC X Y Z hd hgp
   rcases perm3_cases σ with ⟨e0, e1, e2⟩ | ⟨e0, e1, e2⟩ | ⟨e0, e1, e2⟩ | ⟨e0, e1, e2⟩ |
       ⟨e0, e1, e2⟩ | ⟨e0, e1, e2⟩ <;>
     simp only [e0, e1, e2, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
@@ -739,15 +724,16 @@ theorem mesh_dispatch {b : ℝ} {X Y Z : Point} (Qp : Point → Point → Point 
   · exact lab (hQ1 (hQ2 h)) (distributed_swap (distributed_cycle hd))
       (g6 Z Y X ![0, 1, 2, 5, 4, 3] (by decide) (by funext m; fin_cases m <;> rfl)) h1 h2
 
-/-- The scalar end of (29) at a general threshold: `k(1+p) ≥ s(1 + p + 2s)` is impossible with
-`k < 9s/8`, `s ≥ 7/64` and `p ≤ 33/58` (`TYPE_II.md` lines 1036–1044). -/
+/-- The scalar end of the two-point cut at a general threshold: `k(1+p) ≥ s(1 + p + 2s)` is
+impossible with `k < 9s/8`, `s ≥ 7/64` and `p ≤ 33/58`. -/
 theorem ct_K_contra_gen {k p s : ℝ} (hs : 7 / 64 ≤ s) (hk : k < 9 / 8 * s) (hp0 : 0 ≤ p)
     (hp : p ≤ 33 / 58) (h : s * (1 + p + 2 * s) ≤ k * (1 + p)) : False := by
   have h1 := mul_lt_mul_of_pos_right hk (by linarith : (0:ℝ) < 1 + p)
   nlinarith [mul_pos (by linarith : (0:ℝ) < s) (by linarith : (0:ℝ) < 2 * s - (1 + p) / 8)]
 
-/-- The scalar end of (34): `s(2 + 4β + β² + qβ) ≤ βq` is impossible for `1 ≤ q ≤ 30/29`,
-`0 < β ≤ 11q/20` and `s > (79/720) q` (the endpoint value `1914/17453 < 79/720`). -/
+/-- The scalar end of the chamber case below the bottom edge: `s(2 + 4β + β² + qβ) ≤ βq` is
+impossible for `1 ≤ q ≤ 30/29`, `0 < β ≤ 11q/20` and `s > (79/720) q` (the endpoint value
+`1914/17453 < 79/720`). -/
 theorem chamber_neg_scalar {q β s : ℝ} (hq1 : 1 ≤ q) (hq2 : q ≤ 30 / 29) (hβ0 : 0 < β)
     (hβ : β ≤ 11 / 20 * q) (hsq : 79 / 720 * q < s)
     (h : s * (2 + 4 * β + β ^ 2 + q * β) ≤ β * q) : False := by
@@ -760,8 +746,8 @@ theorem chamber_neg_scalar {q β s : ℝ} (hq1 : 1 ≤ q) (hq2 : q ≤ 30 / 29) 
     mul_nonneg (by linarith) (by nlinarith)
   nlinarith [sq_nonneg (q - 30 / 29), mul_nonneg (sub_nonneg.2 hq2) (sub_nonneg.2 hq1)]
 
-/-- The scalar core of the chamber case below the bottom edge ((33)–(34)): `P = (·, p_y)`,
-`Q = (q_x, t)`, `D_Q = [EBQ] = b(t - λ) + λq_x > 0`. -/
+/-- The scalar core of the chamber case below the bottom edge: `P = (·, p_y)`, `Q = (q_x, t)`,
+`D_Q = [EBQ] = b(t - λ) + λq_x > 0`. -/
 theorem chamber_neg_core {b l s py qx qy : ℝ} (hb : 0 < b) (hb2 : b ≤ 11 / 20)
     (hl : -(1 / 29) ≤ l) (hl0 : l < 0) (hs : 0 < s) (hsq : 79 / 720 * (1 - l) < s)
     (h1 : s ≤ 1 - py) (h2 : s ≤ qx - b * (1 - qy)) (h3 : s ≤ qy - l - (1 - l) * qx)
@@ -784,7 +770,7 @@ theorem chamber_neg_core {b l s py qx qy : ℝ} (hb : 0 < b) (hb2 : b ≤ 11 / 2
       mul_nonpos_of_nonpos_of_nonneg (mul_nonpos_of_nonpos_of_nonneg hl0.le hs.le) hpos
     have e3 : 2 * s * qy ≤ b * (1 - l) * (1 - s - qy) * qy := by nlinarith
     exact le_of_mul_le_mul_right e3 hqy
-  -- (33)
+  -- the lower bound `t(1 + bq) ≥ λ + bq + (2 - λ)s`
   have k4 : l + b * (1 - l) + (2 - l) * s ≤ qy * (1 + b * (1 - l)) := by
     nlinarith [mul_le_mul_of_nonneg_left (show s + b * (1 - qy) ≤ qx by linarith) hq.le]
   have hβ : 0 ≤ b * (1 - l) := (mul_pos hb hq).le
@@ -795,9 +781,9 @@ theorem chamber_neg_core {b l s py qx qy : ℝ} (hb : 0 < b) (hb2 : b ≤ 11 / 2
   exact chamber_neg_scalar (q := 1 - l) (by linarith) (by linarith) (mul_pos hb hq)
     (by nlinarith) hsq k5
 
-/-- The chamber case of §10 below the bottom edge: `λ = 1 - q ∈ [-1/29, 0)`, `b ≤ 11/20`, two
-points inside `DCB ∩ DCE` with `[BPQ] > 0 > [EPQ]` and every doubled area at least
-`s > (79/720) q` is impossible ((33)–(34), `TYPE_II.md` lines 1046–1071). -/
+/-- The chamber case of the coupled corollary below the bottom edge: `λ = 1 - q ∈ [-1/29, 0)`,
+`b ≤ 11/20`, two points inside `DCB ∩ DCE` with `[BPQ] > 0 > [EPQ]` and every doubled area at
+least `s > (79/720) q` is impossible. -/
 theorem chamber_neg {l b s : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤ 11 / 20)
     (hl : -(1 / 29) ≤ l) (hl0 : l < 0) (hs : 0 < s) (hsq : 79 / 720 * (1 - l) < s)
     (hPB : InTriangle P ptD (ptB b) ptC)
@@ -850,8 +836,8 @@ theorem chamber_neg {l b s : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤ 11 / 2
     linarith
   exact chamber_neg_core hb hb2 hl hl0 hs hsq h1 h2 h3 hDQ hQ2 hk1
 
-/-- The three-point cut of the coupled corollary ((24) with `s/q ≥ s₀`, `TYPE_II.md`
-lines 1006–1031), as a scalar inequality: `y = X_A`, `X_B ≥ 3s`, `[ECX] = qX_A - αX_B ≥ s`. -/
+/-- The three-point cut of the coupled corollary (the ear bound of `distributed_mesh_bounds` with
+`s/q ≥ s₀`), as a scalar inequality: `y = X_A`, `X_B ≥ 3s`, `[ECX] = qX_A - αX_B ≥ s`. -/
 theorem coupled_three_scalar {q p y XB s Γ : ℝ} (hq : 1 < q) (hs : 7 / 64 ≤ s)
     (hsq : 79 / 720 * q < s) (hp : s ≤ p) (hα : 0 < 1 + p - q)
     (eX : s ≤ q * y - (1 + p - q) * XB) (hXB : 3 * s ≤ XB) (hey : Γ * s + (y - s) ≤ 1)
@@ -870,9 +856,9 @@ theorem coupled_three_scalar {q p y XB s Γ : ℝ} (hq : 1 < q) (hs : 7 / 64 ≤
   nlinarith [mul_lt_mul_of_pos_left hΓ hq0]
 
 /-- The core of the coupled corollary for `1 < q ≤ 30/29` (`λ = 1 - q ∈ [-1/29, 0)`), at a doubled
-threshold `s ≥ 7/64` with `s > (79/720) q`, for a labelled mesh of `DBC` (`TYPE_II.md`
-lines 991–1071): `EBC` holds at most one point, the three-point cut fails by (24), and the
-two-point cut by (29) or by the chamber case `chamber_neg`. -/
+threshold `s ≥ 7/64` with `s > (79/720) q`, for a labelled mesh of `DBC`: `EBC` holds at most one
+point, the three-point cut fails by the ear bound (`coupled_three_scalar`), and the two-point cut
+by `ct_K_contra_gen` or by the chamber case `chamber_neg`. -/
 theorem coupled_core {l b s : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤ 11 / 20)
     (hl : -(1 / 29) ≤ l) (hl0 : l < 0) (hs : 7 / 64 ≤ s) (hsq : 79 / 720 * (1 - l) < s)
     (hX : IsCentral b X) (hY : IsCentral b Y) (hZ : IsCentral b Z)
@@ -898,7 +884,7 @@ theorem coupled_core {l b s : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤ 11 
   have hvB := ge pvB (le_abs_sarea_of_le_min hmin 3 5 6)
   have hvC := ge pvC (le_abs_sarea_of_le_min hmin 1 6 4)
   have hABC : sarea ptD (ptB b) ptC = 1 := by simp [sarea, ptD, ptB, ptC]
-  obtain ⟨hk98, -, hey, -, -⟩ := claim_mesh_kstar hs hABC hx hy hz ha hb' hc hk huA huB
+  obtain ⟨hk98, -, hey, -, -⟩ := distributed_mesh_bounds hs hABC hx hy hz ha hb' hc hk huA huB
     huC hvA hvB hvC
   have hq : 0 < 1 - l := by linarith
   have hp : s ≤ b * (1 - l) := by
@@ -938,7 +924,7 @@ theorem coupled_core {l b s : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤ 11 
     intro U V f hf hUV hU hV
     have hsub : s / 2 ≤ minTriangleArea ![ptE l, ptB b, ptC, U, V] :=
       hmin.trans (min_le_min_reindex (by norm_num) _ _ f hf hUV)
-    have h2 := CornerFamilies.twoInteriorPointLemma (ptE l) (ptB b) ptC U V (Or.inl hU)
+    have h2 := twoInteriorPointLemma (ptE l) (ptB b) ptC U V (Or.inl hU)
       (Or.inl hV) (s / 2) (by linarith) hsub
     rw [triangleArea_eq, hEBC, abs_of_pos hα] at h2
     have h3 : (4 + 2 * (12 / 7)) * s ≤ (4 + 2 * Real.sqrt 3) * s :=
@@ -991,7 +977,7 @@ theorem coupled_core {l b s : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤ 11 
       exact ct_K_contra_gen hs hk98 hp'.le hp2
         (by linarith only [e1, e2, e3, F8, sX1, mul_le_mul_of_nonneg_left ha hs0,
           mul_le_mul_of_nonneg_left hvB hs0])
-  · -- all three above `CE`: `qy ≥ s + αX_B ≥ s + 3s(1 + s - q)` against (24)
+  · -- all three above `CE`: `qy ≥ s + αX_B ≥ s + 3s(1 + s - q)` against the ear bound
     rw [abs_of_pos sX, FX] at eX
     have hXB : 3 * s ≤ sarea ptC ptD X := by linarith only [F6, hz, hc, hvA]
     have h5 : (559 : ℝ) / 250 < Real.sqrt 5 := by rw [Real.lt_sqrt (by norm_num)]; norm_num
@@ -1029,7 +1015,7 @@ theorem coupled_physical {l b s : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤
       (by funext m; fin_cases m <;> rfl))
   have hd : CornerFamilies.Distributed ptD (ptB b) ptC X Y Z := by
     by_contra hnd
-    have := CornerFamilies.claim_nondistributed_bound ptD (ptB b) ptC X Y Z (Or.inl cX)
+    have := CornerFamilies.triangleArea_ge_of_not_distributed ptD (ptB b) ptC X Y Z (Or.inl cX)
       (Or.inl cY) (Or.inl cZ) (s / 2) (by linarith) hmin6 hnd
     rw [triangleArea_eq] at this
     simp [sarea, ptD, ptB, ptC] at this
@@ -1047,16 +1033,13 @@ theorem coupled_physical {l b s : ℝ} {X Y Z : Point} (hb : 0 < b) (hb2 : b ≤
   · rintro X Y Z ⟨h1, h2, h3, h4⟩
     exact coupled_core hb hb2 hl hl0 hs hsq h1 h2 h3 h4
 
-/-- **Coupled affine corollary** (`TYPE_II:CoupledAffineCorollary`). Normalize the doubled area
-of an actual triangle `ABC` to one; let it contain three further points, and let an additional
-point `E` have barycentric coordinates `(α, q, -p)`, `0 < q ≤ 30/29`, `0 < p ≤ (11/20) q`,
-`α + q - p = 1`. If `s ≥ s₀ max(1, q)` (32), `s₀ = 2A₀`, it is impossible for all triangles of
-these seven points to have normalized doubled area at least `s`; that is, some triangle has area
-less than `s · area(ABC)`. `docs/proof/nine/TYPE_II.md`, lines 937–1076.
+/-- The coupled affine corollary. Normalize the doubled area of an actual triangle `ABC` to one;
+let it contain three further points, and let an additional point `E` have barycentric coordinates
+`(α, q, -p)`, `0 < q ≤ 30/29`, `0 < p ≤ (11/20) q`, `α + q - p = 1`. If `s ≥ s₀ max(1, q)`,
+`s₀ = 2A₀`, it is impossible for all triangles of these seven points to have normalized doubled
+area at least `s`; that is, some triangle has area less than `s · area(ABC)`.
 
-Implicit in the manuscript: `ABC` is nondegenerate; the containment is closed.
-
-Uses: TYPE_II:AffineCorollary, TYPE_II:claim-mesh-kstar, CORNER_FAMILIES:TwoInteriorPointLemma. -/
+`ABC` is nondegenerate; the containment is closed. For `q ≤ 1` this is `affineCorollary`. -/
 theorem coupledAffineCorollary {A B C X Y Z : Point} {α q p s : ℝ}
     (hS : 0 < triangleArea A B C)
     (hX : X ∈ convexHull ℝ ({A, B, C} : Set Point))
@@ -1085,12 +1068,10 @@ theorem coupledAffineCorollary {A B C X Y Z : Point} {α q p s : ℝ}
     rw [triangleArea_eq, ← hk]
     nlinarith [mul_lt_mul_of_pos_left key hk0]
 
-/-- **Coupled affine corollary, geometric form** (`TYPE_II:CoupledAffineCorollary`). If the
-actual triangle `ABC` has area `S ≤ 1/2` and `q ≤ min(30/29, 1/(2S))`, `0 < p ≤ (11/20) q`, then
-the seven points have a triangle of area less than `A₀` (the normalized doubled minimum at the
-competitive threshold is at least `A₀ / S = s₀ / (2S)`). `docs/proof/nine/TYPE_II.md`, lines 1078–1090.
-
-Uses: TYPE_II:CoupledAffineCorollary. -/
+/-- The coupled affine corollary, geometric form. If the actual triangle `ABC` has area
+`S ≤ 1/2` and `q ≤ min(30/29, 1/(2S))`, `0 < p ≤ (11/20) q`, then the seven points have a
+triangle of area less than `A₀` (the normalized doubled minimum at the competitive threshold is
+at least `A₀ / S = s₀ / (2S)`). -/
 theorem coupledAffineCorollary_geometric {A B C X Y Z : Point} {α q p : ℝ}
     (hS : 0 < triangleArea A B C) (hS2 : triangleArea A B C ≤ 1 / 2)
     (hX : X ∈ convexHull ℝ ({A, B, C} : Set Point))

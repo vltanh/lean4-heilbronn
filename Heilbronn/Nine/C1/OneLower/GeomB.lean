@@ -3,19 +3,23 @@ module
 public import Heilbronn.Nine.C1.OneLower.ModelB
 public import Heilbronn.Nine.C1.OneLower.TopCap
 
-/-! # Geometric soundness of the hull-word model of group B
+/-! # Geometric soundness of the shared hull-word model
 
-For a convex polygon `V₀, …, V_{n-1}` (`C1OneLowerTopCap.ConvexPolygon`) and interior points with
+The hull-word model of `Heilbronn.Nine.C1.OneLower.ModelB`, used by the one-lower packages of the
+top triangle, the right top triangle, the convex top and the mixed caps.
+
+For a convex polygon `V₀, …, V_{n-1}` (`IsConvexPolygon`) and interior points with
 radial words (`C1OneLowerTopCap.HasHullWord`, from `C1OneLowerTopCap.exists_hullWord`):
 
 * `hsign_eq`: the list sign `hsign` is the polygon sign `hullSign`;
 * `edge_pos`, `inTriangle_edges`: a point strictly inside a triangle of vertices is strictly
   inside every edge of the polygon;
-* `enum_word`: a radial word satisfying (13) and a pruned enumeration test passes the test
+* `enum_word`: a radial word satisfying the complement relation `C1OneLowerTopCap.HullAntisymm`
+  and a pruned enumeration test passes the test
   (`enumW_sound`);
 * `hullTable_holds`: every signed triangle of `hullTable n ws` holds (hull triples by convexity,
   one interior point by its word, interior pairs by the ray-order rule
-  `C1OneLowerTopCap.eq14`).
+  `C1OneLowerTopCap.sarea_pos_of_hullWord_lt`).
 -/
 
 @[expose] public section
@@ -23,8 +27,8 @@ radial words (`C1OneLowerTopCap.HasHullWord`, from `C1OneLowerTopCap.exists_hull
 noncomputable section
 namespace Heilbronn.Nine.C1OneLowerB
 
-open Heilbronn.Nine.C1 Heilbronn.Nine.C1ZeroLower Cover Model
-open Heilbronn.Nine.C1OneLowerTopCap (HullWord hullSign HasHullWord HullAntisymm ConvexPolygon)
+open Heilbronn.Nine.C1 Heilbronn.Nine.C1ZeroLower Heilbronn.Nine.Package Cover Model
+open Heilbronn.Nine.C1OneLowerTopCap (HullWord hullSign HasHullWord HullAntisymm)
 
 variable {n : ℕ}
 
@@ -47,7 +51,7 @@ theorem val_succ_of_last [NeZero n] (_hn : 2 ≤ n) {i : Fin n} (h : i.val + 1 =
   rw [Fin.val_add, Fin.val_one', Nat.add_mod_mod, h, Nat.mod_self]
 
 /-- Every vertex other than the endpoints of an edge lies strictly to the left of it. -/
-theorem edge_pos [NeZero n] (hn : 3 ≤ n) {V : Fin n → Point} (hV : ConvexPolygon V)
+theorem edge_pos [NeZero n] (hn : 3 ≤ n) {V : Fin n → Point} (hV : IsConvexPolygon V)
     (i m : Fin n) (h1 : m ≠ i) (h2 : m ≠ i + 1) : 0 < sarea (V i) (V (i + 1)) (V m) := by
   have hi := i.isLt
   have hm := m.isLt
@@ -73,7 +77,7 @@ theorem bary_identity (A B C P Q R : Point) :
 
 /-- A point strictly inside a counterclockwise triangle of vertices `a < b < c` of a convex
 polygon is strictly inside every edge. -/
-theorem inTriangle_edges [NeZero n] (hn : 3 ≤ n) {V : Fin n → Point} (hV : ConvexPolygon V)
+theorem inTriangle_edges [NeZero n] (hn : 3 ≤ n) {V : Fin n → Point} (hV : IsConvexPolygon V)
     {a b c : Fin n} (hab : a < b) (hbc : b < c) {R : Point} (hR : InTriangle R (V a) (V b) (V c))
     (i : Fin n) : 0 < sarea (V i) (V (i + 1)) R := by
   obtain ⟨r1, r2, r3⟩ := hR
@@ -145,8 +149,8 @@ theorem lastOK_ofFn_take [NeZero n] {r : Fin n → ℕ} (hr : HullAntisymm r) (i
   rw [beq_iff_eq, decide_eq_decide]
   exact key
 
-/-- A radial word with entries in `{1, …, n - 2}` satisfying (13) passes every pruned enumeration
-test that `enumW` has checked. -/
+/-- A radial word with entries in `{1, …, n - 2}` satisfying the complement relation
+`C1OneLowerTopCap.HullAntisymm` passes every pruned enumeration test that `enumW` has checked. -/
 theorem enum_word [NeZero n] {p : List ℕ → Bool} (he : enumW n (n - 2) p n [] = true)
     {r : Fin n → ℕ} (hb : ∀ i, 1 ≤ r i ∧ r i ≤ n - 2) (hr : HullAntisymm r) :
     p (List.ofFn r) = true := by
@@ -165,7 +169,7 @@ theorem enum_word [NeZero n] {p : List ℕ → Bool} (he : enumW n (n - 2) p n [
 structure HullCell (n : ℕ) (V : Fin n → Point) (P : ℕ → Point) (ws : List (List ℕ)) : Prop where
   three : 3 ≤ n
   len : n + ws.length = 9
-  convex : ConvexPolygon V
+  convex : IsConvexPolygon V
   hPV : ∀ i : Fin n, P i.val = V i
   word : ∀ m, m < ws.length →
     HasHullWord V (P (n + m)) (fun i : Fin n => (ws.getD m []).getD i.val 0)
@@ -177,9 +181,9 @@ theorem HullCell.neZero {V : Fin n → Point} {P : ℕ → Point} {ws : List (Li
     (C : HullCell n V P ws) : NeZero n := ⟨by have := C.three; omega⟩
 
 theorem HullCell.triple_holds {V : Fin n → Point} {P : ℕ → Point} {ws : List (List ℕ)}
-    (C : HullCell n V P ws) {t : ℕ × ℕ × ℕ} (ht : t ∈ lexTriples) {sg : Bool}
-    (hs : hullTripleSign n ws t = some sg) : FHolds P (t, sg) := by
-  obtain ⟨t1, t2, t3⟩ := C1ZeroLower.lexTriples_valid t ht
+    (C : HullCell n V P ws) {t : ℕ × ℕ × ℕ} (ht : t ∈ lexTriples 9) {sg : Bool}
+    (hs : hullTripleSign n ws t = some sg) : FHolds 9 P (t, sg) := by
+  obtain ⟨t1, t2, t3⟩ := Cover.mem_lexTriples ht
   refine ⟨t1, t2, t3, ?_⟩
   have hlen := C.len
   unfold hullTripleSign at hs
@@ -211,7 +215,7 @@ theorem HullCell.triple_holds {V : Fin n → Point} {P : ℕ → Point} {ws : Li
 
 theorem HullCell.ray_holds {V : Fin n → Point} {P : ℕ → Point} {ws : List (List ℕ)}
     (C : HullCell n V P ws) {a b : ℕ} (hab : a < b) (hb : b < ws.length) {f : SFact}
-    (hf : f ∈ raySigns n ws a b) : FHolds P f := by
+    (hf : f ∈ raySigns n ws a b) : FHolds 9 P f := by
   have := C.neZero
   have hlen := C.len
   simp only [raySigns, List.mem_filterMap, List.mem_range] at hf
@@ -228,17 +232,17 @@ theorem HullCell.ray_holds {V : Fin n → Point} {P : ℕ → Point} {ws : List 
   rw [C.hPV ⟨v, hv⟩]
   rcases Nat.lt_or_gt_of_ne hxy with hl | hl
   · simp only [hl, decide_true, ite_true]
-    exact C1OneLowerTopCap.eq14 C.convex Wa Wb Ba Bb (i := ⟨v, hv⟩) hl
+    exact C1OneLowerTopCap.sarea_pos_of_hullWord_lt C.convex Wa Wb Ba Bb (i := ⟨v, hv⟩) hl
   · simp only [show ¬ ((ws.getD a []).getD v 0 < (ws.getD b []).getD v 0) by omega,
       decide_false, Bool.false_eq_true, ite_false]
-    have := C1OneLowerTopCap.eq14 C.convex Wb Wa Bb Ba (i := ⟨v, hv⟩) hl
+    have := C1OneLowerTopCap.sarea_pos_of_hullWord_lt C.convex Wb Wa Bb Ba (i := ⟨v, hv⟩) hl
     rw [sarea_swap₂₃] at this
     linarith
 
-/-- **The initial signs of a hull cell hold**: the hull triples (convexity), the triples with one
-interior point (its word) and the ray-order signs of interior pairs (`C1OneLowerTopCap.eq14`). -/
+/-- The initial signs of a hull cell hold: the hull triples (convexity), the triples with one
+interior point (its word) and the ray-order signs of interior pairs (`C1OneLowerTopCap.sarea_pos_of_hullWord_lt`). -/
 theorem HullCell.table_holds {V : Fin n → Point} {P : ℕ → Point} {ws : List (List ℕ)}
-    (C : HullCell n V P ws) : AllHold (FHolds P) (hullTable n ws) := by
+    (C : HullCell n V P ws) : AllHold (FHolds 9 P) (hullTable n ws) := by
   intro f hf
   simp only [hullTable, List.mem_append, List.mem_filterMap, Option.map_eq_some_iff,
     List.mem_flatMap] at hf

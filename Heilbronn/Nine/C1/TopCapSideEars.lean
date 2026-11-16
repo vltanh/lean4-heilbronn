@@ -3,24 +3,24 @@ module
 public import Heilbronn.Nine.C1.TopCapConvexPair
 public import Heilbronn.Nine.C1.TopCapRadialSplit
 
-/-! # The two side ears of a C1 top-cap extension are empty (`docs/proof/nine/C1_TOP_CAP_SIDE_EARS.md`)
+/-! # The two side ears of a C1 top-cap extension are empty
 
-Role: a component on the primary route: `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md` Theorem 2, step 4
-(lines 256-257).
-
-Setting (lines 3-14): the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`,
+Setting: the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`,
 `s = 8/73 < 2A₀`, `ρ = 49/60`; a competitive nine-point configuration `c1Config h c d f L M X P`
 (least area at least `A₀`) with two free points `L, M` inside `OHC` (used only through
 `hc ≥ (4 + 2√3)s > ρ`) and a top-cap point `X` beyond `DF`.
 
 Results:
-* `eq3`: the scalar inequality `J* = AU - s(A + 3U + Δ) < 0` (3) under the relaxed conditions
+* `jStar_neg`: the scalar inequality `J* = AU - s(A + 3U + Δ) < 0` under the relaxed conditions
   `hc ≥ ρ`, `hf, cd, A, U ≥ s`;
-* `claim_certificate`: `hJ* < 0` on the box `ρ ≤ h ≤ 1`, `s ≤ u, v ≤ ρ` of (4) (two halves);
-* `theorem_main` (**Theorem**): `-[HFX] < 3s` and `[CDX] < 3s`, so neither side ear `HFX`,
-  `CDX` contains a further actual point;
-* `claim_consequence`: with one further point `P` in the pentagon, `P` lies inside `OCXH`, the
-  lower points are split by `OX`, and the containing-area bounds (5).
+* `jStar_reduced_neg`: `hJ* < 0` on the box `ρ ≤ h ≤ 1`, `s ≤ u, v ≤ ρ` of the reduced
+  parametrization `reducedHCDF` (two halves);
+* `theorem_main`: `-[HFX] < 3s` and `[CDX] < 3s`, so neither side ear `HFX`, `CDX` contains a
+  further actual point;
+* `upperQuad_radial_split`: with one further point `P` in the pentagon, `P` lies inside `OCXH`, the
+  lower points are split by `OX`, and the triangle of `OCXH` holding `P` gives the area bounds
+  `cY ≥ Ks` or `hx ≥ Ks`; used by `C1TwoLowerCompletion.topCap_upperQuad_OCX_false` and
+  `C1TwoLowerCompletion.topCap_upperQuad_false`.
 -/
 
 @[expose] public section
@@ -30,7 +30,7 @@ namespace Heilbronn.Nine.C1TopCapSideEars
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1TopCapConvexPair Heilbronn.Nine.C1TwoLower
 
-/-- `J* = AU - s(A + 3U + Δ)` of (3), `s = 8/73`. -/
+/-- `J* = AU - s(A + 3U + Δ)`, `s = 8/73`. -/
 def jStar (h c d f : ℝ) : ℝ :=
   areaA c d f * areaU h d f - 8 / 73 * (areaA c d f + 3 * areaU h d f + areaΔ h c d f)
 
@@ -41,19 +41,16 @@ def ehJ : Cert.Expr :=
   ConvexPairCert.ehA * ConvexPairCert.eU -
     k (8 / 73) * (ConvexPairCert.ehA + k 3 * v 0 * ConvexPairCert.eU + ConvexPairCert.ehD)
 
-/-- The two boxes of §3 (the `v` interval halved). -/
+/-- The certificate for `jStar_reduced_neg`: two boxes (the `v` interval halved). -/
 theorem cert_check :
     ltreeCheck [(0 - ehJ, [2, 2, 2])] (.split 2 (4057 / 8760) (.leaf 0 63) (.leaf 0 62))
       [(49 / 60, 1), (8 / 73, 49 / 60), (8 / 73, 49 / 60)] = true := by
   decide +kernel
 
-/-- **Claim** (`C1_TOP_CAP_SIDE_EARS:claim-certificate`, made-up id). In the parametrization (4)
-at `hc = ρ` (`reducedHCDF`), `hJ* < 0` throughout the box `ρ ≤ h ≤ 1`, `s ≤ u, v ≤ ρ`. In the
-manuscript: the `v` interval is halved, and on each half all 27 tensor Bernstein coefficients of
-`hJ*` (degree `(2,2,2)`) are negative (largest `-4376159983/274490395200` and
-`-1816566733/112036896000`); checked by `docs/proof/nine/check_c1_top_cap_side_ears.py`.
-`docs/proof/nine/C1_TOP_CAP_SIDE_EARS.md`, lines 105-129. -/
-theorem claim_certificate (h u v : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 1)
+/-- In the reduced parametrization `reducedHCDF` at `hc = ρ`, `hJ* < 0` throughout the box
+`ρ ≤ h ≤ 1`, `s ≤ u, v ≤ ρ`: the `v` interval is halved, and on each half all tensor Bernstein
+coefficients of `hJ*` (degree `(2,2,2)`) are negative (`cert_check`). -/
+theorem jStar_reduced_neg (h u v : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 1)
     (hu : 8 / 73 ≤ u) (hu' : u ≤ 49 / 60) (hv : 8 / 73 ≤ v) (hv' : v ≤ 49 / 60) :
     h * jStar (reducedHCDF h u v).1 (reducedHCDF h u v).2.1 (reducedHCDF h u v).2.2.1
       (reducedHCDF h u v).2.2.2 < 0 := by
@@ -105,19 +102,18 @@ theorem jstar_mono {h c d f h' c' : ℝ} (hA : C1AnchorsWeak h c d f) (hΔ : 0 <
     (show (0 : ℝ) ≤ areaA c' d f - areaA c d f by linarith)
   linarith
 
-/-- **Claim** (`C1_TOP_CAP_SIDE_EARS:eq3`, made-up id). Under the weak anchor conditions and the
-relaxed conditions `hc ≥ ρ = 49/60`, `hf, cd, A, U ≥ s = 8/73`: `J* = AU - s(A + 3U + Δ) < 0`
-(3). By transposition (which exchanges `A, U` and fixes `Δ`) also `AU - s(3A + U + Δ) < 0`,
-excluding (2). `docs/proof/nine/C1_TOP_CAP_SIDE_EARS.md`, lines 16-129.
-Uses: C1_TOP_CAP_CONVEX_PAIR:eq1-2, C1_TOP_CAP_CONVEX_PAIR:claim-reduction,
-C1_TOP_CAP_SIDE_EARS:claim-certificate. -/
-theorem eq3 {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhc : 49 / 60 ≤ h * c)
+/-- Under the weak anchor conditions and the relaxed conditions `hc ≥ ρ = 49/60`,
+`hf, cd, A, U ≥ s = 8/73`: `J* = AU - s(A + 3U + Δ) < 0`. By transposition (which exchanges `A, U`
+and fixes `Δ`) also `AU - s(3A + U + Δ) < 0`. The proof follows the decreasing path of
+`C1TopCapConvexPair.path_endpoint` to `hc = ρ`, along which `J* ≥ 0` is preserved (`jstar_mono`),
+and applies `jStar_reduced_neg`. -/
+theorem jStar_neg {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhc : 49 / 60 ≤ h * c)
     (hhf : 8 / 73 ≤ h * f) (hcd : 8 / 73 ≤ c * d) (hA' : 8 / 73 ≤ areaA c d f)
     (hU : 8 / 73 ≤ areaU h d f) :
     jStar h c d f < 0 := by
   by_contra hn; push Not at hn
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA
-  have hΔ := (eq1_2 ⟨hd, hdh, hh, hf, hfc, hc⟩).2 hhc hhf hcd
+  have hΔ := (area_sum_and_areaΔ_pos ⟨hd, hdh, hh, hf, hfc, hc⟩).2 hhc hhf hcd
   have hB : 0 < bracketB h c d f := by
     unfold jStar at hn; unfold bracketB; linarith
   obtain ⟨aS, uS, -, h8l, h8u⟩ := df_bounds ⟨hd, hdh, hh, hf, hfc, hc⟩ hhf hcd hhc hB
@@ -132,28 +128,24 @@ theorem eq3 {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhc : 49 / 60 ≤ h * 
     have := mul_le_mul_of_nonneg_left c'f h'0.le; linarith
   have vρ : c' * d ≤ 49 / 60 := by
     have := mul_le_mul_of_nonneg_left h'd (show (0 : ℝ) ≤ c' by linarith); linarith
-  have := claim_certificate h' (h' * f) (c' * d) h'ρ h'1 h'f uρ c'd vρ
+  have := jStar_reduced_neg h' (h' * f) (c' * d) h'ρ h'1 h'f uρ c'd vρ
   rw [reduced_eq h'0 hc'h'] at this
   dsimp only at this
   have := mul_nonneg h'0.le hJ'
   linarith
 
-
-/-- **Theorem** (`C1_TOP_CAP_SIDE_EARS:Theorem`). In a competitive nine-point C1 configuration
-`c1Config h c d f L M X P` (weak anchor conditions, least area at least `A₀`) with `L, M`
-strictly inside `OHC` and `X` in the top cap beyond `DF`: both side ears have doubled area less
-than `3s`, `-[HFX] < 3s` and `[CDX] < 3s` (`s = 8/73`), so neither `HFX` nor `CDX` contains a
-further actual point. `docs/proof/nine/C1_TOP_CAP_SIDE_EARS.md`, lines 16-20 and 120-129.
-Uses: C1_TOP_CAP_CONVEX_PAIR:eq1-2, C1_TOP_CAP_CONVEX_PAIR:eq3-5, C1_TOP_CAP_SIDE_EARS:eq3,
-CORNER_FAMILIES:TwoInteriorPointLemma. -/
+/-- In a competitive nine-point C1 configuration `c1Config h c d f L M X P` (weak anchor
+conditions, least area at least `A₀`) with `L, M` strictly inside `OHC` and `X` in the top cap
+beyond `DF`: both side ears have doubled area less than `3s`, `-[HFX] < 3s` and `[CDX] < 3s`
+(`s = 8/73`), so neither `HFX` nor `CDX` contains a further actual point. -/
 theorem theorem_main {h c d f : ℝ} {L M X P : Point} (hA : C1AnchorsWeak h c d f)
     (hL : L ∈ unitSquare) (hM : M ∈ unitSquare) (hX : X ∈ unitSquare) (hP : P ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f L M X P))
     (hLl : InLower h c L) (hMl : InLower h c M) (hXc : InTopCap d f X) :
     -sarea (ptH h) (ptF f) X < 3 * (8 / 73) ∧ sarea (ptC c) (ptD d) X < 3 * (8 / 73) ∧
-      ∀ i, ¬ InsideTri (freePt L M X P i) (ptH h) (ptF f) X ∧
-        ¬ InsideTri (freePt L M X P i) (ptC c) (ptD d) X := by
-  obtain ⟨b1, b2, b3, b4, hid, hcap⟩ := eq3_5 hA hL hM hX hP hmin
+      ∀ i, ¬ InsideTriangle (freePt L M X P i) (ptH h) (ptF f) X ∧
+        ¬ InsideTriangle (freePt L M X P i) (ptC c) (ptD d) X := by
+  obtain ⟨b1, b2, b3, b4, hid, hcap⟩ := topCap_cost_bounds hA hL hM hX hP hmin
   have hk := two_in hmin 0 1 4 5 6 (by decide) (Or.inl hLl) (Or.inl hMl)
   have e : sarea ptO (ptC c) (ptH h) = h * c := by simp only [sarea, ptO, ptC, ptH]; ring
   have hpos : 0 ≤ h * c := mul_nonneg (by linarith [hA.2.1, hA.1]) (by linarith [hA.2.2.2.1,
@@ -164,12 +156,12 @@ theorem theorem_main {h c d f : ℝ} {L M X P : Point} (hA : C1AnchorsWeak h c d
   obtain ⟨aX, bX, rX, -⟩ := hcap 2 hXc.le
   simp only [freePt, Matrix.cons_val] at aX bX rX
   have idX := hid X
-  have hΔ := (eq1_2 hA).2 hhc b3 b4
+  have hΔ := (area_sum_and_areaΔ_pos hA).2 hhc b3 b4
   have hα : -sarea (ptH h) (ptF f) X < 3 * (8 / 73) := by
     by_contra hn; push Not at hn
     obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA
     obtain ⟨e1, e2, e3⟩ := swap_AUΔ h c d f
-    have := eq3 (h := c) (c := h) (d := f) (f := d) ⟨hf, hfc, hc, hd, hdh, hh⟩ (by linarith)
+    have := jStar_neg (h := c) (c := h) (d := f) (f := d) ⟨hf, hfc, hc, hd, hdh, hh⟩ (by linarith)
       (by linarith) (by linarith) (by rw [e1]; exact b2) (by rw [e2]; exact b1)
     unfold jStar at this
     rw [e1, e2, e3] at this
@@ -179,7 +171,7 @@ theorem theorem_main {h c d f : ℝ} {L M X P : Point} (hA : C1AnchorsWeak h c d
     linarith
   have hβ : sarea (ptC c) (ptD d) X < 3 * (8 / 73) := by
     by_contra hn; push Not at hn
-    have := eq3 hA hhc b3 b4 b1 b2
+    have := jStar_neg hA hhc b3 b4 b1 b2
     unfold jStar at this
     have p1 := mul_le_mul_of_nonneg_left aX (show (0 : ℝ) ≤ areaA c d f by linarith)
     have p2 := mul_le_mul_of_nonneg_left hn (show (0 : ℝ) ≤ areaU h d f by linarith)
@@ -200,7 +192,7 @@ theorem theorem_main {h c d f : ℝ} {L M X P : Point} (hA : C1AnchorsWeak h c d
 theorem cons_CXP {c d f : ℝ} {X P : Point} (hAp : 0 < areaA c d f)
     (bX : 0 < sarea (ptC c) (ptD d) X) (rX : 0 < -sarea (ptD d) (ptF f) X)
     (pCD : 0 < sarea (ptC c) (ptD d) P) (pDF : 0 < sarea (ptD d) (ptF f) P)
-    (hne : sarea (ptC c) X P ≠ 0) (hnot : ¬ InsideTri P (ptC c) (ptD d) X) :
+    (hne : sarea (ptC c) X P ≠ 0) (hnot : ¬ InsideTriangle P (ptC c) (ptD d) X) :
     0 < sarea (ptC c) X P := by
   by_contra hn; push Not at hn
   have hlt : sarea (ptC c) X P < 0 := lt_of_le_of_ne hn hne
@@ -223,7 +215,7 @@ theorem cons_CXP {c d f : ℝ} {X P : Point} (hAp : 0 < areaA c d f)
 theorem cons_XHP {h d f : ℝ} {X P : Point} (hUp : 0 < areaU h d f)
     (aX : 0 < -sarea (ptH h) (ptF f) X) (rX : 0 < -sarea (ptD d) (ptF f) X)
     (pFH : 0 < sarea (ptF f) (ptH h) P) (pDF : 0 < sarea (ptD d) (ptF f) P)
-    (hne : sarea X (ptH h) P ≠ 0) (hnot : ¬ InsideTri P (ptH h) (ptF f) X) :
+    (hne : sarea X (ptH h) P ≠ 0) (hnot : ¬ InsideTriangle P (ptH h) (ptF f) X) :
     0 < sarea X (ptH h) P := by
   by_contra hn; push Not at hn
   have hlt : sarea X (ptH h) P < 0 := lt_of_le_of_ne hn hne
@@ -291,17 +283,15 @@ theorem hc_ge {h c d f : ℝ} {L M X P : Point} (hA : C1AnchorsWeak h c d f)
     hA.2.2.2.2.1])
   rwa [e, abs_of_nonneg hpos] at hk
 
-/-- **Claim** (`C1_TOP_CAP_SIDE_EARS:claim-consequence`, made-up id). In the setting of the
-theorem, with the ninth point `P` inside the anchor pentagon above `HC` (open `HCDF`): `P` lies
-strictly inside the quadrilateral `OCXH` (the hexagon `OCDXFH` is `OCXH` with the two empty
-ears); the lower points lie one in `OXH` and one in `OCX` (radial split); `P` lies in `OCX` or
-`OXH`; `hc ≥ Ks`; and the triangle holding `P` gives `cy ≥ Ks` (for `OCX`) or `hx ≥ Ks` (for
-`OXH`), `X = (x, y)`, `K = 4 + 2√3`, `s = 8/73`. Transposition exchanges the two alternatives,
-giving (5): `P, M ∈ OCX`, `L ∈ OHX`, `hc, cy ≥ Ks`. `docs/proof/nine/C1_TOP_CAP_SIDE_EARS.md`,
-lines 131-156.
-Uses: C1_TOP_CAP_SIDE_EARS:Theorem, C1_TOP_CAP_RADIAL_SPLIT:Theorem,
-CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_consequence {h c d f : ℝ} {L M X P : Point} (hA : C1AnchorsWeak h c d f)
+/-- In the setting of `theorem_main`, with the ninth point `P` inside the anchor pentagon above
+`HC` (open `HCDF`): `P` lies strictly inside the quadrilateral `OCXH` (the hexagon `OCDXFH` is
+`OCXH` with the two empty ears); the lower points lie one in `OXH` and one in `OCX` (they are
+split by `OX`, `C1TopCapRadialSplit.theorem_main`); `P` lies in `OCX` or `OXH`; `hc ≥ Ks`; and
+the triangle holding `P` gives `cy ≥ Ks` (for `OCX`) or `hx ≥ Ks` (for `OXH`), `X = (x, y)`,
+`K = 4 + 2√3`, `s = 8/73`.
+Transposition exchanges the two alternatives, so one may assume `P, M ∈ OCX`, `L ∈ OHX`,
+`hc, cy ≥ Ks`. -/
+theorem upperQuad_radial_split {h c d f : ℝ} {L M X P : Point} (hA : C1AnchorsWeak h c d f)
     (hL : L ∈ unitSquare) (hM : M ∈ unitSquare) (hX : X ∈ unitSquare) (hP : P ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f L M X P))
     (hLl : InLower h c L) (hMl : InLower h c M) (hXc : InTopCap d f X)
@@ -315,7 +305,7 @@ theorem claim_consequence {h c d f : ℝ} {L M X P : Point} (hA : C1AnchorsWeak 
       (InTriangle P ptO (ptC c) X → (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ c * X.2) ∧
       (InTriangle P ptO X (ptH h) → (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h * X.1) := by
   obtain ⟨hα, hβ, hear⟩ := theorem_main hA hL hM hX hP hmin hLl hMl hXc
-  obtain ⟨b1, b2, b3, b4, hid, hcap⟩ := eq3_5 hA hL hM hX hP hmin
+  obtain ⟨b1, b2, b3, b4, hid, hcap⟩ := topCap_cost_bounds hA hL hM hX hP hmin
   obtain ⟨-, -, -, -, hd1, hf1⟩ := anchor_bounds hA hmin
   obtain ⟨aX, bX, rX, -⟩ := hcap 2 hXc.le
   simp only [freePt, Matrix.cons_val] at aX bX rX

@@ -6,37 +6,36 @@ public import Heilbronn.Nine.SixBoundary.ThreeCaps
 public import Heilbronn.Nine.Sharp.BEMoving
 
 /-! # Completion of the two-side-cap N family with an upper point
-(`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_UPPER.md`)
 
-Role: primary route. Theorem 1 closes the occupancy N6-02 `(1,0,1;1)` of
-`docs/proof/nine/UNRESTRICTED.md`, Section 4, when the anchor-interior point is in the upper quadrilateral
-`HCDF`; with `SIX_BOUNDARY_TWO_SIDE_COMPLETION.md` (point below `HC`) it closes N6-02
-(`n6_02`). N6-05 `(1,1,1;0)` is closed by `SixBoundaryThreeCaps.three_caps` (`n6_05`).
+The six-boundary case with one free point in each side cap and the third strictly inside the
+upper anchor quadrilateral `HCDF`; with `SixBoundaryTwoSideCompletion` (third point below `HC`)
+it settles the placement with one point in each side cap and one inside the anchor hexagon
+(`twoSide_isOptimal_of_A₀_le`). The placement with one free point in each of the three caps is settled by
+`SixBoundaryThreeCaps.three_caps`.
 
-Setting (1): `nConfig a h b c d f X Y Q` with `NAnchors a h b c d f`, `X = (x, y)` in the closed
+Setting: `nConfig a h b c d f X Y Q` with `NAnchors a h b c d f`, `X = (x, y)` in the closed
 cap `CD(1,0)`, `Y = (z, w)` in the closed cap `FH(0,1)` (square-side positions allowed),
 `Q = (r, t)` strictly inside `HCDF`. Competitive: every doubled area at least `s = 7/64`.
-Normalization (2) `f ≤ d` by transposition (Sections 1-5). The hull is the strictly convex
-octagon (3) `(V₀, …, V₇) = (A, B, C, X, D, F, Y, H)` with `Q` its sole interior point.
+Normalization `f ≤ d` by transposition. The hull is the strictly convex octagon
+`(V₀, …, V₇) = (A, B, C, X, D, F, Y, H)` (`octagonXY`) with `Q` its sole interior point.
 
-Certificate package (`docs/proof/nine/six_boundary_two_side_upper_certificates.json`, checker
-`docs/proof/nine/check_six_boundary_two_side_upper.py`): the radial word of `Q` (11) lies among 82 words;
-80 cubic certificates (14,253 terms) exclude all of them except `q* = (4,3,3,2,3,4,5,4)`. Its
-geometric conclusion is `claim_80_certificates`: in the competitive normalized setting, the word
-of `Q` is `q*`. The word `q*` is the simultaneous B/E sharp chamber (`claim_sharp_word`).
+Certificates: the radial word of `Q` lies among 82 words; 80 cubic certificates (14,253 terms)
+exclude all of them except `q* = (4,3,3,2,3,4,5,4)`. Their geometric conclusion is
+`radialWord_eq_qStar`: in the competitive normalized setting, the word of `Q` is `q*`. The word
+`q*` is the simultaneous B/E sharp chamber (`sharp_of_qStar`).
 
 Results:
-* `claim_octagon`: the hull is the octagon (3), `Q` interior (the 56 hull signs `Oct.t*` are
+* `octagonXY_hull`: the hull is the octagon, `Q` interior (the 56 hull signs `Oct.t*` are
   linear combinations of products of the N and cap orders, found by linear programming);
-* `claim_common_bounds`: the bounds (4)-(10);
-* `claim_82_words`: the word of `Q` exists and is one of the words of Section 2;
-* `claim_80_certificates`: the word of `Q` is `q*` (the word cover `Trees.tree`, kernel-checked
+* `common_bounds`: the common affine bounds;
+* `word_range`: the word of `Q` takes its values in `1, …, 6`;
+* `radialWord_eq_qStar`: the word of `Q` is `q*` (the word cover `Trees.tree`, kernel-checked
   in `Heilbronn.Nine.SixBoundary.TwoSideUpperTrees*`, and `Cover.checkTree_sound`);
-* `claim_sharp_word`: in the word `q*`, `SHARP_B_E_MOVING.md` Theorem 1 (after the rotation
+* `sharp_of_qStar`: in the word `q*`, `SharpBEMoving.beMoving_chamber_le` (after the rotation
   `R(u, v) = (v, 1 - u)`) gives the sharp bound, and least area at least `A₀` forces `x = w = 1`;
-* `theorem1`: occupancy (1) has least area at most `A₀`, and at least `A₀` forces `x = w = 1`;
-* `n6_02`, `n6_05`: the assembly forms for N6-02 and N6-05 with exactly six contacts (N6-05 by
-  `SixBoundaryThreeCaps.three_caps`; Corollary 2 and its convex-nonagon route are not used).
+* `twoSideUpper_le_A₀`: this placement has least area at most `A₀`, and at least `A₀` forces `x = w = 1`;
+* `twoSide_isOptimal_of_A₀_le`: with exactly six contacts, one free point in each side cap and the third inside the
+  anchor hexagon, least area at least `A₀` gives an optimal configuration.
 -/
 
 @[expose] public section
@@ -46,18 +45,12 @@ namespace Heilbronn.Nine.SixBoundaryTwoSideUpper
 
 open SixBoundary Cert Cert.Expr Cover
 
-/-- The hull octagon (3) `(A, B, C, X, D, F, Y, H)`. -/
+/-- The hull octagon `(A, B, C, X, D, F, Y, H)`. -/
 def octagonXY (a h b c d f : ℝ) (X Y : Point) : Fin 8 → Point :=
   ![ptA a, ptB b, ptC c, X, ptD d, ptF f, Y, ptH h]
 
-/-- The sharp word (14) `q* = (4, 3, 3, 2, 3, 4, 5, 4)`. -/
+/-- The sharp word `q* = (4, 3, 3, 2, 3, 4, 5, 4)`. -/
 def qStar : Fin 8 → Fin 8 := ![4, 3, 3, 2, 3, 4, 5, 4]
-
-/-- The 82 words of Section 2: radial words on the octagon (complement relation (12)) with the
-three `HCDF` tests (13) `q₇ ≥ 3` (`[HCQ] > 0`), `q₂ ≥ 2` (`[CDQ] > 0`), `q₅ ≥ 2`
-(`[FHQ] > 0`). -/
-def upperWords : Finset (Fin 8 → Fin 8) :=
-  (radialWords 8).filter fun q => 3 ≤ (q 7 : ℕ) ∧ 2 ≤ (q 2 : ℕ) ∧ 2 ≤ (q 5 : ℕ)
 
 /-! ### The hull octagon -/
 
@@ -502,7 +495,7 @@ theorem Oct.t567 {a h b c d f x y z w : ℝ} (H : Oct a h b c d f x y z w) :
   linarith []
 
 theorem Oct.convex {a h b c d f x y z w : ℝ} (H : Oct a h b c d f x y z w) :
-    IsConvexCCW (octagonXY a h b c d f (x, y) (z, w)) := by
+    IsConvexPolygon (octagonXY a h b c d f (x, y) (z, w)) := by
   intro i j k hij hjk
   fin_cases i <;> fin_cases j <;> simp only [Fin.reduceFinMk, Fin.reduceLT, Fin.isValue] at hij ⊢ <;>
     fin_cases k <;> simp only [Fin.reduceFinMk, Fin.reduceLT, Fin.isValue] at hjk ⊢
@@ -718,62 +711,28 @@ theorem cfg_area (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q)
   rw [triangleArea_eq] at this
   linarith
 
-theorem mem_lexTriples {t : ℕ × ℕ × ℕ} (ht : t ∈ Model.lexTriples) :
-    t.1 < t.2.1 ∧ t.2.1 < t.2.2 ∧ t.2.2 < 9 := by
-  simp only [Model.lexTriples, List.mem_flatMap, List.mem_range, List.mem_filterMap,
-    Option.ite_none_right_eq_some, Option.some.injEq] at ht
-  obtain ⟨a, _, b, _, c, hc, ⟨hab, hbc⟩, rfl⟩ := ht
-  exact ⟨hab, hbc, hc⟩
+theorem bnd_zero : Model.bnd 0 = 7 / 64 := by norm_num [Model.bnd]
 
-theorem orient_ne_zero {sg : Bool} {x : ℝ} (h : OrientHolds sg x) : x ≠ 0 := by
-  cases sg <;> simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at h <;>
-    [exact h.ne; exact h.ne']
+theorem bnd_one : Model.bnd 1 = 21 / 64 := by norm_num [Model.bnd]
 
-theorem orient_idx_ne {P : ℕ → Point} {sg : Bool} {i j k : ℕ}
-    (hs : OrientHolds sg (sarea (P i) (P j) (P k))) : i ≠ j ∧ j ≠ k ∧ i ≠ k := by
-  have hne := orient_ne_zero hs
-  refine ⟨?_, ?_, ?_⟩ <;> rintro rfl <;> apply hne <;> simp only [sarea] <;> ring
-
-/-- The strengthened cost of a known triangle is nonnegative (`s`, or `3s` with `Q` certified
-inside, by subdivision). -/
-theorem cost_nonneg (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q))
-    {tb : List SFact} (htb : AllHold (SFact.Holds (cfg a h b c d f X Y Q)) tb)
-    {t : ℕ × ℕ × ℕ} (ht : t ∈ Model.lexTriples) {sg : Bool} (hl : lookup tb t = some sg) :
-    0 ≤ (costAtom Model.pt Model.bnd (t, sg) (insideList tb [8] (t, sg)).length).eval
-      (zeta a h b c d f X.1 X.2 Y.1 Y.2 Q.1 Q.2) := by
-  rw [eval_costAtom]
-  simp only [ptEval_zeta]
-  set P := cfg a h b c d f X Y Q
-  obtain ⟨h1, h2, h3⟩ := mem_lexTriples ht
-  have hs := lookup_sound htb hl
-  have harea := cfg_area hmin (i := t.1) (j := t.2.1) (k := t.2.2) (by omega) (by omega) h3
-    (by omega) (by omega) (by omega)
-  rw [← sgArea_eq_abs hs] at harea
-  have hlen : (insideList tb [8] (t, sg)).length ≤ 1 :=
-    (List.length_filter_le _ _).trans (by simp)
-  rcases hn : (insideList tb [8] (t, sg)).length with _ | n
-  · simp only [Model.bnd, ite_true]; push_cast; linarith
-  · obtain ⟨j, hj⟩ := List.exists_mem_of_length_pos (show 0 < (insideList tb [8] (t, sg)).length
-      by omega)
-    obtain ⟨hj8, o1, o2, o3⟩ := insideList_sound htb hj
-    simp only [List.mem_cons, List.not_mem_nil, or_false] at hj8
-    subst hj8
-    obtain ⟨-, n1, n2⟩ := orient_idx_ne o1
-    obtain ⟨-, n3, -⟩ := orient_idx_ne o2
-    have q1 := cfg_area hmin (i := t.1) (j := t.2.1) (k := 8) (by omega) (by omega) (by omega)
-      (by omega) n1 n2
-    have q2 := cfg_area hmin (i := t.2.1) (j := t.2.2) (k := 8) (by omega) h3 (by omega)
-      (by omega) n3 (by omega)
-    have q3 := cfg_area hmin (i := t.2.2) (j := t.1) (k := 8) h3 (by omega) (by omega)
-      (by omega) (by omega) (by omega)
-    have := three_le_sgArea (e := 7 / 64) o1 o2 o3 q1 q2 q3
-    have hn0 : n + 1 ≠ 0 := by omega
-    simp only [Model.bnd, hn0, ite_false]; push_cast; linarith
+/-- The cost premises (`Cover.CostHyp`) with the single free point `Q`: every model triangle has
+doubled area at least `s = 7/64` (two free points inside never occur). -/
+theorem cfg_costHyp (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
+    CostHyp 9 [8] Model.bnd (cfg a h b c d f X Y Q) := by
+  refine ⟨fun j hj => ?_, by decide, fun i j k hi hj hk hij hjk hik => ?_, ?_,
+    fun _ _ _ j₁ j₂ _ _ _ _ hj₁ hj₂ h12 => ?_⟩
+  · simp only [List.mem_singleton] at hj
+    omega
+  · have := cfg_area hmin hi hj hk hij hjk hik
+    rw [bnd_zero]; push_cast; linarith
+  · rw [bnd_one, bnd_zero]; norm_num
+  · simp only [List.mem_singleton] at hj₁ hj₂
+    exact absurd (hj₁.trans hj₂.symm) h12
 
 /-- The plain cost of a known triangle is nonnegative. -/
 theorem plain_nonneg (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q))
     {tb : List SFact} (htb : AllHold (SFact.Holds (cfg a h b c d f X Y Q)) tb)
-    {t : ℕ × ℕ × ℕ} (ht : t ∈ Model.lexTriples) {sg : Bool} (hl : lookup tb t = some sg) :
+    {t : ℕ × ℕ × ℕ} (ht : t ∈ lexTriples 9) {sg : Bool} (hl : lookup tb t = some sg) :
     0 ≤ (Model.plainAtom (t, sg)).eval (zeta a h b c d f X.1 X.2 Y.1 Y.2 Q.1 Q.2) := by
   have e : (Model.plainAtom (t, sg)).eval (zeta a h b c d f X.1 X.2 Y.1 Y.2 Q.1 Q.2) =
       (costAtom Model.pt (fun _ => 7 / 64) (t, sg) 0).eval
@@ -788,37 +747,6 @@ theorem plain_nonneg (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X 
   rw [← sgArea_eq_abs hs] at harea
   push_cast; linarith
 
-/-- The facts of the radial word entry hold. -/
-theorem holds_orient {P : ℕ → Point} {i j k : ℕ} {sg : Bool} (_hij : i ≠ j) (_hjk : j ≠ k)
-    (_hik : i ≠ k) : SFact.Holds P (Model.orient i j k sg) ↔ OrientHolds sg (sarea (P i) (P j) (P k)) := by
-  unfold Model.orient
-  have c1 := sarea_cycle (P i) (P j) (P k)
-  have c2 := sarea_cycle (P j) (P k) (P i)
-  have s1 := sarea_swap₁₂ (P i) (P j) (P k)
-  have s2 := sarea_swap₂₃ (P i) (P j) (P k)
-  have s3 := sarea_swap₁₃ (P i) (P j) (P k)
-  split_ifs <;> simp only [SFact.Holds] <;>
-    first
-    | rw [c1]
-    | rw [c2, c1]
-    | rw [s1, orientHolds_not]
-    | rw [s2, orientHolds_not]
-    | rw [s3, orientHolds_not]
-
-theorem consistent_of_holds {P : ℕ → Point} {tb b : List SFact} (htb : AllHold (SFact.Holds P) tb)
-    (hb : AllHold (SFact.Holds P) b) : Model.consistent tb b = true := by
-  unfold Model.consistent
-  rw [List.all_eq_true]
-  intro f hf
-  rcases hl : lookup tb f.1 with _ | sg
-  · rfl
-  · have h1 := lookup_sound htb hl
-    have h2 := hb f hf
-    simp only [SFact.Holds] at h2
-    cases sg <;> cases hsg : f.2 <;> rw [hsg] at h2 <;>
-      simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at h1 h2 <;>
-      first | rfl | (exfalso; linarith)
-
 end Sound
 
 section Word
@@ -829,9 +757,9 @@ variable {a h b c d f : ℝ} {X Y Q : Point}
 theorem branch_holds {q : Fin 8 → ℕ} (hq : HasRadialWord (octagonXY a h b c d f X Y) Q q)
     (hne : ∀ i j : Fin 8, i ≠ j → sarea (octagonXY a h b c d f X Y i) (octagonXY a h b c d f X Y j) Q ≠ 0)
     (i : ℕ) (hi : i < 8) :
-    AllHold (SFact.Holds (cfg a h b c d f X Y Q)) (Model.branchFacts i (q ⟨i, hi⟩)) := by
+    AllHold (SFact.Holds (cfg a h b c d f X Y Q)) (branchFacts 8 8 i (q ⟨i, hi⟩)) := by
   intro f hf
-  simp only [Model.branchFacts, List.mem_map, List.mem_range] at hf
+  simp only [branchFacts, List.mem_map, List.mem_range] at hf
   obtain ⟨j, hj, rfl⟩ := hf
   have hm : (i + (j + 1)) % 8 < 8 := Nat.mod_lt _ (by norm_num)
   have him : i ≠ (i + (j + 1)) % 8 := by omega
@@ -852,7 +780,7 @@ theorem branch_holds {q : Fin 8 → ℕ} (hq : HasRadialWord (octagonXY a h b c 
 /-- The facts of a word entry `val` determine the entry. -/
 theorem word_of_branch {q : Fin 8 → ℕ} (hq : HasRadialWord (octagonXY a h b c d f X Y) Q q)
     (i : ℕ) (hi : i < 8) {val : ℕ} (hv1 : 1 ≤ val) (hv6 : val ≤ 6)
-    (hb : AllHold (SFact.Holds (cfg a h b c d f X Y Q)) (Model.branchFacts i val)) :
+    (hb : AllHold (SFact.Holds (cfg a h b c d f X Y Q)) (branchFacts 8 8 i val)) :
     q ⟨i, hi⟩ = val := by
   have get : ∀ j : ℕ, j < 7 → OrientHolds (decide (j + 1 ≤ val))
       (sarea (octagonXY a h b c d f X Y ⟨i, hi⟩) (octagonXY a h b c d f X Y (cyc ⟨i, hi⟩ (j + 1))) Q) := by
@@ -876,7 +804,7 @@ theorem word_of_branch {q : Fin 8 → ℕ} (hq : HasRadialWord (octagonXY a h b 
 
 end Word
 
-/-! ### The claims -/
+/-! ### The main steps -/
 
 section Claims
 
@@ -916,18 +844,17 @@ theorem oct_of_setting (hN : NAnchors a h b c d f) (hX : InCapR c d X) (hY : InC
     by linarith, by linarith, by linarith, by linarith [hX.1.2.1], hy, by linarith, hz,
     by linarith, by linarith, by linarith [hY.1.2.2.2], hCDX, hFHY⟩
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_UPPER:claim-octagon`). In the occupancy (1) with every
-doubled area at least `7/64`, the full hull is the strictly convex octagon (3)
-`A, B, C, X, D, F, Y, H` (counterclockwise) and `Q` is strictly inside it.
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_UPPER.md`, lines 71-81. -/
-theorem claim_octagon (hN : NAnchors a h b c d f)
+/-- In the two-side-upper placement with every doubled area at least `7/64`, the full hull is the
+strictly convex octagon `A, B, C, X, D, F, Y, H` (`octagonXY`, counterclockwise) and `Q` is
+strictly inside it. -/
+theorem octagonXY_hull (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y) (_hQ : Q ∈ unitSquare) (hQu : InUpperQuad h c d f Q)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
-    IsConvexCCW (octagonXY a h b c d f X Y) ∧ InPolygon (octagonXY a h b c d f X Y) Q := by
+    IsConvexPolygon (octagonXY a h b c d f X Y) ∧ InPolygon (octagonXY a h b c d f X Y) Q := by
   have H := oct_of_setting hN hX hY (Q := Q) (by linarith)
   exact ⟨H.convex, H.inPolygon hQu⟩
 
-/-- (8): `d ≥ s/M + s/(1-c) ≥ 4s/(1-b) > 1/2` in polynomial form. -/
+/-- `d ≥ s/M + s/(1-c) ≥ 4s/(1-b) > 1/2` in polynomial form. -/
 theorem half_lt_of_caps {m α d y b : ℝ} (hm : 0 < m) (hα : 0 < α) (hsum : m + α = 1 - b)
     (hb : 7 / 50 ≤ b) (hmy : 7 / 64 ≤ m * y) (hdy : 7 / 64 ≤ α * (d - y)) : 1 / 2 < d := by
   have h1 : 7 / 64 * (m + α) ≤ d * (m * α) := by
@@ -941,7 +868,7 @@ theorem half_lt_of_caps {m α d y b : ℝ} (hm : 0 < m) (hα : 0 < α) (hsum : m
   have hd0 : 0 < d := by nlinarith
   nlinarith
 
-/-- (10): from `(1 - f)[CDQ] + (1 - c)[DFQ] = [CDF](1 - r)` with `[CDF] ≤ 1 - f`, `r ≤ 1 - s`. -/
+/-- From `(1 - f)[CDQ] + (1 - c)[DFQ] = [CDF](1 - r)` with `[CDF] ≤ 1 - f`: `r ≤ 1 - s`. -/
 theorem upper_le {f c K r S1 S2 : ℝ} (hS1 : 7 / 64 ≤ S1) (hS2 : 7 / 64 ≤ S2)
     (i9 : (1 - f) * S1 + (1 - c) * S2 = K * (1 - r)) (hK1 : K ≤ 1 - f) (hK : 0 < K)
     (_hf1 : f ≤ 1) (hc1 : c < 1) : r ≤ 1 - 7 / 64 := by
@@ -952,7 +879,7 @@ theorem upper_le {f c K r S1 S2 : ℝ} (hS1 : 7 / 64 ≤ S1) (hS2 : 7 / 64 ≤ S
   have m4 := mul_lt_mul_of_pos_right (show 1 - r < 7 / 64 by linarith) hK
   nlinarith
 
-/-- The cap and anchor consequences (6)-(7). -/
+/-- The cap and anchor consequences of the common bounds. -/
 theorem common_scalar_a {a h b c d f x y z w : ℝ} (hN : NAnchors a h b c d f)
     (x1 : x ≤ 1) (y0 : 0 ≤ y) (z0 : 0 ≤ z) (w1 : w ≤ 1) (hxc : c < x) (hwh : h < w)
     (hABC : 7 / 64 ≤ a * (c - b)) (hABH : 7 / 64 ≤ b * (h - a))
@@ -993,7 +920,7 @@ theorem common_scalar_a {a h b c d f x y z w : ℝ} (hN : NAnchors a h b c d f)
   exact ⟨hxc', hwh', hdy', hfz', by linarith, by linarith, by linarith, by linarith, has, hbs,
     by linarith, by linarith, q1', q2'⟩
 
-/-- The scalar part of the common bounds (6)-(10). -/
+/-- The scalar part of the common bounds. -/
 theorem common_scalar {a h b c d f x y z w r t S1 S2 S3 : ℝ} (hN : NAnchors a h b c d f)
     (_x0 : 0 ≤ x) (x1 : x ≤ 1) (y0 : 0 ≤ y) (z0 : 0 ≤ z) (w1 : w ≤ 1) (q0 : 0 ≤ r) (_q1 : r ≤ 1)
     (q2 : 0 ≤ t) (_q3 : t ≤ 1) (hxc : c < x) (hwh : h < w)
@@ -1035,13 +962,12 @@ theorem common_scalar {a h b c d f x y z w r t S1 S2 S3 : ℝ} (hN : NAnchors a 
     ⟨ha7, hb7⟩, ⟨hd2, hf2, by linarith, by linarith, by linarith, by linarith⟩,
     ⟨by linarith, hr1, by linarith, ht1⟩⟩
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_UPPER:claim-common-bounds`). In the occupancy (1) with every
-doubled area at least `s = 7/64` (`L = h - a`, `M = c - b`, `X = (x, y)`, `Y = (z, w)`,
-`Q = (r, t)`): (4) `aM, bL, My, Lz ≥ s`; (5) `[CXD] = d(x-c) - (1-c)y ≥ s`,
-`[FYH] = (1-h)(f-z) - f(1-w) ≥ s`; (6) `x - c, w - h, d - y, f - z, y, z ≥ s`, `h, c ≤ 1 - s`,
-`a, b ≥ s`; (7) `a, b ≥ 7/50`; (8) `d, f > 1/2`, `h, c > 1/2`, `L, M ≥ s`;
-(10) `s ≤ r, t ≤ 1 - s`. `docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_UPPER.md`, lines 83-159. -/
-theorem claim_common_bounds (hN : NAnchors a h b c d f)
+/-- In the two-side-upper placement with every doubled area at least `s = 7/64` (`L = h - a`,
+`M = c - b`, `X = (x, y)`, `Y = (z, w)`, `Q = (r, t)`): `aM, bL, My, Lz ≥ s`;
+`[CXD] = d(x-c) - (1-c)y ≥ s` and `[FYH] = (1-h)(f-z) - f(1-w) ≥ s`;
+`x - c, w - h, d - y, f - z, y, z ≥ s`, `h, c ≤ 1 - s`, `a, b ≥ s`; `a, b ≥ 7/50`;
+`d, f > 1/2`, `h, c > 1/2`, `L, M ≥ s`; and `s ≤ r, t ≤ 1 - s`. -/
+theorem common_bounds (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y) (hQ : Q ∈ unitSquare) (hQu : InUpperQuad h c d f Q)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     (7 / 64 ≤ a * (c - b) ∧ 7 / 64 ≤ b * (h - a) ∧ 7 / 64 ≤ (c - b) * X.2 ∧
@@ -1110,17 +1036,13 @@ theorem word_range {q : Fin 8 → ℕ} (hpoly : InPolygon (octagonXY a h b c d f
     simp only [show (8 - 1 : ℕ) = 7 by norm_num] at h2 this
     linarith
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_UPPER:claim-80-certificates`). Geometric conclusion of the
-certificate package: in the occupancy (1) with every doubled area at least `7/64` and the
-normalization `f ≤ d`, the radial word of `Q` on the octagon (3) is `q*`. (Eighty fixed cubic
-certificates, 14,253 positive terms, with cube bounds at most `-661437830559/671088640000`,
-exclude the other 81 words; none applies to `q*`. The kernel checks the word cover
-`Trees.tree`, whose splits are the word entries of `Q` and whose leaves are the certificates
-and the sharp word.)
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_UPPER.md`, lines 210-307.
-Uses: SIX_BOUNDARY_TWO_SIDE_UPPER:claim-common-bounds, SIX_BOUNDARY_TWO_SIDE_UPPER:claim-82-words,
-SIX_BOUNDARY_SINGLE_SIDE:claim-pair-line-sign -/
-theorem claim_80_certificates (hN : NAnchors a h b c d f)
+/-- The geometric conclusion of the certificates: in the two-side-upper placement with every
+doubled area at least `7/64` and the normalization `f ≤ d`, the radial word of `Q` on the octagon
+is `q*`. (Eighty fixed cubic certificates, 14,253 positive terms, with cube bounds at most
+`-661437830559/671088640000`, exclude the other 81 words; none applies to `q*`. The kernel checks
+the word cover `Trees.tree`, whose splits are the word entries of `Q` and whose leaves are the
+certificates and the sharp word.) -/
+theorem radialWord_eq_qStar (hN : NAnchors a h b c d f)
     (hfd : f ≤ d) (hX : InCapR c d X) (hY : InCapL f h Y) (hQ : Q ∈ unitSquare)
     (hQu : InUpperQuad h c d f Q)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) (q : Fin 8 → ℕ)
@@ -1128,10 +1050,10 @@ theorem claim_80_certificates (hN : NAnchors a h b c d f)
     q = fun i => (qStar i : ℕ) := by
   by_contra hne
   have hpos : 0 < minTriangleArea (nConfig a h b c d f X Y Q) := by linarith
-  obtain ⟨hconv, hpoly⟩ := claim_octagon hN hX hY hQ hQu hmin
+  obtain ⟨hconv, hpoly⟩ := octagonXY_hull hN hX hY hQ hQu hmin
   obtain ⟨-, -, ⟨hxc, hwh, hdy, hfz, hy, hz, hh1, hc1, has, hbs⟩, ⟨ha7, hb7⟩,
     ⟨hd2, hf2, hh2, hc2, hL, hM⟩, ⟨hr1, hr2, ht1, ht2⟩⟩ :=
-    claim_common_bounds hN hX hY hQ hQu hmin
+    common_bounds hN hX hY hQ hQu hmin
   have hN' := hN
   obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN'
   obtain ⟨⟨x0, x1, y0, y1⟩, -⟩ := hX
@@ -1182,11 +1104,7 @@ theorem claim_80_certificates (hN : NAnchors a h b c d f)
     simp only [Model.spec, Model.atoms, List.mem_append] at he
     rcases he with (he | he) | he
     · exact hfac e he
-    · simp only [Model.costs, List.mem_map] at he
-      obtain ⟨t, ht, rfl⟩ := he
-      rcases hl : lookup (Model.base ++ fs) t with _ | sg
-      · simp
-      · exact cost_nonneg hmin htb ht hl
+    · exact (cfg_costHyp hmin).lookupCosts_nonneg (fun i _ => ptEval_zeta i) htb e he
     · simp only [Model.plains, List.mem_map] at he
       obtain ⟨t, ht, rfl⟩ := he
       rcases hl : lookup (Model.base ++ fs) t with _ | sg
@@ -1198,7 +1116,7 @@ theorem claim_80_certificates (hN : NAnchors a h b c d f)
       simp only [Model.spec, Model.branches]
       split_ifs with hi
       · have hb := branch_holds hq hne0 i hi
-        refine ⟨Model.branchFacts i (q ⟨i, hi⟩), ?_, hb⟩
+        refine ⟨branchFacts 8 8 i (q ⟨i, hi⟩), ?_, hb⟩
         rw [List.mem_filterMap]
         obtain ⟨r1, r6⟩ := word_range hpoly hq ⟨i, hi⟩
         refine ⟨q ⟨i, hi⟩, List.mem_map.2 ⟨q ⟨i, hi⟩ - 1, List.mem_range.2 (by omega), by omega⟩, ?_⟩
@@ -1211,7 +1129,7 @@ theorem claim_80_certificates (hN : NAnchors a h b c d f)
     have htb := hbase.append hfs
     apply hne
     funext i
-    have hall : AllHold (SFact.Holds P) (Model.branchFacts i.val (Model.qStarL.getD i.val 0)) :=
+    have hall : AllHold (SFact.Holds P) (branchFacts 8 8 i.val (Model.qStarL.getD i.val 0)) :=
       fun g hg => lookup_sound htb (hs i.val i.isLt g hg)
     have key := word_of_branch hq i.val i.isLt (val := Model.qStarL.getD i.val 0)
       (by fin_cases i <;> decide) (by fin_cases i <;> decide) hall
@@ -1230,45 +1148,13 @@ theorem oct_gen (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q))
     show cfg a h b c d f X Y Q 8 = Q from rfl, h0, abs_zero] at this
   norm_num at this
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_UPPER:claim-82-words`). The sharp word `q*` is one of the
-words of Section 2, and in the occupancy (1) with every doubled area at least `7/64` the radial
-word (11) of `Q` on the octagon (3) exists and is one of them (the complement relation (12) and
-the three `HCDF` tests (13)). (The count `82` is checked by the word cover `Trees.tree`, whose
-leaves are exactly these words; it is not restated here.)
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_UPPER.md`, lines 161-208.
-Uses: SIX_BOUNDARY_SINGLE_SIDE:claim-radial-word, SIX_BOUNDARY_TWO_SIDE_UPPER:claim-octagon -/
-theorem claim_82_words :
-    qStar ∈ upperWords ∧
-    ∀ {a h b c d f : ℝ} {X Y Q : Point}, NAnchors a h b c d f → InCapR c d X → InCapL f h Y →
-      Q ∈ unitSquare → InUpperQuad h c d f Q →
-      7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q) →
-      ∃ q ∈ upperWords, HasRadialWord (octagonXY a h b c d f X Y) Q fun i => (q i : ℕ) := by
-  refine ⟨by simp only [upperWords, radialWords, Finset.mem_filter, Finset.mem_univ, true_and]; decide,
-    fun {a h b c d f X Y Q} hN hX hY hQ hQu hmin => ?_⟩
-  obtain ⟨hconv, hpoly⟩ := claim_octagon hN hX hY hQ hQu hmin
-  obtain ⟨r, hr, hrw⟩ := claim_radial_word _ Q (by norm_num) hconv hpoly (oct_gen hmin)
-  have hrange : ∀ i, r i < 8 := fun i => by have := hrw.1 i; omega
-  refine ⟨fun i => ⟨r i, hrange i⟩, ?_, hr⟩
-  have hHC : 3 ≤ r 7 := (hr 7 3 (by norm_num) (by norm_num)).1 hQu.1
-  have hCD : 2 ≤ r 2 := (hr 2 2 (by norm_num) (by norm_num)).1 hQu.2.1
-  have hFH : 2 ≤ r 5 := (hr 5 2 (by norm_num) (by norm_num)).1 hQu.2.2.2
-  simp only [upperWords, radialWords, Finset.mem_filter, Finset.mem_univ, true_and]
-  exact ⟨hrw, hHC, hCD, hFH⟩
-
-/-- The rotation `R(u, v) = (v, 1 - u)` keeps every signed area. -/
-theorem sarea_rot (p q r : Point) :
-    sarea (p.2, 1 - p.1) (q.2, 1 - q.1) (r.2, 1 - r.1) = sarea p q r := by
-  simp only [sarea]; ring
-
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_UPPER:claim-sharp-word`). In the occupancy (1), if `Q` has
-the word `q*`, then the eleven oriented areas of the simultaneous B/E chamber are positive —
-`[CXB], [CXD], [CAB], [FYH], [ABH], [AYH]` (hull order) and `[CFQ], [FBQ], [XQY], [ADQ], [DHQ]`
-(20) (word `q*`) — and, after the rotation `R(u, v) = (v, 1 - u)` with the relabelling
-(18)-(19), Theorem 1 of `SHARP_B_E_MOVING.md` gives least area at most `A₀`; at least `A₀`
-forces `x = w = 1`. (The normalization `f ≤ d` is not needed here.)
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_UPPER.md`, lines 309-382.
-Uses: SHARP_B_E_MOVING:Theorem1 -/
-theorem claim_sharp_word (hN : NAnchors a h b c d f)
+/-- In the two-side-upper placement, if `Q` has the word `q*`, then the eleven oriented areas of
+the simultaneous B/E chamber are positive — `[CXB], [CXD], [CAB], [FYH], [ABH], [AYH]` (hull
+order) and `[CFQ], [FBQ], [XQY], [ADQ], [DHQ]` (word `q*`) — and, after the rotation
+`R(u, v) = (v, 1 - u)` with the matching relabelling, `SharpBEMoving.beMoving_chamber_le` gives least area
+at most `A₀`; at least `A₀` forces `x = w = 1`. (The normalization `f ≤ d` is not needed
+here.) -/
+theorem sharp_of_qStar (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y) (hQ : Q ∈ unitSquare)
     (hQu : InUpperQuad h c d f Q)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q))
@@ -1280,7 +1166,7 @@ theorem claim_sharp_word (hN : NAnchors a h b c d f)
       0 < sarea (ptA a) (ptD d) Q ∧ 0 < sarea (ptD d) (ptH h) Q) ∧
     minTriangleArea (nConfig a h b c d f X Y Q) ≤ A₀ ∧
     (A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Q) → X.1 = 1 ∧ Y.2 = 1) := by
-  obtain ⟨hconv, hpoly⟩ := claim_octagon hN hX hY hQ hQu hmin
+  obtain ⟨hconv, hpoly⟩ := octagonXY_hull hN hX hY hQ hQu hmin
   have hgen := oct_gen hmin
   have hpos : 0 < minTriangleArea (nConfig a h b c d f X Y Q) := by linarith
   obtain ⟨⟨hxc, hy, hyd, -⟩, ⟨hz, hzf, hwh, -⟩⟩ := cap_orders hN hX hY hpos
@@ -1347,7 +1233,7 @@ theorem claim_sharp_word (hN : NAnchors a h b c d f)
     refine ⟨⟨by linarith, by linarith, by linarith⟩, ⟨hy, hyd, hdh, hh⟩, ⟨ha, hah⟩,
       ⟨by linarith, by linarith, by linarith⟩, ⟨by linarith, by linarith⟩,
       ⟨by linarith, by linarith⟩, ⟨q2, q3, by linarith, by linarith⟩⟩
-  have K := SharpBEMoving.theorem1 hyp hch
+  have K := SharpBEMoving.beMoving_chamber_le hyp hch
   refine ⟨signs, ?_, fun hA => ?_⟩
   · obtain ⟨i, hi⟩ := K.1
     rw [harea i] at hi
@@ -1361,16 +1247,11 @@ theorem claim_sharp_word (hN : NAnchors a h b c d f)
     obtain ⟨he, hη, -⟩ := K.2 hall
     exact ⟨by linarith, by linarith⟩
 
-/-- **Theorem 1** (`SIX_BOUNDARY_TWO_SIDE_UPPER:Theorem1`). In the occupancy (1) — one free point
-`X` in the cap `CD(1,0)`, one `Y` in the cap `FH(0,1)`, the third `Q` inside `HCDF` — the least
-area is at most `A₀`; least area at least `A₀` forces `x = w = 1` (both cap points on the square
-boundary; the identification with the optimal configuration is `SHARP_B_E_MOVING.md` Theorem 1
-and is not restated here).
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_UPPER.md`, lines 23-37.
-Uses: SIX_BOUNDARY_HULL:claim-transposition, SIX_BOUNDARY_TWO_SIDE_UPPER:claim-octagon,
-SIX_BOUNDARY_SINGLE_SIDE:claim-radial-word, SIX_BOUNDARY_TWO_SIDE_UPPER:claim-82-words,
-SIX_BOUNDARY_TWO_SIDE_UPPER:claim-80-certificates, SIX_BOUNDARY_TWO_SIDE_UPPER:claim-sharp-word -/
-theorem theorem1 (hN : NAnchors a h b c d f)
+/-- With one free point `X` in the cap `CD(1,0)`, one `Y` in the cap `FH(0,1)` and the third `Q`
+inside `HCDF`, the least area is at most `A₀`; least area at least `A₀` forces `x = w = 1` (both
+cap points on the square boundary; the identification with the optimal configuration is
+`SharpBEMoving.beMoving_chamber_le` and is not restated here). -/
+theorem twoSideUpper_le_A₀ (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y) (hQ : Q ∈ unitSquare)
     (hQu : InUpperQuad h c d f Q) :
     minTriangleArea (nConfig a h b c d f X Y Q) ≤ A₀ ∧
@@ -1382,11 +1263,11 @@ theorem theorem1 (hN : NAnchors a h b c d f)
       minTriangleArea (nConfig a h b c d f X Y Q) ≤ A₀ ∧
         (A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Q) → X.1 = 1 ∧ Y.2 = 1) := by
     intro a h b c d f X Y Q hN hfd hX hY hQ hQu hmin
-    obtain ⟨hconv, hpoly⟩ := claim_octagon hN hX hY hQ hQu hmin
-    obtain ⟨r, hr, -⟩ := claim_radial_word _ Q (by norm_num) hconv hpoly (oct_gen hmin)
-    have := claim_80_certificates hN hfd hX hY hQ hQu hmin r hr
+    obtain ⟨hconv, hpoly⟩ := octagonXY_hull hN hX hY hQ hQu hmin
+    obtain ⟨r, hr, -⟩ := exists_radialWord _ Q (by norm_num) hconv hpoly (oct_gen hmin)
+    have := radialWord_eq_qStar hN hfd hX hY hQ hQu hmin r hr
     subst this
-    exact (claim_sharp_word hN hX hY hQ hQu hmin hr).2
+    exact (sharp_of_qStar hN hX hY hQ hQu hmin hr).2
   by_cases h7 : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q)
   swap
   · push Not at h7
@@ -1394,27 +1275,25 @@ theorem theorem1 (hN : NAnchors a h b c d f)
   rcases le_total f d with hfd | hdf
   · exact main hN hfd hX hY hQ hQu h7
   -- the transposed case
-  have T := claim_transposition a h b c d f X Y Q
+  have T := transpose_invariant a h b c d f X Y Q
   have hswap : minTriangleArea (nConfig b c a h f d (transpose Y) (transpose X) (transpose Q)) =
       minTriangleArea (nConfig a h b c d f X Y Q) := by
     rw [← T.2.2.1, show nConfig b c a h f d (transpose Y) (transpose X) (transpose Q) =
       nConfig b c a h f d (transpose X) (transpose Y) (transpose Q) ∘ Equiv.swap 6 7 by
       funext i; fin_cases i <;> rfl, minTriangleArea_comp_perm]
-  have k := main (T.1.1 hN) hdf ((claim_transposition a h b c d f Y X Q).2.2.2.2.2.2.1.1 hY)
-    (T.2.2.2.2.2.1.1 hX) ((claim_transposition a h b c d f Q X Y).2.1.1 hQ)
-    ((claim_transposition a h b c d f Q X Y).2.2.2.2.2.2.2.2.2.2.2.1.1 hQu) (by rw [hswap]; exact h7)
+  have k := main (T.1.1 hN) hdf ((transpose_invariant a h b c d f Y X Q).2.2.2.2.2.2.1.1 hY)
+    (T.2.2.2.2.2.1.1 hX) ((transpose_invariant a h b c d f Q X Y).2.1.1 hQ)
+    ((transpose_invariant a h b c d f Q X Y).2.2.2.2.2.2.2.2.2.2.2.1.1 hQu) (by rw [hswap]; exact h7)
   rw [hswap] at k
   exact ⟨k.1, fun h => ⟨(k.2 h).2, (k.2 h).1⟩⟩
 
 end Claims
 
-/-- **Case N6-02** (`(n_L, n_T, n_R; n_I) = (1,0,1;1)`, `docs/proof/nine/UNRESTRICTED.md`, Section 4),
-assembly form: an N configuration with exactly six contacts, one free point in each side cap and
-the third strictly inside the anchor hexagon, with least area at least `A₀`, is optimal (in fact
-impossible: the third point is above `HC` (Theorem 1) or below it
-(`SIX_BOUNDARY_TWO_SIDE_COMPLETION.md` Theorem 1), and both force `x = 1`).
-Uses: SIX_BOUNDARY_TWO_SIDE_UPPER:Theorem1, SIX_BOUNDARY_TWO_SIDE_COMPLETION:Theorem1 -/
-theorem n6_02 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- An N configuration with exactly six contacts, one free point in each side cap and the third
+strictly inside the anchor hexagon, with least area at least `A₀`, is optimal (in fact
+impossible: the third point is above `HC` (`twoSideUpper_le_A₀`) or below it
+(`SixBoundaryTwoSideCompletion.twoSideLower_lt_A₀`), and both force `x = 1`). -/
+theorem twoSide_isOptimal_of_A₀_le {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y) (hZsq : Z ∈ unitSquare)
     (hZ : InHexagon a h b c d f Z) (hsix : ExactlySixContacts X Y Z)
     (hmin : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
@@ -1422,26 +1301,9 @@ theorem n6_02 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
   exfalso
   have hX1 : X.1 ≠ 1 := ne_of_lt hsix.1.2.1
   by_cases hup : 0 < sarea (ptH h) (ptC c) Z
-  · exact hX1 ((theorem1 hN hX hY hZsq ⟨hup, hZ.2.2.1, hZ.2.2.2.1, hZ.2.2.2.2.1⟩).2 hmin).1
+  · exact hX1 ((twoSideUpper_le_A₀ hN hX hY hZsq ⟨hup, hZ.2.2.1, hZ.2.2.2.1, hZ.2.2.2.2.1⟩).2 hmin).1
   · have hT : InT0 h c Z := ⟨hZsq.1, hZsq.2.2.1, by
       have := sarea_swap₁₂ (ptH h) (ptC c) Z; push Not at hup; linarith⟩
-    exact absurd (SixBoundaryTwoSideCompletion.theorem1 hN hX hY hZsq hT hsix) (not_lt.2 hmin)
-
-/-- **Case N6-05** (`(n_L, n_T, n_R; n_I) = (1,1,1;0)`, `docs/proof/nine/UNRESTRICTED.md`, Section 4),
-assembly form: an N configuration with one free point in each of the caps `R`, `T`, `L` has least
-area below `7/128 < A₀` (`SixBoundaryThreeCaps.three_caps`, nine triangles; the convex-nonagon
-route of the manuscript is not used).
-Uses: SIX_BOUNDARY_THREE_CAPS:three-caps -/
-theorem n6_05 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
-    (hX : InCapR c d X) (hY : InCapL f h Y) (hZ : InCapT d f Z)
-    (_hsix : ExactlySixContacts X Y Z)
-    (hmin : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
-    False := by
-  have hXc : 0 ≤ sarea (c, 0) X (1, d) := by rw [sarea_swap₂₃]; linarith [hX.2]
-  have hYc : 0 ≤ sarea (f, 1) Y (0, h) := by rw [sarea_swap₂₃]; linarith [hY.2]
-  have hZc : 0 ≤ sarea (1, d) Z (f, 1) := by rw [sarea_swap₂₃]; linarith [hZ.2]
-  have := SixBoundaryThreeCaps.three_caps hN hX.1 hY.1 hZ.1 hXc hYc hZc
-  linarith [A₀_bounds.1]
-
+    exact absurd (SixBoundaryTwoSideCompletion.twoSideLower_lt_A₀ hN hX hY hZsq hT hsix) (not_lt.2 hmin)
 
 end Heilbronn.Nine.SixBoundaryTwoSideUpper

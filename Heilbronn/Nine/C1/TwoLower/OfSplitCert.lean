@@ -2,14 +2,14 @@ module
 
 public import Heilbronn.Nine.C1.TwoLower.Quart
 
-/-! # The Bernstein certificate of `docs/proof/nine/C1_TOP_CAP_OF_SPLIT.md` §3
+/-! # The Bernstein certificate of the C1 top-cap split along `OF`
 
 Variables `H₀, C₀` = `var 0, 1` in `[0, 1]`: `c = ρ + (1 - ρ)C₀`, `p = ρ + (c - ρ)H₀`,
 `D = p(48p - 266s)`, `ℓ = 23sc(p + c)`, `W = (c - s)D - ℓ`; `f = (ℓ + Wθ)/D`, `θ ∈ [0, 1]`,
 runs over `[f₀, c - s]`. The five Bernstein coefficients `N₀, …, N₄` in `θ` of `D⁴c²R`
-(`Quart.eN`) are negative on each of the three rectangles of the manuscript (`C₀ ≤ 1/2`;
-`C₀ ≥ 1/2, H₀ ≤ 1/2`; `C₀ ≥ 1/2, H₀ ≥ 1/2`), one Bernstein check of degree `(10, 14)` per
-theorem (`scripts/nine/c1_two_lower/quart.py`). -/
+(`Quart.eN`) are negative on each of the three rectangles `C₀ ≤ 1/2`;
+`C₀ ≥ 1/2, H₀ ≤ 1/2`; `C₀ ≥ 1/2, H₀ ≥ 1/2`, one Bernstein check of degree `(10, 14)` per
+theorem. Used by `C1TopCapOfSplit.of_N_neg`. -/
 
 @[expose] public section
 

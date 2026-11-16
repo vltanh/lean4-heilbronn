@@ -2,38 +2,36 @@ module
 
 public import Heilbronn.Nine.Sharp.BCMoving
 
-/-! # The sharp chamber with B and E both moving inward (`docs/proof/nine/SHARP_B_E_MOVING.md`)
+/-! # The sharp chamber with B and E both moving inward
 
-**Role.** Component of the primary route: the equality branch of rows N6-02/N6-05
-(`SIX_BOUNDARY_TWO_SIDE_UPPER`, Section 5, after the rotation `R(u,v) = (v,1-u)`). Not used by the
-rows N6-03/04/06/07.
+The sharp chamber of `Chamber.chamber_le` with the bottom contact `B = (b,ε)` and the opposite
+right contact `E = (1-η,e)` moved inward. `SixBoundaryTwoSideUpper.sharp_of_qStar` uses
+`beMoving_chamber_le`, after the rotation `R(u,v) = (v,1-u)`.
 
-**Setting.** The sharp chamber of `HAND_PROOF.md` with the bottom contact `B = (b,ε)` and the
-opposite right contact `E = (1-η,e)` moved inward; `A=(0,a), C=(c,0), D=(1,d), F=(f,1), G=(g,1),
-H=(0,h)`, `O=(x,y)` in the square, and the orders (1)
-`0<a<h<1, 0<b<c≤f<1, 0<g<f, a≤d<e<1, 0≤ε≤a, 0≤η≤1-f` (the extra orders `a ≤ d`, `c ≤ f` and the
-two displacement bounds are part of the theorem's scope). The chamber is positivity of the eleven
-oriented doubled areas of the table. Constants: `s = 2A₀`, `λ = (77√65-615)/20` (equal to
-`sharpLambda`); `F₀ = sharpG`, `Φ = sharpPhi` of `SHARP_BC_MOVING`.
+**Setting.** `A=(0,a), C=(c,0), D=(1,d), F=(f,1), G=(g,1), H=(0,h)`, `O=(x,y)` in the square, and
+the orders `0<a<h<1, 0<b<c≤f<1, 0<g<f, a≤d<e<1, 0≤ε≤a, 0≤η≤1-f` (`BEMovingHyp`; the extra orders
+`a ≤ d`, `c ≤ f` and the two displacement bounds are part of the theorem's scope). The chamber is
+positivity of the eleven oriented doubled areas (`chamberSarea_beMovingConfig`). Constants: `s = 2A₀`,
+`λ = (77√65-615)/20` (equal to `sharpLambda`, `SharpBCMoving.sharpLambda_eq`); `F₀ = sharpG`,
+`Φ = sharpPhi` of `SharpBCMoving`.
 
 **Results.**
-* `claim_lambda` (2): `λ = (77√65-615)/20` is `sharpLambda`, `s > 7/64`, `0 < λ < 3/10`.
-* `claim_scalar` (3): `Φ(u,v) + λ(F₀(u,v) - s) ≤ 0` for `0 < u, v < 1/2`, equality only at
+* `phi_add_le_zero`: `Φ(u,v) + λ(F₀(u,v) - s) ≤ 0` for `0 < u, v < 1/2`, equality only at
   `u = v = p₀`.
-* `eq4`: the factorization `p{Φ(p,p) + λ(F₀(p,p) - s)} = (6+5λ)(p-p₀)²(p-q₀)`,
+* `phi_diag_factorization`: the factorization `p{Φ(p,p) + λ(F₀(p,p) - s)} = (6+5λ)(p-p₀)²(p-q₀)`,
   `q₀ = (16257+1889√65)/36104 > 1/2`.
-* `claim_chamber_formulas`: the eleven oriented doubled areas.
-* `claim_losses` (7), (10): `s ≤ F₀ + 2uε + 2vη - εη` and `Φ ≥ εc(1-y) + ηx(1-d)`.
-* `claim_coefficients` (11): `c(1-y) > (3/5)u`, `x(1-d) > (3/5)v`.
-* `theorem1`: minimum of the eleven areas `≤ A₀`; if all are `≥ A₀` then `ε = η = 0` and the
+* `chamberSarea_beMovingConfig`: the eleven oriented doubled areas.
+* `Data.losses`: `s ≤ F₀ + 2uε + 2vη - εη` and `Φ ≥ εc(1-y) + ηx(1-d)`, and the coefficient bounds
+  `c(1-y) > (3/5)u`, `x(1-d) > (3/5)v`.
+* `beMoving_chamber_le`: minimum of the eleven areas `≤ A₀`; if all are `≥ A₀` then `ε = η = 0` and the
   configuration is the sharp configuration.
 
 The proofs go through `Data`, the hypotheses and the eleven bounds as plain real inequalities
-(with a general threshold `s`). The two coefficient bounds (11) are one lemma, `coeff_bound`,
-applied twice with the roles of `(u, v, α, β, x, 1-y, c, 1-d)` exchanged.
+(with a general threshold `s`). The two coefficient bounds are one lemma, `coeff_bound`, applied
+twice with the roles of `(u, v, α, β, x, 1-y, c, 1-d)` exchanged.
 
-Implicit in the manuscript: the claims inside the proof are stated under the proof's standing
-assumption "all eleven displayed doubled areas are at least `s`" (which implies the chamber).
+The intermediate claims are stated under the assumption "all eleven doubled areas are at least
+`s`" (which implies the chamber).
 -/
 
 @[expose] public section
@@ -44,33 +42,23 @@ namespace Heilbronn.Nine.SharpBEMoving
 open Heilbronn.Nine.SharpBCMoving
 
 /-- The B/E-moving configuration: `B = (b,ε)`, `E = (1-η,e)`, the other points as in
-`HAND_PROOF.md`, in the order `A, B, C, D, E, F, G, H, O`. -/
+`baseConfig`, in the order `A, B, C, D, E, F, G, H, O`. -/
 def beMovingConfig (a b c d e f g h ε η x y : ℝ) : Fin 9 → Point :=
   sharpConfig (0, a) (b, ε) (c, 0) (1, d) (1 - η, e) (f, 1) (g, 1) (0, h) (x, y)
 
-/-- The hypotheses (1) of Theorem 1 other than the chamber:
+/-- The hypotheses of `beMoving_chamber_le` other than the chamber:
 `0<a<h<1`, `0<b<c≤f<1`, `0<g<f`, `a≤d<e<1`, `0≤ε≤a`, `0≤η≤1-f`, and `O ∈ [0,1]²`. -/
 def BEMovingHyp (a b c d e f g h ε η x y : ℝ) : Prop :=
   (0 < a ∧ a < h ∧ h < 1) ∧ (0 < b ∧ b < c ∧ c ≤ f ∧ f < 1) ∧ (0 < g ∧ g < f) ∧
     (a ≤ d ∧ d < e ∧ e < 1) ∧ (0 ≤ ε ∧ ε ≤ a) ∧ (0 ≤ η ∧ η ≤ 1 - f) ∧
     ((x, y) : Point) ∈ unitSquare
 
-/-- `q₀ = (16257+1889√65)/36104`, the third root in the factorization (4). -/
+/-- `q₀ = (16257+1889√65)/36104`, the third root in the factorization `phi_diag_factorization`. -/
 def q₀ : ℝ := (16257 + 1889 * Real.sqrt 65) / 36104
 
-/-- **Claim** (`SHARP_B_E_MOVING:claim-lambda`). Equation (2) and the line after it: the weight
-`λ = (77√65-615)/20` equals `(8-39p₀)/(6-10p₀)`, `s = 2A₀ = (9√65-55)/160`, `s > 7/64` and
-`0 < λ < 3/10`. `docs/proof/nine/SHARP_B_E_MOVING.md`, lines 57-68. -/
-theorem claim_lambda :
-    sharpLambda = (77 * Real.sqrt 65 - 615) / 20 ∧ sharpS = (9 * Real.sqrt 65 - 55) / 160 ∧
-      7 / 64 < sharpS ∧ 0 < sharpLambda ∧ sharpLambda < 3 / 10 := by
-  obtain ⟨h1, -, h3, h4⟩ := sharp_bounds
-  exact ⟨sharpLambda_eq, sharpS_eq, h1, by linarith, h4⟩
-
-/-- **Claim** (`SHARP_B_E_MOVING:eq4`). For `p ≠ 0`,
-`p{Φ(p,p) + λ(F₀(p,p) - s)} = (6+5λ)(p-p₀)²(p-q₀)` with `q₀ = (16257+1889√65)/36104 > 1/2`.
-`docs/proof/nine/SHARP_B_E_MOVING.md`, lines 94-107. -/
-theorem eq4 {p : ℝ} (hp : p ≠ 0) :
+/-- For `p ≠ 0`, `p{Φ(p,p) + λ(F₀(p,p) - s)} = (6+5λ)(p-p₀)²(p-q₀)`, and
+`q₀ = (16257+1889√65)/36104 > 1/2`. -/
+theorem phi_diag_factorization {p : ℝ} (hp : p ≠ 0) :
     p * (sharpPhi sharpS p p + sharpLambda * (sharpG p p - sharpS)) =
         (6 + 5 * sharpLambda) * (p - p₀) ^ 2 * (p - q₀) ∧ 1 / 2 < q₀ := by
   refine ⟨?_, half_lt_sharpQ0⟩
@@ -79,20 +67,18 @@ theorem eq4 {p : ℝ} (hp : p ≠ 0) :
   field_simp
   ring
 
-/-- **Claim** (`SHARP_B_E_MOVING:claim-scalar`). Equation (3): for `0 < u, v < 1/2`,
-`Φ(u,v) + λ(F₀(u,v) - s) ≤ 0`, and equality forces `u = v = p₀`.
-`docs/proof/nine/SHARP_B_E_MOVING.md`, lines 55-107. -/
-theorem claim_scalar {u v : ℝ} (hu : 0 < u) (hu2 : u < 1 / 2) (hv : 0 < v) (hv2 : v < 1 / 2) :
+/-- For `0 < u, v < 1/2`, `Φ(u,v) + λ(F₀(u,v) - s) ≤ 0`, and equality forces `u = v = p₀`
+(`phi_scalar`). -/
+theorem phi_add_le_zero {u v : ℝ} (hu : 0 < u) (hu2 : u < 1 / 2) (hv : 0 < v) (hv2 : v < 1 / 2) :
     sharpPhi sharpS u v + sharpLambda * (sharpG u v - sharpS) ≤ 0 ∧
       (sharpPhi sharpS u v + sharpLambda * (sharpG u v - sharpS) = 0 → u = p₀ ∧ v = p₀) :=
   phi_scalar hu hv (by linarith)
 
-/-- **Claim** (`SHARP_B_E_MOVING:claim-chamber-formulas`). The eleven oriented doubled areas, with
-`L = h-a`, `M = f-g`: `ABH = bL`, `ABC = a(c-b)-cε`, `AGH = gL`, `DEF = (1-f)(e-d)-η(1-d)`,
-`GHF = M(1-h)`, `GEF = M(1-e)`, `ADO = y-a-(d-a)x`, `DHO = h-y-(h-d)x`,
-`BOE = (e-ε)(x-b)-(1-η-b)(y-ε)`, `GCO = x-c+(c-g)y`, `OCF = c-x+(f-c)y`.
-`docs/proof/nine/SHARP_B_E_MOVING.md`, lines 20-37. -/
-theorem claim_chamber_formulas (a b c d e f g h ε η x y : ℝ) :
+/-- The eleven oriented doubled areas of the B/E-moving chamber, with `L = h-a`, `M = f-g`:
+`ABH = bL`, `ABC = a(c-b)-cε`, `AGH = gL`, `DEF = (1-f)(e-d)-η(1-d)`, `GHF = M(1-h)`,
+`GEF = M(1-e)`, `ADO = y-a-(d-a)x`, `DHO = h-y-(h-d)x`, `BOE = (e-ε)(x-b)-(1-η-b)(y-ε)`,
+`GCO = x-c+(c-g)y`, `OCF = c-x+(f-c)y`. -/
+theorem chamberSarea_beMovingConfig (a b c d e f g h ε η x y : ℝ) :
     chamberSarea (beMovingConfig a b c d e f g h ε η x y) =
       ![b * (h - a), a * (c - b) - c * ε, g * (h - a), (1 - f) * (e - d) - η * (1 - d),
         (f - g) * (1 - h), (f - g) * (1 - e), y - a - (d - a) * x, h - y - (h - d) * x,
@@ -105,7 +91,8 @@ theorem claim_chamber_formulas (a b c d e f g h ε η x y : ℝ) :
 
 /-! ### The plain-real form -/
 
-/-- The hypotheses (1) and the eleven bounds "doubled area `≥ s`", as plain real inequalities. -/
+/-- The hypotheses `BEMovingHyp` and the eleven bounds "doubled area `≥ s`", as plain real
+inequalities. -/
 structure Data (s a b c d e f g h ε η x y : ℝ) : Prop where
   hs1 : 7 / 64 < s
   hs2 : s < 11 / 100
@@ -147,13 +134,13 @@ theorem Data.of_hs {a b c d e f g h ε η x y : ℝ} (hyp : BEMovingHyp a b c d 
   obtain ⟨⟨ha, hah, hh1⟩, ⟨hb, hbc, hcf, hf1⟩, ⟨hg, hgf⟩, ⟨had, hde, he1⟩, ⟨hε0, hεa⟩,
     ⟨hη0, hηf⟩, hx0, hx1, hy0, hy1⟩ := hyp
   obtain ⟨hs1, hs2, -, -⟩ := sharp_bounds
-  rw [claim_chamber_formulas] at hs
+  rw [chamberSarea_beMovingConfig] at hs
   exact ⟨hs1, hs2, ha, hah, hh1, hb, hbc, hcf, hf1, hg, hgf, had, hde, he1, hε0, hεa, hη0, hηf,
     hx0, hx1, hy0, hy1, by simpa using hs 0, by simpa using hs 1, by simpa using hs 2,
     by simpa using hs 3, by simpa using hs 4, by simpa using hs 5, by simpa using hs 6,
     by simpa using hs 7, by simpa using hs 8, by simpa using hs 9, by simpa using hs 10⟩
 
-/-- The cubic of `SHARP_B_E_MOVING.md` (16)–(17): `3t³ + (10s-3)t² - 3st + 3s > 0` for `t > 0`,
+/-- The cubic bound of `coeff_bound`: `3t³ + (10s-3)t² - 3st + 3s > 0` for `t > 0`,
 `s > 7/64`, through `192t³-122t²-21t+21 = 192z³+166z²+z+4 > 0`, `z = t - 1/2 ≥ -1/2`. -/
 theorem cubic_pos {s t : ℝ} (hs1 : 7 / 64 < s) (ht0 : 0 < t) :
     0 < 3 * t ^ 3 + (10 * s - 3) * t ^ 2 - 3 * s * t + 3 * s := by
@@ -163,10 +150,11 @@ theorem cubic_pos {s t : ℝ} (hs1 : 7 / 64 < s) (ht0 : 0 < t) :
   have hq : 0 ≤ 10 * t ^ 2 - 3 * t + 3 := by nlinarith [sq_nonneg (t - 3 / 20)]
   nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ s - 7 / 64) hq]
 
-/-- **The coefficient bound** behind (11) (`SHARP_B_E_MOVING.md` (12)–(17)): with
-`αu = u-uv-s`, `βv = v-uv-s`, `α, β > s`, `s < u < 1/2`, and the coupled inequalities
-`c ≥ u + s/α`, `x ≥ u + s + (s/α)X`, `X ≥ v + s + (s/β)x` (multiplied out), `cX > (3/5)u`.
-The square root of (15) enters through `t = √u`, and (17) is the cubic `192t³-122t²-21t+21 > 0`. -/
+/-- **The coefficient bound** behind `c(1-y) > (3/5)u` and `x(1-d) > (3/5)v` in
+`Data.losses`: with `αu = u-uv-s`, `βv = v-uv-s`, `α, β > s`, `s < u < 1/2`, and the coupled
+inequalities `c ≥ u + s/α`, `x ≥ u + s + (s/α)X`, `X ≥ v + s + (s/β)x` (multiplied out),
+`cX > (3/5)u`. A square root enters through `t = √u`, and the last step is the cubic
+`192t³-122t²-21t+21 > 0` (`cubic_pos`). -/
 theorem coeff_bound {s u v α β c x X : ℝ} (hs1 : 7 / 64 < s) (hsu : s < u) (hu2 : u < 1 / 2)
     (hv0 : 0 < v) (hα : α * u = u - u * v - s) (hβ : β * v = v - u * v - s)
     (hαs : s < α) (hβs : s < β) (hX0 : 0 ≤ X) (hc : u * α + s ≤ c * α)
@@ -184,7 +172,7 @@ theorem coeff_bound {s u v α β c x X : ℝ} (hs1 : 7 / 64 < s) (hsu : s < u) (
   have E1 : β * v * (v * (1 - u) - β * v - s) = 0 := by rw [hrel, mul_zero]
   have E2 : s * (u + s) * (v * (1 - u) - β * v - s) = 0 := by rw [hrel, mul_zero]
   have hv1 : 0 ≤ v * (1 - u) := mul_nonneg hv0.le (by linarith)
-  -- (15) multiplied out: `X(1-u)q ≥ q² + q(2s+s²) + s²(u+s)` with `q = βv = (1-u)v - s`
+  -- the bound on `X`, multiplied out: `X(1-u)q ≥ q² + q(2s+s²) + s²(u+s)` with `q = βv`
   have h4 : (β * v) ^ 2 + β * v * (2 * s + s ^ 2) + s ^ 2 * (u + s) ≤
       X * (1 - u) * (β * v) := by
     linarith [mul_le_mul_of_nonneg_right hX hv1,
@@ -204,7 +192,7 @@ theorem coeff_bound {s u v α β c x X : ℝ} (hs1 : 7 / 64 < s) (hsu : s < u) (
     have h' : X * (1 - t ^ 2) = X * (1 - t) * (1 + t) := by ring
     rw [h'] at h6
     exact le_of_mul_le_mul_right h6 (by linarith)
-  -- (14): `c(u-s) ≥ u²`
+  -- `c(u-s) ≥ u²`
   have hcu0 : 0 ≤ c - t ^ 2 := by
     by_contra hcon
     push Not at hcon
@@ -212,7 +200,7 @@ theorem coeff_bound {s u v α β c x X : ℝ} (hs1 : 7 / 64 < s) (hsu : s < u) (
   have hcu : (t ^ 2) ^ 2 ≤ c * (t ^ 2 - s) := by
     have E3 : (c - t ^ 2) * (α * t ^ 2) = (c - t ^ 2) * (t ^ 2 - t ^ 2 * v - s) := by rw [hα]
     linarith [mul_le_mul_of_nonneg_right hc hu0.le, mul_nonneg hcu0 (mul_nonneg hu0.le hv0.le)]
-  -- (16)–(17)
+  -- the cubic bound `cubic_pos`
   have h8 : 3 * (t ^ 2 - s) * (1 - t) * t ^ 2 < 10 * s * t ^ 2 * t ^ 2 := by
     linarith [mul_pos hu0 (cubic_pos hs1 ht0)]
   have h9 : 2 * s * (t ^ 2) ^ 2 ≤ c * X * ((t ^ 2 - s) * (1 - t)) := by
@@ -226,7 +214,10 @@ section Plain
 
 variable {s a b c d e f g h ε η x y u v : ℝ}
 
-/-- (5)–(7), (10)–(11) in plain form, with `α = 1-v-(h-a)`, `β = 1-u-(f-g)`, `uL = vM = s`. -/
+/-- The losses in plain form, with `α = 1-v-(h-a)`, `β = 1-u-(f-g)`, `uL = vM = s`:
+`0 < u, v < 1/2`, `x ≤ 1-2u`, `y ≥ 2v`, `b < x`, `y < e`, the budget
+`s ≤ F₀ + 2uε + 2vη - εη`, the loss bound `εc(1-y) + ηx(1-d) ≤ α(1-3u-s) + β(1-3v-s) + 2s(u+v-1)`,
+and the coefficient bounds `c(1-y) > (3/5)u`, `x(1-d) > (3/5)v`. -/
 theorem Data.losses (H : Data s a b c d e f g h ε η x y) (hu : u * (h - a) = s)
     (hv : v * (f - g) = s) :
     (0 < u ∧ u < 1 / 2 ∧ 0 < v ∧ v < 1 / 2) ∧ (x ≤ 1 - 2 * u ∧ 2 * v ≤ y) ∧
@@ -272,7 +263,7 @@ theorem Data.losses (H : Data s a b c d e f g h ε η x y) (hu : u * (h - a) = s
     linarith [mul_le_mul_of_nonneg_right (by linarith : e - ε ≤ y - ε)
       (by linarith : (0:ℝ) ≤ x - b),
       mul_lt_mul_of_pos_left (by linarith : x - b < 1 - η - b) (by linarith : (0:ℝ) < y - ε)]
-  -- (7)
+  -- the BOE bound and the budget
   have hBOE : s ≤ (1 - v) * (x - u) - (1 - u) * y + η * y + ε * (1 - η - x) := by
     linarith [mul_nonneg (sub_nonneg.2 hbu) (by linarith : (0:ℝ) ≤ e - y),
       mul_nonneg (by linarith : (0:ℝ) ≤ 1 - v - e) (by linarith : (0:ℝ) ≤ x - u)]
@@ -280,7 +271,7 @@ theorem Data.losses (H : Data s a b c d e f g h ε η x y) (hu : u * (h - a) = s
     linarith [mul_le_mul_of_nonneg_left (by linarith : x ≤ 1 - 2 * u)
       (by linarith : (0:ℝ) ≤ 1 - v - ε),
       mul_le_mul_of_nonneg_left hY (by linarith : (0:ℝ) ≤ 1 - η - u)]
-  -- (8): `s(1-y) + εc(1-y) ≤ α(x-u-s)`
+  -- `s(1-y) + εc(1-y) ≤ α(x-u-s)`
   have hGCO : (c - b) * (1 - y) ≤ x - u - s := by
     linarith [mul_nonneg (sub_nonneg.2 hbu) (by linarith : (0:ℝ) ≤ 1 - y),
       mul_nonneg (sub_nonneg.2 hgu) hy0]
@@ -289,7 +280,7 @@ theorem Data.losses (H : Data s a b c d e f g h ε η x y) (hu : u * (h - a) = s
   have h8' : s * (1 - y) + ε * c * (1 - y) ≤ (1 - v - (h - a)) * (x - u - s) := by
     linarith [mul_le_mul_of_nonneg_right h1 (by linarith : (0:ℝ) ≤ 1 - y),
       mul_le_mul_of_nonneg_left hGCO ha.le, mul_le_mul_of_nonneg_right hα hGCO0]
-  -- (9): `sx + ηx(1-d) ≤ β(1-v-y-s)`
+  -- `sx + ηx(1-d) ≤ β(1-v-y-s)`
   have hDHO : (e - d) * x ≤ 1 - v - y - s := by
     linarith [mul_nonneg (by linarith : (0:ℝ) ≤ 1 - v - e) hx0,
       mul_nonneg (by linarith : (0:ℝ) ≤ 1 - v - h) (by linarith : (0:ℝ) ≤ 1 - x)]
@@ -298,14 +289,14 @@ theorem Data.losses (H : Data s a b c d e f g h ε η x y) (hu : u * (h - a) = s
     linarith [mul_le_mul_of_nonneg_right h3 hx0,
       mul_le_mul_of_nonneg_left hDHO (by linarith : (0:ℝ) ≤ 1 - f),
       mul_le_mul_of_nonneg_right hβ hDHO0]
-  -- (10)
+  -- the loss bound
   have h10' : ε * c * (1 - y) + η * x * (1 - d) ≤
       (1 - v - (h - a)) * (1 - 3 * u - s) + (1 - u - (f - g)) * (1 - 3 * v - s) +
         2 * s * (u + v - 1) := by
     linarith [mul_le_mul_of_nonneg_left (by linarith : x ≤ 1 - 2 * u)
       (by linarith : (0:ℝ) ≤ 1 - v - (h - a) - s),
       mul_le_mul_of_nonneg_left hY (by linarith : (0:ℝ) ≤ 1 - u - (f - g) - s)]
-  -- (11) through `coeff_bound`
+  -- the coefficient bounds, through `coeff_bound`
   have hαu : (1 - v - (h - a)) * u = u - u * v - s := by linarith
   have hβv : (1 - u - (f - g)) * v = v - u * v - s := by linarith
   have hsu : s < u := by linarith [mul_lt_mul_of_pos_left (by linarith : h - a < 1) hu0]
@@ -336,7 +327,7 @@ theorem Data.losses (H : Data s a b c d e f g h ε η x y) (hu : u * (h - a) = s
   exact ⟨⟨hu0, by linarith, hv0, by linarith⟩, ⟨by linarith, hY⟩, ⟨hxb, hye⟩, h7', h10',
     hc11, by linarith⟩
 
-/-- Theorem 1 in plain form: the eleven bounds force `ε = η = 0`. -/
+/-- `beMoving_chamber_le` in plain form: the eleven bounds force `ε = η = 0`. -/
 theorem Data.rigid {l : ℝ} (H : Data s a b c d e f g h ε η x y) (hl1 : 1 / 4 < l)
     (hl2 : l < 3 / 10) (hsc : ScalarIneq s l) : ε = 0 ∧ η = 0 := by
   have hL0 : 0 < h - a := by linarith [H.hah]
@@ -360,57 +351,12 @@ theorem Data.rigid {l : ℝ} (H : Data s a b c d e f g h ε η x y) (hl1 : 1 / 4
 
 end Plain
 
-/-! ### The claims of the manuscript -/
+/-! ### The chamber bound -/
 
-/-- **Claim** (`SHARP_B_E_MOVING:claim-losses`). If all eleven doubled areas are at least
-`s = 2A₀`, then with `u = s/(h-a)`, `v = s/(f-g)`: `0 < u, v < 1/2`, `x ≤ 1-2u`, `y ≥ 2v` (6),
-`x > b`, `e > y`, (7) `s ≤ F₀(u,v) + 2uε + 2vη - εη`, and (10) `Φ(u,v) ≥ εc(1-y) + ηx(1-d)`.
-`docs/proof/nine/SHARP_B_E_MOVING.md`, lines 109-208. -/
-theorem claim_losses {a b c d e f g h ε η x y : ℝ} (hyp : BEMovingHyp a b c d e f g h ε η x y)
-    (hs : ∀ i, sharpS ≤ chamberSarea (beMovingConfig a b c d e f g h ε η x y) i) :
-    let s := sharpS
-    let u := s / (h - a)
-    let v := s / (f - g)
-    (0 < u ∧ u < 1 / 2 ∧ 0 < v ∧ v < 1 / 2) ∧ (x ≤ 1 - 2 * u ∧ 2 * v ≤ y) ∧
-      (b < x ∧ y < e) ∧
-      s ≤ sharpG u v + 2 * u * ε + 2 * v * η - ε * η ∧
-      ε * c * (1 - y) + η * x * (1 - d) ≤ sharpPhi s u v := by
-  intro s u v
-  have H := Data.of_hs hyp hs
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  have hu : u * (h - a) = s := div_mul_cancel₀ _ hL0.ne'
-  have hv : v * (f - g) = s := div_mul_cancel₀ _ hM0.ne'
-  have hu0 : 0 < u := div_pos (by linarith [H.hs1]) hL0
-  have hv0 : 0 < v := div_pos (by linarith [H.hs1]) hM0
-  rw [← eq_expansion s hu0 hv0]
-  unfold sharpH sharpG
-  rw [sharpAlpha_of_mul hu0.ne' hu v, sharpBeta_of_mul hv0.ne' hv u]
-  obtain ⟨h1, h2, h3, h4, h5, -⟩ := H.losses hu hv
-  exact ⟨h1, h2, h3, h4, h5⟩
-
-/-- **Claim** (`SHARP_B_E_MOVING:claim-coefficients`). Equation (11): under the assumption of
-`claim_losses`, `c(1-y) > (3/5)u` and `x(1-d) > (3/5)v`.
-`docs/proof/nine/SHARP_B_E_MOVING.md`, lines 210-299. -/
-theorem claim_coefficients {a b c d e f g h ε η x y : ℝ}
-    (hyp : BEMovingHyp a b c d e f g h ε η x y)
-    (hs : ∀ i, sharpS ≤ chamberSarea (beMovingConfig a b c d e f g h ε η x y) i) :
-    let u := sharpS / (h - a)
-    let v := sharpS / (f - g)
-    3 / 5 * u < c * (1 - y) ∧ 3 / 5 * v < x * (1 - d) := by
-  intro u v
-  have H := Data.of_hs hyp hs
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  exact (H.losses (div_mul_cancel₀ _ hL0.ne') (div_mul_cancel₀ _ hM0.ne')).2.2.2.2.2
-
-/-- **Theorem 1** (`SHARP_B_E_MOVING:Theorem1`). Throughout (1) and the chamber (positivity of the
+/-- **The B/E-moving chamber.** Under `BEMovingHyp` and in the chamber (positivity of the
 eleven oriented doubled areas), the minimum of the eleven ordinary areas is at most `A₀`. If all
-eleven are at least `A₀`, then `ε = η = 0` and the configuration is exactly the sharp boundary
-configuration of `HAND_PROOF.md`. `docs/proof/nine/SHARP_B_E_MOVING.md`, lines 39-53, 301-326.
-Uses: SHARP_B_E_MOVING:claim-lambda, SHARP_B_E_MOVING:claim-scalar, SHARP_B_E_MOVING:eq4,
-SHARP_B_E_MOVING:claim-losses, SHARP_B_E_MOVING:claim-coefficients, HAND_PROOF:Theorem1 -/
-theorem theorem1 {a b c d e f g h ε η x y : ℝ} (hyp : BEMovingHyp a b c d e f g h ε η x y)
+eleven are at least `A₀`, then `ε = η = 0` and the configuration is exactly the construction. -/
+theorem beMoving_chamber_le {a b c d e f g h ε η x y : ℝ} (hyp : BEMovingHyp a b c d e f g h ε η x y)
     (hch : InChamber (beMovingConfig a b c d e f g h ε η x y)) :
     (∃ i, chamberArea (beMovingConfig a b c d e f g h ε η x y) i ≤ A₀) ∧
       ((∀ i, A₀ ≤ chamberArea (beMovingConfig a b c d e f g h ε η x y) i) →

@@ -3,20 +3,19 @@ module
 public import Heilbronn.Nine.TypeII.Unbalanced.RightHull
 public import Heilbronn.Nine.TypeII.TypeII.Normalization
 
-/-! # Shared tools for the one-upper chain of the unbalanced Type-II notes
+/-! # Shared tools for the one-upper chain of the unbalanced Type-II row
 
-Helpers used by `UNBALANCED_ONE_UPPER_RADIAL`, `UNBALANCED_OCCUPIED_LOWER_EAR`,
-`UNBALANCED_FINAL_NEGATIVE_LINE`, `UNBALANCED_FINAL_UPPER_PAIR` and
-`UNBALANCED_FINAL_LOWER_WEDGE`:
+Helpers used by `UnbalancedOneUpperRadial`, `UnbalancedOccupiedLowerEar`,
+`UnbalancedFinalNegativeLine`, `UnbalancedFinalUpperPair` and `UnbalancedFinalLowerWedge`:
 
 * `bary`: the barycentric identity `[ABC]·f(X) = [BCX]f(A) + [CAX]f(B) + [ABX]f(C)` for the
   affine function `f = [YZ·]`; with it every "an affine function on a triangle is bounded by its
-  vertex values" and every diagonal-partition step of the notes is linear arithmetic;
+  vertex values" and every diagonal-partition step is linear arithmetic;
 * `abs_ge`, `ge_of_pos`, `le_of_neg`: doubled areas of a configuration from a bound on its least
   area;
 * `cap_one`, `two_inside`, `one_inside`: a triangle of three configuration points with doubled
-  area below `Ks` contains at most one further point (`CORNER_FAMILIES.md` §7), and a triangle
-  with one (two) interior configuration points has doubled area at least `3s` (`Ks`);
+  area below `Ks` contains at most one further point, and a triangle with one (two) interior
+  configuration points has doubled area at least `3s` (`Ks`);
 * facts on the anchors and the containers: right points lie below `CE`, central points below
   `CE` are inside `EBC`, the coordinate ranges of right and central points.
 -/
@@ -62,12 +61,6 @@ theorem abs_ge {n : ℕ} {X : Fin n → Point} {s : ℝ} (h : s / 2 ≤ minTrian
 theorem ge_of_pos {x s : ℝ} (h : s ≤ |x|) (hx : 0 < x) : s ≤ x := by
   rwa [abs_of_pos hx] at h
 
-theorem le_of_neg {x s : ℝ} (h : s ≤ |x|) (hx : x < 0) : x ≤ -s := by
-  rw [abs_of_neg hx] at h; linarith
-
-theorem ne_of_abs {x s : ℝ} (hs : 0 < s) (h : s ≤ |x|) : x ≠ 0 := by
-  rintro rfl; simp at h; linarith
-
 /-! ### Interior points and capacity -/
 
 /-- A triangle containing a point has doubled area at least `3s`. -/
@@ -92,7 +85,7 @@ theorem ne_of_inside_c {X A B C : Point} (h : InTriangle X A B C) : X ≠ C := b
   rintro rfl; have := h.2.1; simp [sarea] at this; nlinarith [this]
 
 /-- Two further configuration points inside a triangle of configuration points force doubled
-area at least `Ks` (`CORNER_FAMILIES.md` §7). -/
+area at least `Ks`. -/
 theorem two_inside {n : ℕ} {X : Fin n → Point} {s : ℝ} (hs : 0 < s)
     (hmin : s / 2 ≤ minTriangleArea X) (a b c i j : Fin n) (hij : i ≠ j)
     (hi : InTriangle (X i) (X a) (X b) (X c)) (hj : InTriangle (X j) (X a) (X b) (X c)) :
@@ -111,7 +104,7 @@ theorem two_inside {n : ℕ} {X : Fin n → Point} {s : ℝ} (hs : 0 < s)
   have hsub : s / 2 ≤ minTriangleArea ![X a, X b, X c, X i, X j] :=
     hmin.trans (TypeII.min_le_min_reindex (by norm_num) X _ ![a, b, c, i, j]
       (inj5 hab hbc hac hia hib hic hja hjb hjc hij) (by funext m; fin_cases m <;> rfl))
-  have key := CornerFamilies.twoInteriorPointLemma (X a) (X b) (X c) (X i) (X j) (Or.inl hi)
+  have key := twoInteriorPointLemma (X a) (X b) (X c) (X i) (X j) (Or.inl hi)
     (Or.inl hj) (s / 2) (by positivity) hsub
   rw [triangleArea_eq, abs_of_pos hpos] at key
   unfold Kc; linarith
@@ -137,12 +130,7 @@ theorem amgm {p q : ℝ} (hp : 0 ≤ p) (hq : 0 ≤ q) : 2 * Real.sqrt (p * q) �
 theorem sqrt3_gt : (12 / 7 : ℝ) < Real.sqrt 3 := by
   rw [Real.lt_sqrt (by norm_num)]; norm_num
 
-theorem sqrt3_lt : Real.sqrt 3 < 7 / 4 := by
-  rw [Real.sqrt_lt' (by norm_num)]; norm_num
-
 theorem Kc_gt : (52 / 7 : ℝ) < Kc := by unfold Kc; linarith [sqrt3_gt]
-
-theorem Kc_lt : Kc < 15 / 2 := by unfold Kc; linarith [sqrt3_lt]
 
 theorem Kc_s_gt : (13 / 16 : ℝ) < Kc * (8 / 73) := by nlinarith [Kc_gt]
 
@@ -157,9 +145,6 @@ theorem s7_le_A₀ : (7 / 128 : ℝ) ≤ A₀ := A₀_bounds.1.le
 
 theorem sarea_ECX (l : ℝ) (X : Point) : sarea (ptE l) ptC X = X.2 - l - (1 - l) * X.1 := by
   simp only [sarea, ptE, ptC]; ring
-
-theorem sarea_DRX (R X : Point) : sarea ptD R X = R.1 * (X.2 - 1) - (R.2 - 1) * X.1 := by
-  simp only [sarea, ptD]; ring
 
 theorem sarea_BXC (b : ℝ) (X : Point) : sarea (ptB b) X ptC = X.1 - b - X.2 * (1 - b) := by
   simp only [sarea, ptB, ptC]; ring
@@ -190,7 +175,7 @@ theorem central_facts {b : ℝ} {X : Point} (hb : 0 < b) (_hb1 : b < 1)
 theorem central_EBC {l b : ℝ} {X : Point} (hb : 0 < b) (hb1 : b < 1) (hl : 0 < l) (hl1 : l < 1)
     (hX : InTriangle X ptD (ptB b) ptC) (hbelow : sarea (ptE l) ptC X < 0) :
     InTriangle X (ptE l) (ptB b) ptC :=
-  ((TypeII.claim_central_cut hb hb1 hl hl1 hX).2).2 hbelow
+  ((TypeII.central_inTriangle_iff hb hb1 hl hl1 hX).2).2 hbelow
 
 theorem central_mem {b : ℝ} {X : Point} (hb : 0 < b) (hb1 : b < 1)
     (hX : InTriangle X ptD (ptB b) ptC) : X ∈ unitSquare := by
@@ -200,7 +185,7 @@ theorem central_mem {b : ℝ} {X : Point} (hb : 0 < b) (hb1 : b < 1)
 
 variable {l b : ℝ} {P Q R S T : Point}
 
-/-- The standing row as Type-II data (`TYPE_II.md` (5)). -/
+/-- The standing row `Row123` gives Type-II data `TypeII.TypeIIData`. -/
 theorem row_data (h : Row123 l b P Q R S T) : TypeII.TypeIIData l b P Q R S T :=
   ⟨h.b_pos, by linarith [h.b_le], h.l_pos, h.l_lt,
     central_mem h.b_pos (by linarith [h.b_le]) h.P_central,
@@ -212,8 +197,8 @@ theorem isRight_of {b : ℝ} {X : Point} (h : 0 < sarea (ptB b) X ptC) : TypeII.
   have e : sarea (TypeII.ptB b) TypeII.ptC X = sarea (ptB b) ptC X := rfl
   rw [e]; linarith
 
-/-- `bq ≥ 7/64` (`[DEB]`) and `b < 4/11` (the endpoint-triangle theorem in the right container,
-`TYPE_II.md` §11). -/
+/-- `b(1 - λ) ≥ 7/64` (the area of `DEB`) and `b < 4/11` (the endpoint-triangle bound
+`TypeII.right_three_bound` in the right container). -/
 theorem row_b_bounds (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T)) :
     7 / 64 ≤ b * (1 - l) ∧ b < 4 / 11 := by

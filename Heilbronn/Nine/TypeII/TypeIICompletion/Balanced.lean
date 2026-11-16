@@ -6,27 +6,26 @@ public import Heilbronn.Nine.TypeII.TypeIICompletion.ParameterBound
 public import Heilbronn.Nine.Hulls.FourInteriorQuadrilaterals
 
 /-! # The balanced row: diagonal cut, empty lower ear, quadrilateral right hull
-(`docs/proof/nine/TYPE_II_COMPLETION.md`, §§4–6)
 
-`TYPE_II_COMPLETION.md` lines 208–704. The starting point is the placement forced by
-`TYPE_II_BALANCED.md` (`BalancedPlacement l b L P Q R S`: `L` inside `DBE` above `CE`, `P`
-central above `CE`, `Q` central below `CE`, `R, S` right points, `0 < b ≤ 1/2`).
-In the triangular-right alternative the right hull vertex is called `R = (r, u)` and `S` lies
-strictly inside `BCR` (`InTriangle S (ptB b) R ptC`).
+The starting point is the placement forced by `TypeIIBalanced.balancedPlacement_or_swap`
+(`BalancedPlacement l b L P Q R S`: `L` inside `DBE` above `CE`, `P` central above `CE`, `Q`
+central below `CE`, `R, S` right points, `0 < b ≤ 1/2`). In the triangular-right alternative the
+right hull vertex is called `R = (r, u)` and `S` lies strictly inside `BCR`
+(`InTriangle S (ptB b) R ptC`).
 
-* `eq5` ((5), §4, off-route): `Q_y < Q_x`;
-* `lemma4` (**Lemma 4**): the lower ear `EBR` contains neither `Q` nor `S`; both are inside `ECR`;
-* `corollary5` (**Corollary 5**): the eight points other than `B` have hull `D, E, R, C` with
-  interior points `L, P, Q, S`, the two diagonal splits, (8), and (after
-  `FOUR_INTERIOR_QUADRILATERALS.md` Theorem 1) one point in each diagonal sector, `L` at `DE` and
-  `P` at `CD`;
-* `FinalPlacement`: the sole assignment left by Theorem 8 (`Q` at `ER`, `S` at `RC`), the setting
-  of §§9–10 and of `BALANCED_RIGHT_MIXED.md`;
-* `theorem6` (**Theorem 6**): the right set `B, C, R, S` is not a quadrilateral; in the form used
-  by Theorem 11, `theorem6_tri`: `S` is strictly inside `BRC` or `R` strictly inside `BSC`.
+* `Q_snd_lt_fst` (not used later): `Q_y < Q_x`;
+* `QS_outside_EBR_inside_ECR`: the lower ear `EBR` contains neither `Q` nor `S`; both are inside `ECR`;
+* `quad_DERC_sectors`: the eight points other than `B` have hull `D, E, R, C` with interior points
+  `L, P, Q, S`, the two diagonal splits, the bounds `qr ≥ Ks`, `1 - u ≥ Ks`, and (by
+  `FourInteriorQuadrilaterals.ncard_inQuad_le_four`) one point in each diagonal sector, `L` at `DE` and `P`
+  at `CD`;
+* `FinalPlacement`: the sole assignment left by `minTriangleArea_lt_A₀_of_S_at_ER` (`Q` at `ER`, `S` at `RC`), the
+  setting of `minTriangleArea_lt_of_Q_above_ES_LR`, `minTriangleArea_lt_of_Q_above_ES_below_LR` and `BalancedRightMixed`;
+* `triangularHull_BCRS`: the right set `B, C, R, S` is not a quadrilateral; in the form used by `minTriangleArea_lt_A₀_of_balanced_counts`,
+  `inTriangle_S_or_R_of_balancedRow`: `S` is strictly inside `BRC` or `R` strictly inside `BSC`.
 
-Thresholds: §§4 and 6 assume least area at least `A₀` (as stated); Lemma 4 works at doubled
-threshold `s = 7/64`; Corollary 5 uses the global capacity theorems at `A₀`.
+Thresholds: `Q_snd_lt_fst` and `triangularHull_BCRS` assume least area at least `A₀`; `QS_outside_EBR_inside_ECR` works at doubled
+threshold `s = 7/64`; `quad_DERC_sectors` uses the global capacity theorems at `A₀`.
 -/
 
 @[expose] public section
@@ -36,22 +35,18 @@ namespace Heilbronn.Nine.TypeIICompletion
 
 open Heilbronn.Nine.TypeII Heilbronn.Nine.TypeIIBalanced
 
-/-- The sole remaining balanced placement after Theorem 8 (`TYPE_II_COMPLETION.md` lines
-1009–1013): the `BalancedPlacement`, `S` strictly inside the right triangle `BCR`, and the four
-interior points of the quadrilateral `D, E, R, C` in its four diagonal sectors, `L` at `DE`, `P`
-at `CD`, `Q` at `ER`, `S` at `RC`. -/
+/-- The sole remaining balanced placement after `minTriangleArea_lt_A₀_of_S_at_ER`: the `BalancedPlacement`, `S` strictly
+inside the right triangle `BCR`, and the four interior points of the quadrilateral `D, E, R, C` in
+its four diagonal sectors, `L` at `DE`, `P` at `CD`, `Q` at `ER`, `S` at `RC`. -/
 def FinalPlacement (l b : ℝ) (L P Q R S : Point) : Prop :=
   BalancedPlacement l b L P Q R S ∧ InTriangle S (ptB b) R ptC ∧
     DiagSector ptD (ptE l) R ptC L ∧ DiagSector ptC ptD (ptE l) R P ∧
     DiagSector (ptE l) R ptC ptD Q ∧ DiagSector R ptC ptD (ptE l) S
 
-/-- **Equation (5)** (`TYPE_II_COMPLETION:claim-Q-below-diagonal`). In the balanced placement at
-least area `A₀`, the lower central point satisfies `Q_y < Q_x`: the closed triangle
-`conv{D, C, (0,0)}` already contains `D, C, E, L, P`. Off-route (not used later).
-`docs/proof/nine/TYPE_II_COMPLETION.md`, lines 208–255.
-
-Uses: TYPE_II_COMPLETION:Theorem1. -/
-theorem eq5 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
+/-- In the balanced placement at least area `A₀`, the lower central point satisfies `Q_y < Q_x`:
+the closed triangle `conv{D, C, (0,0)}` already contains `E, L, P`, so by `card_mem_triangle_le_three` it cannot
+also contain `Q`. Not used later. -/
+theorem Q_snd_lt_fst {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     Q.2 < Q.1 := by
   classical
@@ -79,12 +74,12 @@ theorem eq5 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R
       X ∈ convexHull ℝ ({Pc 0, Pc 1, (0, 0)} : Set Point) := by
     intro X h1 h2 h3
     rw [hset]
-    refine tc_mem_hull_of_sarea (by unfold sarea; norm_num) ?_ ?_ ?_ <;>
+    refine mem_convexHull_of_sarea (by unfold sarea; norm_num) ?_ ?_ ?_ <;>
       (unfold sarea; simp) <;> linarith
   have harea : triangleArea (Pc 0) (Pc 1) (0, 0) ≤ 1 / 2 := by
     simp only [Pc, typeIIConfig, Matrix.cons_val_zero, Matrix.cons_val_one, triangleArea_eq]
     unfold sarea; norm_num
-  have h1 := theorem1 Pc hsq hmin 0 1 (by decide) (0, 0) harea
+  have h1 := card_mem_triangle_le_three Pc hsq hmin 0 1 (by decide) (0, 0) harea
   have habove : ∀ X : Point, X ∈ unitSquare → 0 < sarea (ptE l) ptC X → X.1 ≤ X.2 := by
     intro X hX hce
     obtain ⟨-, hx1, -, -⟩ := hX
@@ -116,20 +111,21 @@ theorem bp_basic {l b s : ℝ} {L P Q R S : Point} (hs : 0 < s)
   have hs2 : 0 < s / 2 := by positivity
   constructor
   · have h5 : s / 2 ≤ minTriangleArea ![ptD, ptE l, ptC, L, P] :=
-      tc_min_sub hmin _ ![0, 2, 1, 4, 5] ![0, 2, 1, 0, 3, 4, 0, 0, 0] (by norm_num) (by decide)
+      min_sub' hmin _ ![0, 2, 1, 4, 5] ![0, 2, 1, 0, 3, 4, 0, 0, 0] (by norm_num) (by decide)
         (by intro i; fin_cases i <;> rfl)
     have := tc_two_int hs (pos_L hb hl1 hL hLce).2 (pos_P hb hl1 hP hPce) h5
     simp only [sarea, ptD, ptE, ptC] at this; linarith
-  · have h1 := tc_ge_of_pos hs2 hmin 0 2 4 hL.1
-    have h2 := tc_ge_of_pos hs2 hmin 2 3 4 hL.2.1
-    have h3 := tc_ge_of_pos hs2 hmin 3 0 4 hL.2.2
+  · have h1 := sarea_ge_of_le_min_of_pos hs2 hmin 0 2 4 hL.1
+    have h2 := sarea_ge_of_le_min_of_pos hs2 hmin 2 3 4 hL.2.1
+    have h3 := sarea_ge_of_le_min_of_pos hs2 hmin 3 0 4 hL.2.2
     have := sarea_add_sarea_add_sarea ptD (ptE l) (ptB b) L
     simp only [typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero] at h1 h2 h3
     have e : sarea ptD (ptE l) (ptB b) = b * (1 - l) := by simp only [sarea, ptD, ptE, ptB]; ring
     linarith
 
-/-- The ear `EBR` has doubled area `δ < 3s` (7) at `s = 7/64` when `S` is inside `BRC`. -/
-theorem lemma4_delta {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
+/-- At `s = 7/64`, when `S` is inside `BRC`: `[BRC] ≥ 3s`, and the ear `EBR` has doubled area
+`0 < δ < 3s`. -/
+theorem ear_EBR_bounds {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
     (hS : InTriangle S (ptB b) R ptC)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     3 * (7 / 64) ≤ sarea (ptB b) R ptC ∧ sarea (ptE l) (ptB b) R < 3 * (7 / 64) ∧
@@ -139,9 +135,9 @@ theorem lemma4_delta {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l 
   obtain ⟨hK, -⟩ := bp_basic (by norm_num) hpl hmin'
   obtain ⟨⟨hb, hb1, hl, hl1, -, -, -, ⟨hr0, hr1, hu0, hu1⟩, -⟩, hb2, -, -, -, -, -, -, hR, -⟩ := hpl
   have hs2 : (0 : ℝ) < 7 / 128 := by norm_num
-  have h1 := tc_ge_of_pos hs2 hmin 3 7 8 hS.1
-  have h2 := tc_ge_of_pos hs2 hmin 7 1 8 hS.2.1
-  have h3 := tc_ge_of_pos hs2 hmin 1 3 8 hS.2.2
+  have h1 := sarea_ge_of_le_min_of_pos hs2 hmin 3 7 8 hS.1
+  have h2 := sarea_ge_of_le_min_of_pos hs2 hmin 7 1 8 hS.2.1
+  have h3 := sarea_ge_of_le_min_of_pos hs2 hmin 1 3 8 hS.2.2
   simp only [typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_one]
     at h1 h2 h3
   have hg : 3 * (7 / 64) ≤ sarea (ptB b) R ptC := by
@@ -181,7 +177,7 @@ theorem not_mem_ear {E B R X : Point} {s : ℝ} (hδ : sarea E B R < 3 * s)
     (n1 : sarea B R X ≠ 0) (n2 : sarea R E X ≠ 0) (n3 : sarea E B X ≠ 0) :
     X ∉ convexHull ℝ ({E, B, R} : Set Point) := by
   intro hX
-  obtain ⟨g1, g2, g3⟩ := tc_sarea_nonneg_of_mem_hull hpos.le hX
+  obtain ⟨g1, g2, g3, -⟩ := sarea_nonneg_of_mem_convexHull hpos.le hX
   have := sarea_add_sarea_add_sarea E B R X
   have p1 := lt_of_le_of_ne g1 (Ne.symm n1)
   have p2 := lt_of_le_of_ne g2 (Ne.symm n2)
@@ -200,19 +196,17 @@ theorem sarea_CER_nonneg {l b : ℝ} {R : Point} (hb : 0 < b) (hb1 : b < 1) (hl 
     by_contra hcon; push Not at hcon; nlinarith [mul_pos hw (show 0 < -(l + (1 - l) * R.1 - R.2) by linarith)]
   nlinarith
 
-/-- **Lemma 4** (`TYPE_II_COMPLETION:Lemma4`). In the balanced placement with triangular right
-hull (`S` strictly inside `BCR`, `R = (r,u)`), at doubled threshold `s = 7/64`: neither `Q` nor `S`
-lies in the closed triangle `EBR` (whose doubled area is `δ = bu + λ(r-b) ≤ 1 - (K-1)s < 3s` (7));
-both are strictly inside `ECR`. `docs/proof/nine/TYPE_II_COMPLETION.md`, lines 257–327.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma (`q ≥ Ks` from `L, P ∈ DCE`). -/
-theorem lemma4 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
+/-- In the balanced placement with triangular right hull (`S` strictly inside `BCR`,
+`R = (r,u)`), at doubled threshold `s = 7/64`: neither `Q` nor `S` lies in the closed triangle
+`EBR`, whose doubled area is `δ = bu + λ(r-b) ≤ 1 - (K-1)s < 3s`; both are strictly inside
+`ECR`. The bound `q ≥ Ks` used here is `twoInteriorPointLemma` for `L, P ∈ DCE`. -/
+theorem QS_outside_EBR_inside_ECR {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
     (hS : InTriangle S (ptB b) R ptC)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     Q ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) ∧
       S ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) ∧
       InTriangle Q (ptE l) R ptC ∧ InTriangle S (ptE l) R ptC := by
-  obtain ⟨hg, hδ, hδpos⟩ := lemma4_delta hpl hS hmin
+  obtain ⟨hg, hδ, hδpos⟩ := ear_EBR_bounds hpl hS hmin
   obtain ⟨⟨hb, hb1, hl, hl1, -, -, -, ⟨hr0, hr1, hu0, hu1⟩, -⟩, hb2, hL, hLce, hP, hPce, hQ,
     hQce, hR, hSr⟩ := hpl
   have hpos : 0 < minTriangleArea (typeIIConfig l b L P Q R S) :=
@@ -220,13 +214,13 @@ theorem lemma4 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P 
   have hs2 : (0 : ℝ) < 7 / 128 := by norm_num
   have hδ' : sarea (ptE l) (ptB b) R < 3 * (2 * (7 / 128)) := by linarith
   have hQn : Q ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) :=
-    not_mem_ear hδ' hδpos (fun h => tc_ge_of_pos hs2 hmin 3 7 6 h)
-      (fun h => tc_ge_of_pos hs2 hmin 7 2 6 h) (fun h => tc_ge_of_pos hs2 hmin 2 3 6 h)
+    not_mem_ear hδ' hδpos (fun h => sarea_ge_of_le_min_of_pos hs2 hmin 3 7 6 h)
+      (fun h => sarea_ge_of_le_min_of_pos hs2 hmin 7 2 6 h) (fun h => sarea_ge_of_le_min_of_pos hs2 hmin 2 3 6 h)
       (sarea_ne_zero_of_min_pos hpos 3 7 6) (sarea_ne_zero_of_min_pos hpos 7 2 6)
       (sarea_ne_zero_of_min_pos hpos 2 3 6)
   have hSn : S ∉ convexHull ℝ ({ptE l, ptB b, R} : Set Point) :=
-    not_mem_ear hδ' hδpos (fun h => tc_ge_of_pos hs2 hmin 3 7 8 h)
-      (fun h => tc_ge_of_pos hs2 hmin 7 2 8 h) (fun h => tc_ge_of_pos hs2 hmin 2 3 8 h)
+    not_mem_ear hδ' hδpos (fun h => sarea_ge_of_le_min_of_pos hs2 hmin 3 7 8 h)
+      (fun h => sarea_ge_of_le_min_of_pos hs2 hmin 7 2 8 h) (fun h => sarea_ge_of_le_min_of_pos hs2 hmin 2 3 8 h)
       (sarea_ne_zero_of_min_pos hpos 3 7 8) (sarea_ne_zero_of_min_pos hpos 7 2 8)
       (sarea_ne_zero_of_min_pos hpos 2 3 8)
   refine ⟨hQn, hSn, ?_, ?_⟩
@@ -241,7 +235,7 @@ theorem lemma4 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P 
         nlinarith
     have hERQ : 0 < sarea (ptE l) R Q := by
       by_contra hcon; push Not at hcon
-      exact hQn (tc_mem_hull_of_sarea hδpos hBRQ.le
+      exact hQn (mem_convexHull_of_sarea hδpos hBRQ.le
         (by rw [sarea_swap₁₂]; linarith) hEBQ.le)
     exact ⟨hERQ, hRCQ, by rw [sarea_swap₁₂]; linarith⟩
   · have hEBS : 0 < sarea (ptE l) (ptB b) S := by
@@ -249,7 +243,7 @@ theorem lemma4 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P 
         nlinarith
     have hERS : 0 < sarea (ptE l) R S := by
       by_contra hcon; push Not at hcon
-      exact hSn (tc_mem_hull_of_sarea hδpos hS.1.le
+      exact hSn (mem_convexHull_of_sarea hδpos hS.1.le
         (by rw [sarea_swap₁₂]; linarith) hEBS.le)
     have hCER := sarea_CER_nonneg hb hb1 hl hl1 hR hr1
     have hCES : 0 < sarea ptC (ptE l) S := by
@@ -307,25 +301,20 @@ theorem config_sq {l b : ℝ} {L P Q R S : Point} (hd : TypeIIData l b L P Q R S
   · exact hRsq
   · exact hSsq
 
--- FLAG: Corollary 5 sits in the §5 setting "every doubled actual triangle area exceeds
--- s = 7/64", but its proof uses the global actual-triangle capacity theorem
--- (`THREE_INTERIOR_TRIANGLES.md` Corollary 5) and `FOUR_INTERIOR_QUADRILATERALS.md` Theorem 1,
+-- Threshold: most steps of `quad_DERC_sectors` only need every doubled actual triangle area to exceed
+-- s = 7/64, but its proof uses the global actual-triangle capacity theorem
+-- (`ThreeInteriorTriangles.triangleCapacityTwo_of_A₀_le`) and `FourInteriorQuadrilaterals.ncard_inQuad_le_four`,
 -- which hold for competitive configurations (least area `≥ A₀`); it is stated at `A₀`.
 open Classical in
-/-- **Corollary 5** (`TYPE_II_COMPLETION:Corollary5`). In the triangular-right branch of the
-balanced placement, at least area `A₀`: the eight points other than `B` have convex hull the
-quadrilateral `D, E, R, C`, with interior points `L, P, Q, S`; the diagonal `EC` puts `L, P` on
-one side and `Q, S` on the other; each side of `DR` contains exactly two of the four points;
-`qr ≥ Ks` and `1 - u ≥ Ks` (8) with `s = 7/64`; `L` is on the `E` side of `DR`; and (by
-`FOUR_INTERIOR_QUADRILATERALS.md` Theorem 1) exactly one point lies in each diagonal sector, `L`
-at `DE`, `P` at `CD`, and `Q, S` at `ER, RC` in some order. `docs/proof/nine/TYPE_II_COMPLETION.md`,
-lines 329–369.
+/-- In the triangular-right branch of the balanced placement, at least area `A₀`: the eight
+points other than `B` have convex hull the quadrilateral `D, E, R, C`, with interior points
+`L, P, Q, S`; the diagonal `EC` puts `L, P` on one side and `Q, S` on the other; each side of
+`DR` contains exactly two of the four points; `qr ≥ Ks` and `1 - u ≥ Ks` with `s = 7/64`; `L` is
+on the `E` side of `DR`; and (by `FourInteriorQuadrilaterals.ncard_inQuad_le_four`) exactly one point lies in
+each diagonal sector, `L` at `DE`, `P` at `CD`, and `Q, S` at `ER, RC` in some order.
 
-FLAG (threshold): stated at least area `A₀`, see the comment above.
-
-Uses: TYPE_II_COMPLETION:Lemma4, THREE_INTERIOR_TRIANGLES:Corollary5,
-CORNER_FAMILIES:TwoInteriorPointLemma, FOUR_INTERIOR_QUADRILATERALS:Theorem1. -/
-theorem corollary5 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
+Stated at least area `A₀`; see the threshold comment above. -/
+theorem quad_DERC_sectors {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
     (hS : InTriangle S (ptB b) R ptC)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     ConvexQuad ptD (ptE l) R ptC ∧
@@ -345,8 +334,8 @@ theorem corollary5 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b 
   have hpos : 0 < minTriangleArea (typeIIConfig l b L P Q R S) :=
     lt_of_lt_of_le (by norm_num) h128
   have hs2 : (0 : ℝ) < 7 / 128 := by norm_num
-  obtain ⟨-, -, hQin, hSin⟩ := lemma4 hpl hS h128
-  obtain ⟨hg, hδ, hδpos⟩ := lemma4_delta hpl hS h128
+  obtain ⟨-, -, hQin, hSin⟩ := QS_outside_EBR_inside_ECR hpl hS h128
+  obtain ⟨hg, hδ, hδpos⟩ := ear_EBR_bounds hpl hS h128
   have hsq := config_sq hpl.1
   obtain ⟨⟨hb, hb1, hl, hl1, hLsq, hPsq, hQsq, ⟨hr0, hr1, hu0, hu1⟩, hSsq⟩, hb2, hL, hLce, hP,
     hPce, hQ, hQce, hR, hSr⟩ := hpl
@@ -356,7 +345,7 @@ theorem corollary5 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b 
     simp only [IsRight, sarea, ptB, ptC] at hR; linarith
   have hu1' : R.2 < 1 := by nlinarith
   have hrb : b < R.1 := by nlinarith
-  have hERC : 0 < sarea (ptE l) R ptC := tc_inTri_area_pos hQin
+  have hERC : 0 < sarea (ptE l) R ptC := inTri_pos hQin
   have hDER : 0 < sarea ptD (ptE l) R := by simp only [sarea, ptD, ptE]; nlinarith
   have hRCD : 0 < sarea R ptC ptD := by simp only [sarea, ptD, ptC]; nlinarith
   have hCDE : 0 < sarea ptC ptD (ptE l) := by simp only [sarea, ptD, ptC, ptE]; nlinarith
@@ -371,7 +360,7 @@ theorem corollary5 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b 
   -- the four-interior theorem
   set Pc := typeIIConfig l b L P Q R S with hPc
   have hcq : QuadrilateralHull.ConvexQuad (Pc 0) (Pc 2) (Pc 7) (Pc 1) := hconv
-  obtain ⟨hle4, h4⟩ := FourInteriorQuadrilaterals.theorem1 hsq hmin hcq
+  obtain ⟨hle4, h4⟩ := FourInteriorQuadrilaterals.ncard_inQuad_le_four hsq hmin hcq
   have hge4 : 4 ≤ Set.ncard {m | QuadrilateralHull.InQuad (Pc m) (Pc 0) (Pc 2) (Pc 7) (Pc 1)} := by
     have hsub : ((({4, 5, 6, 8} : Finset (Fin 9))) : Set (Fin 9)) ⊆
         {m | QuadrilateralHull.InQuad (Pc m) (Pc 0) (Pc 2) (Pc 7) (Pc 1)} := by
@@ -442,9 +431,9 @@ theorem corollary5 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b 
       ⟨qX.1, qX.2.1, by linarith [sarea_swap₁₂ ptD R X]⟩
     have h5 : (7 / 64 : ℝ) / 2 ≤ minTriangleArea ![ptD, ptE l, R, L, X] := by
       rcases hXQS with rfl | rfl
-      · exact tc_min_sub (by norm_num; exact h128) _ ![0, 2, 7, 4, 6]
+      · exact min_sub' (by norm_num; exact h128) _ ![0, 2, 7, 4, 6]
           ![0, 0, 1, 0, 3, 0, 4, 2, 0] (by norm_num) (by decide) (by intro i; fin_cases i <;> rfl)
-      · exact tc_min_sub (by norm_num; exact h128) _ ![0, 2, 7, 4, 8]
+      · exact min_sub' (by norm_num; exact h128) _ ![0, 2, 7, 4, 8]
           ![0, 0, 1, 0, 3, 0, 0, 2, 4] (by norm_num) (by decide) (by intro i; fin_cases i <;> rfl)
     have := tc_two_int (by norm_num) hLDER hXDER h5
     simp only [sarea, ptD, ptE] at this; linarith
@@ -456,9 +445,9 @@ theorem corollary5 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b 
     have hXDRC : InTriangle X ptD R ptC := ⟨hp, hX.2.1, qX.2.2.2⟩
     have h5 : (7 / 64 : ℝ) / 2 ≤ minTriangleArea ![ptD, R, ptC, P, X] := by
       rcases hXQS with rfl | rfl
-      · exact tc_min_sub (by norm_num; exact h128) _ ![0, 7, 1, 5, 6]
+      · exact min_sub' (by norm_num; exact h128) _ ![0, 7, 1, 5, 6]
           ![0, 2, 0, 0, 0, 3, 4, 1, 0] (by norm_num) (by decide) (by intro i; fin_cases i <;> rfl)
-      · exact tc_min_sub (by norm_num; exact h128) _ ![0, 7, 1, 5, 8]
+      · exact min_sub' (by norm_num; exact h128) _ ![0, 7, 1, 5, 8]
           ![0, 2, 0, 0, 0, 3, 0, 1, 4] (by norm_num) (by decide) (by intro i; fin_cases i <;> rfl)
     have := tc_two_int (by norm_num) hPDRC hXDRC h5
     simp only [sarea, ptD, ptC] at this; linarith
@@ -489,7 +478,7 @@ theorem corollary5 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b 
     · exact Or.inl ⟨secE Q hQin hq, secC S hSin hs⟩
     · exact Or.inr ⟨secE S hSin hs, secC Q hQin hq⟩
 
-/-! ### Theorem 6 -/
+/-! ### The right hull is a triangle -/
 
 /-- Exchanging the two central points does not change the least area. -/
 theorem tc_min_swapPQ (l b : ℝ) (L P Q R S : Point) :
@@ -505,8 +494,8 @@ theorem tc_min_swapRS (l b : ℝ) (L P Q R S : Point) :
   rw [show typeIIConfig l b L P Q S R = typeIIConfig l b L P Q R S ∘ Equiv.swap 7 8 by
     funext i; fin_cases i <;> rfl, minTriangleArea_comp_perm]
 
-/-- The monotone replacement after (10): the conditions `c > s`, `w(c-s)² ≥ 4cbs` persist when
-`c` is increased. -/
+/-- Monotonicity in `c`: the conditions `c > s`, `w(c-s)² ≥ 4cbs` persist when `c` is
+increased. -/
 theorem N_mono {b w s c C : ℝ} (hw : 0 < w) (hs : 0 < s) (hb : 0 < b) (hcs : s < c)
     (hcC : c ≤ C) (h : 4 * c * b * s ≤ w * (c - s) ^ 2) : 4 * C * b * s ≤ w * (C - s) ^ 2 := by
   have h1 : 4 * b * s ≤ w * (c - s) := by
@@ -516,8 +505,10 @@ theorem N_mono {b w s c C : ℝ} (hw : 0 < w) (hs : 0 < s) (hb : 0 < b) (hcs : s
   nlinarith [mul_nonneg (sub_nonneg.2 hcC) (show 0 ≤ w * (C + c - 2 * s) - 4 * b * s by
     nlinarith)]
 
-/-- The scalar core of Theorem 6 (§§6.2 and 6.5), at `s = 7/64`. -/
-theorem theorem6_scalar {b q c : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hq1 : q ≤ 1)
+/-- The scalar core of `triangularHull_BCRS`, at `s = 7/64`: the conditions `0 < b ≤ 1/2`,
+`13/16 ≤ q ≤ 1`, `bq ≥ 3s`, `c = 1 - (1-b)q > s`, `4cbs ≤ (1-b)(c-s)²` and the bounds on `q` of
+`q_lower_bounds_of_b_le` (`b ≤ 3/7 → q ≥ 7/8`, `b ≤ 9/20 → q > 27/32`) are inconsistent. -/
+theorem false_of_ear_quadratic {b q c : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hq1 : q ≤ 1)
     (hq : 13 / 16 ≤ q) (hbq : 3 * (7 / 64) ≤ b * q) (hc : c = 1 - (1 - b) * q)
     (hcs : 7 / 64 < c) (h10 : 4 * c * b * (7 / 64) ≤ (1 - b) * (c - 7 / 64) ^ 2)
     (h25b : b ≤ 3 / 7 → 7 / 8 ≤ q) (h25c : b ≤ 9 / 20 → 27 / 32 < q) : False := by
@@ -557,7 +548,7 @@ theorem theorem6_scalar {b q c : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hq1 : q 
       have hu : 0 ≤ 20 * b - 9 := by linarith
       nlinarith [mul_nonneg (mul_nonneg hu hu) hu, mul_nonneg hu hu]
 
-/-- §6.1, first step: the lower-vertex inequality of `TYPE_II_BALANCED.md` §1 after the map
+/-- The lower-vertex inequality `TypeIIBalanced.lower_vertex_bounds` after the map
 `(x,y) ↦ ((x-b)/w, y)`, for the right hull vertex `X` adjacent to `B`. -/
 theorem lower_vertex_step {b : ℝ} {X Y : Point} (_hb : 0 < b) (hb1 : b < 1)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hXr : IsRight b X) (hYr : IsRight b Y)
@@ -606,14 +597,15 @@ theorem lower_vertex_step {b : ℝ} {X Y : Point} (_hb : 0 < b) (hb1 : b < 1)
     have : 1 / w * minTriangleArea ![ptB b, X, Y, ptC] * (w * 2) =
         2 * minTriangleArea ![ptB b, X, Y, ptC] := by field_simp
     rw [this]; linarith
-  obtain ⟨-, -, hx1, hlv, -⟩ := TypeIIBalanced.claim_lower_vertex_ineq (a := 7 / 64 / w)
+  obtain ⟨-, -, hx1, hlv, -⟩ := TypeIIBalanced.lower_vertex_bounds (a := 7 / 64 / w)
     (by positivity) (hright X hX hXr) (hright Y hY hYr) hconv hmin'
   rw [hφ1, hφ2] at hlv
   rw [hφ1] at hx1
   exact ⟨hx1, hlv⟩
 
-/-- §6.1, the scalar step: the lower-vertex inequality and the actual ear `EBX` give (10). -/
-theorem eq10_step {b l x' y : ℝ} (hb : 0 < b) (hb1 : b < 1) (hl : 0 < l)
+/-- The scalar step: the lower-vertex inequality and the actual ear `EBX` give `c > s` and
+`4cbs ≤ w(c-s)²` for `w = 1 - b`, `c = 1 - wq`, `q = 1 - λ`, `s = 7/64`. -/
+theorem ear_quadratic_of_lowerVertex {b l x' y : ℝ} (hb : 0 < b) (hb1 : b < 1) (hl : 0 < l)
     (hx1 : x' < 1) (hlv : 7 / 64 / (1 - b) ≤ (x' - y) * (1 - x'))
     (hA : 7 / 64 ≤ b * y + l * (1 - b) * x') :
     7 / 64 < 1 - (1 - b) * (1 - l) ∧
@@ -648,8 +640,8 @@ theorem eq10_step {b l x' y : ℝ} (hb : 0 < b) (hb1 : b < 1) (hl : 0 < l)
   by_contra hcon; push Not at hcon
   nlinarith [mul_pos hw (show 0 < 4 * c * b * (7 / 64) - w * (c - 7 / 64) ^ 2 by linarith)]
 
-/-- §6.1: a quadrilateral right hull `B, X, Y, C` (with `X` adjacent to `B`) gives (10) and,
-with the forced placement and Lemma 7, a contradiction. -/
+/-- A quadrilateral right hull `B, X, Y, C` (with `X` adjacent to `B`) gives the inequality of
+`ear_quadratic_of_lowerVertex` and, with the forced placement and `q_lower_bounds_of_b_le`, a contradiction (`false_of_ear_quadratic`). -/
 theorem quad_excluded {l b : ℝ} {L P X Y : Point} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hl : 0 < l)
     (hl1 : l < 1) (hL : InTriangle L ptD (ptE l) (ptB b)) (hLce : 0 < sarea (ptE l) ptC L)
     (hP : IsCentral b P) (hPce : 0 < sarea (ptE l) ptC P)
@@ -665,14 +657,14 @@ theorem quad_excluded {l b : ℝ} {L P X Y : Point} (hb : 0 < b) (hb2 : b ≤ 1 
       have : (1 - b) ≠ 0 := by linarith
       simp only [sarea, ptE, ptB]; field_simp; ring
     linarith
-  obtain ⟨hcs, h10⟩ := eq10_step hb (by linarith) hl hx1 hlv hA
-  obtain ⟨-, h25b, h25c⟩ := eq25 hb (by linarith) hl hl1 hL hLce hP hPce hmin6
+  obtain ⟨hcs, h10⟩ := ear_quadratic_of_lowerVertex hb (by linarith) hl hx1 hlv hA
+  obtain ⟨-, h25b, h25c⟩ := q_lower_bounds_of_b_le hb (by linarith) hl hl1 hL hLce hP hPce hmin6
   have hKs := tc_Ks_gt
-  exact theorem6_scalar hb hb2 (by linarith) (by linarith) hbq rfl hcs h10 h25b h25c
+  exact false_of_ear_quadratic hb hb2 (by linarith) (by linarith) hbq rfl hcs h10 h25b h25c
 
-/-- Theorem 6 from the forced placement: the right hull is the triangle `BRC` with `S` inside,
+/-- `triangularHull_BCRS` from the forced placement: the right hull is the triangle `BRC` with `S` inside,
 or `BSC` with `R` inside. -/
-theorem theorem6_core {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
+theorem inTriangle_S_or_R_of_placement {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     InTriangle S (ptB b) R ptC ∨ InTriangle R (ptB b) S ptC := by
   have h128 : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S) :=
@@ -683,7 +675,7 @@ theorem theorem6_core {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l
   obtain ⟨⟨hb, hb1, hl, hl1, hLsq, hPsq, hQsq, hRsq, hSsq⟩, hb2, hL, hLce, hP, hPce, hQ, hQce,
     hR, hS⟩ := hpl
   have hmin6 : 7 / 128 ≤ minTriangleArea ![ptD, ptC, ptE l, ptB b, L, P] :=
-    tc_min_sub h128 _ ![0, 1, 2, 3, 4, 5] ![0, 1, 2, 3, 4, 5, 0, 0, 0] (by norm_num) (by decide)
+    min_sub' h128 _ ![0, 1, 2, 3, 4, 5] ![0, 1, 2, 3, 4, 5, 0, 0, 0] (by norm_num) (by decide)
       (by intro i; fin_cases i <;> rfl)
   have hEB : ∀ X : Point, X ∈ unitSquare → IsRight b X → 0 < sarea (ptE l) (ptB b) X := by
     intro X hX hXr
@@ -704,63 +696,60 @@ theorem theorem6_core {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l
     linarith [sarea_cycle R S ptC, sarea_swap₂₃ R ptC S]
   · exfalso
     refine quad_excluded hb hb2 hl hl1 hL hLce hP hPce hmin6 hK hbq hSsq hRsq hS hR ?_ ?_
-      (le_trans (by norm_num) (tc_ge_of_pos hs2 h128 2 3 8 (hEB S hSsq hS)))
+      (le_trans (by norm_num) (sarea_ge_of_le_min_of_pos hs2 h128 2 3 8 (hEB S hSsq hS)))
     · refine ⟨by linarith [sarea_swap₂₃ (ptB b) R S], ?_, ?_, hBCS⟩
       · linarith [sarea_cycle ptC S R, sarea_cycle R ptC S]
       · linarith [sarea_cycle (ptB b) R ptC, sarea_swap₁₂ (ptB b) ptC R,
           sarea_cycle ptC (ptB b) R]
-    · exact tc_min_sub h128 _ ![3, 8, 7, 1] ![0, 3, 0, 0, 0, 0, 0, 2, 1] (by norm_num)
+    · exact min_sub' h128 _ ![3, 8, 7, 1] ![0, 3, 0, 0, 0, 0, 0, 2, 1] (by norm_num)
         (by decide) (by intro i; fin_cases i <;> rfl)
   · exfalso
     refine quad_excluded hb hb2 hl hl1 hL hLce hP hPce hmin6 hK hbq hRsq hSsq hR hS ?_ ?_
-      (le_trans (by norm_num) (tc_ge_of_pos hs2 h128 2 3 7 (hEB R hRsq hR)))
+      (le_trans (by norm_num) (sarea_ge_of_le_min_of_pos hs2 h128 2 3 7 (hEB R hRsq hR)))
     · refine ⟨a1, ?_, ?_, hBCR⟩
       · linarith [sarea_swap₂₃ R ptC S]
       · linarith [sarea_cycle (ptB b) S ptC, sarea_swap₁₂ (ptB b) ptC S,
           sarea_cycle ptC (ptB b) S]
-    · exact tc_min_sub h128 _ ![3, 7, 8, 1] ![0, 3, 0, 0, 0, 0, 0, 1, 2] (by norm_num)
+    · exact min_sub' h128 _ ![3, 7, 8, 1] ![0, 3, 0, 0, 0, 0, 0, 1, 2] (by norm_num)
         (by decide) (by intro i; fin_cases i <;> rfl)
   · left
     exact ⟨a1, a2, hBCS⟩
 
-/-- Theorem 6 in the form used later: in the balanced row at least area `A₀`, `S` is strictly
+/-- `triangularHull_BCRS` in the form used later: in the balanced row at least area `A₀`, `S` is strictly
 inside `BRC` or `R` is strictly inside `BSC`. -/
-theorem theorem6_tri {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b L P Q R S)
+theorem inTriangle_S_or_R_of_balancedRow {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b L P Q R S)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     InTriangle S (ptB b) R ptC ∨ InTriangle R (ptB b) S ptC := by
   have h79 : 79 / 1440 ≤ minTriangleArea (typeIIConfig l b L P Q R S) :=
     le_trans A₀_bounds.2.2.1.le hmin
-  rcases TypeIIBalanced.claim_balanced_placement hrow h79 with hpl | hpl
-  · exact theorem6_core hpl hmin
-  · exact theorem6_core hpl (by rw [tc_min_swapPQ]; exact hmin)
+  rcases TypeIIBalanced.balancedPlacement_or_swap hrow h79 with hpl | hpl
+  · exact inTriangle_S_or_R_of_placement hpl hmin
+  · exact inTriangle_S_or_R_of_placement hpl (by rw [tc_min_swapPQ]; exact hmin)
 
-/-- **Theorem 6** (`TYPE_II_COMPLETION:Theorem6`). In the balanced Type-II class (the row
-`(2,2,2)` with `b ≤ 1/2`), at least area `A₀`, the four-point right set `B, C, R, S` cannot have a
-quadrilateral hull: its hull is a triangle. The proof works at `s = 7/64` from the forced
-placement (9) (`bq ≥ 3s`, `q ≥ Ks > 13/16`): the lower-vertex inequality and the ear `EBR` give
-(10); the cases `q ≥ 7/8` (§6.2), the line `LP` (§6.3), the bounds (19)–(21) (§6.4) and §6.5
-exhaust all parameters. `docs/proof/nine/TYPE_II_COMPLETION.md`, lines 371–704.
-
-Uses: TYPE_II_BALANCED:claim-balanced-placement, TYPE_II_BALANCED:claim-L-above-CE,
-TYPE_II_BALANCED:claim-lower-vertex-ineq, CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem theorem6 {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b L P Q R S)
+/-- In the balanced Type-II class (the row `(2,2,2)` with `b ≤ 1/2`), at least area `A₀`, the
+four-point right set `B, C, R, S` cannot have a quadrilateral hull: its hull is a triangle. The
+proof works at `s = 7/64` from the forced placement `TypeIIBalanced.balancedPlacement_or_swap`
+(`bq ≥ 3s`, `q ≥ Ks > 13/16`): for a quadrilateral hull, the lower-vertex inequality and the ear
+`EBR` give `4cbs ≤ w(c-s)²` (`ear_quadratic_of_lowerVertex`), which the bounds of `q_lower_bounds_of_b_le` exclude
+(`false_of_ear_quadratic`). -/
+theorem triangularHull_BCRS {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b L P Q R S)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     TriangularHull ![ptB b, ptC, R, S] := by
   have hset : ∀ X Y : Point, ({ptB b, X, ptC} : Set Point) = {ptB b, ptC, X} := by
     intro X Y; ext x; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; tauto
-  rcases theorem6_tri hrow hmin with h | h
+  rcases inTriangle_S_or_R_of_balancedRow hrow hmin with h | h
   · refine ⟨0, 1, 2, fun m => ?_⟩
     fin_cases m
     · exact subset_convexHull ℝ _ (Or.inl rfl)
     · exact subset_convexHull ℝ _ (Or.inr (Or.inl rfl))
     · exact subset_convexHull ℝ _ (Or.inr (Or.inr rfl))
-    · have := tc_mem_hull_of_inTri h
+    · have := mem_convexHull_of_inTriangle h
       rw [hset R S] at this; exact this
   · refine ⟨0, 1, 3, fun m => ?_⟩
     fin_cases m
     · exact subset_convexHull ℝ _ (Or.inl rfl)
     · exact subset_convexHull ℝ _ (Or.inr (Or.inl rfl))
-    · have := tc_mem_hull_of_inTri h
+    · have := mem_convexHull_of_inTriangle h
       rw [hset S R] at this; exact this
     · exact subset_convexHull ℝ _ (Or.inr (Or.inr rfl))
 

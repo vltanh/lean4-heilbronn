@@ -5,25 +5,23 @@ public import Heilbronn.Common.CertNotation
 public import Heilbronn.Common.DataReader
 
 /-!
-# Three occupied corner caps (case N6-05)
+# Three occupied corner caps
 
 In family N, with anchors `A = (0,a)`, `H = (0,h)`, `B = (b,0)`, `C = (c,0)`, `D = (1,d)`,
 `F = (f,1)`, let `X` lie in the closed corner cap beyond `CD` (towards `(1,0)`), `Y` in the
 closed cap beyond `FH` (towards `(0,1)`) and `Q` in the closed cap beyond `DF` (towards `(1,1)`).
 Then some triangle has area below `7/128 < A₀` (`three_caps`).
 
-This closes the occupancy `(n_L, n_T, n_R; n_I) = (1, 1, 1; 0)` of the six-boundary form (N6-05,
-`docs/proof/nine/UNRESTRICTED.md` §4) directly. The hand proof reduces that case to a convex nonagon and
-applies the affine isoperimetric inequality (`docs/proof/nine/GLOBAL_COMPLETION.md`, Theorem 1); here nine
-triangles suffice, and no convexity argument is needed.
+This settles directly the six-boundary case with one free point in each of the caps `R`, `T`,
+`L`: nine triangles suffice, and no convexity argument is needed.
 
 The proof is a polynomial certificate in the twelve coordinates
 `(a, h, b, c, d, f, x, y, z, w, r, t)`, where `X = (x, y)`, `Y = (z, w)`, `Q = (r, t)`, split into
 three cells by `h ≤ 1/2`, then `c ≤ 1/2`. The atoms of each cell are 14 normalization and
 cap-membership facts, 8 consequences of single area bounds, the cuts of the cell, and the nine
 oriented area costs `σ·[PQR] - 7/64` of `ABC, ABH, AYH, BCX, CXD, XDQ, DFQ, FYH, FYQ`. The
-weights are in `data/nine/n605/` (found by linear programming, `scripts/nine/n605/`); the kernel expands
-the weighted sum and checks that it is negative on the unit cube (`Cert.check_sound`).
+weights are in `Heilbronn/Nine/Data/n605/` (found by linear programming); the kernel expands the
+weighted sum and checks that it is negative on the unit cube (`Cert.check_sound`).
 -/
 
 @[expose] public section
@@ -68,13 +66,13 @@ def cell0 : List Expr := commonAtoms ++ [k (1 / 2) - v 1] ++ costAtoms
 def cell1 : List Expr := commonAtoms ++ [v 1 - k (1 / 2), k (1 / 2) - v 3] ++ costAtoms
 def cell2 : List Expr := commonAtoms ++ [v 1 - k (1 / 2), v 3 - k (1 / 2)] ++ costAtoms
 
-theorem cell0_check : check cell0 (term_rows% "../../../data/nine/n605/B_cell0_terms.txt") = true := by
+theorem cell0_check : check cell0 (term_rows% "../Data/n605/B_cell0_terms.txt") = true := by
   decide +kernel
 
-theorem cell1_check : check cell1 (term_rows% "../../../data/nine/n605/B_cell1_terms.txt") = true := by
+theorem cell1_check : check cell1 (term_rows% "../Data/n605/B_cell1_terms.txt") = true := by
   decide +kernel
 
-theorem cell2_check : check cell2 (term_rows% "../../../data/nine/n605/B_cell2_terms.txt") = true := by
+theorem cell2_check : check cell2 (term_rows% "../Data/n605/B_cell2_terms.txt") = true := by
   decide +kernel
 
 /-! ### The geometric facts behind the atoms -/

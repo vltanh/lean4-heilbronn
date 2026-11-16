@@ -5,11 +5,10 @@ public import Heilbronn.Nine.SevenBoundary.Interior.WordTable
 
 /-! # Ray words of the points inside the anchor heptagon
 
-`SEVEN_BOUNDARY_MIXED_LOWER.md` (10), `SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md` (11): a point
-strictly inside the anchor heptagon and collinear with no two anchors has one of the 57 ray words
-(`word_exists`). The geometric input is the radial monotonicity at each anchor `O = V_i`
-(`mono_step`): the rays from `O` to the other anchors are angularly ordered, by the identity
-`[OUX][OMW] = [OUM][OXW] + [OMX][OUW]` with `W = V_{i-1}`; the finite part is
+A point strictly inside the anchor heptagon and collinear with no two anchors has one of the 57
+ray words (`word_exists`). The geometric input is the radial monotonicity at each anchor
+`O = V_i` (`mono_step`): the rays from `O` to the other anchors are angularly ordered, by the
+identity `[OUX][OMW] = [OUM][OXW] + [OMX][OUW]` with `W = V_{i-1}`; the finite part is
 `Model.tableOK_true`.
 -/
 
@@ -67,7 +66,7 @@ theorem mono (hN : SevenNormal a h b c d e f) (hX : InHeptagon a h b c d e f X) 
   exact mono_step (cyc_pos hN hi (by omega) (by omega) c1) hW
     (cyc_pos hN hi (by omega) (by omega) c2) (cyc_pos hN hi (by omega) (by omega) c3) hpos
 
-/-- **Words** (`SEVEN_BOUNDARY_MIXED_LOWER:eq10`): a free point strictly inside the anchor
+/-- **Words**: a free point strictly inside the anchor
 heptagon has one of the 57 ray words. -/
 theorem Comp.word_exists (H : Comp a h b c d e f P Q) {x : ℕ} (hx : x = 7 ∨ x = 8)
     (hX : InHeptagon a h b c d e f (cfg a h b c d e f P Q x)) :

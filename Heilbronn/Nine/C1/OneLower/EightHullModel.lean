@@ -2,19 +2,19 @@ module
 
 public import Heilbronn.Nine.C1.OneLower.CoverCommon
 
-/-! # The certificate model of the eight-vertex one-lower hulls (`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`)
+/-! # The certificate model of the eight-vertex one-lower hulls
 
-Computable mirror of `docs/proof/nine/check_c1_one_lower_eight_hull.py`. The nine points are the octagon
-`V₀, …, V₇` of the mode and `V₈ = L`, in the variables `h, c, d, f, r_x, r_y, x_x, x_y, y_x, y_y,
-ℓ_x, ℓ_y` (`0, …, 11`):
+Computable model of the two modes of `Heilbronn.Nine.C1.OneLower.EightHull`. The nine points are
+the octagon `V₀, …, V₇` of the mode and `V₈ = L`, in the variables `h, c, d, f, r_x, r_y, x_x, x_y,
+y_x, y_y, ℓ_x, ℓ_y` (`0, …, 11`):
 * mode `false` (`one_each`): `O, C, R, D, X, F, Y, H, L` (`ptOne`);
 * mode `true` (`two_top`): `O, C, R, D, X, Y, F, H, L` (`ptTwo`).
 
-The atoms of a mode and word are the ordered affine factors (8) or (16) (`factorsOne`,
-`factorsTwo`) and the 84 costs (19): the table `table w` of all lexicographic triples (hull
+The atoms of a mode and word are the ordered affine factors of the mode (`factorsOne`,
+`factorsTwo`) and the 84 costs: the table `table w` of all lexicographic triples (hull
 triples positive, `(i, j, L)` by the word) with its strengthened costs (`L` the only free point).
-The certificates are exported by `scripts/nine/c1_one_lower/eight_hull.py` into
-`data/nine/c1_one_lower_eight_hull/` and checked in `Heilbronn.Nine.C1.OneLower.EightHullCerts`.
+The certificates are read from `Heilbronn/Nine/Data/c1_one_lower_eight_hull/` and checked in
+`Heilbronn.Nine.C1.OneLower.EightHullCerts`.
 -/
 
 @[expose] public section
@@ -49,7 +49,7 @@ def ptTwo : ℕ → Expr × Expr
   | 8 => (v 10, v 11)
   | _ => (0, 0)
 
-/-- The ordered affine factors (8) of `one_each`. -/
+/-- The ordered affine factors of mode `one_each`. -/
 def factorsOne : List Expr :=
   [v 0 - k (32 / 73), k (6 / 7) - v 0, v 1 - k (32 / 73), k (6 / 7) - v 1, v 2 - k (32 / 73),
     v 0 - v 2, v 3 - k (32 / 73), v 1 - v 3, v 2 - v 3,
@@ -59,7 +59,7 @@ def factorsOne : List Expr :=
     v 10 - k (28 / 219), v 11 - k (28 / 219), v 1 - v 10 - k (56 / 219),
     v 0 - v 11 - k (56 / 219), 1 - v 10 - v 11 - k (8 / 73)]
 
-/-- The ordered affine factors (16) of `two_top`. -/
+/-- The ordered affine factors of mode `two_top`. -/
 def factorsTwo : List Expr :=
   [v 0 - k (384 / 803), 1 - v 0, v 1 - k (24 / 73), k (11 / 16) - v 1, v 2 - k (32 / 73),
     k (33 / 65) - v 2, v 3 - k (8 / 73), k (17 / 50) - v 3, v 0 - v 2, v 1 - v 3,
@@ -69,18 +69,19 @@ def factorsTwo : List Expr :=
     v 6 - v 8 - k (8 / 73), v 9 - v 7 - k (8 / 73), v 10 - k (8 / 73), v 11 - k (128 / 803),
     v 1 - v 10 - k (16 / 73), v 0 - v 11 - k (256 / 803), 1 - v 10 - v 11 - k (8 / 73)]
 
-/-- The six octagon words (18). -/
+/-- The six radial words of a point inside `V₀V₁V₇` of a convex octagon
+(`C1OneLowerEightHull.octWord`). -/
 def octWords : List (List ℕ) :=
   [[1, 6, 6, 5, 4, 3, 2, 1], [2, 6, 5, 5, 4, 3, 2, 1], [3, 6, 5, 4, 4, 3, 2, 1],
     [4, 6, 5, 4, 3, 3, 2, 1], [5, 6, 5, 4, 3, 2, 2, 1], [6, 6, 5, 4, 3, 2, 1, 1]]
 
-/-- The checker's `positive(word, i, j)`: `(j - i) mod 8 ≤ wᵢ`. -/
+/-- The sign of `[VᵢVⱼL]` under the word `w`: positive when `(j - i) mod 8 ≤ wᵢ`. -/
 def positive (w : List ℕ) (i j : ℕ) : Bool := ((j + 8 - i) % 8).ble (w.getD i 0)
 
 /-- The table of a word: every lexicographic triple, hull triples positive, `(i, j, L)` by the
 word. -/
 def table (w : List ℕ) : List SFact :=
-  lexTriples.map fun t => (t, if t.2.2 < 8 then true else positive w t.1 t.2.1)
+  (lexTriples 9).map fun t => (t, if t.2.2 < 8 then true else positive w t.1 t.2.1)
 
 /-- The points of a mode. -/
 def pt (m : Bool) : ℕ → Expr × Expr := if m then ptTwo else ptOne
@@ -89,6 +90,7 @@ def pt (m : Bool) : ℕ → Expr × Expr := if m then ptTwo else ptOne
 def factors (m : Bool) : List Expr := if m then factorsTwo else factorsOne
 
 /-- The cover package of a mode and word (no splits). -/
-def spec (m : Bool) (w : List ℕ) : Spec SFact Split := tableSpec (factors m) [] (pt m) [8] (table w)
+def spec (m : Bool) (w : List ℕ) : Spec SFact Split :=
+  tableSpec (pt m) Package.bnd [8] (factors m) [] (table w) triBranches
 
 end Heilbronn.Nine.C1OneLowerEightHull.Model

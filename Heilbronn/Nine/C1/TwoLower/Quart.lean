@@ -4,7 +4,7 @@ public import Heilbronn.Nine.C1.TwoLower.Bern
 
 /-! # Quartic Bernstein certificates for the cap elimination `R(h, c, f) < 0`
 
-Used by `docs/proof/nine/C1_TOP_CAP_OF_SPLIT.md` §3 and `docs/proof/nine/C1_TOP_CAP_CONTAINMENT_PAIR.md` §1. There
+Used by the certificates `OfSplitCert` and `ContainmentCert`. There
 `R(h, c, f) = (B - ωE₁)² - 4Z₀{sf(c - f) - ωE₀}` (with `h = p/c`) is shown negative on an interval
 `f = F/D`, `F = ℓ + Wθ`, `θ ∈ [0, 1]`, by the five degree-four Bernstein coefficients `N₀, …, N₄`
 in `θ` of `G(F) = D⁴c²R(p/c, c, F/D)`, each a polynomial in two parameters checked negative by a
@@ -120,7 +120,8 @@ theorem G_neg {c p D F0 F1 θ : ℝ} (h0 : 0 ≤ θ) (h1 : θ ≤ 1)
     have k0 : rN c p D F0 F1 0 * (1 - 1) ^ 4 = 0 := by ring
     linarith [show rN c p D F0 F1 4 * 1 ^ 4 = rN c p D F0 F1 4 by ring]
 
-/-- `G(fD) = D⁴c²R(p/c, c, f)` for the cap function `R` of `C1_TOP_CAP_OF_SPLIT.md` (10). -/
+/-- `G(fD) = D⁴c²R(p/c, c, f)`, for the cap function `R` of the module header written out with
+`s = 8/73`, `ω = 5/64`, `ρ = 49/60`. -/
 theorem G_eq (c p D f : ℝ) (hc : c ≠ 0) :
     rG c p D (f * D) = D ^ 4 * c ^ 2 *
       (((c - f) * (1 - p / c + p / c * f - 8 / 73) - f * (c - 1) - 5 / 64 * (c * (1 - p / c))) ^ 2 -

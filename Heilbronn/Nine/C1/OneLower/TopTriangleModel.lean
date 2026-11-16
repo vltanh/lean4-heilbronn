@@ -2,14 +2,14 @@ module
 
 public import Heilbronn.Nine.C1.OneLower.ModelB
 
-/-! # The certificate model of `docs/proof/nine/C1_ONE_LOWER_TOP_TRIANGLE.md`
+/-! # The certificate model of the top triangle
 
-Computable mirror of `docs/proof/nine/check_c1_one_lower_top_triangle.py`. The nine points are the hexagon
-`O, C, D, X, F, H` (indices `0, …, 5`) and the interior points `L, P, Q` (`6, 7, 8`), in the
-variables `h, c, d, f, g, k, ℓ_x, ℓ_y, p_x, p_y, q_x, q_y` (`v 0, …, v 11`). The atoms of the
-cell `(i, j, ℓ)` (lower word `i`, cap word `j`, upper word `ℓ`) are the 28 affine factors of
-Section 3 and the strengthened costs of `hullTable 6 [lowerW i, capW j, upperW ℓ]` and the split
-signs. The certificates are exported by `scripts/nine/c1_one_lower_b/top_triangle.py` and checked in
+Computable definitions for the certificate package of `C1OneLowerTopTriangle.topTriangle_cells_false`. The nine
+points are the hexagon `O, C, D, X, F, H` (indices `0, …, 5`) and the interior points `L, P, Q`
+(`6, 7, 8`), in the variables `h, c, d, f, g, k, ℓ_x, ℓ_y, p_x, p_y, q_x, q_y`
+(`v 0, …, v 11`). The atoms of the cell `(i, j, ℓ)` (lower word `i`, cap word `j`, upper word
+`ℓ`) are the 28 affine factors and the strengthened costs of
+`hullTable 6 [lowerW i, capW j, upperW ℓ]` and the split signs. The certificates are checked in
 `Heilbronn.Nine.C1.OneLower.TopTriangleTrees`.
 -/
 
@@ -32,7 +32,7 @@ def pt : ℕ → Expr × Expr
   | 8 => (v 10, v 11)
   | _ => (0, 0)
 
-/-- The 28 affine factors of Section 3, in order. -/
+/-- The 28 affine factors (the bounds of `C1OneLowerTopTriangle.Placement.bounds`), in order. -/
 def factors : List Expr :=
   [v 0 - k (24 / 73), v 1 - k (24 / 73), 1 - v 0, 1 - v 1, v 2 - k (8 / 73), k (41 / 65) - v 2,
     v 3 - k (8 / 73), k (3 / 7) - v 3, v 0 - v 2, v 1 - v 3, v 2 - v 3, v 4 - v 3 - k (24 / 73),
@@ -59,7 +59,7 @@ def upperW : List (List ℕ) :=
 
 /-- The cover package of the cell `(i, j, ℓ)`. -/
 def spec (i j l : ℕ) : Spec SFact C1ZeroLower.Model.Split :=
-  tableSpec factors [] pt [6, 7, 8]
-    (hullTable 6 [lowerW.getD i [], capW.getD j [], upperW.getD l []])
+  tableSpec pt Package.bnd [6, 7, 8] factors []
+    (hullTable 6 [lowerW.getD i [], capW.getD j [], upperW.getD l []]) C1ZeroLower.Model.triBranches
 
 end Heilbronn.Nine.C1OneLowerTopTriangle.Model

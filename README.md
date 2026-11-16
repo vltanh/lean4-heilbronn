@@ -118,10 +118,8 @@ follow from it, by arguments shared by all cases. The root module
 
 ## Proof outline: nine points
 
-The hand proof is in [docs/proof/nine/](docs/proof/nine/README.md), assembled
-in [`UNRESTRICTED.md`](docs/proof/nine/UNRESTRICTED.md). Each of the 84
-manuscripts on the route of the assembly is formalized in the module of the
-same name under `Heilbronn/Nine/`.
+The proof is the Lean code under `Heilbronn/Nine/`, assembled in
+`Heilbronn/Nine/Uniqueness.lean`. In outline:
 
 - **Construction.** The 84 triangle areas of the configuration, with the eleven
   of least area `(9√65 − 55)/320`, exactly in `ℚ(√65)`.
@@ -145,11 +143,8 @@ same name under `Heilbronn/Nine/`.
 - **Equality.** The chamber forces the construction; the shears of the
   normalization fix it, by strict local optimality.
 
-The formalization follows the hand proof and simplifies it where that is
-easier. Several long hand arguments are replaced by certificates found by
-linear programming. The case of three occupied caps, where the hand proof used
-the affine isoperimetric inequality for a convex nonagon, is closed by nine
-triangles and one certificate, so the proof uses no external theorem.
+Many case exclusions are certificates found by linear programming, and the
+proof uses no theorem from outside mathlib.
 
 ## Prior work
 
@@ -159,9 +154,9 @@ Comellas and Yebra (2002) found the configuration. Chen, Xu and Zeng (2017)
 bounded `H₉` in an interval by a branch and bound on GPUs, and Monji, Modir and
 Kocuk (2025) and Sudermann-Merx (2026) found the value by mixed-integer
 optimization, within solver tolerances; the first version of Sudermann-Merx's
-preprint claimed a proof, which later versions withdrew. We found no exact
-proof of `H₉`, and no proof that its optimal configuration is unique, before
-the hand proof here. The Heilbronn numbers of a different problem, points
+preprint claimed a proof, which later versions withdrew. We found no earlier
+exact proof of `H₉`, and no earlier proof that its optimal configuration is
+unique. The Heilbronn numbers of a different problem, points
 normalized by the area of their convex hull, are formalized in Lean for
 `n ≤ 8` (Tej Stead, 2026); we found no formalization of a Heilbronn number of
 the unit square, nor of any nine-point Heilbronn number.
@@ -181,11 +176,8 @@ Heilbronn/
 │                          polynomial and Bernstein certificate checkers, covers
 └── Nine/                  Construction, Uniqueness; Setup/, Normalization/, Local/, Global/,
                            Hulls/, Corners/, TypeII/, EightBoundary/, SevenBoundary/,
-                           SixBoundary/, Sharp/, C1/, Assembly/
-data/nine/                 certificate weights
-scripts/nine/              the exporters and searches that produced them
-docs/proof/nine/           the hand proof of nine points
-docs/research/nine/        its research notes, archived
+                           SixBoundary/, Sharp/, C1/, Assembly/; Data/, the certificate weights
+archive/nine/              the first draft of the proof, by ChatGPT 6 Pro, archived
 ```
 
 Every case has just `Construction.lean` and `Uniqueness.lean` at its root;
@@ -207,7 +199,9 @@ scripts/verify-comparator.sh
 The build uses Lean and mathlib `v4.36.0-rc2`, pinned by `lean-toolchain` and
 `lake-manifest.json`. `lake build` must succeed without warnings, and every
 `#print axioms` line must read `[propext, Classical.choice, Quot.sound]`. The
-certificates are checked by `decide +kernel`, never by `native_decide`. The last
+certificates are checked by the kernel, never by `native_decide`: by
+`decide +kernel`, or for a certificate tree by `tree_decide`, which gives each
+subtree a kernel check of its own so that no module needs much memory. The last
 command (Linux, `bwrap`) runs the check of the
 [Palomar registry](#palomar-registry). The trusted base is Lean, Lake and
 mathlib.
@@ -232,6 +226,6 @@ Apache-2.0, matching mathlib and the Lean ecosystem.
 ## Contributors
 
 AI models wrote the mathematics and the Lean code, and the repository owner
-directed the work. ChatGPT 6 Pro, in the ChatGPT chat, wrote the hand proof of
-nine points; Claude Opus 5.5, in Claude Code, wrote the Lean code. Who did
+directed the work. ChatGPT 6 Pro, in the ChatGPT chat, wrote the first draft
+of the nine-point proof; Claude Opus 5.5, in Claude Code, wrote the Lean code. Who did
 what, and when: [docs/contributors.md](docs/contributors.md).

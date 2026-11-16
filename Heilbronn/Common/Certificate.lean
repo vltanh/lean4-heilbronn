@@ -386,12 +386,8 @@ end Expr
 
 /-! ### Certificates -/
 
-/-- The product of the polynomials `ps` at the indices `is`, each given with its degree. -/
-def prodIdx (ps : List (ℕ × Poly)) : List ℕ → Poly
-  | [] => [(0, 1)]
-  | i :: is => mulPoly (ps.getD i (0, [])).2 (prodIdx ps is)
-
-/-- The degree of that product. -/
+/-- The degree of the product of the polynomials `ps` at the indices `is`, each given with its
+degree. -/
 def degIdx (ps : List (ℕ × Poly)) : List ℕ → ℕ
   | [] => 0
   | i :: is => (ps.getD i (0, [])).1 + degIdx ps is
@@ -407,21 +403,9 @@ def treeSum : ℕ → List Poly → Poly
   | 0, ps => ps.foldr addPoly []
   | n + 1, ps => treeSum n (pairSums ps)
 
-/-- The expansion of `Σ_j w_j ∏_{i ∈ I_j} p_i`. -/
-def expand (ps : List (ℕ × Poly)) (ts : List (ℤ × List ℕ)) : Poly :=
-  treeSum 32 (ts.map fun t => scalePoly t.1 (prodIdx ps t.2))
-
 /-- The degrees and scaled integer polynomials of the expressions. -/
 def prepare (fs : List Expr) : List (ℕ × Poly) :=
   fs.map fun e => (e.deg, e.toPoly.2)
-
-/-- The certificate check: every weight is positive, every index names an expression, every
-term has degree below `32`, and the monomial bound of the expansion is negative. -/
-def check (fs : List Expr) (ts : List (ℤ × List ℕ)) : Bool :=
-  let ps := prepare fs
-  ts.all (fun t => decide (0 < t.1) && t.2.all (fun i => decide (i < fs.length)) &&
-    decide (degIdx ps t.2 < 32)) &&
-  decide (bound (expand ps ts) < 0)
 
 theorem eval_pairSums (z : ℕ → ℝ) (ps : List Poly) :
     ((pairSums ps).map (Poly.eval z)).sum = (ps.map (Poly.eval z)).sum := by
@@ -440,27 +424,209 @@ theorem eval_treeSum (z : ℕ → ℝ) (n : ℕ) (ps : List Poly) :
     | cons p ps ih => simp [eval_addPoly, ih]
   | succ n ih => simp only [treeSum, ih, eval_pairSums]
 
-theorem prodIdx_spec (z : ℕ → ℝ) (fs : List Expr) (hf : ∀ e ∈ fs, 0 ≤ e.eval z)
-    (is : List ℕ) (hi : ∀ i ∈ is, i < fs.length) (hd : degIdx (prepare fs) is < 32) :
-    0 ≤ Poly.eval z (prodIdx (prepare fs) is) ∧
-      Poly.Deg (degIdx (prepare fs) is) (prodIdx (prepare fs) is) := by
-  induction is with
-  | nil =>
-    refine ⟨by simp [prodIdx, keyEval_zero], ?_⟩
-    intro u hu; simp [prodIdx] at hu; subst hu; simp [degIdx, digitSum_zero]
-  | cons i is ih =>
-    have hi0 : i < fs.length := hi i (by simp)
-    have hget : (prepare fs).getD i (0, []) = ((fs[i]'hi0).deg, (fs[i]'hi0).toPoly.2) := by
-      simp [prepare, List.getD_eq_getElem?_getD, List.getElem?_map, List.getElem?_eq_getElem hi0]
-    simp only [degIdx, hget] at hd ⊢
-    simp only [prodIdx, hget]
-    obtain ⟨ih1, ih2⟩ := ih (fun j hj => hi j (by simp [hj])) (by omega)
-    obtain ⟨hpos, hval, hdeg⟩ := (fs[i]'hi0).toPoly_spec z (by omega)
-    obtain ⟨m1, m2⟩ := mulPoly_spec z hd _ _ hdeg ih2
-    refine ⟨?_, m2⟩
-    rw [m1, hval]
-    have := hf _ (List.getElem_mem hi0)
-    positivity
+/-! ### The expansion of a certificate
+
+The kernel evaluates the check, so its cost is the number of reduction steps. A function defined
+by structural recursion unfolds at every step through its `brecOn` construction and its matcher;
+`addPolyR`, `mulTermR` and `mulPolyR` are `addPoly`, `mulTerm` and `mulPoly` written with the
+recursor of `List`, which the kernel reduces in one step. The expansion is factored
+(`horner`): the terms are grouped by their first index `i`, and the polynomial of `i`
+multiplies the expansion of their tails once, instead of once per term. -/
+
+/-- `addPoly`, by the recursor of `List`. -/
+def addPolyR (p q : Poly) : Poly :=
+  @List.rec (ℕ × ℤ) (fun _ => Poly → Poly) (fun q => q)
+    (fun t p' rec q => @List.rec (ℕ × ℤ) (fun _ => Poly) (t :: p')
+      (fun s q' ih => bif t.1.blt s.1 then t :: rec (s :: q')
+        else bif s.1.blt t.1 then s :: ih else (t.1, t.2 + s.2) :: rec q') q) p q
+
+/-- `mulTerm`, by the recursor of `List`. -/
+def mulTermR (t : ℕ × ℤ) (q : Poly) : Poly :=
+  @List.rec (ℕ × ℤ) (fun _ => Poly) [] (fun s _ ih => (t.1 + s.1, t.2 * s.2) :: ih) q
+
+/-- `mulPoly`, by the recursor of `List`. -/
+def mulPolyR (p q : Poly) : Poly :=
+  @List.rec (ℕ × ℤ) (fun _ => Poly) [] (fun t _ ih => addPolyR (mulTermR t q) ih) p
+
+theorem addPolyR_eq (p q : Poly) : addPolyR p q = addPoly p q := by
+  induction p generalizing q with
+  | nil => rfl
+  | cons t p ihp =>
+    induction q with
+    | nil => rfl
+    | cons s q ihq =>
+      show (bif t.1.blt s.1 then t :: addPolyR p (s :: q)
+        else bif s.1.blt t.1 then s :: addPolyR (t :: p) q else (t.1, t.2 + s.2) :: addPolyR p q) =
+        addAux t p (addPoly p) (s :: q)
+      rw [ihq]
+      simp only [addAux, ihp]
+      by_cases h1 : t.1 < s.1
+      · simp [Nat.blt_eq, h1]
+      · by_cases h2 : s.1 < t.1
+        · simp [Nat.blt_eq, h1, h2]; rfl
+        · simp [Nat.blt_eq, h1, h2]
+
+theorem mulTermR_eq (t : ℕ × ℤ) (q : Poly) : mulTermR t q = mulTerm t q := by
+  induction q with
+  | nil => rfl
+  | cons s q ih =>
+    show (t.1 + s.1, t.2 * s.2) :: mulTermR t q = mulTerm t (s :: q)
+    rw [ih]; rfl
+
+theorem mulPolyR_eq (p q : Poly) : mulPolyR p q = mulPoly p q := by
+  induction p with
+  | nil => rfl
+  | cons t p ih =>
+    show addPolyR (mulTermR t q) (mulPolyR p q) = mulPoly (t :: p) q
+    rw [ih, addPolyR_eq, mulTermR_eq]; rfl
+
+/-- Whether the index list `js` starts with `i`. -/
+def headIs (i : ℕ) : List ℕ → Bool
+  | [] => false
+  | j :: _ => i.beq j
+
+theorem eq_of_headIs {i : ℕ} {js : List ℕ} (h : headIs i js = true) : js = i :: js.tail := by
+  cases js with
+  | nil => simp [headIs] at h
+  | cons j js => simp [headIs, Nat.beq_eq] at h; simp [h]
+
+/-- The terms of `ts` whose first index is `i`, with that index removed, and the other terms. -/
+def splitHead (i : ℕ) (ts : List (ℤ × List ℕ)) : List (ℤ × List ℕ) × List (ℤ × List ℕ) :=
+  @List.rec (ℤ × List ℕ) (fun _ => List (ℤ × List ℕ) × List (ℤ × List ℕ)) ([], [])
+    (fun t _ r => bif headIs i t.2 then ((t.1, t.2.tail) :: r.1, r.2) else (r.1, t :: r.2)) ts
+
+theorem splitHead_cons (i : ℕ) (t : ℤ × List ℕ) (ts : List (ℤ × List ℕ)) :
+    splitHead i (t :: ts) = bif headIs i t.2 then
+      ((t.1, t.2.tail) :: (splitHead i ts).1, (splitHead i ts).2)
+      else ((splitHead i ts).1, t :: (splitHead i ts).2) := rfl
+
+theorem mem_splitHead_fst {i : ℕ} {ts : List (ℤ × List ℕ)} {u : ℤ × List ℕ}
+    (hu : u ∈ (splitHead i ts).1) : (u.1, i :: u.2) ∈ ts := by
+  induction ts with
+  | nil => simp [splitHead] at hu
+  | cons t ts ih =>
+    rw [splitHead_cons] at hu
+    cases h : headIs i t.2 with
+    | false => simp only [h, Bool.cond_false] at hu; exact List.mem_cons_of_mem _ (ih hu)
+    | true =>
+      simp only [h, Bool.cond_true, List.mem_cons] at hu
+      rcases hu with rfl | hu
+      · have := eq_of_headIs h
+        refine List.mem_cons.2 (Or.inl ?_)
+        rw [← this]
+      · exact List.mem_cons_of_mem _ (ih hu)
+
+theorem mem_splitHead_snd {i : ℕ} {ts : List (ℤ × List ℕ)} {u : ℤ × List ℕ}
+    (hu : u ∈ (splitHead i ts).2) : u ∈ ts := by
+  induction ts with
+  | nil => simp [splitHead] at hu
+  | cons t ts ih =>
+    rw [splitHead_cons] at hu
+    cases h : headIs i t.2 with
+    | false =>
+      simp only [h, Bool.cond_false, List.mem_cons] at hu
+      rcases hu with rfl | hu
+      · exact List.mem_cons_self ..
+      · exact List.mem_cons_of_mem _ (ih hu)
+    | true => simp only [h, Bool.cond_true] at hu; exact List.mem_cons_of_mem _ (ih hu)
+
+/-- One level of the factored expansion, with fuel `n` for the number of groups: a group of
+terms with first index `i` contributes `pᵢ · rec (their tails)`, a term with no index its
+weight. -/
+def hornerAux (ps : List (ℕ × Poly)) (rec : List (ℤ × List ℕ) → Poly) :
+    ℕ → List (ℤ × List ℕ) → Poly
+  | 0, _ => []
+  | _ + 1, [] => []
+  | n + 1, t :: ts =>
+    match t.2 with
+    | [] => addPolyR [(0, t.1)] (hornerAux ps rec n ts)
+    | i :: _ =>
+      addPolyR (mulPolyR (ps.getD i (0, [])).2 (rec (splitHead i (t :: ts)).1))
+        (hornerAux ps rec n (splitHead i (t :: ts)).2)
+
+/-- The factored expansion of `Σⱼ wⱼ ∏_{i ∈ Iⱼ} pᵢ`, for terms of at most `d` indices (longer
+terms are dropped, which can only make the check fail). -/
+def horner (ps : List (ℕ × Poly)) : ℕ → List (ℤ × List ℕ) → Poly
+  | 0, _ => []
+  | d + 1, ts => hornerAux ps (horner ps d) ts.length ts
+
+/-- The certificate check: every weight is positive, every index names an expression, every
+term has degree below `32`, and the monomial bound of the factored expansion is negative. -/
+def check (fs : List Expr) (ts : List (ℤ × List ℕ)) : Bool :=
+  let ps := prepare fs
+  ts.all (fun t => decide (0 < t.1) && t.2.all (fun i => decide (i < fs.length)) &&
+    decide (degIdx ps t.2 < 32)) &&
+  decide (bound (horner ps 32 ts) < 0)
+
+/-- The terms of a certificate whose expansion has degree at most `D`: positive weights, valid
+indices. -/
+def TermsOK (fs : List Expr) (D : ℕ) (ts : List (ℤ × List ℕ)) : Prop :=
+  ∀ t ∈ ts, 0 < t.1 ∧ (∀ i ∈ t.2, i < fs.length) ∧ degIdx (prepare fs) t.2 ≤ D
+
+theorem getD_prepare {fs : List Expr} {i : ℕ} (hi : i < fs.length) :
+    (prepare fs).getD i (0, []) = ((fs[i]'hi).deg, (fs[i]'hi).toPoly.2) := by
+  simp [prepare, List.getD_eq_getElem?_getD, List.getElem?_map, List.getElem?_eq_getElem hi]
+
+theorem hornerAux_spec (z : ℕ → ℝ) (fs : List Expr) (hf : ∀ e ∈ fs, 0 ≤ e.eval z)
+    (rec : List (ℤ × List ℕ) → Poly)
+    (hrec : ∀ ts D, D < 32 → TermsOK fs D ts →
+      0 ≤ Poly.eval z (rec ts) ∧ Poly.Deg D (rec ts)) :
+    ∀ n ts D, D < 32 → TermsOK fs D ts →
+      0 ≤ Poly.eval z (hornerAux (prepare fs) rec n ts) ∧
+        Poly.Deg D (hornerAux (prepare fs) rec n ts) := by
+  intro n
+  induction n with
+  | zero => intro ts D _ _; simp [hornerAux, Poly.Deg]
+  | succ n ih =>
+    intro ts D hD hts
+    cases ts with
+    | nil => simp [hornerAux, Poly.Deg]
+    | cons t ts =>
+      have ht := hts t (List.mem_cons_self ..)
+      have hrest : TermsOK fs D ts := fun u hu => hts u (List.mem_cons_of_mem _ hu)
+      rcases h2 : t.2 with _ | ⟨i, is⟩
+      · simp only [hornerAux, h2, addPolyR_eq]
+        obtain ⟨r1, r2⟩ := ih ts D hD hrest
+        refine ⟨?_, deg_addPoly _ _ ?_ r2⟩
+        · rw [eval_addPoly]
+          have : (0 : ℝ) < t.1 := by exact_mod_cast ht.1
+          rw [Poly.eval_cons, Poly.eval_nil, keyEval_zero]; linarith
+        · intro u hu; simp at hu; subst hu; simp [digitSum_zero]
+      · simp only [hornerAux, h2, addPolyR_eq, mulPolyR_eq]
+        obtain ⟨hw, hidx, hdeg⟩ := ht
+        rw [h2] at hidx hdeg
+        have hi0 : i < fs.length := hidx i (by simp)
+        rw [getD_prepare hi0]
+        simp only [degIdx, getD_prepare hi0] at hdeg
+        set e := fs[i]'hi0 with he
+        have hG : TermsOK fs (D - e.deg) (splitHead i (t :: ts)).1 := by
+          intro u hu
+          have hmem := mem_splitHead_fst hu
+          obtain ⟨uw, uidx, udeg⟩ := hts _ hmem
+          simp only [degIdx, getD_prepare hi0] at udeg
+          rw [← he] at udeg
+          exact ⟨uw, fun j hj => uidx j (by simp [hj]), by omega⟩
+        have hR : TermsOK fs D (splitHead i (t :: ts)).2 :=
+          fun u hu => hts u (mem_splitHead_snd hu)
+        obtain ⟨g1, g2⟩ := hrec _ (D - e.deg) (by omega) hG
+        obtain ⟨r1, r2⟩ := ih _ D hD hR
+        obtain ⟨hpos, hval, hpdeg⟩ := e.toPoly_spec z (by omega)
+        obtain ⟨m1, m2⟩ := mulPoly_spec z (a := e.deg) (b := D - e.deg) (by omega) _ _ hpdeg g2
+        refine ⟨?_, deg_addPoly _ _ ?_ r2⟩
+        · rw [eval_addPoly, m1, hval]
+          have := hf e (List.getElem_mem hi0)
+          have : (0 : ℝ) ≤ (e.toPoly.1 : ℝ) * e.eval z := by positivity
+          nlinarith
+        · have : e.deg + (D - e.deg) = D := by omega
+          rw [this] at m2; exact m2
+
+theorem horner_spec (z : ℕ → ℝ) (fs : List Expr) (hf : ∀ e ∈ fs, 0 ≤ e.eval z) :
+    ∀ d ts D, D < 32 → TermsOK fs D ts →
+      0 ≤ Poly.eval z (horner (prepare fs) d ts) ∧ Poly.Deg D (horner (prepare fs) d ts) := by
+  intro d
+  induction d with
+  | zero => intro ts D _ _; simp [horner, Poly.Deg]
+  | succ d ih => intro ts D hD hts; exact hornerAux_spec z fs hf _ ih _ ts D hD hts
 
 /-- **Soundness of the certificate check.** If `check fs ts` succeeds, no point of the unit cube
 makes every expression of `fs` nonnegative. -/
@@ -468,16 +634,10 @@ theorem check_sound {fs : List Expr} {ts : List (ℤ × List ℕ)} (h : check fs
     (z : ℕ → ℝ) (hz : ∀ v, 0 ≤ z v ∧ z v ≤ 1) (hf : ∀ e ∈ fs, 0 ≤ e.eval z) : False := by
   simp only [check, Bool.and_eq_true, List.all_eq_true, decide_eq_true_eq] at h
   obtain ⟨hts, hb⟩ := h
-  have hnonneg : 0 ≤ Poly.eval z (expand (prepare fs) ts) := by
-    rw [expand, eval_treeSum, List.map_map]
-    apply List.sum_nonneg
-    intro x hx
-    obtain ⟨t, ht, rfl⟩ := List.mem_map.1 hx
-    obtain ⟨⟨hw, hi⟩, hd⟩ := hts t ht
-    simp only [Function.comp, eval_scalePoly]
-    exact mul_nonneg (by exact_mod_cast hw.le) (prodIdx_spec z fs hf t.2 hi hd).1
-  have := eval_le_bound z hz (expand (prepare fs) ts)
-  have hb' : ((bound (expand (prepare fs) ts) : ℤ) : ℝ) < 0 := by exact_mod_cast hb
+  have hnonneg := (horner_spec z fs hf 32 ts 31 (by norm_num) fun t ht =>
+    ⟨(hts t ht).1.1, (hts t ht).1.2, by have := (hts t ht).2; omega⟩).1
+  have := eval_le_bound z hz (horner (prepare fs) 32 ts)
+  have hb' : ((bound (horner (prepare fs) 32 ts) : ℤ) : ℝ) < 0 := by exact_mod_cast hb
   linarith
 
 end Heilbronn.Cert

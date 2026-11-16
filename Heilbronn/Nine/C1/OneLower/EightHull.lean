@@ -5,16 +5,14 @@ public import Heilbronn.Nine.C1.OneLower.EightHullCerts
 public import Heilbronn.Nine.C1.OneLower.SideCap
 public import Heilbronn.Nine.C1.OneLower.RightPair
 
-/-! # Every eight-vertex C1 hull with one lower point is impossible (`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`)
+/-! # Every eight-vertex C1 hull with one lower point is impossible
 
-**Role.** A component of the one-lower C1 class: `C1_ONE_LOWER_MIXED_CAPS:Theorem2` uses the
-Theorem for the occupancy row `(U, R, T, L_cap) = (0, 1, 1, 1)` (mode `one_each`) and for the row
-`(0, 1, 2, 0)` with a quadrilateral top hull (mode `two_top`). Its Section 3 ((13)–(14)) is
-cited by `C1_ONE_LOWER_CONVEX_TOP.md`.
+Used by `C1OneLowerMixedCaps.lowerCount_eq_one_false` for the occupancy row `(U, R, T, L_cap) = (0, 1, 1, 1)`
+(mode `one_each`) and for the row `(0, 1, 2, 0)` with a quadrilateral top hull (mode `two_top`).
 
 **Setting.** The C1 anchors with `0 < d ≤ h < 1`, `0 < f ≤ c < 1`, minimum triangle area at least
-`A₀`, exactly one free point `L` in `OHC`; transposing if necessary, `f ≤ d` (line 21). "The full
-hull has eight vertices" is `hullVertexCount (c1Config …) = 8`, with `IsHullVertex` defined by
+`A₀`, exactly one free point `L` in `OHC`; transposing if necessary (`transpose`), `f ≤ d`. "The
+full hull has eight vertices" is `hullVertexCount (c1Config …) = 8`, with `IsHullVertex` defined by
 Mathlib's `convexHull`. The two modes, with `R` in the right cap `𝓡`, `X, Y` in the caps:
 
 | mode | free cap points | cyclic hull order |
@@ -25,11 +23,12 @@ Mathlib's `convexHull`. The two modes, with `R` in the right cap `𝓡`, `X, Y` 
 and the configuration is `c1Config h c d f R X Y L`. Threshold `s = 8/73` (local notation).
 
 **Results.**
-* `mainTheorem` (`C1_ONE_LOWER_EIGHT_HULL:Theorem`), with `transpose`; `claim_patterns` (the
-  reduction to the two modes).
-* `eq1`, `eq2` (both modes); `eq3`–`eq7` (`one_each`; FLAG at `eq4`); `eq9`–`eq12`, `eq15`
-  (`two_top`); `eq13_14` (the order of two top-cap vertices, general); `eq17_18` (the six words);
-  `eq19_20` (the twelve certificates).
+* `hullVertexCount_ne_eight`, with `transpose`; `exists_perm_oneEach_or_twoTop` (the reduction to the two modes).
+* Coordinate bounds: `mode_anchor_bounds`, `mode_lower_bounds` (both modes); `oneEach_anchor_bounds`, `oneEach_right_bounds`, `oneEach_top_bounds`, `oneEach_left_bounds`, `oneEach_lower_bounds` (`one_each`);
+  `twoTop_corner_area_ge`, `twoTop_f_lt_and_d_le`, `twoTop_anchor_bounds`, `twoTop_cap_bounds`, `twoTop_lower_bounds` (`two_top`); `topCap_pair_order` (the order of two top-cap
+  vertices, general).
+* `exists_octWord` (the six radial words of `L`); `oneEach_octWord_false`, `twoTop_octWord_false` (the twelve
+  certificates).
 -/
 
 @[expose] public section
@@ -38,7 +37,7 @@ noncomputable section
 namespace Heilbronn.Nine.C1OneLowerEightHull
 
 open Heilbronn.Nine.C1
-open Heilbronn.Nine.C1OneLowerTopCap (HullWord HasHullWord ConvexPolygon)
+open Heilbronn.Nine.C1OneLowerTopCap (HullWord HasHullWord)
 
 /-- `s = 8/73 < 2A₀`. -/
 local notation "s" => (8 / 73 : ℝ)
@@ -96,7 +95,6 @@ def octagonOneEach (h c d f : ℝ) (R X Y : Point) : Fin 8 → Point :=
 def octagonTwoTop (h c d f : ℝ) (R X Y : Point) : Fin 8 → Point :=
   ![ptO, ptC c, R, ptD d, X, Y, ptF f, ptH h]
 
-
 /-- Helper: the transposition `(x, y) ↦ (y, x)` of the plane is linear. -/
 theorem isLinearMap_swap : IsLinearMap ℝ (Prod.swap : Point → Point) :=
   ⟨fun _ _ => rfl, fun _ _ => rfl⟩
@@ -124,10 +122,9 @@ theorem isHullVertex_swap_comp {n : ℕ} (P : Fin n → Point) (σ : Equiv.Perm 
       simpa using this
     exact h (this ▸ hq)
 
-/-- Helper (the transposition of line 21): transposing the square, `(x, y) ↦ (y, x)`, maps
-`c1Config h c d f W X Y Z` to `c1Config c h f d W' X' Y' Z'` (primes: swapped coordinates) and
-keeps the number of hull vertices and the lower count; so `f ≤ d` may be assumed.
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, line 21. -/
+/-- Transposing the square, `(x, y) ↦ (y, x)`, maps `c1Config h c d f W X Y Z` to
+`c1Config c h f d W' X' Y' Z'` (primes: swapped coordinates) and keeps the number of hull vertices
+and the lower count; so `f ≤ d` may be assumed. -/
 theorem transpose (h c d f : ℝ) (W X Y Z : Point) :
     hullVertexCount (c1Config c h f d W.swap X.swap Y.swap Z.swap) =
         hullVertexCount (c1Config h c d f W X Y Z) ∧
@@ -208,116 +205,14 @@ theorem all_vertices {Pc : Fin 9 → Point} (h8 : hullVertexCount Pc = 8) {k₀ 
   simp only [Finset.card_univ, Fintype.card_fin] at this
   omega
 
-/-- Helper (Lemma 3 of `C1_ZERO_LOWER.md`, its first part, as in `C1ZeroLower.Comp.three_seeds`):
-of three top-cap points one lies strictly inside the triangle of `F, D` and another one. -/
+/-- Of three top-cap points, one lies strictly inside the triangle of `F, D` and another one
+(`C1ZeroLower.Comp.three_top`). -/
 theorem three_top_inner {h c d f : ℝ} {Q : Fin 4 → Point} (H : C1ZeroLower.Comp h c d f Q)
     (topc : ∀ k : Fin 3, InTopCap d f (Q k.castSucc)) :
     ∃ σ : Equiv.Perm (Fin 3), InTriangle (Q (σ 2).castSucc) (f, 1) (1, d) (Q (σ 1).castSucc) ∨
       InTriangle (Q (σ 2).castSucc) (f, 1) (1, d) (Q (σ 0).castSucc) := by
-  obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
-  have t0 := C1ZeroLower.two_A₀
-  obtain ⟨-, -, a3, a4⟩ := H.anchor_bounds
-  obtain ⟨-, -, p3, p4⟩ := H.params_ge
-  have hull : ∀ k : Fin 3, Q k.castSucc ∈ convexHull ℝ ({(f, 1), (1, d), C1ZeroLower.ptE} : Set Point) := by
-    intro k
-    have := C1ZeroLower.top_mem_hull H.hA (H.hQ _) (topc k)
-    rwa [Set.insert_comm] at this
-  have hFDE : 0 < sarea (f, 1) (1, d) C1ZeroLower.ptE := by
-    simp only [sarea]; nlinarith
-  have hΩ : sarea (f, 1) (1, d) C1ZeroLower.ptE ≤ 65 / 73 * (65 / 73) := by
-    simp only [sarea]
-    nlinarith [mul_le_mul (show 1 - d ≤ 65 / 73 by linarith) (show 1 - f ≤ 65 / 73 by linarith)
-      (by linarith) (by norm_num)]
-  have hnt : ¬ TypeII.TriangularHull ![(f, 1), (1, d), Q 0, Q 1, Q 2] := by
-    rintro ⟨a, b, e, hall⟩
-    set P5 : Fin 5 → Point := ![(f, 1), (1, d), Q 0, Q 1, Q 2] with hP5
-    have r0 := (H.top_row 0 (topc 0)); have r1 := (H.top_row 1 (topc 1))
-    have r2 := (H.top_row 2 (topc 2))
-    have xb : ∀ m : Fin 5, m ≠ 0 → f + 2 * A₀ ≤ (P5 m).1 := by
-      intro m hm
-      fin_cases m
-      · exact absurd rfl hm
-      all_goals simp [hP5]; linarith [r0.1, r1.1, r2.1]
-    have yb : ∀ m : Fin 5, m ≠ 1 → d + 2 * A₀ ≤ (P5 m).2 := by
-      intro m hm
-      fin_cases m
-      · simp [hP5]; linarith
-      · exact absurd rfl hm
-      all_goals simp [hP5]; linarith [r0.2.1, r1.2.1, r2.2.1]
-    have vF : a = 0 ∨ b = 0 ∨ e = 0 := by
-      by_contra hn; push Not at hn
-      have := C1ZeroLower.hull_le 1 0 0 (f + 2 * A₀) (by
-        intro p hp; simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hp
-        rcases hp with rfl | rfl | rfl
-        · have := xb a hn.1; linarith
-        · have := xb b hn.2.1; linarith
-        · have := xb e hn.2.2; linarith) _ (hall 0)
-      simp [hP5] at this; linarith
-    have vD : a = 1 ∨ b = 1 ∨ e = 1 := by
-      by_contra hn; push Not at hn
-      have := C1ZeroLower.hull_le 0 1 0 (d + 2 * A₀) (by
-        intro p hp; simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hp
-        rcases hp with rfl | rfl | rfl
-        · have := yb a hn.1; linarith
-        · have := yb b hn.2.1; linarith
-        · have := yb e hn.2.2; linarith) _ (hall 1)
-      simp [hP5] at this; linarith
-    have closeK : ∀ k : Fin 5,
-        ({P5 a, P5 b, P5 e} : Set Point) ⊆ {(f, 1), (1, d), P5 k} → False := by
-      intro k hk
-      fin_cases k
-      · exact C1ZeroLower.seg_false (fun p hp => by have := hk hp; simp [hP5] at this ⊢; tauto)
-          (hall 2) (topc 0)
-      · exact C1ZeroLower.seg_false (fun p hp => by have := hk hp; simp [hP5] at this ⊢; tauto)
-          (hall 2) (topc 0)
-      · exact H.tri_false (by decide) (by decide) (by decide) (topc 0)
-          (topc 1) (topc 2) hk (hall 3) (hall 4)
-      · exact H.tri_false (by decide) (by decide) (by decide) (topc 1)
-          (topc 0) (topc 2) hk (hall 2) (hall 4)
-      · exact H.tri_false (by decide) (by decide) (by decide) (topc 2)
-          (topc 0) (topc 1) hk (hall 2) (hall 3)
-    have sub : ∀ x y z : Fin 5, ∀ p : Point, p ∈ ({P5 x, P5 y, P5 z} : Set Point) →
-        p = P5 x ∨ p = P5 y ∨ p = P5 z := by
-      intro x y z p hp; simpa only [Set.mem_insert_iff, Set.mem_singleton_iff] using hp
-    rcases vF with rfl | rfl | rfl <;> rcases vD with h1 | h1 | h1 <;> (try subst h1) <;>
-      first
-      | exact absurd h1 (by decide)
-      | exact closeK e (fun p hp => by rcases sub _ _ _ p hp with rfl | rfl | rfl <;> simp [hP5])
-      | exact closeK b (fun p hp => by rcases sub _ _ _ p hp with rfl | rfl | rfl <;> simp [hP5])
-      | exact closeK a (fun p hp => by rcases sub _ _ _ p hp with rfl | rfl | rfl <;> simp [hP5])
-  have hm5 := H.min_sub (by norm_num) ![3, 2, 5, 6, 7] (by intro x; fin_cases x <;> simp)
-    (by decide)
-  have e5 : (fun x => C1ZeroLower.cfg h c d f Q (![3, 2, 5, 6, 7] x)) =
-      ![(f, 1), (1, d), Q 0, Q 1, Q 2] := by
-    funext x; fin_cases x <;> rfl
-  rw [e5] at hm5
-  obtain ⟨W', σ, hS, harea⟩ := TypeII.claim_support_normalization hFDE (hull 0) (hull 1) (hull 2)
-    (lt_of_lt_of_le A₀_pos hm5) hnt
-  have hQσ : ∀ k : Fin 3, ![Q (0 : Fin 3).castSucc, Q (1 : Fin 3).castSucc,
-      Q (2 : Fin 3).castSucc] k = Q k.castSucc := by intro k; fin_cases k <;> rfl
-  simp only [hQσ] at hS
-  have hm := H.min_sub (by norm_num) ![3, 2, (σ 0).val + 5, (σ 1).val + 5, (σ 2).val + 5]
-    (by intro x; fin_cases x <;> simp <;> omega)
-    (C1ZeroLower.inj5 (by omega) (by omega) (by omega)
-      (fun e => (by decide : (0 : Fin 3) ≠ 1) (σ.injective (Fin.ext (by omega))))
-      (fun e => (by decide : (0 : Fin 3) ≠ 2) (σ.injective (Fin.ext (by omega))))
-      (fun e => (by decide : (1 : Fin 3) ≠ 2) (σ.injective (Fin.ext (by omega)))))
-  have e6 : (fun x => C1ZeroLower.cfg h c d f Q
-      (![3, 2, (σ 0).val + 5, (σ 1).val + 5, (σ 2).val + 5] x)) =
-      ![(f, 1), (1, d), Q (σ 0).castSucc, Q (σ 1).castSucc, Q (σ 2).castSucc] := by
-    funext x; fin_cases x
-    · rfl
-    · rfl
-    · exact C1ZeroLower.cfg_free h c d f Q (σ 0).castSucc
-    · exact C1ZeroLower.cfg_free h c d f Q (σ 1).castSucc
-    · exact C1ZeroLower.cfg_free h c d f Q (σ 2).castSucc
-  rw [e6] at hm
-  have h1 : sarea (f, 1) (1, d) W' ≤ 1 := by nlinarith
-  have rl := C1ZeroLower.rho_lt
-  rcases C1ZeroLower.support_cells hS h1 hm with ⟨-, -, hK⟩ | ⟨hTR, hTS⟩ | ⟨-, -, hK⟩
-  · exfalso; nlinarith
-  · exact ⟨σ, Or.inl hTR⟩
-  · exfalso; nlinarith
+  obtain ⟨σ, -, -, ⟨i1, i2, i3⟩, -, -⟩ := H.three_top topc
+  exact ⟨σ, Or.inl ⟨i3, i1, i2⟩⟩
 
 /-- Helper: four distinct labels are the values of a permutation. -/
 theorem perm_of {x y z l : Fin 4} (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z) (hxl : x ≠ l)
@@ -327,16 +222,13 @@ theorem perm_of {x y z l : Fin 4} (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z
     fin_cases u <;> fin_cases w <;> simp at huw ⊢ <;> simp_all [eq_comm]
   exact ⟨Equiv.ofBijective _ ⟨hinj, Finite.surjective_of_injective hinj⟩, rfl, rfl, rfl, rfl⟩
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:claim-patterns`). Under `f ≤ d`, an eight-vertex hull with
-exactly one lower point is, after naming the free points, in mode `one_each` or `two_top`: every
-other free point is a hull vertex outside the anchor pentagon, the cap restrictions leave the
-patterns `(n_R, n_T, n_L) = (1,1,1), (1,2,0), (2,1,0), (0,3,0)`, and the last two always have an
-interior cap point (two right-cap points have triangular hull with `C, D`; three top-cap points
-include an interior one), as does `(1, 2, 0)` with a triangular top hull.
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 33-63.
-Uses: C1_ZERO_LOWER:Theorem2, C1_ZERO_LOWER:Lemma1, C1_ZERO_LOWER:Lemma3,
-C1_ZERO_LOWER:claim-side-cap-capacity. -/
-theorem claim_patterns {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f) (hfd : f ≤ d)
+/-- Under `f ≤ d`, an eight-vertex hull with exactly one lower point is, after naming the free
+points, in mode `one_each` or `two_top`: every other free point is a hull vertex outside the
+anchor pentagon, the cap restrictions leave the patterns `(n_R, n_T, n_L) = (1,1,1), (1,2,0),
+(2,1,0), (0,3,0)`, and the last two always have an interior cap point (two right-cap points have
+triangular hull with `C, D`; three top-cap points include an interior one), as does `(1, 2, 0)`
+with a triangular top hull. -/
+theorem exists_perm_oneEach_or_twoTop {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f) (hfd : f ≤ d)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hn : lowerCount h c W X Y Z = 1)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z))
@@ -406,7 +298,7 @@ theorem claim_patterns {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f
     · exact hR
   obtain ⟨a, b, e, hab, hae, hbe, hal, hbl, hel⟩ := (by decide : ∀ l : Fin 4, ∃ a b e : Fin 4,
     a ≠ b ∧ a ≠ e ∧ b ≠ e ∧ a ≠ l ∧ b ≠ l ∧ e ≠ l) l
-  -- two right-cap points: the inner one is inside `C X D` (Lemma 1)
+  -- two right-cap points: the inner one is inside `C X D` (`C1ZeroLower.Comp.right_pair_core`)
   have twoR : ∀ x y : Fin 4, x ≠ y → x ≠ l → y ≠ l → InRightCap c d (P x) →
       InRightCap c d (P y) → False := by
     intro x y hxy hxl hyl hx hy
@@ -428,7 +320,7 @@ theorem claim_patterns {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f
       rw [← kfree y] at hm
       exact notIn x hxl 1 ⟨y.val + 5, by omega⟩ 2 (ane x 1 (by norm_num)) (fne x y hxy)
         (ane x 2 (by norm_num)) hm
-  -- two left-cap points (Theorem 2 (i) of `C1_ZERO_LOWER.md`)
+  -- two left-cap points (`C1ZeroLower.Comp.left_pair`)
   have above : ∀ x : Fin 4, InLeftCap f h (P x) → AboveOF f (P x) := by
     intro x hx
     obtain ⟨x0, x1, y0, y1⟩ := H.hQ x
@@ -439,7 +331,7 @@ theorem claim_patterns {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f
       sub_pos.2 hh]
   have twoL : ∀ x y : Fin 4, x ≠ y → InLeftCap f h (P x) → InLeftCap f h (P y) → False :=
     fun x y hxy hx hy => H.left_pair hfd hxy hx hy (above x hx) (above y hy)
-  -- two top-cap points and a left-cap point (Theorem 2 (iii))
+  -- two top-cap points and a left-cap point (`C1ZeroLower.Comp.top_two` against the left-cap row)
   have ttl : ∀ x y z : Fin 4, x ≠ y → InTopCap d f (P x) → InTopCap d f (P y) →
       InLeftCap f h (P z) → False := by
     intro x y z hxy hx hy hz
@@ -453,7 +345,7 @@ theorem claim_patterns {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f
   have relab : ∀ x y z : Fin 4, x ≠ y → x ≠ z → y ≠ z → x ≠ l → y ≠ l → z ≠ l →
       ∃ σ : Equiv.Perm (Fin 4), σ 0 = x ∧ σ 1 = y ∧ σ 2 = z ∧ σ 3 = l :=
     fun x y z => perm_of
-  -- three top-cap points (Lemma 3)
+  -- three top-cap points (`three_top_inner`)
   have ttt : ∀ x y z : Fin 4, x ≠ y → x ≠ z → y ≠ z → x ≠ l → y ≠ l → z ≠ l →
       InTopCap d f (P x) → InTopCap d f (P y) → InTopCap d f (P z) → False := by
     intro x y z hxy hxz hyz hxl hyl hzl hx hy hz
@@ -609,8 +501,8 @@ theorem gt_of_abs_nonneg {x : ℝ} (hx : s < |x|) (h0 : 0 ≤ x) : s < x := by
 theorem gt_neg_of_abs_nonpos {x : ℝ} (hx : s < |x|) (h0 : x ≤ 0) : s < -x := by
   rwa [abs_of_nonpos h0] at hx
 
-/-- Helper: the raw bounds of (1)–(2) from the anchor triangles `OFH, OCD, DFH, CDF` and the
-subdivision of `OHC` at `L`: `hf, cd > s`, `[DFH] = (1-d) - (1-f)(h-d) > s`,
+/-- Helper: the raw bounds behind `mode_anchor_bounds` and `mode_lower_bounds`, from the anchor triangles `OFH, OCD, DFH, CDF`
+and the subdivision of `OHC` at `L`: `hf, cd > s`, `[DFH] = (1-d) - (1-f)(h-d) > s`,
 `[CDF] = 1 - c + d(c-f) > s`, `hℓx, cℓy > s` and `[CHL] = hc - hℓx - cℓy > s`. -/
 theorem base_raw (hA : C1Anchors h c d f)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f R X Y L)) (hL : InLower h c L) :
@@ -699,9 +591,9 @@ theorem mode_base (hM : OneEach h c d f R X Y L ∨ TwoTop h c d f R X Y L) :
 
 /-! ### Bounds in both modes -/
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(1)`). The lower triangle and the anchor areas give
-`hc ≥ 3s`, `hf, cd ≥ s`, `d, f ≤ 1 - s`. `docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 71-75. -/
-theorem eq1 (hM : OneEach h c d f R X Y L ∨ TwoTop h c d f R X Y L) :
+/-- In both modes, the lower triangle and the anchor areas give `hc ≥ 3s`, `hf, cd ≥ s`,
+`d, f ≤ 1 - s`. -/
+theorem mode_anchor_bounds (hM : OneEach h c d f R X Y L ∨ TwoTop h c d f R X Y L) :
     3 * s ≤ h * c ∧ s ≤ h * f ∧ s ≤ c * d ∧ d ≤ 1 - s ∧ f ≤ 1 - s := by
   obtain ⟨hA, hmin, hL⟩ := mode_base hM
   obtain ⟨a1, a2, a3, a4, a5, a6, a7⟩ := base_raw hA hmin hL
@@ -710,10 +602,9 @@ theorem eq1 (hM : OneEach h c d f R X Y L ∨ TwoTop h c d f R X Y L) :
   · nlinarith [mul_nonneg (sub_nonneg.2 (hfc.trans hc.le)) (sub_nonneg.2 hdh)]
   · nlinarith [mul_nonneg (sub_nonneg.2 (hdh.trans hh.le)) (sub_nonneg.2 hfc)]
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(2)`). Subdivision of `OHC` at `L`: `ℓ_x ≥ s/h`,
-`ℓ_y ≥ s/c`, `c - ℓ_x ≥ 2s/h`, `h - ℓ_y ≥ 2s/c`, `ℓ_x + ℓ_y ≤ 1 - s`.
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 77-89. -/
-theorem eq2 (hM : OneEach h c d f R X Y L ∨ TwoTop h c d f R X Y L) :
+/-- In both modes, the subdivision of `OHC` at `L` gives `ℓ_x ≥ s/h`, `ℓ_y ≥ s/c`,
+`c - ℓ_x ≥ 2s/h`, `h - ℓ_y ≥ 2s/c`, `ℓ_x + ℓ_y ≤ 1 - s`. -/
+theorem mode_lower_bounds (hM : OneEach h c d f R X Y L ∨ TwoTop h c d f R X Y L) :
     s / h ≤ L.1 ∧ s / c ≤ L.2 ∧ 2 * s / h ≤ c - L.1 ∧ 2 * s / c ≤ h - L.2 ∧
       L.1 + L.2 ≤ 1 - s := by
   obtain ⟨hA, hmin, hL⟩ := mode_base hM
@@ -737,17 +628,15 @@ theorem eq2 (hM : OneEach h c d f R X Y L ∨ TwoTop h c d f R X Y L) :
     have := mul_neg_of_pos_of_neg (mul_pos h0 c0) (show 1 - s - L.1 - L.2 < 0 by linarith)
     linarith
 
-/-! ### Section 2: bounds for one point in each cap -/
+/-! ### Bounds for one point in each cap -/
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(3)`). Mode `one_each`: from `dc(1-c) ≥ s` and
-`fh(1-h) ≥ s`, `d, f ≥ 4s`, `1/7 < c, h < 6/7`, `h, c ≥ 4s`.
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 93-103. Uses: C1_ZERO_LOWER:eq5-6,
-C1_ONE_LOWER_EIGHT_HULL:(1). -/
-theorem eq3 (hM : OneEach h c d f R X Y L) :
+/-- Mode `one_each`: from `dc(1-c) ≥ s` and `fh(1-h) ≥ s`, `d, f ≥ 4s`, `1/7 < c, h < 6/7`,
+`h, c ≥ 4s`. -/
+theorem oneEach_anchor_bounds (hM : OneEach h c d f R X Y L) :
     4 * s ≤ d ∧ 4 * s ≤ f ∧ 1 / 7 < c ∧ c < 6 / 7 ∧ 1 / 7 < h ∧ h < 6 / 7 ∧ 4 * s ≤ h ∧
       4 * s ≤ c := by
   obtain ⟨⟨r1, r2⟩, -, ⟨y1, y2⟩⟩ := hM.raw
-  obtain ⟨-, -, -, hd1, hf1⟩ := eq1 (Or.inl hM)
+  obtain ⟨-, -, -, hd1, hf1⟩ := mode_anchor_bounds (Or.inl hM)
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   obtain ⟨-, rx1, ry0, -⟩ := hM.rightSq
   obtain ⟨yx0, -, -, yy1⟩ := hM.leftSq
@@ -777,17 +666,13 @@ theorem eq3 (hM : OneEach h c d f R X Y L) :
   · by_contra hn; push Not at hn
     nlinarith [mul_nonneg (sub_nonneg.2 hn) (show (0 : ℝ) ≤ h - 1 / 7 by linarith)]
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(4)`). Mode `one_each`: with
-`-[CDR] = d(r_x-c) - (1-c)r_y = (1-c)(d-r_y) - d(1-r_x) ≥ s` and `c r_y ≥ s`:
-`r_x - c ≥ 7s/6`, `r_y ≥ 7s/6`, `d - r_y ≥ s/(1-4s) = 8/41`.
-FLAG (line 112-116, implicit step): `r_x - c ≥ s/d > 7s/6` needs `d < 6/7`, which follows from
-`d ≤ h < 6/7`; "(3) proves" leaves this implicit (`d ≤ 1 - s` alone gives only `8/65 < 7s/6`).
-The statement holds. `docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 105-117.
-Uses: C1_ONE_LOWER_EIGHT_HULL:(3). -/
-theorem eq4 (hM : OneEach h c d f R X Y L) :
+/-- Mode `one_each`: with `-[CDR] = d(r_x-c) - (1-c)r_y = (1-c)(d-r_y) - d(1-r_x) ≥ s` and
+`c r_y ≥ s`: `r_x - c ≥ 7s/6`, `r_y ≥ 7s/6`, `d - r_y ≥ s/(1-4s) = 8/41`. The first bound,
+`r_x - c ≥ s/d > 7s/6`, uses `d ≤ h < 6/7` (`d ≤ 1 - s` alone gives only `8/65 < 7s/6`). -/
+theorem oneEach_right_bounds (hM : OneEach h c d f R X Y L) :
     7 * s / 6 ≤ R.1 - c ∧ 7 * s / 6 ≤ R.2 ∧ 8 / 41 ≤ d - R.2 := by
   obtain ⟨⟨r1, r2⟩, -, -⟩ := hM.raw
-  obtain ⟨-, -, -, hc7, -, hh7, -, c4⟩ := eq3 hM
+  obtain ⟨-, -, -, hc7, -, hh7, -, c4⟩ := oneEach_anchor_bounds hM
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   obtain ⟨-, rx1, ry0, -⟩ := hM.rightSq
   have p1 : 0 ≤ (1 - c) * R.2 := mul_nonneg (by linarith) ry0
@@ -803,12 +688,10 @@ theorem eq4 (hM : OneEach h c d f R X Y L) :
   · nlinarith [mul_le_mul_of_nonneg_right hc7.le ry0]
   · nlinarith [mul_le_mul_of_nonneg_right (show 1 - c ≤ 41 / 73 by linarith) hdr.le]
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(5)`). Mode `one_each`, top-cap point: `x_x - f ≥ 8/41`,
-`x_y - d ≥ 8/41`. `docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 119-132.
-Uses: C1_ONE_LOWER_TOP_CAP:(3), C1_ONE_LOWER_EIGHT_HULL:(3). -/
-theorem eq5 (hM : OneEach h c d f R X Y L) : 8 / 41 ≤ X.1 - f ∧ 8 / 41 ≤ X.2 - d := by
+/-- Mode `one_each`, top-cap point: `x_x - f ≥ 8/41`, `x_y - d ≥ 8/41`. -/
+theorem oneEach_top_bounds (hM : OneEach h c d f R X Y L) : 8 / 41 ≤ X.1 - f ∧ 8 / 41 ≤ X.2 - d := by
   obtain ⟨-, t1, -⟩ := hM.raw
-  obtain ⟨d4, f4, -⟩ := eq3 hM
+  obtain ⟨d4, f4, -⟩ := oneEach_anchor_bounds hM
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   obtain ⟨-, xx1, -, xy1⟩ := hM.topSq
   have p1 : 0 ≤ (1 - f) * (1 - X.2) := mul_nonneg (by linarith) (by linarith)
@@ -823,13 +706,12 @@ theorem eq5 (hM : OneEach h c d f R X Y L) : 8 / 41 ≤ X.1 - f ∧ 8 / 41 ≤ X
   · nlinarith [mul_le_mul_of_nonneg_right (show 1 - d ≤ 41 / 73 by linarith) hxf.le]
   · nlinarith [mul_le_mul_of_nonneg_right (show 1 - f ≤ 41 / 73 by linarith) hxd.le]
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(6)`). Mode `one_each`, left-cap point, from
-`[HFY] = f(y_y-h) - (1-h)y_x ≥ s`: `y_x ≥ 7s/6`, `f - y_x ≥ 8/41`, `y_y - h ≥ 7s/6`.
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 134-142. Uses: C1_ONE_LOWER_EIGHT_HULL:(3). -/
-theorem eq6 (hM : OneEach h c d f R X Y L) :
+/-- Mode `one_each`, left-cap point, from `[HFY] = f(y_y-h) - (1-h)y_x ≥ s`: `y_x ≥ 7s/6`,
+`f - y_x ≥ 8/41`, `y_y - h ≥ 7s/6`. -/
+theorem oneEach_left_bounds (hM : OneEach h c d f R X Y L) :
     7 * s / 6 ≤ Y.1 ∧ 8 / 41 ≤ f - Y.1 ∧ 7 * s / 6 ≤ Y.2 - h := by
   obtain ⟨-, -, ⟨y1, y2⟩⟩ := hM.raw
-  obtain ⟨-, -, -, hc7, -, hh7, h4, -⟩ := eq3 hM
+  obtain ⟨-, -, -, hc7, -, hh7, h4, -⟩ := oneEach_anchor_bounds hM
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   obtain ⟨yx0, -, -, yy1⟩ := hM.leftSq
   have p1 : 0 ≤ (1 - h) * Y.1 := mul_nonneg (by linarith) yx0
@@ -845,13 +727,11 @@ theorem eq6 (hM : OneEach h c d f R X Y L) :
   · nlinarith [mul_le_mul_of_nonneg_right (show 1 - h ≤ 41 / 73 by linarith) hfy.le]
   · nlinarith [mul_le_mul_of_nonneg_right (show f ≤ 6 / 7 by linarith) hyh.le]
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(7)`). Mode `one_each`: `ℓ_x, ℓ_y ≥ 7s/6`,
-`c - ℓ_x, h - ℓ_y ≥ 7s/3`. `docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 143-148.
-Uses: C1_ONE_LOWER_EIGHT_HULL:(2), C1_ONE_LOWER_EIGHT_HULL:(3). -/
-theorem eq7 (hM : OneEach h c d f R X Y L) :
+/-- Mode `one_each`, lower point: `ℓ_x, ℓ_y ≥ 7s/6`, `c - ℓ_x, h - ℓ_y ≥ 7s/3`. -/
+theorem oneEach_lower_bounds (hM : OneEach h c d f R X Y L) :
     7 * s / 6 ≤ L.1 ∧ 7 * s / 6 ≤ L.2 ∧ 7 * s / 3 ≤ c - L.1 ∧ 7 * s / 3 ≤ h - L.2 := by
   obtain ⟨-, -, -, -, a5, a6, a7⟩ := base_raw hM.anchors hM.min hM.lower
-  obtain ⟨-, -, -, hc7, -, hh7, -, -⟩ := eq3 hM
+  obtain ⟨-, -, -, hc7, -, hh7, -, -⟩ := oneEach_anchor_bounds hM
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   have lx : 0 < L.1 := by nlinarith
   have ly : 0 < L.2 := by nlinarith
@@ -863,7 +743,7 @@ theorem eq7 (hM : OneEach h c d f R X Y L) :
   · nlinarith [mul_le_mul_of_nonneg_right hh7.le lcx.le]
   · nlinarith [mul_le_mul_of_nonneg_right hc7.le lhy.le]
 
-/-! ### Section 3: bounds for the convex two-top pattern -/
+/-! ### Bounds for the convex two-top pattern -/
 
 /-- Helper: the closed half-plane on the nonpositive side of the line `UV` is convex. -/
 theorem convex_halfPlane (U V : Point) : Convex ℝ {P : Point | sarea U V P ≤ 0} := by
@@ -923,11 +803,10 @@ theorem not_triangularHull_quad {D F X Y : Point} (hDXY : 0 < sarea D X Y)
     (hle k (Ne.symm hmk))
   linarith
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(9)`). Mode `two_top`: the convex case of the four-point,
-two-prescribed-vertex triangle theorem (`D, X, Y, F` in the virtual triangle `DF(1,1)`) gives
-`(1-d)(1-f) ≥ 4s`. `docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 166-173.
-Uses: TYPE_II:FourPointEndpointLemma. -/
-theorem eq9 (hM : TwoTop h c d f R X Y L) : 4 * s ≤ (1 - d) * (1 - f) := by
+/-- Mode `two_top`: the convex case of the four-point endpoint lemma
+(`TypeII.fourPointEndpointLemma`, with `D, X, Y, F` in the virtual triangle `DF(1,1)`) gives
+`(1-d)(1-f) ≥ 4s`. -/
+theorem twoTop_corner_area_ge (hM : TwoTop h c d f R X Y L) : 4 * s ≤ (1 - d) * (1 - f) := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   have hX := C1ZeroLower.top_mem_hull hM.anchors hM.topXSq hM.topX
   have hY := C1ZeroLower.top_mem_hull hM.anchors hM.topYSq hM.topY
@@ -963,7 +842,7 @@ theorem right_dc {R : Point} (hd : 0 < d) (hc0 : 0 < c) (hc : c < 1) (hrx : R.1 
   have := mul_lt_mul_of_pos_left r2 (show 0 < 1 - c by linarith)
   nlinarith [mul_nonneg (mul_nonneg hc0.le hd.le) (sub_nonneg.2 hrx)]
 
-/-- Helper: the order of two top-cap vertices ((13)–(14)), in abstract form: with `P, Q > 0`,
+/-- Helper: the order of two top-cap vertices (`topCap_pair_order`), in abstract form: with `P, Q > 0`,
 `A, B ≥ 0`, `uP - Av > 0`, `vQ - Bu > 0` and the strict cap inequalities `aA < bP`, `bB < aQ`
 (`a, b > 0`), `u > 0`. -/
 theorem order_aux {u v P Q A B a b : ℝ} (hP : 0 < P) (hQ : 0 < Q) (hA : 0 ≤ A) (hB : 0 ≤ B)
@@ -990,12 +869,10 @@ theorem order_aux {u v P Q A B a b : ℝ} (hP : 0 < P) (hQ : 0 < Q) (hA : 0 ≤ 
     exact lt_of_mul_lt_mul_left this (mul_pos ha hb).le
   linarith
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(10)`). Mode `two_top`, under `f ≤ d`: `f < 17/50` and
-`d ≤ 33/65`. `docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 175-182.
-Uses: C1_ONE_LOWER_EIGHT_HULL:(9). -/
-theorem eq10 (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) : f < 17 / 50 ∧ d ≤ 33 / 65 := by
-  have k := eq9 hM
-  obtain ⟨-, a2, -, -, -⟩ := eq1 (Or.inr hM)
+/-- Mode `two_top`, under `f ≤ d`: `f < 17/50` and `d ≤ 33/65`. -/
+theorem twoTop_f_lt_and_d_le (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) : f < 17 / 50 ∧ d ≤ 33 / 65 := by
+  have k := twoTop_corner_area_ge hM
+  obtain ⟨-, a2, -, -, -⟩ := mode_anchor_bounds (Or.inr hM)
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   have f1 : s ≤ f := by nlinarith [mul_le_mul_of_nonneg_right hh.le hf.le]
   constructor
@@ -1006,15 +883,13 @@ theorem eq10 (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) : f < 17 / 50 ∧ d �
   · nlinarith [mul_le_mul_of_nonneg_left (show 1 - f ≤ 65 / 73 by linarith)
       (show (0:ℝ) ≤ 1 - d by linarith)]
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(11)`). Mode `two_top`, under `f ≤ d`: `d ≥ 4s`,
-`c(1-c) ≥ 65s/33 > 55/256`, hence `3s ≤ c < 11/16` and `h ≥ 48s/11`.
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 183-195.
-Uses: C1_ZERO_LOWER:eq5-6, C1_ONE_LOWER_EIGHT_HULL:(1), C1_ONE_LOWER_EIGHT_HULL:(10). -/
-theorem eq11 (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) :
+/-- Mode `two_top`, under `f ≤ d`: `d ≥ 4s`, `c(1-c) ≥ 65s/33 > 55/256`, hence `3s ≤ c < 11/16`
+and `h ≥ 48s/11`. -/
+theorem twoTop_anchor_bounds (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) :
     4 * s ≤ d ∧ 65 * s / 33 ≤ c * (1 - c) ∧ 3 * s ≤ c ∧ c < 11 / 16 ∧ 48 * s / 11 ≤ h := by
   obtain ⟨⟨r1, r2⟩, -, -⟩ := hM.raw
-  obtain ⟨a1, -, -, -, -⟩ := eq1 (Or.inr hM)
-  obtain ⟨-, d33⟩ := eq10 hM hfd
+  obtain ⟨a1, -, -, -, -⟩ := mode_anchor_bounds (Or.inr hM)
+  obtain ⟨-, d33⟩ := twoTop_f_lt_and_d_le hM hfd
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   have c0 : 0 < c := by linarith
   have h0 : 0 < h := by linarith
@@ -1028,17 +903,15 @@ theorem eq11 (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) :
   refine ⟨by nlinarith [mul_nonneg hd.le (sq_nonneg (c - 1 / 2))], by linarith, c3, c11, ?_⟩
   nlinarith [mul_le_mul_of_nonneg_left c11.le h0.le]
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(12)`). Mode `two_top`, under `f ≤ d`: `r_x - c ≥ 65s/33`,
-`r_y ≥ 16s/11`, `d - r_y ≥ 8/49`; `x_x - f, y_x - f ≥ 8/41`; `x_y - d, y_y - d ≥ 8/65`.
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 197-209.
-Uses: C1_ONE_LOWER_EIGHT_HULL:(10), C1_ONE_LOWER_EIGHT_HULL:(11). -/
-theorem eq12 (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) :
+/-- Mode `two_top`, under `f ≤ d`, the cap points: `r_x - c ≥ 65s/33`, `r_y ≥ 16s/11`,
+`d - r_y ≥ 8/49`; `x_x - f, y_x - f ≥ 8/41`; `x_y - d, y_y - d ≥ 8/65`. -/
+theorem twoTop_cap_bounds (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) :
     65 * s / 33 ≤ R.1 - c ∧ 16 * s / 11 ≤ R.2 ∧ 8 / 49 ≤ d - R.2 ∧ 8 / 41 ≤ X.1 - f ∧
       8 / 41 ≤ Y.1 - f ∧ 8 / 65 ≤ X.2 - d ∧ 8 / 65 ≤ Y.2 - d := by
   obtain ⟨⟨r1, r2⟩, t1, t2⟩ := hM.raw
-  obtain ⟨-, a2, -, -, -⟩ := eq1 (Or.inr hM)
-  obtain ⟨-, d33⟩ := eq10 hM hfd
-  obtain ⟨d4, -, c3, c11, -⟩ := eq11 hM hfd
+  obtain ⟨-, a2, -, -, -⟩ := mode_anchor_bounds (Or.inr hM)
+  obtain ⟨-, d33⟩ := twoTop_f_lt_and_d_le hM hfd
+  obtain ⟨d4, -, c3, c11, -⟩ := twoTop_anchor_bounds hM hfd
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   obtain ⟨-, rx1, ry0, -⟩ := hM.rightSq
   obtain ⟨-, xx1, -, xy1⟩ := hM.topXSq
@@ -1066,13 +939,12 @@ theorem eq12 (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) :
   refine ⟨by linarith, by linarith, by linarith, by linarith, by linarith, by linarith,
     by linarith⟩
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(15)`). Mode `two_top`, under `f ≤ d`: `ℓ_x ≥ s`,
-`ℓ_y ≥ 16s/11`, `c - ℓ_x ≥ 2s`, `h - ℓ_y ≥ 32s/11`. `docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines
-247-252. Uses: C1_ONE_LOWER_EIGHT_HULL:(2), C1_ONE_LOWER_EIGHT_HULL:(11). -/
-theorem eq15 (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) :
+/-- Mode `two_top`, under `f ≤ d`, the lower point: `ℓ_x ≥ s`, `ℓ_y ≥ 16s/11`, `c - ℓ_x ≥ 2s`,
+`h - ℓ_y ≥ 32s/11`. -/
+theorem twoTop_lower_bounds (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) :
     s ≤ L.1 ∧ 16 * s / 11 ≤ L.2 ∧ 2 * s ≤ c - L.1 ∧ 32 * s / 11 ≤ h - L.2 := by
   obtain ⟨-, -, -, -, a5, a6, a7⟩ := base_raw hM.anchors hM.min hM.lower
-  obtain ⟨-, -, -, c11, -⟩ := eq11 hM hfd
+  obtain ⟨-, -, -, c11, -⟩ := twoTop_anchor_bounds hM hfd
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   have s0 : (0 : ℝ) < s := by norm_num
   have e1 := lt_mul_of_lt_mul_le (show (0:ℝ) ≤ h by linarith) hh.le s0 a5
@@ -1085,13 +957,12 @@ theorem eq15 (hM : TwoTop h c d f R X Y L) (hfd : f ≤ d) :
 
 end
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(13)-(14)`). The order of two top-cap hull vertices: for
-`X, Y` in the top cap (in the square) with `[DXY] ≥ s` and `[FXY] ≥ s`, put `u = x_x - y_x`,
-`v = y_y - x_y`; then `[DXY] = u(x_y-d) - (1-x_x)v` and `[FXY] = v(y_x-f) - (1-y_y)u` (13); `u, v`
-cannot have opposite signs or vanish, both negative contradicts the product of the two strict cap
-inequalities, so `u, v > 0`, and then `u, v ≥ s` (14). Used in mode `two_top` and by
-`C1_ONE_LOWER_CONVEX_TOP.md` (5). `docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 211-245. -/
-theorem eq13_14 {h c d f : ℝ} (hA : C1Anchors h c d f) {X Y : Point} (hX : InTopCap d f X)
+/-- The order of two top-cap hull vertices: for `X, Y` in the top cap (in the square) with
+`[DXY] ≥ s` and `[FXY] ≥ s`, put `u = x_x - y_x`, `v = y_y - x_y`; then
+`[DXY] = u(x_y-d) - (1-x_x)v` and `[FXY] = v(y_x-f) - (1-y_y)u`; `u, v` cannot have opposite
+signs or vanish, both negative contradicts the product of the two strict cap inequalities, so
+`u, v > 0`, and then `u, v ≥ s`. -/
+theorem topCap_pair_order {h c d f : ℝ} (hA : C1Anchors h c d f) {X Y : Point} (hX : InTopCap d f X)
     (hXsq : X ∈ unitSquare) (hY : InTopCap d f Y) (hYsq : Y ∈ unitSquare)
     (hDXY : s ≤ sarea (ptD d) X Y) (hFXY : s ≤ sarea (ptF f) X Y) :
     sarea (ptD d) X Y = (X.1 - Y.1) * (X.2 - d) - (1 - X.1) * (Y.2 - X.2) ∧
@@ -1130,7 +1001,7 @@ theorem eq13_14 {h c d f : ℝ} (hA : C1Anchors h c d f) {X Y : Point} (hX : InT
   · nlinarith [mul_nonneg (sub_nonneg.2 yy1) hu.le, mul_le_mul_of_nonneg_left
       (show Y.1 - f ≤ 1 by linarith) hv.le]
 
-/-! ### Section 4: six radial orders -/
+/-! ### Six radial orders -/
 
 /-- Helper: the edge test of `C → R` (`R = (r_x, r_y)` in the right cap) for a point
 `P = (p_x, p_y)` with `p_y > 0` and `[CDP] ≥ 0`, by `d[CRP] = [CRD]p_y + [CDP]r_y`. -/
@@ -1268,7 +1139,9 @@ theorem octOne_edges_hi {h c d f : ℝ} (hA : C1Anchors h c d f) {R X Y : Point}
   · exact mul_pos h0h hf
   · exact mul_pos h0h hyx
 
-/-- Helper: the edge tests of the `two_top` octagon for the edges `V₀V₁, …, V₃V₄`, from coordinate bounds of the three cap points, the convexity of `D, X, Y, F`, the order (14) and the nondegeneracy `[RDX] > 0`. -/
+/-- Helper: the edge tests of the `two_top` octagon for the edges `V₀V₁, …, V₃V₄`, from coordinate
+bounds of the three cap points, the convexity of `D, X, Y, F`, the order `x_x > y_x`, `y_y > x_y`
+and the nondegeneracy `[RDX] > 0`. -/
 theorem octTwo_edges_lo {h c d f : ℝ} (hA : C1Anchors h c d f) {R X Y : Point}
     (hR : InRightCap c d R) (hrx : R.1 ≤ 1) (hry : 0 < R.2)
     (hX : InTopCap d f X) (hxx : X.1 ≤ 1) (hxy : X.2 ≤ 1)
@@ -1437,16 +1310,16 @@ theorem rdx_nonneg {d : ℝ} {R X : Point} (hrx : R.1 ≤ 1) (hdr : 0 ≤ d - R.
   rw [e]
   exact add_nonneg (mul_nonneg (by linarith) hxd) (mul_nonneg hdr (by linarith))
 
-/-- Helper (implicit in the manuscript, Section 1: "All cyclic hull triples have positive area",
-lines 55-63): in either mode the hull octagon is convex (counterclockwise). -/
+/-- Helper: in either mode the hull octagon is convex (counterclockwise): all cyclic hull triples
+have positive area. -/
 theorem convex_octagon {h c d f : ℝ} {R X Y L : Point} :
-    (OneEach h c d f R X Y L → ConvexPolygon (octagonOneEach h c d f R X Y)) ∧
-      (TwoTop h c d f R X Y L → ConvexPolygon (octagonTwoTop h c d f R X Y)) := by
+    (OneEach h c d f R X Y L → IsConvexPolygon (octagonOneEach h c d f R X Y)) ∧
+      (TwoTop h c d f R X Y L → IsConvexPolygon (octagonTwoTop h c d f R X Y)) := by
   constructor
   · intro hM
-    obtain ⟨r1, r2, r3⟩ := eq4 hM
-    obtain ⟨x1, x2⟩ := eq5 hM
-    obtain ⟨y1, y2, y3⟩ := eq6 hM
+    obtain ⟨r1, r2, r3⟩ := oneEach_right_bounds hM
+    obtain ⟨x1, x2⟩ := oneEach_top_bounds hM
+    obtain ⟨y1, y2, y3⟩ := oneEach_left_bounds hM
     obtain ⟨-, rx1, -, -⟩ := hM.rightSq
     obtain ⟨-, xx1, -, xy1⟩ := hM.topSq
     obtain ⟨-, -, -, yy1⟩ := hM.leftSq
@@ -1486,7 +1359,7 @@ theorem convex_octagon {h c d f : ℝ} {R X Y L : Point} :
       have hcyc : sarea (ptF f) X Y = sarea X Y (ptF f) := (sarea_cycle _ _ _).symm
       rw [hcyc] at e ⊢
       linarith [gt_of_abs_nonneg e hM.convexXYF.le]
-    obtain ⟨-, -, hu, hv⟩ := eq13_14 hM.anchors hM.topX hM.topXSq hM.topY hM.topYSq hDXY hFXY
+    obtain ⟨-, -, hu, hv⟩ := topCap_pair_order hM.anchors hM.topX hM.topXSq hM.topY hM.topYSq hDXY hFXY
     have n1 : 0 < sarea R (ptD d) X := by
       have e : s < |sarea R (ptD d) X| := area_gt hM.min 5 2 6
       linarith [gt_of_abs_nonneg e (rdx_nonneg rx1 hdr.le hxd.le xx1)]
@@ -1499,8 +1372,8 @@ theorem convex_octagon {h c d f : ℝ} {R X Y L : Point} :
         hM.convexDXY hM.convexXYF n1 hrc hdr hxf hxd hyf hyd (by linarith) (by linarith)
         i k hi h1 h2
 
-/-- The six octagon words (18): the solutions of (17) with entries in `{1, …, 6}` and `r₁ = 6`,
-indexed from zero in the displayed order. -/
+/-- The six octagon words: the radial words of an octagon (complement relation, entries in
+`{1, …, 6}`) with `r₁ = 6`, indexed from zero in the displayed order. -/
 def octWord : Fin 6 → HullWord 8 :=
   ![![1, 6, 6, 5, 4, 3, 2, 1], ![2, 6, 5, 5, 4, 3, 2, 1], ![3, 6, 5, 4, 4, 3, 2, 1],
     ![4, 6, 5, 4, 3, 3, 2, 1], ![5, 6, 5, 4, 3, 2, 2, 1], ![6, 6, 5, 4, 3, 2, 1, 1]]
@@ -1514,8 +1387,8 @@ theorem octWord_signs : ∀ k : Fin 6, ∀ a b : Fin 8, a ≠ b →
   decide +kernel
 
 /-- Helper: a point strictly inside the triangle `V₀V₁V₇` of a convex octagon, with no zero area
-against two vertices, has one of the six words (18). -/
-theorem octagon_word {V : Fin 8 → Point} {L : Point} (hV : ConvexPolygon V)
+against two vertices, has one of the six words `octWord`. -/
+theorem octagon_word {V : Fin 8 → Point} {L : Point} (hV : IsConvexPolygon V)
     (hin : InTriangle L (V 0) (V 1) (V 7))
     (hne : ∀ i j : Fin 8, i ≠ j → sarea (V i) (V j) L ≠ 0) :
     ∃ i, HasHullWord V L (octWord i) := by
@@ -1609,11 +1482,10 @@ theorem octagon_word {V : Fin 8 → Point} {L : Point} (hV : ConvexPolygon V)
   simp only [show r 0 - 1 + 1 = r 0 by omega] at this
   rw [this]
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(17)-(18)`). In either mode the lower point `L` has, for the
-hull octagon, a radial word (`[VᵢV_{i+j}L] > 0 ↔ j ≤ rᵢ`, `1 ≤ rᵢ ≤ 6`, the complement relation
-(17), and `r₁ = 6` since `L ∈ OHC`), and it is one of the six words (18).
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 268-301. Uses: C1_ONE_LOWER_TOP_CAP:(12)-(13). -/
-theorem eq17_18 {h c d f : ℝ} {R X Y L : Point} :
+/-- In either mode the lower point `L` has, for the hull octagon, a radial word
+(`[VᵢV_{i+j}L] > 0 ↔ j ≤ rᵢ`, `1 ≤ rᵢ ≤ 6`, the complement relation, and `r₁ = 6` since
+`L ∈ OHC`), and it is one of the six words `octWord`. -/
+theorem exists_octWord {h c d f : ℝ} {R X Y L : Point} :
     (OneEach h c d f R X Y L → ∃ i, HasHullWord (octagonOneEach h c d f R X Y) L (octWord i)) ∧
       (TwoTop h c d f R X Y L → ∃ i, HasHullWord (octagonTwoTop h c d f R X Y) L (octWord i)) := by
   have hL : c1Config h c d f R X Y L 8 = L := rfl
@@ -1641,7 +1513,7 @@ theorem eq17_18 {h c d f : ℝ} {R X Y L : Point} :
     rw [← hσ i, ← hσ j, hL, h0, abs_zero] at e
     norm_num at e
 
-/-! ### Section 5: the twelve exact contradictions -/
+/-! ### The twelve exact contradictions -/
 
 section
 
@@ -1680,8 +1552,8 @@ theorem ptEval_two (h c d f : ℝ) (R X Y L : Point) (i : ℕ) (hi : i < 9) :
 /-- `AreaOK` for the nine points of a mode, from the least area of a relabelling `τ`. -/
 theorem areaOK_cfg9 {Pc : Fin 9 → Point} (hmin : A₀ ≤ minTriangleArea Pc) (V : Fin 8 → Point)
     (L : Point) (τ : Fin 9 → Fin 9) (hτ : Function.Injective τ)
-    (hP : ∀ a : Fin 9, cfg9 V L a = Pc (τ a)) : C1OneLower.AreaOK (cfg9 V L) := by
-  refine C1OneLower.areaOK_of_min hmin _ (fun i => if h : i < 9 then τ ⟨i, h⟩ else 0) ?_ ?_
+    (hP : ∀ a : Fin 9, cfg9 V L a = Pc (τ a)) : Package.AreaOK (cfg9 V L) := by
+  refine Package.areaOK_of_min hmin _ (fun i => if h : i < 9 then τ ⟨i, h⟩ else 0) ?_ ?_
   · intro a b ha hb hab
     simp only [ha, hb, dite_true] at hab
     exact congrArg Fin.val (hτ hab)
@@ -1690,12 +1562,12 @@ theorem areaOK_cfg9 {Pc : Fin 9 → Point} (hmin : A₀ ≤ minTriangleArea Pc) 
     exact hP ⟨a, ha⟩
 
 theorem areaOK_one (hM : OneEach h c d f R X Y L) :
-    C1OneLower.AreaOK (cfg9 (octagonOneEach h c d f R X Y) L) :=
+    Package.AreaOK (cfg9 (octagonOneEach h c d f R X Y) L) :=
   areaOK_cfg9 hM.min _ _ ![0, 1, 5, 2, 6, 3, 7, 4, 8] (by decide) (by
     intro a; fin_cases a <;> rfl)
 
 theorem areaOK_two (hM : TwoTop h c d f R X Y L) :
-    C1OneLower.AreaOK (cfg9 (octagonTwoTop h c d f R X Y) L) :=
+    Package.AreaOK (cfg9 (octagonTwoTop h c d f R X Y) L) :=
   areaOK_cfg9 hM.min _ _ ![0, 1, 5, 2, 6, 7, 3, 4, 8] (by decide) (by
     intro a; fin_cases a <;> rfl)
 
@@ -1706,12 +1578,12 @@ theorem octWords_eq : ∀ i : Fin 6, ∀ a b : Fin 8,
 
 /-- The table of a word holds: hull triples are counterclockwise (convexity), and the triangles
 `(a, b, L)` have the signs of the word. -/
-theorem table_holds {V : Fin 8 → Point} {L : Point} (hV : ConvexPolygon V)
-    (H : C1OneLower.AreaOK (cfg9 V L)) {i : Fin 6} (hw : HasHullWord V L (octWord i)) :
-    Cover.AllHold (C1ZeroLower.FHolds (cfg9 V L)) (Model.table (Model.octWords.getD i [])) := by
+theorem table_holds {V : Fin 8 → Point} {L : Point} (hV : IsConvexPolygon V)
+    (H : Package.AreaOK (cfg9 V L)) {i : Fin 6} (hw : HasHullWord V L (octWord i)) :
+    Cover.AllHold (Cover.FHolds 9 (cfg9 V L)) (Model.table (Model.octWords.getD i [])) := by
   intro g hg
   obtain ⟨t, ht, rfl⟩ := List.mem_map.1 hg
-  obtain ⟨t1, t2, t3⟩ := C1ZeroLower.lexTriples_valid t ht
+  obtain ⟨t1, t2, t3⟩ := Cover.mem_lexTriples ht
   refine ⟨t1, t2, t3, ?_⟩
   by_cases h8 : t.2.2 < 8
   · simp only [h8, ite_true, Cover.SFact.Holds, Cover.OrientHolds]
@@ -1742,7 +1614,7 @@ theorem trees_ok (m : Bool) (i : Fin 6) :
 /-- A cell of either mode is impossible once its factors are nonnegative. -/
 theorem mode_false {m : Bool} {V : Fin 8 → Point} {L : Point} {z : ℕ → ℝ}
     (hz : ∀ v, 0 ≤ z v ∧ z v ≤ 1) (hpt : ∀ j, j < 9 → Cover.ptEval z (Model.pt m) j = cfg9 V L j)
-    (hV : ConvexPolygon V) (H : C1OneLower.AreaOK (cfg9 V L))
+    (hV : IsConvexPolygon V) (H : Package.AreaOK (cfg9 V L))
     (hfac : ∀ e ∈ Model.factors m, 0 ≤ e.eval z) {i : Fin 6} (hw : HasHullWord V L (octWord i)) :
     False := by
   obtain ⟨T, hT⟩ := trees_ok m i
@@ -1761,16 +1633,16 @@ theorem zeta_mem (hA : C1Anchors h c d f) (hR : R ∈ unitSquare) (hX : X ∈ un
 
 end
 
-theorem eq19_20_one {h c d f : ℝ} {R X Y L : Point} (hfd : f ≤ d) (hM : OneEach h c d f R X Y L)
+theorem oneEach_octWord_false {h c d f : ℝ} {R X Y L : Point} (hfd : f ≤ d) (hM : OneEach h c d f R X Y L)
     (i : Fin 6) (hw : HasHullWord (octagonOneEach h c d f R X Y) L (octWord i)) : False := by
   have pos : ∀ {a b : ℝ}, 0 < a → 0 < b → 0 < a / b := fun ha hb => div_pos ha hb
-  obtain ⟨b1, b2, b3, b4, b5⟩ := eq1 (Or.inl hM)
-  obtain ⟨l1, l2, -, -, l5⟩ := eq2 (Or.inl hM)
-  obtain ⟨e1, e2, e3, e4, e5, e6, e7, e8⟩ := eq3 hM
-  obtain ⟨r1, r2, r3⟩ := eq4 hM
-  obtain ⟨x1, x2⟩ := eq5 hM
-  obtain ⟨y1, y2, y3⟩ := eq6 hM
-  obtain ⟨m1, m2, m3, m4⟩ := eq7 hM
+  obtain ⟨b1, b2, b3, b4, b5⟩ := mode_anchor_bounds (Or.inl hM)
+  obtain ⟨l1, l2, -, -, l5⟩ := mode_lower_bounds (Or.inl hM)
+  obtain ⟨e1, e2, e3, e4, e5, e6, e7, e8⟩ := oneEach_anchor_bounds hM
+  obtain ⟨r1, r2, r3⟩ := oneEach_right_bounds hM
+  obtain ⟨x1, x2⟩ := oneEach_top_bounds hM
+  obtain ⟨y1, y2, y3⟩ := oneEach_left_bounds hM
+  obtain ⟨m1, m2, m3, m4⟩ := oneEach_lower_bounds hM
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   obtain ⟨-, rx1, -, -⟩ := hM.rightSq
   obtain ⟨-, xx1, -, xy1⟩ := hM.topSq
@@ -1787,14 +1659,14 @@ theorem eq19_20_one {h c d f : ℝ} {R X Y L : Point} (hfd : f ≤ d) (hM : OneE
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_, ?_, ?_, ?_⟩ <;> linarith
 
-theorem eq19_20_two {h c d f : ℝ} {R X Y L : Point} (hfd : f ≤ d) (hM : TwoTop h c d f R X Y L)
+theorem twoTop_octWord_false {h c d f : ℝ} {R X Y L : Point} (hfd : f ≤ d) (hM : TwoTop h c d f R X Y L)
     (i : Fin 6) (hw : HasHullWord (octagonTwoTop h c d f R X Y) L (octWord i)) : False := by
-  obtain ⟨b1, b2, b3, b4, b5⟩ := eq1 (Or.inr hM)
-  obtain ⟨l1, l2, -, -, l5⟩ := eq2 (Or.inr hM)
-  obtain ⟨f1, f2⟩ := eq10 hM hfd
-  obtain ⟨e1, -, e3, e4, e5⟩ := eq11 hM hfd
-  obtain ⟨r1, r2, r3, x1, y1, x2, y2⟩ := eq12 hM hfd
-  obtain ⟨m1, m2, m3, m4⟩ := eq15 hM hfd
+  obtain ⟨b1, b2, b3, b4, b5⟩ := mode_anchor_bounds (Or.inr hM)
+  obtain ⟨l1, l2, -, -, l5⟩ := mode_lower_bounds (Or.inr hM)
+  obtain ⟨f1, f2⟩ := twoTop_f_lt_and_d_le hM hfd
+  obtain ⟨e1, -, e3, e4, e5⟩ := twoTop_anchor_bounds hM hfd
+  obtain ⟨r1, r2, r3, x1, y1, x2, y2⟩ := twoTop_cap_bounds hM hfd
+  obtain ⟨m1, m2, m3, m4⟩ := twoTop_lower_bounds hM hfd
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hM.anchors
   obtain ⟨-, rx1, -, -⟩ := hM.rightSq
   obtain ⟨-, xx1, -, xy1⟩ := hM.topXSq
@@ -1813,7 +1685,7 @@ theorem eq19_20_two {h c d f : ℝ} {R X Y L : Point} (hfd : f ≤ d) (hM : TwoT
     norm_num at this
     rw [abs_of_pos hM.convexXYF] at this
     rw [← sarea_cycle]; linarith [C1ZeroLower.two_A₀.1]
-  obtain ⟨-, -, u1, v1⟩ := eq13_14 hM.anchors hM.topX hM.topXSq hM.topY hM.topYSq hDXY hFXY
+  obtain ⟨-, -, u1, v1⟩ := topCap_pair_order hM.anchors hM.topX hM.topXSq hM.topY hM.topYSq hDXY hFXY
   have hf1 : s ≤ f := by nlinarith
   refine mode_false (m := true) (zeta_mem hM.anchors hM.rightSq hM.topXSq hM.topYSq
     (by linarith) (by linarith) (by linarith)) (ptEval_two h c d f R X Y L)
@@ -1825,33 +1697,10 @@ theorem eq19_20_two {h c d f : ℝ} {R X Y L : Point} (hfd : f ≤ d) (hM : TwoT
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> linarith
 
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(19)-(20)`). The certificate package: under `f ≤ d`, for
-each mode and each of the six words, no configuration exists. One fixed positive combination of the
-terms (19) (products of one to three affine factors of the ordered lists (8) for `one_each`, (16)
-for `two_top`, and the 84 costs: hull triangles minus `3s` or `s` according to whether the word
-puts `L` inside, triangles `(i, j, L)` with the word sign minus `s`) has unit-cube bound (20) at
-most `-3/4` (largest `-24902965599574904570203/25151865159450302873600`).
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 150-162, 254-266, 303-351 (data
-`c1_one_lower_eight_hull_certificates.json`, checker `check_c1_one_lower_eight_hull.py`).
-Uses: C1_ONE_LOWER_EIGHT_HULL:(1), C1_ONE_LOWER_EIGHT_HULL:(2), C1_ONE_LOWER_EIGHT_HULL:(3),
-C1_ONE_LOWER_EIGHT_HULL:(4), C1_ONE_LOWER_EIGHT_HULL:(5), C1_ONE_LOWER_EIGHT_HULL:(6),
-C1_ONE_LOWER_EIGHT_HULL:(7), C1_ONE_LOWER_EIGHT_HULL:(9), C1_ONE_LOWER_EIGHT_HULL:(10),
-C1_ONE_LOWER_EIGHT_HULL:(11), C1_ONE_LOWER_EIGHT_HULL:(12), C1_ONE_LOWER_EIGHT_HULL:(13)-(14),
-C1_ONE_LOWER_EIGHT_HULL:(15). -/
-theorem eq19_20 {h c d f : ℝ} {R X Y L : Point} (hfd : f ≤ d) :
-    (OneEach h c d f R X Y L →
-        ∀ i, HasHullWord (octagonOneEach h c d f R X Y) L (octWord i) → False) ∧
-      (TwoTop h c d f R X Y L →
-        ∀ i, HasHullWord (octagonTwoTop h c d f R X Y) L (octWord i) → False) := by
-  exact ⟨eq19_20_one hfd, eq19_20_two hfd⟩
-
-/-- **Theorem** (`C1_ONE_LOWER_EIGHT_HULL:Theorem`). The full convex hull of a competitive C1
-configuration with exactly one free point in `OHC` cannot have eight vertices. (No order `f ≤ d`
-is assumed: the note transposes first, line 21.)
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 19-24 and 349-351.
-Uses: C1_ONE_LOWER_EIGHT_HULL:claim-patterns, C1_ONE_LOWER_EIGHT_HULL:(17)-(18),
-C1_ONE_LOWER_EIGHT_HULL:(19)-(20). -/
-theorem mainTheorem {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
+/-- The full convex hull of a competitive C1 configuration with exactly one free point in `OHC`
+cannot have eight vertices. No order `f ≤ d` is assumed: the proof transposes first
+(`transpose`). -/
+theorem hullVertexCount_ne_eight {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hn : lowerCount h c W X Y Z = 1)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z))
@@ -1861,11 +1710,11 @@ theorem mainTheorem {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
       A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z) →
       hullVertexCount (c1Config h c d f W X Y Z) = 8 → f ≤ d → False := by
     intro h c d f W X Y Z hA hW hX hY hZ hn hmin h8 hfd
-    obtain ⟨σ, hM | hM⟩ := claim_patterns hA hfd hW hX hY hZ hn hmin h8
-    · obtain ⟨i, hw⟩ := (eq17_18 (h := h) (c := c) (d := d) (f := f)).1 hM
-      exact eq19_20_one hfd hM i hw
-    · obtain ⟨i, hw⟩ := (eq17_18 (h := h) (c := c) (d := d) (f := f)).2 hM
-      exact eq19_20_two hfd hM i hw
+    obtain ⟨σ, hM | hM⟩ := exists_perm_oneEach_or_twoTop hA hfd hW hX hY hZ hn hmin h8
+    · obtain ⟨i, hw⟩ := (exists_octWord (h := h) (c := c) (d := d) (f := f)).1 hM
+      exact oneEach_octWord_false hfd hM i hw
+    · obtain ⟨i, hw⟩ := (exists_octWord (h := h) (c := c) (d := d) (f := f)).2 hM
+      exact twoTop_octWord_false hfd hM i hw
   rcases le_total f d with hfd | hdf
   · exact key hA hW hX hY hZ hn hmin h8 hfd
   · obtain ⟨e1, e2⟩ := transpose h c d f W X Y Z

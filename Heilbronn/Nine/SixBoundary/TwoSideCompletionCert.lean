@@ -3,16 +3,16 @@ module
 public import Heilbronn.Common.CertNotation
 public import Heilbronn.Common.DataReader
 
-/-! # Certificates for the four bad quadrants of `SIX_BOUNDARY_TWO_SIDE_COMPLETION.md` (5)
+/-! # Certificates for the four bad quadrants of the two-side completion
 
 In the variables `a, h, b, c, d, f, x, y, z, w, r, t` (`0, …, 11`; `X = (x, y)` in the cap
 `CD(1,0)`, `Y = (z, w)` in the cap `FH(0,1)`, `Q = (r, t)` in `T₀ = (0,0)HC`), each quadrant of
-`Q` relative to `(b, a)` in which both projection conditions (3), (4) fail is excluded by a cubic
-certificate (found by linear programming, `scripts/nine/six_two_side_completion/search.py`) on the
+`Q` relative to `(b, a)` in which both projection conditions `(t - a)[AQX] ≤ 0` and
+`(r - b)[BQY] ≥ 0` fail is excluded by a cubic certificate (found by linear programming) on the
 atoms: the 22 affine factors of the setting, the two quadrant signs, and fourteen doubled-area
 costs `±[T] - 7/64` (`ABC, ABH, BCX, AHY, CDX, FHY, HDF, CDF, AHQ, BCQ, HCQ, AQX, BQY, ABQ`, with
-`AQX` and `BQY` signed by the quadrant). They replace the scalar arguments of Sections 2-4 and
-Lemma 3 of the manuscript. The weights are in `data/nine/six_two_side_completion/`.
+`AQX` and `BQY` signed by the quadrant). The weights are in
+`Heilbronn/Nine/Data/six_two_side_completion/`.
 -/
 
 @[expose] public section
@@ -186,16 +186,16 @@ def qIIIAtoms : List Expr :=
   (v 10 - v 2) * (v 9 - 0) - (v 11 - 0) * (v 8 - v 2) - k (7 / 64),
   (v 2 - 0) * (v 11 - v 0) - (0 - v 0) * (v 10 - 0) - k (7 / 64)]
 
-theorem qI_check : check qIAtoms (term_rows% "../../../data/nine/six_two_side_completion/qI.txt") = true := by
+theorem qI_check : check qIAtoms (term_rows% "../Data/six_two_side_completion/qI.txt") = true := by
   decide +kernel
 
-theorem qM1_check : check qM1Atoms (term_rows% "../../../data/nine/six_two_side_completion/qM1.txt") = true := by
+theorem qM1_check : check qM1Atoms (term_rows% "../Data/six_two_side_completion/qM1.txt") = true := by
   decide +kernel
 
-theorem qM2_check : check qM2Atoms (term_rows% "../../../data/nine/six_two_side_completion/qM2.txt") = true := by
+theorem qM2_check : check qM2Atoms (term_rows% "../Data/six_two_side_completion/qM2.txt") = true := by
   decide +kernel
 
-theorem qIII_check : check qIIIAtoms (term_rows% "../../../data/nine/six_two_side_completion/qIII.txt") = true := by
+theorem qIII_check : check qIIIAtoms (term_rows% "../Data/six_two_side_completion/qIII.txt") = true := by
   decide +kernel
 
 end Heilbronn.Nine.SixBoundaryTwoSideCompletion.QuadCert

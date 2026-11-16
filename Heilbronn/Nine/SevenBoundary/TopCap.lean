@@ -6,33 +6,27 @@ public import Heilbronn.Nine.EightBoundary.RadialCatalogue
 public import Heilbronn.Nine.EightBoundary.Basic
 public import Heilbronn.Nine.SevenBoundary.Caps
 
-/-! # The remaining upper exterior cap with seven boundary contacts (`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP.md`)
+/-! # The remaining upper exterior cap with seven boundary contacts
 
-**Role.** Primary-route component of the seven-boundary exterior case: it excludes the
-companion point `P` from three of the four side quadrilaterals of the exterior octagon
-`A, B, C, D, E, X, F, H`, as needed by `SEVEN_BOUNDARY_TOP_CAP_RADIAL` §1 and the side tests (8)
-of `SEVEN_BOUNDARY_EXTERIOR_COMPLETION`.
+The exterior case of the seven-boundary form: `SevenNormal a h b c d e f`
+(`Heilbronn/Nine/SevenBoundary/Setting.lean`), one free point `X = (g,k)` strictly beyond `EF` in
+the far upper cap (`FarCapPoint e f (g, k)`: `f < g < 1`, `e < k ≤ 1`), and the other free point
+`P` strictly inside the anchor heptagon. The nine points are `sevenConfig a h b c d e f (g, k) P`;
+doubled threshold `s = 7/64`. The condition `k > h` is not assumed here (it is
+`SevenBoundaryTopCapRight.h_lt_k`). The results exclude `P` from three of the four side
+quadrilaterals of the exterior octagon `A, B, C, D, E, X, F, H`; the fourth, `CDEX`, is
+`SevenBoundaryTopCapRight.minTriangleArea_lt_of_mem_CDEX`.
 
-**Setting.** The normalized seven-boundary form (`SevenNormal a h b c d e f`,
-`Heilbronn/Nine/SevenBoundary/Setting.lean`), one free point `X = (g,k)` strictly beyond `EF` in the far upper
-cap (`FarCapPoint e f (g, k)`: `f < g < 1`, `e < k ≤ 1`), and the other free point `P` strictly
-inside the anchor heptagon (`SEVEN_BOUNDARY_CAPS:claim-exterior-reduction`). The nine points are
-`sevenConfig a h b c d e f (g, k) P`. Doubled threshold `s = 7/64`. The condition `k > h` is not
-assumed here (it is `SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-k-gt-h`).
-
-**Results.**
-* `theorem1`: `P` is not in the quadrilateral `HEXF`;
-* `theorem2`: `P` is not in `ABCD`;
-* `theorem3`: `P` is not in `FHAB`;
-* `claim_partial_central` (§4): hence `P` is strictly below `HE`, strictly above `AD` and strictly
-  on the interior side of `BF`.
-
-Each exclusion "P cannot lie in `W`" is stated as "`P` in the closed quadrilateral `W` gives a
+Each exclusion "`P` cannot lie in `W`" is stated as "`P` in the closed quadrilateral `W` gives a
 triangle of area `< 7/128`" (a point on an edge or diagonal gives a zero triangle).
 
-Proof gap (minor, Theorem 3, lines 206–210): `U² - (1-s)U + s ≤ 0` is derived from "the identity
-`s/T = 1 - U - s/M`"; it also needs `s/M + s/T ≥ 2s/k(U)` from `M, T ≤ k(U)`, both stated at line
-206. Stale scope text: lines 22–23, 273–275.
+## Main results
+
+* `minTriangleArea_lt_of_mem_HEXF`: `P` is not in the quadrilateral `HEXF`;
+* `minTriangleArea_lt_of_mem_ABCD`: `P` is not in `ABCD`;
+* `minTriangleArea_lt_of_mem_FHAB`: `P` is not in `FHAB`;
+* `partial_central_signs`: hence `P` is strictly below `HE`, strictly above `AD` and strictly on
+  the interior side of `BF`.
 -/
 
 @[expose] public section
@@ -68,7 +62,7 @@ theorem sarea_bary (A B C P Q R : Point) :
       sarea B C P * sarea Q R A + sarea C A P * sarea Q R B + sarea A B P * sarea Q R C := by
   simp only [sarea]; ring
 
-/-- The sub-configuration of five points used by Lemma 3. -/
+/-- The five-point sub-configuration of a configuration, as used with `EightBoundary.quadrilateral_area_ge`. -/
 theorem min_five {n : ℕ} (P : Fin n → Point) (i₁ i₂ i₃ i₄ i₅ : Fin n)
     (hinj : Function.Injective ![i₁, i₂, i₃, i₄, i₅]) :
     minTriangleArea P ≤ minTriangleArea ![P i₁, P i₂, P i₃, P i₄, P i₅] := by
@@ -76,8 +70,8 @@ theorem min_five {n : ℕ} (P : Fin n → Point) (i₁ i₂ i₃ i₄ i₅ : Fin
     funext j; fin_cases j <;> rfl
   rw [e]; exact le_min_comp (by norm_num) P hinj
 
-/-- **Lemma 3 at the threshold.** If `P` is in the closed convex quadrilateral `V₁V₂V₃V₄` of a
-configuration of least area at least `7/128`, the quadrilateral has doubled area
+/-- `EightBoundary.quadrilateral_area_ge` at the threshold: if `P` is in the closed convex quadrilateral
+`V₁V₂V₃V₄` of a configuration of least area at least `7/128`, the quadrilateral has doubled area
 `≥ 2(1+√2)s > 24s/5 = 21/40`. -/
 theorem quad_area_ge {n : ℕ} {P : Fin n → Point} (hmin : 7 / 128 ≤ minTriangleArea P)
     (i₁ i₂ i₃ i₄ i₅ : Fin n) (hinj : Function.Injective ![i₁, i₂, i₃, i₄, i₅])
@@ -85,16 +79,17 @@ theorem quad_area_ge {n : ℕ} {P : Fin n → Point} (hmin : 7 / 128 ≤ minTria
     (hO : InClosedPolygon ![P i₁, P i₂, P i₃, P i₄] (P i₅)) :
     2 * (1 + Real.sqrt 2) * (7 / 64) ≤
       sarea (P i₁) (P i₂) (P i₃) + sarea (P i₁) (P i₃) (P i₄) :=
-  EightBoundary.lemma3 (by norm_num) hconv hO
+  EightBoundary.quadrilateral_area_ge (by norm_num) hconv hO
     (by have := min_five P i₁ i₂ i₃ i₄ i₅ hinj; linarith)
 
-/-- The scalar contradiction of `EIGHT_BOUNDARY.md` §4 at `s = 7/64`. -/
+/-- `EightBoundary.side_quad_scalar_bound` at `s = 7/64`: when `XZ ≥ 4`, the quadrilateral bound
+`2 - sZ - s(2-sZ)/(1-sZ) - X + 2s` cannot reach `2(1+√2)s`. -/
 theorem scalar_contra {X Z : ℝ} (hX : 0 < X) (hZ : 0 < Z) (hsZ : 7 / 64 * Z < 1)
     (hXZ : 4 ≤ X * Z)
     (hQ : 2 * (1 + Real.sqrt 2) * (7 / 64) ≤
       2 - 7 / 64 * Z - 7 / 64 * (2 - 7 / 64 * Z) / (1 - 7 / 64 * Z) - X + 2 * (7 / 64)) :
     False := by
-  have := EightBoundary.claim_scalar_bound (by norm_num) hX hZ hsZ hXZ hQ
+  have := EightBoundary.side_quad_scalar_bound (by norm_num) hX hZ hsZ hXZ hQ
   linarith
 
 /-- `(L + R)(1/L + 1/R) ≥ 4`. -/
@@ -105,10 +100,10 @@ theorem four_le_mul_inv {L R : ℝ} (hL : 0 < L) (hR : 0 < R) : 4 ≤ (L + R) * 
     nlinarith [sq_nonneg (L - R)]
   linarith
 
-/-- The bound (3) of `SEVEN_BOUNDARY_TOP_CAP.md`: with gaps `L, R` and `M ≤ 1 - sZ`, `Z = 1/L+1/R`,
-the quantity `(1 - u)(1 - α - L) + (1 - v)(1 - α - R)` (with `u = s/L ≤ b`, `v = s/R`,
-`α = s/M`) is at most `2 - sZ - s(2-sZ)/(1-sZ) - (L+R) + 2s`. Stated for upper bounds
-`p ≤ 1 - s/L`, `p' ≤ 1 - α - L`, `q ≤ 1 - s/R`, `q' ≤ 1 - α - R`. -/
+/-- The quadrilateral bound: with gaps `L, R`, `M ≤ 1 - s/L - s/R` and `αM = s`, and with
+`Z = 1/L + 1/R`, the sum `pp' + qq'` is at most `2 - sZ - s(2-sZ)/(1-sZ) - (L+R) + 2s` whenever
+`0 ≤ p ≤ 1 - s/L`, `0 ≤ p' ≤ 1 - α - L`, `0 ≤ q ≤ 1 - s/R`, `0 ≤ q' ≤ 1 - α - R`; also
+`sZ < 1`. -/
 theorem scalar3 {L R M α p p' q q' : ℝ} (hL : 0 < L) (hR : 0 < R) (hM : 0 < M)
     (hMZ : M ≤ 1 - 7 / 64 / L - 7 / 64 / R) (hα : α * M = 7 / 64)
     (hp0 : 0 ≤ p) (hp : p ≤ 1 - 7 / 64 / L) (hp'0 : 0 ≤ p') (hp' : p' ≤ 1 - α - L)
@@ -136,12 +131,10 @@ theorem scalar3 {L R M α p p' q q' : ℝ} (hL : 0 < L) (hR : 0 < R) (hM : 0 < M
     nlinarith
   nlinarith
 
-/-- **Theorem 1** (`SEVEN_BOUNDARY_TOP_CAP:Theorem1`). In the exterior case, the companion point
-`P` does not lie in the closed quadrilateral `HEXF` at minimum area at least `7/128` (its doubled
-area obeys the scalar bound of `EIGHT_BOUNDARY.md` §4, below Lemma 3's `2(1+√2)s`).
-`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP.md`, lines 27–100.
-Uses: EIGHT_BOUNDARY:Lemma3, EIGHT_BOUNDARY:claim-scalar-bound. -/
-theorem theorem1 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case, the companion point `P` does not lie in the closed quadrilateral `HEXF`
+at minimum area at least `7/128`: its doubled area obeys the bound `scalar3`, which stays below
+the lower bound `2(1+√2)s` of `quad_area_ge` (`scalar_contra`). -/
+theorem minTriangleArea_lt_of_mem_HEXF {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (_hP : InHeptagon a h b c d e f P)
     (hq : InClosedPolygon ![(0, h), (1, e), (g, k), (f, 1)] P) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) P) < 7 / 128 := by
@@ -181,7 +174,7 @@ theorem theorem1 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     mul_le_mul_of_nonneg_left (by linarith) (by linarith)
   exact scalar_contra (by linarith) (by positivity) hsZ (four_le_mul_inv hL hR) (by linarith)
 
-/-- (9) of `SEVEN_BOUNDARY_TOP_CAP.md`: `fT(1-R) < s`. -/
+/-- From the cost `R(1-g) ≥ s`, with `0 < R < 1` and `0 < f < g`: `f(g-f)(1-R) < s`. -/
 theorem tc2_h9 {f g R : ℝ} (hR : 0 < R) (hR1 : R < 1) (hf0 : 0 < f) (hfg : f < g)
     (hDEX : 7 / 64 ≤ R * (1 - g)) : f * (g - f) * (1 - R) < 7 / 64 := by
   have hfT4 : 4 * (f * (g - f)) ≤ g ^ 2 := by nlinarith [sq_nonneg (g - 2 * f)]
@@ -223,7 +216,7 @@ theorem tc2_bl {b L : ℝ} (hb : 0 < b) (hb1 : b < 1) (hL : 0 < L) (hL1 : L < 1)
   have hLb : 2 * t ≤ L + b := by nlinarith [sq_nonneg (L - b)]
   nlinarith
 
-/-- The brace-nonpositive branch of Theorem 2: the bound (3) and the scalar contradiction. -/
+/-- The case `f(1-b) ≤ c(1-f)` of `quad_ABCD_scalar`: the bound `scalar3` and `scalar_contra`. -/
 theorem tc2_neg {a h b c d e f g k : ℝ} (_ha : 0 < a) (hah : a < h) (hh : h < 1)
     (hb : 0 < b) (hbc : b < c) (hc : c < 1) (_hd : 0 < d) (hde : d < e) (he : e < 1)
     (hbf : b ≤ f) (hfg : f < g) (hk1 : k ≤ 1)
@@ -278,7 +271,8 @@ theorem tc2_neg {a h b c d e f g k : ℝ} (_ha : 0 < a) (hah : a < h) (hh : h < 
     (by linarith) (by linarith) le_rfl
   exact scalar_contra (by linarith) (by positivity) hsZ (four_le_mul_inv hL hR) (by linarith)
 
-/-- The brace-positive branch of Theorem 2: `fT Q ≤ fT((1-L)(1-b) + c(1-R)) - cs`. -/
+/-- The case `f(1-b) > c(1-f)` of `quad_ABCD_scalar`: with `T = g - f`, `L = h - a`, `R = e - d` and
+`Q = a(1-b) + cd`, `fTQ ≤ fT((1-L)(1-b) + c(1-R)) - cs`. -/
 theorem tc2_pos {a h b c d e f g k : ℝ} (_hah : a < h) (hh : h < 1)
     (hb1 : b < 1) (hc : 0 < c) (hf0 : 0 < f) (hf1 : f < 1) (hfg : f < g) (_hk1 : k ≤ 1)
     (hHFX : 7 / 64 ≤ (g - f) * (1 - h) + f * (1 - k))
@@ -308,9 +302,9 @@ theorem tc2_pos {a h b c d e f g k : ℝ} (_hah : a < h) (hh : h < 1)
     have h3 := mul_nonneg (show 0 ≤ 7 / 64 - f * (1 - k) by linarith) hbr.le
     linarith
 
-/-- The scalar part of Theorem 2: the doubled area `Q = a(1-b) + cd` of `ABCD` cannot reach
+/-- The scalar part of `minTriangleArea_lt_of_mem_ABCD`: the doubled area `Q = a(1-b) + cd` of `ABCD` cannot reach
 `2(1+√2)s`. -/
-theorem theorem2_core {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1)
+theorem quad_ABCD_scalar {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1)
     (hb : 0 < b) (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
     (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g) (hk1 : k ≤ 1)
     (hABH : 7 / 64 ≤ b * (h - a)) (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
@@ -336,11 +330,9 @@ theorem theorem2_core {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) (hh :
     have hbl := tc2_bl hb (by linarith) (by linarith : 0 < h - a) (by linarith) hABH
     linarith
 
-/-- **Theorem 2** (`SEVEN_BOUNDARY_TOP_CAP:Theorem2`). In the exterior case, `P` does not lie in
-the closed quadrilateral `ABCD` at minimum area at least `7/128`.
-`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP.md`, lines 104–163.
-Uses: EIGHT_BOUNDARY:Lemma3, EIGHT_BOUNDARY:claim-scalar-bound. -/
-theorem theorem2 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case, `P` does not lie in the closed quadrilateral `ABCD` at minimum area at
+least `7/128`. -/
+theorem minTriangleArea_lt_of_mem_ABCD {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (_hP : InHeptagon a h b c d e f P)
     (hq : InClosedPolygon ![(0, a), (b, 0), (c, 0), (1, d)] P) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) P) < 7 / 128 := by
@@ -367,10 +359,10 @@ theorem theorem2 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
   have hQ' : sarea (0, a) (b, 0) (c, 0) + sarea (0, a) (c, 0) (1, d) =
       a * (1 - b) + c * d := by simp only [sarea]; ring
   rw [hQ'] at hQ
-  exact theorem2_core ha hah hh hb hbc hc hd hde he hbf hf hfg hk1 H.ABH H.ABC H.BCD
+  exact quad_ABCD_scalar ha hah hh hb hbc hc hd hde he hbf hf hfg hk1 H.ABH H.ABC H.BCD
     H.CDE hDEX hHFX hEFX hQ
 
-/-- (12) when `U ≤ 7/12`. -/
+/-- `f²U² < s(1-f)(1+U)` when `0 < f ≤ 1/2` and `0 < U ≤ 7/12`. -/
 theorem tc3_12_small {f U : ℝ} (hf0 : 0 < f) (hf : f ≤ 1 / 2) (hU : 0 < U) (hU1 : U ≤ 7 / 12) :
     f ^ 2 * U ^ 2 < 7 / 64 * (1 - f) * (1 + U) := by
   have hf2 : f ^ 2 ≤ 1 / 4 := by nlinarith
@@ -378,8 +370,8 @@ theorem tc3_12_small {f U : ℝ} (hf0 : 0 < f) (hf : f ≤ 1 / 2) (hU : 0 < U) (
   have h2 : 7 / 64 / 2 * (1 + U) ≤ 7 / 64 * (1 - f) * (1 + U) := by nlinarith
   nlinarith [mul_nonneg hU.le (show 0 ≤ 7 / 12 - U by linarith)]
 
-/-- The upper bounds on `U` and the lower bound on `T` behind (12): with
-`Den = U - U² - s`, `fU·Den ≤ (U-s)Den - sU(U-s)` and `U < 3/4`. -/
+/-- Bounds behind `tc3_12`: with `Den = U - U² - s`, the hypotheses give `U < 3/4`, `Den > 0` and
+`fU·Den ≤ (U-s)Den - sU(U-s)`. -/
 theorem tc3_den {f U M T : ℝ} (hf0 : 0 < f) (hU : 0 < U) (hM : 0 < M)
     (hT : 0 < T) (hMU : M * U ≤ U - 7 / 64) (hTU : (T + f) * U ≤ U - 7 / 64)
     (hid : 7 / 64 * (M + T) = (1 - U) * (M * T)) :
@@ -416,7 +408,7 @@ theorem tc3_den {f U M T : ℝ} (hf0 : 0 < f) (hU : 0 < U) (hM : 0 < M)
   have h2 := mul_le_mul_of_nonneg_left hTden hU.le
   nlinarith
 
-/-- (12) of `SEVEN_BOUNDARY_TOP_CAP.md`, `f²/(1-f) < s(1+U)/U²`, in polynomial form. -/
+/-- `f²/(1-f) < s(1+U)/U²`, in the polynomial form `f²U² < s(1-f)(1+U)`. -/
 theorem tc3_12 {f U M T : ℝ} (hf0 : 0 < f) (hf : f ≤ 1 / 2) (hU : 0 < U) (hM : 0 < M)
     (hT : 0 < T) (hMU : M * U ≤ U - 7 / 64) (hTU : (T + f) * U ≤ U - 7 / 64)
     (hid : 7 / 64 * (M + T) = (1 - U) * (M * T)) :
@@ -447,7 +439,7 @@ theorem tc3_12 {f U M T : ℝ} (hf0 : 0 < f) (hf : f ≤ 1 / 2) (hU : 0 < U) (hM
     have h1 : f * U < 1 / 3 * (3 / 4) := mul_lt_mul'' hf3 hU34 hf0.le hU.le
     nlinarith [mul_pos hf0 hU]
 
-/-- The final estimate of Theorem 3 with `U = 1 - μ - τ`, `μ = s/M`, `τ = s/T`, `ρ = s/R`. -/
+/-- The final estimate of `minTriangleArea_lt_of_mem_FHAB`, with `U = 1 - μ - τ`, `μ = s/M`, `τ = s/T`, `ρ = s/R`. -/
 theorem tc3_main {a b f h M T R δ' μ τ ρ : ℝ} (hM : 0 < M) (hT : 0 < T) (hR : 0 < R)
     (hb0 : 0 ≤ b) (hf0 : 0 < f) (hf : f ≤ 1 / 2) (hδ : 0 ≤ δ')
     (hμM : μ * M = 7 / 64) (hτT : τ * T = 7 / 64) (hρR : ρ * R = 7 / 64)
@@ -511,7 +503,7 @@ theorem tc3_main {a b f h M T R δ' μ τ ρ : ℝ} (hM : 0 < M) (hT : 0 < T) (h
   exact scalar_contra (by linarith) (by positivity) (by rw [hZ]; linarith)
     (four_le_mul_inv hM hT) hfin
 
-/-- The scalar part of Theorem 3 in the coordinates. -/
+/-- The scalar part of `minTriangleArea_lt_of_mem_FHAB` in the coordinates. -/
 theorem tc3_core {a h b c d e f g k : ℝ} (_hah : a < h) (hb : 0 < b) (hbc : b < c)
     (hde : d < e) (he : e < 1) (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g) (hk1 : k ≤ 1)
     (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
@@ -559,11 +551,9 @@ theorem tc3_core {a h b c d e f g k : ℝ} (_hah : a < h) (hb : 0 < b) (hbc : b 
   exact tc3_main hM hT hR hb.le (by linarith) hf hδ0 hμ hτ hρ (by linarith) (by linarith)
     (by linarith) haμ hhτ hsM hsT hQ
 
-/-- **Theorem 3** (`SEVEN_BOUNDARY_TOP_CAP:Theorem3`). In the exterior case, `P` does not lie in
-the closed quadrilateral `FHAB` at minimum area at least `7/128`.
-`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP.md`, lines 167–256.
-Uses: EIGHT_BOUNDARY:Lemma3, EIGHT_BOUNDARY:claim-scalar-bound. -/
-theorem theorem3 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case, `P` does not lie in the closed quadrilateral `FHAB` at minimum area at
+least `7/128`. -/
+theorem minTriangleArea_lt_of_mem_FHAB {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (_hP : InHeptagon a h b c d e f P)
     (hq : InClosedPolygon ![(f, 1), (0, h), (0, a), (b, 0)] P) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) P) < 7 / 128 := by
@@ -592,13 +582,10 @@ theorem theorem3 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
   rw [hQ'] at hQ
   exact tc3_core hah hb hbc hde he hbf hf hfg hk1 H.ABC H.BCD H.CDE hDEX hHFX hEFX hQ
 
-/-- **Claim** (`SEVEN_BOUNDARY_TOP_CAP:claim-partial-central`). In the exterior case at minimum
-area at least `7/128`, `P` lies strictly below `HE` (`HEF ⊂ HEXF`), strictly above `AD`, and
-strictly on the interior side of `BF` (the side of `C`).
-`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP.md`, lines 258–271.
-Uses: SEVEN_BOUNDARY_TOP_CAP:Theorem1, SEVEN_BOUNDARY_TOP_CAP:Theorem2,
-SEVEN_BOUNDARY_TOP_CAP:Theorem3. -/
-theorem claim_partial_central {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case at minimum area at least `7/128`, `P` lies strictly below `HE`
+(`HEF ⊂ HEXF`), strictly above `AD`, and strictly on the interior side of `BF` (the side of
+`C`). -/
+theorem partial_central_signs {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P)
     (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f (g, k) P)) :
     sarea (0, h) (1, e) P < 0 ∧ 0 < sarea (0, a) (1, d) P ∧ sarea (b, 0) (f, 1) P < 0 := by
@@ -628,16 +615,16 @@ theorem claim_partial_central {a h b c d e f g k : ℝ} (hN : SevenNormal a h b 
     have hXFP : 0 ≤ sarea (g, k) (f, 1) P := by
       by_contra hn; push Not at hn
       nlinarith [mul_pos hEF hXFH, mul_pos hFHP hXFE, mul_neg_of_neg_of_pos hn hHEF]
-    have := theorem1 hN hX ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩
+    have := minTriangleArea_lt_of_mem_HEXF hN hX ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩
       (inClosedPolygon_four hc0 hEXP hXFP hFHP.le)
     linarith
   · by_contra hc0; push Not at hc0
     have hDA : 0 ≤ sarea (1, d) (0, a) P := by rw [sarea_swap₁₂]; linarith
-    have := theorem2 hN hX ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩
+    have := minTriangleArea_lt_of_mem_ABCD hN hX ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩
       (inClosedPolygon_four hAB.le hBC.le hCD.le hDA)
     linarith
   · by_contra hc0; push Not at hc0
-    have := theorem3 hN hX ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩
+    have := minTriangleArea_lt_of_mem_FHAB hN hX ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩
       (inClosedPolygon_four hFH.le hHA.le hAB.le hc0)
     linarith
 

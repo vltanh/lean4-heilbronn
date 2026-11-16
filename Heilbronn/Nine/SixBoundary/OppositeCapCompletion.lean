@@ -5,43 +5,34 @@ public import Heilbronn.Nine.SixBoundary.OppositeCapTrees
 public import Heilbronn.Nine.Sharp.CDMoving
 
 /-! # Completion when all three N free points lie in the opposite cap
-(`docs/proof/nine/SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md`)
 
-Role: primary route. Theorem 1 closes the occupancy N6-08 `(0,3,0;0)` of
-`docs/proof/nine/UNRESTRICTED.md`, Section 4 (`n6_08`).
+The six-boundary case with all three free points in the opposite cap `T` (`oppositeCap_isOptimal_of_A₀_le`).
 
 Setting: `nConfig a h b c d f X Y Z` with `NAnchors a h b c d f` and all three free points in
 the closed opposite cap `T = DF(1,1)` (positions on the top and right sides allowed). Threshold
 `s = 7/64` (doubled) for the reduction and the certificates; the sharp chamber is at `2A₀`.
-By Theorem 4 of `SIX_BOUNDARY_EXTERIOR.md` the free points are named `E, G, O` so that
-`A, B, C, D, E, G, F, H` is the strictly convex hull octagon, (1) `O ∈ DFE ∩ DFG`, and the
-direction `E → G` points strictly left and up; transposition arranges (2) `f ≤ d`.
-`CapSetting` collects these hypotheses.
+By `SixBoundaryExterior.oppositeCap_octagon` the free points are named `E, G, O` so that
+`A, B, C, D, E, G, F, H` is the strictly convex hull octagon, `O ∈ DFE ∩ DFG`, and the
+direction `E → G` points strictly left and up; transposition arranges `f ≤ d`.
+`CapSetting` collects these hypotheses. The strict direction bounds `g_x < e_x`, `e_y < g_y`
+come from the apex of the support triangle (`SixBoundaryExterior.support_direction`).
 
-Remark on (7): the manuscript derives `e_x ≥ g_x`, `e_y ≤ g_y` from the apex `K` of the support
-triangle built inside the proof of `TYPE_II.md` Section 1. Theorem 4 of
-`SIX_BOUNDARY_EXTERIOR.md` is proved here through that support triangle and exports the strict
-bounds `g_x < e_x`, `e_y < g_y` (`SixBoundaryExterior.support_direction`); they are part of
-`CapSetting`.
+Certificates: the radial word of `O` on the octagon lies among 15 words (`capWords`); 14 cubic
+certificates exclude the 14 non-sharp words and two more (`left`, `low`) exclude `e_x ≤ c` and
+`g_y ≤ h` in the sharp word `word10 = (4,3,3,2,3,4,5,4)` (3,133 terms in total). The word cover
+is `Trees.tree` (`Heilbronn.Nine.SixBoundary.OppositeCapModel`, kernel checks in
+`Heilbronn.Nine.SixBoundary.OppositeCapTrees*`).
 
-Certificate package (`docs/proof/nine/six_boundary_opposite_cap_certificates.json`, checker
-`docs/proof/nine/check_six_boundary_opposite_cap.py`): the radial word of `O` on the octagon lies among 15
-words; 14 cubic certificates exclude the 14 non-sharp words and two more (`left`, `low`) exclude
-`e_x ≤ c` and `g_y ≤ h` in the sharp word 10 `(4,3,3,2,3,4,5,4)` (3,133 terms in total). The word
-cover is `Trees.tree` (`Heilbronn.Nine.SixBoundary.OppositeCapModel`, kernel checks in
-`Heilbronn.Nine.SixBoundary.OppositeCapTrees*`, exported by
-`scripts/nine/six_opposite_cap/export.py`).
-
-Results:
-* `claim_hull_and_bounds`: the bounds (3)-(7);
-* `claim_15_words`: the sharp word 10 is one of the words of Section 2, and the word of `O` is one
-  of them (the count `15` is checked by the word cover, whose leaves are exactly these words);
-* `claim_16_certificates`: the word of `O` is word 10, and `e_x > c`, `g_y > h` (14);
-* `claim_sharp_chamber`: the eleven chamber signs (17), and `SHARP_CD_MOVING.md` Theorem 1 after
-  the rotation `(x, y) ↦ (y, 1 - x)` gives the sharp bound and equality;
-* `theorem1`: least area at most `A₀`, equality only at the optimal configuration, strict with
+Main results:
+* `capSetting_bounds`: the common bounds on the anchors and the cap points;
+* `exists_capWord`: the sharp word is one of `capWords`, and the word of `O` is one of them (the
+  count `15` is checked by the word cover, whose leaves are exactly these words);
+* `radialWord_eq_word10`: the word of `O` is `word10`, and `e_x > c`, `g_y > h`;
+* `sharp_chamber`: the eleven chamber signs, and `SharpCDMoving.cdMoving_chamber_le` after the
+  rotation `(x, y) ↦ (y, 1 - x)` gives the sharp bound and equality;
+* `oppositeCap_le_A₀`: least area at most `A₀`, equality only at the optimal configuration, strict with
   exactly six contacts;
-* `n6_08`: the assembly form for N6-08.
+* `oppositeCap_isOptimal_of_A₀_le`: with exactly six contacts and least area at least `A₀`, the configuration is optimal.
 -/
 
 @[expose] public section
@@ -51,28 +42,27 @@ namespace Heilbronn.Nine.SixBoundaryOppositeCapCompletion
 
 open SixBoundary SixBoundaryExterior Cert Cert.Expr Cover
 
-/-- The standing hypotheses of Sections 1-5: the free points `E, G, O` lie in the closed opposite
-cap, every doubled area is at least `7/64`, the normalization (2) `f ≤ d` holds, and (1): the
-hull is the strictly convex octagon `A, B, C, D, E, G, F, H` with `O` interior and
-`O ∈ DEF ∩ DGF` (written with counterclockwise triangles), the direction `E → G` pointing strictly
-left and up. -/
+/-- The standing hypotheses of this file: the free points `E, G, O` lie in the closed opposite
+cap, every doubled area is at least `7/64`, the normalization `f ≤ d` holds, and the hull is the
+strictly convex octagon `A, B, C, D, E, G, F, H` with `O` interior and `O ∈ DEF ∩ DGF` (written
+with counterclockwise triangles), the direction `E → G` pointing strictly left and up. -/
 def CapSetting (a h b c d f : ℝ) (E G O : Point) : Prop :=
   NAnchors a h b c d f ∧ f ≤ d ∧ InCapT d f E ∧ InCapT d f G ∧ InCapT d f O ∧
     7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O) ∧
-    IsConvexCCW (octagonDEGF a h b c d f E G) ∧ InPolygon (octagonDEGF a h b c d f E G) O ∧
+    IsConvexPolygon (octagonDEGF a h b c d f E G) ∧ InPolygon (octagonDEGF a h b c d f E G) O ∧
     InTriangle O (ptD d) E (ptF f) ∧ InTriangle O (ptD d) G (ptF f) ∧ G.1 < E.1 ∧ E.2 < G.2
 
-/-- The 15 words of Section 2: radial words on the octagon `(A, B, C, D, E, G, F, H)` (relation
-(8)) with the tests (9) `r₃ = 2`, `r₄ ≥ 2` forced by `O ∈ DFE ∩ DFG`. -/
+/-- The 15 candidate words: radial words on the octagon `(A, B, C, D, E, G, F, H)` with
+`r₃ = 2` and `r₄ ≥ 2`, the entries forced by `O ∈ DFE ∩ DFG`. -/
 def capWords : Finset (Fin 8 → Fin 8) :=
   (radialWords 8).filter fun r => (r 3 : ℕ) = 2 ∧ 2 ≤ (r 4 : ℕ)
 
-/-- The sharp word 10, `(4, 3, 3, 2, 3, 4, 5, 4)`. -/
+/-- The sharp word `(4, 3, 3, 2, 3, 4, 5, 4)`. -/
 def word10 : Fin 8 → Fin 8 := ![4, 3, 3, 2, 3, 4, 5, 4]
 
-/-! ### Section 1: the common bounds -/
+/-! ### The common bounds -/
 
-/-- (6): a point `W` of the square with `-[DFW] ≥ s` has `w_x - f ≥ s` and `w_y - d ≥ s`. -/
+/-- A point `W` of the square with `-[DFW] ≥ s` has `w_x - f ≥ s` and `w_y - d ≥ s`. -/
 theorem cap_bound6 {d f : ℝ} (hd0 : 0 ≤ d) (hd1 : d < 1) (hf0 : 0 ≤ f) (hf1 : f < 1) {W : Point}
     (hW : W ∈ unitSquare) (harea : 7 / 64 ≤ -sarea (ptD d) (ptF f) W) :
     7 / 64 ≤ W.1 - f ∧ 7 / 64 ≤ W.2 - d := by
@@ -108,15 +98,15 @@ theorem mem_cap_hull {d f : ℝ} (hd1 : d < 1) (hf1 : f < 1) {W : Point} (hW : I
   have hΔ : 0 < sarea (ptF f) (ptD d) (1, 1) := by
     simp only [sarea]
     nlinarith [mul_pos (by linarith : (0:ℝ) < 1 - d) (by linarith : (0:ℝ) < 1 - f)]
-  refine TypeII.mem_convexHull_of_sarea hΔ ?_ ?_ ?_
+  refine mem_convexHull_of_sarea hΔ ?_ ?_ ?_
   · simp only [sarea]
     nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ 1 - d) (by linarith : (0:ℝ) ≤ 1 - W.1)]
   · simp only [sarea]
     nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ 1 - f) (by linarith : (0:ℝ) ≤ 1 - W.2)]
   · have := sarea_swap₁₂ (ptD d) (ptF f) W; linarith
 
-/-- (4): the endpoint-triangle theorem on `F, D` and the three cap points in the virtual cap
-`F D (1,1)` gives `δ = (1-d)(1-f) ≥ s/(3-2√2) > 7/11`. -/
+/-- The endpoint-triangle theorem `TypeII.endpointTriangleTheorem` on `F, D` and the three cap
+points in the virtual cap `F D (1,1)` gives `δ = (1-d)(1-f) ≥ s/(3-2√2) > 7/11`. -/
 theorem delta_bound {a h b c d f : ℝ} {E G O : Point} (hN : NAnchors a h b c d f)
     (hE : InCapT d f E) (hG : InCapT d f G) (hO : InCapT d f O)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
@@ -145,7 +135,7 @@ theorem delta_bound {a h b c d f : ℝ} {E G O : Point} (hN : NAnchors a h b c d
   rw [this, div_le_iff₀ hk0]
   linarith
 
-/-- (3): `aM, bL ≥ s` give `a, b, L, M ≥ s` and `hc ≥ 4s` (`ab · LM = aM · bL ≥ s²`). -/
+/-- `aM, bL ≥ s` give `a, b, L, M ≥ s` and `hc ≥ 4s` (`ab · LM = aM · bL ≥ s²`). -/
 theorem bounds3 {a h b c : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b) (hbc : b < c)
     (hc : c < 1) (hABC : 7 / 64 ≤ a * (c - b)) (hABH : 7 / 64 ≤ b * (h - a)) :
     7 / 64 ≤ a ∧ 7 / 64 ≤ b ∧ 7 / 64 ≤ h - a ∧ 7 / 64 ≤ c - b ∧ 4 * (7 / 64) ≤ h * c ∧
@@ -178,7 +168,7 @@ theorem bounds3 {a h b c : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 
   · nlinarith [mul_le_mul_of_nonneg_left hc.le (by linarith : (0:ℝ) ≤ h)]
   · nlinarith [mul_le_mul_of_nonneg_right hh.le (by linarith : (0:ℝ) ≤ c)]
 
-/-- (5): `δ > 7/11`, `f ≤ d` and `f ≥ s` give `d ≤ 179/627` and `f < 13/64`. -/
+/-- `δ > 7/11`, `f ≤ d` and `f ≥ s` give `d ≤ 179/627` and `f < 13/64`. -/
 theorem bounds5 {d f : ℝ} (hfd : f ≤ d) (hd1 : d < 1) (hf : 7 / 64 ≤ f)
     (hδ : 7 / 11 < (1 - d) * (1 - f)) : d ≤ 179 / 627 ∧ f < 13 / 64 := by
   constructor
@@ -187,7 +177,7 @@ theorem bounds5 {d f : ℝ} (hfd : f ≤ d) (hd1 : d < 1) (hf : 7 / 64 ≤ f)
   · nlinarith [mul_le_mul_of_nonneg_right (by linarith : 1 - d ≤ 1 - f)
       (by linarith : (0:ℝ) ≤ 1 - f)]
 
-/-- (6) for the free point `k` of `nConfig`. -/
+/-- `cap_bound6` for the free point `k` of `nConfig`. -/
 theorem bound6_of {a h b c d f : ℝ} {E G O W : Point} (hd0 : 0 ≤ d) (hd1 : d < 1) (hf0 : 0 ≤ f)
     (hf1 : f < 1) (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O)) (k : Fin 9)
     (hk : 6 ≤ k.val) (hkW : nConfig a h b c d f E G O k = W) (hW : InCapT d f W) :
@@ -199,16 +189,12 @@ theorem bound6_of {a h b c d f : ℝ} {E G O W : Point} (hd0 : 0 ≤ d) (hd1 : d
     (by rw [← hkW]; exact area_of_le_min hmin 4 5 k (by decide) h5k h4k)
   exact cap_bound6 hd0 hd1 hf0 hf1 hW.1 (by linarith)
 
-/-- **Claim** (`SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-hull-and-bounds`). In `CapSetting`
-(`s = 7/64`, `L = h - a`, `M = c - b`, `δ = (1 - d)(1 - f)`):
-(3) `a, b, L, M ≥ s`, `hc ≥ 4s`, `h, c ≥ 4s`; (4) `δ ≥ s/(3 - 2√2) > 7/11` (endpoint-triangle
-theorem on `D, F, E, G, O` in the virtual cap); (5) `d ≤ 179/627`, `f < 13/64`; (6) for each
-`Z ∈ {E, G, O}`, `z_x - f ≥ s` and `z_y - d ≥ s`; (7) `g_x < e_x`, `e_y < g_y` (strict, from
-`CapSetting`).
-`docs/proof/nine/SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md`, lines 32-102.
-Uses: SIX_BOUNDARY_EXTERIOR:Theorem4, SIX_BOUNDARY_HULL:claim-transposition,
-TYPE_II:EndpointTriangleTheorem -/
-theorem claim_hull_and_bounds {a h b c d f : ℝ} {E G O : Point}
+/-- In `CapSetting` (`s = 7/64`, `L = h - a`, `M = c - b`, `δ = (1 - d)(1 - f)`):
+`a, b, L, M ≥ s`, `hc ≥ 4s` and `h, c ≥ 4s`; `δ ≥ s/(3 - 2√2) > 7/11` (the endpoint-triangle
+theorem on `D, F, E, G, O` in the virtual cap); `d ≤ 179/627` and `f < 13/64`; for each
+`Z ∈ {E, G, O}`, `z_x - f ≥ s` and `z_y - d ≥ s`; and `g_x < e_x`, `e_y < g_y` (strict, from
+`CapSetting`). -/
+theorem capSetting_bounds {a h b c d f : ℝ} {E G O : Point}
     (hS : CapSetting a h b c d f E G O) :
     (7 / 64 ≤ a ∧ 7 / 64 ≤ b ∧ 7 / 64 ≤ h - a ∧ 7 / 64 ≤ c - b ∧ 4 * (7 / 64) ≤ h * c ∧
       4 * (7 / 64) ≤ h ∧ 4 * (7 / 64) ≤ c) ∧
@@ -231,7 +217,7 @@ theorem claim_hull_and_bounds {a h b c d f : ℝ} {E G O : Point}
   · exact bound6_of (by linarith) hd1 (by linarith) hf1 hmin 7 (by decide) rfl hG
   · exact bound6_of (by linarith) hd1 (by linarith) hf1 hmin 8 (by decide) rfl hO
 
-/-! ### Section 2: the certificate cover -/
+/-! ### The certificate cover -/
 
 /-- The coordinates `a, h, b, c, d, f, e_x, e_y, g_x, g_y, o_x, o_y` as a point of the cube (the
 variables beyond the twelfth are `0`). -/
@@ -281,87 +267,23 @@ theorem cfg_area (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O)
   rw [triangleArea_eq] at this
   linarith
 
-theorem mem_lexTriples {t : ℕ × ℕ × ℕ} (ht : t ∈ Model.lexTriples) :
-    t.1 < t.2.1 ∧ t.2.1 < t.2.2 ∧ t.2.2 < 9 := by
-  simp only [Model.lexTriples, List.mem_flatMap, List.mem_range, List.mem_filterMap,
-    Option.ite_none_right_eq_some, Option.some.injEq] at ht
-  obtain ⟨a, _, b, _, c, hc, ⟨hab, hbc⟩, rfl⟩ := ht
-  exact ⟨hab, hbc, hc⟩
+theorem bnd_zero : Model.bnd 0 = 7 / 64 := by norm_num [Model.bnd]
 
-theorem orient_ne_zero {sg : Bool} {x : ℝ} (h : OrientHolds sg x) : x ≠ 0 := by
-  cases sg <;> simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at h <;>
-    [exact h.ne; exact h.ne']
+theorem bnd_one : Model.bnd 1 = 21 / 64 := by norm_num [Model.bnd]
 
-theorem orient_idx_ne {P : ℕ → Point} {sg : Bool} {i j k : ℕ}
-    (hs : OrientHolds sg (sarea (P i) (P j) (P k))) : i ≠ j ∧ j ≠ k ∧ i ≠ k := by
-  have hne := orient_ne_zero hs
-  refine ⟨?_, ?_, ?_⟩ <;> rintro rfl <;> apply hne <;> simp only [sarea] <;> ring
-
-/-- The strengthened cost of a known triangle is nonnegative (`s`, or `3s` with `O` certified
-inside, by subdivision). -/
-theorem cost_nonneg (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O))
-    {tb : List SFact} (htb : AllHold (SFact.Holds (cfg a h b c d f E G O)) tb)
-    {t : ℕ × ℕ × ℕ} (ht : t ∈ Model.lexTriples) {sg : Bool} (hl : lookup tb t = some sg) :
-    0 ≤ (costAtom Model.pt Model.bnd (t, sg) (insideList tb [8] (t, sg)).length).eval
-      (zeta a h b c d f E.1 E.2 G.1 G.2 O.1 O.2) := by
-  rw [eval_costAtom]
-  simp only [ptEval_zeta]
-  obtain ⟨h1, h2, h3⟩ := mem_lexTriples ht
-  have hs := lookup_sound htb hl
-  have harea := cfg_area hmin (i := t.1) (j := t.2.1) (k := t.2.2) (by omega) (by omega) h3
-    (by omega) (by omega) (by omega)
-  rw [← sgArea_eq_abs hs] at harea
-  rcases hn : (insideList tb [8] (t, sg)).length with _ | n
-  · simp only [Model.bnd, ite_true]; push_cast; linarith
-  · obtain ⟨j, hj⟩ := List.exists_mem_of_length_pos (show 0 < (insideList tb [8] (t, sg)).length
-      by omega)
-    obtain ⟨hj8, o1, o2, o3⟩ := insideList_sound htb hj
-    simp only [List.mem_cons, List.not_mem_nil, or_false] at hj8
-    subst hj8
-    obtain ⟨-, n1, n2⟩ := orient_idx_ne o1
-    obtain ⟨-, n3, -⟩ := orient_idx_ne o2
-    have q1 := cfg_area hmin (i := t.1) (j := t.2.1) (k := 8) (by omega) (by omega) (by omega)
-      (by omega) n1 n2
-    have q2 := cfg_area hmin (i := t.2.1) (j := t.2.2) (k := 8) (by omega) h3 (by omega)
-      (by omega) n3 (by omega)
-    have q3 := cfg_area hmin (i := t.2.2) (j := t.1) (k := 8) h3 (by omega) (by omega)
-      (by omega) (by omega) (by omega)
-    have := three_le_sgArea (e := 7 / 64) o1 o2 o3 q1 q2 q3
-    have hn0 : n + 1 ≠ 0 := by omega
-    simp only [Model.bnd, hn0, ite_false]; push_cast; linarith
-
-set_option linter.unusedVariables false in
-/-- The facts of the radial word entry hold. -/
-theorem holds_orient {P : ℕ → Point} {i j k : ℕ} {sg : Bool} (hij : i ≠ j) (hjk : j ≠ k)
-    (hik : i ≠ k) :
-    SFact.Holds P (Model.orient i j k sg) ↔ OrientHolds sg (sarea (P i) (P j) (P k)) := by
-  unfold Model.orient
-  have c1 := sarea_cycle (P i) (P j) (P k)
-  have c2 := sarea_cycle (P j) (P k) (P i)
-  have s1 := sarea_swap₁₂ (P i) (P j) (P k)
-  have s2 := sarea_swap₂₃ (P i) (P j) (P k)
-  have s3 := sarea_swap₁₃ (P i) (P j) (P k)
-  split_ifs <;> simp only [SFact.Holds] <;>
-    first
-    | rw [c1]
-    | rw [c2, c1]
-    | rw [s1, orientHolds_not]
-    | rw [s2, orientHolds_not]
-    | rw [s3, orientHolds_not]
-
-theorem consistent_of_holds {P : ℕ → Point} {tb b : List SFact} (htb : AllHold (SFact.Holds P) tb)
-    (hb : AllHold (SFact.Holds P) b) : Model.consistent tb b = true := by
-  unfold Model.consistent
-  rw [List.all_eq_true]
-  intro f hf
-  rcases hl : lookup tb f.1 with _ | sg
-  · rfl
-  · have h1 := lookup_sound htb hl
-    have h2 := hb f hf
-    simp only [SFact.Holds] at h2
-    cases sg <;> cases hsg : f.2 <;> rw [hsg] at h2 <;>
-      simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at h1 h2 <;>
-      first | rfl | (exfalso; linarith)
+/-- The cost premises (`Cover.CostHyp`) with the single free point `O`: every model triangle has
+doubled area at least `s = 7/64` (two free points inside never occur). -/
+theorem cfg_costHyp (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
+    CostHyp 9 [8] Model.bnd (cfg a h b c d f E G O) := by
+  refine ⟨fun j hj => ?_, by decide, fun i j k hi hj hk hij hjk hik => ?_, ?_,
+    fun _ _ _ j₁ j₂ _ _ _ _ hj₁ hj₂ h12 => ?_⟩
+  · simp only [List.mem_singleton] at hj
+    omega
+  · have := cfg_area hmin hi hj hk hij hjk hik
+    rw [bnd_zero]; push_cast; linarith
+  · rw [bnd_one, bnd_zero]; norm_num
+  · simp only [List.mem_singleton] at hj₁ hj₂
+    exact absurd (hj₁.trans hj₂.symm) h12
 
 end Sound
 
@@ -376,7 +298,7 @@ theorem branch_holds {q : Fin 8 → ℕ} (hq : HasRadialWord (octagonDEGF a h b 
     (i : ℕ) (hi : i < 8) :
     AllHold (SFact.Holds (cfg a h b c d f E G O)) (Model.branchFacts i (q ⟨i, hi⟩)) := by
   intro f hf
-  simp only [Model.branchFacts, List.mem_map, List.mem_range] at hf
+  simp only [Model.branchFacts, branchFacts, List.mem_map, List.mem_range] at hf
   obtain ⟨j, hj, rfl⟩ := hf
   have hm : (i + (j + 1)) % 8 < 8 := Nat.mod_lt _ (by norm_num)
   have him : i ≠ (i + (j + 1)) % 8 := by omega
@@ -447,20 +369,16 @@ theorem oct_gen (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O))
 
 end Word
 
-/-! ### Section 3: the claims -/
+/-! ### The word of `O` and the sharp chamber -/
 
 section Claims
 
 variable {a h b c d f : ℝ} {E G O : Point}
 
-/-- **Claim** (`SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-15-words`). Word 10
-`(4,3,3,2,3,4,5,4)` satisfies (8) and (9) on the octagon, and in `CapSetting` the radial word of
-`O` on the octagon `(A, B, C, D, E, G, F, H)` exists and is one of the words of (8)-(9). (The
-count `15` is checked by the word cover `Trees.tree`, whose leaves are exactly these words; it is
-not restated here.)
-`docs/proof/nine/SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md`, lines 104-151.
-Uses: SIX_BOUNDARY_SINGLE_SIDE:claim-radial-word -/
-theorem claim_15_words :
+/-- The sharp word `word10` lies in `capWords`, and in `CapSetting` the radial word of `O` on
+the octagon `(A, B, C, D, E, G, F, H)` exists and lies in `capWords`. (The count `15` is checked
+by the word cover `Trees.tree`, whose leaves are exactly these words; it is not restated here.) -/
+theorem exists_capWord :
     word10 ∈ capWords ∧
     ∀ {a h b c d f : ℝ} {E G O : Point}, CapSetting a h b c d f E G O →
       ∃ r ∈ capWords, HasRadialWord (octagonDEGF a h b c d f E G) O fun i => (r i : ℕ) := by
@@ -469,7 +387,7 @@ theorem claim_15_words :
     decide
   refine ⟨h10, fun {a h b c d f E G O} hS => ?_⟩
   obtain ⟨-, -, -, -, -, hmin, hconv, hpoly, hDEF, hDGF, -, -⟩ := hS
-  obtain ⟨r, hr, hrw⟩ := claim_radial_word _ O (by norm_num) hconv hpoly (oct_gen hmin)
+  obtain ⟨r, hr, hrw⟩ := exists_radialWord _ O (by norm_num) hconv hpoly (oct_gen hmin)
   have hrange : ∀ i, r i < 8 := fun i => by have := hrw.1 i; omega
   refine ⟨fun i => ⟨r i, hrange i⟩, ?_, hr⟩
   have hDG : 2 ≤ r 3 := (hr 3 2 (by norm_num) (by norm_num)).1 hDGF.1
@@ -487,7 +405,7 @@ theorem atoms_nonneg (hS : CapSetting a h b c d f E G O) {fs : List SFact}
     (hfs : AllHold (SFact.Holds (cfg a h b c d f E G O)) (Model.base ++ fs)) :
     ∀ e ∈ Model.atoms fs, 0 ≤ e.eval (zeta a h b c d f E.1 E.2 G.1 G.2 O.1 O.2) := by
   obtain ⟨⟨h3a, h3b, h3L, h3M, -, h3h, h3c⟩, ⟨-, hδ⟩, ⟨h5d, h5f⟩, h6, h7a, h7b⟩ :=
-    claim_hull_and_bounds hS
+    capSetting_bounds hS
   obtain ⟨hN, hfd, hE, hG, hO, hmin, -⟩ := hS
   obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN
   obtain ⟨⟨e0, e1, e2, e3⟩, -⟩ := hE
@@ -505,11 +423,7 @@ theorem atoms_nonneg (hS : CapSetting a h b c d f E G O) {fs : List SFact}
       simp only [eval_minus, eval_v, eval_k, eval_one, zeta] <;> push_cast <;> linarith
   · simp only [Model.delta, eval_minus, eval_times, eval_v, eval_k, eval_one, zeta]
     push_cast; linarith
-  · simp only [Model.costs, List.mem_map] at he
-    obtain ⟨t, ht, rfl⟩ := he
-    rcases hl : lookup (Model.base ++ fs) t with _ | sg
-    · simp
-    · exact cost_nonneg hmin hfs ht hl
+  · exact (cfg_costHyp hmin).lookupCosts_nonneg (fun i _ => ptEval_zeta i) hfs e he
 
 /-- The initial facts hold. -/
 theorem base_holds (hS : CapSetting a h b c d f E G O) :
@@ -559,16 +473,12 @@ theorem sharp_holds (hS : CapSetting a h b c d f E G O)
   exact ((((((((h0.append b4).append b5).append b0).append b1).append b2).append b3).append
     b6).append b7)
 
-/-- **Claim** (`SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-16-certificates`). Geometric
-conclusion of the certificate package: in `CapSetting`, the radial word of `O` is word 10, and
-(14) `e_x > c`, `g_y > h`. (Fourteen `whole` certificates exclude the other words; the `left`
-and `low` certificates, with the extra factors `c - e_x` and `h - g_y`, exclude `e_x ≤ c` and
-`g_y ≤ h`; 3,133 positive terms, cube bounds at most `-662811495605/673236123648`. The kernel
-checks the word cover `Trees.tree` and the two height certificates.)
-`docs/proof/nine/SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md`, lines 153-239.
-Uses: SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-hull-and-bounds,
-SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-15-words -/
-theorem claim_16_certificates (hS : CapSetting a h b c d f E G O) (r : Fin 8 → ℕ)
+/-- The geometric conclusion of the certificates: in `CapSetting`, the radial word of `O` is
+`word10`, and `e_x > c`, `g_y > h`. (Fourteen `whole` certificates exclude the other words; the
+`left` and `low` certificates, with the extra factors `c - e_x` and `h - g_y`, exclude `e_x ≤ c`
+and `g_y ≤ h`; 3,133 positive terms, cube bounds at most `-662811495605/673236123648`. The
+kernel checks the word cover `Trees.tree` and the two height certificates.) -/
+theorem radialWord_eq_word10 (hS : CapSetting a h b c d f E G O) (r : Fin 8 → ℕ)
     (hr : HasRadialWord (octagonDEGF a h b c d f E G) O r) :
     r = (fun i => (word10 i : ℕ)) ∧ c < E.1 ∧ h < G.2 := by
   have hpoly := hS.2.2.2.2.2.2.2.1
@@ -640,24 +550,18 @@ theorem claim_16_certificates (hS : CapSetting a h b c d f E G O) (r : Fin 8 →
     · exact hat e he
     · simp only [eval_minus, eval_v, hzdef, zeta]; linarith
 
-/-- The rotation `(u, v) ↦ (v, 1 - u)` keeps every signed area. -/
-theorem sarea_rot (p q r : Point) :
-    sarea (p.2, 1 - p.1) (q.2, 1 - q.1) (r.2, 1 - r.1) = sarea p q r := by
-  simp only [sarea]; ring
-
 /-- The relabelling of the rotated configuration: the point `i` of the C/D chamber
 `(A', …, H', O') = (C, D, E, G, F, H, A, B, O)` is the point `capPerm i` of `nConfig`. -/
 def capPerm : Equiv.Perm (Fin 9) :=
   Equiv.ofBijective (![3, 4, 6, 7, 5, 1, 0, 2, 8] : Fin 9 → Fin 9) (by decide)
 
-/-- **Claim** (`SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-sharp-chamber`). In `CapSetting` with
-word 10 and (14) `e_x > c`, `g_y > h`: the strict orders `d < e_y < 1`, `f < g_x < 1` hold, the
-eleven chamber areas (17) `CDB, CDE, CAB, GFH, ABH, AFH, CGO, GBO, DOF, AEO, OEH` are positive,
-and Theorem 1 of `SHARP_CD_MOVING.md`, after the rotation `(x, y) ↦ (y, 1 - x)` with the labels
-(15), gives least area at most `A₀`; least area at least `A₀` forces `e_x = g_y = 1` and the
-optimal configuration. `docs/proof/nine/SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md`, lines 241-279.
-Uses: SHARP_CD_MOVING:Theorem1, SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-hull-and-bounds -/
-theorem claim_sharp_chamber (hS : CapSetting a h b c d f E G O)
+/-- In `CapSetting` with the word `word10` and `e_x > c`, `g_y > h`: the strict orders
+`d < e_y < 1`, `f < g_x < 1` hold, the eleven chamber areas
+`CDB, CDE, CAB, GFH, ABH, AFH, CGO, GBO, DOF, AEO, OEH` are positive, and
+`SharpCDMoving.cdMoving_chamber_le`, after the rotation `(x, y) ↦ (y, 1 - x)` with the relabelling
+`capPerm`, gives least area at most `A₀`; least area at least `A₀` forces `e_x = g_y = 1` and
+the optimal configuration. -/
+theorem sharp_chamber (hS : CapSetting a h b c d f E G O)
     (hr : HasRadialWord (octagonDEGF a h b c d f E G) O fun i => (word10 i : ℕ))
     (hE : c < E.1) (hG : h < G.2) :
     (d < E.2 ∧ E.2 < 1 ∧ f < G.1 ∧ G.1 < 1) ∧
@@ -669,7 +573,7 @@ theorem claim_sharp_chamber (hS : CapSetting a h b c d f E G O)
     minTriangleArea (nConfig a h b c d f E G O) ≤ A₀ ∧
     (A₀ ≤ minTriangleArea (nConfig a h b c d f E G O) →
       E.1 = 1 ∧ G.2 = 1 ∧ IsOptimal (nConfig a h b c d f E G O)) := by
-  obtain ⟨⟨h3a, h3b, -, -, -, -, -⟩, -, -, h6, h7a, h7b⟩ := claim_hull_and_bounds hS
+  obtain ⟨⟨h3a, h3b, -, -, -, -, -⟩, -, -, h6, h7a, h7b⟩ := capSetting_bounds hS
   obtain ⟨hEx, hEy⟩ := h6 E (by simp)
   obtain ⟨hGx, hGy⟩ := h6 G (by simp)
   obtain ⟨hN, -, hEc, hGc, hOc, hmin, hconv, -, -, -, -, -⟩ := hS
@@ -681,7 +585,7 @@ theorem claim_sharp_chamber (hS : CapSetting a h b c d f E G O)
   obtain ⟨⟨o0, o1, o2, o3⟩, -⟩ := hOc
   set V := octagonDEGF a h b c d f E G with hV
   have cv : ∀ i j k : Fin 8, i < j → j < k → 0 < sarea (V i) (V j) (V k) := hconv
-  -- the word signs of word 10
+  -- the word signs of `word10`
   have w1 : 0 < sarea (V 2) (V 5) O := (hr 2 3 (by norm_num) (by norm_num)).2 (by decide)
   have w2 : 0 < sarea (V 5) (V 1) O := (hr 5 4 (by norm_num) (by norm_num)).2 (by decide)
   have w3 : sarea (V 3) (V 6) O < 0 := by
@@ -740,7 +644,7 @@ theorem claim_sharp_chamber (hS : CapSetting a h b c d f E G O)
     ⟨⟨by linarith, by linarith, by linarith, by linarith, by linarith, hEy1, by linarith,
       by linarith, by linarith, ha, hah, hh⟩, by linarith, by linarith, by linarith,
       by linarith, ⟨o2, o3, by linarith, by linarith⟩⟩
-  have K := SharpCDMoving.theorem1 hyp hch
+  have K := SharpCDMoving.cdMoving_chamber_le hyp hch
   refine ⟨⟨by linarith, hEy1, by linarith, hGx1⟩, signs, ?_, fun hA => ?_⟩
   · obtain ⟨i, hi⟩ := K.1
     rw [harea i] at hi
@@ -760,17 +664,17 @@ theorem claim_sharp_chamber (hS : CapSetting a h b c d f E G O)
 
 end Claims
 
-/-! ### Section 4: the theorem -/
+/-! ### The completion -/
 
-/-- The normalized case `f ≤ d` of Theorem 1: least area at most `A₀`, and at least `A₀` makes the
-configuration optimal with a free point on the square boundary. -/
-theorem theorem1_normalized {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- The normalized case `f ≤ d` of `oppositeCap_le_A₀`: least area at most `A₀`, and at least `A₀` makes
+the configuration optimal with a free point on the square boundary. -/
+theorem oppositeCap_le_A₀_of_f_le_d {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hfd : f ≤ d) (hX : InCapT d f X) (hY : InCapT d f Y) (hZ : InCapT d f Z)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     minTriangleArea (nConfig a h b c d f X Y Z) ≤ A₀ ∧
       (A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z) →
         IsOptimal (nConfig a h b c d f X Y Z) ∧ ¬ ExactlySixContacts X Y Z) := by
-  obtain ⟨σ, -, hDEF, hDGF, h7a, h7b, hconv, hpoly⟩ := theorem4 hN hX hY hZ hmin
+  obtain ⟨σ, -, hDEF, hDGF, h7a, h7b, hconv, hpoly⟩ := oppositeCap_octagon hN hX hY hZ hmin
   set W : Fin 3 → Point := ![X, Y, Z] with hW
   have hcap : ∀ i, InCapT d f (W i) := fun i => by
     fin_cases i
@@ -782,10 +686,10 @@ theorem theorem1_normalized {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a
     rw [hperm]; exact hmin
   have hS : CapSetting a h b c d f (W (σ 0)) (W (σ 1)) (W (σ 2)) :=
     ⟨hN, hfd, hcap _, hcap _, hcap _, hmin', hconv, hpoly, hDEF, hDGF, h7a, h7b⟩
-  obtain ⟨r, -, hr⟩ := (claim_15_words).2 hS
-  obtain ⟨hr10, hEc, hGh⟩ := claim_16_certificates hS _ hr
+  obtain ⟨r, -, hr⟩ := (exists_capWord).2 hS
+  obtain ⟨hr10, hEc, hGh⟩ := radialWord_eq_word10 hS _ hr
   rw [hr10] at hr
-  obtain ⟨-, -, hle, heq⟩ := claim_sharp_chamber hS hr hEc hGh
+  obtain ⟨-, -, hle, heq⟩ := sharp_chamber hS hr hEc hGh
   rw [hperm] at hle heq
   refine ⟨hle, fun hA => ?_⟩
   obtain ⟨hE1, -, hopt⟩ := heq hA
@@ -798,17 +702,10 @@ theorem theorem1_normalized {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a
   have := (hopen (σ 0)).2.1
   linarith
 
-/-- **Theorem 1** (`SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:Theorem1`). If all three free points lie
-in the closed opposite cap `DF(1,1)`, the least area is at most `A₀`; equality holds only at the
-optimal (eight-boundary) configuration, up to square symmetry and relabelling; in particular,
-with exactly six boundary contacts the bound is strict.
-`docs/proof/nine/SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md`, lines 15-30.
-Uses: SIX_BOUNDARY_EXTERIOR:Theorem4, SIX_BOUNDARY_HULL:claim-transposition,
-SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-hull-and-bounds,
-SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-15-words,
-SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-16-certificates,
-SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:claim-sharp-chamber -/
-theorem theorem1 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- If all three free points lie in the closed opposite cap `DF(1,1)`, the least area is at most
+`A₀`; equality holds only at the optimal (eight-boundary) configuration, up to square symmetry
+and relabelling; in particular, with exactly six boundary contacts the bound is strict. -/
+theorem oppositeCap_le_A₀ {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : InCapT d f X) (hY : InCapT d f Y) (hZ : InCapT d f Z) :
     minTriangleArea (nConfig a h b c d f X Y Z) ≤ A₀ ∧
       (minTriangleArea (nConfig a h b c d f X Y Z) = A₀ →
@@ -822,27 +719,25 @@ theorem theorem1 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     · push Not at h7
       exact ⟨by linarith [A₀_bounds.1], fun h => absurd (h.trans_lt h7) (not_lt.2 A₀_bounds.1.le)⟩
     rcases le_total f d with hfd | hdf
-    · exact theorem1_normalized hN hfd hX hY hZ h7
+    · exact oppositeCap_le_A₀_of_f_le_d hN hfd hX hY hZ h7
     -- the transposed case
-    have T := claim_transposition a h b c d f X Y Z
-    have k := theorem1_normalized (T.1.1 hN) hdf (T.2.2.2.2.2.2.2.1.1 hX)
-      ((claim_transposition a h b c d f Y X Z).2.2.2.2.2.2.2.1.1 hY)
-      ((claim_transposition a h b c d f Z X Y).2.2.2.2.2.2.2.1.1 hZ) (by rw [T.2.2.1]; exact h7)
+    have T := transpose_invariant a h b c d f X Y Z
+    have k := oppositeCap_le_A₀_of_f_le_d (T.1.1 hN) hdf (T.2.2.2.2.2.2.2.1.1 hX)
+      ((transpose_invariant a h b c d f Y X Z).2.2.2.2.2.2.2.1.1 hY)
+      ((transpose_invariant a h b c d f Z X Y).2.2.2.2.2.2.2.1.1 hZ) (by rw [T.2.2.1]; exact h7)
     rw [T.2.2.1] at k
     refine ⟨k.1, fun hA => ⟨T.2.2.2.1.1 (k.2 hA).1, fun hsix => (k.2 hA).2 (T.2.2.2.2.1.2 hsix)⟩⟩
   refine ⟨key.1, fun h => (key.2 h.ge).1, fun hsix => lt_of_le_of_ne key.1 fun h =>
     (key.2 h.ge).2 hsix⟩
 
-/-- **Case N6-08** (`(n_L, n_T, n_R; n_I) = (0,3,0;0)`, `docs/proof/nine/UNRESTRICTED.md`, Section 4),
-assembly form: an N configuration with exactly six contacts and all three free points in the
-opposite cap, with least area at least `A₀`, is optimal (in fact impossible, by the strict part
-of Theorem 1).
-Uses: SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION:Theorem1 -/
-theorem n6_08 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- An N configuration with exactly six contacts and all three free points in the opposite cap,
+with least area at least `A₀`, is optimal (in fact impossible, by the strict part of
+`oppositeCap_le_A₀`). -/
+theorem oppositeCap_isOptimal_of_A₀_le {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : InCapT d f X) (hY : InCapT d f Y) (hZ : InCapT d f Z)
     (hsix : ExactlySixContacts X Y Z)
     (hmin : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     IsOptimal (nConfig a h b c d f X Y Z) :=
-  absurd hmin (not_le.2 ((theorem1 hN hX hY hZ).2.2 hsix))
+  absurd hmin (not_le.2 ((oppositeCap_le_A₀ hN hX hY hZ).2.2 hsix))
 
 end Heilbronn.Nine.SixBoundaryOppositeCapCompletion

@@ -19,8 +19,6 @@ namespace Heilbronn.Nine
 /-- `A₀ = (9√65 - 55)/320 ≈ 0.054876`, the value of `H₉`. -/
 def A₀ : ℝ := (9 * Real.sqrt 65 - 55) / 320
 
-theorem A₀_def : A₀ = (9 * Real.sqrt 65 - 55) / 320 := rfl
-
 /-- `√65 ∈ (8.0622, 8.0623)`. -/
 theorem sqrt65_bounds : (8.0622 : ℝ) < Real.sqrt 65 ∧ Real.sqrt 65 < 8.0623 := by
   constructor

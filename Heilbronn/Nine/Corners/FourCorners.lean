@@ -2,36 +2,37 @@ module
 
 public import Heilbronn.Nine.Corners.OppositeCorners
 
-/-! # Nine points with all four square corners (`docs/proof/nine/FOUR_CORNERS.md`)
+/-! # Nine points with all four square corners
 
-**Role.** A component used only by the near-square quadrilateral lemma of `CORNER_FAMILIES.md`
-§9 (projective transfer, `CORNER_FAMILIES:NearSquareQuadrilateralLemma`), hence on the primary
-route through the Type-III `2+4` class.
+Nine points of the unit square that include all four corners have minimum triangle area at most
+`1/19` (`fourCornersTheorem`). The bound is used by
+`CornerFamilies.nearSquareQuadrilateralLemma`, which transfers a near-square quadrilateral to the
+square by a projective map.
 
-**Setting** (lines 16–32). Nine points of the unit square include the corners
-`A = (0,0)`, `B = (0,1)`, `C = (1,1)`, `D = (1,0)`. The proof assumes every triangle area is at
-least `1/19` (written `1/19 ≤ minTriangleArea …`), i.e. every doubled area at least
-`s = 2/19`; `D_O(P, Q) = det(P - O, Q - O) = sarea O P Q`. The five noncorner points lie in four
-triangular regions (`fcRegion 0 = leftRegion`, `1 = topRegion`, `2 = rightRegion`,
-`3 = bottomRegion`, the rotations of (3) about the centre).
+**Setting.** The corners are `A = (0,0)`, `B = (0,1)`, `C = (1,1)`, `D = (1,0)`. The proof
+assumes every triangle area is at least `1/19` (written `1/19 ≤ minTriangleArea …`), i.e. every
+doubled area at least `s = 2/19`; `D_O(P, Q) = det(P - O, Q - O) = sarea O P Q`. The five
+noncorner points lie in four triangular regions (`fcRegion 0 = leftRegion`, `1 = topRegion`,
+`2 = rightRegion`, `3 = bottomRegion`, the rotations of the left region about the centre).
 
 **Results.**
 
-* `fourCornersTheorem` (the Theorem): minimum area `≤ 1/19` (the proof gives `< 1/19`).
-* `claim_regions` (2)–(3); `claim_pair_separation` (4)–(5), `claim_region_capacity`;
-  `claim_line_band` (6)–(7); `claim_exactly_one_pair` (8); `claim_corner_signs` (9)–(11);
-  `claim_final_triangle` (12).
+* `fourCornersTheorem`: minimum area `≤ 1/19` (the proof gives `< 1/19`).
+* `exists_mem_fcRegion`: every noncorner point lies in one of the regions; `leftRegion_pair_bounds`:
+  the separation of a pair in the left region; `not_three_mem_fcRegion`: no region holds three
+  points; `pairLine_band`: the band around the line through the pair;
+  `no_pair_in_other_fcRegion`: only one region holds two points; `top_bottom_corner_signs`: the corner
+  signs of the top and bottom points; `abs_sarea_inner_top_bottom_le`: these two points form a small
+  triangle with the inner point of the pair.
 
-The claims are stated for the left region and the pair in it, as in the manuscript ("rotate the
-square to make that region `L`"); the other regions follow by the square symmetries.
-
-**Implicit in the manuscript.** In the claims about a pair `P, Q` of the left region, `P` is the
-member with the smaller `x`-coordinate and `Q` the "inner point" (line 93).
+The lemmas about a pair are stated for the left region; the other regions follow by the square
+symmetries. In a pair `P, Q` of the left region, `P` is the member with the smaller
+`x`-coordinate and `Q` the "inner point".
 
 **Proof organization.** The square rotations `rotK k` (determinant `1`) bring region `k` to the
-left region, which reduces the claims for the other regions (`claim_region_capacity`,
-`claim_exactly_one_pair`) and the theorem to the left region; the reflection `flipY` across
-`y = 1/2` gives the bottom signs of (9) from the top ones. The final triangle (12) is a
+left region, which reduces the statements for the other regions (`not_three_mem_fcRegion`,
+`no_pair_in_other_fcRegion`) and the theorem to the left region; the reflection `flipY` across
+`y = 1/2` gives the bottom signs from the top ones (`top_signs`). The final triangle is a
 division-free polynomial argument (`final_poly`). The theorem assigns each of the five noncorner
 points a region, finds a pair by pigeonhole, rotates it to the left region, and counts the other
 three (`four_left`).
@@ -44,11 +45,10 @@ namespace Heilbronn.Nine.FourCorners
 
 /-! ### The four regions -/
 
-/-- The left region (3): `s ≤ x`, `x + s ≤ y ≤ 1 - s - x` (then `x ≤ 1/2 - s`). -/
+/-- The left region: `s ≤ x`, `x + s ≤ y ≤ 1 - s - x` (then `x ≤ 1/2 - s`). -/
 def leftRegion (s : ℝ) : Set Point := {p | s ≤ p.1 ∧ p.1 + s ≤ p.2 ∧ p.1 + p.2 ≤ 1 - s}
 
-/-- The top region, the rotation of the left one (lines 51–54): `y ≤ 1 - s`, `y ≥ x + s`,
-`x + y ≥ 1 + s`. -/
+/-- The top region, the rotation of the left one: `y ≤ 1 - s`, `y ≥ x + s`, `x + y ≥ 1 + s`. -/
 def topRegion (s : ℝ) : Set Point := {p | p.2 ≤ 1 - s ∧ p.1 + s ≤ p.2 ∧ 1 + s ≤ p.1 + p.2}
 
 /-- The right region: `x ≤ 1 - s`, `x ≥ y + s`, `x + y ≥ 1 + s`. -/
@@ -61,8 +61,8 @@ def bottomRegion (s : ℝ) : Set Point := {p | s ≤ p.2 ∧ p.2 + s ≤ p.1 ∧
 def fcRegion (k : Fin 4) (s : ℝ) : Set Point :=
   ![leftRegion s, topRegion s, rightRegion s, bottomRegion s] k
 
-/-- The line through `P` and `Q` as a function of `x`: `ℓ(x) = y_P + (y_Q - y_P)(x - x_P)/(x_Q - x_P)`
-(line 107). -/
+/-- The line through `P` and `Q` as a function of `x`:
+`ℓ(x) = y_P + (y_Q - y_P)(x - x_P)/(x_Q - x_P)`. -/
 def pairLine (P Q : Point) (x : ℝ) : ℝ := P.2 + (Q.2 - P.2) / (Q.1 - P.1) * (x - P.1)
 
 /-! ### Helpers: sub-configurations and the rotations of the square -/
@@ -113,13 +113,12 @@ theorem min_rot4 (k : Fin 4) (X Y : Point) :
   exact minTriangleArea_comp_of_area _ _ fun p q r => by
     rw [triangleArea_eq, triangleArea_eq, sarea_rotK]
 
-/-! ### §1. Four regions and a pair in one region -/
+/-! ### Four regions and a pair in one region -/
 
-/-- **Claim** (`FOUR_CORNERS:claim-regions`), (2)–(3): a point `X` of the square whose triangles
-with pairs of corners have doubled area at least `s = 2/19` satisfies `s ≤ x, y ≤ 1 - s`,
-`|x - y| ≥ s`, `|x + y - 1| ≥ s`, and lies in one of the four regions.
-`docs/proof/nine/FOUR_CORNERS.md`, lines 34–54. -/
-theorem claim_regions (X : Point) (hX : X ∈ unitSquare)
+/-- A point `X` of the square whose triangles with pairs of corners have doubled area at least
+`s = 2/19` satisfies `s ≤ x, y ≤ 1 - s`, `|x - y| ≥ s`, `|x + y - 1| ≥ s`, and lies in one of the
+four regions. -/
+theorem exists_mem_fcRegion (X : Point) (hX : X ∈ unitSquare)
     (hmin : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), (1, 0), X]) :
     2 / 19 ≤ X.1 ∧ X.1 ≤ 1 - 2 / 19 ∧ 2 / 19 ≤ X.2 ∧ X.2 ≤ 1 - 2 / 19 ∧
       2 / 19 ≤ |X.1 - X.2| ∧ 2 / 19 ≤ |X.1 + X.2 - 1| ∧
@@ -152,12 +151,10 @@ theorem claim_regions (X : Point) (hX : X ∈ unitSquare)
   · exact ⟨3, ⟨a3, by linarith, by linarith⟩⟩
   · exact ⟨2, ⟨by linarith, by linarith, by linarith⟩⟩
 
-/-- **Claim** (`FOUR_CORNERS:claim-pair-separation`), (4)–(5): for `P = (p,u)`, `Q = (q,v)` in the
-left region with `p ≤ q` and all doubled areas among `A, B, P, Q` at least `s = 2/19`:
-`D_A(P,Q) ≤ -s`, `D_B(P,Q) ≥ s`, `d = q - p ≥ 2s`, and the inner point `Q` satisfies
-`3s ≤ q ≤ 1/2 - s`, `q + s ≤ v ≤ 1 - s - q`, `4s ≤ v ≤ 1 - 4s`.
-`docs/proof/nine/FOUR_CORNERS.md`, lines 56–99. -/
-theorem claim_pair_separation (P Q : Point) (hP : P ∈ leftRegion (2 / 19))
+/-- For `P = (p,u)`, `Q = (q,v)` in the left region with `p ≤ q` and all doubled areas among
+`A, B, P, Q` at least `s = 2/19`: `D_A(P,Q) ≤ -s`, `D_B(P,Q) ≥ s`, `d = q - p ≥ 2s`, and the
+inner point `Q` satisfies `3s ≤ q ≤ 1/2 - s`, `q + s ≤ v ≤ 1 - s - q`, `4s ≤ v ≤ 1 - 4s`. -/
+theorem leftRegion_pair_bounds (P Q : Point) (hP : P ∈ leftRegion (2 / 19))
     (hQ : Q ∈ leftRegion (2 / 19)) (hpq : P.1 ≤ Q.1)
     (hmin : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), P, Q]) :
     sarea (0, 0) P Q ≤ -(2 / 19) ∧ 2 / 19 ≤ sarea (0, 1) P Q ∧ 2 * (2 / 19) ≤ Q.1 - P.1 ∧
@@ -190,11 +187,9 @@ theorem claim_pair_separation (P Q : Point) (hP : P ∈ leftRegion (2 / 19))
   rw [eA, eB]
   exact ⟨dA, dB, hd, by linarith, by linarith, q2, by linarith, by linarith, by linarith⟩
 
-/-- **Claim** (`FOUR_CORNERS:claim-pair-separation`), the capacity consequence: no region
-contains three points, since a pair needs an `x`-span `≥ 2s` and the region's span is
-`1/2 - 2s = 11/38 < 4s` (stated for every region, by rotation). `docs/proof/nine/FOUR_CORNERS.md`,
-lines 88–91. -/
-theorem claim_region_capacity (k : Fin 4) (P Q R : Point) (hP : P ∈ fcRegion k (2 / 19))
+/-- No region contains three points: a pair needs an `x`-span `≥ 2s` (`leftRegion_pair_bounds`),
+and the region's span is `1/2 - 2s = 11/38 < 4s`. Stated for every region, by rotation. -/
+theorem not_three_mem_fcRegion (k : Fin 4) (P Q R : Point) (hP : P ∈ fcRegion k (2 / 19))
     (hQ : Q ∈ fcRegion k (2 / 19)) (hR : R ∈ fcRegion k (2 / 19))
     (hmin : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), (1, 0), P, Q, R]) : False := by
   have hsub : ∀ X Y : Point, X ∈ fcRegion k (2 / 19) → Y ∈ fcRegion k (2 / 19) →
@@ -205,9 +200,9 @@ theorem claim_region_capacity (k : Fin 4) (P Q R : Point) (hP : P ∈ fcRegion k
     have hX' := rotK_region k _ hX
     have hY' := rotK_region k _ hY
     rcases le_total (rotK k X).1 (rotK k Y).1 with h | h
-    · have := (claim_pair_separation _ _ hX' hY' h hm).2.2.1
+    · have := (leftRegion_pair_bounds _ _ hX' hY' h hm).2.2.1
       rw [abs_of_nonpos (by linarith)]; linarith
-    · have := (claim_pair_separation _ _ hY' hX' h (by rw [min_swap4]; exact hm)).2.2.1
+    · have := (leftRegion_pair_bounds _ _ hY' hX' h (by rw [min_swap4]; exact hm)).2.2.1
       rw [abs_of_nonneg (by linarith)]; linarith
   have m4 : 1 / 19 ≤ minTriangleArea ![preA k, preB k, P, Q] ∧
       1 / 19 ≤ minTriangleArea ![preA k, preB k, Q, R] ∧
@@ -230,7 +225,7 @@ theorem claim_region_capacity (k : Fin 4) (P Q R : Point) (hP : P ∈ fcRegion k
   rcases le_abs'.1 d1 with e1 | e1 <;> rcases le_abs'.1 d2 with e2 | e2 <;>
     rcases le_abs'.1 d3 with e3 | e3 <;> linarith
 
-/-! ### §2. The line through the pair -/
+/-! ### The line through the pair -/
 
 /-- The pair line in multiplied-out form: `(q - p) ℓ(x) = (q - p) u + (v - u)(x - p)`, and the
 determinant of `PQX` is `(q - p)(y - ℓ(x))`. -/
@@ -243,7 +238,8 @@ theorem sarea_pairLine {P Q : Point} (h : P.1 ≠ Q.1) (X : Point) :
     sarea P Q X = (Q.1 - P.1) * (X.2 - pairLine P Q X.1) := by
   rw [mul_sub, pairLine_mul h]; simp only [sarea]; ring
 
-/-- The line band (6)–(7), in explicit form. -/
+/-- The band of `pairLine_band` multiplied out by `q - p`: `s ≤ (q - p)ℓ(x) ≤ (q - p) - s` on
+`[0, 1]`, and `2s ≤ q - p ≤ 11/38`. -/
 theorem line_band_core (P Q : Point) (hP : P ∈ leftRegion (2 / 19))
     (hQ : Q ∈ leftRegion (2 / 19)) (hpq : P.1 ≤ Q.1)
     (hmin : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), (1, 0), P, Q]) :
@@ -252,7 +248,7 @@ theorem line_band_core (P Q : Point) (hP : P ∈ leftRegion (2 / 19))
       2 * (2 / 19) ≤ Q.1 - P.1 ∧ Q.1 - P.1 ≤ 11 / 38 := by
   have h4 : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), P, Q] :=
     hmin.trans (min_sub4 _ 0 1 4 5 (by decide))
-  obtain ⟨dA, dB, hd, -, qhalf, qv1, qv2, -, -⟩ := claim_pair_separation P Q hP hQ hpq h4
+  obtain ⟨dA, dB, hd, -, qhalf, qv1, qv2, -, -⟩ := leftRegion_pair_bounds P Q hP hQ hpq h4
   obtain ⟨p1, p2, p3⟩ := hP
   have hd0 : P.1 ≠ Q.1 := by intro h; linarith
   have hm : (2 / 19 : ℝ) / 2 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), (1, 0), P, Q] := by
@@ -330,7 +326,7 @@ theorem inner_y (k : Fin 4) (hk : k ≠ 0) {X Y : Point} (hX : X ∈ fcRegion k 
   have hX' := rotK_region k _ hX
   have hY' := rotK_region k _ hY
   rcases le_total (rotK k X).1 (rotK k Y).1 with h | h
-  · obtain ⟨-, -, -, a1, a2, -, -, a3, a4⟩ := claim_pair_separation _ _ hX' hY' h hm
+  · obtain ⟨-, -, -, a1, a2, -, -, a3, a4⟩ := leftRegion_pair_bounds _ _ hX' hY' h hm
     right
     fin_cases k
     · exact absurd rfl hk
@@ -338,7 +334,7 @@ theorem inner_y (k : Fin 4) (hk : k ≠ 0) {X Y : Point} (hX : X ∈ fcRegion k 
     · simp [rotK] at a1 a2 a3 a4; constructor <;> linarith
     · simp [rotK] at a1 a2 a3 a4; constructor <;> linarith
   · obtain ⟨-, -, -, a1, a2, -, -, a3, a4⟩ :=
-      claim_pair_separation _ _ hY' hX' h (by rw [min_swap4]; exact hm)
+      leftRegion_pair_bounds _ _ hY' hX' h (by rw [min_swap4]; exact hm)
     left
     fin_cases k
     · exact absurd rfl hk
@@ -346,12 +342,11 @@ theorem inner_y (k : Fin 4) (hk : k ≠ 0) {X Y : Point} (hX : X ∈ fcRegion k 
     · simp [rotK] at a1 a2 a3 a4; constructor <;> linarith
     · simp [rotK] at a1 a2 a3 a4; constructor <;> linarith
 
-/-- **Claim** (`FOUR_CORNERS:claim-line-band`), (6)–(7): for a pair `P, Q` of the left region
-(`p ≤ q`) with all doubled areas among the corners and `P, Q` at least `s = 2/19`, put
-`a = s/(q - p)`. The line `ℓ` through `P, Q` satisfies `a ≤ ℓ(x) ≤ 1 - a` on `[0, 1]` and
-`a ≥ 4/11`, and any point `X` of the square with `|D(P,Q,X)| ≥ s` has `y ≥ ℓ(x) + a ≥ 2a` or
-`y ≤ ℓ(x) - a ≤ 1 - 2a`. `docs/proof/nine/FOUR_CORNERS.md`, lines 102–155. -/
-theorem claim_line_band (P Q : Point) (hP : P ∈ leftRegion (2 / 19))
+/-- For a pair `P, Q` of the left region (`p ≤ q`) with all doubled areas among the corners and
+`P, Q` at least `s = 2/19`, put `a = s/(q - p)`. The line `ℓ` through `P, Q` satisfies
+`a ≤ ℓ(x) ≤ 1 - a` on `[0, 1]` and `a ≥ 4/11`, and any point `X` of the square with
+`|D(P,Q,X)| ≥ s` has `y ≥ ℓ(x) + a ≥ 2a` or `y ≤ ℓ(x) - a ≤ 1 - 2a`. -/
+theorem pairLine_band (P Q : Point) (hP : P ∈ leftRegion (2 / 19))
     (hQ : Q ∈ leftRegion (2 / 19)) (hpq : P.1 ≤ Q.1)
     (hmin : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), (1, 0), P, Q]) :
     let a := (2 / 19) / (Q.1 - P.1)
@@ -388,15 +383,12 @@ theorem claim_line_band (P Q : Point) (hP : P ∈ leftRegion (2 / 19))
     · right; constructor <;> linarith
     · left; constructor <;> linarith
 
-/-! ### §3. Exactly one region contains a pair -/
+/-! ### Exactly one region contains a pair -/
 
-/-- **Claim** (`FOUR_CORNERS:claim-exactly-one-pair`), (8): if the left region contains the pair
-`P, Q`, no other region contains two points: the inner point `Z` of a second pair would give
-`|det(Q - P, Z - P)| ≤ 67/722 < s`. Hence the region counts are exactly `2, 1, 1, 1`.
-`docs/proof/nine/FOUR_CORNERS.md`, lines 157–182.
-
-Uses: FOUR_CORNERS:claim-pair-separation, FOUR_CORNERS:claim-line-band -/
-theorem claim_exactly_one_pair (P Q Z₁ Z₂ : Point) (hP : P ∈ leftRegion (2 / 19))
+/-- If the left region contains the pair `P, Q`, no other region contains two points: the inner
+point `Z` of a second pair would give `|det(Q - P, Z - P)| ≤ 67/722 < s`. Hence the region
+counts are exactly `2, 1, 1, 1`. -/
+theorem no_pair_in_other_fcRegion (P Q Z₁ Z₂ : Point) (hP : P ∈ leftRegion (2 / 19))
     (hQ : Q ∈ leftRegion (2 / 19)) (k : Fin 4) (hk : k ≠ 0) (hZ₁ : Z₁ ∈ fcRegion k (2 / 19))
     (hZ₂ : Z₂ ∈ fcRegion k (2 / 19))
     (hmin : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), (1, 0), P, Q, Z₁, Z₂]) :
@@ -441,9 +433,9 @@ theorem claim_exactly_one_pair (P Q Z₁ Z₂ : Point) (hP : P ∈ leftRegion (2
       funext i; fin_cases i <;> rfl
     rw [e, minTriangleArea_comp_perm]; exact hmin
 
-/-! ### §4. The corner signs for the top and bottom points -/
+/-! ### The corner signs for the top and bottom points -/
 
-/-- The signs (9) for a point `X` of the top region. -/
+/-- The corner signs of `top_bottom_corner_signs` for a point `X` of the top region. -/
 theorem top_signs (P Q X : Point) (hP : P ∈ leftRegion (2 / 19))
     (hQ : Q ∈ leftRegion (2 / 19)) (hpq : P.1 ≤ Q.1) (hX : X ∈ topRegion (2 / 19))
     (hmin : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), (1, 0), P, Q, X]) :
@@ -458,8 +450,8 @@ theorem top_signs (P Q X : Point) (hP : P ∈ leftRegion (2 / 19))
     h6.trans (min_sub4 _ 0 1 4 5 (by decide))
   have hm : (2 / 19 : ℝ) / 2 ≤
       minTriangleArea ![(0, 0), (0, 1), (1, 1), (1, 0), P, Q, X] := by linarith
-  obtain ⟨-, -, -, q3, qh, qv1, qv2, v4, v5⟩ := claim_pair_separation P Q hP hQ hpq h4
-  obtain ⟨-, ha, hband⟩ := claim_line_band P Q hP hQ hpq h6
+  obtain ⟨-, -, -, q3, qh, qv1, qv2, v4, v5⟩ := leftRegion_pair_bounds P Q hP hQ hpq h4
+  obtain ⟨-, ha, hband⟩ := pairLine_band P Q hP hQ hpq h6
   obtain ⟨x1, x2, x3⟩ := hX
   have hXsq : X ∈ unitSquare := ⟨by linarith, by linarith, by linarith, by linarith⟩
   have aPQX : 2 / 19 ≤ |sarea P Q X| := OppositeCorners.abs_sarea_ge hm 4 5 6
@@ -509,16 +501,13 @@ def flipY (p : Point) : Point := (p.1, 1 - p.2)
 theorem sarea_flipY (a b c : Point) : sarea (flipY a) (flipY b) (flipY c) = -sarea a b c := by
   simp only [flipY, sarea]; ring
 
-/-- **Claim** (`FOUR_CORNERS:claim-corner-signs`), (9)–(11): with the pair `P, Q` in the left
-region (`p ≤ q`), a point `X` of the top region and a point `Y` of the bottom region, and all
-doubled areas at least `s = 2/19`: `y_X ≥ 8/11 > v`, `D_A(Q,X) ≥ s`, `D_B(Q,X) ≥ s`,
-`D_C(Q,X) ≤ -s`, the reflected signs `D_A(Q,Y) ≤ -s`, `D_B(Q,Y) ≤ -s`, `D_D(Q,Y) ≥ s`, and,
-writing `X = (q + ξ, v + h)`, `Y = (q + η, v - k)`, the bounds (10)
-`(s - qh)/(1 - v) ≤ ξ ≤ (qh - s)/v`, `(s - qk)/v ≤ η ≤ (qk - s)/(1 - v)` and (11)
-`h ≤ 1 - s - v`, `k ≤ v - s`. `docs/proof/nine/FOUR_CORNERS.md`, lines 184–267.
-
-Uses: FOUR_CORNERS:claim-pair-separation, FOUR_CORNERS:claim-line-band -/
-theorem claim_corner_signs (P Q X Y : Point) (hP : P ∈ leftRegion (2 / 19))
+/-- With the pair `P, Q` in the left region (`p ≤ q`), a point `X` of the top region and a point
+`Y` of the bottom region, and all doubled areas at least `s = 2/19`: `y_X ≥ 8/11 > v`,
+`D_A(Q,X) ≥ s`, `D_B(Q,X) ≥ s`, `D_C(Q,X) ≤ -s`, the reflected signs `D_A(Q,Y) ≤ -s`,
+`D_B(Q,Y) ≤ -s`, `D_D(Q,Y) ≥ s`, and, writing `X = (q + ξ, v + h)`, `Y = (q + η, v - k)`, the
+bounds `(s - qh)/(1 - v) ≤ ξ ≤ (qh - s)/v`, `(s - qk)/v ≤ η ≤ (qk - s)/(1 - v)` and the height
+bounds `h ≤ 1 - s - v`, `k ≤ v - s`. -/
+theorem top_bottom_corner_signs (P Q X Y : Point) (hP : P ∈ leftRegion (2 / 19))
     (hQ : Q ∈ leftRegion (2 / 19)) (hpq : P.1 ≤ Q.1) (hX : X ∈ topRegion (2 / 19))
     (hY : Y ∈ bottomRegion (2 / 19))
     (hmin : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), (1, 0), P, Q, X, Y]) :
@@ -573,7 +562,7 @@ theorem claim_corner_signs (P Q X Y : Point) (hP : P ∈ leftRegion (2 / 19))
   have q4 : 4 * (2 / 19) ≤ Q.2 ∧ Q.2 ≤ 1 - 4 * (2 / 19) := by
     have h4 : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), P, Q] :=
       h7X.trans (min_sub4 _ 0 1 4 5 (by decide))
-    obtain ⟨-, -, -, -, -, -, -, a, b⟩ := claim_pair_separation P Q ⟨p1, p2, p3⟩ ⟨q1, q2, q3⟩ hpq h4
+    obtain ⟨-, -, -, -, -, -, -, a, b⟩ := leftRegion_pair_bounds P Q ⟨p1, p2, p3⟩ ⟨q1, q2, q3⟩ hpq h4
     exact ⟨a, b⟩
   have eAX : sarea (0, 0) Q X = Q.1 * (X.2 - Q.2) - Q.2 * (X.1 - Q.1) := by
     simp only [sarea]; ring
@@ -592,10 +581,10 @@ theorem claim_corner_signs (P Q X Y : Point) (hP : P ∈ leftRegion (2 / 19))
   · rw [div_le_iff₀ hv0]; linarith
   · rw [le_div_iff₀ hv1]; linarith
 
-/-! ### §5. The final triangle -/
+/-! ### The final triangle -/
 
-/-- The polynomial core of (12): from the four corner signs (10), the height bounds (11) and the
-ranges of `q, v`, `|ξk + ηh| ≤ 1095/13718`. -/
+/-- The polynomial core of `abs_sarea_inner_top_bottom_le`: from the four corner signs, the height bounds
+and the ranges of `q, v`, `|ξk + ηh| ≤ 1095/13718`. -/
 theorem final_poly {q v ξ η h k : ℝ} (hq3 : 3 * (2 / 19) ≤ q) (hq : q ≤ 1 / 2 - 2 / 19)
     (hh : 0 < h) (hk : 0 < k)
     (hh0 : h ≤ 1 - 2 / 19 - v) (hk0 : k ≤ v - 2 / 19)
@@ -653,22 +642,19 @@ theorem final_poly {q v ξ η h k : ℝ} (hq3 : 3 * (2 / 19) ≤ q) (hq : q ≤ 
       linarith
     exact le_of_mul_le_mul_left this hD
 
-/-- **Claim** (`FOUR_CORNERS:claim-final-triangle`), (12): in the situation of
-`claim_corner_signs`, `|det(X - Q, Y - Q)| = |ξk + ηh| ≤ max(F₁, F₂) ≤ 1095/13718 < s`, so the
-triangle `QXY` is too small. `docs/proof/nine/FOUR_CORNERS.md`, lines 269–317.
-
-Uses: FOUR_CORNERS:claim-corner-signs -/
-theorem claim_final_triangle (P Q X Y : Point) (hP : P ∈ leftRegion (2 / 19))
+/-- In the situation of `top_bottom_corner_signs`, `|det(X - Q, Y - Q)| = |ξk + ηh| ≤ 1095/13718 < s`,
+so the triangle `QXY` is too small. -/
+theorem abs_sarea_inner_top_bottom_le (P Q X Y : Point) (hP : P ∈ leftRegion (2 / 19))
     (hQ : Q ∈ leftRegion (2 / 19)) (hpq : P.1 ≤ Q.1) (hX : X ∈ topRegion (2 / 19))
     (hY : Y ∈ bottomRegion (2 / 19))
     (hmin : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), (1, 0), P, Q, X, Y]) :
     |sarea Q X Y| ≤ 1095 / 13718 ∧ (1095 / 13718 : ℝ) < 2 / 19 := by
   refine ⟨?_, by norm_num⟩
   obtain ⟨-, hvx, -, hvy, xA, xB, -, yA, yB, -, -, -, -, -, h11, k11⟩ :=
-    claim_corner_signs P Q X Y hP hQ hpq hX hY hmin
+    top_bottom_corner_signs P Q X Y hP hQ hpq hX hY hmin
   have h4 : 1 / 19 ≤ minTriangleArea ![(0, 0), (0, 1), P, Q] :=
     hmin.trans (min_sub4 _ 0 1 4 5 (by decide))
-  obtain ⟨-, -, -, q3, qh, -, -, v4, v5⟩ := claim_pair_separation P Q hP hQ hpq h4
+  obtain ⟨-, -, -, q3, qh, -, -, v4, v5⟩ := leftRegion_pair_bounds P Q hP hQ hpq h4
   have eAX : sarea (0, 0) Q X = Q.1 * (X.2 - Q.2) - Q.2 * (X.1 - Q.1) := by
     simp only [sarea]; ring
   have eBX : sarea (0, 1) Q X = (1 - Q.2) * (X.1 - Q.1) + Q.1 * (X.2 - Q.2) := by
@@ -688,20 +674,6 @@ theorem claim_final_triangle (P Q X Y : Point) (hP : P ∈ leftRegion (2 / 19))
 
 /-! ### Assembly: the nine-point configuration -/
 
-/-- Distinct indices carry distinct points when the least area is positive. -/
-theorem ne_of_min {P : Fin 9 → Point} (hmin : 1 / 19 ≤ minTriangleArea P) {i j : Fin 9}
-    (hij : i ≠ j) : P i ≠ P j := by
-  intro heq
-  obtain ⟨k, -, hk⟩ := Finset.exists_mem_notMem_of_card_lt_card
-    (s := ({i, j} : Finset (Fin 9))) (t := Finset.univ)
-    (lt_of_le_of_lt Finset.card_le_two (by simp))
-  simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at hk
-  have := area_of_le_min hmin i j k hij (Ne.symm hk.2) (Ne.symm hk.1)
-  rw [triangleArea_eq, heq] at this
-  have e : sarea (P j) (P j) (P k) = 0 := by simp only [sarea]; ring
-  rw [e] at this
-  norm_num at this
-
 theorem sub_vec {m : ℕ} (hm : 3 ≤ m) (P : Fin 9 → Point) (f : Fin m → Fin 9)
     (hf : Function.Injective f) (V : Fin m → Point) (hV : ∀ x, V x = P (f x)) :
     minTriangleArea P ≤ minTriangleArea V := by
@@ -716,8 +688,8 @@ theorem corner_not_left {X : Point} (hX : X ∈ leftRegion (2 / 19)) :
   refine ⟨?_, ?_, ?_, ?_⟩ <;> rintro rfl <;> norm_num at *
 
 /-- The theorem once a pair lies in the left region: the other three noncorner points are one in
-each of the other regions (capacity and §3), and the top and bottom ones close the argument
-(§§4–5). -/
+each of the other regions (`not_three_mem_fcRegion`, `no_pair_in_other_fcRegion`), and the top and
+bottom ones form a small triangle with the pair (`abs_sarea_inner_top_bottom_le`). -/
 theorem four_left (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare) (iA iB iC iD : Fin 9)
     (hA : P iA = (0, 0)) (hB : P iB = (0, 1)) (hC : P iC = (1, 1)) (hD : P iD = (1, 0))
     (hmin : 1 / 19 ≤ minTriangleArea P) (j₁ j₂ : Fin 9) (hj : j₁ ≠ j₂)
@@ -750,7 +722,7 @@ theorem four_left (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare) (iA iB 
         fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;>
           first | exact absurd hxy ‹_› | exact absurd hxy.symm ‹_›) _
         (by intro x; fin_cases x <;> simp [hA, hB, hC, hD]))
-    exact (claim_regions (P j) (hP j) h5).2.2.2.2.2.2
+    exact (exists_mem_fcRegion (P j) (hP j) h5).2.2.2.2.2.2
   choose! reg hreg using hreg
   obtain ⟨a₁, b₁, c₁, d₁⟩ := notc j₁ h₁
   obtain ⟨a₂, b₂, c₂, d₂⟩ := notc j₂ h₂
@@ -777,7 +749,7 @@ theorem four_left (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare) (iA iB 
         fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;>
           first | exact absurd hxy ‹_› | exact absurd hxy.symm ‹_›) _
         (by intro x; fin_cases x <;> simp [hA, hB, hC, hD]))
-    exact claim_region_capacity 0 _ _ _ h₁ h₂ hjl h7
+    exact not_three_mem_fcRegion 0 _ _ _ h₁ h₂ hjl h7
   have notpair : ∀ j ∈ M, ∀ j' ∈ M, j ≠ j' → reg j ≠ reg j' := by
     intro j hj j' hj' hjj' heq
     obtain ⟨⟨a, b, c, d⟩, e₁, e₂⟩ := memM j hj
@@ -789,7 +761,7 @@ theorem four_left (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare) (iA iB 
         fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;>
           first | exact absurd hxy ‹_› | exact absurd hxy.symm ‹_›) _
         (by intro x; fin_cases x <;> simp [hA, hB, hC, hD]))
-    exact claim_exactly_one_pair _ _ _ _ h₁ h₂ (reg j) (not0 j hj) (hreg j (inN j hj))
+    exact no_pair_in_other_fcRegion _ _ _ _ h₁ h₂ (reg j) (not0 j hj) (hreg j (inN j hj))
       (by rw [heq]; exact hreg j' (inN j' hj')) h8
   have exists_reg : ∀ r : Fin 4, r ≠ 0 → ∃ j ∈ M, reg j = r := by
     intro r hr
@@ -830,7 +802,7 @@ theorem four_left (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare) (iA iB 
         fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;>
           first | exact absurd hxy ‹_› | exact absurd hxy.symm ‹_›) _
         (by intro x; fin_cases x <;> simp [hA, hB, hC, hD]))
-    have b := (claim_final_triangle _ _ _ _ hu hw hle hXt hYb h8).1
+    have b := (abs_sarea_inner_top_bottom_le _ _ _ _ hu hw hle hXt hYb h8).1
     have hm : (2 / 19 : ℝ) / 2 ≤ minTriangleArea P := by linarith
     have := OppositeCorners.abs_sarea_ge hm w jX jY w5 hXY w6
     linarith
@@ -840,13 +812,8 @@ theorem four_left (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare) (iA iB 
 
 /-! ### The theorem -/
 
-/-- **Theorem** (`FOUR_CORNERS:Theorem`). Nine points of the unit square that include all four
-corners have minimum triangle area at most `1/19` (the proof gives a triangle of area
-`< 1/19`). `docs/proof/nine/FOUR_CORNERS.md`, lines 3–14 (proof 16–317).
-
-Uses: FOUR_CORNERS:claim-regions, FOUR_CORNERS:claim-pair-separation,
-FOUR_CORNERS:claim-line-band, FOUR_CORNERS:claim-exactly-one-pair,
-FOUR_CORNERS:claim-corner-signs, FOUR_CORNERS:claim-final-triangle -/
+/-- Nine points of the unit square that include all four corners have minimum triangle area at
+most `1/19` (the proof gives a triangle of area `< 1/19`). -/
 theorem fourCornersTheorem (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare)
     (hA : ∃ i, P i = (0, 0)) (hB : ∃ i, P i = (0, 1)) (hC : ∃ i, P i = (1, 1))
     (hD : ∃ i, P i = (1, 0)) :
@@ -880,7 +847,7 @@ theorem fourCornersTheorem (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare
         fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;>
           first | exact absurd hxy ‹_› | exact absurd hxy.symm ‹_›) _
         (by intro x; fin_cases x <;> simp [hA, hB, hC, hD]))
-    exact (claim_regions (P j) (hP j) h5).2.2.2.2.2.2
+    exact (exists_mem_fcRegion (P j) (hP j) h5).2.2.2.2.2.2
   choose! reg hreg using hreg
   obtain ⟨j₁, hj₁, j₂, hj₂, hj, hk⟩ := Finset.exists_ne_map_eq_of_card_lt_of_maps_to
     (t := (Finset.univ : Finset (Fin 4))) (by rw [cardN]; decide) (f := reg)

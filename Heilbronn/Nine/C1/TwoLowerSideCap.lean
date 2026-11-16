@@ -4,12 +4,12 @@ public import Heilbronn.Nine.C1.Setting
 public import Heilbronn.Nine.C1.TwoLower.Basic
 public import Heilbronn.Nine.Corners.OneCornerCompletion
 
-/-! # Two lower C1 points exclude both side caps (`docs/proof/nine/C1_TWO_LOWER_SIDE_CAP.md`)
+/-! # Two lower C1 points exclude both side caps
 
-Role: a component on the primary route: `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md` Theorem 2, step 1
-(lines 241-244), excludes every free point in a side cap when two free points are inside `OHC`.
+When two free points of a C1 configuration are strictly inside `OHC`, no free point lies in a side
+cap (`theorem_main`, used by `C1TwoLowerCompletion.core`).
 
-Setting (lines 3-38): the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`,
+Setting: the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`,
 two actual points `L, M` strictly inside `OHC`, and an actual point `X = (x, Y)` in the left cap
 `conv{H, F, (0,1)}`. The configuration is competitive (least area at least `A₀`); only the eight
 points `O, C, D, F, H, L, M, X` are used, so the competitiveness hypothesis is stated for the
@@ -17,14 +17,14 @@ eight-point sub-configuration `![O, C, D, F, H, L, M, X]` (`LeftCapSetting`). Do
 compared with `σ = 8/73 < 2A₀`; `K = 4 + 2√3`, `k = Kσ`, `ρ = 49/60 < k`.
 
 Results:
-* `eq1_6`: `hc ≥ k`, `h, c ≥ k > ρ` (1); `f ≥ x + σ/(1-h) ≥ σ/(h(1-h))` (2), `h < 7/8`; (3);
-  `G(h, c) ≥ 0` (4); `h < 43/50`, `h < 341/400 + (1-c)/25` (5);
-* `eq7_10`: for each lower point `R = (r, z)`: `[ORX] ≥ σ` (7), `R ∈ OHC ∩ OCX` (9),
-  `r(1 - z) ≥ σ` (10);
-* `eq11`: `[HRX] < 3σ` (11), so `HRX` contains no further actual point;
-* `claim_separating`: the line through the lower points cannot separate `O, C`;
-* `claim_nonseparating`: it cannot keep `O, C` on one side either;
-* `theorem_main` (**Theorem**, unnumbered): no actual point lies in either side cap.
+* `leftCap_anchor_bounds`: `hc ≥ k`, `h, c ≥ k > ρ`; `f ≥ x + σ/(1-h) ≥ σ/(h(1-h))`, `h < 7/8`;
+  `hf ≤ 1 - σ - c(1-h)`, `hx ≤ 1 - c(1-h) - σ/(1-h)`; `G(h, c) ≥ 0`; `h < 43/50`,
+  `h < 341/400 + (1-c)/25`;
+* `lower_inTriangle_OCX`: for each lower point `R = (r, z)`: `[ORX] ≥ σ`, `R ∈ OHC ∩ OCX`, `r(1 - z) ≥ σ`;
+* `sarea_HRX_lt_three_σ`: `[HRX] < 3σ`, so `HRX` contains no further actual point;
+* `not_oppSide_OC`: the line through the lower points cannot separate `O, C`;
+* `not_sameSide_OC`: it cannot keep `O, C` on one side either;
+* `theorem_main`: no actual point lies in either side cap.
 -/
 
 @[expose] public section
@@ -34,7 +34,7 @@ namespace Heilbronn.Nine.C1TwoLowerSideCap
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1TwoLower
 
-/-- The setting of §§1–5: weak anchors, `L, M` strictly inside `OHC`, `X` in the closed left cap
+/-- The left-cap setting: weak anchors, `L, M` strictly inside `OHC`, `X` in the closed left cap
 `conv{H, F, (0,1)}` (`[FHX] ≤ 0` for a point of the square), and the eight actual points
 `O, C, D, F, H, L, M, X` with least area at least `A₀`. -/
 structure LeftCapSetting (h c d f : ℝ) (L M X : Point) : Prop where
@@ -47,7 +47,7 @@ structure LeftCapSetting (h c d f : ℝ) (L M X : Point) : Prop where
   lowerM : InLower h c M
   capX : sarea (ptF f) (ptH h) X ≤ 0
 
-/-- `G(h, c) = (1 - σ)(1 - h) - c(1 - h)² - σ` of (4), `σ = 8/73`. -/
+/-- `G(h, c) = (1 - σ)(1 - h) - c(1 - h)² - σ`, `σ = 8/73`. -/
 def capG (h c : ℝ) : ℝ := (1 - 8 / 73) * (1 - h) - c * (1 - h) ^ 2 - 8 / 73
 
 /-- The basic areas of the left-cap point: `hx ≥ σ` (`OHX`), `[HFX] = f(Y - h) - (1 - h)x ≥ σ`,
@@ -117,7 +117,8 @@ theorem hH0_of {h c : ℝ} (hc0 : 0 ≤ c) (hc : c ≤ 1) (hG : 0 ≤ capG h c) 
   nlinarith [sq_nonneg (1 - c)]
 
 set_option linter.unusedVariables false in
-/-- The scalar content of (1)–(6). -/
+/-- The scalar content of `leftCap_anchor_bounds`: the bounds on `h, c, f, x` that follow from `hc ≥ k`,
+`hx ≥ σ`, `[HFX] ≥ σ` and `[CDF] ≥ σ`. -/
 theorem scal_1_6 {h c d f x Y : ℝ} (hA : C1AnchorsWeak h c d f)
     (hk : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h * c) (hxh : 8 / 73 ≤ h * x)
     (hcapX : 8 / 73 ≤ f * (Y - h) - (1 - h) * x) (hCDF : 8 / 73 ≤ 1 - c + d * (c - f))
@@ -170,13 +171,10 @@ theorem scal_1_6 {h c d f x Y : ℝ} (hA : C1AnchorsWeak h c d f)
   exact ⟨hk, hk1, hk2, kgt, hlt1, key2, key3, h78, hf3, hx3, hG, h43_of (by linarith) hG hh,
     hH0_of (by linarith) hc hG hh⟩
 
-/-- **Claim** (`C1_TWO_LOWER_SIDE_CAP:eq1-6`). In the left-cap setting, with `X = (x, Y)`,
-`σ = 8/73`, `k = (4 + 2√3)σ`: `hc ≥ k` and `h, c ≥ k > ρ` (1); `h < 1` and
-`f ≥ x + σ/(1-h) ≥ σ/(h(1-h))` (2); `h < 7/8`; `hf ≤ 1 - σ - c(1-h)` and
-`hx ≤ 1 - c(1-h) - σ/(1-h)` (3); `G(h, c) ≥ 0` (4); `h < 43/50` and
-`h < 341/400 + (1-c)/25` (5). `docs/proof/nine/C1_TWO_LOWER_SIDE_CAP.md`, lines 31-104.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem eq1_6 {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X) :
+/-- In the left-cap setting, with `X = (x, Y)`, `σ = 8/73`, `k = (4 + 2√3)σ`: `hc ≥ k` and
+`h, c ≥ k > ρ`; `h < 1` and `f ≥ x + σ/(1-h) ≥ σ/(h(1-h))`; `h < 7/8`; `hf ≤ 1 - σ - c(1-h)` and
+`hx ≤ 1 - c(1-h) - σ/(1-h)`; `G(h, c) ≥ 0`; `h < 43/50` and `h < 341/400 + (1-c)/25`. -/
+theorem leftCap_anchor_bounds {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X) :
     (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h * c ∧ (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h ∧
       (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ c ∧ (49 / 60 : ℝ) < (4 + 2 * Real.sqrt 3) * (8 / 73) ∧
       h < 1 ∧ X.1 + 8 / 73 / (1 - h) ≤ f ∧ 8 / 73 / (h * (1 - h)) ≤ X.1 + 8 / 73 / (1 - h) ∧
@@ -186,7 +184,7 @@ theorem eq1_6 {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X
   obtain ⟨hxh, hcapX, hCDF, x0, x1, y1, y0⟩ := prelim hS
   exact scal_1_6 hS.anchors (hc_k hS) hxh hcapX hCDF x0 x1 y1
 
-/-- `R₀(h) = h(1 - h) - σh(3 - 2h) - k(1 - h)² < 0` for `k ≤ h < 1` (8). -/
+/-- `R₀(h) = h(1 - h) - σh(3 - 2h) - k(1 - h)² < 0` for `k ≤ h < 1`. -/
 theorem R0_neg {h : ℝ} (hk : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h) (h1 : h < 1) :
     h * (1 - h) - 8 / 73 * h * (3 - 2 * h) - (4 + 2 * Real.sqrt 3) * (8 / 73) * (1 - h) ^ 2 < 0 := by
   have kgt := kσ_gt'
@@ -198,7 +196,8 @@ theorem R0_neg {h : ℝ} (hk : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h) (h1 : h <
   have t2 : 0 ≤ h - 40899 / 50000 := by linarith
   nlinarith [sq_nonneg (h - 40899 / 50000)]
 
-/-- (7) in scalar form. -/
+/-- `[ORX] > 0` in scalar form: with `R = (r, z)`, `X = (x, Y)`, `z < h < Y` and
+`|rY - zx| ≥ σ`, the doubled area `rY - zx` is positive. -/
 theorem scal_7 {h c f x Y r z : ℝ} (hk : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h * c)
     (hk1 : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h) (hlt1 : h < 1)
     (key2 : x + 8 / 73 / (1 - h) ≤ f) (hf3 : h * f ≤ 1 - 8 / 73 - c * (1 - h))
@@ -226,7 +225,7 @@ theorem scal_7 {h c f x Y r z : ℝ} (hk : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ 
   have := R0_neg hk1 hlt1
   nlinarith
 
-/-- The point facts (7), (9), (10) for one lower point `R`. -/
+/-- For one lower point `R = (r, z)`: `[ORX] ≥ σ > 0`, `R ∈ OHC ∩ OCX` and `r(1 - z) ≥ σ`. -/
 theorem pt_7_10 {h c d f : ℝ} {X R : Point} (hA : C1AnchorsWeak h c d f)
     (hk : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h * c) (hX : X ∈ unitSquare)
     (hxh : 8 / 73 ≤ h * X.1) (hcapX : 8 / 73 ≤ f * (X.2 - h) - (1 - h) * X.1)
@@ -282,7 +281,9 @@ theorem pt_7_10 {h c d f : ℝ} {X R : Point} (hA : C1AnchorsWeak h c d f)
       linarith
 
 set_option linter.unusedVariables false in
-/-- `E(h) < 3σ`: the bound (12) for one lower point, in scalar form. -/
+/-- The scalar bound behind `[HRX] < 3σ`:
+`E(h) = (c - 2σ/h)(1 - h) + (h - σ/c)(1 - c(1 - h) - σ/(1 - h))/h < 3σ` for `ρ ≤ h < 1`,
+`0 < c ≤ 1`. -/
 theorem E_bound {h c : ℝ} (hρ : 49 / 60 ≤ h) (h1 : h < 1) (c0 : 0 < c) (c1 : c ≤ 1)
     (hcs : 8 / 73 < h * c) (hApos : 0 < 1 - 8 / 73 / (1 - h)) :
     (c - 2 * (8 / 73) / h) * (1 - h) + (h - 8 / 73 / c) * ((1 - c * (1 - h) - 8 / 73 / (1 - h)) / h)
@@ -308,7 +309,7 @@ theorem E_bound {h c : ℝ} (hρ : 49 / 60 ≤ h) (h1 : h < 1) (c0 : 0 < c) (c1 
   have e5 := div_pos e4 (mul_pos h0 h1h)
   linarith
 
-/-- (11) for one lower point. -/
+/-- `0 < [HRX] < 3σ` for one lower point `R`. -/
 theorem pt_11 {h c d f : ℝ} {X R : Point} (hA : C1AnchorsWeak h c d f)
     (hk : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h * c) (hX : X ∈ unitSquare)
     (hxh : 8 / 73 ≤ h * X.1) (hcapX : 8 / 73 ≤ f * (X.2 - h) - (1 - h) * X.1)
@@ -377,11 +378,9 @@ theorem pt_11 {h c d f : ℝ} {X R : Point} (hA : C1AnchorsWeak h c d f)
     linarith
   linarith
 
-/-- **Claim** (`C1_TWO_LOWER_SIDE_CAP:eq7-10`). In the left-cap setting, every lower point
-`R = (r, z)` satisfies `[ORX] > 0` (7), hence `[ORX] ≥ σ`; `R ∈ OHC ∩ OCX` (9); and
-`r(1 - z) ≥ σ` (10), with `σ = 8/73`. `docs/proof/nine/C1_TWO_LOWER_SIDE_CAP.md`, lines 106-156.
-Uses: C1_TWO_LOWER_SIDE_CAP:eq1-6. -/
-theorem eq7_10 {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X) :
+/-- In the left-cap setting, every lower point `R = (r, z)` satisfies `[ORX] > 0`, hence
+`[ORX] ≥ σ`; `R ∈ OHC ∩ OCX`; and `r(1 - z) ≥ σ`, with `σ = 8/73`. -/
+theorem lower_inTriangle_OCX {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X) :
     ∀ R, (R = L ∨ R = M) →
       0 < sarea ptO R X ∧ 8 / 73 ≤ sarea ptO R X ∧ InLower h c R ∧
         InTriangle R ptO (ptC c) X ∧ 8 / 73 ≤ R.1 * (1 - R.2) := by
@@ -393,14 +392,12 @@ theorem eq7_10 {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M 
   · exact pt_7_10 hS.anchors hk hS.memX hxh hcapX hCDF hS.lowerM (ar hS.competitive 0 6 7)
       (ar hS.competitive 4 0 6) (ar hS.competitive 4 6 7)
 
-/-- **Claim** (`C1_TWO_LOWER_SIDE_CAP:eq11`). In the left-cap setting, every lower point `R`
-satisfies `0 < [HRX] < 3σ` (11) (indeed `[HRX] ≤ E(h) ≤ E(ρ) = 3σ - 14661/2872331`); in
-particular the triangle `HRX` contains no further actual point (here: the other lower point).
-`docs/proof/nine/C1_TWO_LOWER_SIDE_CAP.md`, lines 158-202.
-Uses: C1_TWO_LOWER_SIDE_CAP:eq1-6, C1_TWO_LOWER_SIDE_CAP:eq7-10. -/
-theorem eq11 {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X) :
+/-- In the left-cap setting, every lower point `R` satisfies `0 < [HRX] < 3σ` (indeed
+`[HRX] ≤ E(h) ≤ E(ρ) = 3σ - 14661/2872331`, `E_bound`); in particular the triangle `HRX`
+contains no further actual point (here: the other lower point). -/
+theorem sarea_HRX_lt_three_σ {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X) :
     (∀ R, (R = L ∨ R = M) → 0 < sarea (ptH h) R X ∧ sarea (ptH h) R X < 3 * (8 / 73)) ∧
-      ¬ InsideTri M (ptH h) L X ∧ ¬ InsideTri L (ptH h) M X := by
+      ¬ InsideTriangle M (ptH h) L X ∧ ¬ InsideTriangle L (ptH h) M X := by
   obtain ⟨hxh, hcapX, hCDF, -, -, -, -⟩ := prelim hS
   have hk := hc_k hS
   have hL := pt_11 hS.anchors hk hS.memX hxh hcapX hCDF hS.lowerL (ar hS.competitive 0 1 5)
@@ -416,8 +413,9 @@ theorem eq11 {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X)
   · have hM3 : |sarea (ptH h) M X| < 3 * (8 / 73) := by rw [abs_of_pos hM.1]; exact hM.2
     exact ear_empty hS.competitive 4 6 7 5 hM3
 
-/-- The scalar end of §4: the endpoint inequality (14) (either bracket), `T ≥ b + σ` and
-`k ≤ a ≤ b ≤ 1`, `a < 43/50` are incompatible ((15) and `F(43/50, 1) < 0`). -/
+/-- The scalar end of `not_oppSide_OC`: the endpoint inequality
+`ab - σ(T + a) > 0`, `4σT·ab ≤ (ab - σ(T + a))²` (or the same with `T + b`) is incompatible with
+`T ≥ b + σ`, `k ≤ a ≤ b ≤ 1` and `a < 43/50`. -/
 theorem sep_scalar {a b T : ℝ} (ha : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ a) (hab : a ≤ b)
     (hb1 : b ≤ 1) (ha43 : a < 43 / 50) (hT : b + 8 / 73 ≤ T)
     (hcase : (0 < a * b - 8 / 73 * (T + a) ∧ 4 * (8 / 73) * T * (a * b) ≤
@@ -494,16 +492,18 @@ theorem quad_min {h c d f : ℝ} {L M X P Q : Point} (hS : LeftCapSetting h c d 
     8 / 73 / 2 ≤ minTriangleArea (OneCornerCompletion.quadConfig ptO (ptC c) X (ptH h) P Q) := by
   have hA : A₀ ≤ minTriangleArea (OneCornerCompletion.quadConfig ptO (ptC c) X (ptH h) P Q) := by
     rcases hPQ with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
-    · exact CornerFamilies.min_sub hS.competitive _ ![0, 1, 7, 4, 5, 6] (by norm_num) (by decide)
+    · exact min_sub hS.competitive _ ![0, 1, 7, 4, 5, 6] (by norm_num) (by decide)
         (by intro i; fin_cases i <;> rfl)
-    · exact CornerFamilies.min_sub hS.competitive _ ![0, 1, 7, 4, 6, 5] (by norm_num) (by decide)
+    · exact min_sub hS.competitive _ ![0, 1, 7, 4, 6, 5] (by norm_num) (by decide)
         (by intro i; fin_cases i <;> rfl)
   linarith [σ_lt]
 
-/-- The data of §4 for an ordered lower pair `P, Q`. -/
+/-- The data of the separating case for an ordered lower pair `P, Q`: the convex
+quadrilateral `O, C, X, H` with `a = hc ≤ b = cY ≤ 1` and `T = cY + hx ≥ b + σ`, the central pair
+`P, Q`, and the signs of `P`. -/
 theorem sep_data {h c d f : ℝ} {L M X P Q : Point} (hS : LeftCapSetting h c d f L M X)
     (hPQ : (P = L ∧ Q = M) ∨ (P = M ∧ Q = L)) :
-    sarea P Q (ptH h) ≠ 0 ∧ sarea P Q X ≠ 0 ∧ ¬ InsideTri P (ptH h) Q X ∧
+    sarea P Q (ptH h) ≠ 0 ∧ sarea P Q X ≠ 0 ∧ ¬ InsideTriangle P (ptH h) Q X ∧
       OneCornerCompletion.IsConvexQuad ptO (ptC c) X (ptH h) ∧
       OneCornerCompletion.CentralPair ptO (ptC c) X (ptH h) P Q ∧
       8 / 73 / 2 ≤ minTriangleArea (OneCornerCompletion.quadConfig ptO (ptC c) X (ptH h) P Q) ∧
@@ -518,8 +518,8 @@ theorem sep_data {h c d f : ℝ} {L M X P Q : Point} (hS : LeftCapSetting h c d 
   have hk := hc_k hS
   obtain ⟨-, hk1, hk2, -, hlt1, key2, -, -, -, -, -, h43, -⟩ :=
     scal_1_6 hS.anchors hk hxh hcapX hCDF x0 x1 y1
-  have h710 := eq7_10 hS
-  obtain ⟨-, n1, n2⟩ := eq11 hS
+  have h710 := lower_inTriangle_OCX hS
+  obtain ⟨-, n1, n2⟩ := sarea_HRX_lt_three_σ hS
   have kgt := kσ_gt
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have h0 : 0 < h := by linarith
@@ -530,7 +530,7 @@ theorem sep_data {h c d f : ℝ} {L M X P Q : Point} (hS : LeftCapSetting h c d 
   have hQm : Q = L ∨ Q = M := by rcases hPQ with ⟨-, h1⟩ | ⟨-, h1⟩ <;> tauto
   obtain ⟨-, -, hPl, hPX, -⟩ := h710 P hPm
   obtain ⟨-, -, hQl, hQX, -⟩ := h710 Q hQm
-  have hne : sarea P Q (ptH h) ≠ 0 ∧ sarea P Q X ≠ 0 ∧ ¬ InsideTri P (ptH h) Q X := by
+  have hne : sarea P Q (ptH h) ≠ 0 ∧ sarea P Q X ≠ 0 ∧ ¬ InsideTriangle P (ptH h) Q X := by
     rcases hPQ with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
     · exact ⟨ar_ne (by norm_num) (ar hS.competitive 5 6 4),
         ar_ne (by norm_num) (ar hS.competitive 5 6 7), n2⟩
@@ -590,7 +590,8 @@ theorem sep_data {h c d f : ℝ} {L M X P Q : Point} (hS : LeftCapSetting h c d 
     have := mul_le_mul_of_nonneg_left hc h0.le; linarith
   exact ⟨neH, neX, nin, hq, hcp, hmin6, hJ, ea, eb, eW, hCHP, tP1, tP2, hk, hab, hb1, hT, ha43⟩
 
-/-- **§4 for an oriented lower pair** `P, Q` with `[PQO] < 0 < [PQC]`. -/
+/-- The separating case is impossible for an oriented lower pair `P, Q` with
+`[PQO] < 0 < [PQC]`. -/
 theorem sep_core {h c d f : ℝ} {L M X P Q : Point} (hS : LeftCapSetting h c d f L M X)
     (hPQ : (P = L ∧ Q = M) ∨ (P = M ∧ Q = L)) (hO : sarea P Q ptO < 0)
     (hC : 0 < sarea P Q (ptC c)) : False := by
@@ -605,7 +606,7 @@ theorem sep_core {h c d f : ℝ} {L M X P Q : Point} (hS : LeftCapSetting h c d 
   · rcases lt_or_gt_of_ne neX with dX | dX
     · have hiso : OneCornerCompletion.Isolates P Q (ptC c) ptO X (ptH h) :=
         ⟨mul_neg_of_pos_of_neg hC hO, mul_neg_of_pos_of_neg hC dX, mul_neg_of_pos_of_neg hC dH⟩
-      have := OneCornerCompletion.eq6_B _ _ _ _ P Q (8 / 73) (by norm_num) hq hcp hmin6 hJ hiso
+      have := OneCornerCompletion.discr_of_isolates_B _ _ _ _ P Q (8 / 73) (by norm_num) hq hcp hmin6 hJ hiso
       rw [ea, eb, eW] at this
       exact sep_scalar hk hab hb1 ha43 hT (Or.inr this)
     · refine nin (Or.inl ⟨?_, ?_, tP1⟩)
@@ -621,20 +622,15 @@ theorem sep_core {h c d f : ℝ} {L M X P Q : Point} (hS : LeftCapSetting h c d 
       exact pos_of_mul_pos_right h2 hCHP.le
     have hiso : OneCornerCompletion.Isolates P Q ptO (ptC c) X (ptH h) :=
       ⟨mul_neg_of_neg_of_pos hO hC, mul_neg_of_neg_of_pos hO dX, mul_neg_of_neg_of_pos hO dH⟩
-    have := OneCornerCompletion.eq6 _ _ _ _ P Q (8 / 73) (by norm_num) hq hcp hmin6 hJ hiso
+    have := OneCornerCompletion.discr_of_isolates_A _ _ _ _ P Q (8 / 73) (by norm_num) hq hcp hmin6 hJ hiso
     rw [ea, eb, eW] at this
     exact sep_scalar hk hab hb1 ha43 hT (Or.inl this)
 
-/-- **Claim** (`C1_TWO_LOWER_SIDE_CAP:claim-separating`, made-up id). In the left-cap setting,
-the line through the two lower points cannot separate `O, C`. `docs/proof/nine/C1_TWO_LOWER_SIDE_CAP.md`,
-lines 204-262 (quadrilateral `O, C, X, H` with `a = hc ≤ b = cY ≤ 1`, `T = cY + hx`; the middle
-sign case contradicts (11); the endpoint cases give (14)–(15) and `F(43/50, 1) < 0`).
-Uses: C1_TWO_LOWER_SIDE_CAP:eq1-6, C1_TWO_LOWER_SIDE_CAP:eq7-10, C1_TWO_LOWER_SIDE_CAP:eq11,
-ONE_CORNER_COMPLETION:claim-general-identities. -/
--- Note (lines 222-223): only `a + b - T > 0` is checked for the canonical central-cell
--- normalization of ONE_CORNER_COMPLETION §1; `T > a`, `T > b` are also needed (true:
--- `T - b = hx > 0`, `T - a = c(Y - h) + hx > 0`).
-theorem claim_separating {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X) :
+/-- In the left-cap setting, the line through the two lower points cannot separate `O, C`.
+In the convex quadrilateral `O, C, X, H` (`a = hc ≤ b = cY ≤ 1`, `T = cY + hx`), the middle sign
+case contradicts `sarea_HRX_lt_three_σ`, and the endpoint cases (`OneCornerCompletion.discr_of_isolates_A`,
+`OneCornerCompletion.discr_of_isolates_B`) contradict `sep_scalar`. -/
+theorem not_oppSide_OC {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X) :
     ¬ OppSide L M ptO (ptC c) := by
   intro hopp
   unfold OppSide at hopp
@@ -649,7 +645,8 @@ theorem claim_separating {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h 
     · rw [sarea_swap₁₂]; linarith
     · rw [sarea_swap₁₂]; linarith
 
-/-- The cubic `N(v) = H₀(1 - v)·W(H₀, 1, v) < 0` for `0 < v < 2/3`. -/
+/-- The cubic `N(v) = H₀(1 - v)·W(H₀, 1, v)`, with `H₀ = 341/400` and `W` as in
+`not_sameSide_OC`, is negative for `0 < v < 2/3`. -/
 theorem N_neg {v : ℝ} (hv0 : 0 < v) (hv : v < 2 / 3) :
     v * (1 - v) * (341 / 400) - v * (v + 8 / 73) * (1 - v) - 8 / 73 * (341 / 400) < 0 := by
   have e : v * (1 - v) * (341 / 400) - v * (v + 8 / 73) * (1 - v) - 8 / 73 * (341 / 400) =
@@ -660,7 +657,8 @@ theorem N_neg {v : ℝ} (hv0 : 0 < v) (hv : v < 2 / 3) :
     (sq_nonneg (v - 9 / 32))
   nlinarith [sq_nonneg (v - 9 / 32 + 963 / 5760512)]
 
-/-- (16)–(18): `W(h, c, v) < 0` in the multiplied form `h(1 - v)W`. -/
+/-- `W(h, c, v) < 0`, in the multiplied form `h(1 - v)W`, for `4/5 ≤ c ≤ 1`,
+`4/5 ≤ h < 341/400 + (1 - c)/25` and `0 < v < 2/3`. -/
 theorem W_neg {h c v : ℝ} (hc0 : 4 / 5 ≤ c) (hc1 : c ≤ 1) (hh0 : 4 / 5 ≤ h)
     (hh1 : h < 341 / 400 + (1 - c) / 25) (hv0 : 0 < v) (hv : v < 2 / 3) :
     v * (1 - v) * (h * c - c * v - 8 / 73) - 8 / 73 * h * v - 8 / 73 * h * (1 - v) < 0 := by
@@ -693,7 +691,8 @@ theorem W_neg {h c v : ℝ} (hc0 : 4 / 5 ≤ c) (hc1 : c ≤ 1) (hh0 : 4 / 5 ≤
   have : v * c - 8 / 73 / (1 - v) - v * (c * v + 8 / 73) / h < 0 := by linarith
   rw [eW]; exact mul_neg_of_pos_of_neg (mul_pos h0 hv1) this
 
-/-- The scalar content of §5 for an ordered pair `P = (p, y)`, `Q = (q, t)`, `t ≤ y`. -/
+/-- The scalar content of `not_sameSide_OC` for an ordered pair `P = (p, y)`, `Q = (q, t)`,
+`t ≤ y`. -/
 theorem nonsep_scalar {h c p y q t : ℝ} (hk1 : 4 / 5 ≤ h) (hkc : 4 / 5 ≤ c) (hc1 : c ≤ 1)
     (h78 : h < 7 / 8) (hH0 : h < 341 / 400 + (1 - c) / 25)
     (hP1 : 8 / 73 ≤ p * (1 - y)) (hP2 : 8 / 73 ≤ h * c - c * y - h * p) (hP3 : 8 / 73 ≤ h * p)
@@ -766,14 +765,14 @@ theorem low_costs {h c d f : ℝ} {L M X R : Point} (hS : LeftCapSetting h c d f
   rw [q2] at e1 r2; rw [q3] at e2 r3; rw [q1] at e3 r1
   exact ⟨ar_pos e1 r2.le, ar_pos e2 r3.le, ar_pos e3 r1.le, hzh⟩
 
-/-- **§5 for an ordered lower pair** `P, Q` with `Q.2 ≤ P.2`. -/
+/-- The non-separating case is impossible for an ordered lower pair `P, Q` with `Q.2 ≤ P.2`. -/
 theorem nonsep_core {h c d f : ℝ} {L M X P Q : Point} (hS : LeftCapSetting h c d f L M X)
     (hPQ : (P = L ∧ Q = M) ∨ (P = M ∧ Q = L)) (hyt : Q.2 ≤ P.2)
     (hss : 0 < sarea P Q ptO * sarea P Q (ptC c)) : False := by
-  obtain ⟨-, hk1, hk2, -, -, -, -, h78, -, -, -, -, hH0⟩ := eq1_6 hS
+  obtain ⟨-, hk1, hk2, -, -, -, -, h78, -, -, -, -, hH0⟩ := leftCap_anchor_bounds hS
   have kgt := kσ_gt'
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
-  have h710 := eq7_10 hS
+  have h710 := lower_inTriangle_OCX hS
   have hPm : P = L ∨ P = M := by rcases hPQ with ⟨h1, -⟩ | ⟨h1, -⟩ <;> tauto
   have hQm : Q = L ∨ Q = M := by rcases hPQ with ⟨-, h1⟩ | ⟨-, h1⟩ <;> tauto
   obtain ⟨-, -, hPl, -, hP1⟩ := h710 P hPm
@@ -811,13 +810,11 @@ theorem nonsep_core {h c d f : ℝ} {L M X P Q : Point} (hS : LeftCapSetting h c
   exact nonsep_scalar (by linarith) (by linarith) hc h78 hH0 hP1 hP2 hP3 hP4 hQ1 hQ2 hQ3 hQ4 hyt
     hy1 hcase
 
-/-- **Claim** (`C1_TWO_LOWER_SIDE_CAP:claim-nonseparating`, made-up id). In the left-cap setting,
-the line through the two lower points cannot keep `O, C` on the same side: one of the two
-heights `v` would satisfy `W(h, c, v) = v[c - (cv + σ)/h - σ/(1 - v)] - σ ≥ 0` (16), but
-`W(h, c, v) ≤ W(341/400, 1, v) < 0` for `0 < v < 2/3`. `docs/proof/nine/C1_TWO_LOWER_SIDE_CAP.md`,
-lines 264-357.
-Uses: C1_TWO_LOWER_SIDE_CAP:eq1-6, C1_TWO_LOWER_SIDE_CAP:eq7-10. -/
-theorem claim_nonseparating {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X) :
+/-- In the left-cap setting, the line through the two lower points cannot keep `O, C` on the
+same side: one of the two heights `v` would satisfy
+`W(h, c, v) = v[c - (cv + σ)/h - σ/(1 - v)] - σ ≥ 0`, but `W(h, c, v) ≤ W(341/400, 1, v) < 0`
+for `0 < v < 2/3`. -/
+theorem not_sameSide_OC {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting h c d f L M X) :
     ¬ SameSide L M ptO (ptC c) := by
   intro hss
   unfold SameSide at hss
@@ -826,13 +823,10 @@ theorem claim_nonseparating {h c d f : ℝ} {L M X : Point} (hS : LeftCapSetting
   · refine nonsep_core hS (P := M) (Q := L) (Or.inr ⟨rfl, rfl⟩) hyt ?_
     rw [sarea_swap₁₂ L M, sarea_swap₁₂ L M]; linarith
 
-/-- **Theorem** (`C1_TWO_LOWER_SIDE_CAP:Theorem`, unnumbered). If the actual configuration
-contains the C1 anchors (weak conditions) and two points `L, M` strictly inside `OHC`, and its
-least area is at least `A₀`, then no other actual point `X` lies in the left cap
-`conv{H, F, (0,1)}`; by transposition, none lies in the right cap `conv{C, D, (1,0)}`. Only the
-eight points `O, C, D, F, H, L, M, X` are used. `docs/proof/nine/C1_TWO_LOWER_SIDE_CAP.md`, lines 3-15 and
-357-361.
-Uses: C1_TWO_LOWER_SIDE_CAP:claim-separating, C1_TWO_LOWER_SIDE_CAP:claim-nonseparating. -/
+/-- If the actual configuration contains the C1 anchors (weak conditions) and two points `L, M`
+strictly inside `OHC`, and its least area is at least `A₀`, then no other actual point `X` lies in
+the left cap `conv{H, F, (0,1)}`; by transposition, none lies in the right cap
+`conv{C, D, (1,0)}`. Only the eight points `O, C, D, F, H, L, M, X` are used. -/
 theorem theorem_main {h c d f : ℝ} {L M X : Point} (hA : C1AnchorsWeak h c d f)
     (hL : L ∈ unitSquare) (hM : M ∈ unitSquare) (hX : X ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea ![ptO, ptC c, ptD d, ptF f, ptH h, L, M, X])
@@ -844,8 +838,8 @@ theorem theorem_main {h c d f : ℝ} {L M X : Point} (hA : C1AnchorsWeak h c d f
       mul_ne_zero (ar_ne (by norm_num) (ar hS.competitive 5 6 0))
         (ar_ne (by norm_num) (ar hS.competitive 5 6 1))
     rcases lt_or_gt_of_ne hne with h1 | h1
-    · exact claim_separating hS h1
-    · exact claim_nonseparating hS h1
+    · exact not_oppSide_OC hS h1
+    · exact not_sameSide_OC hS h1
   rcases hcap with hcap | hcap
   · exact sides ⟨hA, hL, hM, hX, hmin, hLl, hMl, hcap⟩
   · obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA

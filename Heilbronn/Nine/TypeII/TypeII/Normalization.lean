@@ -2,25 +2,25 @@ module
 
 public import Heilbronn.Nine.TypeII.TypeII.Basic
 
-/-! # Type II: the shear normalization and the count reduction (`docs/proof/nine/TYPE_II.md`, §§2–5)
+/-! # Type II: the shear normalization and the count reduction
 
-`TYPE_II.md` lines 187–403. Every positive Type-II configuration is area-equivalent to a
-Type-III configuration or to a Type-II configuration with `b ≤ 1/2` (§2). For a configuration of
-least area `t ≥ A₀` with `b ≤ 1/2`, the counts `(ℓ, c, r)` of the six points other than `D, C, B`
-in the three containers are one of five triples (§3), the triple `(2,1,3)` is impossible (§4),
-and the four remaining rows carry the parameter ranges of §5.
+Every positive Type-II configuration is area-equivalent to a Type-III configuration or to a
+Type-II configuration with `b ≤ 1/2`. For a configuration of least area `t ≥ A₀` with
+`b ≤ 1/2`, the counts `(ℓ, c, r)` of the six points other than `D, C, B` in the three
+containers are one of five triples, the triple `(2,1,3)` is impossible, and the four remaining
+rows carry explicit parameter ranges.
 
 Results:
 
-* `shearNormalization` (**Shear normalization**, (6));
-* `eq7`: `2A₀ > 7/64 > 1/10`;
-* `claim_container_assignment` and `eq8`: each free point is in exactly one container, and
-  `ℓ + c + r = 6`;
-* `claim_count_bounds`: `c ≤ 3`, `ℓ ≤ 2`, `r ≤ 3`, hence five triples;
-* `claim_exclude_213`: the class `(2,1,3)` does not occur;
-* `claim_scope_four_rows`: the parameter ranges of the four remaining rows (§5).
+* `shearNormalization` (the shear normalization);
+* `seven_div_64_lt_two_mul_A₀`: `2A₀ > 7/64 > 1/10`;
+* `isLeft_or_isCentral_or_isRight` and `isLeft_ptE_and_counts_sum_eq_six`: each free point lies in one of the three containers,
+  and `ℓ + c + r = 6`;
+* `typeIICounts_bounds`: `c ≤ 3`, `ℓ ≤ 2`, `r ≤ 3`, hence five triples;
+* `typeIICounts_ne_two_one_three`: the class `(2,1,3)` does not occur;
+* `typeIICounts_four_rows`: the parameter ranges of the four remaining rows.
 
-The standing hypothesis of §§3–5 is "the minimum area `t` is at least `A₀`" (line 241), written
+The standing hypothesis of the count reduction is "the least area `t` is at least `A₀`", written
 `A₀ ≤ minTriangleArea (typeIIConfig l b V W X Y Z)`, with `s = 2t`.
 -/
 
@@ -193,13 +193,13 @@ theorem shear_typeIII {P : Fin 9 → Point} {l b τ : ℝ} {V W X Y Z : Point}
   · exact e2
   all_goals rfl
 
-/-- **Shear normalization** (`TYPE_II:ShearNormalization`). Every Type-II configuration of
-positive least area is area-equivalent (a shear `(x,y) ↦ (x + τ(1-y), y)` of determinant one
-followed by the reflection `x ↦ 1 - x`, and a relabelling) to a Type-III configuration or to a
-Type-II configuration with `b ≤ 1/2`, (6). `docs/proof/nine/TYPE_II.md`, lines 187–237.
+/-- The shear normalization. Every Type-II configuration of positive least area is
+area-equivalent (a shear `(x,y) ↦ (x + τ(1-y), y)` of determinant one followed by the reflection
+`x ↦ 1 - x`, and a relabelling) to a Type-III configuration or to a Type-II configuration with
+`b ≤ 1/2`.
 
-Implicit in the manuscript: the Type-III alternative is reached after a symmetry of the square
-(three occupied corners), which is again an affine map of determinant `±1`. -/
+The Type-III alternative is reached after a symmetry of the square (three occupied corners),
+which is again an affine map of determinant `±1`. -/
 theorem shearNormalization (P : Fin 9 → Point) (hP : IsTypeII P)
     (hpos : 0 < minTriangleArea P) :
     ∃ Q, AreaEquiv P Q ∧ (IsTypeIII Q ∨ IsTypeIIHalf Q) := by
@@ -302,20 +302,16 @@ theorem shearNormalization (P : Fin 9 → Point) (hP : IsTypeII P)
     · exact shear_typeII rfl (Equiv.swap 0 1 * Equiv.swap 2 8) 8 (by decide) (by decide)
         (by decide) (by decide) hsq hzero hy0 hiS hb0' hb'2
 
-/-- **Equation (7)** (`TYPE_II:eq7`). `2A₀ > 7/64 > 1/10` (by `18²·65 - 145² = 35 > 0`).
-`docs/proof/nine/TYPE_II.md`, lines 241–249. -/
-theorem eq7 : (7 / 64 : ℝ) < 2 * A₀ ∧ (1 / 10 : ℝ) < 7 / 64 := by
+/-- `2A₀ > 7/64 > 1/10` (by `18²·65 - 145² = 35 > 0`). -/
+theorem seven_div_64_lt_two_mul_A₀ : (7 / 64 : ℝ) < 2 * A₀ ∧ (1 / 10 : ℝ) < 7 / 64 := by
   have := sqrt65_bounds
   unfold A₀
   constructor <;> linarith [this.1]
 
-/-- **Claim** (`TYPE_II:claim-container-assignment`, made up). In a Type-II configuration of
-positive least area, every free point is a left, a central or a right point (a point on `DB`,
-`BC` or `DC` would make a zero-area triangle with its endpoints; points on the outer square
-edges belong to their side container). `docs/proof/nine/TYPE_II.md`, lines 251–268.
-
-Implicit in the manuscript: "no point on `DC`" (it would be collinear with `D, C`). -/
-theorem claim_container_assignment {l b : ℝ} {V W X Y Z : Point}
+/-- In a Type-II configuration of positive least area, every free point is a left, a central or a
+right point: a point on `DB`, `BC` or `DC` would make a zero-area triangle with the endpoints of
+that segment, and points on the outer square edges belong to their side container. -/
+theorem isLeft_or_isCentral_or_isRight {l b : ℝ} {V W X Y Z : Point}
     (hd : TypeIIData l b V W X Y Z)
     (hpos : 0 < minTriangleArea (typeIIConfig l b V W X Y Z)) (i : Fin 5) :
     IsLeft b (freePts V W X Y Z i) ∨ IsCentral b (freePts V W X Y Z i) ∨
@@ -347,11 +343,8 @@ theorem claim_container_assignment {l b : ℝ} {V W X Y Z : Point}
   · exact key Z hZ (sarea_ne_zero_of_min_pos hpos 0 3 8) (sarea_ne_zero_of_min_pos hpos 3 1 8)
       (sarea_ne_zero_of_min_pos hpos 1 0 8)
 
-/-- **Equation (8)** (`TYPE_II:eq8`). `E` is a left point, and `ℓ + c + r = 6`.
-`docs/proof/nine/TYPE_II.md`, lines 264–272.
-
-Uses: TYPE_II:claim-container-assignment. -/
-theorem eq8 {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z)
+/-- `E` is a left point, and `ℓ + c + r = 6`. -/
+theorem isLeft_ptE_and_counts_sum_eq_six {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z)
     (hpos : 0 < minTriangleArea (typeIIConfig l b V W X Y Z)) :
     IsLeft b (ptE l) ∧
       (typeIICounts b V W X Y Z).1 + (typeIICounts b V W X Y Z).2.1 +
@@ -376,7 +369,7 @@ theorem eq8 {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z)
       obtain ⟨-, -, hy0, -⟩ := hsq i
       simp only [IsLeft, IsRight, sarea, ptD, ptB, ptC] at h1 h2
       linarith
-    rcases claim_container_assignment hd hpos i with h | h | h <;> simp_all
+    rcases isLeft_or_isCentral_or_isRight hd hpos i with h | h | h <;> simp_all
   simp only [typeIICounts, countLeft, countCentral, countRight, Finset.card_filter]
   rw [add_assoc, add_assoc, ← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
   simp only [← add_assoc, hone, Finset.sum_const, Finset.card_univ, Fintype.card_fin]
@@ -417,16 +410,11 @@ theorem right_four_false {l b : ℝ} {P Q R S : Point} (hb : 0 < b) (hb1 : b < 1
     have hb' : 2 * A₀ ≤ b := by nlinarith
     nlinarith
 
-/-- **Claim** (`TYPE_II:claim-count-bounds`). With least area at least `A₀` and `b ≤ 1/2`:
-`c ≤ 3` (four central points contradict the seven-point triangular-hull bound), `ℓ ≤ 2` (three
-free points in `T_L` give `s ≤ kb < 1/10` by (1)), `r ≤ 3` (the six-point bounds of
-`CORNER_FAMILIES.md` §§6, 8 in `T_R`, with `b ≥ s` from `DBE`). Together with (8) exactly five
-triples remain. `docs/proof/nine/TYPE_II.md`, lines 274–298.
-
-Uses: CORNER_FAMILIES:TriangularHullLemma, TYPE_II:EndpointTriangleTheorem,
-CORNER_FAMILIES:NontriangularHullLemma, CORNER_FAMILIES:SixPointTriangularHullTheorem,
-TYPE_II:eq7, TYPE_II:eq8. -/
-theorem claim_count_bounds {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z)
+/-- With least area at least `A₀` and `b ≤ 1/2`: `c ≤ 3` (`CornerFamilies.globalOccupancyCorollary`
+on the triangle `DBC`), `ℓ ≤ 2` (`left_two_false`: three free points in `T_L` give
+`s ≤ kb < 1/10`), `r ≤ 3` (`right_four_false`, the six-point bounds in `T_R` with `b ≥ s` from
+`DBE`). Together with `isLeft_ptE_and_counts_sum_eq_six` exactly five triples remain. -/
+theorem typeIICounts_bounds {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z)
     (hb2 : b ≤ 1 / 2) (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b V W X Y Z)) :
     (typeIICounts b V W X Y Z).2.1 ≤ 3 ∧ (typeIICounts b V W X Y Z).1 ≤ 2 ∧
       (typeIICounts b V W X Y Z).2.2 ≤ 3 ∧
@@ -439,7 +427,7 @@ theorem claim_count_bounds {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b 
   have hl1 := hd.2.2.2.1
   have hpos : 0 < minTriangleArea (typeIIConfig l b V W X Y Z) :=
     lt_of_lt_of_le A₀_pos hmin
-  have hsum := (eq8 hd hpos).2
+  have hsum := (isLeft_ptE_and_counts_sum_eq_six hd hpos).2
   have hDEB : 2 * A₀ ≤ b * (1 - l) := s_le_DEB hd (by linarith)
   -- `c ≤ 3`: the global occupancy corollary on the actual triangle `DBC`
   have hc : countCentral b (freePts V W X Y Z) ≤ 3 := by
@@ -447,7 +435,7 @@ theorem claim_count_bounds {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b 
       (typeIIConfig_mem hd) hmin 0 3 1
     have hinj : Function.Injective freeIdx := by decide
     have hsub : ((Finset.univ.filter fun i => IsCentral b (freePts V W X Y Z i)).map
-        ⟨freeIdx, hinj⟩ : Set (Fin 9)) ⊆ {m | CornerFamilies.InsideTriangle
+        ⟨freeIdx, hinj⟩ : Set (Fin 9)) ⊆ {m | InsideTriangle
           (typeIIConfig l b V W X Y Z m) (typeIIConfig l b V W X Y Z 0)
           (typeIIConfig l b V W X Y Z 3) (typeIIConfig l b V W X Y Z 1)} := by
       intro m hm
@@ -547,8 +535,8 @@ theorem right_three_bound {b : ℝ} {P Q R : Point} (hb1 : b < 1) (hP : P ∈ un
     (right_mem_TR hb1 hQ hQR) (right_mem_TR hb1 hR hRR)
   rwa [area_TR b hb1] at key
 
-/-- The scalar contradiction of (12): `s ≤ bv + λw`, `kw(1-v) ≥ s`, `b(1-λ) ≥ 3s` with
-`w = 1 - b`, `0 < k < 0.172` and `s > 7/64` are incompatible (AM–GM). -/
+/-- The scalar contradiction of the `(2,1,3)` exclusion: `s ≤ bv + λw`, `kw(1-v) ≥ s`,
+`b(1-λ) ≥ 3s` with `w = 1 - b`, `0 < k < 0.172` and `s > 7/64` are incompatible (AM–GM). -/
 theorem exclude213_scalar {b l v s k : ℝ} (hb : 0 < b) (hb1 : b < 1) (_hl : 0 ≤ l)
     (hk : 0 < k) (hk1 : k < 172 / 1000) (hs : 7 / 64 < s) (h1 : s ≤ b * v + l * (1 - b))
     (h2 : s ≤ k * (1 - b) * (1 - v)) (h3 : 3 * s ≤ b * (1 - l)) : False := by
@@ -572,7 +560,7 @@ theorem exclude213_scalar {b l v s k : ℝ} (hb : 0 < b) (hb1 : b < 1) (_hl : 0 
 theorem exclude213_tri {b t : ℝ} {R P Q : Point} (ht : 7 / 128 < t) (h3 : 6 * t ≤ b)
     (hR : sarea ptC (ptB b) R ≤ 1 - b) (hmin : t ≤ minTriangleArea ![ptC, ptB b, R, P, Q])
     (hP : InTriangle P ptC (ptB b) R) (hQ : InTriangle Q ptC (ptB b) R) : False := by
-  have h2 := CornerFamilies.twoInteriorPointLemma ptC (ptB b) R P Q (Or.inl hP) (Or.inl hQ) t
+  have h2 := twoInteriorPointLemma ptC (ptB b) R P Q (Or.inl hP) (Or.inl hQ) t
     (by linarith) hmin
   have hpos : 0 < sarea ptC (ptB b) R := by
     have := sarea_add_sarea_add_sarea ptC (ptB b) R P
@@ -582,10 +570,10 @@ theorem exclude213_tri {b t : ℝ} {R P Q : Point} (ht : 7 / 128 < t) (h3 : 6 * 
   have := sqrt_three_gt
   nlinarith
 
-/-- `(2,1,3)`, right support case (`TYPE_II.md` (11)–(12)): `H` extreme at `C`, the contact
-`F = Q` extreme at `B` on the leg `BR'` of the support triangle `CBR'`, `R' = (u,v)`. The
-endpoint-triangle theorem in `CBR'` gives `k(1-b)(1-v) ≥ s`, the actual triangle `BEQ` gives
-`s ≤ bv + λ(1-b)`, and `b(1-λ) ≥ 3s`; `exclude213_scalar` concludes. -/
+/-- `(2,1,3)`, right support case: `H` extreme at `C`, the contact `F = Q` extreme at `B` on the
+leg `BR'` of the support triangle `CBR'`, `R' = (u,v)`. The endpoint-triangle theorem in `CBR'`
+gives `k(1-b)(1-v) ≥ s`, the actual triangle `BEQ` gives `s ≤ bv + λ(1-b)`, and
+`b(1-λ) ≥ 3s`; `exclude213_scalar` concludes. -/
 theorem exclude213_support {l b t : ℝ} {H F X : Point} (hb : 0 < b) (hb1 : b < 1) (hl : 0 ≤ l)
     (ht : 7 / 128 < t) (_h3 : 6 * t ≤ b) (hl3 : 6 * t ≤ b * (1 - l))
     (hH : H ∈ unitSquare) (hF : F ∈ unitSquare) (_hX : X ∈ unitSquare)
@@ -714,14 +702,11 @@ theorem exclude213_right {l b t : ℝ} {R0 R1 R2 : Point} (hb : 0 < b) (hb1 : b 
       (inTriangle_of_extreme (g 0) (hi 0 (by decide)) (hj 0 (by decide)))
       (inTriangle_of_extreme (g 1) (hi 1 (by decide)) (hj 1 (by decide)))
 
-/-- **Claim** (`TYPE_II:claim-exclude-213`). The count class `(2,1,3)` is impossible at least
-area `A₀` (with `b ≤ 1/2`): the left hull is the triangle `DBE`, the right five-point hull is not
-triangular, and the actual triangle `BEQ` with the contact `Q` of the right support triangle
-`BCR'` gives `s ≤ 1/(1 + 2√(3/k)) < 7/64`, (9)–(12). `docs/proof/nine/TYPE_II.md`, lines 302–383.
-
-Uses: TYPE_II:FourPointEndpointLemma, CORNER_FAMILIES:TwoInteriorPointLemma,
-TYPE_II:claim-support-normalization, TYPE_II:EndpointTriangleTheorem, TYPE_II:eq7. -/
-theorem claim_exclude_213 {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z)
+/-- The count class `(2,1,3)` is impossible at least area `A₀` (with `b ≤ 1/2`): the left hull is
+the triangle `DBE` (`fourPointEndpointLemma`), the right five-point hull is not triangular, and
+the actual triangle `BEQ` with the contact `Q` of the right support triangle `BCR'`
+(`exists_isSupportTriangle`, `endpointTriangleTheorem`) gives `s ≤ 1/(1 + 2√(3/k)) < 7/64`. -/
+theorem typeIICounts_ne_two_one_three {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z)
     (hb2 : b ≤ 1 / 2) (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b V W X Y Z)) :
     typeIICounts b V W X Y Z ≠ (2, 1, 3) := by
   classical
@@ -814,14 +799,10 @@ theorem claim_exclude_213 {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V
       · exact rt r1 (by simp)
       · exact rt r2 (by simp)
 
-/-- **Claim** (`TYPE_II:claim-scope-four-rows`). After §4, with `s = 2t` the doubled least area
-and `0 < b ≤ 1/2`, the counts are one of four rows, with the necessary ranges
-`(1,2,3)`: `s ≤ b ≤ 1 - s/k`; `(1,3,2)`: `s ≤ b ≤ 1/2`; `(2,2,2)` and `(2,3,1)`:
-`3s ≤ b ≤ 1/2`. `docs/proof/nine/TYPE_II.md`, lines 385–403.
-
-Uses: TYPE_II:claim-count-bounds, TYPE_II:claim-exclude-213, TYPE_II:EndpointTriangleTheorem,
-TYPE_II:FourPointEndpointLemma. -/
-theorem claim_scope_four_rows {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z)
+/-- Once `(2,1,3)` is excluded, with `s = 2t` the doubled least area and `0 < b ≤ 1/2`, the counts
+are one of four rows, with the necessary ranges `(1,2,3)`: `s ≤ b ≤ 1 - s/k`; `(1,3,2)`:
+`s ≤ b ≤ 1/2`; `(2,2,2)` and `(2,3,1)`: `3s ≤ b ≤ 1/2`. -/
+theorem typeIICounts_four_rows {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z)
     (hb2 : b ≤ 1 / 2) (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b V W X Y Z)) :
     let s := 2 * minTriangleArea (typeIIConfig l b V W X Y Z)
     (typeIICounts b V W X Y Z = (1, 2, 3) ∧ s ≤ b ∧ b ≤ 1 - s / kEnd) ∨
@@ -834,8 +815,8 @@ theorem claim_scope_four_rows {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l
   have hb1 := hd.2.1
   have hl := hd.2.2.1
   have hl1 := hd.2.2.2.1
-  obtain ⟨-, -, -, hmem⟩ := claim_count_bounds hd hb2 hmin
-  have hne := claim_exclude_213 hd hb2 hmin
+  obtain ⟨-, -, -, hmem⟩ := typeIICounts_bounds hd hb2 hmin
+  have hne := typeIICounts_ne_two_one_three hd hb2 hmin
   simp only [Finset.mem_insert, Finset.mem_singleton] at hmem
   have hsDEB : s ≤ b * (1 - l) := s_le_DEB hd (by simp [s])
   have hs0 : 0 ≤ s := by simp only [s]; linarith [minTriangleArea_nonneg (typeIIConfig l b V W X Y Z)]

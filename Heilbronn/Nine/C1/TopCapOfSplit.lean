@@ -5,31 +5,28 @@ public import Heilbronn.Nine.TypeII.TypeIICompletion.ParameterBound
 public import Heilbronn.Nine.C1.TwoLower.OfSplitCert
 
 /-! # A complete lower-ray exclusion in the remaining C1 top-cap case
-(`docs/proof/nine/C1_TOP_CAP_OF_SPLIT.md`)
 
-Role: a component on the primary route: `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md` Theorem 2, step 4
-(lines 260-261). Its §2 (`f < x < c` and the cap elimination `R(h, c, f) ≥ 0`) is reused by
-`docs/proof/nine/C1_TOP_CAP_COMMON_CELL.md` and `docs/proof/nine/C1_TOP_CAP_CONTAINMENT_PAIR.md`.
+Setting (`OneCapSetting`): the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`,
+`0 < f ≤ c ≤ 1`; a competitive nine-point configuration `c1Config h c d f L M X P` (least area at
+least `A₀`; `s = 8/73`, `K = 4 + 2√3`, `ρ = 49/60`); two lower points `L, M` inside `OHC`, one
+top-cap point `X = (x, Y)` beyond `DF`, one point `P` inside the anchor pentagon (above `HC`);
+after the reflection allowed by `C1TopCapSideEars.upperQuad_radial_split`, `P, M ∈ OCX` and
+`L ∈ OHX`. The conclusion of `theorem_main`, both lower points in `OCF`, is the common-cell
+placement `CommonCellSetting`. The setting also records `h < 1` (the C1 anchors are strict),
+which `TypeIICompletion.q_z_bounds_of_six_points` needs (`λ = 1 - h > 0`).
 
-Setting (lines 3-34; `OneCapSetting`): the C1 anchors with the weak conditions
-`0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`; a competitive nine-point configuration
-`c1Config h c d f L M X P` (least area at least `A₀`; `s = 8/73`, `K = 4 + 2√3`, `ρ = 49/60`);
-two lower points `L, M` inside `OHC`, one top-cap point `X = (x, Y)` beyond `DF`, one point `P`
-inside the anchor pentagon (above `HC`); after the reflection allowed by the side-ear and radial
-theorems, `P, M ∈ OCX` and `L ∈ OHX`. The output of the theorem, both lower points in `OCF`, is
-the common-cell placement `CommonCellSetting` used by the later notes. The setting also records
-`h < 1` (the C1 anchors of the assembly are strict; TYPE_II_COMPLETION Lemma 7 needs `λ = 1 - h > 0`).
+The facts `f < x < c` and `R(h, c, f) ≥ 0` do not depend on the side of `L`; they are reused for
+the common-cell placement in `C1TopCapCommonCell` and `C1TopCapContainmentPair`.
 
 Results:
-* `eq1`: (1) `hc, cY ≥ Ks > ρ`;
-* `eq2_3`: if `L` is on the `H`-side of `OF`: `L ∈ OHF`, `M ∈ OCF`, the transferred bounds (3)
-  and `u·Z(p) ≥ sc(h + 1)` (2) (`p = hc`, `u = hf`);
-* `eq4_5`: the tangent bound `Z(p) ≤ (48p - 266s)/23` (4) and `f ≥ f₀(h, c)` (5);
-* `claim_x_lt_c`: `f < x < c` and `f ≤ c - s` (6) (independent of the side of `L`);
-* `eq7_10`: the cap elimination (7)–(10), `R(h, c, f) ≥ 0`;
-* `claim_certificate`: `R < 0` on `f₀ ≤ f ≤ c - s`, `ρ ≤ hc ≤ c ≤ 1`;
-* `theorem_main` (**Theorem**): `L` is not on the `H`-side of `OF`; both lower points lie in
-  `OCF`.
+* `oneCap_kσ_le_hc_cY`: `hc, cY ≥ Ks > ρ`;
+* `split_bigZ_bounds`: if `L` is on the `H`-side of `OF`: `L ∈ OHF`, `M ∈ OCF`, the bounds
+  `s(h + 1)/(fh) ≤ z`, `cz ≤ Z(p)` for `L = (ℓ, z)`, and `u·Z(p) ≥ sc(h + 1)` (`p = hc`, `u = hf`);
+* `bigZ_le_and_fLow_le`: the tangent bound `Z(p) ≤ (48p - 266s)/23` and `f ≥ f₀(h, c)`;
+* `oneCap_f_lt_x_lt_c`: `f < x < c` and `f ≤ c - s` (independent of the side of `L`);
+* `oneCap_capR_nonneg`: the cap elimination, `R(h, c, f) ≥ 0`;
+* `capR_neg`: `R < 0` on `f₀ ≤ f ≤ c - s`, `ρ ≤ hc ≤ c ≤ 1`;
+* `theorem_main`: `L` is not on the `H`-side of `OF`; both lower points lie in `OCF`.
 -/
 
 @[expose] public section
@@ -39,11 +36,10 @@ namespace Heilbronn.Nine.C1TopCapOfSplit
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1TwoLower Heilbronn.Nine.C1TopCapConvexPair
 
-/-- The reduced one-top-cap placement (`C1_TOP_CAP_OF_SPLIT.md` (1), `C1_TOP_CAP_SIDE_EARS.md`
-(5)): weak anchors; the nine-point configuration `c1Config h c d f L M X P` with least area at
-least `A₀`; `L, M` strictly inside `OHC`; `X` in the top cap beyond `DF`; `P` in the open upper
-quadrilateral `HCDF` (inside the pentagon, above `HC`); and, after the reflection, `P, M` inside
-`OCX`, `L` inside `OHX`. -/
+/-- The reduced one-top-cap placement: weak anchors; the nine-point configuration
+`c1Config h c d f L M X P` with least area at least `A₀`; `L, M` strictly inside `OHC`; `X` in the
+top cap beyond `DF`; `P` in the open upper quadrilateral `HCDF` (inside the pentagon, above `HC`);
+after the reflection, `P, M` inside `OCX`, `L` inside `OHX`; and `h < 1`. -/
 structure OneCapSetting (h c d f : ℝ) (L M X P : Point) : Prop where
   anchors : C1AnchorsWeak h c d f
   memL : L ∈ unitSquare
@@ -60,8 +56,8 @@ structure OneCapSetting (h c d f : ℝ) (L M X P : Point) : Prop where
   L_OXH : InTriangle L ptO X (ptH h)
   h_lt : h < 1
 
-/-- The common-cell placement (`C1_TOP_CAP_COMMON_CELL.md`, lines 18-30): the reduced one-cap
-placement with both lower points also inside `OCF`, i.e. `L, M ∈ OHC ∩ OCF`. -/
+/-- The common-cell placement: the reduced one-cap placement with both lower points also inside
+`OCF`, i.e. `L, M ∈ OHC ∩ OCF`. -/
 structure CommonCellSetting (h c d f : ℝ) (L M X P : Point) : Prop
     extends OneCapSetting h c d f L M X P where
   L_OCF : InTriangle L ptO (ptC c) (ptF f)
@@ -70,7 +66,7 @@ structure CommonCellSetting (h c d f : ℝ) (L M X P : Point) : Prop
 /-- `Z(p) = (p + √(p² - 8sp + 4s²))/2`, `s = 8/73`. -/
 def bigZ (p : ℝ) : ℝ := (p + Real.sqrt (p ^ 2 - 8 * (8 / 73) * p + 4 * (8 / 73) ^ 2)) / 2
 
-/-- `f₀(h, c) = 23sc(h + 1)/(h(48hc - 266s))` of (5). -/
+/-- The lower bound `f₀(h, c) = 23sc(h + 1)/(h(48hc - 266s))` on `f` (see `bigZ_le_and_fLow_le`). -/
 def fLow (h c : ℝ) : ℝ := 23 * (8 / 73) * c * (h + 1) / (h * (48 * h * c - 266 * (8 / 73)))
 
 /-- `Z₀ = c(1 - h) + hf`. -/
@@ -85,19 +81,17 @@ def capE0 (h c f : ℝ) : ℝ := c * (1 - h + h * f - 8 / 73) - f * (49 / 60)
 /-- `E₁ = c(1 - h)`. -/
 def capE1 (h c : ℝ) : ℝ := c * (1 - h)
 
-/-- `Q(v) = -Z₀v² + Bv - sf(c - f)` of (8). -/
+/-- `Q(v) = -Z₀v² + Bv - sf(c - f)`. -/
 def capQ (h c f v : ℝ) : ℝ := -capZ0 h c f * v ^ 2 + capB h c f * v - 8 / 73 * f * (c - f)
 
-/-- `R(h, c, f) = (B - ωE₁)² - 4Z₀{sf(c - f) - ωE₀}` of (10), `ω = 5/64`. -/
+/-- `R(h, c, f) = (B - ωE₁)² - 4Z₀{sf(c - f) - ωE₀}`, `ω = 5/64`. -/
 def capR (h c f : ℝ) : ℝ :=
   (capB h c f - 5 / 64 * capE1 h c) ^ 2 -
     4 * capZ0 h c f * (8 / 73 * f * (c - f) - 5 / 64 * capE0 h c f)
 
-/-- **Claim** (`C1_TOP_CAP_OF_SPLIT:eq1`, made-up id; (1)). In the reduced one-cap placement,
-`hc ≥ Ks > ρ` and `cY ≥ Ks > ρ` (`K = 4 + 2√3`, `s = 8/73`, `ρ = 49/60`).
-`docs/proof/nine/C1_TOP_CAP_OF_SPLIT.md`, lines 13-19.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem eq1 {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X P) :
+/-- In the reduced one-cap placement, `hc ≥ Ks > ρ` and `cY ≥ Ks > ρ` (`K = 4 + 2√3`,
+`s = 8/73`, `ρ = 49/60`): `L, M` lie inside `OCH` and `P, M` inside `OCX`. -/
+theorem oneCap_kσ_le_hc_cY {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X P) :
     (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h * c ∧ (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ c * X.2 ∧
       (49 / 60 : ℝ) < (4 + 2 * Real.sqrt 3) * (8 / 73) := by
   have hk := two_in hS.competitive 0 1 4 5 6 (by decide) (Or.inl hS.lowerL) (Or.inl hS.lowerM)
@@ -114,13 +108,11 @@ theorem eq1 {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X 
   rw [e2, abs_of_nonneg (mul_nonneg (by linarith) y0)] at hkY
   exact ⟨hk, hkY, kσ_gt⟩
 
-/-- **Claim** (`C1_TOP_CAP_OF_SPLIT:claim-x-lt-c`, made-up id). In the reduced one-cap placement
-(independently of the side of `L`), `f < x < c` and `f ≤ c - s` (6), `X = (x, Y)`, `s = 8/73`.
-`docs/proof/nine/C1_TOP_CAP_OF_SPLIT.md`, lines 125-155.
-Uses: C1_TOP_CAP_OF_SPLIT:eq1. -/
-theorem claim_x_lt_c {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X P) :
+/-- In the reduced one-cap placement (independently of the side of `L`), `f < x < c` and
+`f ≤ c - s`, where `X = (x, Y)`, `s = 8/73`. -/
+theorem oneCap_f_lt_x_lt_c {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X P) :
     f < X.1 ∧ X.1 < c ∧ f ≤ c - 8 / 73 := by
-  obtain ⟨hk, hkY, -⟩ := eq1 hS
+  obtain ⟨hk, hkY, -⟩ := oneCap_kσ_le_hc_cY hS
   have h8 : A₀ ≤ minTriangleArea ![ptO, ptC c, ptD d, ptF f, ptH h, L, M, X] := min8 hS.competitive
   obtain ⟨hd1, hf1, hfx, -, k1, kCF, k2, -, -, -, -⟩ :=
     C1TopCapRadialSplit.rs_cap (L := L) (M := M) (X := X)
@@ -150,7 +142,7 @@ theorem tri_negdet {a b c d e g : ℝ} (hdet : a * d - b * c < 0) {R A B C : Poi
 theorem split_pos {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X P)
     (hLH : 0 < sarea ptO (ptF f) L) :
     InTriangle L ptO (ptF f) (ptH h) ∧ InTriangle M ptO (ptC c) (ptF f) := by
-  obtain ⟨hk, hkY, kgt⟩ := eq1 hS
+  obtain ⟨hk, hkY, kgt⟩ := oneCap_kσ_le_hc_cY hS
   have h8 : A₀ ≤ minTriangleArea ![ptO, ptC c, ptD d, ptF f, ptH h, L, M, X] := min8 hS.competitive
   obtain ⟨hd1, hf1, hfx, -, k1, kCF, k2, -, hHC, hhf, -⟩ :=
     C1TopCapRadialSplit.rs_cap (L := L) (M := M) (X := X)
@@ -182,28 +174,21 @@ theorem split_pos {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f 
   have : 0 < sarea (ptF f) (ptH h) L * (h * c) := by rw [e]; linarith
   exact pos_of_mul_pos_left this (mul_pos h0 c0).le
 
-/-- **Claim** (`C1_TOP_CAP_OF_SPLIT:eq2-3`). In the reduced one-cap placement, if `L` is on the
-`H`-side of `OF` (`[OFL] > 0`), then `L ∈ OHC ∩ OHF` and `M ∈ OHC ∩ OCF`; the transferred
-parameter inequality (3) holds for `L = (ℓ, z)`: `s(h + 1)/(fh) ≤ z` and `cz ≤ Z(p)`; hence
-`u·Z(p) ≥ sc(h + 1)` (2), where `p = hc`, `u = hf`, `s = 8/73`. `docs/proof/nine/C1_TOP_CAP_OF_SPLIT.md`,
-lines 36-99.
-Uses: TYPE_II_COMPLETION:Lemma7, CORNER_FAMILIES:TwoInteriorPointLemma,
-C1_TOP_CAP_OF_SPLIT:claim-x-lt-c. -/
--- FLAG (lines 60-99): TYPE_II_COMPLETION Lemma 7 is stated only at `s = 7/64` (and for Type-II
--- positions); it is used here at the threshold `σ = s/c`. Its proof (TYPE_II_COMPLETION
--- §6.3 (14)-(15), §6.4 (18)-(19), lines 727-758) is threshold-generic, and the manuscript
--- re-lists the steps (lines 84-98); a general-threshold Lemma 7 must be stated and proved.
-theorem eq2_3 {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X P)
+/-- In the reduced one-cap placement, if `L` is on the `H`-side of `OF` (`[OFL] > 0`), then
+`L ∈ OHC ∩ OHF` and `M ∈ OHC ∩ OCF`; for `L = (ℓ, z)`, `s(h + 1)/(fh) ≤ z` and `cz ≤ Z(p)`; hence
+`u·Z(p) ≥ sc(h + 1)`, where `p = hc`, `u = hf`, `s = 8/73`. The bounds on `z` come from
+`TypeIICompletion.q_z_bounds_of_six_points` at the threshold `s/c`, after the map `(a, b) ↦ (a/c, 1 - b)`. -/
+theorem split_bigZ_bounds {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X P)
     (hLH : 0 < sarea ptO (ptF f) L) :
     InTriangle L ptO (ptF f) (ptH h) ∧ InTriangle M ptO (ptC c) (ptF f) ∧
       8 / 73 * (h + 1) / (f * h) ≤ L.2 ∧ c * L.2 ≤ bigZ (h * c) ∧
       8 / 73 * c * (h + 1) ≤ h * f * bigZ (h * c) := by
   obtain ⟨hL, hM⟩ := split_pos hS hLH
-  obtain ⟨hfx, hxc, hfcs⟩ := claim_x_lt_c hS
+  obtain ⟨hfx, hxc, hfcs⟩ := oneCap_f_lt_x_lt_c hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have hh1 := hS.h_lt
   have kgt := kσ_gt
-  obtain ⟨hk, -, -⟩ := eq1 hS
+  obtain ⟨hk, -, -⟩ := oneCap_kσ_le_hc_cY hS
   have h0 : 0 < h := by nlinarith
   have c0 : 0 < c := by nlinarith
   have hfc' : f < c := by linarith
@@ -234,7 +219,7 @@ theorem eq2_3 {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M 
   have hmin6 : 8 / 73 / c / 2 ≤
       minTriangleArea ![TypeII.ptD, TypeII.ptC, TypeII.ptE (1 - h), TypeII.ptB (f / c), T L, T M] := by
     have hA : A₀ ≤ minTriangleArea ![ptO, ptC c, ptH h, ptF f, L, M] :=
-      CornerFamilies.min_sub hS.competitive _ ![0, 1, 4, 3, 5, 6] (by norm_num) (by decide)
+      min_sub hS.competitive _ ![0, 1, 4, 3, 5, 6] (by norm_num) (by decide)
         (by intro i; fin_cases i <;> rfl)
     have e : ![TypeII.ptD, TypeII.ptC, TypeII.ptE (1 - h), TypeII.ptB (f / c), T L, T M] =
         T ∘ ![ptO, ptC c, ptH h, ptF f, L, M] := by
@@ -254,7 +239,7 @@ theorem eq2_3 {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M 
     have := mul_le_mul_of_nonneg_left hA' (one_div_pos.2 c0).le
     calc 8 / 73 / c / 2 = 1 / c * (8 / 73 / 2) := by ring
       _ ≤ _ := this
-  have l7 := TypeIICompletion.lemma7 (l := 1 - h) (b := f / c) (s := 8 / 73 / c) (L := T L)
+  have l7 := TypeIICompletion.q_z_bounds_of_six_points (l := 1 - h) (b := f / c) (s := 8 / 73 / c) (L := T L)
     (P := T M) (by positivity) (div_pos hf c0) ((div_lt_one c0).2 hfc') (by linarith)
     (by linarith) hL' (hce L hS.lowerL) hM' (hce M hS.lowerM) hmin6
   obtain ⟨-, l2, l3⟩ := l7
@@ -282,12 +267,9 @@ theorem eq2_3 {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M 
   have k2 := mul_le_mul_of_nonneg_left hcz (mul_nonneg hf.le h0.le)
   linarith
 
-/-- **Claim** (`C1_TOP_CAP_OF_SPLIT:eq4-5`). For `p ≥ ρ`, `Z(p) ≤ (48p - 266s)/23` (4); hence,
-in the reduced one-cap placement with `L` on the `H`-side of `OF`,
-`f ≥ f₀(h, c) = 23sc(h + 1)/(h(48hc - 266s))` (5). `docs/proof/nine/C1_TOP_CAP_OF_SPLIT.md`,
-lines 101-123.
-Uses: C1_TOP_CAP_OF_SPLIT:eq2-3. -/
-theorem eq4_5 :
+/-- For `p ≥ ρ`, the tangent bound `Z(p) ≤ (48p - 266s)/23`; hence, in the reduced one-cap
+placement with `L` on the `H`-side of `OF`, `f ≥ f₀(h, c) = 23sc(h + 1)/(h(48hc - 266s))`. -/
+theorem bigZ_le_and_fLow_le :
     (∀ p : ℝ, 49 / 60 ≤ p → bigZ p ≤ (48 * p - 266 * (8 / 73)) / 23) ∧
       ∀ {h c d f : ℝ} {L M X P : Point}, OneCapSetting h c d f L M X P →
         0 < sarea ptO (ptF f) L → fLow h c ≤ f := by
@@ -303,8 +285,8 @@ theorem eq4_5 :
     linarith
   refine ⟨tang, ?_⟩
   intro h c d f L M X P hS hLH
-  obtain ⟨-, -, -, -, k⟩ := eq2_3 hS hLH
-  obtain ⟨hk, -, kgt⟩ := eq1 hS
+  obtain ⟨-, -, -, -, k⟩ := split_bigZ_bounds hS hLH
+  obtain ⟨hk, -, kgt⟩ := oneCap_kσ_le_hc_cY hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have h0 : 0 < h := by nlinarith
   have hp : 49 / 60 ≤ h * c := by linarith
@@ -316,7 +298,7 @@ theorem eq4_5 :
   nlinarith
 
 set_option linter.unusedVariables false in
-/-- The cap elimination (7)–(10) in scalar form. -/
+/-- The cap elimination of `oneCap_capR_nonneg` in scalar form. -/
 theorem cap_elim {h c d f x Y : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh : h ≤ 1) (hf : 0 < f)
     (hfc : f ≤ c) (hc : c ≤ 1) (x1 : x ≤ 1) (hfx : f < x) (hxc : x < c)
     (hkY : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ c * Y) (kgt : 49 / 60 < (4 + 2 * Real.sqrt 3) * (8 / 73))
@@ -366,20 +348,18 @@ theorem cap_elim {h c d f x Y : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh : h ≤ 1)
   have := mul_nonneg (mul_nonneg (by norm_num : (0 : ℝ) ≤ 4) hZ0.le) hsum
   nlinarith [sq_nonneg (2 * capZ0 h c f * (1 - x) - (capB h c f - 5 / 64 * capE1 h c))]
 
-/-- **Claim** (`C1_TOP_CAP_OF_SPLIT:eq7-10`, the cap elimination). In the reduced one-cap
-placement (independently of the side of `L`), with `X = (x, Y)`, `r = -[DFX]`, `β = [CDX]`,
-`v = 1 - x`: `(c - x)r + (x - f)β = (1 - x){(c - f)Y - (c - x)} ≥ s(c - f)` (7);
-`Q(v) ≥ 0` (8); `E(v) = E₀ - E₁v ≥ 0` (9); hence `R(h, c, f) ≥ 0` (10).
-`docs/proof/nine/C1_TOP_CAP_OF_SPLIT.md`, lines 157-207.
-Uses: C1_TOP_CAP_OF_SPLIT:eq1, C1_TOP_CAP_OF_SPLIT:claim-x-lt-c. -/
-theorem eq7_10 {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X P) :
+/-- The cap elimination. In the reduced one-cap placement (independently of the side of `L`),
+with `X = (x, Y)`, `r = -[DFX]`, `β = [CDX]`, `v = 1 - x`:
+`(c - x)r + (x - f)β = (1 - x){(c - f)Y - (c - x)} ≥ s(c - f)`; `Q(v) ≥ 0`;
+`E(v) = E₀ - E₁v ≥ 0`; hence `R(h, c, f) ≥ 0`. -/
+theorem oneCap_capR_nonneg {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X P) :
     (c - X.1) * -sarea (ptD d) (ptF f) X + (X.1 - f) * sarea (ptC c) (ptD d) X =
         (1 - X.1) * ((c - f) * X.2 - (c - X.1)) ∧
       8 / 73 * (c - f) ≤ (1 - X.1) * ((c - f) * X.2 - (c - X.1)) ∧
       0 ≤ capQ h c f (1 - X.1) ∧ 0 ≤ capE0 h c f - capE1 h c * (1 - X.1) ∧
       0 ≤ capR h c f := by
-  obtain ⟨hk, hkY, kgt⟩ := eq1 hS
-  obtain ⟨hfx, hxc, hfcs⟩ := claim_x_lt_c hS
+  obtain ⟨hk, hkY, kgt⟩ := oneCap_kσ_le_hc_cY hS
+  obtain ⟨hfx, hxc, hfcs⟩ := oneCap_f_lt_x_lt_c hS
   have h8 : A₀ ≤ minTriangleArea ![ptO, ptC c, ptD d, ptF f, ptH h, L, M, X] := min8 hS.competitive
   obtain ⟨-, -, -, -, k1, -, k2, k3, -, -, -⟩ :=
     C1TopCapRadialSplit.rs_cap (L := L) (M := M) (X := X)
@@ -419,12 +399,11 @@ theorem of_N_neg {H0 C0 : ℝ} (h0 : 0 ≤ H0) (h1 : H0 ≤ 1) (c0 : 0 ≤ C0) (
     · exact Quart.sound_rect OfSplitCert.chk3_2 hb1 hb2
     · exact Quart.sound_rect OfSplitCert.chk4_2 hb1 hb2
 
-/-- **Claim** (`C1_TOP_CAP_OF_SPLIT:claim-certificate`, made-up id). `R(h, c, f) < 0` whenever
-`ρ ≤ hc ≤ c ≤ 1` and `f₀(h, c) ≤ f ≤ c - s`. In the manuscript: with `p = hc`,
-`f = (ℓ + Wθ)/D`, the five scaled quartic Bernstein coefficients `N_k(p, c)` (11)–(12) have all
-tensor Bernstein coefficients below `-2` on three rectangles of `(H₀, C₀)`; checked by
-`docs/proof/nine/check_c1_top_cap_of_split.py`. `docs/proof/nine/C1_TOP_CAP_OF_SPLIT.md`, lines 209-292. -/
-theorem claim_certificate (h c f : ℝ) (hp : 49 / 60 ≤ h * c) (hpc : h * c ≤ c) (hc : c ≤ 1)
+/-- `R(h, c, f) < 0` whenever `ρ ≤ hc ≤ c ≤ 1` and `f₀(h, c) ≤ f ≤ c - s`. With `p = hc` and
+`f = (ℓ + Wθ)/D`, `R` is controlled by five scaled quartic coefficients `N_k(p, c)`, which are
+negative on the whole parameter square (`of_N_neg`, Bernstein checks on three rectangles of
+`(H₀, C₀)`). -/
+theorem capR_neg (h c f : ℝ) (hp : 49 / 60 ≤ h * c) (hpc : h * c ≤ c) (hc : c ≤ 1)
     (hf : fLow h c ≤ f) (hf' : f ≤ c - 8 / 73) :
     capR h c f < 0 := by
   have c0 : 0 < c := by nlinarith
@@ -481,24 +460,21 @@ theorem claim_certificate (h c f : ℝ) (hp : 49 / 60 ≤ h * c) (hpc : h * c �
   have := mul_nonneg hpos.le hn
   linarith
 
-/-- **Theorem** (`C1_TOP_CAP_OF_SPLIT:Theorem`). In the reduced one-cap placement, `L` is not on
-the `H`-side of `OF`: the lower pair does not straddle `OF`, and both lower points lie in `OCF`.
-(Relative to the reflection choosing `P ∈ OCX`; the reflected statement applies when
-`P ∈ OHX`.) `docs/proof/nine/C1_TOP_CAP_OF_SPLIT.md`, lines 28-34 and 294-298.
-Uses: C1_TOP_CAP_OF_SPLIT:eq2-3, C1_TOP_CAP_OF_SPLIT:eq4-5, C1_TOP_CAP_OF_SPLIT:claim-x-lt-c,
-C1_TOP_CAP_OF_SPLIT:eq7-10, C1_TOP_CAP_OF_SPLIT:claim-certificate. -/
+/-- In the reduced one-cap placement, `L` is not on the `H`-side of `OF`: the lower pair does not
+straddle `OF`, and both lower points lie in `OCF`. (Relative to the reflection choosing
+`P ∈ OCX`; the reflected statement applies when `P ∈ OHX`.) -/
 theorem theorem_main {h c d f : ℝ} {L M X P : Point} (hS : OneCapSetting h c d f L M X P) :
     ¬ 0 < sarea ptO (ptF f) L ∧ InTriangle L ptO (ptC c) (ptF f) ∧
       InTriangle M ptO (ptC c) (ptF f) := by
-  obtain ⟨hk, hkY, kgt⟩ := eq1 hS
-  obtain ⟨hfx, hxc, hfcs⟩ := claim_x_lt_c hS
-  obtain ⟨-, -, -, -, hR⟩ := eq7_10 hS
+  obtain ⟨hk, hkY, kgt⟩ := oneCap_kσ_le_hc_cY hS
+  obtain ⟨hfx, hxc, hfcs⟩ := oneCap_f_lt_x_lt_c hS
+  obtain ⟨-, -, -, -, hR⟩ := oneCap_capR_nonneg hS
   have hnot : ¬ 0 < sarea ptO (ptF f) L := by
     intro hLH
-    have hf0 := (eq4_5).2 hS hLH
+    have hf0 := (bigZ_le_and_fLow_le).2 hS hLH
     obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
     have h0 : 0 < h := by nlinarith
-    have := claim_certificate h c f (by linarith) (by nlinarith) hc hf0 hfcs
+    have := capR_neg h c f (by linarith) (by nlinarith) hc hf0 hfcs
     linarith
   have h8 : A₀ ≤ minTriangleArea ![ptO, ptC c, ptD d, ptF f, ptH h, L, M, X] := min8 hS.competitive
   obtain ⟨hd1, hf1, -, -, k1, kCF, k2, -, hHC, hhf, -⟩ :=

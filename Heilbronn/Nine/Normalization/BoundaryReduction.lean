@@ -2,72 +2,56 @@ module
 
 public import Heilbronn.Nine.Setup.Families
 
-/-! # The boundary reduction of a maximizer (`docs/proof/nine/BOUNDARY_REDUCTION.md`)
+/-! # The boundary reduction of a maximizer
 
-**Role.** Primary route, normalization step of `UNRESTRICTED.md` §2. The consequences of the
-minimum-area enclosing parallelogram (every side is contacted, opposite contact intervals overlap
-in projection) are the two standing facts of `GLOBAL_STRUCTURE.md` (lines 22-27) and of
-`UNRESTRICTED.md` (lines 49-54). The adjacent-corner shear produces Type II or Type III in
-`GLOBAL_STRUCTURE.md` Theorem 3 (line 174) and in `THREE_INTERIOR_TRIANGLES.md` Corollary 5
-(lines 493-494).
+A maximizer `P` of nine points in the square (`IsMaximizer`, `Setup/Families.lean`) with positive
+least area contacts every side of the square, and its opposite contact intervals overlap in
+projection. If two adjacent corners are occupied, feasible shears, square symmetries and
+relabellings bring it to Type II or Type III. The normalization of
+`Heilbronn/Nine/Normalization/GlobalStructure.lean` starts from these facts.
 
-**Setting.** A maximizer `P` of nine points in the square (`IsMaximizer`,
-`Setup/Families.lean`) with positive least area. The manuscript allows any `n ≥ 5` points
-(line 7); only `n = 9` is used, so everything is stated for nine points.
-
-**Normalization moves** (shared with `GLOBAL_STRUCTURE.md`).
+**Normalization moves.**
 * `shearX t ℓ` is the determinant-one shear `(x, y) ↦ (x + t(y - ℓ), y)` and `shearY t ℓ` its
-  transpose `(x, y) ↦ (x, y + t(x - ℓ))`. The contact-increasing shears of `GLOBAL_STRUCTURE.md`
-  Lemma 1 are of this form, so is the adjacent-corner shear `ψ(x, y) = (x - s(1 - y), y)`
-  (`= shearX s 1`), and so is the Type-II shear `(x, y) ↦ (x + τ(1 - y), y)` of `TYPE_II.md` §2
-  (`= shearX (-τ) 1`).
+  transpose `(x, y) ↦ (x, y + t(x - ℓ))`. The contact-increasing shears of
+  `GlobalStructure.exists_contact_shear_of_noExpand` are of this form, and so is the adjacent-corner shear
+  `ψ(x, y) = (x - s(1 - y), y)` (`= shearX s 1`).
 * `NormStep P Q`: `Q` comes from `P` by one feasible shear (`P` and its image both in the square),
-  one square symmetry, or one relabelling. `Normalizes` is its reflexive-transitive closure: "finitely
-  many square symmetries, relabelings, and feasible shears", the hypothesis of
-  `GLOBAL_STRUCTURE.md` Lemma 4 (equality transfer).
+  one square symmetry, or one relabelling. `Normalizes` is its reflexive-transitive closure.
 * `Occupied P c`: some point of `P` is `c` (used for the corners).
 
 **Results.**
-* `claim_min_parallelogram`: an affine map that sends every point of `P` into the square has
+* `abs_det_le_one_of_isMaximizer`: an affine map that sends every point of `P` into the square has
   absolute determinant at most one (the square is a minimum-area parallelogram containing
   `conv P`).
-* `claim_side_contact`: every side of the square contains a point of `P`.
-* `claim_overlap`: the projection-overlap property `ContactOverlap P`.
-* `claim_adjacent_shear`: if the corners `(0,1)` and `(1,1)` are occupied, feasible shears,
-  square symmetries and relabellings give a maximizer of Type II or Type III.
+* `side_contacts_of_noExpand`: every side of the square contains a point of `P`.
+* `contactOverlap_of_isMaximizer`: the projection-overlap property `ContactOverlap P`.
+* `exists_typeII_or_typeIII_of_noExpand`: if the corners `(0,1)` and `(1,1)` are occupied, feasible
+  shears, square symmetries and relabellings give a configuration of Type II or Type III.
 
 **Proof notes.** The minimum-area enclosing parallelogram is never formed. Each use is one
 explicit affine map of determinant greater than one that keeps the points in the square, which
-`claim_min_parallelogram` (from `minTriangleArea_affineMap` and maximality) rules out: the stretch
-`x ↦ (x - x_min)/(x_max - x_min)` for the side contacts (`exists_fst_eq_zero_one`), and the tilt
-`(x, y) ↦ (x, (y + β(x - b₋))/(1 - β(b₋ - t₊)))` with `β > 0` below every nonzero distance of a
-point to the top or bottom side for the overlap (`exists_bottom_le_top`). The other three overlap
-conditions and the `y`-contacts follow by square symmetries. The relabellings that put named
-points first come from `Equiv.Perm.exists_extending_pair` (`exists_perm₃` … `exists_perm₆`).
+`abs_det_le_one_of_isMaximizer` (from `minTriangleArea_affineMap` and maximality) rules out: the stretch
+`x ↦ (x - x_min)/(x_max - x_min)` for the side contacts (`exists_fst_eq_zero_one_of_noExpand`),
+and the tilt `(x, y) ↦ (x, (y + β(x - b₋))/(1 - β(b₋ - t₊)))` with `β > 0` below every nonzero
+distance of a point to the top or bottom side for the overlap
+(`exists_bottom_le_top_of_noExpand`). The other three overlap conditions and the `y`-contacts
+follow by square symmetries. The relabellings that put named points first come from
+`Equiv.Perm.exists_extending_pair` (`exists_perm₃` … `exists_perm₆`).
 
-**No feasible expansion.** Maximality is used only through `claim_min_parallelogram`. The
+**No feasible expansion.** Maximality is used only through `abs_det_le_one_of_isMaximizer`. The
 lemmas are proved under the weaker hypothesis `NoExpand P` (the points are in the square and no
 affine map of absolute determinant above one keeps them there), as `*_of_noExpand`, and the
 maximizer statements are their corollaries (`noExpand_of_isMaximizer`). `NoExpand` passes along
-normalizations (`noExpand_of_normalizes`), and a normalization is a relabelling of an affine image of
-absolute determinant one (`normalizes_affine`). This serves `THREE_INTERIOR_TRIANGLES.md`
-Corollary 5, which normalizes the minimum-enclosing-parallelogram image of an arbitrary
-configuration.
+normalizations (`noExpand_of_normalizes`), and a normalization is a relabelling of an affine
+image of absolute determinant one (`normalizes_affine`). `Heilbronn/Nine/Hulls/GlobalCapacity.lean`
+uses this to normalize the image of an arbitrary configuration under the affine map that sends a
+minimum-area enclosing parallelogram onto the square.
 
-**Not formalized (superseded, off the primary route).** "Some side has two contacts"
-(lines 22-42) is superseded by `GLOBAL_STRUCTURE.md` Corollary 2, which does not use it. "No
-adjacent occupied corners" and the five-point Type-I form (lines 54-79) are superseded by
-`GLOBAL_STRUCTURE.md` §2 (families N, C1, C2).
-
-**Implicit in the manuscript.**
-* "Each side holds at most two points" (`UNRESTRICTED.md` line 53) follows from positive least area
-  alone. It is stated in `GlobalStructure.lean` (`claim_two_per_side`).
-* Adjacent-corner shear (lines 81-98). The manuscript says "if the left and bottom contacts are
-  distinct, this is Type II", but Type II also needs `0 < b < 1` (`TYPE_II.md` (5), line 196).
-  When the only bottom contact is the corner `(1,0)` (three occupied corners), or the existing
-  left contact is `(0,0)`, the configuration is Type III, but only after a square symmetry and a
-  relabelling into the order `(0,0), (0,1), (1,1)` of `typeIIIConfig`. The conclusion therefore
-  allows symmetries and relabellings (`Normalizes`), not only the shear `ψ`.
+**Adjacent occupied corners.** A configuration of Type II needs a bottom contact `(b, 0)` with
+`0 < b < 1`. When the only bottom contact is the corner `(1,0)` (three occupied corners), or the
+existing left contact is `(0,0)`, the configuration is of Type III, but only after a square
+symmetry and a relabelling into the order `(0,0), (0,1), (1,1)` of `typeIIIConfig`. The
+conclusion therefore allows symmetries and relabellings (`Normalizes`), not only the shear `ψ`.
 -/
 
 @[expose] public section
@@ -104,7 +88,6 @@ def Normalizes : (Fin 9 → Point) → (Fin 9 → Point) → Prop := Relation.Re
 
 /-- The point `c` (in practice a corner of the square) is a point of the configuration. -/
 def Occupied (P : Fin 9 → Point) (c : Point) : Prop := ∃ i, P i = c
-
 
 /-! ### Auxiliary facts: shears, symmetries, relabellings -/
 
@@ -208,8 +191,9 @@ theorem exists_perm₆ {a b c d e f : Fin 9} (hab : a ≠ b) (hac : a ≠ c) (ha
 /-- No feasible affine expansion: `P` lies in the square, and every affine map sending all points
 of `P` into the square has absolute determinant at most one (the square is a minimum-area
 parallelogram containing `conv P`). This is the only consequence of maximality that the
-normalization uses (`claim_min_parallelogram`); it also holds for the minimum-enclosing-
-parallelogram image of an arbitrary configuration (`THREE_INTERIOR_TRIANGLES.md` Corollary 5). -/
+normalization uses (`abs_det_le_one_of_isMaximizer`); it also holds for the image of an arbitrary
+configuration under the affine map that sends a minimum-area enclosing parallelogram onto the
+square. -/
 def NoExpand (P : Fin 9 → Point) : Prop :=
   (∀ i, P i ∈ unitSquare) ∧ ∀ a b c d e f : ℝ,
     (∀ i, affineMap a b c d e f (P i) ∈ unitSquare) → |a * d - b * c| ≤ 1
@@ -353,14 +337,12 @@ theorem normalizes_affine {P Q : Fin 9 → Point} (h : Normalizes P Q) :
 
 /-! ### The minimum-area enclosing parallelogram -/
 
-/-- **Claim** (`BOUNDARY_REDUCTION:claim-min-parallelogram`). The square is a minimum-area
-parallelogram containing `conv P`. If the affine map `(x, y) ↦ (ax + by + e, cx + dy + f)` sends
-every point of a maximizer `P` of positive least area into the square, then `|ad - bc| ≤ 1`.
-The preimage of the square is an enclosing parallelogram of area `1/|ad - bc|`, and a larger
-determinant would multiply every triangle area by more than one (an affine map multiplies the
-least area by `|det|`, `minTriangleArea_affineMap`).
-`docs/proof/nine/BOUNDARY_REDUCTION.md`, lines 12-18. -/
-theorem claim_min_parallelogram {P : Fin 9 → Point} (hP : IsMaximizer P)
+/-- **The square is a minimum-area parallelogram containing `conv P`.** If the affine map
+`(x, y) ↦ (ax + by + e, cx + dy + f)` sends every point of a maximizer `P` of positive least area
+into the square, then `|ad - bc| ≤ 1`. The preimage of the square is an enclosing parallelogram of
+area `1/|ad - bc|`, and a larger determinant would multiply every triangle area by more than one
+(an affine map multiplies the least area by `|det|`, `minTriangleArea_affineMap`). -/
+theorem abs_det_le_one_of_isMaximizer {P : Fin 9 → Point} (hP : IsMaximizer P)
     (hpos : 0 < minTriangleArea P) {a b c d e f : ℝ}
     (hT : ∀ i, affineMap a b c d e f (P i) ∈ unitSquare) : |a * d - b * c| ≤ 1 := by
   by_contra hlt
@@ -372,7 +354,7 @@ theorem claim_min_parallelogram {P : Fin 9 → Point} (hP : IsMaximizer P)
 /-- A positive-area maximizer has no feasible expansion. -/
 theorem noExpand_of_isMaximizer {P : Fin 9 → Point} (hP : IsMaximizer P)
     (hpos : 0 < minTriangleArea P) : NoExpand P :=
-  ⟨hP.1, fun _ _ _ _ _ _ hT => claim_min_parallelogram hP hpos hT⟩
+  ⟨hP.1, fun _ _ _ _ _ _ hT => abs_det_le_one_of_isMaximizer hP hpos hT⟩
 
 /-- Some point has `x = 0` and some point has `x = 1`: otherwise the affine stretch
 `x ↦ (x - x_min)/(x_max - x_min)` has determinant greater than one and keeps the points in the
@@ -410,40 +392,21 @@ theorem exists_fst_eq_zero_one_of_noExpand {P : Fin 9 → Point} (hP : NoExpand 
   exact ⟨⟨i₀, by linarith⟩, ⟨i₁, by linarith⟩⟩
 
 /-- Some point has `y = 0` and some point has `y = 1` (the transpose of
-`exists_fst_eq_zero_one`). -/
+`exists_fst_eq_zero_one_of_noExpand`). -/
 theorem exists_snd_eq_zero_one_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
     (hpos : 0 < minTriangleArea P) : (∃ i, (P i).2 = 0) ∧ (∃ i, (P i).2 = 1) := by
   have h := exists_fst_eq_zero_one_of_noExpand (hP.symm ⟨true, false, false⟩)
     (by rwa [SquareSymmetry.minTriangleArea_comp])
   simpa [SquareSymmetry.apply] using h
 
-/-- `claim_side_contact` under `NoExpand`. -/
-theorem claim_side_contact_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
+/-- Every side of the square contains a point of a configuration of positive least area with
+no feasible expansion. -/
+theorem side_contacts_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
     (hpos : 0 < minTriangleArea P) :
     (∃ i, (P i).1 = 0) ∧ (∃ i, (P i).2 = 0) ∧ (∃ i, (P i).1 = 1) ∧ (∃ i, (P i).2 = 1) := by
   obtain ⟨h1, h3⟩ := exists_fst_eq_zero_one_of_noExpand hP hpos
   obtain ⟨h2, h4⟩ := exists_snd_eq_zero_one_of_noExpand hP hpos
   exact ⟨h1, h2, h3, h4⟩
-
-/-- Some point has `x = 0` and some point has `x = 1`. -/
-theorem exists_fst_eq_zero_one {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) : (∃ i, (P i).1 = 0) ∧ (∃ i, (P i).1 = 1) :=
-  exists_fst_eq_zero_one_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
-
-/-- Some point has `y = 0` and some point has `y = 1`. -/
-theorem exists_snd_eq_zero_one {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) : (∃ i, (P i).2 = 0) ∧ (∃ i, (P i).2 = 1) :=
-  exists_snd_eq_zero_one_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
-
-/-- **Claim** (`BOUNDARY_REDUCTION:claim-side-contact`). Every side of the square meets the
-configuration: some point has `x = 0`, some `y = 0`, some `x = 1` and some `y = 1`. A side
-without contact could be moved inward.
-`docs/proof/nine/BOUNDARY_REDUCTION.md`, lines 19-20.
-Uses: BOUNDARY_REDUCTION:claim-min-parallelogram -/
-theorem claim_side_contact {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) :
-    (∃ i, (P i).1 = 0) ∧ (∃ i, (P i).2 = 0) ∧ (∃ i, (P i).1 = 1) ∧ (∃ i, (P i).2 = 1) :=
-  claim_side_contact_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
 
 /-- One half of the overlap property: some bottom point is weakly left of some top point.
 Otherwise every bottom point is strictly right of every top point, `b₋ > t₊`, and the affine map
@@ -454,7 +417,7 @@ theorem exists_bottom_le_top_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
   classical
   by_contra hcon
   push Not at hcon
-  obtain ⟨-, ⟨ib, hib⟩, -, ⟨it, hit⟩⟩ := claim_side_contact_of_noExpand hP hpos
+  obtain ⟨-, ⟨ib, hib⟩, -, ⟨it, hit⟩⟩ := side_contacts_of_noExpand hP hpos
   obtain ⟨i₀, hi₀m, hi₀⟩ := Finset.exists_min_image (Finset.univ.filter fun i => (P i).2 = 0)
     (fun i => (P i).1) ⟨ib, by simp [hib]⟩
   obtain ⟨j₀, hj₀m, hj₀⟩ := Finset.exists_max_image (Finset.univ.filter fun i => (P i).2 = 1)
@@ -510,14 +473,11 @@ theorem exists_bottom_le_top_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
       · have := hj₀ k h
         nlinarith [mul_nonneg hβ0.le (sub_nonneg.2 this)]
 
-/-- **Claim** (`BOUNDARY_REDUCTION:claim-overlap`). Opposite contact intervals overlap in
-projection. The `x`-ranges of the bottom and top contacts meet, and so do the `y`-ranges of the
-left and right contacts (`ContactOverlap`). If, say, the bottom interval lay strictly left of
-the top one, the tilt `v = y - αx` with small `α > 0` would give an enclosing parallelogram of
-area `1 + α(b₊ - t₋) < 1`.
-`docs/proof/nine/BOUNDARY_REDUCTION.md`, lines 44-52.
-Uses: BOUNDARY_REDUCTION:claim-min-parallelogram, BOUNDARY_REDUCTION:claim-side-contact -/
-theorem claim_overlap_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
+/-- **Opposite contact intervals overlap in projection.** The `x`-ranges of the bottom and top
+contacts meet, and so do the `y`-ranges of the left and right contacts (`ContactOverlap`). If,
+say, the bottom interval lay strictly left of the top one, the tilt `v = y - αx` with small
+`α > 0` would give an enclosing parallelogram of area `1 + α(b₊ - t₋) < 1`. -/
+theorem contactOverlap_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
     (hpos : 0 < minTriangleArea P) : ContactOverlap P := by
   have hpos' : ∀ g : SquareSymmetry, 0 < minTriangleArea (g.apply ∘ P) := fun g => by
     rwa [SquareSymmetry.minTriangleArea_comp]
@@ -535,16 +495,11 @@ theorem claim_overlap_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
     simp only [Function.comp, SquareSymmetry.apply, Bool.false_eq_true, ↓reduceIte] at h1 h2 h3
     exact ⟨i, j, h1, h2, by linarith⟩
 
-theorem exists_bottom_le_top {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) : ∃ i j, (P i).2 = 0 ∧ (P j).2 = 1 ∧ (P i).1 ≤ (P j).1 :=
-  exists_bottom_le_top_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
-
-/-- **Claim** (`BOUNDARY_REDUCTION:claim-overlap`), for a maximizer (see `claim_overlap_of_noExpand`).
-`docs/proof/nine/BOUNDARY_REDUCTION.md`, lines 44-52.
-Uses: BOUNDARY_REDUCTION:claim-min-parallelogram, BOUNDARY_REDUCTION:claim-side-contact -/
-theorem claim_overlap {P : Fin 9 → Point} (hP : IsMaximizer P)
+/-- Opposite contact intervals of a maximizer of positive least area overlap in projection
+(`contactOverlap_of_noExpand`). -/
+theorem contactOverlap_of_isMaximizer {P : Fin 9 → Point} (hP : IsMaximizer P)
     (hpos : 0 < minTriangleArea P) : ContactOverlap P :=
-  claim_overlap_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
+  contactOverlap_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
 
 /-! ### Adjacent occupied corners -/
 
@@ -592,7 +547,7 @@ theorem adjacent_of_left_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
     fin_cases i <;> simp [typeIIConfig, h0, h1, h2, h3, hiD, hiC] <;> ext <;> simp [hk1, hj0]
   · -- the only bottom contacts are corners; `(1,0)` is occupied: reflect `x ↦ 1 - x`
     push Not at hB
-    obtain ⟨-, ⟨j, hj⟩, -, -⟩ := claim_side_contact_of_noExpand hP hpos
+    obtain ⟨-, ⟨j, hj⟩, -, -⟩ := side_contacts_of_noExpand hP hpos
     have hj1 : (P j).1 = 1 := by
       rcases (hP.1 j).1.eq_or_lt with h | h
       · exact absurd ⟨j, Prod.ext h.symm hj⟩ h00
@@ -611,16 +566,14 @@ theorem adjacent_of_left_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
     funext i
     fin_cases i <;> simp [typeIIIConfig, h0, h1, h2, hiD, hiC, hg, hj, hj1]
 
-/-- **Claim** (`BOUNDARY_REDUCTION:claim-adjacent-shear`). Let `P` be a maximizer of positive
-least area whose adjacent corners `D = (0,1)` and `C = (1,1)` are occupied. If no left contact
-`(0, λ)` with `λ < 1` exists, put `s = min_{y_p < 1} x_p/(1 - y_p)` (so `0 < s ≤ b ≤ 1` for a
-bottom contact `(b, 0)`). The shear `ψ(x, y) = (x - s(1 - y), y)` (`shearX s 1`) keeps every
+/-- **The adjacent-corner shear.** Let `P` be a configuration of positive least area with no
+feasible expansion whose adjacent corners `D = (0,1)` and `C = (1,1)` are occupied. If no left
+contact `(0, λ)` with `λ < 1` exists, put `s = min_{y_p < 1} x_p/(1 - y_p)` (so `0 < s ≤ b ≤ 1`
+for a bottom contact `(b, 0)`). The shear `ψ(x, y) = (x - s(1 - y), y)` (`shearX s 1`) keeps every
 point in the square, fixes `C` and `D`, keeps a bottom contact and creates a left contact below
-`D`. The result, after a square symmetry and a relabelling if needed, is a maximizer of Type II
-or of Type III with the same least area.
-`docs/proof/nine/BOUNDARY_REDUCTION.md`, lines 81-98.
-Uses: BOUNDARY_REDUCTION:claim-side-contact -/
-theorem claim_adjacent_shear_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
+`D`. The result, after a square symmetry and a relabelling if needed, is of Type II or of
+Type III (`adjacent_of_left_of_noExpand`). -/
+theorem exists_typeII_or_typeIII_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
     (hpos : 0 < minTriangleArea P) (hD : Occupied P (0, 1)) (hC : Occupied P (1, 1)) :
     ∃ Q : Fin 9 → Point, Normalizes P Q ∧ (IsTypeII Q ∨ IsTypeIII Q) := by
   by_cases hL : ∃ k, (P k).1 = 0 ∧ (P k).2 < 1
@@ -628,7 +581,7 @@ theorem claim_adjacent_shear_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
   push Not at hL
   obtain ⟨iD, hiD⟩ := hD
   obtain ⟨iC, hiC⟩ := hC
-  obtain ⟨-, ⟨jb, hjb⟩, -, -⟩ := claim_side_contact_of_noExpand hP hpos
+  obtain ⟨-, ⟨jb, hjb⟩, -, -⟩ := side_contacts_of_noExpand hP hpos
   classical
   -- every point below the top line has positive `x`
   have hxpos : ∀ k, (P k).2 < 1 → 0 < (P k).1 := fun k hk =>
@@ -657,26 +610,5 @@ theorem claim_adjacent_shear_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
       field_simp
       ring, hk₀m⟩
   exact ⟨Q, Relation.ReflTransGen.head (NormStep.xShear s 1 hP.1 hfeas) hPQ, hfam⟩
-
-/-- Adjacent occupied corners with a left contact below `(0,1)`, for a maximizer (see
-`adjacent_of_left_of_noExpand`). -/
-theorem adjacent_of_left {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) (hD : Occupied P (0, 1)) (hC : Occupied P (1, 1))
-    (hL : ∃ k, (P k).1 = 0 ∧ (P k).2 < 1) :
-    ∃ Q : Fin 9 → Point, Normalizes P Q ∧ IsMaximizer Q ∧
-      minTriangleArea Q = minTriangleArea P ∧ (IsTypeII Q ∨ IsTypeIII Q) := by
-  obtain ⟨Q, hPQ, hQ⟩ := adjacent_of_left_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos hD hC hL
-  exact ⟨Q, hPQ, isMaximizer_of_normalizes hP hPQ, minTriangleArea_of_normalizes hPQ, hQ⟩
-
-/-- **Claim** (`BOUNDARY_REDUCTION:claim-adjacent-shear`), for a maximizer (see
-`claim_adjacent_shear_of_noExpand`).
-`docs/proof/nine/BOUNDARY_REDUCTION.md`, lines 81-98.
-Uses: BOUNDARY_REDUCTION:claim-side-contact -/
-theorem claim_adjacent_shear {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) (hD : Occupied P (0, 1)) (hC : Occupied P (1, 1)) :
-    ∃ Q : Fin 9 → Point, Normalizes P Q ∧ IsMaximizer Q ∧
-      minTriangleArea Q = minTriangleArea P ∧ (IsTypeII Q ∨ IsTypeIII Q) := by
-  obtain ⟨Q, hPQ, hQ⟩ := claim_adjacent_shear_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos hD hC
-  exact ⟨Q, hPQ, isMaximizer_of_normalizes hP hPQ, minTriangleArea_of_normalizes hPQ, hQ⟩
 
 end Heilbronn.Nine.BoundaryReduction

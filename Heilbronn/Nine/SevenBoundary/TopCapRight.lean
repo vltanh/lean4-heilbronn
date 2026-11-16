@@ -5,30 +5,26 @@ public import Heilbronn.Nine.SevenBoundary.TopCap
 public import Heilbronn.Common.Bernstein
 public import Heilbronn.Common.CertNotation
 
-/-! # The final side quadrilateral beside a seven-boundary exterior point (`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`)
+/-! # The final side quadrilateral beside a seven-boundary exterior point
 
-**Role.** Primary-route component of the seven-boundary exterior case. It excludes the fourth
-side quadrilateral `CDEX` and proves two standing inequalities used downstream: `b > 3/20`
-(`SEVEN_BOUNDARY_EXTERIOR_COMPLETION`, factor `l₇` and bounds (3), (5)) and `k > h`
-(`SEVEN_BOUNDARY_TOP_CAP_RADIAL` line 16, `SEVEN_BOUNDARY_ADJACENT_CAPS` §4,
-`SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION` §4, `SEVEN_BOUNDARY_EXTERIOR_COMPLETION` factor `l₂`).
+The exterior case of the seven-boundary form, as in `Heilbronn/Nine/SevenBoundary/TopCap.lean`:
+`SevenNormal a h b c d e f`, the far-cap point `X = (g,k)` (`FarCapPoint e f (g, k)`) and the
+companion point `P` inside the heptagon; `s = 7/64`. This file excludes `P` from the fourth side
+quadrilateral `CDEX` of the exterior octagon and proves two inequalities used in the rest of the
+exterior case, `b > 3/20` and `k > h`. The two inequalities and the area bound use only the seven
+anchors and `X`, and are stated for the eight-point configuration
+`sevenConfig₁ a h b c d e f (g, k)`.
 
-**Setting.** As in `Heilbronn/Nine/SevenBoundary/TopCap.lean`: `SevenNormal a h b c d e f`, the far-cap point
-`X = (g,k)` (`FarCapPoint e f (g, k)`), the companion point `P` inside the heptagon; `s = 7/64`.
-The two inequalities and the area bound use only the seven anchors and `X` (line 22) and are
-stated for the eight-point configuration `sevenConfig₁ a h b c d e f (g, k)`.
+## Main results
 
-**Results.**
-* `claim_b_gt_3_20` (7): `b > 3/20` (a degree-(2,3) Bernstein certificate on four rectangles,
-  (4)–(6));
-* `claim_k_gt_h` (10): `k > h`;
-* `mainTheorem`: the doubled area `[CDEX] = (1-c)(k-d) + (1-g)e` is below `21/40 = 24s/5 <
+* `three_div_twenty_lt_b`: `b > 3/20` (a degree-(2,3) Bernstein certificate on four boxes);
+* `h_lt_k`: `k > h`;
+* `minTriangleArea_lt_of_mem_CDEX`: the doubled area `[CDEX] = (1-c)(k-d) + (1-g)e` is below `21/40 = 24s/5 <
   2(1+√2)s`, so `P` is not in `CDEX`;
-* `claim_central_region`: with `SEVEN_BOUNDARY_TOP_CAP` Theorems 1–3, `P` lies in
-  `int conv(A,D,E,H) ∩ int conv(B,C,X,F)`.
+* `inCentralRegion_exteriorOctagon`: with `SevenBoundaryTopCap.minTriangleArea_lt_of_mem_HEXF`, `SevenBoundaryTopCap.minTriangleArea_lt_of_mem_ABCD`
+  and `SevenBoundaryTopCap.minTriangleArea_lt_of_mem_FHAB`, `P` lies in `int conv(A,D,E,H) ∩ int conv(B,C,X,F)`.
 
-Notation note: `w` is `min(1-c, 1-g)` in §1 but `s/T` in §3; `h*, e*, δ*` are scalar
-replacements, not points. Stale scope text: lines 301–303.
+Notation: `w` is `min(1-c, 1-g)` in `tcr_b_core` and `tcr_k_core`, but `s/T` in `tcr_area_uvw`.
 -/
 
 @[expose] public section
@@ -38,12 +34,13 @@ namespace Heilbronn.Nine.SevenBoundaryTopCapRight
 
 open SevenBoundary RadialCatalogue
 
-/-! ### §1. The certificate (4)–(6) for `b > 3/20` -/
+/-! ### The certificate for `b > 3/20` -/
 
 section BCert
 open Cert Cert.Expr
 
-/-- `𝒫(f, w)` of (4), in the variables `f = var 0`, `w = var 1`. -/
+/-- The polynomial `𝒫(f, w)` behind `b > 3/20` (see `tcr_P`), in the variables `f = var 0`,
+`w = var 1`. -/
 def calP : Cert.Expr :=
   (k (20 / 3) * (1 - v 0) - k (64 / 7)) * v 1 * (k (17 / 20) - v 1) * (1 - v 0 - v 1) +
     v 0 * (k (17 / 20) - v 1) * (1 - v 0 - v 1) + v 1 * (1 - v 0 - v 1) +
@@ -68,7 +65,7 @@ theorem calP_eval (x : ℕ → ℝ) : calP.eval x =
       x 1 * (17 / 20 - x 1) := by
   simp [calP]
 
-/-- `𝒫 > 0` on `[1/8, 1/2] × [7/64, 1/2]` (the Bernstein table of (6)). -/
+/-- `𝒫 > 0` on `[1/8, 1/2] × [7/64, 1/2]`, by Bernstein certificates on four boxes. -/
 theorem calP_pos {f w : ℝ} (hf1 : 1 / 8 ≤ f) (hf2 : f ≤ 1 / 2) (hw1 : 7 / 64 ≤ w)
     (hw2 : w ≤ 1 / 2) :
     0 < (20 / 3 * (1 - f) - 64 / 7) * w * (17 / 20 - w) * (1 - f - w) +
@@ -99,8 +96,8 @@ theorem calP_pos {f w : ℝ} (hf1 : 1 / 8 ≤ f) (hf2 : f ≤ 1 / 2) (hw1 : 7 / 
 
 end BCert
 
-/-- (2) of `SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`: `Φ(b, f, w) ≤ 1/s`, from the anchor bounds (1) and
-the two upper areas. -/
+/-- `Φ(b, f, w) = (1-f)/b + f/w + 1/(1-w-b) + 1/(1-w-f) ≤ 1/s`, from the lower bounds on `h` and
+`e` and the upper area bound `T((1-f)(1-h) + f(1-e)) ≥ s`. -/
 theorem tcr_phi {b f w M T h e : ℝ} (_hb : 0 < b) (hf0 : 0 ≤ f) (hf1 : f ≤ 1) (_hw : 0 < w)
     (hM : 0 < M) (hT : 0 < T) (hh : 7 / 64 / M + 7 / 64 / b ≤ h) (he : 7 / 64 / M + 7 / 64 / w ≤ e)
     (hup : 7 / 64 ≤ T * ((1 - f) * (1 - h) + f * (1 - e)))
@@ -121,7 +118,7 @@ theorem tcr_phi {b f w M T h e : ℝ} (_hb : 0 < b) (hf0 : 0 ≤ f) (hf1 : f ≤
       1 - 7 / 64 * (1 / M) - 7 / 64 * ((1 - f) / b) - 7 / 64 * (f / w) := by ring
   nlinarith
 
-/-- The replacement `b ↦ 3/20` in (2): `Φ(3/20, f, w) ≤ Φ(b, f, w)` when `b ≤ 3/20`,
+/-- The replacement `b ↦ 3/20` in `Φ`: `Φ(3/20, f, w) ≤ Φ(b, f, w)` when `b ≤ 3/20`,
 `1 - w - b ≥ 21/52` and `f ≤ 1/2`. -/
 theorem tcr_mono {b f w : ℝ} (hb : 1 / 8 < b) (hb3 : b ≤ 3 / 20) (hf1 : f ≤ 1 / 2)
     (hwb : 21 / 52 ≤ 1 - w - b) :
@@ -167,7 +164,8 @@ theorem tcr_P {f w : ℝ} (hw : 0 < w) (hw2 : w < 17 / 20) (hfw : 0 < 1 - f - w)
   rw [← e1]
   exact mul_nonpos_of_nonpos_of_nonneg (by linarith) hD.le
 
-/-- The scalar argument for `b > 3/20` (§1 of `SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`). -/
+/-- The scalar argument for `three_div_twenty_lt_b`: the costs, the bound `c ≥ b²/(b-s)` and
+`1/8 < b ≤ 3/20` are incompatible. -/
 theorem tcr_b_core {a h b c d e f g k : ℝ} (_ha : 0 < a) (_hah : a < h) (_hh : h < 1)
     (hbc : b < c) (_hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
     (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g) (_hg1 : g < 1) (_hk1 : k ≤ 1)
@@ -217,17 +215,15 @@ theorem tcr_b_core {a h b c d e f g k : ℝ} (_ha : 0 < a) (_hah : a < h) (_hh :
   have hpos := calP_pos (f := f) (w := w) (by linarith) hf hw0.le (by linarith)
   linarith
 
-/-- **Claim** (`SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-b-gt-3/20`). In the exterior case, if every
-triangle of the seven anchors and `X` has area at least `7/128`, then `b > 3/20` (7).
-`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`, lines 24–119.
-Uses: SEVEN_BOUNDARY_CAPS:eq37 (Bernstein certificate (4)–(6) on `[1/8,1/2] × [7/64,1/2]`). -/
-theorem claim_b_gt_3_20 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case, if every triangle of the seven anchors and `X` has area at least
+`7/128`, then `b > 3/20`. -/
+theorem three_div_twenty_lt_b {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k))
     (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f (g, k))) :
     3 / 20 < b := by
   have hA := hmin.trans SevenBoundaryCaps.minAnchor_of₁
   have H := SevenBoundaryCaps.anchorCosts hN.1 hA
-  obtain ⟨hb18, -, h37, -⟩ := SevenBoundaryCaps.eq37 hN hA
+  obtain ⟨hb18, -, h37, -⟩ := SevenBoundaryCaps.b_bounds_of_anchor_min hN hA
   obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
   obtain ⟨hfg, hg1, hek, hk1, hFEX⟩ := hX
   simp only [sarea] at hfg hg1 hek hk1 hFEX
@@ -243,16 +239,16 @@ theorem claim_b_gt_3_20 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e 
   exact tcr_b_core ha hah hh hbc hc hd hde he hbf hf hfg hg1 hk1 H.ABH H.ABC H.BCD H.CDE hDEX
     hHFX hEFX h37 hb18 hb3
 
-/-! ### §2. `k > h` -/
+/-! ### `k > h` -/
 
-/-- (9) of `SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`, first part: `1/(c-β) + 1/w ≥ 4/(1-β) = 80/17`. -/
+/-- With `β = 3/20`: `1/(c-β) + 1/w ≥ 4/(1-β) = 80/17` when `0 < w ≤ 1 - c`. -/
 theorem tcr_min_c {c w : ℝ} (hc : 3 / 20 < c) (hw : 0 < w) (hcw : w ≤ 1 - c) :
     80 / 17 ≤ 1 / (c - 3 / 20) + 1 / w := by
   have h1 : 0 < c - 3 / 20 := by linarith
   rw [div_add_div _ _ h1.ne' hw.ne', le_div_iff₀ (by positivity)]
   nlinarith [sq_nonneg (c - 3 / 20 - w)]
 
-/-- (9), second part: for `g ≥ 23/40`, `1/(c-β) + 1/min(1-c,1-g) ≥ 1/(g-β) + 1/(1-g)`. -/
+/-- With `β = 3/20` and `g ≥ 23/40`: `1/(c-β) + 1/min(1-c,1-g) ≥ 1/(g-β) + 1/(1-g)`. -/
 theorem tcr_min_c' {c g : ℝ} (hc : 3 / 20 < c) (hc1 : c < 1) (hg : 23 / 40 ≤ g) (hg1 : g < 1) :
     1 / (g - 3 / 20) + 1 / (1 - g) ≤ 1 / (c - 3 / 20) + 1 / min (1 - c) (1 - g) := by
   have hg0 : 0 < g - 3 / 20 := by linarith
@@ -269,7 +265,7 @@ theorem tcr_min_c' {c g : ℝ} (hc : 3 / 20 < c) (hc1 : c < 1) (hg : 23 / 40 ≤
     nlinarith [mul_nonneg (sub_nonneg.2 hcg) (show 0 ≤ (c - 3 / 20) * (g - 3 / 20) -
       (1 - c) * (1 - g) by nlinarith), mul_pos hc0 hg0, mul_pos h1c h1g]
 
-/-- The two univariate contradictions of §2. -/
+/-- The univariate bound for `3/20 < g ≤ 23/40` (`tcr_g_large` is the case `g ≥ 23/40`). -/
 theorem tcr_g_small {g : ℝ} (hg0 : 3 / 20 < g) (hg : g ≤ 23 / 40) :
     64 / 7 < 1 / g + 1 / (g * (g - 3 / 20)) + 80 / 17 := by
   have h1 : 40 / 23 ≤ 1 / g := by rw [le_div_iff₀ (by linarith)]; linarith
@@ -302,7 +298,7 @@ theorem tcr_g_large {g : ℝ} (hg : 23 / 40 ≤ g) (hg1 : g < 1) :
   rw [e1] at this
   nlinarith
 
-/-- The final contradiction of §2 from (8). -/
+/-- The final contradiction for `h_lt_k`: the bound of `tcr_k_sum` fails when `b > 3/20`. -/
 theorem tcr_k_final {b c g w : ℝ} (hbc : b < c) (hc : c < 1) (hg1 : g < 1) (hb3 : 3 / 20 < b)
     (hgb : b < g) (hwpos : 0 < w) (hw1 : w ≤ 1 - c) (hw : w = min (1 - c) (1 - g))
     (hsum : 1 / g + 1 / (g * (g - b)) + 1 / (c - b) + 1 / w ≤ 64 / 7) : False := by
@@ -320,7 +316,7 @@ theorem tcr_k_final {b c g w : ℝ} (hbc : b < c) (hc : c < 1) (hg1 : g < 1) (hb
     rw [← hw] at h2
     linarith
 
-/-- (8) of `SEVEN_BOUNDARY_TOP_CAP_RIGHT.md` under `k ≤ h`. -/
+/-- Under `k ≤ h`: `1/g + 1/(g(g-b)) + 1/(c-b) + 1/w ≤ 64/7`. -/
 theorem tcr_k_sum {a h b c d e f g k : ℝ} (_hah : a < h) (hh : h < 1) (hbc : b < c)
     (_hde : d < e) (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g)
     (hBCD : 7 / 64 ≤ d * (c - b)) (_hR : 0 < e - d) {w : ℝ} (hwpos : 0 < w)
@@ -355,7 +351,7 @@ theorem tcr_k_sum {a h b c d e f g k : ℝ} (_hah : a < h) (hh : h < 1) (hbc : b
       7 / 64 * (1 / g + 1 / (g * (g - b)) + 1 / (c - b) + 1 / w) := by ring
   linarith
 
-/-- The scalar argument for `k > h` (§2 of `SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`). -/
+/-- The scalar argument for `h_lt_k`: the costs, `b > 3/20` and `k ≤ h` are incompatible. -/
 theorem tcr_k_core {a h b c d e f g k : ℝ} (hah : a < h) (hh : h < 1) (hbc : b < c) (hc : c < 1)
     (hde : d < e) (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g) (hg1 : g < 1)
     (hBCD : 7 / 64 ≤ d * (c - b))
@@ -375,16 +371,13 @@ theorem tcr_k_core {a h b c d e f g k : ℝ} (hah : a < h) (hh : h < 1) (hbc : b
     (by linarith) hkh
   exact tcr_k_final hbc hc hg1 hb3 (by linarith) hwpos hw1 hw hsum
 
-/-- **Claim** (`SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-k-gt-h`). In the exterior case, if every
-triangle of the seven anchors and `X` has area at least `7/128`, then the exterior point is higher
-than `H`: `k > h` (10).
-`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`, lines 122–166.
-Uses: SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-b-gt-3/20. -/
-theorem claim_k_gt_h {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case, if every triangle of the seven anchors and `X` has area at least
+`7/128`, then the exterior point is higher than `H`: `k > h`. -/
+theorem h_lt_k {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k))
     (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f (g, k))) :
     h < k := by
-  have hb3 := claim_b_gt_3_20 hN hX hmin
+  have hb3 := three_div_twenty_lt_b hN hX hmin
   have hA := hmin.trans SevenBoundaryCaps.minAnchor_of₁
   have H := SevenBoundaryCaps.anchorCosts hN.1 hA
   obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
@@ -401,10 +394,11 @@ theorem claim_k_gt_h {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
   by_contra hkh; push Not at hkh
   exact tcr_k_core hah hh hbc hc hde hbf hf hfg hg1 H.BCD H.CDE hDEX hHFX hEFX hb3 hkh
 
-/-! ### §3–4. The area of `CDEX` -/
+/-! ### The area of `CDEX` -/
 
-/-- The scalar bound (3)–(4) of `SEVEN_BOUNDARY_TOP_CAP.md` in the strict form used by (11):
-the right side of (3) is below `24s/5 = 21/40` (adapted from `EightBoundary.scalar_bound_core`). -/
+/-- The quadrilateral bound of `SevenBoundaryTopCap.scalar3` in strict form: when `XZ ≥ 4`,
+`2 - sZ - s(2-sZ)/(1-sZ) - X + 2s < 24s/5 = 21/40` (adapted from
+`EightBoundary.scalar_bound_core`). -/
 theorem scalar_lt_2140 {X Z : ℝ} (hX : 0 < X) (_hZ : 0 < Z) (hsZ : 7 / 64 * Z < 1)
     (hXZ : 4 ≤ X * Z) :
     2 - 7 / 64 * Z - 7 / 64 * (2 - 7 / 64 * Z) / (1 - 7 / 64 * Z) - X + 2 * (7 / 64) < 21 / 40 := by
@@ -439,11 +433,11 @@ theorem scalar_lt_2140 {X Z : ℝ} (hX : 0 < X) (_hZ : 0 < Z) (hsZ : 7 / 64 * Z 
 section RCert
 open Cert Cert.Expr
 
-/-- `-(10240u³ - 9120u² + 1939u - 245)`, the sign factor of `C₁` in (15). -/
+/-- `-(10240u³ - 9120u² + 1939u - 245)`, the sign factor of the coefficient `C₁` of `tcr_R`. -/
 def negC1poly : Cert.Expr := k 245 - v 0 * (k 1939 + v 0 * (k 10240 * v 0 - k 9120))
-/-- `-(40960u³ - 43200u² + 5789u - 245)`, the sign factor of `C₂` in (15). -/
+/-- `-(40960u³ - 43200u² + 5789u - 245)`, the sign factor of the coefficient `C₂` of `tcr_R`. -/
 def negC2poly : Cert.Expr := k 245 - v 0 * (k 5789 + v 0 * (k 40960 * v 0 - k 43200))
-/-- The sextic factor of `D = C₁² - 4C₀C₂` in (16). -/
+/-- The sextic factor of the discriminant `C₁² - 4C₀C₂` of `tcr_R`. -/
 def sextic : Cert.Expr :=
   (((((k 655360 * v 0 - k 2396160) * v 0 + k 2778528) * v 0 - k 1205910) * v 0 + k 123249) *
     v 0 + k 28126) * v 0 - k 3430
@@ -481,7 +475,7 @@ theorem sextic_pos {u : ℝ} (h1 : 13 / 20 ≤ u) (h2 : u ≤ 35 / 48) :
 
 end RCert
 
-/-- (15)–(16): `ℛ(u, z) = C₀ + C₁z + C₂z² + C₃z³ > 0` for `7/32 ≤ u ≤ 35/48`, `z ≥ 0`. -/
+/-- `ℛ(u, z) = C₀ + C₁z + C₂z² + C₃z³ > 0` for `7/32 ≤ u ≤ 35/48` and `z ≥ 0`. -/
 theorem tcr_R {u z : ℝ} (hu1 : 7 / 32 ≤ u) (hu2 : u ≤ 35 / 48) (hz : 0 ≤ z) :
     0 < (1 - u) * (320 * u ^ 3 - 133 * u ^ 2 - 82 * u + 35) / 320 +
       (u - 1) * (10240 * u ^ 3 - 9120 * u ^ 2 + 1939 * u - 245) / 1120 * z -
@@ -529,8 +523,8 @@ theorem tcr_R {u z : ℝ} (hu1 : 7 / 32 ≤ u) (hu2 : u ≤ 35 / 48) (hz : 0 ≤
       rw [hC]
     linarith
 
-/-- The inward case `δ_* > 0` of §3: with `u = s/b`, `v = s/M`, `w = s/T`, `z = v + w - (1-u) > 0`
-and `wδ ≥ uz`, the bound `G(δ)` of `Q` is below `21/40` ((13)–(15)). -/
+/-- The case `z = v + w - (1-u) > 0` of `tcr_area_uvw`, with `u = s/b`, `v = s/M`, `w = s/T`:
+if `wδ ≥ uz`, the bound `G(δ)` of `Q` is below `21/40`. -/
 theorem tcr_area_B {u v w δ Q : ℝ} (hu1 : 7 / 32 ≤ u) (hu2 : u ≤ 35 / 48) (hv : 0 < v)
     (hw : 0 < w) (hz : 0 < v + w - 1 + u) (hδ : u * (v + w - 1 + u) ≤ w * δ)
     (h1c : 0 ≤ 1 - 7 / 64 / u - 7 / 64 / v) (h1g : 0 ≤ 1 - 7 / 64 / u - 7 / 64 / w)
@@ -554,13 +548,13 @@ theorem tcr_area_B {u v w δ Q : ℝ} (hu1 : 7 / 32 ≤ u) (hu2 : u ≤ 35 / 48)
     have k1 := mul_le_mul_of_nonneg_left hδ' h1c
     have k2 := mul_le_mul_of_nonneg_left hδ' (mul_nonneg h1g (mul_nonneg h1b hw.le))
     nlinarith
-  -- the identity (13)
+  -- `G` at `δ = uz/w`, as a function of `V = v + w`
   have e13 : (1 - 7 / 64 / u - 7 / 64 / v) * (1 - u * z / w - v) +
       (1 - 7 / 64 / u - 7 / 64 / w) * (1 - w - (1 - 7 / 64 / u) * (u * z / w) * w / (7 / 64)) =
       (7 / 64 - 7 / 64 / u + 2 * u + u * (1 - u) / (7 / 64)) - (u / (7 / 64) - 1) * V -
         7 / 64 * (1 - u) * (V + u) / (v * w) := by
     rw [hzdef, hV]; field_simp; ring
-  -- (14): `vw ≤ V²/4`
+  -- `vw ≤ V²/4`
   have hV0 : 0 < V := by positivity
   have h14 : 4 * (7 / 64) * (1 - u) * (V + u) / V ^ 2 ≤ 7 / 64 * (1 - u) * (V + u) / (v * w) := by
     rw [div_le_div_iff₀ (by positivity) (by positivity)]
@@ -569,7 +563,7 @@ theorem tcr_area_B {u v w δ Q : ℝ} (hu1 : 7 / 32 ≤ u) (hu2 : u ≤ 35 / 48)
       have : 0 ≤ 1 - u := by linarith
       positivity
     nlinarith [mul_le_mul_of_nonneg_left this h0]
-  -- (15): `ℛ(u, z) > 0`
+  -- `ℛ(u, z) > 0`
   have hR := tcr_R hu1 hu2 hz.le
   have eR : (1 - u) * (320 * u ^ 3 - 133 * u ^ 2 - 82 * u + 35) / 320 +
       (u - 1) * (10240 * u ^ 3 - 9120 * u ^ 2 + 1939 * u - 245) / 1120 * z -
@@ -592,7 +586,8 @@ theorem tcr_area_B {u v w δ Q : ℝ} (hu1 : 7 / 32 ≤ u) (hu2 : u ≤ 35 / 48)
     linarith
   linarith
 
-/-- The case `δ_* = 0` of §3, (11): the scalar bound (3) with gaps `M = s/v`, `T = s/w`. -/
+/-- The case `w ≤ 1 - u - v` of `tcr_area_uvw`: the bound `SevenBoundaryTopCap.scalar3` with gaps
+`s/v`, `s/w`, then `scalar_lt_2140`. -/
 theorem tcr_case_A {u v w d e k : ℝ} (hu0 : 0 < u) (hv0 : 0 < v) (hw0 : 0 < w)
     (hU : u ≤ 1 - v - w) (hdv : v ≤ d) (he2 : e ≤ 1 - w) (hk1 : k ≤ 1)
     (h1c : 0 ≤ 1 - 7 / 64 / u - 7 / 64 / v) (h1g : 0 ≤ 1 - 7 / 64 / u - 7 / 64 / w) :
@@ -617,7 +612,7 @@ theorem tcr_case_A {u v w d e k : ℝ} (hu0 : 0 < u) (hv0 : 0 < v) (hw0 : 0 < w)
     (SevenBoundaryTopCap.four_le_mul_inv hL hR)
   linarith
 
-/-- §3 in the variables `u = s/b`, `v = s/M`, `w = s/T`. -/
+/-- The area bound `[CDEX] < 21/40` in the variables `u = s/b`, `v = s/M`, `w = s/T`. -/
 theorem tcr_area_uvw {u v w d e k : ℝ} (hu1 : 7 / 32 ≤ u) (hu2 : u ≤ 35 / 48) (hv0 : 0 < v)
     (hw0 : 0 < w) (hdv : v ≤ d) (hk1 : k ≤ 1)
     (hF4 : 7 / 64 ≤ 7 / 64 / w * (1 - u - v) + 7 / 64 / u * (1 - k))
@@ -651,7 +646,7 @@ theorem tcr_area_uvw {u v w d e k : ℝ} (hu1 : 7 / 32 ≤ u) (hu2 : u ≤ 35 / 
       nlinarith
     exact tcr_area_B hu1 hu2 hv0 hw0 hz hδ h1c h1g hQG
 
-/-- The reductions of §3 in the coordinates: `Q = (1-c)(k-d) + (1-g)e < 21/40`. -/
+/-- The area bound in the coordinates: `Q = (1-c)(k-d) + (1-g)e < 21/40`. -/
 theorem tcr_area_core {a h b c d e f g k : ℝ} (_hah : a < h) (hbc : b < c) (hc : c < 1)
     (hbf : b ≤ f) (hf : f ≤ 1 / 2) (hfg : f < g) (hg1 : g < 1)
     (hek : e < k) (hk1 : k ≤ 1) (hkh : h < k) (hb3 : 3 / 20 < b)
@@ -708,14 +703,11 @@ theorem tcr_area_core {a h b c d e f g k : ℝ} (_hah : a < h) (hbc : b < c) (hc
   rw [e1, e2] at key
   exact key
 
-/-- **Theorem** (`SEVEN_BOUNDARY_TOP_CAP_RIGHT:Theorem`). In the exterior case: if every triangle
-of the seven anchors and `X` has area at least `7/128`, the doubled area of the convex
-quadrilateral `CDEX`, `[CDE] + [CEX] = (1-c)(k-d) + (1-g)e`, is strictly below `21/40`;
-consequently `P` does not lie in the closed quadrilateral `CDEX` at minimum area at least `7/128`.
-`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`, lines 14–22, 169–290.
-Uses: SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-b-gt-3/20, SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-k-gt-h,
-EIGHT_BOUNDARY:claim-scalar-bound, EIGHT_BOUNDARY:Lemma3. -/
-theorem mainTheorem {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case: if every triangle of the seven anchors and `X` has area at least
+`7/128`, the doubled area of the convex quadrilateral `CDEX`,
+`[CDE] + [CEX] = (1-c)(k-d) + (1-g)e`, is strictly below `21/40`; consequently `P` does not lie
+in the closed quadrilateral `CDEX` at minimum area at least `7/128`. -/
+theorem minTriangleArea_lt_of_mem_CDEX {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) :
     (7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f (g, k)) →
         sarea (c, 0) (1, d) (1, e) + sarea (c, 0) (1, e) (g, k) < 21 / 40) ∧
@@ -725,8 +717,8 @@ theorem mainTheorem {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
   have part1 : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f (g, k)) →
       sarea (c, 0) (1, d) (1, e) + sarea (c, 0) (1, e) (g, k) < 21 / 40 := by
     intro hmin
-    have hb3 := claim_b_gt_3_20 hN hX hmin
-    have hkh := claim_k_gt_h hN hX hmin
+    have hb3 := three_div_twenty_lt_b hN hX hmin
+    have hkh := h_lt_k hN hX hmin
     have hA := hmin.trans SevenBoundaryCaps.minAnchor_of₁
     have H := SevenBoundaryCaps.anchorCosts hN.1 hA
     obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
@@ -761,17 +753,14 @@ theorem mainTheorem {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     sarea (c, 0) (1, e) (g, k) at hQ'
   linarith
 
-/-- **Claim** (`SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-central-region`). In the exterior case at
-minimum area at least `7/128`, `P` lies strictly inside both `conv(A,D,E,H)` and `conv(B,C,X,F)`:
-the central region of the exterior octagon `A, B, C, D, E, X, F, H`.
-`docs/proof/nine/SEVEN_BOUNDARY_TOP_CAP_RIGHT.md`, lines 292–300.
-Uses: SEVEN_BOUNDARY_TOP_CAP_RIGHT:Theorem, SEVEN_BOUNDARY_TOP_CAP:Theorem1,
-SEVEN_BOUNDARY_TOP_CAP:Theorem2, SEVEN_BOUNDARY_TOP_CAP:Theorem3. -/
-theorem claim_central_region {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case at minimum area at least `7/128`, `P` lies strictly inside both
+`conv(A,D,E,H)` and `conv(B,C,X,F)`: the central region of the exterior octagon
+`A, B, C, D, E, X, F, H`. -/
+theorem inCentralRegion_exteriorOctagon {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P)
     (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f (g, k) P)) :
     InCentralRegion (exteriorOctagon a h b c d e f (g, k)) P := by
-  obtain ⟨hHE, hAD, hBF⟩ := SevenBoundaryTopCap.claim_partial_central hN hX hP hmin
+  obtain ⟨hHE, hAD, hBF⟩ := SevenBoundaryTopCap.partial_central_signs hN hX hP hmin
   have hN' := hN
   obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN'
   have hX' := hX
@@ -799,7 +788,7 @@ theorem claim_central_region {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c
   have hCX : 0 < sarea (c, 0) (g, k) P := by
     by_contra hn; push Not at hn
     have hXC : 0 ≤ sarea (g, k) (c, 0) P := by rw [sarea_swap₁₂]; linarith
-    have := (mainTheorem hN hX).2 P hP
+    have := (minTriangleArea_lt_of_mem_CDEX hN hX).2 P hP
       (SevenBoundaryTopCap.inClosedPolygon_four hCD.le hDE.le hEXP.le hXC)
     linarith
   refine ⟨?_, ?_⟩

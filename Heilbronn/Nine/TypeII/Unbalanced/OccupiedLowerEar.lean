@@ -6,45 +6,44 @@ public import Heilbronn.Nine.TypeII.Unbalanced.EarBernstein
 public import Heilbronn.Nine.TypeII.Unbalanced.ChainBasic
 
 /-! # The lower ear is empty in the final unbalanced Type-II placement
-(`docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`)
 
-**Role.** Primary route: step 2 of `UNBALANCED_FINAL_LOWER_WEDGE:claim-chain` (§5, line 276).
-The proof ends with a 1540-coefficient Bernstein certificate in the variables `b, r, u`.
+`Q_not_inside_EBR` is the second step of `UnbalancedFinalLowerWedge.false_of_oneUpperSetting`. The proof ends with a
+1540-coefficient Bernstein certificate in the variables `b, r, u`.
 
-**Setting** (lines 5-34, `OccSetting`): `Row123 l b P Q R S T`, minimum area at least `A₀`, the
+**Setting** (`OccSetting`): `Row123 l b P Q R S T`, minimum area at least `A₀`, the
 right hull the quadrilateral `B, R, S, C` with `T` inside, in support cell II; `P` above `CE`,
-`Q` below `CE`; and (`UNBALANCED_ONE_UPPER_RADIAL:Theorem1`) `P, T` above `DR`, `Q` below `DR`.
+`Q` below `CE`; and `P, T` above `DR`, `Q` below `DR` (`UnbalancedOneUpperRadial.P_T_above_DR_Q_below`).
 The doubled threshold is `s = 8/73 < 2A₀`. Write `R = (r, u)`, `S = (k, t)`, `w = 1 - b`,
 `L = 1 - r`, `λ = 1 - q`, `c = 1 - wq`, `δ = [EBR] = bu + λ(r - b)`, `g = [BRC] = r - b - wu`,
-`A = [EBT]`, `Z = [BRT]`, `M = g - sw/L`. Everything from §1 on assumes, for a contradiction,
-`Q ∈ int EBR` (hypothesis `hQ`).
+`A = [EBT]`, `Z = [BRT]`, `M = g - sw/L`. Every claim except `occ_parameter_bounds` assumes, for a
+contradiction, `Q ∈ int EBR` (hypothesis `hQ`).
 
-**The relaxation in q** (§2). From (3) on, `q` is replaced by the endpoint
+**The relaxation in q.** From `stress_nonneg_at_q0` on, `q` is replaced by the endpoint
 `q₀ = max(3s, s/b)` (`q0Fn`) in the scalar conditions; this is not a deformation of `E`.
-Accordingly the quantities of (6)-(18) are written as functions of `(q, b, r, u)` and evaluated
+Accordingly the scalar quantities are written as functions of `(q, b, r, u)` and evaluated
 at `q₀`: `deltaFn` (`δ`), `aFn` (`A`), `gFn` (`g`), `cFn` (`c`), `mFn` (`M`), `fB, fR, fC`
-(`F_B, F_R, F_C` of (15)), `k1Fn, k2Fn` (`K₁, K₂` of (17)), `e0Fn` (`E₀`), `h1Fn, h2Fn`
-(`H₁, H₂` of (18)). The branch polynomials `h1Minus, h2Minus` (`b ∈ [1/5, 1/3]`, `q = s/b`) and
-`h1Plus, h2Plus` (`b ∈ [1/3, 4/11]`, `q = 3s`) are `H₁, H₂` in the unit coordinates of (19):
-`b = b₋ + (b₊ - b₋)x`, `r = 7/10 + y/5`, `u = (3/16)z`. They are written with the divisions of
-(1), (11), (3); on the boxes the denominators `b`, `1 - r` are nonzero and they equal the
-polynomials of degrees `(5,4,3)`, `(6,5,4)`, `(6,4,3)`, `(6,5,4)` of the table after (19).
+(the stress values `F_B, F_R, F_C`), `k1Fn, k2Fn` (`K₁, K₂`), `e0Fn` (`E₀`), `h1Fn, h2Fn`
+(`H₁, H₂`). On the branches `b ∈ [1/5, 1/3]`, `q = s/b` (`-`) and `b ∈ [1/3, 4/11]`, `q = 3s`
+(`+`), `H₁, H₂` are certified negative by the structural polynomials of
+`Heilbronn.Nine.UnbalancedEarBernstein`, whose boxes are given in the unit coordinates
+`b = b₋ + (b₊ - b₋)x`, `r = 7/10 + y/5`, `u = (3/16)z`; there the denominators `b`, `1 - r` are
+nonzero.
 
 **Results.**
-* `claim_stress` (2): `F = (δ - 2s)A - s(δ + Z) ≥ 0` and `A > s`.
-* `claim_lower_q` (3)-(4): the system remains valid at `q₀`.
-* `claim_basic` (5)-(6): `s < b < 4/11`, `1 - u ≥ Ks`, `u < 3/16`, `gL ≥ sw`,
+* `stress_nonneg_of_Q_inside_EBR`: `F = (δ - 2s)A - s(δ + Z) ≥ 0` and `A > s`.
+* `stress_nonneg_at_q0`: the system remains valid at `q₀`.
+* `occ_parameter_bounds`: `s < b < 4/11`, `1 - u ≥ Ks`, `u < 3/16`, `gL ≥ sw`,
   `δ ≤ c - 2√(cd)`.
-* `claim_b` (7)-(8): `1/5 < b < 4/11`; `claim_r` (9): `7/10 < r < 9/10`;
-  `claim_delta` (10): `3s ≤ δ < 4s`; `claim_M` (11)-(12): `M < s`.
-* `claim_MW` (13)-(14): `MW ≥ sV`, `M > 0`, `W > V`.
-* `claim_K` (15)-(17): `WF_B + VF_R + ZF_C ≥ 0`, `F_C > F_B`, `M(g - 2s) ≥ s²`, `K₁ ≥ 0` or
-  `K₂ ≥ 0`, hence (18) `H₁ ≥ 0` or `H₂ ≥ 0`.
-* `bernstein_minus_H1_row1` … `bernstein_plus_H2`: the eleven rows of the certificate table;
-  `claim_bernstein` (18)-(20): `H₁, H₂ < 0` on both branch boxes.
-* `theorem1`: `Q ∉ int EBR`; `EBR` contains no further actual point; `Q` is above `ER`.
+* `b_bounds_of_Q_inside_EBR`: `1/5 < b < 4/11`; `r_bounds_of_Q_inside_EBR`: `7/10 < r < 9/10`;
+  `deltaFn_bounds`: `3s ≤ δ < 4s`; `mFn_lt`: `M < s`.
+* `s_mul_V_le_mFn_mul_W`: `MW ≥ sV`, `M > 0`, `W > V`.
+* `h1Fn_nonneg_or_h2Fn_nonneg`: `WF_B + VF_R + ZF_C ≥ 0`, `F_C > F_B`, `M(g - 2s) ≥ s²`, `K₁ ≥ 0` or
+  `K₂ ≥ 0`, hence `H₁ ≥ 0` or `H₂ ≥ 0`.
+* `bernstein_minus_H1_row1` … `bernstein_plus_H2`: the eleven boxes of the certificate;
+  `h1Fn_neg_and_h2Fn_neg`: `H₁, H₂ < 0` on both branch boxes.
+* `Q_not_inside_EBR`: `Q ∉ int EBR`; `EBR` contains no further actual point; `Q` is above `ER`.
 
-Implicit in the manuscript: `claim_basic` does not use `Q ∈ int EBR` and is stated without it.
+`occ_parameter_bounds` does not use `Q ∈ int EBR` and is stated without it.
 -/
 
 @[expose] public section
@@ -56,8 +55,8 @@ open UnbalancedRightHull UnbalancedChain
 
 variable {l b : ℝ} {P Q R S T : Point}
 
-/-- The standing setting of the note: the final one-upper placement of
-UNBALANCED_ONE_UPPER_RADIAL:Theorem1 (cell II, `P` above `CE` and `DR`, `Q` below both, `T`
+/-- The standing setting: the final one-upper placement given by
+`UnbalancedOneUpperRadial.P_T_above_DR_Q_below` (cell II, `P` above `CE` and `DR`, `Q` below both, `T`
 above `DR`), minimum area at least `A₀`. -/
 structure OccSetting (l b : ℝ) (P Q R S T : Point) : Prop where
   row : Row123 l b P Q R S T
@@ -72,7 +71,7 @@ structure OccSetting (l b : ℝ) (P Q R S T : Point) : Prop where
 
 /-! ### The scalar quantities as functions of `q` -/
 
-/-- The endpoint `q₀ = max(3s, s/b)` of (3). -/
+/-- The endpoint `q₀ = max(3s, s/b)`, a lower bound for `q` (`stress_nonneg_at_q0`). -/
 def q0Fn (s b : ℝ) : ℝ := max (3 * s) (s / b)
 
 /-- `δ = [EBR] = bu + (1 - q)(r - b)`, at the parameter `q`. -/
@@ -87,62 +86,38 @@ def gFn (b r u : ℝ) : ℝ := r - b - (1 - b) * u
 /-- `c = 1 - (1 - b)q`. -/
 def cFn (q b : ℝ) : ℝ := 1 - (1 - b) * q
 
-/-- `M = g - sw/L`, the right-hull margin of §4. -/
+/-- `M = g - sw/L`, the right-hull margin. -/
 def mFn (s b r u : ℝ) : ℝ := gFn b r u - s * (1 - b) / (1 - r)
 
-/-- `F_B = -sδ`, the value of the stress at `B` (15). -/
+/-- `F_B = -sδ`, the value of the stress at `B`. -/
 def fB (s q b r u : ℝ) : ℝ := -s * deltaFn q b r u
 
-/-- `F_R = δ(δ - 3s)`, the value of the stress at `R` (15). -/
+/-- `F_R = δ(δ - 3s)`, the value of the stress at `R`. -/
 def fR (s q b r u : ℝ) : ℝ := deltaFn q b r u * (deltaFn q b r u - 3 * s)
 
-/-- `F_C = (δ - 2s)c - s(δ + g)`, the value of the stress at `C` (15). -/
+/-- `F_C = (δ - 2s)c - s(δ + g)`, the value of the stress at `C`. -/
 def fC (s q b r u : ℝ) : ℝ :=
   (deltaFn q b r u - 2 * s) * cFn q b - s * (deltaFn q b r u + gFn b r u)
 
-/-- `K₁ = {M(g - s) - s²}F_C + sMF_R + s²F_B`, (17). -/
+/-- `K₁ = {M(g - s) - s²}F_C + sMF_R + s²F_B`. -/
 def k1Fn (s q b r u : ℝ) : ℝ :=
   (mFn s b r u * (gFn b r u - s) - s ^ 2) * fC s q b r u + s * mFn s b r u * fR s q b r u +
     s ^ 2 * fB s q b r u
 
-/-- `K₂ = (g - s)(sF_B + MF_R) + s(M + s)F_C`, (17). -/
+/-- `K₂ = (g - s)(sF_B + MF_R) + s(M + s)F_C`. -/
 def k2Fn (s q b r u : ℝ) : ℝ :=
   (gFn b r u - s) * (s * fB s q b r u + mFn s b r u * fR s q b r u) +
     s * (mFn s b r u + s) * fC s q b r u
 
-/-- `E₀ = (g - 2s)(gL - sw) - s²L`, (18). -/
+/-- `E₀ = (g - 2s)(gL - sw) - s²L`. -/
 def e0Fn (s b r u : ℝ) : ℝ :=
   (gFn b r u - 2 * s) * (gFn b r u * (1 - r) - s * (1 - b)) - s ^ 2 * (1 - r)
 
-/-- `H₁ = Lb²K₁ + (3/1024)E₀`, (18). -/
+/-- `H₁ = Lb²K₁ + (3/1024)E₀`. -/
 def h1Fn (s q b r u : ℝ) : ℝ := (1 - r) * b ^ 2 * k1Fn s q b r u + 3 / 1024 * e0Fn s b r u
 
-/-- `H₂ = Lb²K₂`, (18). -/
+/-- `H₂ = Lb²K₂`. -/
 def h2Fn (s q b r u : ℝ) : ℝ := (1 - r) * b ^ 2 * k2Fn s q b r u
-
-/-- Branch `-` of (19): `b = 1/5 + (1/3 - 1/5)x`. -/
-def bMinus (x : ℝ) : ℝ := 1 / 5 + (1 / 3 - 1 / 5) * x
-
-/-- Branch `+` of (19): `b = 1/3 + (4/11 - 1/3)x`. -/
-def bPlus (x : ℝ) : ℝ := 1 / 3 + (4 / 11 - 1 / 3) * x
-
-/-- The substitution (19) for `r`: `r = 7/10 + y/5`. -/
-def rOf (y : ℝ) : ℝ := 7 / 10 + y / 5
-
-/-- The substitution (19) for `u`: `u = (3/16)z`. -/
-def uOf (z : ℝ) : ℝ := 3 / 16 * z
-
-/-- `H₁` on branch `-` (`q = s/b`, `s = 8/73`) in the unit coordinates of (19). -/
-def h1Minus (x y z : ℝ) : ℝ := h1Fn (8 / 73) (8 / 73 / bMinus x) (bMinus x) (rOf y) (uOf z)
-
-/-- `H₂` on branch `-` (`q = s/b`, `s = 8/73`) in the unit coordinates of (19). -/
-def h2Minus (x y z : ℝ) : ℝ := h2Fn (8 / 73) (8 / 73 / bMinus x) (bMinus x) (rOf y) (uOf z)
-
-/-- `H₁` on branch `+` (`q = 3s`, `s = 8/73`) in the unit coordinates of (19). -/
-def h1Plus (x y z : ℝ) : ℝ := h1Fn (8 / 73) (3 * (8 / 73)) (bPlus x) (rOf y) (uOf z)
-
-/-- `H₂` on branch `+` (`q = 3s`, `s = 8/73`) in the unit coordinates of (19). -/
-def h2Plus (x y z : ℝ) : ℝ := h2Fn (8 / 73) (3 * (8 / 73)) (bPlus x) (rOf y) (uOf z)
 
 /-! ### The eliminations -/
 
@@ -153,18 +128,16 @@ theorem occ_facts (h : OccSetting l b P Q R S T) :
       S.2 < 1 ∧ b < T.1 ∧ T.2 < 1 ∧ 0 ≤ T.2 ∧ T.1 ≤ 1 := by
   have hm : (8 / 73 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by
     linarith [s_le_A₀.trans h.min]
-  obtain ⟨o1, o2, o3, o4, o5, o6, o7⟩ := UnbalancedCellI.claim_order h.row h.quad
+  obtain ⟨o1, o2, o3, o4, o5, o6, o7⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
   obtain ⟨t1, -, t3, t4, t5⟩ :=
     right_facts h.row.b_pos (by linarith [h.row.b_le]) h.row.T_mem h.row.T_right
   exact ⟨hm, h.row.b_pos, h.row.b_le, h.row.l_pos, h.row.l_lt, o1, o2, o3, o4, o5, o6, o7, t1, t3,
     t4, t5⟩
 
-
-/-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-stress`), equation (2). If `Q ∈ int EBR`
+/-- If `Q ∈ int EBR`
 (counterclockwise `E, B, R`), then `δ ≥ 3s`, `Z = [BRT] ≥ s`, `[BTQ] ≥ s`,
-`F = (δ - 2s)A - s(δ + Z) ≥ 0` and `A > s` (`s = 8/73`).
-`docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`, lines 43-77. -/
-theorem claim_stress (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
+`F = (δ - 2s)A - s(δ + Z) ≥ 0` and `A > s` (`s = 8/73`). -/
+theorem stress_nonneg_of_Q_inside_EBR (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
     let s : ℝ := 8 / 73
     let δ := sarea (ptE l) (ptB b) R
     let A := sarea (ptE l) (ptB b) T
@@ -208,12 +181,11 @@ theorem claim_stress (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (
   nlinarith [mul_le_mul_of_nonneg_left hA (by linarith : (0 : ℝ) ≤ sarea (ptE l) (ptB b) R -
     2 * (8 / 73))]
 
-/-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-lower-q`), equations (3)-(4). `bq ≥ s` and
+/-- `bq ≥ s` and
 `q ≥ 3s` (`DCE` contains `P`), so `q ≥ q₀ = max(3s, s/b)` (`= s/b` for `b ≤ 1/3`, `= 3s` for
-`b ≥ 1/3`), and the scalar conditions `δ ≥ 3s`, `F ≥ 0` of (2) remain valid with `q` replaced
-by `q₀` (`∂F/∂q < 0`). `docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`, lines 79-109.
-Uses: UNBALANCED_OCCUPIED_LOWER_EAR:claim-stress. -/
-theorem claim_lower_q (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
+`b ≥ 1/3`), and the scalar conditions `δ ≥ 3s`, `F ≥ 0` of `stress_nonneg_of_Q_inside_EBR` remain valid with `q`
+replaced by `q₀` (`∂F/∂q < 0`). -/
+theorem stress_nonneg_at_q0 (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
     let s : ℝ := 8 / 73
     let q₀ := q0Fn s b
     s ≤ b * (1 - l) ∧ 3 * s ≤ 1 - l ∧ q₀ ≤ 1 - l ∧
@@ -223,7 +195,7 @@ theorem claim_lower_q (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) 
         s * (deltaFn q₀ b R.1 R.2 + sarea (ptB b) R T) := by
   intro s q₀
   obtain ⟨hm, hb, hb2, hl, hl1, -, hbr, -, -, -, -, -, hTx, -, -, -⟩ := occ_facts h
-  obtain ⟨hδ3, hZ, -, hF, hA⟩ := claim_stress h hQ
+  obtain ⟨hδ3, hZ, -, hF, hA⟩ := stress_nonneg_of_Q_inside_EBR h hQ
   have hDEB : 8 / 73 ≤ b * (1 - l) := TypeII.s_le_DEB (row_data h.row) hm
   have hq3 : 3 * (8 / 73) ≤ 1 - l := by
     have hPx := (central_facts hb (by linarith) h.row.P_central)
@@ -262,7 +234,7 @@ theorem claim_lower_q (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) 
       deltaFn (1 - l) b R.1 R.2 - 2 * (8 / 73)) (sub_nonneg.2 hTx.le)),
       mul_nonneg (mul_nonneg hΔ hΔ) (mul_nonneg (sub_nonneg.2 hbr.le) (sub_nonneg.2 hTx.le))]
 
-/-- The ear elimination (6) in cleared form: from `gL ≥ sw`,
+/-- The ear elimination in cleared form: from `gL ≥ sw`,
 `wLδ ≤ wLc - L²c - bsw` at every `q` (`δ = bu + (1-q)(r-b)`, `c = 1 - wq`). -/
 theorem ear_poly {s b r u q : ℝ} (hb : 0 ≤ b)
     (hgL : s * (1 - b) ≤ (r - b - (1 - b) * u) * (1 - r)) :
@@ -270,7 +242,7 @@ theorem ear_poly {s b r u q : ℝ} (hb : 0 ≤ b)
       (1 - b) * (1 - r) * (1 - (1 - b) * q) - (1 - r) ^ 2 * (1 - (1 - b) * q) - b * s * (1 - b) := by
   nlinarith [mul_le_mul_of_nonneg_left hgL hb]
 
-/-- The stronger ear elimination of §4: from `gL ≥ s(w + L)`,
+/-- The stronger ear elimination: from `gL ≥ s(w + L)`,
 `wLδ ≤ wLc - L²c - bsw - bsL`. -/
 theorem ear_poly2 {s b r u q : ℝ} (hb : 0 ≤ b)
     (hgL : s * ((1 - b) + (1 - r)) ≤ (r - b - (1 - b) * u) * (1 - r)) :
@@ -284,12 +256,10 @@ theorem sq_step {X Y Z : ℝ} (hX : 0 ≤ X) (hY : 0 ≤ Y) (h : X + Y ≤ Z) : 
   have h0 : 0 ≤ X + Y := by linarith
   nlinarith [sq_nonneg (X - Y), mul_le_mul h h h0 (by linarith)]
 
-/-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-basic`), equations (5)-(6). `s < b < 4/11`;
+/-- `s < b < 4/11`;
 `1 - u ≥ Ks > 13/16`, `0 ≤ u < 3/16`; `gL ≥ sw`; and, at `q₀`, `δ ≤ c - 2√(cd)` with
-`c = 1 - wq₀`, `d = bs/w` (`s = 8/73`). `docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`, lines 111-131.
-Uses: TYPE_II:EndpointTriangleTheorem, CORNER_FAMILIES:TwoInteriorPointLemma,
-UNBALANCED_RIGHT_HULL:claim-lower-vertex. -/
-theorem claim_basic (h : OccSetting l b P Q R S T) :
+`c = 1 - wq₀`, `d = bs/w` (`s = 8/73`). -/
+theorem occ_parameter_bounds (h : OccSetting l b P Q R S T) :
     let s : ℝ := 8 / 73
     let q₀ := q0Fn s b
     let c := cFn q₀ b
@@ -362,16 +332,17 @@ theorem claim_basic (h : OccSetting l b P Q R S T) :
   show deltaFn (q0Fn (8 / 73) b) b R.1 R.2 ≤ c' - 2 * Real.sqrt (c' * (b * (8 / 73) / (1 - b)))
   linarith
 
-/-- The scalar facts of §§2-3 used by (7)-(12): `s < b < 4/11`, `0 ≤ u < 3/16`, `b < r < 1`,
-`gL ≥ sw`, the branch values of `q₀`, `δ(q₀) ≥ 3s`, and the ear bound at `q₀`. -/
+/-- The scalar facts used by `b_bounds_of_Q_inside_EBR`, `r_bounds_of_Q_inside_EBR`, `deltaFn_bounds` and `mFn_lt`: `s < b < 4/11`,
+`0 ≤ u < 3/16`, `b < r < 1`, `gL ≥ sw`, the branch values of `q₀`, `δ(q₀) ≥ 3s`, and
+`3s ≤ q₀ < 1`. -/
 theorem occ_core (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
     8 / 73 < b ∧ b < 4 / 11 ∧ 0 ≤ R.2 ∧ R.2 < 3 / 16 ∧ b < R.1 ∧ R.1 < 1 ∧
       8 / 73 * (1 - b) ≤ gFn b R.1 R.2 * (1 - R.1) ∧
       (b ≤ 1 / 3 → q0Fn (8 / 73) b = 8 / 73 / b) ∧ (1 / 3 ≤ b → q0Fn (8 / 73) b = 3 * (8 / 73)) ∧
       3 * (8 / 73) ≤ deltaFn (q0Fn (8 / 73) b) b R.1 R.2 ∧ 3 * (8 / 73) ≤ q0Fn (8 / 73) b ∧
       q0Fn (8 / 73) b < 1 := by
-  obtain ⟨hsb, hb411, -, -, hu0, hu316, hgL, -⟩ := claim_basic h
-  obtain ⟨-, -, -, hm1, hm2, hδ3, -⟩ := claim_lower_q h hQ
+  obtain ⟨hsb, hb411, -, -, hu0, hu316, hgL, -⟩ := occ_parameter_bounds h
+  obtain ⟨-, -, -, hm1, hm2, hδ3, -⟩ := stress_nonneg_at_q0 h hQ
   obtain ⟨-, hb, -, -, -, -, hbr, hrk, hk1, -, -, -, -, -, -, -⟩ := occ_facts h
   have hq0 : q0Fn (8 / 73) b < 1 :=
     max_lt (by norm_num) (by rw [div_lt_one hb]; linarith)
@@ -416,10 +387,9 @@ theorem ear_sq {b r c δ κ : ℝ} (hb : 0 < b) (hb1 : b < 1) (hbr : b < r) (hr1
   by_contra hh; push Not at hh
   nlinarith [mul_nonpos_iff.2 (Or.inl ⟨(mul_pos hw hL).le, (by linarith : c - κ * (8 / 73) ≤ 0)⟩)]
 
-/-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-b`), equations (7)-(8). If `Q ∈ int EBR`,
-then `1/5 < b < 4/11`. `docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`, lines 133-168.
-Uses: UNBALANCED_OCCUPIED_LOWER_EAR:claim-basic, UNBALANCED_OCCUPIED_LOWER_EAR:claim-lower-q. -/
-theorem claim_b (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
+/-- If `Q ∈ int EBR`,
+then `1/5 < b < 4/11`. -/
+theorem b_bounds_of_Q_inside_EBR (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
     1 / 5 < b ∧ b < 4 / 11 := by
   obtain ⟨hsb, hb411, hu0, hu316, hbr, hr1, hgL, hm1, hm2, hδ3, hq3, hq1⟩ := occ_core h hQ
   refine ⟨?_, hb411⟩
@@ -446,10 +416,9 @@ theorem claim_b (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b
   have := Pb_pos h6 hb5
   nlinarith
 
-/-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-r`), equation (9). If `Q ∈ int EBR`, then
-`7/10 < r < 9/10`. `docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`, lines 170-205.
-Uses: UNBALANCED_OCCUPIED_LOWER_EAR:claim-basic, UNBALANCED_OCCUPIED_LOWER_EAR:claim-lower-q. -/
-theorem claim_r (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
+/-- If `Q ∈ int EBR`, then
+`7/10 < r < 9/10`. -/
+theorem r_bounds_of_Q_inside_EBR (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
     7 / 10 < R.1 ∧ R.1 < 9 / 10 := by
   obtain ⟨hsb, hb411, hu0, hu316, hbr, hr1, hgL, hm1, hm2, hδ3, hq3, hq1⟩ := occ_core h hQ
   have hb : 0 < b := by linarith
@@ -475,8 +444,8 @@ theorem claim_r (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b
       nlinarith [mul_le_mul_of_nonneg_left hc hg.le]
     linarith
 
-/-- The scalar contradiction of (10): with `c ≤ C*`, `d = bs/w ≥ d*` on the two ranges of `b`,
-`4cd > (c - 4s)²` for `4s < c ≤ C*`. -/
+/-- The scalar contradiction behind `deltaFn_bounds`: with `c ≤ C*`, `d = bs/w ≥ d*` on the two
+ranges of `b`, `4cd > (c - 4s)²` for `4s < c ≤ C*`. -/
 theorem delta_scalar {b c : ℝ} (hb5 : 1 / 5 < b) (hb411 : b < 4 / 11) (hc : 0 < c)
     (h3 : 4 * c * (b * (8 / 73)) ≤ (1 - b) * (c - 4 * (8 / 73)) ^ 2) (h4 : 4 * (8 / 73) < c)
     (hc1 : b ≤ 7 / 25 → c ≤ 367 / 511) (hc2 : 7 / 25 ≤ b → c ≤ 635 / 803) : False := by
@@ -497,7 +466,7 @@ theorem delta_scalar {b c : ℝ} (hb5 : 1 / 5 < b) (hb411 : b < 4 / 11) (hc : 0 
     nlinarith [mul_nonneg (by linarith : (0 : ℝ) ≤ c - 4 * (8 / 73))
       (by linarith : (0 : ℝ) ≤ 635 / 803 - c)]
 
-/-- The scalar contradictions of (12) on the two branches. -/
+/-- The scalar contradiction behind `mFn_lt` on branch `-` (`M_scalar_plus` is branch `+`). -/
 theorem M_scalar_minus {b : ℝ} (hb5 : 1 / 5 < b) (hb3 : b ≤ 1 / 3)
     (h5 : 4 * (b - (1 - b) * (8 / 73)) * (b * (8 / 73)) * (b * (1 - b)) ≤
       ((1 - b) * (b - (1 - b) * (8 / 73)) - b * (b * (8 / 73)) - 3 * (8 / 73) * b * (1 - b)) ^ 2) :
@@ -512,15 +481,13 @@ theorem M_scalar_plus {b : ℝ} (hb3 : 1 / 3 ≤ b) (hb411 : b < 4 / 11)
   have := Pplus_pos hb3 hb411
   nlinarith
 
-/-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-delta`), equation (10). If `Q ∈ int EBR`,
-then at `q₀`: `3s ≤ δ < 4s` (`s = 8/73`). `docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`,
-lines 207-232.
-Uses: UNBALANCED_OCCUPIED_LOWER_EAR:claim-basic, UNBALANCED_OCCUPIED_LOWER_EAR:claim-b. -/
-theorem claim_delta (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
+/-- If `Q ∈ int EBR`,
+then at `q₀`: `3s ≤ δ < 4s` (`s = 8/73`). -/
+theorem deltaFn_bounds (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
     3 * (8 / 73) ≤ deltaFn (q0Fn (8 / 73) b) b R.1 R.2 ∧
       deltaFn (q0Fn (8 / 73) b) b R.1 R.2 < 4 * (8 / 73) := by
   obtain ⟨hsb, hb411, hu0, hu316, hbr, hr1, hgL, hm1, hm2, hδ3, hq3, hq1⟩ := occ_core h hQ
-  obtain ⟨hb5, -⟩ := claim_b h hQ
+  obtain ⟨hb5, -⟩ := b_bounds_of_Q_inside_EBR h hQ
   have hb : 0 < b := by linarith
   refine ⟨hδ3, ?_⟩
   by_contra hδ4; push Not at hδ4
@@ -539,7 +506,7 @@ theorem claim_delta (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (p
     intro hb7; rw [hcdef]; nlinarith
   exact delta_scalar hb5 hb411 hc h3 h4 hcC1 hcC2
 
-/-- The squared stronger ear of §4: `4c·bsw ≤ (wc - 3sw - bs)²`. -/
+/-- The squared stronger ear (`ear_poly2`): `4c·bsw ≤ (wc - 3sw - bs)²`. -/
 theorem M_sq {b r u c q : ℝ} (hb : 0 < b) (hb1 : b < 1) (hbr : b < r) (hr1 : r < 1)
     (hc : 0 < c) (hδ3 : 3 * (8 / 73) ≤ b * u + (1 - q) * (r - b))
     (hear : (1 - b) * (1 - r) * (b * u + (1 - q) * (r - b)) ≤
@@ -555,15 +522,12 @@ theorem M_sq {b r u c q : ℝ} (hb : 0 < b) (hb1 : b < 1) (hbr : b < r) (hr1 : r
       (1 - r) ^ 2 * ((1 - b) * c - 3 * (8 / 73) * (1 - b) - b * (8 / 73)) ^ 2 := by nlinarith [h2]
   exact le_of_mul_le_mul_left this (by positivity)
 
-/-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-M`), equations (11)-(12). If `Q ∈ int EBR`,
-the right-hull margin satisfies `M = g - sw/L < s` (`s = 8/73`).
-`docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`, lines 234-305.
-Uses: UNBALANCED_OCCUPIED_LOWER_EAR:claim-basic, UNBALANCED_OCCUPIED_LOWER_EAR:claim-b,
-UNBALANCED_OCCUPIED_LOWER_EAR:claim-lower-q. -/
-theorem claim_M (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
+/-- If `Q ∈ int EBR`,
+the right-hull margin satisfies `M = g - sw/L < s` (`s = 8/73`). -/
+theorem mFn_lt (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
     mFn (8 / 73) b R.1 R.2 < 8 / 73 := by
   obtain ⟨hsb, hb411, hu0, hu316, hbr, hr1, hgL, hm1, hm2, hδ3, hq3, hq1⟩ := occ_core h hQ
-  obtain ⟨hb5, -⟩ := claim_b h hQ
+  obtain ⟨hb5, -⟩ := b_bounds_of_Q_inside_EBR h hQ
   have hb : 0 < b := by linarith
   have hL : 0 < 1 - R.1 := by linarith
   have hw : 0 < 1 - b := by linarith
@@ -591,11 +555,10 @@ theorem claim_M (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b
   · rw [hcdef, hm2 hb3] at h3
     exact M_scalar_plus hb3 hb411 h3
 
-/-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-MW`), equations (13)-(14). With
+/-- With
 `V = [CBT]`, `W = [RCT]`, `Z = [BRT]` (all `≥ s`, `V + W + Z = g`): `MW ≥ sV`, hence `M > 0`
-and `W > V` (`s = 8/73`). `docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`, lines 307-343.
-Uses: UNBALANCED_OCCUPIED_LOWER_EAR:claim-M. -/
-theorem claim_MW (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
+and `W > V` (`s = 8/73`). -/
+theorem s_mul_V_le_mFn_mul_W (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
     let s : ℝ := 8 / 73
     let V := sarea ptC (ptB b) T
     let W := sarea R ptC T
@@ -605,7 +568,7 @@ theorem claim_MW (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB 
   intro s V W Z M
   obtain ⟨hm, hb, hb2, hl, hl1, hur, hbr, hrk, hk1, hu0, hut, ht1, hTx, hTy1, hTy0, hTx1⟩ :=
     occ_facts h
-  have hM := claim_M h hQ
+  have hM := mFn_lt h hQ
   obtain ⟨t1, t2, t3⟩ := h.cell.1
   have hV : 8 / 73 ≤ sarea ptC (ptB b) T := ge_of_pos (abs_ge hm 1 3 8) t3
   have hW : 8 / 73 ≤ sarea R ptC T := ge_of_pos (abs_ge hm 6 1 8) t2
@@ -666,7 +629,7 @@ theorem claim_MW (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB 
   have b' := mul_lt_mul_of_pos_right hM (by linarith : (0 : ℝ) < sarea ptC (ptB b) T)
   linarith
 
-/-- `F_C > F_B` (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-K): otherwise (15) would be
+/-- `F_C > F_B`: otherwise `WF_B + VF_R + ZF_C` would be
 negative, since `F_R < -F_B` (`δ < 4s`), `F_B < 0` and `W > V`. -/
 theorem fcb {s δ V W Z FB FR FC : ℝ} (hs : 0 < s) (hδ0 : 0 < δ) (hδ4 : δ < 4 * s)
     (hFB : FB = -s * δ) (hFR : FR = δ * (δ - 3 * s)) (hV : 0 < V) (hZ : 0 < Z) (hVW : V < W)
@@ -679,10 +642,10 @@ theorem fcb {s δ V W Z FB FR FC : ℝ} (hs : 0 < s) (hδ0 : 0 < δ) (hδ4 : δ 
   have c := mul_neg_of_pos_of_neg (by linarith : (0 : ℝ) < W - V + Z) hFB0
   linarith
 
-/-- The endpoint argument of (17) (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-K): lowering `W`
-to `sV/M` (moving weight to `Z`) raises (15), and the result `Ψ(V)/M` is affine in `V` on
-`[s, M(g-s)/(M+s)]`, so it is nonnegative at an endpoint; the endpoint values are `K₁/M` and
-`K₂/(M+s)`. -/
+/-- The endpoint argument of `h1Fn_nonneg_or_h2Fn_nonneg`: lowering `W`
+to `sV/M` (moving weight to `Z`) raises `WF_B + VF_R + ZF_C`, and the result `Ψ(V)/M` is affine
+in `V` on `[s, M(g-s)/(M+s)]`, so it is nonnegative at an endpoint; the endpoint values are
+`K₁/M` and `K₂/(M+s)`. -/
 theorem K_endpoint {M V W Z g FB FR FC : ℝ} (hM0 : 0 < M) (hV : 8 / 73 ≤ V)
     (hV2 : V ≤ M * (g - 8 / 73) / (M + 8 / 73)) (hMW : 8 / 73 * V ≤ M * W) (hsum : V + W + Z = g)
     (hFCB : FB < FC) (h15 : 0 ≤ W * FB + V * FR + Z * FC) :
@@ -723,14 +686,10 @@ theorem K_endpoint {M V W Z g FB FR FC : ℝ} (hM0 : 0 < M) (hV : 8 / 73 ≤ V)
           mul_pos (by linarith : (0 : ℝ) < V - s) (by linarith : (0 : ℝ) < -Ψ V₁)]
     nlinarith [mul_nonneg (by linarith : (0 : ℝ) ≤ V₁ - s) hΨV]
 
-/-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-K`), equations (15)-(17), and the necessary
-condition of (18). At `q₀` (`s = 8/73`): `WF_B + VF_R + ZF_C ≥ 0` (15), `F_C > F_B`,
-`s ≤ V ≤ M(g - s)/(M + s)` and `M(g - 2s) ≥ s²` (16), `K₁ ≥ 0` or `K₂ ≥ 0` (17); hence
-`E₀ ≥ 0` and `H₁ ≥ 0` or `H₂ ≥ 0` (18). `docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`,
-lines 345-394.
-Uses: UNBALANCED_OCCUPIED_LOWER_EAR:claim-stress, UNBALANCED_OCCUPIED_LOWER_EAR:claim-lower-q,
-UNBALANCED_OCCUPIED_LOWER_EAR:claim-MW, UNBALANCED_OCCUPIED_LOWER_EAR:claim-delta. -/
-theorem claim_K (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
+/-- At `q₀` (`s = 8/73`): `WF_B + VF_R + ZF_C ≥ 0`, `F_C > F_B`,
+`s ≤ V ≤ M(g - s)/(M + s)` and `M(g - 2s) ≥ s²`, and `K₁ ≥ 0` or `K₂ ≥ 0`; hence the
+necessary condition `E₀ ≥ 0` and `H₁ ≥ 0` or `H₂ ≥ 0`. -/
+theorem h1Fn_nonneg_or_h2Fn_nonneg (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b) R) :
     let s : ℝ := 8 / 73
     let q₀ := q0Fn s b
     let r := R.1
@@ -747,10 +706,10 @@ theorem claim_K (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b
   intro s q₀ r u V W Z M g
   obtain ⟨hm, hb, hb2, hl, hl1, hur, hbr, hrk, hk1, hu0, hut, ht1, hTx, hTy1, hTy0, hTx1⟩ :=
     occ_facts h
-  obtain ⟨-, -, -, -, -, hδ3, hF⟩ := claim_lower_q h hQ
-  obtain ⟨-, hδ4⟩ := claim_delta h hQ
-  obtain ⟨hsum, hV, hW, hZ, hMW, hM0, hVW⟩ := claim_MW h hQ
-  have hM := claim_M h hQ
+  obtain ⟨-, -, -, -, -, hδ3, hF⟩ := stress_nonneg_at_q0 h hQ
+  obtain ⟨-, hδ4⟩ := deltaFn_bounds h hQ
+  obtain ⟨hsum, hV, hW, hZ, hMW, hM0, hVW⟩ := s_mul_V_le_mFn_mul_W h hQ
+  have hM := mFn_lt h hQ
   have hL : 0 < 1 - R.1 := by linarith
   have hw : 0 < 1 - b := by linarith
   set δ₀ := deltaFn (q0Fn (8 / 73) b) b R.1 R.2 with hδ₀
@@ -769,7 +728,7 @@ theorem claim_K (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b
   have eFR : FR = δ₀ * (δ₀ - 3 * (8 / 73)) := by simp only [hFR, fR, hδ₀]
   have eFC : FC = (δ₀ - 2 * (8 / 73)) * c₀ - 8 / 73 * (δ₀ + gg) := by
     simp only [hFC, fC, hδ₀, hc₀, hgg]
-  -- (15)
+  -- the stress identity `WF_B + VF_R + ZF_C = g·F`
   have h15e : Ww * FB + Vv * FR + Zz * FC = gg * ((δ₀ - 2 * (8 / 73)) *
       aFn (q0Fn (8 / 73) b) b T - 8 / 73 * (δ₀ + Zz)) := by
     rw [eFB, eFR, eFC]
@@ -780,14 +739,14 @@ theorem claim_K (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b
   have hδ0 : 0 < δ₀ := by linarith
   have hFCB : FB < FC :=
     fcb (by norm_num) hδ0 hδ4 eFB eFR (by linarith) (by linarith) hVW h15
-  -- (16)
+  -- `V ≤ M(g - s)/(M + s)` and `M(g - 2s) ≥ s²`
   have hMs : 0 < Mm + 8 / 73 := by linarith
   have hV1 : Vv * (Mm + 8 / 73) ≤ Mm * (gg - 8 / 73) := by
     nlinarith [mul_le_mul_of_nonneg_left hZ hM0.le]
   have hV2 : Vv ≤ Mm * (gg - 8 / 73) / (Mm + 8 / 73) := by rw [le_div_iff₀ hMs]; exact hV1
   have h16 : (8 / 73) ^ 2 ≤ Mm * (gg - 2 * (8 / 73)) := by
     nlinarith [mul_le_mul_of_nonneg_right hV hMs.le]
-  -- (17): one endpoint of the affine `Ψ` is nonnegative
+  -- one endpoint of the affine `Ψ` is nonnegative
   have hK : 0 ≤ k1Fn (8 / 73) (q0Fn (8 / 73) b) b R.1 R.2 ∨
       0 ≤ k2Fn (8 / 73) (q0Fn (8 / 73) b) b R.1 R.2 := by
     have eK1 : k1Fn (8 / 73) (q0Fn (8 / 73) b) b R.1 R.2 =
@@ -814,14 +773,13 @@ theorem claim_K (h : OccSetting l b P Q R S T) (hQ : InTriangle Q (ptE l) (ptB b
     unfold h2Fn
     exact mul_nonneg (mul_nonneg hL.le (sq_nonneg b)) hK
 
-/-! ### The Bernstein certificate (§6): the eleven rows of the table
+/-! ### The Bernstein certificate: the eleven boxes
 
-The rows are checked by the kernel in `Heilbronn.Nine.TypeII.Unbalanced.EarBernstein`
-(`bernsteinBoxCheck` on the physical boxes of `(b, r, u)` that the unit boxes of (19) describe);
-`h_minus_eq`, `h_plus_eq` identify its structural polynomials with `H₁`, `H₂`. Each row is stated
-as the strict sign on its box in `(b, r, u)` (the unit coordinates `x, y, z` of (19) are
-`b = b₋ + (b₊ - b₋)x`, `r = 7/10 + y/5`, `u = 3z/16`); the coefficient bounds `-1/N` of the table
-are the parameters `N` of the checks. -/
+The boxes are checked by the kernel in `Heilbronn.Nine.TypeII.Unbalanced.EarBernstein`
+(`bernsteinBoxCheck` on physical boxes of `(b, r, u)`); `h_minus_eq`, `h_plus_eq` identify its
+structural polynomials with `H₁`, `H₂`. Each box is stated as the strict sign on its box in
+`(b, r, u)` (in the unit coordinates `x, y, z`: `b = b₋ + (b₊ - b₋)x`, `r = 7/10 + y/5`,
+`u = 3z/16`); the coefficient bounds `-1/N` are the parameters `N` of the checks. -/
 
 open UnbalancedEarBernstein Cert Cert.Expr in
 theorem pt_eval (b r u : ℝ) : pt b r u 0 = b ∧ pt b r u 1 = r ∧ pt b r u 2 = u := by
@@ -851,8 +809,7 @@ theorem h_plus_eq {b r u : ℝ} (hL : 1 - r ≠ 0) :
   push_cast
   constructor <;> field_simp <;> ring
 
-/-- Row 1 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`-`, `H₁`, `y ∈ [0, 1/2]`, `z ∈ [0, 1/2]`. -/
+/-- Box 1 of the certificate: branch `-`, `H₁`, `y ∈ [0, 1/2]`, `z ∈ [0, 1/2]`. -/
 theorem bernstein_minus_H1_row1 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) (1 / 3))
     (hr : r ∈ Set.Icc (7 / 10 : ℝ) (4 / 5)) (hu : u ∈ Set.Icc (0 : ℝ) (3 / 32)) :
     h1Fn (8 / 73) (8 / 73 / b) b r u < 0 := by
@@ -862,8 +819,7 @@ theorem bernstein_minus_H1_row1 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) 
   rw [(h_minus_eq (by linarith [hb.1]) (by linarith [hr.2])).1]
   linarith
 
-/-- Row 2 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`-`, `H₁`, `y ∈ [0, 1/2]`, `z ∈ [1/2, 1]`. -/
+/-- Box 2 of the certificate: branch `-`, `H₁`, `y ∈ [0, 1/2]`, `z ∈ [1/2, 1]`. -/
 theorem bernstein_minus_H1_row2 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) (1 / 3))
     (hr : r ∈ Set.Icc (7 / 10 : ℝ) (4 / 5)) (hu : u ∈ Set.Icc (3 / 32 : ℝ) (3 / 16)) :
     h1Fn (8 / 73) (8 / 73 / b) b r u < 0 := by
@@ -873,8 +829,7 @@ theorem bernstein_minus_H1_row2 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) 
   rw [(h_minus_eq (by linarith [hb.1]) (by linarith [hr.2])).1]
   linarith
 
-/-- Row 3 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`-`, `H₁`, `y ∈ [1/2, 5/8]`, `z ∈ [0, 1/4]`. -/
+/-- Box 3 of the certificate: branch `-`, `H₁`, `y ∈ [1/2, 5/8]`, `z ∈ [0, 1/4]`. -/
 theorem bernstein_minus_H1_row3 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) (1 / 3))
     (hr : r ∈ Set.Icc (4 / 5 : ℝ) (33 / 40)) (hu : u ∈ Set.Icc (0 : ℝ) (3 / 64)) :
     h1Fn (8 / 73) (8 / 73 / b) b r u < 0 := by
@@ -884,8 +839,7 @@ theorem bernstein_minus_H1_row3 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) 
   rw [(h_minus_eq (by linarith [hb.1]) (by linarith [hr.2])).1]
   linarith
 
-/-- Row 4 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`-`, `H₁`, `y ∈ [5/8, 3/4]`, `z ∈ [0, 1/4]`. -/
+/-- Box 4 of the certificate: branch `-`, `H₁`, `y ∈ [5/8, 3/4]`, `z ∈ [0, 1/4]`. -/
 theorem bernstein_minus_H1_row4 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) (1 / 3))
     (hr : r ∈ Set.Icc (33 / 40 : ℝ) (17 / 20)) (hu : u ∈ Set.Icc (0 : ℝ) (3 / 64)) :
     h1Fn (8 / 73) (8 / 73 / b) b r u < 0 := by
@@ -895,8 +849,7 @@ theorem bernstein_minus_H1_row4 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) 
   rw [(h_minus_eq (by linarith [hb.1]) (by linarith [hr.2])).1]
   linarith
 
-/-- Row 5 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`-`, `H₁`, `y ∈ [1/2, 3/4]`, `z ∈ [1/4, 1/2]`. -/
+/-- Box 5 of the certificate: branch `-`, `H₁`, `y ∈ [1/2, 3/4]`, `z ∈ [1/4, 1/2]`. -/
 theorem bernstein_minus_H1_row5 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) (1 / 3))
     (hr : r ∈ Set.Icc (4 / 5 : ℝ) (17 / 20)) (hu : u ∈ Set.Icc (3 / 64 : ℝ) (3 / 32)) :
     h1Fn (8 / 73) (8 / 73 / b) b r u < 0 := by
@@ -906,8 +859,7 @@ theorem bernstein_minus_H1_row5 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) 
   rw [(h_minus_eq (by linarith [hb.1]) (by linarith [hr.2])).1]
   linarith
 
-/-- Row 6 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`-`, `H₁`, `y ∈ [1/2, 3/4]`, `z ∈ [1/2, 1]`. -/
+/-- Box 6 of the certificate: branch `-`, `H₁`, `y ∈ [1/2, 3/4]`, `z ∈ [1/2, 1]`. -/
 theorem bernstein_minus_H1_row6 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) (1 / 3))
     (hr : r ∈ Set.Icc (4 / 5 : ℝ) (17 / 20)) (hu : u ∈ Set.Icc (3 / 32 : ℝ) (3 / 16)) :
     h1Fn (8 / 73) (8 / 73 / b) b r u < 0 := by
@@ -917,8 +869,7 @@ theorem bernstein_minus_H1_row6 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) 
   rw [(h_minus_eq (by linarith [hb.1]) (by linarith [hr.2])).1]
   linarith
 
-/-- Row 7 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`-`, `H₁`, `y ∈ [3/4, 1]`, `z ∈ [0, 1]`. -/
+/-- Box 7 of the certificate: branch `-`, `H₁`, `y ∈ [3/4, 1]`, `z ∈ [0, 1]`. -/
 theorem bernstein_minus_H1_row7 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) (1 / 3))
     (hr : r ∈ Set.Icc (17 / 20 : ℝ) (9 / 10)) (hu : u ∈ Set.Icc (0 : ℝ) (3 / 16)) :
     h1Fn (8 / 73) (8 / 73 / b) b r u < 0 := by
@@ -928,8 +879,7 @@ theorem bernstein_minus_H1_row7 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) 
   rw [(h_minus_eq (by linarith [hb.1]) (by linarith [hr.2])).1]
   linarith
 
-/-- Row 8 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`-`, `H₂`, `y, z ∈ [0, 1]`. -/
+/-- Box 8 of the certificate: branch `-`, `H₂`, `y, z ∈ [0, 1]`. -/
 theorem bernstein_minus_H2 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) (1 / 3))
     (hr : r ∈ Set.Icc (7 / 10 : ℝ) (9 / 10)) (hu : u ∈ Set.Icc (0 : ℝ) (3 / 16)) :
     h2Fn (8 / 73) (8 / 73 / b) b r u < 0 := by
@@ -939,8 +889,7 @@ theorem bernstein_minus_H2 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 5 : ℝ) (1 / 
   rw [(h_minus_eq (by linarith [hb.1]) (by linarith [hr.2])).2]
   linarith
 
-/-- Row 9 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`+`, `H₁`, `y ∈ [0, 1/2]`, `z ∈ [0, 1]`. -/
+/-- Box 9 of the certificate: branch `+`, `H₁`, `y ∈ [0, 1/2]`, `z ∈ [0, 1]`. -/
 theorem bernstein_plus_H1_row1 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 3 : ℝ) (4 / 11))
     (hr : r ∈ Set.Icc (7 / 10 : ℝ) (4 / 5)) (hu : u ∈ Set.Icc (0 : ℝ) (3 / 16)) :
     h1Fn (8 / 73) (3 * (8 / 73)) b r u < 0 := by
@@ -950,8 +899,7 @@ theorem bernstein_plus_H1_row1 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 3 : ℝ) (
   rw [(h_plus_eq (by linarith [hr.2])).1]
   linarith
 
-/-- Row 10 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`+`, `H₁`, `y ∈ [1/2, 1]`, `z ∈ [0, 1]`. -/
+/-- Box 10 of the certificate: branch `+`, `H₁`, `y ∈ [1/2, 1]`, `z ∈ [0, 1]`. -/
 theorem bernstein_plus_H1_row2 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 3 : ℝ) (4 / 11))
     (hr : r ∈ Set.Icc (4 / 5 : ℝ) (9 / 10)) (hu : u ∈ Set.Icc (0 : ℝ) (3 / 16)) :
     h1Fn (8 / 73) (3 * (8 / 73)) b r u < 0 := by
@@ -961,8 +909,7 @@ theorem bernstein_plus_H1_row2 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 3 : ℝ) (
   rw [(h_plus_eq (by linarith [hr.2])).1]
   linarith
 
-/-- Row 11 of the table of §6 (part of UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein): branch
-`+`, `H₂`, `y, z ∈ [0, 1]`. -/
+/-- Box 11 of the certificate: branch `+`, `H₂`, `y, z ∈ [0, 1]`. -/
 theorem bernstein_plus_H2 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 3 : ℝ) (4 / 11))
     (hr : r ∈ Set.Icc (7 / 10 : ℝ) (9 / 10)) (hu : u ∈ Set.Icc (0 : ℝ) (3 / 16)) :
     h2Fn (8 / 73) (3 * (8 / 73)) b r u < 0 := by
@@ -972,12 +919,11 @@ theorem bernstein_plus_H2 {b r u : ℝ} (hb : b ∈ Set.Icc (1 / 3 : ℝ) (4 / 1
   rw [(h_plus_eq (by linarith [hr.2])).2]
   linarith
 
-/-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein`), equations (18)-(20). `H₁` and
+/-- `H₁` and
 `H₂` are strictly negative on both branch boxes: for `b ∈ [1/5, 1/3]` with `q = s/b`, and for
 `b ∈ [1/3, 4/11]` with `q = 3s`, whenever `r ∈ [7/10, 9/10]`, `u ∈ [0, 3/16]` (`s = 8/73`;
-1540 strict coefficient comparisons in all). `docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`,
-lines 386-454. -/
-theorem claim_bernstein :
+1540 strict coefficient comparisons in all). -/
+theorem h1Fn_neg_and_h2Fn_neg :
     (∀ b r u : ℝ, b ∈ Set.Icc (1 / 5 : ℝ) (1 / 3) → r ∈ Set.Icc (7 / 10 : ℝ) (9 / 10) →
       u ∈ Set.Icc (0 : ℝ) (3 / 16) →
         h1Fn (8 / 73) (8 / 73 / b) b r u < 0 ∧ h2Fn (8 / 73) (8 / 73 / b) b r u < 0) ∧
@@ -1006,13 +952,10 @@ theorem claim_bernstein :
     · exact bernstein_plus_H1_row1 hb ⟨hr.1, hr1⟩ hu
     · exact bernstein_plus_H1_row2 hb ⟨hr1, hr.2⟩ hu
 
-/-- **Theorem 1** (`UNBALANCED_OCCUPIED_LOWER_EAR:Theorem1`). The point `Q` cannot lie inside
+/-- The point `Q` cannot lie inside
 `EBR`. Consequently `EBR` contains no further actual point in this final placement, and `Q` is
-above `ER`. `docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md`, lines 36-41, 456-460.
-Uses: UNBALANCED_OCCUPIED_LOWER_EAR:claim-K, UNBALANCED_OCCUPIED_LOWER_EAR:claim-Bernstein,
-UNBALANCED_OCCUPIED_LOWER_EAR:claim-b, UNBALANCED_OCCUPIED_LOWER_EAR:claim-r,
-UNBALANCED_OCCUPIED_LOWER_EAR:claim-basic. -/
-theorem theorem1 (h : OccSetting l b P Q R S T) :
+above `ER`. -/
+theorem Q_not_inside_EBR (h : OccSetting l b P Q R S T) :
     ¬ InTriangle Q (ptE l) (ptB b) R ∧
       NoPointInside (typeIIConfig l b P Q R S T) (ptE l) (ptB b) R ∧
       0 < sarea (ptE l) R Q := by
@@ -1020,12 +963,12 @@ theorem theorem1 (h : OccSetting l b P Q R S T) :
     occ_facts h
   have hnot : ¬ InTriangle Q (ptE l) (ptB b) R := by
     intro hQ
-    obtain ⟨-, -, -, -, -, -, hH⟩ := claim_K h hQ
-    obtain ⟨hb5, hb411⟩ := claim_b h hQ
-    obtain ⟨hr7, hr9⟩ := claim_r h hQ
-    obtain ⟨-, -, -, -, hu0', hu316, -, -⟩ := claim_basic h
-    obtain ⟨-, -, -, hm1, hm2, -, -⟩ := claim_lower_q h hQ
-    obtain ⟨cm, cp⟩ := claim_bernstein
+    obtain ⟨-, -, -, -, -, -, hH⟩ := h1Fn_nonneg_or_h2Fn_nonneg h hQ
+    obtain ⟨hb5, hb411⟩ := b_bounds_of_Q_inside_EBR h hQ
+    obtain ⟨hr7, hr9⟩ := r_bounds_of_Q_inside_EBR h hQ
+    obtain ⟨-, -, -, -, hu0', hu316, -, -⟩ := occ_parameter_bounds h
+    obtain ⟨-, -, -, hm1, hm2, -, -⟩ := stress_nonneg_at_q0 h hQ
+    obtain ⟨cm, cp⟩ := h1Fn_neg_and_h2Fn_neg
     rcases le_total b (1 / 3) with hb3 | hb3
     · rw [hm1 hb3] at hH
       obtain ⟨n1, n2⟩ := cm b R.1 R.2 ⟨hb5.le, hb3⟩ ⟨hr7.le, hr9.le⟩ ⟨hu0', hu316.le⟩

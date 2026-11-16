@@ -8,14 +8,13 @@ public import Heilbronn.Nine.Sharp.BDMoving
 public import Heilbronn.Nine.Sharp.DFMoving
 
 /-! # A side-cap point, an opposite-cap point, and one interior point in N
-(`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`)
 
-**Role.** Primary route: closes the six-boundary occupancy N6-04 `(n_L,n_T,n_R;n_I) = (0,1,1;1)`
-of `docs/proof/nine/UNRESTRICTED.md`, Section 4, both for `Q` below and above `HC` (its transpose
-`(1,1,0;1)` by `theorem1_transposed`). Sharp: the two residual branches are the moving sharp
-chambers `SHARP_DF_MOVING` (word 23) and `SHARP_BD_MOVING` (word 54).
+The six-boundary case with one free point in the side cap `R`, one in the opposite cap `T` and
+one strictly inside the anchor hexagon, both for `Q` below and above `HC` (the transposed
+placement, with the left cap, by `sideOpposite_le_A₀_transposed`). Sharp: the two residual branches are the
+moving sharp chambers of `SharpDFMoving` (word 23) and `SharpBDMoving` (word 54).
 
-**Setting.** The N anchors (`NAnchors`, (1)); `X = (x,y)` in the side cap `R = CD(1,0)`
+**Setting.** The N anchors (`NAnchors`); `X = (x,y)` in the side cap `R = CD(1,0)`
 (`InCapR`), `Y = (z,w)` in the opposite cap `T = DF(1,1)` (`InCapT`), `Q = (r,t)` strictly inside
 the anchor hexagon (`InHexagon`); square-side contacts allowed, the cap corners are virtual. The
 configuration is `nConfig a h b c d f X Y Q`. Competitive assumption: every actual area is at least
@@ -24,26 +23,25 @@ configuration is `nConfig a h b c d f X Y Q`. Competitive assumption: every actu
 full hull is the octagon `(V₀,…,V₇) = (A,B,C,X,D,Y,F,H)` (`octagon`).
 
 **Results.**
-* `theorem1`: minimum `≤ A₀`; if all actual areas are `≥ A₀`, the configuration is a symmetric
+* `sideOpposite_le_A₀`: minimum `≤ A₀`; if all actual areas are `≥ A₀`, the configuration is a symmetric
   relabelled copy of the sharp configuration (`IsOptimal`) and both cap points are on the square
-  boundary (`x = 1`, `w = 1`). `theorem1_transposed`: the left-cap placement.
-* `claim_hull`: the octagon is strictly convex with `Q` inside.
-* `claim_empty_ABH_BCX`: `[ABH], [BCX] < 3·7/64`, `Q` in neither.
-* `claim_ears` (4): the six ears have doubled area `< 13/16`.
-* `claim_anchor` (5), `claim_side_point` (6)–(7), `claim_cap` (8)–(9), `eq11`, `claim_Q_box`
-  (10)–(11): the affine bounds behind the 32 factors (12).
-* `claim_words`: 97 octagon words (18 with `Q` below `HC`); `Q` has a word in the list.
-* `claim_hc_lower` (15): `hc ≥ σ/(3-2√2) > 7/11` when `Q` is below `HC`.
-* `claim_certificate`: the 93 words other than 23, 54, 69, 84 are impossible (one cubic each).
-* `claim_branch_cover`: words 69, 84 are impossible; word 23 and word 54 are confined to their
+  boundary (`x = 1`, `w = 1`). `sideOpposite_le_A₀_transposed`: the left-cap placement.
+* `octagon_hull`: the octagon is strictly convex with `Q` inside.
+* `empty_ABH_BCX`: `[ABH], [BCX] < 3·7/64`, `Q` in neither.
+* `ears_lt`: the six ears have doubled area `< 13/16`.
+* `fam_bounds` (with `capY_bounds`, `q_bounds`, `projection_identities`, `Q_box`): the affine bounds behind
+  the 32 factors.
+* `exists_octagonWord`: 97 octagon words (18 with `Q` below `HC`); `Q` has a word in the list.
+* `hc_lower_of_below`: `hc ≥ σ/(3-2√2) > 7/11` when `Q` is below `HC`.
+* `not_hasRadialWord_of_ne`: the 93 words other than 23, 54, 69, 84 are impossible (one cubic each).
+* `branch_cover`: words 69, 84 are impossible; word 23 and word 54 are confined to their
   residual regions.
-* `claim_word23_DF`, `claim_word54_BD`: the residual regions are instances of the moving sharp
+* `word23_DFMoving`, `word54_BDMoving`: the residual regions are instances of the moving sharp
   chambers.
 
-Implicit in the manuscript: the claims are stated under `4/73 ≤ minTriangleArea` (the cubic part
-uses only `σ`). `FLAG`-type remark (justification misattributed, statement true): the strict
+All claims are stated under `4/73 ≤ minTriangleArea` (the cubic part uses only `σ`). The strict
 orders `f' = z < 1` (word 23) and `d' = 1-z > 0` (word 54) follow from the residual condition
-`x > z` and `x ≤ 1`, not from "(1), (6), (8)" as stated (lines 293-295, 317-318).
+`x > z` and `x ≤ 1`.
 -/
 
 @[expose] public section
@@ -53,16 +51,16 @@ namespace Heilbronn.Nine.SixBoundarySideOpposite
 
 open Heilbronn.Nine.SixBoundary Heilbronn.Nine.SharpBCMoving SixRadial Cover Cert Cert.Expr
 
-/-- The full hull (3): the octagon `(V₀, …, V₇) = (A, B, C, X, D, Y, F, H)`. -/
+/-- The full hull: the octagon `(V₀, …, V₇) = (A, B, C, X, D, Y, F, H)`. -/
 def octagon (a h b c d f : ℝ) (X Y : Point) : Fin 8 → Point :=
   ![ptA a, ptB b, ptC c, X, ptD d, Y, ptF f, ptH h]
 
-/-- The occupancy N6-04: N anchors, `X` in the side cap `CD(1,0)`, `Y` in the opposite cap
-`DF(1,1)`, `Q` strictly inside the anchor hexagon. -/
+/-- The side-opposite placement: N anchors, `X` in the side cap `CD(1,0)`, `Y` in the opposite
+cap `DF(1,1)`, `Q` strictly inside the anchor hexagon. -/
 def SideOppositeFamily (a h b c d f : ℝ) (X Y Q : Point) : Prop :=
   NAnchors a h b c d f ∧ InCapR c d X ∧ InCapT d f Y ∧ InHexagon a h b c d f Q
 
-/-- The 97 radial words of `Q` (13): octagon words (`radialWords 8`) with the hexagon edge tests
+/-- The 97 radial words of `Q`: octagon words (`radialWords 8`) with the hexagon edge tests
 `CDQ`, `DFQ` (`r₂ ≥ 2`, `r₄ ≥ 2`) and the empty triangles `ABH`, `BCX` (`2 ≤ r₁ ≤ 5`). -/
 def octagonWords : Finset (Fin 8 → Fin 8) :=
   (radialWords 8).filter fun r => 2 ≤ (r 2 : ℕ) ∧ 2 ≤ (r 4 : ℕ) ∧ 2 ≤ (r 1 : ℕ) ∧ (r 1 : ℕ) ≤ 5
@@ -82,12 +80,11 @@ def word84 : Fin 8 → Fin 8 := ![5, 4, 4, 3, 3, 2, 3, 4]
 /-- The rotation `R(u,v) = (v, 1-u)` of the square (swap, then flip the second coordinate). -/
 def rotation : SquareSymmetry := ⟨true, false, true⟩
 
-
 /-! ### Scalar bounds -/
 
 section Scalar
 
-/-- The opposite-cap point bounds (8)–(9) from `[DYF] ≥ σ` (`σ = 8/73`). -/
+/-- The opposite-cap point bounds from `[DYF] ≥ σ` (`σ = 8/73`). -/
 theorem capY_bounds {b d f z w : ℝ} (hd2 : 1 / 2 < d) (hd1 : d < 1) (hf8 : 1 / 8 < f) (hf1 : f < 1)
     (hbf : b ≤ f) (hz1 : z ≤ 1) (hw1 : w ≤ 1) (hd4 : 4 * (8 / 73) ≤ d * (1 - b))
     (hDYF : 8 / 73 ≤ (1 - d) * (z - f) - (1 - f) * (1 - w)) :
@@ -121,7 +118,7 @@ theorem capY_bounds {b d f z w : ℝ} (hd2 : 1 / 2 < d) (hd1 : d < 1) (hf8 : 1 /
   have hb5 : b ≤ 1 - 5 * (8 / 73) := by nlinarith
   exact ⟨by linarith, by linarith, hzf, hwd, hzf2, hwd8, hb5⟩
 
-/-- The bounds (10)–(11) for `Q = (r, t)` from its five hexagon-edge areas. -/
+/-- The box bounds for `Q = (r, t)` from its five hexagon-edge areas. -/
 theorem q_bounds {a h b c d f r t : ℝ} (hN : NAnchors a h b c d f) (ha7 : 1 / 7 < a)
     (hM : c - b < 447 / 584) (hHAQ : 8 / 73 ≤ (h - a) * r) (hBCQ : 8 / 73 ≤ (c - b) * t)
     (hCDQ : 8 / 73 ≤ (1 - c) * t - d * (r - c))
@@ -140,7 +137,7 @@ theorem q_bounds {a h b c d f r t : ℝ} (hN : NAnchors a h b c d f) (ha7 : 1 / 
     have := mul_lt_mul_of_pos_right (by linarith : h - a < 6 / 7) hr0; linarith
   have ht7 : 1 / 7 < t := by
     have := mul_lt_mul_of_pos_right hM ht0; linarith
-  -- the projection identities (11)
+  -- the projection identities (`projection_identities`)
   have i1 : (1 - f) * ((1 - c) * t - d * (r - c)) + (1 - c) * ((f - 1) * (t - d) - (1 - d) * (r - 1))
       = (d * (1 - f) + (1 - d) * (1 - c)) * (1 - r) := by ring
   have i2 : (1 - h) * ((f - 1) * (t - d) - (1 - d) * (r - 1)) + (1 - d) * (f * (1 - t) + (1 - h) * (r - f))
@@ -253,7 +250,7 @@ theorem fam_bounds (hfam : SideOppositeFamily a h b c d f X Y Q)
 
 end Model
 
-/-! ### Section 1: the complete hull and two empty ears -/
+/-! ### The complete hull and two empty ears -/
 
 section Hull
 
@@ -266,7 +263,7 @@ local notation "zetaS" => SixBoundarySideTwoTop.zeta
 with `Q`. -/
 theorem fam_hull (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
-    IsConvexCCW (octagon a h b c d f X Y) ∧ InPolygon (octagon a h b c d f X Y) Q ∧
+    IsConvexPolygon (octagon a h b c d f X Y) ∧ InPolygon (octagon a h b c d f X Y) Q ∧
       ∀ i j : Fin 8, i ≠ j →
         sarea (octagon a h b c d f X Y i) (octagon a h b c d f X Y j) Q ≠ 0 := by
   obtain ⟨S, C, I, hABC, hABH, hBCX, hCXD, hDYF, -⟩ := fam_bounds hfam hmin
@@ -277,7 +274,7 @@ theorem fam_hull (hfam : SideOppositeFamily a h b c d f X Y Q)
     by linarith, by linarith [S.2.2.2.2.2.2.2.1], by linarith, y0,
     by linarith [S.2.2.2.2.2.2.2.2.2.1], by linarith, by linarith [C.2.2.1], by linarith,
     by linarith [C.2.2.2.1], by linarith, by linarith⟩
-  have hconv : IsConvexCCW (octagon a h b c d f X Y) := by
+  have hconv : IsConvexPolygon (octagon a h b c d f X Y) := by
     have := H.convex (fun i j k hij hjk => by
       rw [SixBoundarySideTwoTop.octV_eq (O := Q), SixBoundarySideTwoTop.octV_eq (O := Q),
         SixBoundarySideTwoTop.octV_eq (O := Q)]
@@ -302,20 +299,17 @@ theorem fam_hull (hfam : SideOppositeFamily a h b c d f X Y Q)
     (p5 := 7) (by decide) (by decide) (by decide) (by decide) (by decide) q1 q2 q3 q4 q5 q6
     (hgen 0 2 (by decide)) (hgen 0 4 (by decide)) (hgen 0 6 (by decide)), hgen⟩
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-hull`). The full convex hull is the strictly
-convex octagon `(A, B, C, X, D, Y, F, H)` (3), and `Q` is its sole interior point.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 48-58. -/
-theorem claim_hull (hfam : SideOppositeFamily a h b c d f X Y Q)
+/-- The full convex hull is the strictly convex octagon `(A, B, C, X, D, Y, F, H)` (`octagon`),
+and `Q` is its sole interior point. -/
+theorem octagon_hull (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
-    IsConvexCCW (octagon a h b c d f X Y) ∧ InPolygon (octagon a h b c d f X Y) Q :=
+    IsConvexPolygon (octagon a h b c d f X Y) ∧ InPolygon (octagon a h b c d f X Y) Q :=
   ⟨(fam_hull hfam hmin).1, (fam_hull hfam hmin).2.1⟩
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-empty-ABH-BCX`). `[ABH] < 3(7/64) < 3σ`
-(`SIX_BOUNDARY_EXTERIOR` Theorem 5, the right cap being occupied) and `[BCX] < 3(7/64) < 3σ`
-(`SIX_BOUNDARY_TWO_SIDE_PROJECTION` Lemma 2); hence `Q` is inside neither actual triangle.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 60-64.
-Uses: SIX_BOUNDARY_EXTERIOR:Theorem5, SIX_BOUNDARY_TWO_SIDE_PROJECTION:Lemma2 -/
-theorem claim_empty_ABH_BCX (hfam : SideOppositeFamily a h b c d f X Y Q)
+/-- `[ABH] < 3(7/64) < 3σ` (`SixBoundaryExterior.occupiedSideCap_ear_lt`, the right cap being occupied) and
+`[BCX] < 3(7/64) < 3σ` (`SixBoundaryTwoSideProjection.sideCap_BCX_lt`); hence `Q` is inside neither
+actual triangle. -/
+theorem empty_ABH_BCX (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     sarea (ptA a) (ptB b) (ptH h) < 3 * (7 / 64) ∧ sarea (ptB b) (ptC c) X < 3 * (7 / 64) ∧
       ¬ InTriangle Q (ptA a) (ptB b) (ptH h) ∧ ¬ InTriangle Q (ptB b) (ptC c) X := by
@@ -324,15 +318,13 @@ theorem claim_empty_ABH_BCX (hfam : SideOppositeFamily a h b c d f X Y Q)
     obtain ⟨S, C, I, -⟩ := fam_bounds ⟨hN, hX, hY, hQ⟩ hmin
     exact ⟨by linarith [I.1], by linarith [I.2.1], by linarith [I.2.2.1], by linarith [I.2.2.2.1]⟩
   have h7 : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q) := by linarith
-  have E5 := (SixBoundaryExterior.theorem5 hN hX.1 hY.1 hQs h7).1 hX
-  have L2 := (SixBoundaryTwoSideProjection.lemma2 hN hX.1 hY.1 hQs h7).1 hX
+  have E5 := (SixBoundaryExterior.occupiedSideCap_ear_lt hN hX.1 hY.1 hQs h7).1 hX
+  have L2 := (SixBoundaryTwoSideProjection.sideCap_BCX_lt hN hX.1 hY.1 hQs h7).1 hX
   exact ⟨E5.1, L2.1, E5.2.2, L2.2.2⟩
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-ears`). Equation (4): the six anchor ears
-`ABH, ABC, BCD, CDF, DFH, FHA` have doubled area `< ρ = 13/16` (`SIX_BOUNDARY_HULL` Theorem 1).
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 66-72.
-Uses: SIX_BOUNDARY_HULL:Theorem1 -/
-theorem claim_ears (hfam : SideOppositeFamily a h b c d f X Y Q)
+/-- The six anchor ears `ABH, ABC, BCD, CDF, DFH, FHA` have doubled area `< ρ = 13/16`
+(`SixBoundaryHull.ears_sarea_lt_atMostOne`). -/
+theorem ears_lt (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     sarea (ptA a) (ptB b) (ptH h) < 13 / 16 ∧ sarea (ptA a) (ptB b) (ptC c) < 13 / 16 ∧
       sarea (ptB b) (ptC c) (ptD d) < 13 / 16 ∧ sarea (ptC c) (ptD d) (ptF f) < 13 / 16 ∧
@@ -341,13 +333,11 @@ theorem claim_ears (hfam : SideOppositeFamily a h b c d f X Y Q)
   have hQs : Q ∈ unitSquare := by
     obtain ⟨S, C, I, -⟩ := fam_bounds ⟨hN, hX, hY, hQ⟩ hmin
     exact ⟨by linarith [I.1], by linarith [I.2.1], by linarith [I.2.2.1], by linarith [I.2.2.2.1]⟩
-  exact (SixBoundaryHull.theorem1 hN hX.1 hY.1 hQs (by linarith)).1
+  exact (SixBoundaryHull.ears_sarea_lt_atMostOne hN hX.1 hY.1 hQs (by linarith)).1
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-hc-lower`). Equation (15): if `Q` is below `HC`,
-then `hc ≥ σ/(3-2√2) > 7/11` (five-point endpoint theorem for `H, C, A, B, Q` in `(0,0)HC`).
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 190-196.
-Uses: TYPE_II:EndpointTriangleTheorem -/
-theorem claim_hc_lower (hfam : SideOppositeFamily a h b c d f X Y Q)
+/-- If `Q` is below `HC`, then `hc ≥ σ/(3-2√2) > 7/11` (the five-point endpoint theorem
+`TypeII.endpointTriangleTheorem` for `H, C, A, B, Q` in `(0,0)HC`). -/
+theorem hc_lower_of_below (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q))
     (hlow : sarea (ptH h) (ptC c) Q < 0) :
     (8 / 73) / (3 - 2 * Real.sqrt 2) ≤ h * c ∧ 7 / 11 < (8 / 73) / (3 - 2 * Real.sqrt 2) := by
@@ -370,7 +360,7 @@ theorem claim_hc_lower (hfam : SideOppositeFamily a h b c d f X Y Q)
     simp only [sarea]; nlinarith [mul_pos hc0 hh0]
   have mem : ∀ p : Point, 0 ≤ sarea (ptC c) (ptH h) p → 0 ≤ sarea (ptH h) (0, 0) p →
       0 ≤ sarea (0, 0) (ptC c) p → p ∈ convexHull ℝ ({ptH h, ptC c, (0, 0)} : Set Point) :=
-    fun p h1 h2 h3 => by rw [← hset]; exact TypeII.mem_convexHull_of_sarea hO h1 h2 h3
+    fun p h1 h2 h3 => by rw [← hset]; exact mem_convexHull_of_sarea hO h1 h2 h3
   have p1 := mul_pos hc0 (show 0 < h - a by linarith)
   have p2 := mul_pos hc0 ha
   have p3 := mul_pos hh0 (show 0 < c - b by linarith)
@@ -427,15 +417,15 @@ theorem fac_nonneg (f1 : 1 / 7 ≤ a) (f2 : 1 / 8 ≤ b) (f3 : 1 / 2 ≤ h) (f4 
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> linarith
 
-/-- The ten costs (16) are nonnegative. -/
+/-- The ten extra costs are nonnegative. -/
 theorem extra_nonneg (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) {tb : List SFact}
     (htb : AllHold (SFact.Holds (cfgS a h b c d f X Y Q)) tb) :
     ∀ e ∈ Model.extra tb, 0 ≤ e.eval (zetaS a h b c d f X Y Q) := by
   obtain ⟨S, C, I, hABC, hABH, hBCX, hCXD, hDYF, hCDQ, hDFQ, hFHQ⟩ := fam_bounds hfam hmin
   obtain ⟨hconv, hpoly, hgen⟩ := fam_hull hfam hmin
-  obtain ⟨e1, e2, -, -⟩ := claim_empty_ABH_BCX hfam hmin
-  obtain ⟨r1, r2, r3, r4, r5, r6⟩ := claim_ears hfam hmin
+  obtain ⟨e1, e2, -, -⟩ := empty_ABH_BCX hfam hmin
+  obtain ⟨r1, r2, r3, r4, r5, r6⟩ := ears_lt hfam hmin
   have hhc := S.2.2.2.2.2.2.2.2.2.2.2.2.2.2
   have g := fun {i j k : ℕ} (hi : i < 9) (hj : j < 9) (hk : k < 9) (hij : i ≠ j) (hjk : j ≠ k)
     (hik : i ≠ k) {V : ℝ} => SixBoundarySideTwoTop.area_ge hmin hi hj hk hij hjk hik (V := V)
@@ -465,7 +455,7 @@ theorem extra_nonneg (hfam : SideOppositeFamily a h b c d f X Y Q)
       change 0 < sarea (c, 0) (0, h) Q at hs
       have hlow : sarea (ptH h) (ptC c) Q < 0 := by
         rw [sarea_swap₁₂]; simp only [ptC, ptH]; linarith
-      have hc711 := claim_hc_lower hfam hmin hlow
+      have hc711 := hc_lower_of_below hfam hmin hlow
       have hHCD := g (i := 7) (j := 2) (k := 4) (by norm_num) (by norm_num) (by norm_num)
         (by norm_num) (by norm_num) (by norm_num) (V := sarea (ptH h) (ptC c) (ptD d)) rfl
         (by have := hconv 2 4 7 (by decide) (by decide); rw [sarea_cycle] at this; exact this.le)
@@ -502,7 +492,7 @@ theorem fam_hyp (hfam : SideOppositeFamily a h b c d f X Y Q)
     Hyp Model.pkg (cfgS a h b c d f X Y Q) (zetaS a h b c d f X Y Q) := by
   obtain ⟨S, C, I, hABC, hABH, hBCX, hCXD, hDYF, -⟩ := fam_bounds hfam hmin
   obtain ⟨hconv, hpoly, hgen⟩ := fam_hull hfam hmin
-  obtain ⟨-, -, nABH, nBCX⟩ := claim_empty_ABH_BCX hfam hmin
+  obtain ⟨-, -, nABH, nBCX⟩ := empty_ABH_BCX hfam hmin
   have hfam' := hfam
   obtain ⟨hN, ⟨⟨x0, x1, y0, y1⟩, -⟩, ⟨⟨e0, e1, e2, e3⟩, -⟩, hQ⟩ := hfam'
   obtain ⟨q1, q2, q3, q4, q5, q6⟩ := hQ
@@ -605,106 +595,37 @@ theorem res_false (hfam : SideOppositeFamily a h b c d f X Y Q)
 
 end Cover
 
-/-! ### Section 2: all affine bounds -/
+/-! ### All affine bounds -/
 
 section Claims
 
 variable {a h b c d f : ℝ} {X Y Q : Point}
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-anchor`). Equation (5) and the line after it:
-with `σ = 8/73`, `L = h-a`, `M = c-b`: `aM ≥ σ`, `bL ≥ σ`, `h ≥ σ/M + σ/b`, `hc ≥ 4σ`, `b > 1/8`.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 76-83. -/
-theorem claim_anchor (hfam : SideOppositeFamily a h b c d f X Y Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
-    let σ : ℝ := 8 / 73
-    σ ≤ a * (c - b) ∧ σ ≤ b * (h - a) ∧ σ / (c - b) + σ / b ≤ h ∧ 4 * σ ≤ h * c ∧ 1 / 8 < b := by
-  dsimp only
-  obtain ⟨S, -, -, hABC, hABH, -⟩ := fam_bounds hfam hmin
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, -⟩, -⟩ := hfam
-  refine ⟨hABC, hABH, ?_, S.2.2.2.2.2.2.2.2.2.2.2.2.2.2, S.2.1⟩
-  have e1 : 8 / 73 / (c - b) ≤ a := by rw [div_le_iff₀ (by linarith)]; linarith
-  have e2 : 8 / 73 / b ≤ h - a := by rw [div_le_iff₀ hb]; linarith
-  linarith
-
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-side-point`). Equations (6)–(7), for the side
-point `X = (x, y)`, with `σ = 8/73`, `M = c-b`: `[BCX] = My ≥ σ`, `[CXD] = d(x-c)-(1-c)y ≥ σ`;
-`x - c ≥ σ`, `c ≤ 1-σ`, `d - y ≥ σ/(1-c)`, `d ≥ σ/M + σ/(1-c) ≥ 4σ/(1-b) > 1/2`; `h ≥ d`,
-`c ≥ 4σ`, `M < 49/64`, `a, y > 1/7`, `d - y > 7/36`.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 85-102. -/
-theorem claim_side_point (hfam : SideOppositeFamily a h b c d f X Y Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
-    let σ : ℝ := 8 / 73
-    sarea (ptB b) (ptC c) X = (c - b) * X.2 ∧ σ ≤ (c - b) * X.2 ∧
-      sarea (ptC c) X (ptD d) = d * (X.1 - c) - (1 - c) * X.2 ∧
-      σ ≤ d * (X.1 - c) - (1 - c) * X.2 ∧
-      σ ≤ X.1 - c ∧ c ≤ 1 - σ ∧ σ / (1 - c) ≤ d - X.2 ∧
-      σ / (c - b) + σ / (1 - c) ≤ d ∧ 4 * σ / (1 - b) ≤ σ / (c - b) + σ / (1 - c) ∧
-      1 / 2 < 4 * σ / (1 - b) ∧
-      d ≤ h ∧ 4 * σ ≤ c ∧ c - b < 49 / 64 ∧ 1 / 7 < a ∧ 1 / 7 < X.2 ∧ 7 / 36 < d - X.2 := by
-  dsimp only
-  obtain ⟨S, -, -, -, -, hBCX, hCXD, -⟩ := fam_bounds hfam hmin
-  obtain ⟨ha', hb8, hc4, hc1, hd2, hL, hM, hxc, hy', hdy, hMlt, hW, hd4, -⟩ := S
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩, -⟩ := hfam
-  have hM0 : 0 < c - b := by linarith
-  have hW0 : 0 < 1 - c := by linarith
-  have e1 : 8 / 73 / (c - b) ≤ X.2 := by rw [div_le_iff₀ hM0]; linarith
-  have e2 : 8 / 73 / (1 - c) ≤ d - X.2 := by rw [div_le_iff₀ hW0]; linarith
-  have e3 : 4 * (8 / 73) / (1 - b) ≤ 8 / 73 / (c - b) + 8 / 73 / (1 - c) := by
-    rw [show 1 - b = (c - b) + (1 - c) by ring, div_add_div _ _ hM0.ne' hW0.ne',
-      div_le_div_iff₀ (by positivity) (by positivity)]
-    linarith [mul_nonneg (by norm_num : (0 : ℝ) ≤ 8 / 73) (sq_nonneg ((c - b) - (1 - c)))]
-  have e4 : 1 / 2 < 4 * (8 / 73) / (1 - b) := by
-    rw [lt_div_iff₀ (by linarith)]; linarith
-  exact ⟨by simp only [sarea]; ring, hBCX, by simp only [sarea]; ring, hCXD, hxc, hc1, e2,
-    by linarith, e3, e4, hdh, hc4, by linarith, by linarith, by linarith, by linarith⟩
-
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-cap`). Equations (8)–(9), for the opposite-cap
-point `Y = (z, w)`, with `σ = 8/73`: `[DYF] = (1-d)(z-f)-(1-f)(1-w) = (1-f)(w-d)-(1-d)(1-z) ≥ σ`;
-`d, f ≤ 1-σ`, `z - f ≥ σ`, `w - d ≥ σ`, `z - f > 2σ`, `w - d > 1/8`; `b ≤ 1-5σ < 29/64`.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 104-120. -/
-theorem claim_cap (hfam : SideOppositeFamily a h b c d f X Y Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
-    let σ : ℝ := 8 / 73
-    σ ≤ sarea (ptD d) Y (ptF f) ∧ d ≤ 1 - σ ∧ f ≤ 1 - σ ∧ σ ≤ Y.1 - f ∧ σ ≤ Y.2 - d ∧
-      2 * σ < Y.1 - f ∧ 1 / 8 < Y.2 - d ∧ b ≤ 1 - 5 * σ ∧ 1 - 5 * σ < 29 / 64 := by
-  dsimp only
-  obtain ⟨-, C, -, -, -, -, -, hDYF, -⟩ := fam_bounds hfam hmin
-  obtain ⟨c1, c2, c3, c4, c5, c6, c7⟩ := C
-  refine ⟨?_, c1, c2, c3, c4, c5, c6, c7, by norm_num⟩
-  have : sarea (ptD d) Y (ptF f) = (1 - d) * (Y.1 - f) - (1 - f) * (1 - Y.2) := by
-    simp only [sarea]; ring
-  rw [this]; exact hDYF
-
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:eq11`). The projection identities (11), for every
-point `Q = (r, t)`: `(1-f)[CDQ] + (1-c)[DFQ] = {d(1-f)+(1-d)(1-c)}(1-r)` and
-`(1-h)[DFQ] + (1-d)[FHQ] = {(1-h)(1-f)+(1-d)f}(1-t)`.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 130-138. -/
-theorem eq11 (h c d f : ℝ) (Q : Point) :
+/-- The projection identities, for every point `Q = (r, t)`:
+`(1-f)[CDQ] + (1-c)[DFQ] = {d(1-f)+(1-d)(1-c)}(1-r)` and
+`(1-h)[DFQ] + (1-d)[FHQ] = {(1-h)(1-f)+(1-d)f}(1-t)`. -/
+theorem projection_identities (h c d f : ℝ) (Q : Point) :
     (1 - f) * sarea (ptC c) (ptD d) Q + (1 - c) * sarea (ptD d) (ptF f) Q =
         (d * (1 - f) + (1 - d) * (1 - c)) * (1 - Q.1) ∧
       (1 - h) * sarea (ptD d) (ptF f) Q + (1 - d) * sarea (ptF f) (ptH h) Q =
         ((1 - h) * (1 - f) + (1 - d) * f) * (1 - Q.2) := by
   constructor <;> simp only [sarea] <;> ring
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-Q-box`). Equations (10)–(11), for `Q = (r, t)`,
-with `σ = 8/73`: `σ ≤ r, t ≤ 1-σ`, `r > 1/8`, `t > 1/7`.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 122-142. -/
-theorem claim_Q_box (hfam : SideOppositeFamily a h b c d f X Y Q)
+/-- The box bounds for `Q = (r, t)`, with `σ = 8/73`: `σ ≤ r, t ≤ 1-σ`, `r > 1/8`, `t > 1/7`. -/
+theorem Q_box (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     let σ : ℝ := 8 / 73
     σ ≤ Q.1 ∧ Q.1 ≤ 1 - σ ∧ σ ≤ Q.2 ∧ Q.2 ≤ 1 - σ ∧ 1 / 8 < Q.1 ∧ 1 / 7 < Q.2 :=
   (fam_bounds hfam hmin).2.2.1
 
-/-! ### Section 3: the radial words -/
+/-! ### The radial words -/
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-words`), restated. The four special words are in
-the list, the explicit list `Model.words` of the 97 words (the leaves of the kernel-checked
-enumeration `Model.enumTree`) has 97 entries, 18 of them with `r₇ < 3` (`Q` below `HC`); and `Q`
-has a radial word (13) in the list, with `[HCQ] > 0` exactly when `r₇ ≥ 3`. (The manuscript counts
-the Finset `octagonWords` itself; its cardinality over all `8⁸` tuples is not computed here.)
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 157-176.
-Uses: SIX_BOUNDARY_SIDE_OPPOSITE:claim-hull, SIX_BOUNDARY_SIDE_OPPOSITE:claim-empty-ABH-BCX -/
-theorem claim_words :
+/-- The four special words are in the list, the explicit list `Model.words` of the 97 words (the
+leaves of the kernel-checked enumeration `Model.enumTree`) has 97 entries, 18 of them with
+`r₇ < 3` (`Q` below `HC`); and `Q` has a radial word in the list, with `[HCQ] > 0` exactly when
+`r₇ ≥ 3`. (The cardinality of the Finset `octagonWords` over all `8⁸` tuples is not computed
+here.) -/
+theorem exists_octagonWord :
     Model.words.length = 97 ∧ (Model.words.filter fun w => w.getD 7 0 < 3).length = 18 ∧
       word23 ∈ octagonWords ∧ word54 ∈ octagonWords ∧ word69 ∈ octagonWords ∧
       word84 ∈ octagonWords ∧
@@ -718,7 +639,7 @@ theorem claim_words :
   refine ⟨by decide, by decide, (mem _).2 (by decide), (mem _).2 (by decide), (mem _).2 (by decide),
     (mem _).2 (by decide), fun {a h b c d f X Y Q} hfam hmin => ?_⟩
   obtain ⟨hconv, hpoly, hgen⟩ := fam_hull hfam hmin
-  obtain ⟨r, hr, hrw⟩ := claim_radial_word _ Q (by norm_num) hconv hpoly hgen
+  obtain ⟨r, hr, hrw⟩ := exists_radialWord _ Q (by norm_num) hconv hpoly hgen
   have H := fam_hyp hfam hmin hr hrw
   have hb := H.hbase
   have hrange : ∀ i, r i < 8 := fun i => by have := hrw.1 i; omega
@@ -740,7 +661,7 @@ theorem claim_words :
 
 end Claims
 
-/-! ### Sections 4–6: the certificates, the branch cover and the sharp chambers -/
+/-! ### The certificates, the branch cover and the sharp chambers -/
 
 section Final
 
@@ -754,20 +675,13 @@ theorem word_eq {r : Fin 8 → Fin 8} {n : ℕ}
     {w : Fin 8 → Fin 8} (hw : ∀ i : Fin 8, (Model.words.getD n []).getD i 0 = w i) : r = w :=
   funext fun i => Fin.ext ((hwr i.1 i.2).trans (hw i))
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-certificate`). The certificate package
-(`docs/proof/nine/six_boundary_side_opposite_certificates.json`, verified by
-`docs/proof/nine/check_six_boundary_side_opposite.py`): every word of the list other than 23, 54, 69, 84 is
-impossible. In the manuscript each of these 93 words has one fixed rational cubic (scale 4096) in
-the 32 affine factors (12) and the 94 quadratic costs (16) (signed areas minus `σ` or `3σ`,
-`W - 4σ | 2σ`, `hc - 4σ | 7/11`, `3σ - [ABH]`, `3σ - [BCX]`, `13/16 - [ear]`), nonnegative on its
-word and with cube bound (18) below `-3/4`. Here each certificate is checked by the kernel on the
-atoms of `Model.pkg` (`Heilbronn.Nine.SixBoundary.SideOppositeTrees*`); the words 69 and 84 are
-covered too. `docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 198-276.
-Uses: SIX_BOUNDARY_SIDE_OPPOSITE:claim-anchor, SIX_BOUNDARY_SIDE_OPPOSITE:claim-side-point,
-SIX_BOUNDARY_SIDE_OPPOSITE:claim-cap, SIX_BOUNDARY_SIDE_OPPOSITE:claim-Q-box,
-SIX_BOUNDARY_SIDE_OPPOSITE:claim-empty-ABH-BCX, SIX_BOUNDARY_SIDE_OPPOSITE:claim-ears,
-SIX_BOUNDARY_SIDE_OPPOSITE:claim-hc-lower -/
-theorem claim_certificate (hfam : SideOppositeFamily a h b c d f X Y Q)
+/-- Every word of the list other than `word23`, `word54`, `word69`, `word84` is impossible. Each
+of these 93 words is excluded by one rational cubic (scale 4096) in the 32 affine factors and the
+94 quadratic costs (signed areas minus `σ` or `3σ`, `W - 4σ | 2σ`, `hc - 4σ | 7/11`,
+`3σ - [ABH]`, `3σ - [BCX]`, `13/16 - [ear]`), nonnegative on its word and with cube bound below
+`-3/4`. Each certificate is checked by the kernel on the atoms of `Model.pkg`
+(`Heilbronn.Nine.SixBoundary.SideOppositeTrees*`); the words 69 and 84 are covered too. -/
+theorem not_hasRadialWord_of_ne (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     ∀ r ∈ octagonWords, r ≠ word23 → r ≠ word54 → r ≠ word69 → r ≠ word84 →
       ¬ HasRadialWord (octagon a h b c d f X Y) Q (fun i => (r i : ℕ)) := by
@@ -780,13 +694,11 @@ theorem claim_certificate (hfam : SideOppositeFamily a h b c d f X Y Q)
   · rintro rfl; exact h23 (word_eq hwr (by decide))
   · rintro rfl; exact h54 (word_eq hwr (by decide))
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-branch-cover`). The branch table of Section 4:
-words 69 and 84 are impossible (branches `x_low`, `y_low` and the joint `x_high, y_high`; the
-joint branch of word 84 is the single quartic); word 23 is confined to
+/-- The branch table: words 69 and 84 are impossible (branches `x_low`, `y_low` and the joint
+`x_high, y_high`; the joint branch of word 84 is the single quartic); word 23 is confined to
 `x > z, w > h, 11/20 < h-a < 2/3, z-f > 11/20, f < 1/4, c > 2/3`; word 54 to `x > z, w > h`
-(writing `X = (x,y)`, `Y = (z,w)`). `docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 212-276.
-Uses: SIX_BOUNDARY_SIDE_OPPOSITE:claim-certificate -/
-theorem claim_branch_cover (hfam : SideOppositeFamily a h b c d f X Y Q)
+(writing `X = (x,y)`, `Y = (z,w)`). -/
+theorem branch_cover (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     ¬ HasRadialWord (octagon a h b c d f X Y) Q (fun i => (word69 i : ℕ)) ∧
       ¬ HasRadialWord (octagon a h b c d f X Y) Q (fun i => (word84 i : ℕ)) ∧
@@ -844,14 +756,12 @@ theorem claim_branch_cover (hfam : SideOppositeFamily a h b c d f X Y Q)
         simp only [Model.res54, List.getD_cons_zero, List.getD_cons_succ, eval_minus, eval_v,
           SixBoundarySideTwoTop.zeta]; linarith)
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-word23-DF`). In the residual region of word 23,
-with the sharp labels `(A',B',C',D',E',F',G',H',O') = (A,B,C,X,D,Y,F,H,Q)`, the configuration is
-the D/F-moving chamber of `SHARP_DF_MOVING.md` with `r' = 1-x`, `d' = y`, `e' = d`, `f' = z`,
-`k' = w`, `g' = f`, `O' = Q`: all hypotheses (1)–(2) of that theorem hold and its eleven oriented
-doubled areas are positive. (The order `f' = z < 1` comes from `z < x ≤ 1`.)
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 280-297.
-Uses: SIX_BOUNDARY_SIDE_OPPOSITE:claim-side-point, SIX_BOUNDARY_SIDE_OPPOSITE:claim-cap -/
-theorem claim_word23_DF (hfam : SideOppositeFamily a h b c d f X Y Q)
+/-- In the residual region of word 23, with the sharp labels
+`(A',B',C',D',E',F',G',H',O') = (A,B,C,X,D,Y,F,H,Q)`, the configuration is the D/F-moving chamber
+of `SharpDFMoving` with `r' = 1-x`, `d' = y`, `e' = d`, `f' = z`, `k' = w`, `g' = f`, `O' = Q`:
+all hypotheses `SharpDFMoving.DFMovingHyp` hold and its eleven oriented doubled areas are
+positive. (The order `f' = z < 1` comes from `z < x ≤ 1`.) -/
+theorem word23_DFMoving (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q))
     (hw : HasRadialWord (octagon a h b c d f X Y) Q (fun i => (word23 i : ℕ)))
     (hres : Y.1 < X.1 ∧ h < Y.2 ∧ 11 / 20 < h - a ∧ h - a < 2 / 3 ∧ 11 / 20 < Y.1 - f ∧
@@ -909,16 +819,14 @@ theorem claim_word23_DF (hfam : SideOppositeFamily a h b c d f X Y Q)
   · show 0 < sarea Q (ptC c) Y
     simp only [sarea] at w10 ⊢; linarith
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-word54-BD`). In the residual region of word 54,
-after the rotation `R(u,v) = (v,1-u)` and the labels
-`(A',…,O') = (R(C),R(X),R(D),R(Y),R(F),R(H),R(A),R(B),R(Q))`, i.e. (19)
+/-- In the residual region of word 54, after the rotation `R(u,v) = (v,1-u)` and the labels
+`(A',…,O') = (R(C),R(X),R(D),R(Y),R(F),R(H),R(A),R(B),R(Q))`, that is
 `A' = (0,1-c)`, `B' = (y,1-x)`, `C' = (d,0)`, `D' = (w,1-z)`, `E' = (1,1-f)`, `F' = (h,1)`,
 `G' = (a,1)`, `H' = (0,1-b)`, `O' = (t,1-r)`, the configuration is the B/D-moving chamber of
-`SHARP_BD_MOVING.md` with `t' = 1-x ≤ d' = 1-z` and `r' = 1-w ≤ 1-f' = 1-h`: all its hypotheses
-(1) hold and its eleven oriented doubled areas are positive. (The order `d' = 1-z > 0` comes from
-`z < x ≤ 1`.) `docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 299-319.
-Uses: SIX_BOUNDARY_SIDE_OPPOSITE:claim-side-point, SIX_BOUNDARY_SIDE_OPPOSITE:claim-cap -/
-theorem claim_word54_BD (hfam : SideOppositeFamily a h b c d f X Y Q)
+`SharpBDMoving` with `t' = 1-x ≤ d' = 1-z` and `r' = 1-w ≤ 1-f' = 1-h`: all hypotheses
+`SharpBDMoving.BDMovingHyp` hold and its eleven oriented doubled areas are positive. (The order
+`d' = 1-z > 0` comes from `z < x ≤ 1`.) -/
+theorem word54_BDMoving (hfam : SideOppositeFamily a h b c d f X Y Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q))
     (hw : HasRadialWord (octagon a h b c d f X Y) Q (fun i => (word54 i : ℕ)))
     (hres : Y.1 < X.1 ∧ h < Y.2) :
@@ -993,9 +901,9 @@ theorem sharp23 (hfam : SideOppositeFamily a h b c d f X Y Q)
     minTriangleArea (nConfig a h b c d f X Y Q) ≤ A₀ ∧
       (A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Q) →
         IsOptimal (nConfig a h b c d f X Y Q) ∧ X.1 = 1 ∧ Y.2 = 1) := by
-  have hres := (claim_branch_cover hfam hmin).2.2.1 hw
-  obtain ⟨hyp, hch, ceq⟩ := claim_word23_DF hfam hmin hw hres
-  have K := SharpDFMoving.theorem1 hyp hch
+  have hres := (branch_cover hfam hmin).2.2.1 hw
+  obtain ⟨hyp, hch, ceq⟩ := word23_DFMoving hfam hmin hw hres
+  have K := SharpDFMoving.dfMoving_chamber_le hyp hch
   have hP : sharpConfig (ptA a) (ptB b) (ptC c) X (ptD d) Y (ptF f) (ptH h) Q =
       nConfig a h b c d f X Y Q ∘ SixBoundarySideTwoTop.nIdx := by
     funext i; fin_cases i <;> rfl
@@ -1019,9 +927,9 @@ theorem sharp54 (hfam : SideOppositeFamily a h b c d f X Y Q)
     minTriangleArea (nConfig a h b c d f X Y Q) ≤ A₀ ∧
       (A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Q) →
         IsOptimal (nConfig a h b c d f X Y Q) ∧ X.1 = 1 ∧ Y.2 = 1) := by
-  have hres := (claim_branch_cover hfam hmin).2.2.2 hw
-  obtain ⟨hyp, hch, ceq⟩ := claim_word54_BD hfam hmin hw hres
-  have K := SharpBDMoving.theorem1 hyp hch
+  have hres := (branch_cover hfam hmin).2.2.2 hw
+  obtain ⟨hyp, hch, ceq⟩ := word54_BDMoving hfam hmin hw hres
+  have K := SharpBDMoving.bdMoving_chamber_le hyp hch
   set τ : Fin 9 → Fin 9 := ![3, 6, 4, 7, 5, 1, 0, 2, 8] with hτ
   have hinj : Function.Injective τ := by rw [hτ]; decide
   have hP : sharpConfig (ptC c) X (ptD d) Y (ptF f) (ptH h) (ptA a) (ptB b) Q =
@@ -1046,20 +954,11 @@ theorem sharp54 (hfam : SideOppositeFamily a h b c d f X Y Q)
     rw [← this]
     simp [rotation, SquareSymmetry.apply]
 
-/-- **Theorem 1** (`SIX_BOUNDARY_SIDE_OPPOSITE:Theorem1`). Throughout N6-04 (N anchors, `X` in
-the side cap `CD(1,0)`, `Y` in the opposite cap `DF(1,1)`, `Q` strictly inside the anchor
-hexagon), the minimum ordinary triangle area is at most `A₀`. If all actual triangle areas are at
-least `A₀`, the configuration is an isometric copy of the equality configuration of
-`HAND_PROOF.md`, and both cap points lie on the square boundary (`x = 1`, `w = 1`).
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 20-36, 321-323.
-Uses: SIX_BOUNDARY_SIDE_OPPOSITE:claim-hull, SIX_BOUNDARY_SIDE_OPPOSITE:claim-empty-ABH-BCX,
-SIX_BOUNDARY_SIDE_OPPOSITE:claim-ears, SIX_BOUNDARY_SIDE_OPPOSITE:claim-anchor,
-SIX_BOUNDARY_SIDE_OPPOSITE:claim-side-point, SIX_BOUNDARY_SIDE_OPPOSITE:claim-cap,
-SIX_BOUNDARY_SIDE_OPPOSITE:claim-Q-box, SIX_BOUNDARY_SIDE_OPPOSITE:claim-words,
-SIX_BOUNDARY_SIDE_OPPOSITE:claim-hc-lower, SIX_BOUNDARY_SIDE_OPPOSITE:claim-certificate,
-SIX_BOUNDARY_SIDE_OPPOSITE:claim-branch-cover, SIX_BOUNDARY_SIDE_OPPOSITE:claim-word23-DF,
-SIX_BOUNDARY_SIDE_OPPOSITE:claim-word54-BD, SHARP_DF_MOVING:Theorem1, SHARP_BD_MOVING:Theorem1 -/
-theorem theorem1 (hfam : SideOppositeFamily a h b c d f X Y Q) :
+/-- With N anchors, `X` in the side cap `CD(1,0)`, `Y` in the opposite cap `DF(1,1)` and `Q`
+strictly inside the anchor hexagon, the minimum ordinary triangle area is at most `A₀`. If all
+actual triangle areas are at least `A₀`, the configuration is optimal (an isometric copy of the
+equality configuration), and both cap points lie on the square boundary (`x = 1`, `w = 1`). -/
+theorem sideOpposite_le_A₀ (hfam : SideOppositeFamily a h b c d f X Y Q) :
     minTriangleArea (nConfig a h b c d f X Y Q) ≤ A₀ ∧
       (A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Q) →
         IsOptimal (nConfig a h b c d f X Y Q) ∧ X.1 = 1 ∧ Y.2 = 1) := by
@@ -1069,7 +968,7 @@ theorem theorem1 (hfam : SideOppositeFamily a h b c d f X Y Q) :
     have := A₀_bounds.2.1
     exact ⟨by linarith, fun h => absurd (h.trans_lt h4) (by linarith)⟩
   obtain ⟨hconv, hpoly, hgen⟩ := fam_hull hfam h4
-  obtain ⟨r, hr, hrw⟩ := claim_radial_word _ Q (by norm_num) hconv hpoly hgen
+  obtain ⟨r, hr, hrw⟩ := exists_radialWord _ Q (by norm_num) hconv hpoly hgen
   obtain ⟨n, hn, hwr⟩ := word_index hfam h4 hr hrw
   by_cases h23 : n = 23
   · subst h23
@@ -1085,20 +984,18 @@ theorem theorem1 (hfam : SideOppositeFamily a h b c d f X Y Q) :
     exact sharp54 hfam h4 hr
   exact (leaf_false hfam h4 hr hrw hn h23 h54 hwr).elim
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-transposed`). Theorem 1 for the transposed
-placement (lines 15-16): `X` in the left side cap `FH(0,1)`, `Y` in `DF(1,1)`, `Q` inside the
-hexagon; at equality `X` is on the top side and `Y` on the right side.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 15-16.
-Uses: SIX_BOUNDARY_SIDE_OPPOSITE:Theorem1, SIX_BOUNDARY_HULL:claim-transposition -/
-theorem theorem1_transposed (hN : NAnchors a h b c d f)
+/-- `sideOpposite_le_A₀` for the transposed placement: `X` in the left side cap `FH(0,1)`, `Y` in
+`DF(1,1)`, `Q` inside the hexagon; at equality `X` is on the top side and `Y` on the right
+side. -/
+theorem sideOpposite_le_A₀_transposed (hN : NAnchors a h b c d f)
     (hX : InCapL f h X) (hY : InCapT d f Y) (hQ : InHexagon a h b c d f Q) :
     minTriangleArea (nConfig a h b c d f X Y Q) ≤ A₀ ∧
       (A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Q) →
         IsOptimal (nConfig a h b c d f X Y Q) ∧ X.2 = 1 ∧ Y.1 = 1) := by
-  have T := claim_transposition a h b c d f X Y Q
-  have k := theorem1 ⟨T.1.1 hN, T.2.2.2.2.2.2.1.1 hX,
-    (claim_transposition a h b c d f Y X Q).2.2.2.2.2.2.2.1.1 hY,
-    (claim_transposition a h b c d f Q X Y).2.2.2.2.2.2.2.2.2.1.1 hQ⟩
+  have T := transpose_invariant a h b c d f X Y Q
+  have k := sideOpposite_le_A₀ ⟨T.1.1 hN, T.2.2.2.2.2.2.1.1 hX,
+    (transpose_invariant a h b c d f Y X Q).2.2.2.2.2.2.2.1.1 hY,
+    (transpose_invariant a h b c d f Q X Y).2.2.2.2.2.2.2.2.2.1.1 hQ⟩
   rw [T.2.2.1] at k
   refine ⟨k.1, fun hA => ?_⟩
   obtain ⟨hopt, h1, h2⟩ := k.2 hA

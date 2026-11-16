@@ -2,16 +2,17 @@ module
 
 public import Heilbronn.Nine.C1.OneLower.CoverCommon
 
-/-! # Radial words of a convex polygon (`docs/proof/nine/C1_ONE_LOWER_TOP_CAP.md` §3, shared by the one-lower group)
+/-! # Radial words of a convex polygon
 
-Moved from `Heilbronn.Nine.C1.OneLower.TopCap` (same namespace `Heilbronn.Nine.C1OneLowerTopCap`, same
-names) so that the certificate modules can be imported by the notes' main files. Radial words of
-a point with respect to a convex polygon `V₀, …, V_{n-1}`: `HullWord`, `hullSign` (the checkers'
-`sign`), `hullInside` (`inside`), `HasHullWord` (geometric meaning (12)), `HullAntisymm` (13),
-`ConvexPolygon`, `interiorWords`; `hullTriples`, `insideCount`; `AtMostInside` (capacity); the
-upper-pair rule `sameSector`, `upperPairSign`, `upperPairConflict` (15). General results:
-`hasHullWord_inside_iff`, `exists_hullWord` ((12)–(13)), `interiorWords_card_six`, `eq14` (the
-ray-order rule (14)).
+Shared by the one-lower C1 packages. This module lives apart from
+`Heilbronn.Nine.C1.OneLower.TopCap` (in the same namespace `Heilbronn.Nine.C1OneLowerTopCap`) so
+that the certificate modules, which the main files import, can use it. Radial words of
+a point with respect to a convex polygon `V₀, …, V_{n-1}`: `HullWord`, `hullSign` (the sign of
+`[VᵢVⱼR]` read off the word), `hullInside` (inside a triangle of vertices), `HasHullWord` (the
+geometric meaning of a word), `HullAntisymm` (the complement relation); `hullTriples`,
+`insideCount`; `AtMostInside` (capacity); the upper-pair rule `sameSector`,
+`upperPairSign`, `upperPairConflict`. General results: `hasHullWord_inside_iff`,
+`exists_hullWord` (every interior point has a word), `sarea_pos_of_hullWord_lt` (the ray-order rule).
 -/
 
 @[expose] public section
@@ -21,25 +22,24 @@ namespace Heilbronn.Nine.C1OneLowerTopCap
 
 open Heilbronn.Nine.C1
 
-
 /-- A radial word `r = (r₀, …, r_{n-1})` of a point with respect to a polygon `V₀, …, V_{n-1}`. -/
 abbrev HullWord (n : ℕ) := Fin n → ℕ
 
-/-- The checkers' `sign(word, i, j)`: `(j - i) mod n ≤ rᵢ`. For a point with word `r` this is the
+/-- The sign `(j - i) mod n ≤ rᵢ` read off the word `r`. For a point with word `r` this is the
 truth value of `[VᵢVⱼR] > 0` (`HasHullWord`). -/
 def hullSign {n : ℕ} (r : HullWord n) (i j : Fin n) : Bool := decide ((j - i : Fin n).val ≤ r i)
 
-/-- The checkers' `inside(word, (a, b, c))`: the three edge tests of the triangle `V_a V_b V_c`
-(given in counterclockwise cyclic order) are positive, i.e. the point is strictly inside it. -/
+/-- The three edge tests of the triangle `V_a V_b V_c` (given in counterclockwise cyclic order),
+read off the word `r`, are positive, i.e. the point is strictly inside it. -/
 def hullInside {n : ℕ} (r : HullWord n) (a b c : Fin n) : Bool :=
   hullSign r a b && hullSign r b c && hullSign r c a
 
-/-- `R` has the radial word `r` with respect to the polygon `V` ((12) of the note): for all
-vertices `i ≠ j`, `[VᵢVⱼR] > 0` exactly when `(j - i) mod n ≤ rᵢ`. -/
+/-- `R` has the radial word `r` with respect to the polygon `V`: for all vertices `i ≠ j`,
+`[VᵢVⱼR] > 0` exactly when `(j - i) mod n ≤ rᵢ`. -/
 def HasHullWord {n : ℕ} (V : Fin n → Point) (R : Point) (r : HullWord n) : Prop :=
   ∀ i j : Fin n, i ≠ j → (0 < sarea (V i) (V j) R ↔ hullSign r i j = true)
 
-/-- The complement relation (13): `(j ≤ rᵢ) ↔ (n - j > r_{i+j})` for `j = 1, …, n - 1`, indices
+/-- The complement relation: `(j ≤ rᵢ) ↔ (n - j > r_{i+j})` for `j = 1, …, n - 1`, indices
 mod `n` (reversing a directed diagonal). -/
 def HullAntisymm {n : ℕ} (r : HullWord n) : Prop :=
   ∀ i j : Fin n, (j : ℕ) ≠ 0 → ((j : ℕ) ≤ r i ↔ r (i + j) < n - (j : ℕ))
@@ -47,18 +47,7 @@ def HullAntisymm {n : ℕ} (r : HullWord n) : Prop :=
 instance {n : ℕ} (r : HullWord n) : Decidable (HullAntisymm r) := by
   unfold HullAntisymm; infer_instance
 
-/-- `V₀, …, V_{n-1}` is a convex polygon in counterclockwise order: every increasing triple of
-vertices is counterclockwise. -/
-def ConvexPolygon {n : ℕ} (V : Fin n → Point) : Prop :=
-  ∀ i j k : Fin n, i < j → j < k → 0 < sarea (V i) (V j) (V k)
-
-/-- The words of interior points: entries in `{1, …, n - 2}` (the two neighbouring hull-edge
-tests) satisfying (13). For `n = 6` there are 26 (`interiorWords_card_six`). -/
-def interiorWords (n : ℕ) : Finset (Fin n → Fin (n - 1)) :=
-  Finset.univ.filter fun r => (∀ i, 1 ≤ (r i : ℕ)) ∧ HullAntisymm fun i => (r i : ℕ)
-
-/-- The increasing index triples `a < b < c` of `Fin n`, in lexicographic order (the checkers'
-`combinations(range(n), 3)`). -/
+/-- The increasing index triples `a < b < c` of `Fin n`, in lexicographic order. -/
 def hullTriples (n : ℕ) : List (Fin n × Fin n × Fin n) :=
   (List.finRange n).flatMap fun a => (List.finRange n).flatMap fun b =>
     ((List.finRange n).filter fun c => decide (a < b) && decide (b < c)).map fun c => (a, b, c)
@@ -77,15 +66,15 @@ quadrilateral `HCDF`, whose vertices have indices `iH, iC, iD, iF` in the polygo
 def sameSector {n : ℕ} (iH iC iD iF : Fin n) (p q : HullWord n) : Bool :=
   (hullSign p iH iD == hullSign q iH iD) && (hullSign p iC iF == hullSign q iC iF)
 
-/-- The upper-pair rule ((15) and the isolated-vertex table of Section 3; the checkers'
-`upper_pair_signs`): for two points of `HCDF` with words `p, q`, not in the same sector, the forced
+/-- The upper-pair rule (`upperPairSign_sound`, with its isolated-vertex table): for two points of `HCDF` with
+words `p, q`, not in the same sector, the forced
 sign of `[V_v P Q]` at each vertex `v ∈ {H, C, D, F}` (`true` = positive).
 
 * Both diagonals separate the pair: `sgn[PQA] = -sgn[ABP]`, `sgn[PQB] = sgn[ABP]` for `A → B`
   equal to `H → D` and to `C → F`.
 * Only `CF` separates (common triangle `HDF` or `HCD`): the line `PQ` isolates `F`, resp. `C`;
   only `HD` separates (common triangle `HCF` or `CDF`): it isolates `H`, resp. `D`. The sign of
-  the isolated vertex is the one given by (15) for the separating diagonal, and the other three
+  the isolated vertex is the one given by `upperPairSign_sound` for the separating diagonal, and the other three
   signs are its negatives.
 
 The value is `none` for other vertices and for a pair in the same sector. -/
@@ -109,8 +98,8 @@ def upperPairSign {n : ℕ} (iH iC iD iF : Fin n) (p q : HullWord n) (v : Fin n)
     let side := if pCF then !pHD else pHD
     some (if v = iso then side else !side)
 
-/-- A sign conflict between the upper-pair rule and the ray-order rule (14): at some vertex where
-the words differ, the forced sign of `[V_v P Q]` is not `sgn(q_v - p_v)`. -/
+/-- A sign conflict between the upper-pair rule and the ray-order rule (`sarea_pos_of_hullWord_lt`): at some vertex
+where the words differ, the forced sign of `[V_v P Q]` is not `sgn(q_v - p_v)`. -/
 def upperPairConflict {n : ℕ} (iH iC iD iF : Fin n) (p q : HullWord n) : Bool :=
   (List.finRange n).any fun v =>
     (p v != q v) &&
@@ -188,8 +177,8 @@ theorem add_one_ne_sub_one {n : ℕ} [NeZero n] (hn : 3 ≤ n) (i : Fin n) : i +
   rcases val_add_offset i (m := 1) (by omega) with ⟨a1, a2⟩ | ⟨a1, a2⟩ <;>
     rcases val_add_offset i (m := n - 1) (by omega) with ⟨b1, b2⟩ | ⟨b1, b2⟩ <;> omega
 
-/-- Helper: the radial identity at a vertex `P` with the linear form
-`ℓ(X) = [PUX] - [PWX]`: `[PAB] ℓ(M) = [PAM] ℓ(B) + [PMB] ℓ(A)`. -/
+/-- Helper: the radial identity at a vertex `P` with the linear form `ℓ(X) = [PUX] - [PWX]`:
+`[PAB] ℓ(M) = [PAM] ℓ(B) + [PMB] ℓ(A)`. -/
 theorem radial_identity (P A B M U W : Point) :
     sarea P A B * (sarea P U M - sarea P W M) =
       sarea P A M * (sarea P U B - sarea P W B) + sarea P M B * (sarea P U A - sarea P W A) := by
@@ -222,7 +211,7 @@ theorem radial_neg {P A B M U W : Point} (hA : 0 ≤ sarea P U A - sarea P W A)
 
 /-- Helper (cyclic positivity): in a convex polygon, the vertices `a, a + p, a + q` with
 `0 < p < q < n` are counterclockwise (a rotation of an increasing triple). -/
-theorem cyc_pos {n : ℕ} [NeZero n] {V : Fin n → Point} (hV : ConvexPolygon V) (a : Fin n)
+theorem cyc_pos {n : ℕ} [NeZero n] {V : Fin n → Point} (hV : IsConvexPolygon V) (a : Fin n)
     {p q : ℕ} (hp : 0 < p) (hpq : p < q) (hq : q < n) :
     0 < sarea (V a) (V (a + (p : Fin n))) (V (a + (q : Fin n))) := by
   have ha := a.isLt
@@ -238,7 +227,7 @@ theorem cyc_pos {n : ℕ} [NeZero n] {V : Fin n → Point} (hV : ConvexPolygon V
 /-- Helper: at a vertex `Vᵢ` of a convex polygon, every other vertex lies in the open half-plane
 `ℓ > 0`, `ℓ(X) = [VᵢV_{i+1}X] - [VᵢV_{i-1}X]`. -/
 theorem ell_vertex_pos {n : ℕ} [NeZero n] (hn : 3 ≤ n) {V : Fin n → Point}
-    (hV : ConvexPolygon V) (i : Fin n) {m : ℕ} (h1 : 1 ≤ m) (h2 : m < n) :
+    (hV : IsConvexPolygon V) (i : Fin n) {m : ℕ} (h1 : 1 ≤ m) (h2 : m < n) :
     0 < sarea (V i) (V (i + 1)) (V (i + (m : Fin n))) -
       sarea (V i) (V (i - 1)) (V (i + (m : Fin n))) := by
   rw [add_one_eq_add, sub_one_eq_add]
@@ -288,11 +277,11 @@ theorem hasHullWord_inside_iff {n : ℕ} {V : Fin n → Point} {R : Point} {r : 
   simp only [hullInside, Bool.and_eq_true, InTriangle, ← hr a b hab.ne, ← hr b e hbe.ne,
     ← hr e a (hab.trans hbe).ne', and_assoc]
 
-/-- Helper (the general form of (12)–(13)): a point strictly inside a convex polygon, with no zero
-area against two vertices, has a radial word with entries in `{1, …, n - 2}` satisfying (13).
-"Convexity makes the positive signs consecutive, and the two neighboring hull-edge tests give
-`1 ≤ rᵢ ≤ n - 2`." `docs/proof/nine/C1_ONE_LOWER_TOP_CAP.md`, lines 211-227. -/
-theorem exists_hullWord {n : ℕ} [NeZero n] {V : Fin n → Point} (hV : ConvexPolygon V)
+/-- A point strictly inside a convex polygon, with no zero area against two vertices, has a
+radial word with entries in `{1, …, n - 2}` satisfying the complement relation `HullAntisymm`.
+Convexity makes the positive signs consecutive, and the two neighboring hull-edge tests give
+`1 ≤ rᵢ ≤ n - 2`. -/
+theorem exists_hullWord {n : ℕ} [NeZero n] {V : Fin n → Point} (hV : IsConvexPolygon V)
     {R : Point} (hin : ∀ i : Fin n, 0 < sarea (V i) (V (i + 1)) R)
     (hne : ∀ i j : Fin n, i ≠ j → sarea (V i) (V j) R ≠ 0) :
     ∃ r : HullWord n, HasHullWord V R r ∧ (∀ i, 1 ≤ r i ∧ r i ≤ n - 2) ∧ HullAntisymm r := by
@@ -406,19 +395,11 @@ theorem exists_hullWord {n : ℕ} [NeZero n] {V : Fin n → Point} (hV : ConvexP
     push Not at a b
     exact hne' (by linarith)
 
-/-- Helper: the 26 words of (13) for a hexagon ("The finite list of all words satisfying (13) has
-26 members"). `docs/proof/nine/C1_ONE_LOWER_TOP_CAP.md`, line 229. -/
-theorem interiorWords_card_six : (interiorWords 6).card = 26 := by
-  decide +kernel
-
-/-- **Claim** (`C1_ONE_LOWER_TOP_CAP:(14)`). The ray-order rule, for any convex polygon: at a
-vertex `Vᵢ` all rays towards the other vertices and the interior points lie in the convex angle
-at `Vᵢ`, of size less than `π`, and `rᵢ(R)` locates the ray `VᵢR` between the rays to
-`V_{i+rᵢ}` and `V_{i+rᵢ+1}`. Hence if two interior words differ at `i`,
-`sgn[VᵢRS] = sgn(rᵢ(S) - rᵢ(R))`. The same rule is (8) of `C1_ONE_LOWER_SIDE_CAP.md`, (11) of
-`C1_ONE_LOWER_TOP_TRIANGLE.md`, (10) of `C1_ONE_LOWER_CONVEX_TOP.md` and (11) of
-`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`. `docs/proof/nine/C1_ONE_LOWER_TOP_CAP.md`, lines 270-281. -/
-theorem eq14 {n : ℕ} {V : Fin n → Point} (hV : ConvexPolygon V) {R S : Point}
+/-- The ray-order rule, for any convex polygon: at a vertex `Vᵢ` all rays towards the other vertices
+and the interior points lie in the convex angle at `Vᵢ`, of size less than `π`, and `rᵢ(R)` locates
+the ray `VᵢR` between the rays to `V_{i+rᵢ}` and `V_{i+rᵢ+1}`. Hence if two interior words differ at
+`i`, `sgn[VᵢRS] = sgn(rᵢ(S) - rᵢ(R))`. -/
+theorem sarea_pos_of_hullWord_lt {n : ℕ} {V : Fin n → Point} (hV : IsConvexPolygon V) {R S : Point}
     {r r' : HullWord n} (hR : HasHullWord V R r) (hS : HasHullWord V S r')
     (hr : ∀ i, 1 ≤ r i ∧ r i ≤ n - 2) (hr' : ∀ i, 1 ≤ r' i ∧ r' i ≤ n - 2) {i : Fin n}
     (hlt : r i < r' i) : 0 < sarea (V i) R S := by
@@ -444,7 +425,7 @@ vertices lie in the open half-plane `ℓ > 0`, `ℓ(X) = [VᵢV_{i+1}X] + [V_{i-
 rays turn left, so the rays are ordered.) -/
 theorem convex_of_edges {n : ℕ} [NeZero n] (hn : 3 ≤ n) {V : Fin n → Point}
     (hV : ∀ i k : Fin n, k ≠ i → k ≠ i + 1 → 0 < sarea (V i) (V (i + 1)) (V k)) :
-    ConvexPolygon V := by
+    IsConvexPolygon V := by
   have z : ∀ A B : Point, sarea A B B = 0 := fun A B => by unfold sarea; ring
   have hne1 : ∀ i : Fin n, i + 1 ≠ i := fun i h => by
     have h' := congrArg (fun x => x - i) h

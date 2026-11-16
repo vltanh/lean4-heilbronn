@@ -9,8 +9,8 @@ A labelled tree subdivides a box; each leaf names one polynomial of a list `es` 
 degrees) and the bound `M` of a Bernstein box check (`Cert.bernsteinBoxCheck`) proving that this
 polynomial is positive on the leaf box. Soundness (`ltreeCheck_sound`): if the tree check
 succeeds, at every point of the box *some* polynomial of the list is positive. This generalizes
-`MovingFCert.treeCheck` (one polynomial) to the certificates of `docs/proof/nine/C1_TOP_CAP_CONVEX_PAIR.md`
-§4 (labels `P`/`Q`) and `docs/proof/nine/C1_TOP_CAP_TRIANGULAR_PAIR.md` §4 (labels `0, …, 3`).
+`MovingFCert.treeCheck` (one polynomial) to the certificates `ConvexPairCert` (two polynomials) and
+`TriangularPairCert` (four polynomials).
 
 `pointOf` turns a list of reals into a valuation, with `pointOf_box` for the box hypothesis.
 -/

@@ -3,14 +3,15 @@ module
 public import Heilbronn.Nine.C1.ZeroLowerPairs
 public import Heilbronn.Nine.C1.ZeroLowerTrees
 
-/-! # Zero-lower C1: finite facts about the word cases (`docs/proof/nine/C1_ZERO_LOWER.md` §5)
+/-! # Zero-lower C1: finite facts about the word cases
 
 Decidable statements about the eleven zero-lower words and the retained cases, each checked by
-`decide +kernel`: the word table of `C1_ZERO_LOWER:claim-words` (`wordTableB_true`), the radial
-separating anchor of (14) (`radial_words`), the regions of the words (`word_region`), witnesses
-for the region counts of the retained cases (`keys_one`, `keys_two`, `keys_three`), the anchor
-triples (`lexTriples_valid`, `lexTriples_anchor`), and the filters of §5 with the theorem that a
-nondecreasing word tuple passing them is one of the 112 retained cases (`filters_keys`). -/
+`decide +kernel`: the word table behind `Comp.word_exists` (`wordTableB_true`), the separating
+anchor ray of the radial rule (`radial_words`), the regions of the words (`word_region`),
+witnesses for the region counts of the retained cases (`keys_one`, `keys_two`, `keys_three`), the
+anchor triples (`lexTriples_anchor`), and the filters `F1`–`F13` with the
+theorem that a nondecreasing word tuple passing them is one of the 112 retained cases
+(`filters_keys`). -/
 
 @[expose] public section
 
@@ -45,7 +46,7 @@ theorem word_region : ∀ w : Fin 11,
     (cat w = 3 → wsign w 3 4 = false ∧ wsign w 0 3 = true) ∧ cat w < 4 := by
   decide +kernel
 
-/-- The finite part of `C1_ZERO_LOWER:claim-words`, as a Boolean test: a sign vector at the five
+/-- The finite part of `Comp.word_exists`, as a Boolean test: a sign vector at the five
 anchors (`bᵤᵥ` the truth of `[VᵤVᵥX] > 0`, `u < v`) with `[OCX] > 0`, `[OHX] < 0`, `[HCX] > 0`
 and the prefix implications of the radial order is one of the eleven zero-lower words. -/
 def wordTableB (b01 b02 b03 b04 b12 b13 b14 b23 b24 b34 : Bool) : Bool :=
@@ -99,47 +100,44 @@ theorem radial_words : ∀ wa wb : Fin 11, ∀ v : Fin 5, wordAt wa v < wordAt w
       wsign wb v ((v + wordAt wa v + 1) % 5) = true := by
   decide +kernel
 
-theorem lexTriples_valid : ∀ t ∈ lexTriples, t.1 < t.2.1 ∧ t.2.1 < t.2.2 ∧ t.2.2 < 9 := by
-  decide +kernel
-
-theorem lexTriples_anchor : ∀ t ∈ lexTriples, t.2.2 < 5 →
+theorem lexTriples_anchor : ∀ t ∈ lexTriples 9, t.2.2 < 5 →
     t ∈ [(0, 1, 2), (0, 1, 3), (0, 1, 4), (0, 2, 3), (0, 2, 4), (0, 3, 4), (1, 2, 3), (1, 2, 4),
       (1, 3, 4), (2, 3, 4)] := by
   decide +kernel
 
-/-- (F1) `HCDF` holds at most two points (QUADRILATERAL_HULL Corollary 3). -/
+/-- `HCDF` holds at most two free points (`Comp.quad_three`). -/
 def F1 (ks : List ℕ) : Prop := ∀ a b e : Fin 4, a ≠ b → a ≠ e → b ≠ e →
   ¬(cat (kw ks a) = 0 ∧ cat (kw ks b) = 0 ∧ cat (kw ks e) = 0)
-/-- (F2) the fan below `OD` (4). -/
+/-- At most two free points lie below `OD` (`Comp.fan_below`). -/
 def F2 (ks : List ℕ) : Prop := ∀ a b e : Fin 4, a ≠ b → a ≠ e → b ≠ e →
   ¬(wordAt (kw ks a) 0 = 1 ∧ wordAt (kw ks b) 0 = 1 ∧ wordAt (kw ks e) 0 = 1)
-/-- (F3) the fan above `OF` (4). -/
+/-- At most two free points lie above `OF` (`Comp.fan_above`). -/
 def F3 (ks : List ℕ) : Prop := ∀ a b e : Fin 4, a ≠ b → a ≠ e → b ≠ e →
   ¬(wordAt (kw ks a) 0 = 3 ∧ wordAt (kw ks b) 0 = 3 ∧ wordAt (kw ks e) 0 = 3)
-/-- (F4) not four top-cap points (7). -/
+/-- Not all four free points are in the top cap (`Comp.top_four`). -/
 def F4 (ks : List ℕ) : Prop := ¬(∀ a : Fin 4, cat (kw ks a) = 2)
-/-- (F5) Theorem 2 (i). -/
+/-- No two free points are in the left cap (`Comp.left_pair`). -/
 def F5 (ks : List ℕ) : Prop := ∀ a b : Fin 4, a ≠ b → ¬(cat (kw ks a) = 3 ∧ cat (kw ks b) = 3)
-/-- (F6) Theorem 2 (ii), left. -/
+/-- No two right-cap points together with a left-cap point. -/
 def F6 (ks : List ℕ) : Prop := ∀ a b e : Fin 4, a ≠ b → a ≠ e → b ≠ e →
   ¬(cat (kw ks a) = 1 ∧ cat (kw ks b) = 1 ∧ cat (kw ks e) = 3)
-/-- (F7) Theorem 2 (ii), top. -/
+/-- No two right-cap points together with two top-cap points. -/
 def F7 (ks : List ℕ) : Prop := ∀ a b e g : Fin 4, a ≠ b → a ≠ e → a ≠ g → b ≠ e → b ≠ g → e ≠ g →
   ¬(cat (kw ks a) = 1 ∧ cat (kw ks b) = 1 ∧ cat (kw ks e) = 2 ∧ cat (kw ks g) = 2)
-/-- (F8) Theorem 2 (iii). -/
+/-- No left-cap point together with two top-cap points. -/
 def F8 (ks : List ℕ) : Prop := ∀ a b e : Fin 4, a ≠ b → a ≠ e → b ≠ e →
   ¬(cat (kw ks a) = 3 ∧ cat (kw ks b) = 2 ∧ cat (kw ks e) = 2)
-/-- (F9) Theorem 2 (iv). -/
+/-- No right-cap point together with three top-cap points. -/
 def F9 (ks : List ℕ) : Prop := ∀ a b e g : Fin 4, a ≠ b → a ≠ e → a ≠ g → b ≠ e → b ≠ g → e ≠ g →
   ¬(cat (kw ks a) = 1 ∧ cat (kw ks b) = 2 ∧ cat (kw ks e) = 2 ∧ cat (kw ks g) = 2)
-/-- (F11) `HDF` holds at most one point. -/
+/-- `HDF` holds at most one free point (`Comp.two_inside` and `Comp.hdf_lt`). -/
 def F11 (ks : List ℕ) : Prop := ∀ a b : Fin 4, a ≠ b →
   ¬((wsign (kw ks a) 2 3 && wsign (kw ks a) 3 4 && wsign (kw ks a) 4 2) = true ∧
     (wsign (kw ks b) 2 3 && wsign (kw ks b) 3 4 && wsign (kw ks b) 4 2) = true)
-/-- (F12) two upper points are in different sectors (ONE_CORNER_COMPLETION Theorem 2). -/
+/-- Two points of `HCDF` are in different diagonal sectors (`Comp.upper_pair`). -/
 def F12 (ks : List ℕ) : Prop := ∀ a b : Fin 4, a ≠ b → cat (kw ks a) = 0 → cat (kw ks b) = 0 →
   sector (kw ks a) ≠ sector (kw ks b)
-/-- (F13) the upper pair rule agrees with the radial rule. -/
+/-- For two points of `HCDF`, the upper pair rule agrees with the radial rule. -/
 def F13 (ks : List ℕ) : Prop := ∀ a b : Fin 4, a < b → cat (kw ks a) = 0 → cat (kw ks b) = 0 →
   ∀ v : Fin 5, ∀ sg : Bool, upperPair (kw ks a) (kw ks b) v = some sg →
     wordAt (kw ks a) v ≠ wordAt (kw ks b) v → sg = decide (wordAt (kw ks a) v < wordAt (kw ks b) v)
@@ -157,20 +155,19 @@ instance (ks : List ℕ) : Decidable (F11 ks) := by unfold F11; infer_instance
 instance (ks : List ℕ) : Decidable (F12 ks) := by unfold F12; infer_instance
 instance (ks : List ℕ) : Decidable (F13 ks) := by unfold F13; infer_instance
 
-/-- The filters of §5 (the checker's `candidate_cases` and `fan_excluded`; its global capacity
-filter is implied by the others and is not needed). -/
+/-- The filters `F1`–`F13` (there is no `F10`), as a Boolean test. -/
 def filtersB (ks : List ℕ) : Bool :=
   decide (F1 ks) && decide (F2 ks) && decide (F3 ks) && decide (F4 ks) && decide (F5 ks) &&
     decide (F6 ks) && decide (F7 ks) && decide (F8 ks) && decide (F9 ks) && decide (F11 ks) &&
     decide (F12 ks) && decide (F13 ks)
 
-
-/-- **The 112 retained cases**: a nondecreasing word tuple passing the filters is one of the
-cases of the certificate package. -/
+/-- The 112 retained cases: a nondecreasing word tuple passing the filters is one of the cases
+of the certificate package. -/
 theorem filters_keys : ∀ a b e g : Fin 11, a ≤ b → b ≤ e → e ≤ g →
     filtersB [a.val, b.val, e.val, g.val] = true →
       [a.val, b.val, e.val, g.val] ∈ Trees.caseKeys := by
-  decide +kernel
-
+  -- one kernel check per pair `a, b`, to bound the memory of each
+  intro a b
+  fin_cases a <;> fin_cases b <;> tree_decide
 
 end Heilbronn.Nine.C1ZeroLower

@@ -3,14 +3,14 @@ module
 public import Heilbronn.Nine.C1.Setting
 public import Heilbronn.Nine.Corners.CornerFamilies.Interior
 
-/-! # Shared tools for the C1 two-lower notes
+/-! # Shared tools for the C1 two-lower modules
 
 Point-level tools used by `Heilbronn.Nine.C1.{TwoLowerSideCap, TopCap*, MixedPentagon,
 TwoLowerCompletion}`:
 
 * `ar`, `ar_pos`, `ar_neg`, `ar_ne`: in a configuration of least area at least `A₀` every doubled
   area of three distinct points has absolute value at least `σ = 8/73` (`7/64` for `ar7`);
-* `two_in`: the two-interior-point lemma (`CornerFamilies.twoInteriorPointLemma`) in doubled
+* `two_in`: the two-interior-point lemma (`twoInteriorPointLemma`) in doubled
   form, `|[ABE]| ≥ (4 + 2√3)σ`; `one_in`: a triangle with a further point inside has doubled area
   at least `3σ`;
 * `kσ_gt`: `ρ = 49/60 < (4 + 2√3)σ`; `sqrt3_bounds`;
@@ -60,10 +60,6 @@ theorem σ_lt : (8 / 73 : ℝ) < 2 * A₀ := by have := A₀_bounds; linarith
 theorem kσ_gt : (49 / 60 : ℝ) < (4 + 2 * Real.sqrt 3) * (8 / 73) := by
   have := sqrt3_bounds; nlinarith
 
-/-- `(4 + 2√3)σ < 9/10`. -/
-theorem kσ_lt : (4 + 2 * Real.sqrt 3) * (8 / 73) < 9 / 10 := by
-  have := sqrt3_bounds; nlinarith
-
 /-- **The area oracle**: three distinct points of a configuration of least area at least `A₀`
 span a doubled area at least `σ = 8/73` in absolute value. -/
 theorem ar {n : ℕ} {P : Fin n → Point} (hP : A₀ ≤ minTriangleArea P) (i j k : Fin n)
@@ -98,16 +94,16 @@ theorem ar_cases {t x : ℝ} (h : t ≤ |x|) : t ≤ x ∨ x ≤ -t := by
 theorem min5 {n : ℕ} {P : Fin n → Point} {t : ℝ} (hP : t ≤ minTriangleArea P) (a b e j k : Fin n)
     (hinj : Function.Injective ![a, b, e, j, k]) :
     t ≤ minTriangleArea ![P a, P b, P e, P j, P k] :=
-  CornerFamilies.min_sub hP _ ![a, b, e, j, k] (by norm_num) hinj
+  min_sub hP _ ![a, b, e, j, k] (by norm_num) hinj
     (by intro i; fin_cases i <;> rfl)
 
 /-- **The two-interior-point lemma** in doubled form: a triangle of the configuration with two
 further points of the configuration strictly inside has doubled area at least `(4 + 2√3)σ`. -/
 theorem two_in {n : ℕ} {P : Fin n → Point} (hP : A₀ ≤ minTriangleArea P) (a b e j k : Fin n)
     (hinj : Function.Injective ![a, b, e, j, k])
-    (h₁ : InsideTri (P j) (P a) (P b) (P e)) (h₂ : InsideTri (P k) (P a) (P b) (P e)) :
+    (h₁ : InsideTriangle (P j) (P a) (P b) (P e)) (h₂ : InsideTriangle (P k) (P a) (P b) (P e)) :
     (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ |sarea (P a) (P b) (P e)| := by
-  have := CornerFamilies.twoInteriorPointLemma _ _ _ _ _ h₁ h₂ A₀ A₀_pos (min5 hP a b e j k hinj)
+  have := twoInteriorPointLemma _ _ _ _ _ h₁ h₂ A₀ A₀_pos (min5 hP a b e j k hinj)
   rw [triangleArea_eq] at this
   have := sqrt3_bounds
   nlinarith [σ_lt]
@@ -115,7 +111,7 @@ theorem two_in {n : ℕ} {P : Fin n → Point} (hP : A₀ ≤ minTriangleArea P)
 /-- The same, with the threshold `7/64`. -/
 theorem two_in7 {n : ℕ} {P : Fin n → Point} (hP : A₀ ≤ minTriangleArea P) (a b e j k : Fin n)
     (hinj : Function.Injective ![a, b, e, j, k])
-    (h₁ : InsideTri (P j) (P a) (P b) (P e)) (h₂ : InsideTri (P k) (P a) (P b) (P e)) :
+    (h₁ : InsideTriangle (P j) (P a) (P b) (P e)) (h₂ : InsideTriangle (P k) (P a) (P b) (P e)) :
     (4 + 2 * Real.sqrt 3) * (7 / 64) ≤ |sarea (P a) (P b) (P e)| := by
   have := two_in hP a b e j k hinj h₁ h₂
   have := sqrt3_bounds
@@ -169,7 +165,7 @@ theorem in_ge3 {n : ℕ} {P : Fin n → Point} (hP : A₀ ≤ minTriangleArea P)
   one_in h (ar hP a b j hab hbj haj) (ar hP b e j hbe hej hbj) (ar hP e a j hae.symm haj hej)
 
 /-- A point is not strictly inside a triangle of which it is a vertex. -/
-theorem not_inside_vertex (X A B : Point) : ¬ InsideTri X A B X := by
+theorem not_inside_vertex (X A B : Point) : ¬ InsideTriangle X A B X := by
   rintro (⟨-, h, -⟩ | ⟨h, -, -⟩) <;> simp only [sarea] at h <;> linarith
 
 /-- The eight points `O, C, D, F, H, L, M, X` of a nine-point C1 configuration. -/
@@ -187,7 +183,7 @@ theorem ear_empty {n : ℕ} {P : Fin n → Point} (hP : A₀ ≤ minTriangleArea
     (hlt : |sarea (P a) (P b) (P e)| < 3 * (8 / 73))
     (hab : a ≠ b := by decide) (hbe : b ≠ e := by decide) (hae : a ≠ e := by decide)
     (haj : a ≠ j := by decide) (hbj : b ≠ j := by decide) (hej : e ≠ j := by decide) :
-    ¬ InsideTri (P j) (P a) (P b) (P e) := by
+    ¬ InsideTriangle (P j) (P a) (P b) (P e) := by
   rintro (h1 | h1)
   · have := in_ge3 hP a b e j h1 hab hbe hae haj hbj hej
     have := le_abs_self (sarea (P a) (P b) (P e)); linarith
@@ -265,8 +261,6 @@ theorem sarea_tp (p q r : Point) : sarea (tp p) (tp q) (tp r) = -sarea p q r := 
 theorem tp_mem {p : Point} (hp : p ∈ unitSquare) : tp p ∈ unitSquare := by
   obtain ⟨a, b, c, d⟩ := hp; exact ⟨c, d, a, b⟩
 
-theorem tp_tp (p : Point) : tp (tp p) = p := rfl
-
 /-- Transposition preserves the least area. -/
 theorem min_tp {n : ℕ} (P : Fin n → Point) :
     minTriangleArea (fun i => tp (P i)) = minTriangleArea P := by
@@ -287,9 +281,9 @@ theorem inTriangle_tp {X A B C : Point} : InTriangle (tp X) (tp A) (tp C) (tp B)
     refine ⟨?_, ?_, ?_⟩ <;>
       linarith [sarea_swap₁₂ A B X, sarea_swap₁₂ B C X, sarea_swap₁₂ C A X]
 
-theorem insideTri_tp {X A B C : Point} : InsideTri (tp X) (tp A) (tp B) (tp C) ↔
-    InsideTri X A B C := by
-  unfold InsideTri
+theorem insideTri_tp {X A B C : Point} : InsideTriangle (tp X) (tp A) (tp B) (tp C) ↔
+    InsideTriangle X A B C := by
+  unfold InsideTriangle
   rw [inTriangle_tp (A := A) (B := C) (C := B), inTriangle_tp (A := A) (B := B) (C := C)]
   exact or_comm
 
@@ -337,12 +331,12 @@ theorem inLower_tp {h c : ℝ} {L : Point} (hL : InLower h c L) : InLower c h (t
 theorem inTriangle_rot {X A B C : Point} : InTriangle X A B C ↔ InTriangle X B C A := by
   unfold InTriangle; tauto
 
-theorem insideTri_rot {X A B C : Point} : InsideTri X A B C ↔ InsideTri X B C A := by
-  unfold InsideTri
+theorem insideTri_rot {X A B C : Point} : InsideTriangle X A B C ↔ InsideTriangle X B C A := by
+  unfold InsideTriangle
   unfold InTriangle; tauto
 
-theorem insideTri_swap {X A B C : Point} : InsideTri X A B C ↔ InsideTri X A C B := by
-  unfold InsideTri; tauto
+theorem insideTri_swap {X A B C : Point} : InsideTriangle X A B C ↔ InsideTriangle X A C B := by
+  unfold InsideTriangle; tauto
 
 /-- Transposition of the eight-point configuration `O, C, D, F, H, L, M, X`. -/
 theorem min8_tp (h c d f : ℝ) (L M X : Point) :

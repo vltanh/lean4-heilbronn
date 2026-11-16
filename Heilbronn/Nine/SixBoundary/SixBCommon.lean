@@ -2,9 +2,9 @@ module
 
 public import Heilbronn.Nine.SixBoundary.RadialCover
 public import Heilbronn.Nine.TypeII.TypeII.EndpointTriangle
-public import Heilbronn.Nine.Local.HandProof
+public import Heilbronn.Nine.Local.Chamber
 
-/-! # Shared tools of the six-boundary packages `SIDE_OPPOSITE`, `SIDE_TWO_TOP`, `TWO_TOP_*`
+/-! # Shared tools of the six-boundary radial-word cases (side-opposite, side-two-top, two-top)
 
 * `nConfig_area`: a least area `≥ 4/73` gives every actual doubled area `≥ σ = 8/73`;
 * `anchor_bounds`: the N anchor bounds from `[ABC], [ABH] ≥ σ` (`a, b > 1/8`, `hc ≥ 4σ`, …);
@@ -24,12 +24,6 @@ theorem pos_of_nonneg_of_le_abs {x t : ℝ} (ht : 0 < t) (h0 : 0 ≤ x) (h : t �
   rcases h0.eq_or_lt with h' | h'
   · rw [← h', abs_zero] at h; linarith
   · exact h'
-
-theorem le_of_pos_of_le_abs {x t : ℝ} (h0 : 0 < x) (h : t ≤ |x|) : t ≤ x := by
-  rwa [abs_of_pos h0] at h
-
-theorem le_neg_of_neg_of_le_abs {x t : ℝ} (h0 : x < 0) (h : t ≤ |x|) : t ≤ -x := by
-  rwa [abs_of_neg h0] at h
 
 /-- A least area `≥ 4/73` gives every actual doubled area `≥ 8/73`. -/
 theorem nConfig_area {a h b c d f : ℝ} {X Y Z : Point}
@@ -158,7 +152,7 @@ theorem side_bounds {a h b c d f x y : ℝ} (hN : NAnchors a h b c d f) (hx1 : x
 
 /-! ### Convex polygons -/
 
-theorem rc_convex_cyc {n : ℕ} {V : Fin n → Point} (hV : IsConvexCCW V) (i : Fin n) {p q : ℕ}
+theorem rc_convex_cyc {n : ℕ} {V : Fin n → Point} (hV : IsConvexPolygon V) (i : Fin n) {p q : ℕ}
     (hp : 0 < p) (hpq : p < q) (hq : q < n) :
     0 < sarea (V i) (V (cyc i p)) (V (cyc i q)) := by
   have hi := i.isLt
@@ -181,7 +175,7 @@ theorem rc_convex_cyc {n : ℕ} {V : Fin n → Point} (hV : IsConvexCCW V) (i : 
     rw [← sarea_cycle]; exact this
 
 /-- Every vertex is weakly on the inner side of every edge, strictly when not on it. -/
-theorem edge_sign {n : ℕ} {V : Fin n → Point} (hV : IsConvexCCW V) (i m : Fin n) :
+theorem edge_sign {n : ℕ} {V : Fin n → Point} (hV : IsConvexPolygon V) (i m : Fin n) :
     0 ≤ sarea (V i) (V (cyc i 1)) (V m) ∧
       (m ≠ i → m ≠ cyc i 1 → 0 < sarea (V i) (V (cyc i 1)) (V m)) := by
   have hi := i.isLt
@@ -219,7 +213,7 @@ theorem sarea_bary (U W P₁ P₂ P₃ Q : Point) :
   simp only [sarea]; ring
 
 /-- A point strictly inside a triangle of three hull vertices is inside the hull polygon. -/
-theorem inPolygon_of_inTriangle {n : ℕ} {V : Fin n → Point} (hV : IsConvexCCW V) {p q r : Fin n}
+theorem inPolygon_of_inTriangle {n : ℕ} {V : Fin n → Point} (hV : IsConvexPolygon V) {p q r : Fin n}
     (hpq : p < q) (hqr : q < r) {R : Point} (hR : InTriangle R (V p) (V q) (V r)) :
     InPolygon V R := by
   intro i
@@ -259,7 +253,7 @@ theorem inPolygon_of_inTriangle {n : ℕ} {V : Fin n → Point} (hV : IsConvexCC
 
 /-- A point strictly inside the hexagon `V p₀ … V p₅` (vertices of a strictly convex polygon, in
 order) and on no diagonal from `V p₀` is inside the polygon (fan from `V p₀`). -/
-theorem inPolygon_of_fan {n : ℕ} {V : Fin n → Point} (hV : IsConvexCCW V)
+theorem inPolygon_of_fan {n : ℕ} {V : Fin n → Point} (hV : IsConvexPolygon V)
     {p0 p1 p2 p3 p4 p5 : Fin n} (h01 : p0 < p1) (h12 : p1 < p2) (h23 : p2 < p3) (h34 : p3 < p4)
     (h45 : p4 < p5) {R : Point}
     (e1 : 0 < sarea (V p0) (V p1) R) (e2 : 0 < sarea (V p1) (V p2) R)
@@ -278,21 +272,21 @@ theorem inPolygon_of_fan {n : ℕ} {V : Fin n → Point} (hV : IsConvexCCW V)
 
 /-! ### The sharp chambers -/
 
-open HandProof in
+open Chamber in
 theorem chamber_ne (i : Fin 11) :
     (chamberTriangles i).1 ≠ (chamberTriangles i).2.1 ∧
       (chamberTriangles i).2.1 ≠ (chamberTriangles i).2.2 ∧
       (chamberTriangles i).1 ≠ (chamberTriangles i).2.2 := by
   fin_cases i <;> decide
 
-open HandProof in
+open Chamber in
 /-- A chamber area of a relabelled configuration bounds its least area. -/
 theorem min_le_of_chamber {P : Fin 9 → Point} {τ : Fin 9 → Fin 9} (hτ : Function.Injective τ)
     {i : Fin 11} {t : ℝ} (h : chamberArea (P ∘ τ) i ≤ t) : minTriangleArea P ≤ t := by
   obtain ⟨d1, d2, d3⟩ := chamber_ne i
   exact (minTriangleArea_le P (hτ.ne d1) (hτ.ne d2) (hτ.ne d3)).trans h
 
-open HandProof in
+open Chamber in
 /-- The least area bounds every chamber area of a relabelled configuration. -/
 theorem chamber_ge_of_min {P : Fin 9 → Point} {τ : Fin 9 → Fin 9} (hτ : Function.Injective τ)
     {t : ℝ} (h : t ≤ minTriangleArea P) (i : Fin 11) : t ≤ chamberArea (P ∘ τ) i := by
@@ -313,19 +307,19 @@ theorem quad_not_triangular {P0 P1 P2 P3 : Point} (h012 : 0 < sarea P0 P1 P2)
     ¬ TypeII.TriangularHull ![P0, P1, P2, P3] := by
   rintro ⟨i, j, k, hm⟩
   have o3 : P3 ∉ convexHull ℝ ({P0, P1, P2} : Set Point) := fun h => by
-    obtain ⟨-, h2, -, -⟩ := TypeII.sarea_nonneg_of_mem_convexHull h012.le h
+    obtain ⟨-, h2, -, -⟩ := sarea_nonneg_of_mem_convexHull h012.le h
     have : sarea P2 P0 P3 = -sarea P0 P2 P3 := by simp only [sarea]; ring
     linarith
   have o2 : P2 ∉ convexHull ℝ ({P0, P1, P3} : Set Point) := fun h => by
-    obtain ⟨h1, -, -, -⟩ := TypeII.sarea_nonneg_of_mem_convexHull h013.le h
+    obtain ⟨h1, -, -, -⟩ := sarea_nonneg_of_mem_convexHull h013.le h
     have : sarea P1 P3 P2 = -sarea P1 P2 P3 := by simp only [sarea]; ring
     linarith
   have o1 : P1 ∉ convexHull ℝ ({P0, P2, P3} : Set Point) := fun h => by
-    obtain ⟨-, -, h3, -⟩ := TypeII.sarea_nonneg_of_mem_convexHull h023.le h
+    obtain ⟨-, -, h3, -⟩ := sarea_nonneg_of_mem_convexHull h023.le h
     have : sarea P0 P2 P1 = -sarea P0 P1 P2 := by simp only [sarea]; ring
     linarith
   have o0 : P0 ∉ convexHull ℝ ({P1, P2, P3} : Set Point) := fun h => by
-    obtain ⟨-, h2, -, -⟩ := TypeII.sarea_nonneg_of_mem_convexHull h123.le h
+    obtain ⟨-, h2, -, -⟩ := sarea_nonneg_of_mem_convexHull h123.le h
     have : sarea P3 P1 P0 = -sarea P0 P1 P3 := by simp only [sarea]; ring
     linarith
   obtain ⟨m, hmi, hmj, hmk⟩ : ∃ m : Fin 4, m ≠ i ∧ m ≠ j ∧ m ≠ k := by
@@ -368,7 +362,7 @@ theorem capT_mem {d f : ℝ} (hd : d < 1) (hf : f < 1) {Y : Point} (hY : InCapT 
       {ptD d, ((1 : ℝ), (1 : ℝ)), ptF f} := by
     rw [Set.pair_comm]
   rw [hset]
-  refine TypeII.mem_convexHull_of_sarea ?_ ?_ ?_ ?_
+  refine mem_convexHull_of_sarea ?_ ?_ ?_ ?_
   · simp only [sarea]; nlinarith
   · simp only [sarea]; nlinarith
   · simp only [sarea] at hc ⊢; linarith
@@ -401,7 +395,7 @@ theorem hc_lower {a h b c : ℝ} {O : Point} (ha : 0 < a) (hah : a < h) (hb : 0 
     simp only [sarea]; nlinarith [mul_pos hc0 hh0]
   have mem : ∀ p : Point, 0 ≤ sarea (ptC c) (ptH h) p → 0 ≤ sarea (ptH h) (0, 0) p →
       0 ≤ sarea (0, 0) (ptC c) p → p ∈ convexHull ℝ ({ptH h, ptC c, (0, 0)} : Set Point) :=
-    fun p h1 h2 h3 => by rw [← hset]; exact TypeII.mem_convexHull_of_sarea hO h1 h2 h3
+    fun p h1 h2 h3 => by rw [← hset]; exact mem_convexHull_of_sarea hO h1 h2 h3
   have p1 := mul_pos hc0 (show 0 < h - a by linarith)
   have p2 := mul_pos hc0 ha
   have p3 := mul_pos hh0 (show 0 < c - b by linarith)

@@ -4,23 +4,22 @@ public import Heilbronn.Common.Bernstein
 public import Heilbronn.Common.CertNotation
 
 /-!
-# The polynomial certificate for the F-moving chamber (`docs/proof/nine/GLOBAL_COMPLETION.md` §5)
+# The polynomial certificate for the F-moving chamber
 
-This replaces the case analysis of §§5.3-5.5 of `GLOBAL_COMPLETION.md` (the halves `u ≥ v` and
-`u < v`, the 32 one-variable and 886 three-variable Bernstein coefficients) by one positivity
-statement. With `g = u + z`, `B* = 1 - g - s/v`, `X₀ = (u(1-3v) + s + 2v)/(1-v)`,
-`C* = g(a_u + B*) - B*X₀`, `N = B*(1-v) - s` and `Φ` the left side of `HAND_PROOF.md` (8), the
-hand proof's `Δ = z a_v B*(1-g) - N C*` (33) is corrected by the nonnegative term `-Φ B*(1-g)`:
+The last step of `GlobalCompletion.movingF_chamber_le` is one positivity statement
+(`GlobalCompletion.Hyps3.cstar_nonpos`). With `g = u + z`, `a_u = 1 - 3u - s`, `a_v = 1 - 3v - s`,
+`B* = 1 - g - s/v`, `X₀ = (u(1-3v) + s + 2v)/(1-v)`, `C* = g(a_u + B*) - B*X₀`,
+`N = B*(1-v) - s` and `Φ` with `uv·Φ = Chamber.phiNum s u v`, the quantity
+`Δ = z a_v B*(1-g) - N C*`, corrected by the nonnegative term `-Φ B*(1-g)`, is positive:
 
   `Δ̃ = z a_v B*(1-g) - N C* - Φ B*(1-g) > 0`
 
-on the whole region of the proof, in both halves `u ≥ v` and `u < v`. Cleared of denominators,
-`T = u v² (1-v) Δ̃` (`Treal`) is a polynomial of degrees `(4, 4, 3, 3)` in `(u, v, s, z)`, positive
-on the region `1/8 ≤ u`, `0.1469 ≤ v`, `u + v ≤ 0.3469`, `s ∈ [0.10974, 0.10976]`, `0 ≤ z ≤ 1/4`
-(`T_pos`). The region is covered by six strips in `u`, each a box; on each box the positivity is a
-Bernstein certificate (`Cert.bernsteinBoxCheck`), split further along `z` and `v` where needed
-(`treeCheck`). The splits were found in floating point and are verified here by the kernel
-(`scripts/nine/movingf/find_tree.py` recomputes them and checks every leaf in exact arithmetic).
+on the region below. Cleared of denominators, `T = u v² (1-v) Δ̃` (`Treal`) is a polynomial of
+degrees `(4, 4, 3, 3)` in `(u, v, s, z)`, positive on the region `1/8 ≤ u`, `0.1469 ≤ v`,
+`u + v ≤ 0.3469`, `s ∈ [0.10974, 0.10976]`, `0 ≤ z ≤ 1/4` (`T_pos`). The region is covered by six
+strips in `u`, each a box; on each box the positivity is a Bernstein certificate
+(`Cert.bernsteinBoxCheck`), split further along `z` and `v` where needed (`treeCheck`). The splits
+were found in floating point and are verified here by the kernel.
 
 `BTree`/`treeCheck`/`treeCheck_sound` are generic: a subdivision tree of Bernstein box checks for
 any `Cert.Expr`, usable by other certificates.

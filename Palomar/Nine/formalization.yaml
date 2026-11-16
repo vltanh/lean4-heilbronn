@@ -39,17 +39,15 @@ classification:
   msc2020: ["52C10", "52A40"]
 
 sources:
-  - title: "The hand proof of H₉ = (9√65 − 55)/320"
+  - title: "First draft of the proof of H₉ = (9√65 − 55)/320"
     type: "original-proof"
     location: >-
-      docs/proof/nine/ of this repository, assembled in
-      docs/proof/nine/UNRESTRICTED.md, Theorem 1; written by ChatGPT 6 Pro
-      from 14 to 15 November 2026 and committed to this repository
+      archive/nine/ of this repository; written by ChatGPT 6 Pro from 14 to
+      15 November 2026
     relationship: "other"
     note: >-
-      The proof formalized here, with its research notes in
-      docs/research/nine/. The formalization follows its route and replaces
-      some of its arguments by shorter ones (fidelity.divergences). We found
+      The draft the Lean proof was developed from, archived. The Lean proof
+      stands on its own and is not kept in correspondence with it. We found
       no earlier exact proof of H₉ or of the uniqueness of its optimal
       configuration.
   - title: "New lower bounds for Heilbronn numbers"
@@ -92,22 +90,12 @@ sources:
     location: "Section 2.2 (boundary structure, Theorem 1); Sections 4.2 and 6 (n = 9)"
     relationship: "background"
     note: >-
-      The hand proof's boundary reduction starts from the boundary structure
-      of Section 2.2. For n = 9 the paper solves the problem to optimality
+      The normalization of a maximizer here descends from the boundary
+      structure of Section 2.2. For n = 9 the paper solves the problem to optimality
       within floating-point solver tolerances and verifies the Comellas–Yebra
       coordinates exactly; it states that no proof of optimality is known for
       n = 9 or n = 10. Version 1 (11 March 2026) claimed a proof for n = 9;
       versions 2 and 3 withdraw that claim.
-  - title: "A Generalized Affine Isoperimetric Inequality"
-    authors: ["W. Chen", "R. Howard", "E. Lutwak", "D. Yang", "G. Zhang"]
-    id: "doi:10.1007/BF02922171"
-    type: "paper"
-    location: "J. Geom. Anal. 14 (2004), 597–612; arXiv:math/0402083"
-    relationship: "background"
-    note: >-
-      The hand proof uses it for nine points in convex position (N6-05); the
-      formalization replaces that step by nine triangles and a cubic
-      certificate, so it is not used.
   - title: "A Heilbronn Type Inequality for Plane Nonagons"
     authors: ["Z. Zeng", "J. Lu", "L. Dehbi", "L. Chen", "J. Wang"]
     id: "doi:10.1007/978-3-030-41258-6_23"
@@ -175,10 +163,9 @@ automation:
       models: ["ChatGPT 6 Pro"]
       framework: "ChatGPT"
       tool_setup: >-
-        The ChatGPT chat, prompted by the repository owner. It wrote the hand
-        proof of nine points (docs/proof/nine/): the manuscripts, the
-        certificate packages and their exact checkers, and the research
-        notes archived in docs/research/nine/, from 14 to 15 November 2026.
+        The ChatGPT chat, prompted by the repository owner. It wrote the first
+        draft of the nine-point proof, archived in archive/nine/, from 14 to
+        15 November 2026.
     - method: "agent"
       models: ["Claude Opus 5.5"]
       framework: "Claude Code"
@@ -187,17 +174,20 @@ automation:
         using the formalize-math-paper skill, version 3.4.0, prompted by the
         repository owner. On 15 November 2026 it wrote the whole Lean library:
         the statement, the kernel-checked certificate checkers, the exporters
-        of the certificate data, and the proofs of every manuscript on the
-        route of the hand proof, with up to twelve sub-agents at once (52 in
-        all), each against a private build snapshot of the library. It found
-        the certificates that replace some hand arguments by linear
-        programming, reorganized the library by case, and wrote the
+        of the certificate data, and the proofs, with up to twelve sub-agents
+        at once (52 in all), each against a private build snapshot of the
+        library. It found some of the certificates by linear programming,
+        reorganized the library by case, and wrote the
         documentation. Wall-clock time 7.1 hours, from 14:53 to the last
         proof at 21:56 (US Central time); 51.8 agent-hours; 5,954 tool calls;
         30.09 million input, 2,026 million cache-read and 14.58 million output
-        tokens. Spend not tracked.
+        tokens. Spend not tracked. On 16 November 2026 it made the build fit
+        Palomar's memory, consolidated the library and renamed the
+        declarations named after the draft's numbering, with up to six
+        sub-agents at once.
   notes: >-
-    ChatGPT 6 Pro, in the ChatGPT chat, wrote the hand proof of nine points;
+    ChatGPT 6 Pro, in the ChatGPT chat, wrote the first draft of the
+    nine-point proof;
     Claude Opus 5.5, in Claude Code, wrote the Lean code. The repository
     owner directed the work and decided its scope and naming.
     docs/contributors.md gives a dated account, and the commits name the
@@ -209,22 +199,9 @@ fidelity:
     nine points in the closed unit square, with the ordinary area (half the
     absolute determinant); repeated points count separately, so they give
     least area 0. Congruence allows the eight symmetries of the square and a
-    relabelling, as in the hand proof. Proofs: the formalization follows the
-    route of the hand proof and departs from it in these places. The case of
-    three occupied caps (N6-05), which the hand proof reduces to a convex
-    nonagon and the affine isoperimetric inequality, is closed by nine
-    triangles and a three-cell cubic certificate, so no external theorem is
-    used. Certificate covers found by linear programming replace hand case
-    analyses: the two interior points of seven boundary points, the exact
-    anchor hexagon of six boundary points, Theorems 11 and 12 and class R6 of
-    eight boundary points, the quadrants of SIX_BOUNDARY_TWO_SIDE_COMPLETION
-    and the chamber in which F moves inward. Every use of a minimum-area
-    enclosing parallelogram is replaced by an explicit affine map of
-    determinant above one. Gaps of the hand proof were repaired along its
-    own lines, among them the empty convex quadrilateral of CORNER_FAMILIES,
-    the bound W ≥ (Γ+1)s misquoted as W ≥ 10s, and convexity and sign facts
-    left implicit in the Type II, six-boundary and C1 notes; nothing in it
-    was found false. docs/results.md lists the departures.
+    relabelling. Proof: the Lean proof is the reference. It was developed
+    from a first draft by ChatGPT 6 Pro, archived, and is not kept in
+    correspondence with it.
 
 review:
   status: "agent-reviewed"
@@ -236,7 +213,7 @@ review:
     has not yet had a human review, and neither has the mathematics. Lean's
     kernel checks every proof, and lake comparator also replays the compared
     theorems through the NanoDa kernel; locally, con-ron with two workers
-    accepted the same export too (45,152 declarations, 1 h 50 min). That
+    accepted an earlier export of it too (1 h 50 min). That
     establishes the proofs, not that the statement says what the prose
     claims.
 

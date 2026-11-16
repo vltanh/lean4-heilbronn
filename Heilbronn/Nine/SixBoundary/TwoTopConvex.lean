@@ -7,38 +7,36 @@ public import Heilbronn.Nine.SixBoundary.Hull
 public import Heilbronn.Nine.Sharp.EFMoving
 
 /-! # Two opposite-cap vertices and one anchor-interior point in N
-(`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`)
 
-**Role.** Primary route: the convex-cap-hull branch of the six-boundary occupancy N6-06
-`(n_L,n_T,n_R;n_I) = (0,2,0;1)` of `docs/proof/nine/UNRESTRICTED.md`, Section 4 (sharp: its only equality
-branch, word 31, is the E/F chamber of `SHARP_EF_MOVING`); assembled with
-`SIX_BOUNDARY_TWO_TOP_TRIANGULAR` in `SIX_BOUNDARY_TWO_TOP_COMPLETION`.
+The convex-cap-hull branch of the six-boundary case with two free points in the opposite cap
+and one inside the anchor hexagon (sharp: its only equality branch, word 31, is the E/F chamber
+of `SharpEFMoving`); assembled with `SixBoundaryTwoTopTriangular` in
+`SixBoundaryTwoTopCompletion`.
 
-**Setting.** The N anchors (`NAnchors`, (1)); `E = (e_x,e_y)` and `G = (g_x,g_y)` in the opposite
+**Setting.** The N anchors (`NAnchors`); `E = (e_x,e_y)` and `G = (g_x,g_y)` in the opposite
 cap `T = DF(1,1)` (`InCapT`; strictly beyond `DF` under a positive minimum), with `D, E, G, F`
-strictly convex in this counterclockwise order (`IsConvexCCW ![D, E, G, F]`); `O = (x,y)`
+strictly convex in this counterclockwise order (`IsConvexPolygon ![D, E, G, F]`); `O = (x,y)`
 strictly inside the anchor hexagon. Cap points on a square side are allowed. The configuration
 is `nConfig a h b c d f E G O`. Competitive assumption: every actual area is at least `A₀`; the
 cubic part uses only `σ = 8/73 < 2A₀` (hypothesis `4/73 ≤ minTriangleArea`). Transposition
-exchanges the upper anchors and reverses the cap chain, so relabelling `E, G` permits `f ≤ d`
-(2); the claims that use it carry the hypothesis `f ≤ d`. Notation `L = h-a`, `M = c-b`,
+exchanges the upper anchors and reverses the cap chain, so relabelling `E, G` permits `f ≤ d`;
+the results that use it carry the hypothesis `f ≤ d`. Notation `L = h-a`, `M = c-b`,
 `δ = (1-d)(1-f)`, `W = 1-(h-d)(c-f)`; the full hull is the octagon
 `(V₀,…,V₇) = (A,B,C,D,E,G,F,H)` (`octagon`) with `O` inside.
 
 **Results.**
-* `mainTheorem` (the note's unnumbered Theorem): minimum `≤ A₀`; at equality `e_x = g_y = 1` and
-  the configuration is the sharp configuration up to symmetry and relabelling (`IsOptimal`).
-* `claim_hull`, `claim_anchor` (4)–(5), `claim_delta` (6), `claim_box` (7), `claim_cap` (8)–(9),
-  `claim_order` (10)–(11), `claim_O_box` (12)–(13), `claim_ears` (14), `claim_W_hc` (15).
-* `claim_words`: exactly 94 octagon words with `w₃ ≥ 3`; `O` has one, upper iff `w₇ ≥ 3`.
-* `claim_certificate`: with `f ≤ d`, all words other than 31 and 66 are impossible.
-* `claim_branches`: word 66 is impossible (split `x ≤ 1/2`, `x ≥ 1/2`); word 31 lies in the
-  neighbourhood (20).
-* `claim_sharp_map` (24)–(25): on (20), word 31 is the E/F-moving sharp chamber.
+* `twoTopConvex_le_A₀`: minimum `≤ A₀`; at equality `e_x = g_y = 1` and the configuration is the sharp
+  configuration up to symmetry and relabelling (`IsOptimal`).
+* `octagon_hull`, `fam_bounds` (with `capZ_bounds`, `order_bounds`), `delta_ge`, `box_bounds`,
+  `cap_order`, `O_box`, `ears_lt`, `W_hc_bounds`: the hull and the affine bounds.
+* `exists_convexWord`: exactly 94 octagon words with `w₃ ≥ 3`; `O` has one, upper iff `w₇ ≥ 3`.
+* `not_hasRadialWord_of_ne`: with `f ≤ d`, all words other than 31 and 66 are impossible.
+* `word_branches`: word 66 is impossible (split `x ≤ 1/2`, `x ≥ 1/2`); word 31 lies in the
+  neighbourhood `Neighbourhood20`.
+* `word31_EFMoving`: on `Neighbourhood20`, word 31 is the E/F-moving sharp chamber.
 
-Implicit in the manuscript: the claims are stated under `4/73 ≤ minTriangleArea` and, where
-used, `f ≤ d`. The manuscript derives `d < 255/511` strictly (line 100) but records `≤` (line
-105); the weak form is stated.
+The results are stated under `4/73 ≤ minTriangleArea` and, where used, `f ≤ d`. The bound
+`d ≤ 255/511` of `box_bounds` is stated in its weak form.
 -/
 
 @[expose] public section
@@ -48,31 +46,30 @@ namespace Heilbronn.Nine.SixBoundaryTwoTopConvex
 
 open Heilbronn.Nine.SixBoundary Heilbronn.Nine.SharpBCMoving SixRadial Cover Cert Cert.Expr
 
-/-- The full hull (3): the octagon `(V₀, …, V₇) = (A, B, C, D, E, G, F, H)`. -/
+/-- The full hull: the octagon `(V₀, …, V₇) = (A, B, C, D, E, G, F, H)`. -/
 def octagon (a h b c d f : ℝ) (E G : Point) : Fin 8 → Point :=
   ![ptA a, ptB b, ptC c, ptD d, E, G, ptF f, ptH h]
 
-/-- The convex-hull branch of N6-06: N anchors, `E, G` in the opposite cap `DF(1,1)` with
+/-- The convex-cap two-top placement: N anchors, `E, G` in the opposite cap `DF(1,1)` with
 `D, E, G, F` strictly convex counterclockwise, and `O` strictly inside the anchor hexagon. -/
 def ConvexFamily (a h b c d f : ℝ) (E G O : Point) : Prop :=
-  NAnchors a h b c d f ∧ InCapT d f E ∧ InCapT d f G ∧ IsConvexCCW ![ptD d, E, G, ptF f] ∧
+  NAnchors a h b c d f ∧ InCapT d f E ∧ InCapT d f G ∧ IsConvexPolygon ![ptD d, E, G, ptF f] ∧
     InHexagon a h b c d f O
 
-/-- The 94 radial words (16)–(18) of `O`: octagon words with the `DF` test `w₃ ≥ 3`. -/
+/-- The 94 radial words of `O`: octagon words with the `DF` test `w₃ ≥ 3`. -/
 def convexWords : Finset (Fin 8 → Fin 8) :=
   (radialWords 8).filter fun r => 3 ≤ (r 3 : ℕ)
 
-/-- Word 31, `w* = (3,2,3,4,5,4,4,3)` (19). -/
+/-- Word 31, `w* = (3,2,3,4,5,4,4,3)`. -/
 def word31 : Fin 8 → Fin 8 := ![3, 2, 3, 4, 5, 4, 4, 3]
 
 /-- Word 66, `(4,4,4,4,3,3,3,3)`. -/
 def word66 : Fin 8 → Fin 8 := ![4, 4, 4, 4, 3, 3, 3, 3]
 
-/-- The closed neighbourhood (20): `11/20 ≤ h-a ≤ 2/3`, `g_x - f ≥ 11/20`, `f ≤ 1/4`,
-`c ≥ 2/3`, `g_y ≥ h`. -/
+/-- The closed neighbourhood of the sharp word: `11/20 ≤ h-a ≤ 2/3`, `g_x - f ≥ 11/20`,
+`f ≤ 1/4`, `c ≥ 2/3`, `g_y ≥ h`. -/
 def Neighbourhood20 (a h c f : ℝ) (G : Point) : Prop :=
   11 / 20 ≤ h - a ∧ h - a ≤ 2 / 3 ∧ 11 / 20 ≤ G.1 - f ∧ f ≤ 1 / 4 ∧ 2 / 3 ≤ c ∧ h ≤ G.2
-
 
 /-! ### The configuration as model points -/
 
@@ -147,7 +144,7 @@ theorem area_ge (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) 
   have := cfg_area hmin hi hj hk hij hjk hik
   rwa [e, abs_of_nonneg hV] at this
 
-/-- The cap bounds (8)–(9) of a cap point `Z` from `[DZF] ≥ σ`. -/
+/-- The cap bounds of a cap point `Z` from `[DZF] ≥ σ`. -/
 theorem capZ_bounds {d f zx zy : ℝ} (hd8 : 1 / 8 < d) (hd1 : d < 1) (hf8 : 1 / 8 < f) (hf1 : f < 1)
     (hzx : zx ≤ 1) (hzy : zy ≤ 1) (hDZF : 8 / 73 ≤ (1 - d) * (zx - f) - (1 - f) * (1 - zy)) :
     64 / 511 ≤ zx - f ∧ 64 / 511 ≤ zy - d := by
@@ -163,8 +160,8 @@ theorem capZ_bounds {d f zx zy : ℝ} (hd8 : 1 / 8 < d) (hd1 : d < 1) (hf8 : 1 /
   · have := prod_le (by norm_num) (by linarith : (0 : ℝ) ≤ 1 - f) (by linarith : 1 - f ≤ 7 / 8) hB
     linarith
 
-/-- The order bounds (10)–(11): `u = e_x - g_x ≥ σ`, `v = g_y - e_y ≥ σ`. (If `u ≤ 0` or `v ≤ 0`,
-then both are negative, and the product of `[DEG] ≥ σ` and `[FEG] ≥ σ` contradicts
+/-- The order bounds: `u = e_x - g_x ≥ σ`, `v = g_y - e_y ≥ σ`. (If `u ≤ 0` or `v ≤ 0`, then both
+are negative, and the product of `[DEG] ≥ σ` and `[FEG] ≥ σ` contradicts
 `[DEF] = (e_y-d)(e_x-f) - (1-e_x)(1-e_y) ≥ σ`.) -/
 theorem order_bounds {d f ex ey gx gy : ℝ} (hex1 : ex ≤ 1) (hgy1 : gy ≤ 1) (hey1 : ey ≤ 1)
     (hed : 0 < ey - d) (hef : 0 < ex - f) (hgf : 0 < gx - f) (hed1 : ey - d ≤ 1)
@@ -282,7 +279,7 @@ theorem fam_bounds (hfam : ConvexFamily a h b c d f E G O)
 with `O`. -/
 theorem fam_hull (hfam : ConvexFamily a h b c d f E G O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
-    IsConvexCCW (octagon a h b c d f E G) ∧ InPolygon (octagon a h b c d f E G) O ∧
+    IsConvexPolygon (octagon a h b c d f E G) ∧ InPolygon (octagon a h b c d f E G) O ∧
       ∀ i j : Fin 8, i ≠ j →
         sarea (octagon a h b c d f E G i) (octagon a h b c d f E G j) O ≠ 0 := by
   obtain ⟨A, CE, CG, Ord, Ob, hABC, hABH, hDEF, hDGF, hDEG, hEGF, -⟩ := fam_bounds hfam hmin
@@ -293,7 +290,7 @@ theorem fam_hull (hfam : ConvexFamily a h b c d f E G O)
     by linarith [CE.1], by linarith, by linarith [CE.2], by linarith, by linarith,
     by linarith [CG.1], by linarith, by linarith [CG.2], by linarith, by linarith,
     by linarith [Ord.1], by linarith [Ord.2], by linarith, by linarith⟩
-  have hconv : IsConvexCCW (octagon a h b c d f E G) := by
+  have hconv : IsConvexPolygon (octagon a h b c d f E G) := by
     have := H.convex (fun i j k hij hjk => by
       rw [octV_eq (O := O), octV_eq (O := O), octV_eq (O := O)]
       exact cfg_area hmin (by omega) (by omega) (by omega) (fun e => by
@@ -317,42 +314,22 @@ theorem fam_hull (hfam : ConvexFamily a h b c d f E G O)
 
 end Model
 
-/-! ### Section 1: bounds valid throughout the convex cap case -/
+/-! ### Bounds valid throughout the convex cap case -/
 
 section Claims
 
 variable {a h b c d f : ℝ} {E G O : Point}
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-hull`). The full hull is the strictly convex
-octagon `(A, B, C, D, E, G, F, H)` (3), with `O` as its sole interior point.
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 59-69. -/
-theorem claim_hull (hfam : ConvexFamily a h b c d f E G O)
+/-- The full hull is the strictly convex octagon `(A, B, C, D, E, G, F, H)` (`octagon`), with `O`
+as its sole interior point. -/
+theorem octagon_hull (hfam : ConvexFamily a h b c d f E G O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
-    IsConvexCCW (octagon a h b c d f E G) ∧ InPolygon (octagon a h b c d f E G) O :=
+    IsConvexPolygon (octagon a h b c d f E G) ∧ InPolygon (octagon a h b c d f E G) O :=
   ⟨(fam_hull hfam hmin).1, (fam_hull hfam hmin).2.1⟩
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-anchor`). Equations (4)–(5), with `σ = 8/73`,
-`L = h-a`, `M = c-b`: `aM ≥ σ`, `bL ≥ σ`, `h ≥ σ/M + σ/b`, `hc ≥ 4σ`, `a, b, d, f > 1/8`,
-`h, c ≥ 4σ`. `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 73-89. -/
-theorem claim_anchor (hfam : ConvexFamily a h b c d f E G O)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
-    let σ : ℝ := 8 / 73
-    σ ≤ a * (c - b) ∧ σ ≤ b * (h - a) ∧ σ / (c - b) + σ / b ≤ h ∧ 4 * σ ≤ h * c ∧
-      1 / 8 < a ∧ 1 / 8 < b ∧ 1 / 8 < d ∧ 1 / 8 < f ∧ 4 * σ ≤ h ∧ 4 * σ ≤ c := by
-  dsimp only
-  obtain ⟨A, -, -, -, -, hABC, hABH, -⟩ := fam_bounds hfam hmin
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩, -⟩ := hfam
-  obtain ⟨ha8, hb8, hhc, -, -, h4, c4⟩ := A
-  refine ⟨hABC, hABH, ?_, hhc, ha8, hb8, by linarith, by linarith, h4, c4⟩
-  have e1 : 8 / 73 / (c - b) ≤ a := by rw [div_le_iff₀ (by linarith)]; linarith
-  have e2 : 8 / 73 / b ≤ h - a := by rw [div_le_iff₀ hb]; linarith
-  linarith
-
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-delta`). Equation (6): `δ = (1-d)(1-f) ≥ 4σ`
-(convex four-point endpoint lemma for `D, F, E, G` in the virtual triangle `DF(1,1)`).
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 91-97.
-Uses: TYPE_II:FourPointEndpointLemma -/
-theorem claim_delta (hfam : ConvexFamily a h b c d f E G O)
+/-- `δ = (1-d)(1-f) ≥ 4σ` (the convex four-point endpoint lemma
+`TypeII.fourPointEndpointLemma` for `D, F, E, G` in the virtual triangle `DF(1,1)`). -/
+theorem delta_ge (hfam : ConvexFamily a h b c d f E G O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
     4 * (8 / 73) ≤ (1 - d) * (1 - f) := by
   obtain ⟨⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩, hE, hG, hcv, -⟩ := hfam
@@ -380,15 +357,14 @@ theorem claim_delta (hfam : ConvexFamily a h b c d f E G O)
   rw [harea] at this
   linarith
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-box`). Equation (7), with `σ = 8/73` and the
-normalization `f ≤ d`: `d ≤ 255/511`, `f ≤ 17/50`, `L ≥ 50σ/17`, `M ≥ 511σ/255`.
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 99-112. -/
-theorem claim_box (hfam : ConvexFamily a h b c d f E G O)
+/-- With `σ = 8/73` and the normalization `f ≤ d`: `d ≤ 255/511`, `f ≤ 17/50`, `L ≥ 50σ/17`,
+`M ≥ 511σ/255`. -/
+theorem box_bounds (hfam : ConvexFamily a h b c d f E G O)
     (hfd : f ≤ d) (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
     let σ : ℝ := 8 / 73
     d ≤ 255 / 511 ∧ f ≤ 17 / 50 ∧ 50 * σ / 17 ≤ h - a ∧ 511 * σ / 255 ≤ c - b := by
   dsimp only
-  have hδ := claim_delta hfam hmin
+  have hδ := delta_ge hfam hmin
   obtain ⟨A, -, -, -, -, hABC, hABH, -⟩ := fam_bounds hfam hmin
   obtain ⟨⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩, -⟩ := hfam
   have hd : d ≤ 255 / 511 := by
@@ -407,31 +383,10 @@ theorem claim_box (hfam : ConvexFamily a h b c d f E G O)
       (by linarith : 8 / 73 ≤ a * (c - b))
     linarith
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-cap`). Equations (8)–(9): for either cap point
-`Z ∈ {E, G}`, `[DZF] = (1-d)(z_x-f)-(1-f)(1-z_y) = (1-f)(z_y-d)-(1-d)(1-z_x) ≥ σ`, hence
-`z_x - f ≥ 64/511` and `z_y - d ≥ 64/511`. `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 114-128. -/
-theorem claim_cap (hfam : ConvexFamily a h b c d f E G O)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
-    ∀ Z ∈ ({E, G} : Set Point),
-      sarea (ptD d) Z (ptF f) = (1 - d) * (Z.1 - f) - (1 - f) * (1 - Z.2) ∧
-      sarea (ptD d) Z (ptF f) = (1 - f) * (Z.2 - d) - (1 - d) * (1 - Z.1) ∧
-      8 / 73 ≤ sarea (ptD d) Z (ptF f) ∧ 64 / 511 ≤ Z.1 - f ∧ 64 / 511 ≤ Z.2 - d := by
-  obtain ⟨-, CE, CG, -, -, -, -, hDEF, hDGF, -⟩ := fam_bounds hfam hmin
-  intro Z hZ
-  have e1 : sarea (ptD d) Z (ptF f) = (1 - d) * (Z.1 - f) - (1 - f) * (1 - Z.2) := by
-    simp only [sarea]; ring
-  have e2 : sarea (ptD d) Z (ptF f) = (1 - f) * (Z.2 - d) - (1 - d) * (1 - Z.1) := by
-    simp only [sarea]; ring
-  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hZ
-  rcases hZ with rfl | rfl
-  · exact ⟨e1, e2, by rw [e1]; exact hDEF, CE.1, CE.2⟩
-  · exact ⟨e1, e2, by rw [e1]; exact hDGF, CG.1, CG.2⟩
-
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-order`). Equations (10)–(11): with
-`u = e_x - g_x`, `v = g_y - e_y`, `[DEG] = u(e_y-d) - (1-e_x)v` and `[FEG] = v(g_x-f) - (1-g_y)u`;
-their positivity and (8) force `u, v > 0`, and then `e_x - g_x ≥ σ`, `g_y - e_y ≥ σ`.
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 130-157. -/
-theorem claim_order (hfam : ConvexFamily a h b c d f E G O)
+/-- With `u = e_x - g_x`, `v = g_y - e_y`: `[DEG] = u(e_y-d) - (1-e_x)v` and
+`[FEG] = v(g_x-f) - (1-g_y)u`; their positivity and the cap bounds force `u, v > 0`, and then
+`e_x - g_x ≥ σ`, `g_y - e_y ≥ σ`. -/
+theorem cap_order (hfam : ConvexFamily a h b c d f E G O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
     sarea (ptD d) E G = (E.1 - G.1) * (E.2 - d) - (1 - E.1) * (G.2 - E.2) ∧
       sarea (ptF f) E G = (G.2 - E.2) * (G.1 - f) - (1 - G.2) * (E.1 - G.1) ∧
@@ -440,35 +395,29 @@ theorem claim_order (hfam : ConvexFamily a h b c d f E G O)
   exact ⟨by simp only [sarea]; ring, by simp only [sarea]; ring, by linarith [Ord.1],
     by linarith [Ord.2], Ord.1, Ord.2⟩
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-O-box`). Equations (12)–(13): `σ ≤ x, y ≤ 1-σ`
-for `O = (x, y)` (bases `AH`, `BC` and the identities (12), with `[CDF] ≤ 1-f`, `[DFH] ≤ 1-d`).
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 159-176. -/
-theorem claim_O_box (hfam : ConvexFamily a h b c d f E G O)
+/-- `σ ≤ x, y ≤ 1-σ` for `O = (x, y)` (bases `AH`, `BC` and the projection identities, with
+`[CDF] ≤ 1-f`, `[DFH] ≤ 1-d`). -/
+theorem O_box (hfam : ConvexFamily a h b c d f E G O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
     8 / 73 ≤ O.1 ∧ O.1 ≤ 1 - 8 / 73 ∧ 8 / 73 ≤ O.2 ∧ O.2 ≤ 1 - 8 / 73 :=
   (fam_bounds hfam hmin).2.2.2.2.1
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-ears`). Equation (14): the six anchor ears
-`ABH, ABC, BCD, CDF, DFH, FHA` have doubled area `< 13/16` (`SIX_BOUNDARY_HULL` Theorem 1, which
-does not assume that the anchor hexagon is the full hull).
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 178-184.
-Uses: SIX_BOUNDARY_HULL:Theorem1 -/
-theorem claim_ears (hfam : ConvexFamily a h b c d f E G O)
+/-- The six anchor ears `ABH, ABC, BCD, CDF, DFH, FHA` have doubled area `< 13/16`
+(`SixBoundaryHull.ears_sarea_lt_atMostOne`, which does not assume that the anchor hexagon is the full hull). -/
+theorem ears_lt (hfam : ConvexFamily a h b c d f E G O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
     sarea (ptA a) (ptB b) (ptH h) < 13 / 16 ∧ sarea (ptA a) (ptB b) (ptC c) < 13 / 16 ∧
       sarea (ptB b) (ptC c) (ptD d) < 13 / 16 ∧ sarea (ptC c) (ptD d) (ptF f) < 13 / 16 ∧
       sarea (ptD d) (ptF f) (ptH h) < 13 / 16 ∧ sarea (ptF f) (ptH h) (ptA a) < 13 / 16 := by
-  obtain ⟨o1, o2, o3, o4⟩ := claim_O_box hfam hmin
+  obtain ⟨o1, o2, o3, o4⟩ := O_box hfam hmin
   obtain ⟨hN, hE, hG, -, -⟩ := hfam
-  exact (SixBoundaryHull.theorem1 hN hE.1 hG.1 ⟨by linarith, by linarith, by linarith,
+  exact (SixBoundaryHull.ears_sarea_lt_atMostOne hN hE.1 hG.1 ⟨by linarith, by linarith, by linarith,
     by linarith⟩ (by linarith)).1
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-W-hc`). Equation (15) and the lines before it,
-with `σ = 8/73`, `W = 1-(h-d)(c-f)`: if `O` is above `HC`, `W ≥ 4σ` and `hc ≥ 4σ`; if below,
-`W ≥ 2σ` and `hc ≥ σ/(3-2√2) > (7/64)(3+2√2) > 7/11` (endpoint theorem for `H, C, A, B, O`).
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 186-207.
-Uses: TYPE_II:EndpointTriangleTheorem -/
-theorem claim_W_hc (hfam : ConvexFamily a h b c d f E G O)
+/-- With `σ = 8/73`, `W = 1-(h-d)(c-f)`: if `O` is above `HC`, `W ≥ 4σ` and `hc ≥ 4σ`; if
+below, `W ≥ 2σ` and `hc ≥ σ/(3-2√2) > (7/64)(3+2√2) > 7/11` (endpoint theorem for
+`H, C, A, B, O`). -/
+theorem W_hc_bounds (hfam : ConvexFamily a h b c d f E G O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
     let σ : ℝ := 8 / 73
     (0 < sarea (ptH h) (ptC c) O → 4 * σ ≤ 1 - (h - d) * (c - f) ∧ 4 * σ ≤ h * c) ∧
@@ -513,15 +462,14 @@ theorem claim_W_hc (hfam : ConvexFamily a h b c d f E G O)
     rw [lt_div_iff₀ hk]
     nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)]
 
-/-! ### Section 2: the complete radial-word list -/
+/-! ### The complete radial-word list -/
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-words`), restated. The explicit list
-`Model.words` of the octagon words with `w₃ ≥ 3` (the leaves of the kernel-checked enumeration
-`Model.enumTree`) has 94 entries, words 31 and 66 are in `convexWords`, and `O` has a radial word
-in `convexWords`, with `[HCO] > 0` exactly when `w₇ ≥ 3`. (The cardinality of the Finset
-`convexWords` over all `8⁸` tuples is not computed.)
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 209-247. -/
-theorem claim_words :
+/-- The explicit list `Model.words` of the octagon words with `w₃ ≥ 3` (the leaves of the
+kernel-checked enumeration `Model.enumTree`) has 94 entries, words 31 and 66 are in
+`convexWords`, and `O` has a radial word in `convexWords`, with `[HCO] > 0` exactly when
+`w₇ ≥ 3`. (The cardinality of the Finset `convexWords` over all `8⁸` tuples is not
+computed.) -/
+theorem exists_convexWord :
     Model.words.length = 94 ∧ word31 ∈ convexWords ∧ word66 ∈ convexWords ∧
     ∀ {a h b c d f : ℝ} {E G O : Point}, ConvexFamily a h b c d f E G O →
       4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O) →
@@ -533,14 +481,14 @@ theorem claim_words :
   refine ⟨by decide, (mem _).2 (by decide), (mem _).2 (by decide),
     fun {a h b c d f E G O} hfam hmin => ?_⟩
   obtain ⟨hconv, hpoly, hgen⟩ := fam_hull hfam hmin
-  obtain ⟨r, hr, hrw⟩ := claim_radial_word _ O (by norm_num) hconv hpoly hgen
+  obtain ⟨r, hr, hrw⟩ := exists_radialWord _ O (by norm_num) hconv hpoly hgen
   have hrange : ∀ i, r i < 8 := fun i => by have := hrw.1 i; omega
   refine ⟨fun i => ⟨r i, hrange i⟩, (mem _).2 ⟨hrw, ?_⟩, hr, hr 7 3 (by norm_num) (by norm_num)⟩
   exact (hr 3 3 (by norm_num) (by norm_num)).1 hfam.2.2.2.2.2.2.2.1
 
 end Claims
 
-/-! ### Section 3: the certificate cover -/
+/-! ### The certificate cover -/
 
 section Cover
 
@@ -574,9 +522,9 @@ theorem extra_nonneg (hfam : ConvexFamily a h b c d f E G O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) {tb : List SFact}
     (htb : AllHold (SFact.Holds (cfg a h b c d f E G O)) tb) :
     ∀ e ∈ Model.extra tb, 0 ≤ e.eval (zeta a h b c d f E G O) := by
-  have hδ := claim_delta hfam hmin
-  obtain ⟨r1, r2, r3, r4, r5, r6⟩ := claim_ears hfam hmin
-  obtain ⟨Wup, Wlow⟩ := claim_W_hc hfam hmin
+  have hδ := delta_ge hfam hmin
+  obtain ⟨r1, r2, r3, r4, r5, r6⟩ := ears_lt hfam hmin
+  obtain ⟨Wup, Wlow⟩ := W_hc_bounds hfam hmin
   obtain ⟨hconv, -, hgen⟩ := fam_hull hfam hmin
   obtain ⟨A, -⟩ := fam_bounds hfam hmin
   obtain ⟨hk, -⟩ := endpoint_const
@@ -630,7 +578,7 @@ theorem fam_hyp (hfam : ConvexFamily a h b c d f E G O) (hfd : f ≤ d)
     (hr : HasRadialWord (octagon a h b c d f E G) O r) (hrw : IsRadialWord r) :
     Hyp Model.pkg (cfg a h b c d f E G O) (zeta a h b c d f E G O) := by
   obtain ⟨A, CE, CG, Ord, Ob, -⟩ := fam_bounds hfam hmin
-  obtain ⟨hb1, hb2, hb3, hb4⟩ := claim_box hfam hfd hmin
+  obtain ⟨hb1, hb2, hb3, hb4⟩ := box_bounds hfam hfd hmin
   obtain ⟨hconv, hpoly, hgen⟩ := fam_hull hfam hmin
   have hfam' := hfam
   obtain ⟨hN, ⟨⟨e0, e1, e2, e3⟩, -⟩, ⟨⟨g0, g1, g2, g3⟩, -⟩, -, hO⟩ := hfam'
@@ -714,7 +662,7 @@ theorem res_false (hfam : ConvexFamily a h b c d f E G O) (hfd : f ≤ d)
 
 end Cover
 
-/-! ### Sections 3–4: the fixed cubic inequalities and the sharp E/F chamber -/
+/-! ### The fixed cubic inequalities and the sharp E/F chamber -/
 
 section Final
 
@@ -725,21 +673,14 @@ theorem word_eq {r : Fin 8 → Fin 8} {n : ℕ}
     {w : Fin 8 → Fin 8} (hw : ∀ i : Fin 8, (Model.words.getD n []).getD i 0 = w i) : r = w :=
   funext fun i => Fin.ext ((hwr i.1 i.2).trans (hw i))
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-certificate`). The certificate package
-(`docs/proof/nine/six_boundary_two_top_convex_certificates.json`, verified by
-`docs/proof/nine/check_six_boundary_two_top_convex.py`): with the normalization `f ≤ d`, every word of the
-list other than 31 and 66 is impossible. In the manuscript each such word has one fixed rational
-cubic (21) (scale 4096) in the 31 affine factors `a₀, …, a₃₀` (table, lines 260-277) and the 93
-quadratic costs `q₀, …, q₉₂` (`δ - 4σ`, `hc - 4σ | 7/11`, `W - 4σ | 2σ`, `13/16 - [ear]`, the 84
-signed areas minus `σ` or `3σ`); with the branches of `claim_branches` there are 100 cubics,
-17,619 positive terms, cube bound (23) at most `-11315534897214263309/11507808525803520000`. Here
-each certificate is checked by the kernel on the atoms of `Model.pkg`
-(`Heilbronn.Nine.SixBoundary.TwoTopConvexTrees*`). `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 249-381.
-Uses: SIX_BOUNDARY_TWO_TOP_CONVEX:claim-anchor, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-delta,
-SIX_BOUNDARY_TWO_TOP_CONVEX:claim-box, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-cap,
-SIX_BOUNDARY_TWO_TOP_CONVEX:claim-order, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-O-box,
-SIX_BOUNDARY_TWO_TOP_CONVEX:claim-ears, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-W-hc -/
-theorem claim_certificate (hfam : ConvexFamily a h b c d f E G O)
+/-- With the normalization `f ≤ d`, every word of the list other than 31 and 66 is impossible.
+Each such word has one fixed rational cubic (scale 4096) in the 31 affine factors
+`a₀, …, a₃₀` and the 93 quadratic costs `q₀, …, q₉₂` (`δ - 4σ`, `hc - 4σ | 7/11`,
+`W - 4σ | 2σ`, `13/16 - [ear]`, the 84 signed areas minus `σ` or `3σ`); with the branches of
+`word_branches` there are 100 cubics, 17,619 positive terms, cube bound at most
+`-11315534897214263309/11507808525803520000`. Each certificate is checked by the kernel on the
+atoms of `Model.pkg` (`Heilbronn.Nine.SixBoundary.TwoTopConvexTrees*`). -/
+theorem not_hasRadialWord_of_ne (hfam : ConvexFamily a h b c d f E G O)
     (hfd : f ≤ d) (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
     ∀ w ∈ convexWords, w ≠ word31 → w ≠ word66 →
       ¬ HasRadialWord (octagon a h b c d f E G) O (fun i => (w i : ℕ)) := by
@@ -751,12 +692,10 @@ theorem claim_certificate (hfam : ConvexFamily a h b c d f E G O)
   refine leaf_false hfam hfd hmin hrad hrw hn ?_ hwr
   rintro rfl; exact h31 (word_eq hwr (by decide))
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-branches`). With `f ≤ d`: word 66 is impossible
-(two certificates, appending `1/2 - x` and `x - 1/2`); word 31 lies in the closed neighbourhood
-(20) (six certificates `l_low, l_high, m_low, g_high, c_low, k_low` exclude its complement).
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 299-339.
-Uses: SIX_BOUNDARY_TWO_TOP_CONVEX:claim-certificate -/
-theorem claim_branches (hfam : ConvexFamily a h b c d f E G O)
+/-- With `f ≤ d`: word 66 is impossible (two certificates, appending `1/2 - x` and `x - 1/2`);
+word 31 lies in the closed neighbourhood `Neighbourhood20` (six certificates
+`l_low, l_high, m_low, g_high, c_low, k_low` exclude its complement). -/
+theorem word_branches (hfam : ConvexFamily a h b c d f E G O)
     (hfd : f ≤ d) (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
     ¬ HasRadialWord (octagon a h b c d f E G) O (fun i => (word66 i : ℕ)) ∧
       (HasRadialWord (octagon a h b c d f E G) O (fun i => (word31 i : ℕ)) →
@@ -791,15 +730,13 @@ theorem claim_branches (hfam : ConvexFamily a h b c d f E G O)
       simp only [Model.res31, List.getD_cons_zero, List.getD_cons_succ, eval_minus, eval_v,
         zeta]; linarith)
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-sharp-map`). Equations (24)–(25): on the
-neighbourhood (20) with word 31, the labels `(A',B',C',D',E',F',G',H',O') = (A,B,C,D,E,G,F,H,O)`
-make the configuration the E/F-moving chamber of `SHARP_EF_MOVING.md` with `r = 1-e_x`,
-`e' = e_y`, `f' = g_x`, `k = g_y`, `g' = f`: all its hypotheses (1)–(2) hold
-(`0 < d < e_y < g_y ≤ 1`, `0 < f < g_x < e_x ≤ 1`, `b ≤ f`, `h ≤ g_y`, (20)) and its eleven
-oriented doubled areas are positive (the five `O`-signs `[ADO], [DHO], [BOE], [FCO], [OCG] > 0`
-follow from (19)). `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 383-428.
-Uses: SIX_BOUNDARY_TWO_TOP_CONVEX:claim-cap, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-order -/
-theorem claim_sharp_map (hfam : ConvexFamily a h b c d f E G O)
+/-- On the neighbourhood `Neighbourhood20` with word 31, the labels
+`(A',B',C',D',E',F',G',H',O') = (A,B,C,D,E,G,F,H,O)` make the configuration the E/F-moving
+chamber of `SharpEFMoving` with `r = 1-e_x`, `e' = e_y`, `f' = g_x`, `k = g_y`, `g' = f`: all
+hypotheses `SharpEFMoving.EFMovingHyp` hold (`0 < d < e_y < g_y ≤ 1`, `0 < f < g_x < e_x ≤ 1`,
+`b ≤ f`, `h ≤ g_y`, `Neighbourhood20`) and its eleven oriented doubled areas are positive (the
+five `O`-signs `[ADO], [DHO], [BOE], [FCO], [OCG] > 0` follow from the word). -/
+theorem word31_EFMoving (hfam : ConvexFamily a h b c d f E G O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O))
     (hw : HasRadialWord (octagon a h b c d f E G) O (fun i => (word31 i : ℕ)))
     (hnb : Neighbourhood20 a h c f G) :
@@ -855,14 +792,6 @@ theorem claim_sharp_map (hfam : ConvexFamily a h b c d f E G O)
   · show 0 < sarea O (ptC c) G
     simp only [sarea] at w10 ⊢; linarith
 
-theorem isOptimal_comp_perm_iff' (P : Fin 9 → Point) (τ : Equiv.Perm (Fin 9)) :
-    IsOptimal (P ∘ τ) ↔ IsOptimal P := by
-  constructor
-  · rintro ⟨g, ρ, hρ⟩
-    exact ⟨g, τ * ρ, fun i => hρ i⟩
-  · rintro ⟨g, ρ, hρ⟩
-    exact ⟨g, τ⁻¹ * ρ, fun i => by simp [hρ i]⟩
-
 /-- The normalized theorem (`f ≤ d`). -/
 theorem main_normalized (hfam : ConvexFamily a h b c d f E G O) (hfd : f ≤ d) :
     minTriangleArea (nConfig a h b c d f E G O) ≤ A₀ ∧
@@ -874,7 +803,7 @@ theorem main_normalized (hfam : ConvexFamily a h b c d f E G O) (hfd : f ≤ d) 
     have := A₀_bounds.2.1
     exact ⟨by linarith, fun h => absurd (h.trans_lt h4) (by linarith)⟩
   obtain ⟨hconv, hpoly, hgen⟩ := fam_hull hfam h4
-  obtain ⟨r, hr, hrw⟩ := claim_radial_word _ O (by norm_num) hconv hpoly hgen
+  obtain ⟨r, hr, hrw⟩ := exists_radialWord _ O (by norm_num) hconv hpoly hgen
   obtain ⟨n, hn, hwr⟩ := word_index hfam hfd h4 hr hrw
   by_cases h31 : n = 31
   swap
@@ -883,9 +812,9 @@ theorem main_normalized (hfam : ConvexFamily a h b c d f E G O) (hfd : f ≤ d) 
   have e : r = fun i => (word31 i : ℕ) := funext fun i => (hwr i.1 i.2).trans (by
     fin_cases i <;> rfl)
   subst e
-  have hnb := (claim_branches hfam hfd h4).2 hr
-  obtain ⟨hyp, hch, ceq⟩ := claim_sharp_map hfam h4 hr hnb
-  have K := SharpEFMoving.mainTheorem hyp hch
+  have hnb := (word_branches hfam hfd h4).2 hr
+  obtain ⟨hyp, hch, ceq⟩ := word31_EFMoving hfam h4 hr hnb
+  have K := SharpEFMoving.efMoving_chamber_le hyp hch
   have hP : sharpConfig (ptA a) (ptB b) (ptC c) (ptD d) E G (ptF f) (ptH h) O =
       nConfig a h b c d f E G O ∘ nIdx := by
     funext i; fin_cases i <;> rfl
@@ -902,19 +831,10 @@ theorem main_normalized (hfam : ConvexFamily a h b c d f E G O) (hfd : f ≤ d) 
     rw [this]
     simp [SquareSymmetry.apply]
 
-/-- **Theorem** (`SIX_BOUNDARY_TWO_TOP_CONVEX:Theorem`). Every configuration of the convex-cap
-branch of N6-06 has minimum ordinary triangle area at most `A₀`. Equality forces `e_x = g_y = 1`
-and the sharp eight-boundary configuration of `HAND_PROOF.md`, up to square symmetry and
-relabelling. `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 22-43, 430-433.
-Uses: SIX_BOUNDARY_HULL:claim-transposition, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-hull,
-SIX_BOUNDARY_TWO_TOP_CONVEX:claim-anchor, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-delta,
-SIX_BOUNDARY_TWO_TOP_CONVEX:claim-box, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-cap,
-SIX_BOUNDARY_TWO_TOP_CONVEX:claim-order, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-O-box,
-SIX_BOUNDARY_TWO_TOP_CONVEX:claim-ears, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-W-hc,
-SIX_BOUNDARY_TWO_TOP_CONVEX:claim-words, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-certificate,
-SIX_BOUNDARY_TWO_TOP_CONVEX:claim-branches, SIX_BOUNDARY_TWO_TOP_CONVEX:claim-sharp-map,
-SHARP_EF_MOVING:Theorem -/
-theorem mainTheorem (hfam : ConvexFamily a h b c d f E G O) :
+/-- Every configuration of the convex-cap two-top placement has minimum ordinary triangle area
+at most `A₀`. Equality forces `e_x = g_y = 1` and the optimal eight-boundary configuration, up
+to square symmetry and relabelling. -/
+theorem twoTopConvex_le_A₀ (hfam : ConvexFamily a h b c d f E G O) :
     minTriangleArea (nConfig a h b c d f E G O) ≤ A₀ ∧
       (A₀ ≤ minTriangleArea (nConfig a h b c d f E G O) →
         IsOptimal (nConfig a h b c d f E G O) ∧ E.1 = 1 ∧ G.2 = 1) := by
@@ -922,8 +842,8 @@ theorem mainTheorem (hfam : ConvexFamily a h b c d f E G O) :
   · exact main_normalized hfam hfd
   -- the transposed case: `(b, c, a, h, f, d)`, cap points `Gᵀ, Eᵀ`
   obtain ⟨hN, hE, hG, hcv, hO⟩ := hfam
-  have T := claim_transposition a h b c d f E G O
-  have hcv' : IsConvexCCW ![ptD f, transpose G, transpose E, ptF d] := by
+  have T := transpose_invariant a h b c d f E G O
+  have hcv' : IsConvexPolygon ![ptD f, transpose G, transpose E, ptF d] := by
     have k1 := hcv 0 1 2 (by decide) (by decide)
     have k2 := hcv 0 1 3 (by decide) (by decide)
     have k3 := hcv 0 2 3 (by decide) (by decide)
@@ -935,9 +855,9 @@ theorem mainTheorem (hfam : ConvexFamily a h b c d f E G O) :
       simp only [Matrix.cons_val, Fin.isValue, transpose, ptD, ptF, sarea] at k1 k2 k3 k4 ⊢ <;>
       linarith
   have hfam' : ConvexFamily b c a h f d (transpose G) (transpose E) (transpose O) :=
-    ⟨T.1.1 hN, (claim_transposition a h b c d f G E O).2.2.2.2.2.2.2.1.1 hG,
-      (claim_transposition a h b c d f E G O).2.2.2.2.2.2.2.1.1 hE, hcv',
-      (claim_transposition a h b c d f O E G).2.2.2.2.2.2.2.2.2.1.1 hO⟩
+    ⟨T.1.1 hN, (transpose_invariant a h b c d f G E O).2.2.2.2.2.2.2.1.1 hG,
+      (transpose_invariant a h b c d f E G O).2.2.2.2.2.2.2.1.1 hE, hcv',
+      (transpose_invariant a h b c d f O E G).2.2.2.2.2.2.2.2.2.1.1 hO⟩
   have k := main_normalized hfam' hdf
   have hswap : nConfig b c a h f d (transpose G) (transpose E) (transpose O) =
       nConfig b c a h f d (transpose E) (transpose G) (transpose O) ∘ Equiv.swap 6 7 := by
@@ -948,7 +868,7 @@ theorem mainTheorem (hfam : ConvexFamily a h b c d f E G O) :
   have ho : IsOptimal (nConfig b c a h f d (transpose G) (transpose E) (transpose O)) ↔
       IsOptimal (nConfig a h b c d f E G O) := by
     rw [hswap, ← T.2.2.2.1]
-    exact isOptimal_comp_perm_iff' _ _
+    exact isOptimal_comp_perm_iff _ _
   rw [hm] at k
   refine ⟨k.1, fun hA => ?_⟩
   obtain ⟨hopt, h1, h2⟩ := k.2 hA

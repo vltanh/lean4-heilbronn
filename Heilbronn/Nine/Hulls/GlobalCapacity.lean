@@ -6,29 +6,29 @@ public import Heilbronn.Nine.Corners.CornerFamilies
 public import Heilbronn.Nine.Normalization.GlobalStructure
 public import Heilbronn.Nine.TypeII.TypeII.Normalization
 
-/-! # Global triangle capacity two (`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`, §§4-5)
+/-! # Global triangle capacity two
 
-Part of `THREE_INTERIOR_TRIANGLES.md` (module `Heilbronn.Nine.Hulls.ThreeInteriorTriangles`, same
-namespace), split off because Corollaries 4 and 5 use the corner-triangle theorem and the C1
-capacity of `ONE_CORNER.md` (§§1-4, §6), whose own proof uses Theorem 1 of this note: keeping
-them in the module of Theorem 1 would make an import cycle once `ONE_CORNER` imports Theorem 1.
+The second part of the namespace `Heilbronn.Nine.ThreeInteriorTriangles` (the first is the module
+`Heilbronn.Nine.Hulls.ThreeInteriorTriangles`), split off because `typeIIConfig_triangleCapacityTwo` and `triangleCapacityTwo_of_A₀_le` use
+`OneCorner.cornerTriangleOccupancyTheorem` and the C1 capacity
+`OneCorner.globalC1OccupancyCorollary`, whose own proof uses `three_inside_is_ear`: keeping them in the
+module of `three_inside_is_ear` would make an import cycle.
 
-* `corollary4`: capacity two in Type II with `b ≤ 1/2`. By Theorem 1 a three-point triangle is
+* `typeIIConfig_triangleCapacityTwo`: capacity two in Type II with `b ≤ 1/2`. By `three_inside_is_ear` a three-point triangle is
   a hull ear with supporting edges; the ears are excluded by the strip `y ≤ 1 - 2A₀` (no corner
   vertex), the supporting edge through `E` (ears at `D`), the triangle `B, (1,0), C` (ears at `C`;
-  when `BC` itself is a hull edge, the endpoint-triangle theorem of `TYPE_II.md` and the
-  seven-point bound fill too few containers, `cor4_BC_edge`), and the corner-triangle theorem of
-  `ONE_CORNER.md` for `DEC` (`cor4_DEC`) and, after the shear, for `DCR` (`cor4_shear`).
-* `claim_min_enclosing_parallelogram`: the parameters `(a,…,f)` of the affine maps keeping the
+  when `BC` itself is a hull edge, `TypeII.endpointTriangleTheorem` and the seven-point bound
+  fill too few containers, `typeII_BC_not_hull_edge`), and `OneCorner.cornerTriangleOccupancyTheorem` for
+  `DEC` (`typeII_ear_DEC_not_three`) and, after the shear, for `DCR` (`typeII_ear_DCR_not_three`).
+* `exists_min_enclosing_parallelogram`: the parameters `(a,…,f)` of the affine maps keeping the
   configuration in the square form a compact set of `ℝ⁶` (three non-collinear points bound the
-  linear part), on which `|ad - bc|` attains its maximum. This replaces the manuscript's
-  compactness over pairs of unit normals.
-* `claim_normalization`: the image under that map has no feasible expansion
-  (`BoundaryReduction.NoExpand`), so the normalization of `GLOBAL_STRUCTURE.md`, proved under that
-  hypothesis (`GlobalStructure.exists_family_of_noExpand`), applies; Type II is finished by the
-  shear normalization of `TYPE_II.md` §2 (`TypeII.shearNormalization`).
-* `corollary5`: global capacity two, from `claim_normalization`, the family results (Corollary 2
-  for N, `ONE_CORNER` §6 for C1, Corollary 4 for Type II, the exclusions of C2 and Type III), and
+  linear part), on which `|ad - bc|` attains its maximum.
+* `exists_affine_family_normal_form`: the image under that map has no feasible expansion
+  (`BoundaryReduction.NoExpand`), so `GlobalStructure.exists_family_of_noExpand` applies; Type II
+  is finished by the shear normalization `TypeII.shearNormalization`.
+* `triangleCapacityTwo_of_A₀_le`: global capacity two, from `exists_affine_family_normal_form`, the family results
+  (`nConfig_triangleCapacityTwo` for N, `OneCorner.globalC1OccupancyCorollary` for C1, `typeIIConfig_triangleCapacityTwo` for Type II,
+  `OppositeCorners.minTriangleArea_c2Config_lt_A₀` for C2 and `CornerFamilies.typeIII_lt_A₀` for Type III), and
   the transfer of capacity through affine maps and relabellings.
 -/
 
@@ -37,9 +37,9 @@ them in the module of Theorem 1 would make an import cycle once `ONE_CORNER` imp
 noncomputable section
 namespace Heilbronn.Nine.ThreeInteriorTriangles
 
-/-! ### §4. The complete normalized Type-II family -/
+/-! ### The complete normalized Type-II family -/
 
-/-! ### Helpers for Corollary 4 -/
+/-! ### Helpers for `typeIIConfig_triangleCapacityTwo` -/
 
 /-- A triangle in the strip `[0,1] × [0,h]` has doubled area at most `h`. -/
 theorem sarea_le_of_strip {X Y Z : Point} {h : ℝ} (hh : 0 < h) (hX : X ∈ unitSquare)
@@ -70,17 +70,18 @@ theorem sarea_le_right {b : ℝ} (hb : 0 < b) (hb1 : b < 1) {A C : Point} (hA : 
     mul_nonneg (sub_nonneg.2 ha1) (neg_nonneg.2 fc), mul_nonneg (neg_nonneg.2 fa) hc2,
     mul_nonneg (neg_nonneg.2 fa) (sub_nonneg.2 hc1), mul_nonneg (neg_nonneg.2 fa) (neg_nonneg.2 fc)]
 
-/-- The corner-triangle theorem of `ONE_CORNER.md` for three distinct points of an affine image
-`Q` of the configuration, stated with the counterclockwise corner triangle `(0,0), (ξ,0), (0,η)`. -/
+/-- `OneCorner.cornerTriangleOccupancyTheorem` as a contradiction: three distinct points of an
+affine image `Q` of the configuration do not all lie inside the counterclockwise corner triangle
+`(0,0), (ξ,0), (0,η)`. -/
 theorem corner_contra {Q : Fin 9 → Point} (hQ : ∀ i, Q i ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea Q) {ξ η : ℝ} (hξ : 0 < ξ) (hξ1 : ξ ≤ 1) (hη : 0 < η)
     (hη1 : η ≤ 1) (hO : ∃ i, Q i = (0, 0)) (hH : ∃ i, Q i = (0, η)) (hC : ∃ i, Q i = (ξ, 0))
     {m₁ m₂ m₃ : Fin 9} (h12 : m₁ ≠ m₂) (h13 : m₁ ≠ m₃) (h23 : m₂ ≠ m₃)
     (h1 : InTriangle (Q m₁) (0, 0) (ξ, 0) (0, η)) (h2 : InTriangle (Q m₂) (0, 0) (ξ, 0) (0, η))
     (h3 : InTriangle (Q m₃) (0, 0) (ξ, 0) (0, η)) : False := by
-  have hs : 3 ≤ {m : Fin 9 | CornerFamilies.InsideTriangle (Q m) (0, 0) (0, η) (ξ, 0)}.ncard := by
+  have hs : 3 ≤ {m : Fin 9 | InsideTriangle (Q m) (0, 0) (0, η) (ξ, 0)}.ncard := by
     have sub : (({m₁, m₂, m₃} : Finset (Fin 9)) : Set (Fin 9)) ⊆
-        {m : Fin 9 | CornerFamilies.InsideTriangle (Q m) (0, 0) (0, η) (ξ, 0)} := by
+        {m : Fin 9 | InsideTriangle (Q m) (0, 0) (0, η) (ξ, 0)} := by
       intro m hm
       simp only [Finset.coe_insert, Finset.coe_singleton, Set.mem_insert_iff,
         Set.mem_singleton_iff] at hm
@@ -93,10 +94,10 @@ theorem corner_contra {Q : Fin 9 → Point} (hQ : ∀ i, Q i ∈ unitSquare)
   have := OneCorner.cornerTriangleOccupancyTheorem Q hQ ξ η hξ hξ1 hη hη1 hO hH hC hs
   linarith [A₀_bounds.1]
 
-/-- The case `A' = B`, `B' = C` of Corollary 4: `BC` would be a hull edge, so the six points
-other than `D, C, B` lie in the left container (at most two, by the endpoint-triangle theorem) or
-in the central triangle `DBC` (at most three). -/
-theorem cor4_BC_edge {P : Fin 9 → Point} {b : ℝ} (hP : ∀ m, P m ∈ unitSquare)
+/-- The case `A' = B`, `B' = C` of `typeIIConfig_triangleCapacityTwo`: `BC` would be a hull edge, so the six points
+other than `D, C, B` lie in the left container (at most two, by `TypeII.endpointTriangleTheorem`)
+or in the central triangle `DBC` (at most three, by `ncard_inside_le_three`). -/
+theorem typeII_BC_not_hull_edge {P : Fin 9 → Point} {b : ℝ} (hP : ∀ m, P m ∈ unitSquare)
     (hP0 : P 0 = (0, 1)) (hP1 : P 1 = (1, 1)) (hP3 : P 3 = (b, 0)) (hb : 0 < b)
     (hb2 : b ≤ 1 / 2) (hA : A₀ ≤ minTriangleArea P)
     (ylow : ∀ m, m ≠ 0 → m ≠ 1 → (P m).2 ≤ 1 - 2 * A₀)
@@ -183,8 +184,9 @@ theorem inTriangle_affine_neg {X A B C : Point} {a b c d e f : ℝ} (hdet : a * 
   · rw [sarea_swap₁₂] at h2; linarith
   · rw [sarea_swap₁₂] at h1; linarith
 
-/-- The ear `DEC` of Corollary 4 is a corner triangle at `D` (after the reflection `y ↦ 1 - y`). -/
-theorem cor4_DEC {P : Fin 9 → Point} {l : ℝ} (hl : 0 < l) (hl1 : l < 1)
+/-- The ear `DEC` of `typeIIConfig_triangleCapacityTwo` is a corner triangle at `D` (after the reflection `y ↦ 1 - y`),
+so it does not contain three points. -/
+theorem typeII_ear_DEC_not_three {P : Fin 9 → Point} {l : ℝ} (hl : 0 < l) (hl1 : l < 1)
     (hP : ∀ m, P m ∈ unitSquare) (hP0 : P 0 = (0, 1)) (hP1 : P 1 = (1, 1)) (hP2 : P 2 = (0, l))
     (hA : A₀ ≤ minTriangleArea P) {m₁ m₂ m₃ : Fin 9} (d12 : m₁ ≠ m₂) (d13 : m₁ ≠ m₃)
     (d23 : m₂ ≠ m₃) (i1 : InTriangle (P m₁) (P 0) (P 2) (P 1))
@@ -208,9 +210,10 @@ theorem cor4_DEC {P : Fin 9 → Point} {l : ℝ} (hl : 0 < l) (hl1 : l < 1)
   exact corner_contra hQ hmin one_pos le_rfl (by linarith) (by linarith) ⟨0, q0⟩ ⟨2, q2⟩ ⟨1, q1⟩
     d12 d13 d23 (tr i1) (tr i2) (tr i3)
 
-/-- The ear `DCR` of Corollary 4 (apex `C`): the shear `(x, y) ↦ (x + τ(1 - y), y)`,
-`τ = (1 - R_x)/(1 - R_y)`, followed by the half-turn, makes it a corner triangle at `C`. -/
-theorem cor4_shear {P : Fin 9 → Point} (hP : ∀ m, P m ∈ unitSquare) (hP0 : P 0 = (0, 1))
+/-- The ear `DCR` of `typeIIConfig_triangleCapacityTwo` (apex `C`) does not contain three points: the shear
+`(x, y) ↦ (x + τ(1 - y), y)`, `τ = (1 - R_x)/(1 - R_y)`, followed by the half-turn, makes it a
+corner triangle at `C`. -/
+theorem typeII_ear_DCR_not_three {P : Fin 9 → Point} (hP : ∀ m, P m ∈ unitSquare) (hP0 : P 0 = (0, 1))
     (hP1 : P 1 = (1, 1)) (hA : A₀ ≤ minTriangleArea P) {R : Fin 9} (hR : (P R).2 < 1)
     (sup : ∀ m, m ≠ R → m ≠ 1 → 0 < sarea (P R) (P 1) (P m)) {m₁ m₂ m₃ : Fin 9}
     (d12 : m₁ ≠ m₂) (d13 : m₁ ≠ m₃) (d23 : m₂ ≠ m₃) (i1 : InTriangle (P m₁) (P 1) (P 0) (P R))
@@ -256,8 +259,9 @@ theorem cor4_shear {P : Fin 9 → Point} (hP : ∀ m, P m ∈ unitSquare) (hP0 :
   exact corner_contra hQ hmin one_pos le_rfl hRy (by linarith [(hP R).2.2.1]) ⟨1, q1⟩ ⟨R, qR⟩
     ⟨0, q0⟩ d12 d13 d23 (tr i1) (tr i2) (tr i3)
 
-/-- The ear analysis of Corollary 4. -/
-theorem cor4_cases {l b : ℝ} {P : Fin 9 → Point} (hl : 0 < l) (hl1 : l < 1) (hb : 0 < b)
+/-- The ear analysis of `typeIIConfig_triangleCapacityTwo`: no hull ear of doubled area above `29/30` contains three
+points. -/
+theorem typeII_no_three_in_ear {l b : ℝ} {P : Fin 9 → Point} (hl : 0 < l) (hl1 : l < 1) (hb : 0 < b)
     (hb2 : b ≤ 1 / 2) (hP : ∀ m, P m ∈ unitSquare) (hP0 : P 0 = (0, 1)) (hP1 : P 1 = (1, 1))
     (hP2 : P 2 = (0, l)) (hP3 : P 3 = (b, 0)) (hA : A₀ ≤ minTriangleArea P)
     (ylow : ∀ m, m ≠ 0 → m ≠ 1 → (P m).2 ≤ 1 - 2 * A₀) (hb2A : 2 * A₀ ≤ b)
@@ -293,10 +297,10 @@ theorem cor4_cases {l b : ℝ} {P : Fin 9 → Point} (hl : 0 < l) (hl1 : l < 1) 
     · subst h
       by_cases hB2 : B' = 2
       · subst hB2
-        exact cor4_DEC hl hl1 hP hP0 hP1 hP2 hA d12 d13 d23 i1 i2 i3
+        exact typeII_ear_DEC_not_three hl hl1 hP hP0 hP1 hP2 hA d12 d13 d23 i1 i2 i3
       · exact neg0m2 B' (sup1 2 (by decide) (Ne.symm hB2))
     · subst h
-      exact cor4_shear hP hP0 hP1 hA (hy C' (Ne.symm dBC) (Ne.symm dAC)) sup2 d12 d13 d23 i1 i2 i3
+      exact typeII_ear_DCR_not_three hP hP0 hP1 hA (hy C' (Ne.symm dBC) (Ne.symm dAC)) sup2 d12 d13 d23 i1 i2 i3
     · exact absurd h (by decide)
     · subst h
       have := sup1 1 (Ne.symm dAC) (by decide); rw [e01] at this
@@ -341,7 +345,7 @@ theorem cor4_cases {l b : ℝ} {P : Fin 9 → Point} (hl : 0 < l) (hl1 : l < 1) 
       linarith [hy B' hD2 (Ne.symm dAB)]
     · by_cases hA3 : A' = 3
       · subst hA3
-        exact cor4_BC_edge hP hP0 hP1 hP3 hb hb2 hA ylow sup1
+        exact typeII_BC_not_hull_edge hP hP0 hP1 hP3 hb hb2 hA ylow sup1
       · have fa : sarea (b, 0) (1, 1) (P A') ≤ 0 := by
           have h := sup1 3 (Ne.symm hA3) (by decide)
           have e : sarea (P A') (P 1) (P 3) = -sarea (b, 0) (1, 1) (P A') := by
@@ -366,17 +370,12 @@ theorem cor4_cases {l b : ℝ} {P : Fin 9 → Point} (hl : 0 < l) (hl1 : l < 1) 
       (ylow A' hD.1 hC.1) (ylow B' hD.2.1 hC.2.1) (ylow C' hD.2.2 hC.2.2)
     linarith
 
-/-- **Corollary 4** (`THREE_INTERIOR_TRIANGLES:Corollary4`). Type II has triangle capacity two.
-For `D=(0,1), C=(1,1), E=(0,λ), B=(b,0)` with `0<λ<1`, `0<b≤1/2` and five further points anywhere
-in the square, least area at least `A₀` implies that every actual triangle contains at most two
-further points. Every hull ear is excluded: by the strip `P_y ≤ 1 - s`, the chains at `D` and `C`,
-the corner-triangle theorem of `ONE_CORNER.md` for `DCE`, and, for `DCR`, a shear onto a corner
-triangle.
-`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`, lines 331-442.
-Uses: THREE_INTERIOR_TRIANGLES:Theorem1, TYPE_II:EndpointTriangleTheorem,
-CORNER_FAMILIES:TriangularHullLemma, CORNER_FAMILIES:SixPointTriangularHullTheorem,
-ONE_CORNER:CornerTriangleOccupancyTheorem -/
-theorem corollary4 {l b : ℝ} {V W X Y Z : Point} (hl : 0 < l) (hl1 : l < 1) (hb : 0 < b)
+/-- Type II has triangle capacity two. For `D=(0,1), C=(1,1), E=(0,λ), B=(b,0)` with `0<λ<1`,
+`0<b≤1/2` and five further points anywhere in the square, least area at least `A₀` implies that
+every actual triangle contains at most two further points. Every hull ear is excluded: by the
+strip `P_y ≤ 1 - s`, the chains at `D` and `C`, `OneCorner.cornerTriangleOccupancyTheorem` for
+`DCE`, and, for `DCR`, a shear onto a corner triangle. -/
+theorem typeIIConfig_triangleCapacityTwo {l b : ℝ} {V W X Y Z : Point} (hl : 0 < l) (hl1 : l < 1) (hb : 0 < b)
     (hb2 : b ≤ 1 / 2) (hV : V ∈ unitSquare) (hW : W ∈ unitSquare) (hX : X ∈ unitSquare)
     (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hA : A₀ ≤ minTriangleArea (typeIIConfig l b V W X Y Z)) :
@@ -417,7 +416,7 @@ theorem corollary4 {l b : ℝ} {V W X Y Z : Point} (hl : 0 < l) (hl1 : l < 1) (h
     have h := sarea_ge_of_le_min_of_pos A₀_pos hA 0 2 3
       (by rw [e]; exact mul_pos hb (by linarith)) (by decide) (by decide) (by decide)
     rw [e] at h; nlinarith
-  obtain ⟨A', B', C', hrot, h3, hext, sup1, sup2, -⟩ := theorem1 hP hA hccw (by omega)
+  obtain ⟨A', B', C', hrot, h3, hext, sup1, sup2, -⟩ := three_inside_is_ear hP hA hccw (by omega)
   have hccw' : 0 < sarea (P A') (P B') (P C') := by
     rcases hrot with ⟨h1, h2, h3⟩ | ⟨h1, h2, h3⟩ | ⟨h1, h2, h3⟩ <;> rw [h1, h2, h3] <;>
       (unfold sarea at hccw ⊢; linarith)
@@ -426,20 +425,17 @@ theorem corollary4 {l b : ℝ} {V W X Y Z : Point} (hl : 0 < l) (hl1 : l < 1) (h
   have hT := D_ge hA hccw' i1 i2 i3 d12 d13 d23
   have hT' : 29 / 30 < sarea (P A') (P B') (P C') := lt_of_lt_of_le gamma_A₀ hT
   clear_value P
-  exact cor4_cases hl hl1 hb hb2 hP hP0 hP1 hP2 hP3 hA ylow hb2A hccw' sup1 sup2 hext i1 i2 i3
+  exact typeII_no_three_in_ear hl hl1 hb hb2 hP hP0 hP1 hP2 hP3 hA ylow hb2A hccw' sup1 sup2 hext i1 i2 i3
     d12 d13 d23 hT'
 
-/-! ### §5. Unrestricted triangle capacity two -/
+/-! ### Unrestricted triangle capacity two -/
 
-/-- **Claim** (`THREE_INTERIOR_TRIANGLES:claim-min-enclosing-parallelogram`, made up). A minimum-area
-enclosing parallelogram exists. For nine points in the square with positive least area, some
-affine map with `|det| ≥ 1` sends them into the square so that the image square is a minimum-area
-enclosing parallelogram: no affine map of absolute determinant greater than one sends the image
-into the square. The manuscript argues by compactness over pairs of unit normals, with
-`𝒜(u, v) = w(u) w(v)/|det(u, v)|`; here `|det|` is maximized over the compact set of feasible
-affine maps.
-`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`, lines 455-477. -/
-theorem claim_min_enclosing_parallelogram {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
+/-- A minimum-area enclosing parallelogram exists. For nine points in the square with positive
+least area, some affine map with `|det| ≥ 1` sends them into the square so that the image square
+is a minimum-area enclosing parallelogram: no affine map of absolute determinant greater than one
+sends the image into the square. The proof maximizes `|det|` over the compact set of feasible
+affine maps. -/
+theorem exists_min_enclosing_parallelogram {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (hpos : 0 < minTriangleArea P) :
     ∃ a b c d e f : ℝ, (∀ i, affineMap a b c d e f (P i) ∈ unitSquare) ∧
       1 ≤ |a * d - b * c| ∧
@@ -594,8 +590,8 @@ theorem mem_of_typeIII {R : Fin 9 → Point} (h : IsTypeIII R) : ∀ i, R i ∈ 
   · exact hY
   · exact hZ
 
-/-- The `TYPE_II.md` form of the half-normalized Type II is the one of Corollary 4, and its points
-lie in the square. -/
+/-- The half-normalized Type-II form `TypeII.IsTypeIIHalf` gives `IsTypeIIHalf`, the form of
+`typeIIConfig_triangleCapacityTwo`, and its points lie in the square. -/
 theorem of_typeIIHalf {R : Fin 9 → Point} (h : TypeII.IsTypeIIHalf R) :
     IsTypeIIHalf R ∧ ∀ i, R i ∈ unitSquare := by
   obtain ⟨l, b, V, W, X, Y, Z, ⟨hb, hb1, hl, hl1, hV, hW, hX, hY, hZ⟩, hb2, rfl⟩ := h
@@ -611,19 +607,13 @@ theorem of_typeIIHalf {R : Fin 9 → Point} (h : TypeII.IsTypeIIHalf R) :
   · exact hY
   · exact hZ
 
-/-- **Claim** (`THREE_INTERIOR_TRIANGLES:claim-normalization`, made up). Normal form without
-maximality. Every nine-point configuration in the square with least area at least `A₀` has an
-affine image, by a map with `|det| ≥ 1` and a relabelling, that lies in the square and belongs to
-N, C1, C2, Type II with `b ≤ 1/2`, or Type III. The proofs of `BOUNDARY_REDUCTION.md` and
-`GLOBAL_STRUCTURE.md` use only the minimum-parallelogram property, which their determinant-one
-shears preserve. The Type-II step is the shear normalization of `TYPE_II.md` §2.
-`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`, lines 479-497.
-Uses: THREE_INTERIOR_TRIANGLES:claim-min-enclosing-parallelogram,
-BOUNDARY_REDUCTION:claim-side-contact, BOUNDARY_REDUCTION:claim-overlap,
-BOUNDARY_REDUCTION:claim-adjacent-shear, GLOBAL_STRUCTURE:Lemma1, GLOBAL_STRUCTURE:Corollary2,
-GLOBAL_STRUCTURE:claim-N-selection, GLOBAL_STRUCTURE:claim-C1-selection,
-GLOBAL_STRUCTURE:claim-C2-selection, TYPE_II:ShearNormalization -/
-theorem claim_normalization {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
+/-- Normal form without maximality. Every nine-point configuration in the square with least area
+at least `A₀` has an affine image, by a map with `|det| ≥ 1` and a relabelling, that lies in the
+square and belongs to N, C1, C2, Type II with `b ≤ 1/2`, or Type III. The normalization
+`GlobalStructure.exists_family_of_noExpand` needs only the minimum-parallelogram property
+(`exists_min_enclosing_parallelogram`), which its determinant-one shears preserve. The Type-II step
+is the shear normalization `TypeII.shearNormalization`. -/
+theorem exists_affine_family_normal_form {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (hA : A₀ ≤ minTriangleArea P) :
     ∃ (a b c d e f : ℝ) (σ : Equiv.Perm (Fin 9)), 1 ≤ |a * d - b * c| ∧
       (∀ i, affineMap a b c d e f (P (σ i)) ∈ unitSquare) ∧
@@ -631,7 +621,7 @@ theorem claim_normalization {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquar
         IsC2 (affineMap a b c d e f ∘ P ∘ σ) ∨ IsTypeIIHalf (affineMap a b c d e f ∘ P ∘ σ) ∨
         IsTypeIII (affineMap a b c d e f ∘ P ∘ σ)) := by
   have hpos : 0 < minTriangleArea P := lt_of_lt_of_le A₀_pos hA
-  obtain ⟨a₀, b₀, c₀, d₀, e₀, f₀, hsq₀, hdet₀, hmax₀⟩ := claim_min_enclosing_parallelogram hP hpos
+  obtain ⟨a₀, b₀, c₀, d₀, e₀, f₀, hsq₀, hdet₀, hmax₀⟩ := exists_min_enclosing_parallelogram hP hpos
   have hNE : BoundaryReduction.NoExpand (affineMap a₀ b₀ c₀ d₀ e₀ f₀ ∘ P) :=
     ⟨hsq₀, fun a' b' c' d' e' f' hT => hmax₀ a' b' c' d' e' f' hT⟩
   have hpos' : 0 < minTriangleArea (affineMap a₀ b₀ c₀ d₀ e₀ f₀ ∘ P) := by
@@ -660,7 +650,7 @@ theorem claim_normalization {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquar
   · exact finish (Or.inl h)
   · exact finish (Or.inr (Or.inl h))
   · exact finish (Or.inr (Or.inr (Or.inl h)))
-  · -- Type II: the shear normalization of `TYPE_II.md` §2
+  · -- Type II: the shear normalization `TypeII.shearNormalization`
     obtain ⟨R, ⟨a₂, b₂, c₂, d₂, e₂, f₂, σ₂, hdet₂, hR⟩, hR'⟩ :=
       TypeII.shearNormalization Q h (by rw [hQmin]; exact hpos')
     have hRe : R = affineMap (a₂ * (a₁ * a₀ + b₁ * c₀) + b₂ * (c₁ * a₀ + d₁ * c₀))
@@ -690,17 +680,12 @@ theorem claim_normalization {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquar
       · exact Or.inr (Or.inr (Or.inr (Or.inl (of_typeIIHalf h2).1)))
   · exact finish (Or.inr (Or.inr (Or.inr (Or.inr h))))
 
-/-- **Corollary 5** (`THREE_INTERIOR_TRIANGLES:Corollary5`). Global triangle capacity. In any
-nine-point configuration in the unit square with least area at least `A₀`, every triangle spanned
-by three of its points contains at most two further points. No normalization or maximizing
-hypothesis is assumed.
-`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`, lines 444-506.
-Uses: THREE_INTERIOR_TRIANGLES:claim-normalization, OPPOSITE_CORNERS:Corollary2,
-CORNER_FAMILIES:TypeIII-complete, THREE_INTERIOR_TRIANGLES:Corollary2,
-ONE_CORNER:GlobalC1OccupancyCorollary, THREE_INTERIOR_TRIANGLES:Corollary4 -/
-theorem corollary5 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
+/-- Global triangle capacity. In any nine-point configuration in the unit square with least area
+at least `A₀`, every triangle spanned by three of its points contains at most two further points.
+No normalization or maximizing hypothesis is assumed. -/
+theorem triangleCapacityTwo_of_A₀_le {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (hA : A₀ ≤ minTriangleArea P) : TriangleCapacityTwo P := by
-  obtain ⟨a, b, c, d, e, f, σ, hdet, hsq, hfam⟩ := claim_normalization hP hA
+  obtain ⟨a, b, c, d, e, f, σ, hdet, hsq, hfam⟩ := exists_affine_family_normal_form hP hA
   set Q := affineMap a b c d e f ∘ P ∘ σ with hQ
   have hdet0 : a * d - b * c ≠ 0 := by
     intro h; rw [h, abs_zero] at hdet; linarith
@@ -716,15 +701,15 @@ theorem corollary5 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
       ⟨l, b', V, W, X, Y, Z, hb, hb2, hl, hl1, hV, hW, hX, hY, hZ, hQe⟩ |
       ⟨U, V, W, X, Y, Z, hU, hV, hW, hX, hY, hZ, hQe⟩
     · rw [hQe] at hQmin ⊢
-      exact corollary2 hN hX hY hZ hQmin
+      exact nConfig_triangleCapacityTwo hN hX hY hZ hQmin
     · rw [hQe] at hQmin ⊢
       intro i j k _
       exact le_trans (Set.ncard_le_ncard (fun m hm => Or.inl hm))
         (OneCorner.globalC1OccupancyCorollary h' c' d' f' hC W X Y Z hW hX hY hZ hQmin i j k)
     · rw [hQe] at hQmin
-      exact absurd hQmin (not_le.2 (OppositeCorners.corollary2_lt_A₀ h' c' d' f' hC X Y Z hX hY hZ))
+      exact absurd hQmin (not_le.2 (OppositeCorners.minTriangleArea_c2Config_lt_A₀ h' c' d' f' hC X Y Z hX hY hZ))
     · rw [hQe] at hQmin ⊢
-      exact corollary4 hl hl1 hb hb2 hV hW hX hY hZ hQmin
+      exact typeIIConfig_triangleCapacityTwo hl hl1 hb hb2 hV hW hX hY hZ hQmin
     · rw [hQe] at hQmin
       exact absurd hQmin (not_le.2 (CornerFamilies.typeIII_lt_A₀ U V W X Y Z hU hV hW hX hY hZ))
   have capPσ : TriangleCapacityTwo (P ∘ σ) := TriangleCapacityTwo.of_affine hdet0 capQ

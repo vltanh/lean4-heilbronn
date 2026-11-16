@@ -2,22 +2,20 @@ module
 
 public import Heilbronn.Nine.Corners.CornerFamilies.SupportTriangle
 
-/-! # Corner families, §§7–8: two interior points, the sharp six-point theorem, the seven-face
-mesh (`docs/proof/nine/CORNER_FAMILIES.md`, lines 415–725)
+/-! # Corner families: three interior points and the seven-face mesh
 
-Part of `CORNER_FAMILIES.md` (module `Heilbronn.Nine.Corners.CornerFamilies`). General results
-reused by many notes: the two-interior-point lemma (13) and the six-point triangular-hull theorem
-(14), together with the seven-face mesh of a distributed six-point triangle and its identities
-(15)–(20); and the Type-III consequences: the upper-triple restriction and the triangular lower
-hull of the `2+4` class (21).
+Part of `Heilbronn.Nine.Corners.CornerFamilies`. General results on three points inside a
+triangle, reused in many places: the bound for a non-distributed triple, and the seven-face mesh
+of a distributed triple with its identities; and the Type-III consequence for the triangular
+lower hull of the `2+4` class (`fst_sub_snd_ge_of_three_inside`).
 
 Definitions:
 
 * `FanSplit A B C P Q R`: for the interior point `P`, the other two points `Q, R` do not lie in
   a common triangle of the fan `ABP, BCP, CAP`;
-* `Distributed A B C X Y Z` (lines 540–541): `X, Y, Z` strictly inside `ABC` and the fan split
-  holds at each of them;
-* `MeshLabelled A B C X Y Z` (15): the labelled distributed configuration, `Z ∈ int ABY`,
+* `Distributed A B C X Y Z`: `X, Y, Z` strictly inside `ABC` and the fan split holds at each of
+  them;
+* `MeshLabelled A B C X Y Z`: the labelled distributed configuration, `Z ∈ int ABY`,
   `X ∈ int BCY` and the four deduced containments;
 * `bary A B C α β γ`: the point with barycentric coordinates `(α, β, γ)`.
 
@@ -27,22 +25,16 @@ Type-III frame `A = (0,0)`, `B = (0,1)`, `C = (1,1)`, which is clockwise. In the
 `k = [ZXY]` (central) and `u_A = [AZX]`, `u_B = [BXY]`, `u_C = [CYZ]`, `v_A = [AXY]`,
 `v_B = [BYZ]`, `v_C = [CZX]` (cross areas); doubled areas are `|sarea …|`.
 
-**Results.** `twoInteriorPointLemma` (13) and `sixPointTriangularHullTheorem` (14) are proved in
-`CornerFamilies/Interior.lean` (same names); here: `claim_nondistributed_bound`,
-`upperTripleRestriction`, the vertex symmetries (`inside_rot`, `inside_swap`, `inside_rev`,
-`meshLabelled_reverse`, `distributed_*`), `mesh_ccw` (the thirteen signs), `eq15`, `eq16_17`,
-`eq18`, `eq19`, `eq20`, `claim_connector_sum`, `labelling_ccw`, `claim_mesh_labelling`,
-`claim_fourth_vertex` (21).
+**Results.** `twoInteriorPointLemma` and `sixPointTriangularHullTheorem` are proved in
+`CornerFamilies/Interior.lean`; here: `triangleArea_ge_of_not_distributed`, the vertex symmetries
+(`inside_rot`, `inside_swap`, `inside_rev`, `meshLabelled_reverse`, `distributed_*`), `mesh_ccw`
+(the thirteen signs), `meshLabelled_of_distributed`, `meshLabelled_signs_and_area_sum`, `mesh_connector_identities`, `mesh_plucker_identities`, `labelling_ccw`, `exists_mesh_labelling`,
+`fst_sub_snd_ge_of_three_inside`. `meshLabelled_of_distributed` assumes `0 < sarea A B C` (counterclockwise; the clockwise case is
+the reversed labelling `meshLabelled_reverse`).
 
-**Changes.** `eq15`, `eq20`, `claim_connector_sum` carry the extra hypothesis `0 < sarea A B C`
-(counterclockwise; the clockwise case is the reversed labelling `meshLabelled_reverse`).
-`claim_2plus4_hull` (its role is taken by `two_four_core` in `NearSquare.lean`) and
-`claim_Gamma_sharp` (sharpness, used by no proof) were removed.
-
-**Gap 3** (inventory 02, lines 1041–1048 and `ONE_CORNER.md` 71–78): in fixed coordinates the
-outer vertices cannot be relabelled cyclically; one chooses `Y` as the interior point whose
-empty fan triangle lies on the edge `CA`. `claim_mesh_labelling` states that such a labelling of
-the interior points exists (flagged at the declaration: not stated in the manuscript).
+**Labelling.** In fixed coordinates the outer vertices cannot be relabelled cyclically; instead
+one chooses `Y` as the interior point whose empty fan triangle lies on the edge `CA`.
+`exists_mesh_labelling` states that such a labelling of the interior points exists.
 -/
 
 @[expose] public section
@@ -53,19 +45,19 @@ namespace Heilbronn.Nine.CornerFamilies
 /-! ### Distributed triples and the mesh -/
 
 /-- For the interior point `P` of `ABC`, the other two points `Q, R` lie in distinct triangles of
-its fan `ABP, BCP, CAP` (lines 476–478, 540–541): no fan triangle contains both. -/
+its fan `ABP, BCP, CAP`: no fan triangle contains both. -/
 def FanSplit (A B C P Q R : Point) : Prop :=
   ¬ (InsideTriangle Q A B P ∧ InsideTriangle R A B P) ∧
     ¬ (InsideTriangle Q B C P ∧ InsideTriangle R B C P) ∧
     ¬ (InsideTriangle Q C A P ∧ InsideTriangle R C A P)
 
 /-- The three points `X, Y, Z` are strictly inside `ABC` and distributed: for each of them the
-other two lie in distinct triangles of its fan (lines 540–541). -/
+other two lie in distinct triangles of its fan. -/
 def Distributed (A B C X Y Z : Point) : Prop :=
   InsideTriangle X A B C ∧ InsideTriangle Y A B C ∧ InsideTriangle Z A B C ∧
     FanSplit A B C X Y Z ∧ FanSplit A B C Y Z X ∧ FanSplit A B C Z X Y
 
-/-- The labelled seven-face mesh (15): `Y` inside `ABC`, `Z ∈ int ABY`, `X ∈ int BCY`, and the
+/-- The labelled seven-face mesh: `Y` inside `ABC`, `Z ∈ int ABY`, `X ∈ int BCY`, and the
 deduced containments `Y ∈ int CAZ`, `X ∈ int BCZ`, `Y ∈ int CAX`, `Z ∈ int ABX`. -/
 def MeshLabelled (A B C X Y Z : Point) : Prop :=
   InsideTriangle Y A B C ∧ InsideTriangle Z A B Y ∧ InsideTriangle X B C Y ∧
@@ -130,7 +122,7 @@ theorem area_split {W A B C : Point} (h : InsideTriangle W A B C) :
       abs_of_neg (by linarith)]
     linarith
 
-/-! ### §7. Two interior points -/
+/-! ### Two interior points -/
 
 /-- Two interior points in the fan triangle `ABP` of an interior point `P`:
 `area(ABC) ≥ (4 + 2√3)t + 2t` (orientation-free). -/
@@ -145,14 +137,9 @@ theorem nd_helper {A B C P Q R : Point} {t : ℝ} (ht : 0 < t) (hP : InsideTrian
   have h3 : t ≤ triangleArea C A P := area_of_le_min hmin 2 0 3
   rw [area_split hP]; linarith
 
-/-- **Claim** (`CORNER_FAMILIES:claim-nondistributed-bound`; new id for the common step of
-`CORNER_FAMILIES:UpperTripleRestriction` (lines 479–486) and the non-distributed case of
-`CORNER_FAMILIES:SixPointTriangularHullTheorem` (lines 531–539)): if three points strictly inside
-`ABC` are not distributed, two of them share a fan triangle of the third, so
-`area(ABC) ≥ (4 + 2√3)t + 2t = (6 + 2√3)t`.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem claim_nondistributed_bound (A B C X Y Z : Point) (hX : InsideTriangle X A B C)
+/-- If three points strictly inside `ABC` are not distributed, two of them share a fan triangle
+of the third, so `area(ABC) ≥ (4 + 2√3)t + 2t = (6 + 2√3)t`. -/
+theorem triangleArea_ge_of_not_distributed (A B C X Y Z : Point) (hX : InsideTriangle X A B C)
     (hY : InsideTriangle Y A B C) (hZ : InsideTriangle Z A B C) (t : ℝ) (ht : 0 < t)
     (hmin : t ≤ minTriangleArea ![A, B, C, X, Y, Z]) (hnd : ¬ Distributed A B C X Y Z) :
     (6 + 2 * Real.sqrt 3) * t ≤ triangleArea A B C := by
@@ -211,37 +198,11 @@ theorem claim_nondistributed_bound (A B C X Y Z : Point) (hX : InsideTriangle X 
           (by intro i; fin_cases i <;> simp))
       rw [← r2]; exact this
 
-/-- **Upper-triple restriction** (`CORNER_FAMILIES:UpperTripleRestriction`): in a Type-III
-configuration of minimum area at least `A₀`, three upper free points (here `U, V, W`) are
-distributed in `ABC`, `A = (0,0)`, `B = (0,1)`, `C = (1,1)`; otherwise
-`1/2 ≥ (6 + 2√3)t`, `t ≤ 1/(12 + 4√3) < 7/132 < 17/320 < A₀`. The manuscript assumes exactly
-three upper points; the argument uses only the three. `docs/proof/nine/CORNER_FAMILIES.md`, lines 474–492.
+/-! ### The mesh -/
 
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem upperTripleRestriction (U V W X Y Z : Point) (hU : U ∈ unitSquare)
-    (hV : V ∈ unitSquare) (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare)
-    (hZ : Z ∈ unitSquare) (hmin : A₀ ≤ minTriangleArea (typeIIIConfig U V W X Y Z))
-    (hUu : U.1 < U.2) (hVu : V.1 < V.2) (hWu : W.1 < W.2) :
-    Distributed (0, 0) (0, 1) (1, 1) U V W := by
-  by_contra hnd
-  have hpos : 0 < minTriangleArea (typeIIIConfig U V W X Y Z) := lt_of_lt_of_le A₀_pos hmin
-  have h := claim_nondistributed_bound (0, 0) (0, 1) (1, 1) U V W
-    (Or.inr (upper_inside hU hV hW hX hY hZ hpos 0 hUu))
-    (Or.inr (upper_inside hU hV hW hX hY hZ hpos 1 hVu))
-    (Or.inr (upper_inside hU hV hW hX hY hZ hpos 2 hWu)) A₀ A₀_pos
-    (min_sub hmin _ ![0, 1, 2, 3, 4, 5] (by norm_num) (by decide)
-      (by intro i; fin_cases i <;> simp [typeIIIConfig])) hnd
-  have harea : triangleArea ((0 : ℝ), (0 : ℝ)) (0, 1) (1, 1) = 1 / 2 := by
-    simp only [triangleArea_eq, sarea]; norm_num
-  rw [harea] at h
-  have := A₀_bounds
-  nlinarith [sqrt3_gt]
-
-/-! ### §8. The mesh -/
-
-/-- The thirteen signs of a labelled mesh in a counterclockwise triangle (16)–(17): the seven
-faces and the six cross areas are positive. The central sign uses the identity
-`[CZY][ZBX] = [XZY][ZBC] + [ZBY][CZX]` (the convexity of `BZYX`, lines 571–576). -/
+/-- The thirteen signs of a labelled mesh in a counterclockwise triangle: the seven faces and the
+six cross areas are positive. The central sign uses the identity
+`[CZY][ZBX] = [XZY][ZBC] + [ZBY][CZX]` (the convexity of `BZYX`). -/
 theorem mesh_ccw {A B C X Y Z : Point} (hp : 0 < sarea A B C) (hm : MeshLabelled A B C X Y Z) :
     0 < sarea A B Z ∧ 0 < sarea B C X ∧ 0 < sarea C A Y ∧ 0 < sarea A Z Y ∧
       0 < sarea B X Z ∧ 0 < sarea C Y X ∧ 0 < sarea Z X Y ∧
@@ -274,12 +235,10 @@ theorem mesh_ccw {A B C X Y Z : Point} (hp : 0 < sarea A B C) (hm : MeshLabelled
     by linarith [hZABX.2.2, sarea_cycle X A Z], by linarith [hX.2.2, sarea_cycle Y B X],
     by linarith [hYCAZ.2.2, sarea_cycle Z C Y], hYCAX.2.1, hZ.2.1, hXBCZ.2.1⟩
 
-/-- **Claim** (`CORNER_FAMILIES:SixPointTriangularHullTheorem`), the containments (15): for a
-distributed triple in general position with `Z ∈ int ABY` and `X ∈ int BCY`, also
-`Y ∈ int CAZ`, `X ∈ int BCZ`, `Y ∈ int CAX`, `Z ∈ int ABX`. Restated for a counterclockwise
-`ABC` (the clockwise case is the reversed labelling, `meshLabelled_reverse`).
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 552–569. -/
-theorem eq15 (A B C X Y Z : Point) (hp : 0 < sarea A B C) (hd : Distributed A B C X Y Z)
+/-- A distributed triple in general position with `Z ∈ int ABY` and `X ∈ int BCY` is a labelled
+mesh: also `Y ∈ int CAZ`, `X ∈ int BCZ`, `Y ∈ int CAX`, `Z ∈ int ABX`. Stated for a
+counterclockwise `ABC` (the clockwise case is the reversed labelling, `meshLabelled_reverse`). -/
+theorem meshLabelled_of_distributed (A B C X Y Z : Point) (hp : 0 < sarea A B C) (hd : Distributed A B C X Y Z)
     (hgp : 0 < minTriangleArea ![A, B, C, X, Y, Z]) (hZ : InsideTriangle Z A B Y)
     (hX : InsideTriangle X B C Y) : MeshLabelled A B C X Y Z := by
   obtain ⟨hXi, hYi, hZi, fX, fY, fZ⟩ := hd
@@ -328,11 +287,9 @@ theorem eq15 (A B C X Y Z : Point) (hp : 0 < sarea A B C) (hd : Distributed A B 
       · linarith [g.2.1, hXc.2.1, sarea_swap₂₃ C Y X]
       · exact fX.2.2 ⟨Or.inl g, Or.inl h⟩
 
-/-- **Claim** (`CORNER_FAMILIES:SixPointTriangularHullTheorem`), (16)–(17): in a labelled mesh the
-quadrilateral `BZYX` is convex and flipping `BY` to `ZX` gives the seven faces; the seven faces
-and the six cross areas all have the orientation of `ABC`, and the seven faces tile `ABC`.
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 571–602. -/
-theorem eq16_17 (A B C X Y Z : Point) (hm : MeshLabelled A B C X Y Z) :
+/-- In a labelled mesh the seven faces `ABZ, BCX, CAY, AZY, BXZ, CYX, ZXY` and the six cross
+triangles all have the orientation of `ABC`, and the seven faces tile `ABC`. -/
+theorem meshLabelled_signs_and_area_sum (A B C X Y Z : Point) (hm : MeshLabelled A B C X Y Z) :
     0 < sarea A B C * sarea A B Z ∧ 0 < sarea A B C * sarea B C X ∧
       0 < sarea A B C * sarea C A Y ∧ 0 < sarea A B C * sarea A Z Y ∧
       0 < sarea A B C * sarea B X Z ∧ 0 < sarea A B C * sarea C Y X ∧
@@ -383,99 +340,21 @@ theorem eq16_17 (A B C X Y Z : Point) (hm : MeshLabelled A B C X Y Z) :
       abs_of_pos g6, abs_of_pos g7]
     linarith
 
-/-- **Claim** (`CORNER_FAMILIES:SixPointTriangularHullTheorem`), identities (18):
-`a = u_A + v_A - k`, `b = u_B + v_B - k`, `c = u_C + v_C - k` (signed areas, all points).
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 604–608. -/
-theorem eq18 (A B C X Y Z : Point) :
+/-- The connector identities of the mesh: `a = u_A + v_A - k`, `b = u_B + v_B - k`,
+`c = u_C + v_C - k` (signed areas, for all points). -/
+theorem mesh_connector_identities (A B C X Y Z : Point) :
     sarea A Z Y = sarea A Z X + sarea A X Y - sarea Z X Y ∧
       sarea B X Z = sarea B X Y + sarea B Y Z - sarea Z X Y ∧
       sarea C Y X = sarea C Y Z + sarea C Z X - sarea Z X Y := by
   unfold sarea; refine ⟨by ring, by ring, by ring⟩
 
-/-- **Claim** (`CORNER_FAMILIES:SixPointTriangularHullTheorem`), the Plücker identities (19):
-`xk = ab - u_A v_B`, `yk = bc - u_B v_C`, `zk = ca - u_C v_A` (signed areas, all points).
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 610–622. -/
-theorem eq19 (A B C X Y Z : Point) :
+/-- The Plücker identities of the mesh: `xk = ab - u_A v_B`, `yk = bc - u_B v_C`,
+`zk = ca - u_C v_A` (signed areas, for all points). -/
+theorem mesh_plucker_identities (A B C X Y Z : Point) :
     sarea A B Z * sarea Z X Y = sarea A Z Y * sarea B X Z - sarea A Z X * sarea B Y Z ∧
       sarea B C X * sarea Z X Y = sarea B X Z * sarea C Y X - sarea B X Y * sarea C Z X ∧
       sarea C A Y * sarea Z X Y = sarea C Y X * sarea A Z Y - sarea C Y Z * sarea A X Y := by
   unfold sarea; refine ⟨by ring, by ring, by ring⟩
-
-/-- **Claim** (`CORNER_FAMILIES:SixPointTriangularHullTheorem`), inequality (20) at a general
-doubled threshold `s` (used by `TYPE_II.md` lines 570–618 and `ONE_CORNER.md`): in a labelled
-mesh whose six points have all doubled areas at least `s`, with doubled connectors `a, b, c`,
-central `k` and cross areas `u_i, v_i`, multiplying (20) by `s²`:
-`Σ (a - s)(b - s) + s(a + b + c - 3s) ≥ 3s² + 6s(k - s) + Σ (u_A - s)(v_B - s) ≥ 3s²`.
-Restated for a counterclockwise `ABC` (`0 < sarea A B C`; the clockwise case is the reversed
-labelling, `meshLabelled_reverse`). `docs/proof/nine/CORNER_FAMILIES.md`, lines 624–654.
-
-Uses: CORNER_FAMILIES:SixPointTriangularHullTheorem (18), (19) -/
-theorem eq20 (A B C X Y Z : Point) (s : ℝ) (hs : 0 < s) (hp : 0 < sarea A B C)
-    (hm : MeshLabelled A B C X Y Z)
-    (hmin : s / 2 ≤ minTriangleArea ![A, B, C, X, Y, Z]) :
-    let a := |sarea A Z Y|
-    let b := |sarea B X Z|
-    let c := |sarea C Y X|
-    let k := |sarea Z X Y|
-    let uA := |sarea A Z X|
-    let uB := |sarea B X Y|
-    let uC := |sarea C Y Z|
-    let vA := |sarea A X Y|
-    let vB := |sarea B Y Z|
-    let vC := |sarea C Z X|
-    3 * s ^ 2 + 6 * s * (k - s) +
-        ((uA - s) * (vB - s) + (uB - s) * (vC - s) + (uC - s) * (vA - s)) ≤
-      (a - s) * (b - s) + (b - s) * (c - s) + (c - s) * (a - s) + s * (a + b + c - 3 * s) ∧
-    3 * s ^ 2 ≤ 3 * s ^ 2 + 6 * s * (k - s) +
-        ((uA - s) * (vB - s) + (uB - s) * (vC - s) + (uC - s) * (vA - s)) := by
-  obtain ⟨g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13⟩ := mesh_ccw hp hm
-  have ht : 0 < s / 2 := by linarith
-  have e : ∀ {p q r : Point}, 0 < sarea p q r → s / 2 ≤ triangleArea p q r → s ≤ sarea p q r :=
-    fun h h' => by have := ge_of_pos ht h' h; linarith
-  have ex := e g1 (area_of_le_min hmin 0 1 5)
-  have ey := e g2 (area_of_le_min hmin 1 2 3)
-  have ez := e g3 (area_of_le_min hmin 2 0 4)
-  have ek := e g7 (area_of_le_min hmin 5 3 4)
-  have euA := e g8 (area_of_le_min hmin 0 5 3)
-  have euB := e g9 (area_of_le_min hmin 1 3 4)
-  have euC := e g10 (area_of_le_min hmin 2 4 5)
-  have evA := e g11 (area_of_le_min hmin 0 3 4)
-  have evB := e g12 (area_of_le_min hmin 1 4 5)
-  have evC := e g13 (area_of_le_min hmin 2 5 3)
-  obtain ⟨h18a, h18b, h18c⟩ := eq18 A B C X Y Z
-  obtain ⟨h19a, h19b, h19c⟩ := eq19 A B C X Y Z
-  simp only
-  rw [abs_of_pos g4, abs_of_pos g5, abs_of_pos g6, abs_of_pos g7, abs_of_pos g8, abs_of_pos g9,
-    abs_of_pos g10, abs_of_pos g11, abs_of_pos g12, abs_of_pos g13]
-  constructor
-  · nlinarith
-  · nlinarith [mul_nonneg (sub_nonneg.2 euA) (sub_nonneg.2 evB),
-      mul_nonneg (sub_nonneg.2 euB) (sub_nonneg.2 evC),
-      mul_nonneg (sub_nonneg.2 euC) (sub_nonneg.2 evA)]
-
-/-- **Claim** (`CORNER_FAMILIES:SixPointTriangularHullTheorem`), the by-product used in §10
-(lines 903–904): in a labelled mesh with all doubled areas at least `s > 0`, the doubled
-connectors satisfy `a + b + c ≥ 3φs`, `φ = (1 + √5)/2` (from `Z₀ ≥ 3(√5 - 1)/2`). Restated for
-a counterclockwise `ABC`. `docs/proof/nine/CORNER_FAMILIES.md`, lines 656–661, 903–904.
-
-Uses: CORNER_FAMILIES:SixPointTriangularHullTheorem (20) -/
-theorem claim_connector_sum (A B C X Y Z : Point) (s : ℝ) (hs : 0 < s) (hp : 0 < sarea A B C)
-    (hm : MeshLabelled A B C X Y Z) (hmin : s / 2 ≤ minTriangleArea ![A, B, C, X, Y, Z]) :
-    3 * ((1 + Real.sqrt 5) / 2) * s ≤ |sarea A Z Y| + |sarea B X Z| + |sarea C Y X| := by
-  obtain ⟨g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13⟩ := mesh_ccw hp hm
-  have ht : 0 < s / 2 := by linarith
-  have e : ∀ {p q r : Point}, 0 < sarea p q r → s / 2 ≤ triangleArea p q r → s ≤ sarea p q r :=
-    fun h h' => by have := ge_of_pos ht h' h; linarith
-  obtain ⟨h18a, h18b, h18c⟩ := eq18 A B C X Y Z
-  obtain ⟨h19a, h19b, h19c⟩ := eq19 A B C X Y Z
-  rw [abs_of_pos g4, abs_of_pos g5, abs_of_pos g6]
-  exact mesh_ineq hs (e g1 (area_of_le_min hmin 0 1 5)) (e g2 (area_of_le_min hmin 1 2 3))
-    (e g3 (area_of_le_min hmin 2 0 4)) (e g4 (area_of_le_min hmin 0 5 4))
-    (e g5 (area_of_le_min hmin 1 3 5)) (e g6 (area_of_le_min hmin 2 4 3))
-    (e g7 (area_of_le_min hmin 5 3 4)) (e g8 (area_of_le_min hmin 0 5 3))
-    (e g9 (area_of_le_min hmin 1 3 4)) (e g10 (area_of_le_min hmin 2 4 5))
-    (e g11 (area_of_le_min hmin 0 3 4)) (e g12 (area_of_le_min hmin 1 4 5))
-    (e g13 (area_of_le_min hmin 2 5 3)) h18a h18b h18c h19a h19b h19c
 
 /-! ### Symmetries of distributed triples -/
 
@@ -532,37 +411,34 @@ theorem labelling_ccw {A B C P Q R : Point} (hp : 0 < sarea A B C)
   · exact absurd ⟨Or.inl h1, Or.inl h2⟩ fP.1
   · exact ⟨⟨![2, 0, 1], ![1, 2, 0], by decide, by decide⟩, Or.inl h1, Or.inl h2⟩
   · -- `Q ∈ ABP`, `R ∈ CAP`: `Y = R`, `Z = Q`, `X = P`
-    have hm := eq15 C A B Q P R (by linarith) (distributed_swap (distributed_rot
+    have hm := meshLabelled_of_distributed C A B Q P R (by linarith) (distributed_swap (distributed_rot
       (distributed_rot hd))) (lt_of_lt_of_le hgp (min_sub (le_refl _) _ ![2, 0, 1, 4, 3, 5]
         (by norm_num) (by decide) (by intro i; fin_cases i <;> simp))) (Or.inl h2) (Or.inl h1)
     exact ⟨⟨![0, 2, 1], ![0, 2, 1], by decide, by decide⟩, hm.2.2.2.2.1, hm.2.2.2.1⟩
   · exact ⟨⟨![1, 0, 2], ![1, 0, 2], by decide, by decide⟩, Or.inl h2, Or.inl h1⟩
   · exact absurd ⟨Or.inl h1, Or.inl h2⟩ fP.2.1
   · -- `Q ∈ BCP`, `R ∈ CAP`: `Y = R`, `Z = P`, `X = Q`
-    have hm := eq15 B C A R P Q (by linarith) (distributed_cyc (distributed_rot hd))
+    have hm := meshLabelled_of_distributed B C A R P Q (by linarith) (distributed_cyc (distributed_rot hd))
       (lt_of_lt_of_le hgp (min_sub (le_refl _) _ ![1, 2, 0, 5, 3, 4] (by norm_num) (by decide)
         (by intro i; fin_cases i <;> simp))) (Or.inl h1) (Or.inl h2)
     exact ⟨⟨![1, 2, 0], ![2, 0, 1], by decide, by decide⟩, hm.2.2.2.2.2.1, hm.2.2.2.2.2.2⟩
   · -- `Q ∈ CAP`, `R ∈ ABP`: `Y = Q`, `Z = R`, `X = P`
-    have hm := eq15 C A B R P Q (by linarith) (distributed_cyc (distributed_rot (distributed_rot hd)))
+    have hm := meshLabelled_of_distributed C A B R P Q (by linarith) (distributed_cyc (distributed_rot (distributed_rot hd)))
       (lt_of_lt_of_le hgp (min_sub (le_refl _) _ ![2, 0, 1, 5, 3, 4] (by norm_num) (by decide)
         (by intro i; fin_cases i <;> simp))) (Or.inl h1) (Or.inl h2)
     exact ⟨⟨![0, 1, 2], ![0, 1, 2], by decide, by decide⟩, hm.2.2.2.2.1, hm.2.2.2.1⟩
   · -- `Q ∈ CAP`, `R ∈ BCP`: `Y = Q`, `Z = P`, `X = R`
-    have hm := eq15 B C A Q P R (by linarith) (distributed_swap (distributed_rot hd))
+    have hm := meshLabelled_of_distributed B C A Q P R (by linarith) (distributed_swap (distributed_rot hd))
       (lt_of_lt_of_le hgp (min_sub (le_refl _) _ ![1, 2, 0, 4, 3, 5] (by norm_num) (by decide)
         (by intro i; fin_cases i <;> simp))) (Or.inl h2) (Or.inl h1)
     exact ⟨⟨![2, 1, 0], ![2, 1, 0], by decide, by decide⟩, hm.2.2.2.2.2.1, hm.2.2.2.2.2.2⟩
   · exact absurd ⟨Or.inl h1, Or.inl h2⟩ fP.2.2
 
-/-- **Claim** (`CORNER_FAMILIES:SixPointTriangularHullTheorem`, labelling step of the mesh,
-lines 543–550; see Gap 3): a distributed triple in general position can be named `X, Y, Z` (a
-permutation of the three points, the outer vertices fixed) so that `Z ∈ int ABY` and
-`X ∈ int BCY`: take `Y` the point whose empty fan triangle is `CAY`. The manuscript relabels
-the outer vertices instead, which is not possible in fixed coordinates (inventory 02, Gap 3). -/
--- FLAG: implicit step. Not stated in the manuscript (CORNER_FAMILIES lines 543–546, 1041–1048;
--- ONE_CORNER lines 71–78); needed to use the mesh in the physical Type-III frame.
-theorem claim_mesh_labelling (A B C P Q R : Point) (hd : Distributed A B C P Q R)
+/-- The labelling of the mesh: a distributed triple in general position can be named `X, Y, Z`
+(a permutation of the three points, the outer vertices fixed) so that `Z ∈ int ABY` and
+`X ∈ int BCY`: take `Y` the point whose empty fan triangle is `CAY`. Fixing the outer vertices
+lets the mesh be used in the Type-III frame, where they cannot be relabelled cyclically. -/
+theorem exists_mesh_labelling (A B C P Q R : Point) (hd : Distributed A B C P Q R)
     (hgp : 0 < minTriangleArea ![A, B, C, P, Q, R]) :
     ∃ σ : Equiv.Perm (Fin 3),
       InsideTriangle (![P, Q, R] (σ 2)) A B (![P, Q, R] (σ 1)) ∧
@@ -583,13 +459,10 @@ theorem claim_mesh_labelling (A B C P Q R : Point) (hd : Distributed A B C P Q R
       rw [show (Equiv.swap (0 : Fin 3) 2) 1 = 1 from rfl]
       exact h1
 
-/-- **Claim** (`CORNER_FAMILIES:claim-fourth-vertex`), equation (21): if `R` is below the diagonal
-and three points lie strictly inside `ACR` (`A = (0,0)`, `C = (1,1)`), with all triangles of the
-six points of area at least `t`, then `r_x - r_y = 2 area(ACR) ≥ (11 + 3√5)t` (at `t ≥ A₀`,
-`≥ (11 + 3√5)A₀ ≈ 0.97176`). `docs/proof/nine/CORNER_FAMILIES.md`, lines 703–725.
-
-Uses: CORNER_FAMILIES:SixPointTriangularHullTheorem -/
-theorem claim_fourth_vertex (R P₁ P₂ P₃ : Point) (hR : R.2 < R.1)
+/-- If `R` is below the diagonal and three points lie strictly inside `ACR` (`A = (0,0)`,
+`C = (1,1)`), with all triangles of the six points of area at least `t`, then
+`r_x - r_y = 2 area(ACR) ≥ (11 + 3√5)t` (at `t ≥ A₀`, `≥ (11 + 3√5)A₀ ≈ 0.97176`). -/
+theorem fst_sub_snd_ge_of_three_inside (R P₁ P₂ P₃ : Point) (hR : R.2 < R.1)
     (h₁ : InsideTriangle P₁ (0, 0) R (1, 1)) (h₂ : InsideTriangle P₂ (0, 0) R (1, 1))
     (h₃ : InsideTriangle P₃ (0, 0) R (1, 1)) (t : ℝ)
     (hmin : t ≤ minTriangleArea ![(0, 0), R, (1, 1), P₁, P₂, P₃]) :

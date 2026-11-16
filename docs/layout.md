@@ -13,12 +13,9 @@ Heilbronn/
 │                         H_n, the symmetries of the square, congruence, the optimal
 │                         configurations of each case
 ├── Common/               tools shared by every case
-└── Nine/                 nine points
-data/nine/                certificate weights, one directory per package
-scripts/                  certlib.py, the Comparator check and the build tools
-scripts/nine/             the exporters and searches that produced data/nine/
-docs/proof/nine/          the hand proof of nine points: manuscripts, checkers, certificate packages
-docs/research/nine/       the research archive of nine points: audits, searches, the earlier route
+└── Nine/                 nine points; Nine/Data/ holds its certificate weights
+scripts/                  the Comparator check and the build tools
+archive/nine/             the first draft of the proof, by ChatGPT 6 Pro, archived
 ```
 
 Every case has just `Construction.lean` and `Uniqueness.lean` at its root:
@@ -31,27 +28,27 @@ only `Common/` and its own folder.
 
 | file | content |
 | --- | --- |
-| `Basic.lean` | the doubled signed area `sarea`; the least area under relabelling, affine maps and the symmetries of the square; its continuity; existence of a maximizer |
-| `Config.lean` | triangle areas of a named configuration; sub-configurations; affine images |
+| `Basic.lean` | the doubled signed area `sarea`; the least area under relabelling, affine maps and the symmetries of the square; its continuity; existence of a maximizer; the open square |
+| `Config.lean` | triangle areas of a named configuration; sub-configurations; affine images; points strictly inside a triangle; convex polygons |
+| `Plane.lean` | closed triangles (convex hulls of three points) by barycentric coordinates and by signs |
+| `TwoInteriorPoints.lean` | the two-interior-point lemma: a triangle with two points strictly inside, all of whose triangles have area at least `t`, has area at least `(4 + 2√3)t` |
 | `Optimum.lean` | the optimum of a case, and the value, the Heilbronn number and the optimal configurations that follow from it |
 | `Certificate.lean` | polynomial certificates on the unit cube, checked by the kernel, with `check_sound` |
 | `Bernstein.lean` | positivity on boxes by Bernstein coefficients, with `bernsteinBoxCheck_sound` |
 | `Cover.lean` | case splits with certificate leaves (sign splits, scalar cuts, strengthened area costs), with `checkTree_sound` |
+| `SignTable.lean` | the shared layer of the sign-table packages: lexicographic triples, oriented facts, word branches, strengthened cost tables and their premises `CostHyp`, the package `tableSpec` with `tableSpec_sound` |
 | `CertNotation.lean` | arithmetic notation for certificate expressions |
 | `DataReader.lean` | `term_rows%` and its relatives: certificate data read from text files as raw literals |
 
 ## `Nine/`
 
-The modules follow the manuscripts of [`docs/proof/nine/`](proof/nine/README.md):
-each manuscript `FILE.md` has a module of the same name (`SIX_BOUNDARY_SINGLE_TOP.md`
-is `SixBoundary/SingleTop.lean`), and every numbered result carries its manuscript
-label in its docstring (``**Theorem 2** (`C1_ONE_LOWER_MIXED_CAPS:Theorem2`)``).
-Where the formalization replaces a hand argument by a certificate or a shorter
-route, the docstring says so.
+The folders follow the structure of the proof: normalize a maximizer into one
+of five families, exclude the families that cannot reach `A₀`, and show that
+the remaining ones force the construction.
 
 | folder or file | content |
 | --- | --- |
-| `Setup/` | `A₀` and its brackets (`Value.lean`); the five normalized families N, C1, C2, Type II, Type III (`Families.lean`) |
+| `Setup/` | `A₀` and its brackets (`Value.lean`); the five normalized families N, C1, C2, Type II, Type III (`Families.lean`); the nine-point layer of the sign-table packages: occupancy bounds, `AreaOK` and its cost premises (`Package.lean`); the 57 heptagon words (`HeptagonWords.lean`) |
 | `Construction.lean`, `Construction/` | the 84 triangle areas of the optimal configuration |
 | `Uniqueness.lean`, `Assembly/` | every maximizer is the construction, from the family theorems; `Nine.optimum` and the three theorems |
 | `Normalization/` | side contacts, projection overlap and the shears, from the absence of an expanding affine map; the normalization into the five families and the transfer of equality |
@@ -60,20 +57,17 @@ route, the docstring says so.
 | `Hulls/` | triangles with three interior points, quadrilaterals with four, capacity two for every configuration of least area at least `A₀` |
 | `Corners/` | C2, Type III, C1 with three or more lower points, the hull bounds and the quadrilateral identities used throughout |
 | `TypeII/` | two adjacent occupied corners, ending in `typeII_exclusion` |
-| `EightBoundary/` | the radial catalogue of words and family N with eight or more boundary points, ending in Theorem 13 (`Theorem13.lean`) |
+| `EightBoundary/` | the radial catalogue of words and family N with eight or more boundary points, ending in `Completion.lean` |
 | `SevenBoundary/` | family N with exactly seven boundary points, with the interior cover of 403 certificates |
-| `SixBoundary/` | family N with exactly six boundary points: the anchor hexagon and the eight occupancies of its caps |
+| `SixBoundary/` | family N with exactly six boundary points: the anchor hexagon and the eight occupancies of its caps; `SingleCommon/` is shared by the cases of one point in a side cap and one in the opposite cap |
 | `Sharp/` | the seven sharp chambers in which one or two points move |
 | `C1/` | one occupied corner, by the number of lower points |
 
 ## Certificates
 
 A certificate package has a model (its atoms, affine factors and oriented area
-costs, and its case cover) in a `*Model.lean` file, its weights in `data/nine/`,
-and kernel checks in `*Trees/Chunk*.lean` (or `Part*.lean`), about 2,500 terms per
-module so that the build checks them in parallel. The exporters in
-`scripts/nine/<package>/` rebuild the data from the hand proof's JSON packages
-(or, where the formalization uses its own certificates, from a linear-programming
-search), cross-check every factor and cost against the hand checkers, and mirror
-Lean's arithmetic exactly (`scripts/certlib.py`). Lean trusts none of them: the
-kernel rechecks every certificate.
+costs, and its case cover) in a `*Model.lean` file, its weights in
+`Nine/Data/<package>/`, and kernel checks in `*Trees*` modules, a few thousand
+terms per module so that the build checks them in parallel, each tree by
+`tree_decide`. The weights were computed outside Lean; Lean trusts none of them:
+the kernel rechecks every certificate.

@@ -9,8 +9,8 @@ public import Heilbronn.Nine.Corners.CornerFamilies.SixPoint
 The real configuration behind `Heilbronn.Nine.SevenInterior.Model`: the nine points `cfg` in heptagon
 order `A, B, C, D, E, F, H, P, Q`, the point `zeta` of the cube, and the proofs, once for all fact
 lists, that the atoms are nonnegative (`Cell.atoms_nonneg`: the box and order factors from the
-normal form, the strengthened triangle costs from the least area by subdivision and the
-two-interior-point lemma, the cuts from their facts) and that the splits are exhaustive
+normal form, the strengthened triangle costs from the cost premises `Comp.costHyp` (least area and
+the two-interior-point lemma), the cuts from their facts) and that the splits are exhaustive
 (`Cell.branch`). `Cell.false`: a cell whose tree passes the kernel check is impossible.
 -/
 
@@ -137,7 +137,7 @@ theorem Comp.two_inside (H : Comp a h b c d e f P Q) {i j k j₁ j₂ : ℕ} (hi
       cfg a h b c d e f P Q j₂] := by
     funext x; fin_cases x <;> rfl
   rw [e1] at hm
-  have := CornerFamilies.twoInteriorPointLemma _ _ _ _ _ h₁ h₂ (7 / 128) (by norm_num) hm
+  have := twoInteriorPointLemma _ _ _ _ _ h₁ h₂ (7 / 128) (by norm_num) hm
   rw [triangleArea_eq] at this
   linarith [rho_le]
 
@@ -200,43 +200,7 @@ theorem anchor_pos (hN : SevenNormal a h b c d e f) {i j k : ℕ} (hij : i < j) 
   · clear * - h7 h4 hf0 h5; nlinarith [mul_pos h7 h4, mul_pos hf0 h5]
   · clear * - h7 h4 hf0 h6; nlinarith [mul_pos h7 h4, mul_pos hf0 h6]
 
-/-! ### Facts -/
-
-/-- A signed triangle with increasing indices below `9`, holding for the configuration. -/
-def FHolds (X : ℕ → Point) (g : SFact) : Prop :=
-  g.1.1 < g.1.2.1 ∧ g.1.2.1 < g.1.2.2 ∧ g.1.2.2 < 9 ∧ SFact.Holds X g
-
-/-- A fact holds: its signed triangle holds, or its cut atom is nonnegative at `z`. -/
-def FactHolds (z : ℕ → ℝ) (X : ℕ → Point) : Fact → Prop
-  | .inl g => FHolds X g
-  | .inr e => 0 ≤ e.eval z
-
-theorem orient_ne_zero {sg : Bool} {x : ℝ} (h : OrientHolds sg x) : x ≠ 0 := by
-  cases sg <;> simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at h <;>
-    [exact h.ne; exact h.ne']
-
-theorem sarea_self₁₂ (p r : Point) : sarea p p r = 0 := by unfold sarea; ring
-theorem sarea_self₁₃ (p q : Point) : sarea p q p = 0 := by unfold sarea; ring
-theorem sarea_self₂₃ (p q : Point) : sarea p q q = 0 := by unfold sarea; ring
-
-theorem orient_idx_ne {X : ℕ → Point} {sg : Bool} {i j k : ℕ}
-    (hs : OrientHolds sg (sarea (X i) (X j) (X k))) : i ≠ j ∧ j ≠ k ∧ i ≠ k := by
-  have hne := orient_ne_zero hs
-  refine ⟨?_, ?_, ?_⟩
-  · rintro rfl; exact hne (sarea_self₁₂ _ _)
-  · rintro rfl; exact hne (sarea_self₂₃ _ _)
-  · rintro rfl; exact hne (sarea_self₁₃ _ _)
-
-/-- An oriented actual triangle has oriented doubled area at least `s`. -/
-theorem Comp.orient_area (H : Comp a h b c d e f P Q) {sg : Bool} {i j k : ℕ} (hi : i < 9)
-    (hj : j < 9) (hk : k < 9)
-    (hs : OrientHolds sg (sarea (cfg a h b c d e f P Q i) (cfg a h b c d e f P Q j)
-      (cfg a h b c d e f P Q k))) :
-    7 / 64 ≤ sgArea sg (sarea (cfg a h b c d e f P Q i) (cfg a h b c d e f P Q j)
-      (cfg a h b c d e f P Q k)) := by
-  obtain ⟨n1, n2, n3⟩ := orient_idx_ne hs
-  rw [sgArea_eq_abs hs]
-  exact H.area i j k hi hj hk n1 n2 n3
+/-! ### The cost premises -/
 
 theorem free_mem {ks : List ℕ} (hl : ks.length ≤ 2) {j : ℕ} (hj : j ∈ free ks) : j < 9 := by
   simp only [free, List.mem_map, List.mem_range] at hj
@@ -245,55 +209,25 @@ theorem free_mem {ks : List ℕ} (hl : ks.length ≤ 2) {j : ℕ} (hj : j ∈ fr
 theorem free_nodup (ks : List ℕ) : (free ks).Nodup :=
   (List.nodup_range).map (fun x y h => by omega)
 
-/-- **The strengthened costs**: the cost of every signed triangle of the table is nonnegative:
-`s` for no certified inside point, `3s` for one (subdivision), `ρ` for two (the
-two-interior-point lemma). -/
-theorem Comp.cost_nonneg (H : Comp a h b c d e f P Q) {ks : List ℕ} (hl : ks.length ≤ 2)
-    {tb : List SFact} (htb : AllHold (FHolds (cfg a h b c d e f P Q)) tb) {g : SFact}
-    (hg : g ∈ tb) :
-    0 ≤ (costAtom pt bnd g (insideList tb (free ks) g).length).eval (zeta a h b c d e f P Q) := by
-  rw [eval_costAtom]
-  simp only [ptEval_zeta]
-  obtain ⟨g1, g2, g3, gs⟩ := htb g hg
-  have htb' : AllHold (SFact.Holds (cfg a h b c d e f P Q)) tb := fun x hx => (htb x hx).2.2.2
-  have harea := H.orient_area (by omega) (by omega) g3 gs
-  have hLnd : (insideList tb (free ks) g).Nodup := List.Nodup.filter _ (free_nodup ks)
-  have hmem : ∀ j ∈ insideList tb (free ks) g, j < 9 := fun j hj =>
-    free_mem hl (insideList_sound htb' hj).1
-  rcases hn : (insideList tb (free ks) g).length with _ | _ | n
-  · simp only [bnd, ite_true]; push_cast; linarith
-  · obtain ⟨j, hj⟩ := List.exists_mem_of_length_pos (show 0 < (insideList tb (free ks) g).length
-      by omega)
-    obtain ⟨-, o1, o2, o3⟩ := insideList_sound htb' hj
-    have hj9 := hmem j hj
-    have q1 := H.orient_area (by omega) (by omega) hj9 o1
-    have q2 := H.orient_area (by omega) g3 hj9 o2
-    have q3 := H.orient_area g3 (by omega) hj9 o3
-    rw [sgArea_eq_abs o1] at q1; rw [sgArea_eq_abs o2] at q2; rw [sgArea_eq_abs o3] at q3
-    have := three_le_sgArea (e := 7 / 64) o1 o2 o3 q1 q2 q3
-    simp only [bnd]; norm_num; linarith
-  · obtain ⟨j₁, j₂, rest, hL⟩ : ∃ j₁ j₂ rest, insideList tb (free ks) g = j₁ :: j₂ :: rest := by
-      rcases hL : insideList tb (free ks) g with _ | ⟨j₁, _ | ⟨j₂, rest⟩⟩
-      · rw [hL] at hn; simp at hn
-      · rw [hL] at hn; simp at hn
-      · exact ⟨j₁, j₂, rest, rfl⟩
-    have hj₁ : j₁ ∈ insideList tb (free ks) g := by rw [hL]; simp
-    have hj₂ : j₂ ∈ insideList tb (free ks) g := by rw [hL]; simp
-    have h12 : j₁ ≠ j₂ := by
-      rw [hL] at hLnd; simp only [List.nodup_cons, List.mem_cons, not_or] at hLnd
-      exact hLnd.1.1
-    obtain ⟨-, o1, o2, o3⟩ := insideList_sound htb' hj₁
-    obtain ⟨-, p1, p2, p3⟩ := insideList_sound htb' hj₂
-    obtain ⟨-, n1, n2⟩ := orient_idx_ne o1
-    obtain ⟨-, n3, -⟩ := orient_idx_ne o2
-    obtain ⟨-, m1, m2⟩ := orient_idx_ne p1
-    obtain ⟨-, m3, -⟩ := orient_idx_ne p2
-    have := H.two_inside (by omega) (by omega) g3 (hmem _ hj₁) (hmem _ hj₂)
-      (by simp only [List.nodup_cons, List.mem_cons, List.not_mem_nil, or_false, not_or,
-        List.nodup_nil, and_true, not_false_eq_true]; omega)
-      (inTriangle_of_orient o1 o2 o3) (inTriangle_of_orient p1 p2 p3)
-    rw [← sgArea_eq_abs gs] at this
-    simp only [bnd]; norm_num; linarith
+theorem bnd_zero : bnd 0 = 7 / 64 := by norm_num [bnd]
+
+theorem bnd_one : bnd 1 = 21 / 64 := by norm_num [bnd]
+
+theorem bnd_add_two (n : ℕ) : bnd (n + 2) = 102 / 125 := by
+  have h1 : ¬(n + 2 = 1) := by omega
+  simp [bnd, h1]
+
+/-- The cost premises of the case `ks` (`Cover.CostHyp`): every actual triangle has doubled area at
+least `s = 7/64`, and `ρ = 102/125` with two free points inside (the two-interior-point lemma). -/
+theorem Comp.costHyp (H : Comp a h b c d e f P Q) {ks : List ℕ} (hl : ks.length ≤ 2) :
+    CostHyp 9 (free ks) bnd (cfg a h b c d e f P Q) := by
+  refine CostHyp.of_inside (fun j hj => free_mem hl hj) (free_nodup ks)
+    (fun i j k hi hj hk hij hjk hik => ?_) ?_ (ρ := 102 / 125) (fun n => ?_)
+    (fun i j k j₁ j₂ hi hj hk hj₁ hj₂ hd h₁ h₂ => H.two_inside hi hj hk hj₁ hj₂ hd h₁ h₂)
+  · have := H.area i j k hi hj hk hij hjk hik
+    rw [bnd_zero]; push_cast; linarith
+  · rw [bnd_one, bnd_zero]; norm_num
+  · rw [bnd_add_two]; norm_num
 
 /-! ### Cells -/
 
@@ -301,7 +235,7 @@ theorem Comp.cost_nonneg (H : Comp a h b c d e f P Q) {ks : List ℕ} (hl : ks.l
 structure Cell (a h b c d e f : ℝ) (P Q : Point) (ks : List ℕ) : Prop where
   comp : Comp a h b c d e f P Q
   len : ks.length ≤ 2
-  base : AllHold (FHolds (cfg a h b c d e f P Q)) (baseSigns ks)
+  base : AllHold (FHolds 9 (cfg a h b c d e f P Q)) (baseSigns ks)
 
 theorem Comp.factors_nonneg (H : Comp a h b c d e f P Q) :
     ∀ x ∈ factors, 0 ≤ x.eval (zeta a h b c d e f P Q) := by
@@ -314,29 +248,21 @@ theorem Comp.factors_nonneg (H : Comp a h b c d e f P Q) :
     rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
     simp only [eval_minus, eval_v, eval_k, eval_one, zeta] <;> push_cast <;> linarith
 
-theorem Cell.atoms_nonneg {ks : List ℕ} (C : Cell a h b c d e f P Q ks) (fs : List Fact)
-    (hfs : AllHold (FactHolds (zeta a h b c d e f P Q) (cfg a h b c d e f P Q)) fs) :
+theorem Cell.atoms_nonneg {ks : List ℕ} (C : Cell a h b c d e f P Q ks) (fs : List SignOrCut)
+    (hfs : AllHold (FactHolds (FHolds 9 (cfg a h b c d e f P Q)) (zeta a h b c d e f P Q)) fs) :
     ∀ x ∈ atoms ks fs, 0 ≤ x.eval (zeta a h b c d e f P Q) := by
-  have htb : AllHold (FHolds (cfg a h b c d e f P Q)) (table ks fs) := by
-    refine C.base.append ?_
-    intro g hg
-    simp only [sgnFacts, List.mem_filterMap] at hg
-    obtain ⟨x, hx, hxg⟩ := hg
-    rcases x with x | x <;> simp at hxg
-    subst hxg; exact hfs _ hx
   intro x hx
-  simp only [atoms, List.mem_append, List.mem_map] at hx
-  rcases hx with (hx | ⟨g, hg, rfl⟩) | hx
+  simp only [atoms, List.mem_append] at hx
+  rcases hx with (hx | hx) | hx
   · exact C.comp.factors_nonneg x hx
-  · exact C.comp.cost_nonneg C.len htb hg
-  · simp only [cutFacts, List.mem_filterMap] at hx
-    obtain ⟨y, hy, hyx⟩ := hx
-    rcases y with y | y <;> simp at hyx
-    subst hyx; exact hfs _ hy
+  · exact (C.comp.costHyp C.len).tableCosts_nonneg (fun i _ => ptEval_zeta i)
+      (C.base.append (allHold_sgn hfs)) x hx
+  · exact allHold_cut hfs x hx
 
-theorem Cell.branch {ks : List ℕ} (C : Cell a h b c d e f P Q ks) (fs : List Fact) (s : Split) :
+theorem Cell.branch {ks : List ℕ} (C : Cell a h b c d e f P Q ks) (fs : List SignOrCut)
+    (s : Split) :
     ∃ br ∈ (spec ks).branches fs s,
-      AllHold (FactHolds (zeta a h b c d e f P Q) (cfg a h b c d e f P Q)) br := by
+      AllHold (FactHolds (FHolds 9 (cfg a h b c d e f P Q)) (zeta a h b c d e f P Q)) br := by
   cases s with
   | tri i j k =>
     simp only [spec, branches]
@@ -348,27 +274,21 @@ theorem Cell.branch {ks : List ℕ} (C : Cell a h b c d e f P Q ks) (fs : List F
         intro h0
         have := C.comp.area i j k (by omega) (by omega) (by omega) (by omega) (by omega) (by omega)
         rw [h0, abs_zero] at this; linarith
-      obtain ⟨br, hbr, hall⟩ := signBranches_exhaustive (P := cfg a h b c d e f P Q)
-        (t := (i, j, k)) hne
-      refine ⟨br.map Sum.inl, List.mem_map.2 ⟨br, hbr, rfl⟩, ?_⟩
-      intro x hx
-      obtain ⟨g, hg, rfl⟩ := List.mem_map.1 hx
-      refine ⟨?_, ?_, ?_, hall g hg⟩ <;>
-      · simp only [signBranches, List.mem_cons, List.not_mem_nil, or_false] at hbr
-        rcases hbr with rfl | rfl <;> simp at hg <;> subst hg <;> simp <;> omega
+      obtain ⟨br, hbr, hall⟩ := fholds_signBranches (N := 9) (P := cfg a h b c d e f P Q) hij hjk
+        (by omega) hne
+      exact ⟨br.map Sum.inl, List.mem_map.2 ⟨br, hbr, rfl⟩, allHold_inl hall⟩
     · exact ⟨[], by simp, by simp [AllHold]⟩
   | cut i q =>
     simp only [spec, branches]
     obtain ⟨br, hbr, hall⟩ := cutBranches_exhaustive (zeta a h b c d e f P Q) (v i) q
-    exact ⟨br.map Sum.inr, List.mem_map.2 ⟨br, hbr, rfl⟩, fun x hx => by
-      obtain ⟨y, hy, rfl⟩ := List.mem_map.1 hx; exact hall y hy⟩
+    exact ⟨br.map Sum.inr, List.mem_map.2 ⟨br, hbr, rfl⟩, allHold_inr hall⟩
 
 /-- **The cover check is sound**: a cell whose tree passes the kernel check is impossible. -/
 theorem Cell.false {ks : List ℕ} (C : Cell a h b c d e f P Q ks) {T : Cover.Tree Split}
     (hT : checkTree (spec ks) [] T = true) : False :=
   checkTree_sound (σ := spec ks)
-    (Holds := FactHolds (zeta a h b c d e f P Q) (cfg a h b c d e f P Q)) C.comp.zeta_mem
-    (fun fs hfs => C.atoms_nonneg fs hfs) (fun fs s _ => C.branch fs s)
+    (Holds := FactHolds (FHolds 9 (cfg a h b c d e f P Q)) (zeta a h b c d e f P Q))
+    C.comp.zeta_mem (fun fs hfs => C.atoms_nonneg fs hfs) (fun fs s _ => C.branch fs s)
     (fun _ _ _ h => absurd h (by simp [spec])) (fs := []) (fun _ h => absurd h List.not_mem_nil) hT
 
 end Heilbronn.Nine.SevenInterior

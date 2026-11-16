@@ -2,6 +2,7 @@ module
 
 public import Heilbronn.Common.CertNotation
 public import Heilbronn.Common.Config
+public meta import Lean.Elab.Tactic
 
 /-!
 # Cover trees: case splits closed by kernel-checked certificates
@@ -26,8 +27,10 @@ and a type `S` of *split labels*. Its `Spec F S` gives
 A `Tree S` is a split tree: `node s children` (one child per branch, in order), `cert terms`
 (a leaf closed by `Cert.check (atoms fs) terms`), or `closed tag` (closed by `closedOK fs tag`).
 `checkTree σ fs T` walks the tree from the facts `fs`, appending each branch's facts to the
-current ones, and checks every leaf; it is evaluated by `decide +kernel`. A large tree can be
-checked in pieces: `checkTree_node` proves a node from proofs for its children.
+current ones, and checks every leaf. The kernel evaluates it: `tree_decide` proves
+`checkTree σ fs T = true` by one kernel check for each subtree of at most 400 certificate terms
+(see *Checking a tree* below), so that no single check holds the intermediate values of a whole
+large tree.
 
 **Soundness** (`checkTree_sound`): if `checkTree σ fs T = true`, then no point `z` of the unit
 cube admits an interpretation `Holds : F → Prop` with
@@ -38,6 +41,27 @@ cube admits an interpretation `Holds : F → Prop` with
 
 The package proves `hatoms`, `hbranch`, `hclosed` once (as lemmas about all fact lists); the
 kernel does the per-case work.
+
+## Checking a tree
+
+The kernel keeps every intermediate value of a check until the check ends, so a single check of a
+tree with a few thousand certificate terms needs several gigabytes. `tree_decide n m` proves
+`checkTree σ fs T = true` by splitting `T` at every split of size above `n` (its certificate terms,
+and one for each leaf closed by `closedOK`; default `400`) or with more than `m` leaves (default: no
+limit): each smaller subtree becomes an auxiliary theorem `of_decide_eq_true rfl`, checked by the
+kernel on its own and one after another. At a split too large for one piece, the branches
+`σ.branches fs s` are computed once, as a list literal `bs`, by an auxiliary theorem
+`σ.branches fs s = bs`; the splits are glued by `checkTree_node_of_branches` and
+`checkChildren_cons_of`, and each child is checked from the literal facts `fs ++ b`, so that no
+piece computes the branches of its ancestors again.
+
+A tree too large for one module is checked in parts: a part below the path of splits
+`[(s₀, i₀), …, (sₖ, iₖ)]` is proved in its own module from the facts
+`pathFacts σ fs [(s₀, i₀), …, (sₖ, iₖ)]` (each step appends the facts of the `iⱼ`-th branch of the
+split `sⱼ`), and `tree_decide using h₁, …, hₖ` in the module of the whole tree takes the parts from
+the theorems `hᵢ`. On `L.all f = true`, `tree_decide` proves `f x = true` for each element `x` of
+the list `L` separately (`all_cons_of_true`); on any other decidable goal it is a single kernel
+check.
 
 ## Atom-only packages
 
@@ -124,6 +148,30 @@ theorem checkChildren_cons (σ : Spec F S) (fs b : List F) (bs : List (List F)) 
 
 theorem checkChildren_nil (σ : Spec F S) (fs : List F) : checkChildren σ fs [] [] = true := by
   simp [checkChildren]
+
+/-! ### Lemmas for `tree_decide` -/
+
+theorem all_cons_of_true {α : Type*} (f : α → Bool) (x : α) (xs : List α) (h : f x = true)
+    (hs : xs.all f = true) : (x :: xs).all f = true := by
+  simp_all
+
+theorem all_nil_true {α : Type*} (f : α → Bool) : ([] : List α).all f = true := rfl
+
+theorem checkTree_node_of_branches (σ : Spec F S) (fs : List F) (s : S) (cs : List (Tree S))
+    (bs : List (List F)) (hbr : σ.branches fs s = bs) (h : checkChildren σ fs bs cs = true) :
+    checkTree σ fs (.node s cs) = true := by
+  rw [checkTree_node, hbr]; exact h
+
+theorem checkChildren_cons_of (σ : Spec F S) (fs b : List F) (bs : List (List F)) (c : Tree S)
+    (cs : List (Tree S)) (hc : checkTree σ (fs ++ b) c = true)
+    (hcs : checkChildren σ fs bs cs = true) : checkChildren σ fs (b :: bs) (c :: cs) = true := by
+  rw [checkChildren_cons, hc, hcs]; rfl
+
+/-- The facts known below the splits `p` of a tree, from the facts `fs`: each step `(s, i)` appends
+the facts of the `i`-th branch of the split `s`. -/
+def pathFacts (σ : Spec F S) : List F → List (S × ℕ) → List F
+  | fs, [] => fs
+  | fs, (s, i) :: p => pathFacts σ (fs ++ (σ.branches fs s).getD i []) p
 
 /-! ### Soundness -/
 
@@ -399,3 +447,233 @@ example (x : ℝ) (hx : 0 ≤ x ∧ x ≤ 1) (h1 : 1 / 4 ≤ |x - 1 / 2|)
 end Test
 
 end Heilbronn.Cover
+
+end
+
+/-! ### The tactic `tree_decide` -/
+
+public meta section
+
+namespace Heilbronn.Cover.TreeDecide
+
+open Lean Meta Elab Tactic
+
+/-- The elements of a list, unfolding definitions until it is a literal. -/
+partial def elems (e : Expr) : MetaM (Option (List Expr)) := do
+  let e ← whnfD e
+  if e.isAppOfArity ``List.nil 1 then
+    return some []
+  else if e.isAppOfArity ``List.cons 3 then
+    return (← elems e.appArg!).map (e.appFn!.appArg! :: ·)
+  else
+    return none
+
+/-- The tails of a list literal: the list itself, then each tail after it, ending with `[]`. -/
+partial def tails (e : Expr) : MetaM (List Expr) := do
+  let e ← whnfD e
+  if e.isAppOfArity ``List.cons 3 then
+    return e :: (← tails e.appArg!)
+  else
+    return [e]
+
+/-- The size of a tree, unfolding definitions: its certificate terms, and one for each leaf closed
+by the package's own test. -/
+partial def size (t : Expr) : MetaM Nat := do
+  let t ← whnfD t
+  if t.isAppOfArity ``Tree.cert 2 then
+    return ((← elems t.appArg!).map List.length).getD 0
+  else if t.isAppOfArity ``Tree.closed 2 then
+    return 1
+  else if t.isAppOfArity ``Tree.node 3 then
+    let some cs ← elems t.appArg! | return 0
+    cs.foldlM (fun n c => return n + (← size c)) 0
+  else
+    return 0
+
+/-- `e` with the projections of explicit pairs, `(a, b).1` and `(a, b).2`, reduced: the element
+`(k, T)` of a list of cases gives the goal `checkTree (σ k) [] T`, as its pieces state it. -/
+def reducePairProj (e : Expr) : Expr := e.replace fun s =>
+  let pick (i : Nat) (p : Expr) : Option Expr :=
+    if p.isAppOfArity ``Prod.mk 4 then
+      some (if i == 0 then p.appFn!.appArg! else p.appArg!)
+    else none
+  if s.isAppOfArity ``Prod.fst 3 then pick 0 s.appArg!
+  else if s.isAppOfArity ``Prod.snd 3 then pick 1 s.appArg!
+  else match s with
+    | .proj ``Prod i p => pick i p
+    | _ => none
+
+/-- The number of leaves of a tree, unfolding definitions. -/
+partial def leaves (t : Expr) : MetaM Nat := do
+  let t ← whnfD t
+  if t.isAppOfArity ``Tree.node 3 then
+    let some cs ← elems t.appArg! | return 0
+    cs.foldlM (fun n c => return n + (← leaves c)) 0
+  else
+    return 1
+
+/-- Close `g`, a closed decidable proposition, by an auxiliary theorem `of_decide_eq_true rfl`,
+which only the kernel checks, as `decide +kernel` does. Unlike `decide +kernel`, the theorem is
+added like any other: the kernel checks it in a task of its own, after the declarations before it,
+so the checks of the pieces run one at a time and do not count against the heartbeats of the
+command. A failing check is reported as a kernel error on the auxiliary theorem. -/
+def decideKernel (g : MVarId) : TacticM Unit := g.withContext do
+  let ty ← instantiateMVars (← g.getType)
+  if ty.hasFVar || ty.hasMVar then
+    throwError "tree_decide: the goal must be closed{indentExpr ty}"
+  let pf ← mkDecideProof ty
+  let name ← withOptions (Elab.async.set · true) <| mkAuxLemma [] ty pf
+  g.assign (mkConst name)
+
+/-- Theorems given by `using`, with their statements, and whether each has been used. -/
+structure Known where
+  proofs : Array (Expr × Expr)
+  used : IO.Ref (Array Bool)
+
+/-- Close `g` by a theorem given by `using` whose statement is `g`'s, up to reducible unfolding.
+The statements are first compared on their last argument (the tree), which must be equal. -/
+def closeByKnown (k : Known) (g : MVarId) (ty : Expr) : MetaM Bool := do
+  for h : i in [:k.proofs.size] do
+    let (pf, kty) := k.proofs[i]
+    let same := match kty.eq?, ty.eq? with
+      | some (_, a, _), some (_, b, _) =>
+        a.getAppNumArgs == b.getAppNumArgs && a.appArg! == b.appArg!
+      | _, _ => false
+    if same && (← withReducible <| isDefEq kty ty) then
+      g.assign pf
+      k.used.modify (·.set! i true)
+      return true
+  return false
+
+/-- `e`, a closed term of an inductive data type, reduced by the kernel to constructors and
+literals all the way down (proofs and types are left as they are). -/
+partial def kernelNorm (e : Expr) : MetaM Expr := do
+  let e ← match Kernel.whnf (← getEnv) (← getLCtx) e with
+    | .ok e => pure e
+    | .error ex => throwKernelException ex
+  let f := e.getAppFn
+  let .const n _ := f | return e
+  let some (.ctorInfo info) := (← getEnv).find? n | return e
+  let args ← e.getAppArgs.mapIdxM fun i a => do
+    if i < info.numParams then return a
+    let ty ← inferType a
+    if (← isProp ty) || ty.isSort then return a
+    kernelNorm a
+  return mkAppN f args
+
+/-- The proof of `g : checkTree σ fs t = true`, where `fs` is a list literal: the facts below the
+path `path` of splits from the facts `fs₀`. At a split `s` too large for one piece, the branches
+`σ.branches fs s` are computed once, as a literal `bs`, by an auxiliary theorem
+`σ.branches fs s = bs` (checked by the kernel), and the `i`-th child is checked from the literal
+facts `fs ++ bs[i]`, so that no piece computes the branches of its ancestors again. A piece given
+by `using` states its facts as `pathFacts σ fs₀ path`, which the kernel reduces to the same
+list. -/
+partial def goTree (budget : Nat × Nat) (k : Known) (g : MVarId) (F S σ fs₀ : Expr)
+    (path : List Expr) (fs t : Expr) : TacticM Unit := g.withContext do
+  -- a piece given by `using`
+  let pairTy := mkApp2 (mkConst ``Prod [0, 0]) S (mkConst ``Nat)
+  let pfs := mkAppN (mkConst ``pathFacts) #[F, S, σ, fs₀, ← mkListLit pairTy path]
+  let stated ← mkEq (mkAppN (mkConst ``checkTree) #[F, S, σ, pfs, t]) (mkConst ``Bool.true)
+  if (← closeByKnown k g stated) then return
+  let t' ← whnfD t
+  unless t'.isAppOfArity ``Tree.node 3 do return ← decideKernel g
+  if (← size t') ≤ budget.1 && (← leaves t') ≤ budget.2 then return ← decideKernel g
+  let s := t'.getArg! 1
+  let cs := t'.getArg! 2
+  let some children ← elems cs | decideKernel g
+  let ts ← tails cs
+  -- the branches of the split, as a literal, and their theorem
+  let bsExpr := mkApp5 (mkConst ``Spec.branches) F S σ fs s
+  let bs ← kernelNorm bsExpr
+  let some (_, branches) := bs.listLit? | decideKernel g
+  unless branches.length == children.length do return ← decideKernel g
+  let bsTy ← mkEq bsExpr bs
+  let hbr ← mkAuxLemma [] bsTy (← mkEqRefl bs)
+  let some (_, fsElems) := fs.listLit? | decideKernel g
+  let listF := mkApp (mkConst ``List [0]) F
+  let mut proof := mkApp3 (mkConst ``checkChildren_nil) F S σ |>.app fs
+  for i in (List.range children.length).reverse do
+    let b := branches[i]!
+    let some (_, bElems) := b.listLit? | return ← decideKernel g
+    let childFs ← mkListLit F (fsElems ++ bElems)
+    let restBs ← mkListLit listF (branches.drop (i + 1))
+    let goal ← mkEq (mkAppN (mkConst ``checkTree) #[F, S, σ, childFs, children[i]!])
+      (mkConst ``Bool.true)
+    let step := mkApp4 (mkConst ``Prod.mk [0, 0]) S (mkConst ``Nat) s (mkNatLit i)
+    let h ← withCurrHeartbeats do
+      let h ← mkFreshExprSyntheticOpaqueMVar goal
+      goTree budget k h.mvarId! F S σ fs₀ (path ++ [step]) childFs children[i]!
+      pure h
+    proof := mkAppN (mkConst ``checkChildren_cons_of) #[F, S, σ, fs, b, restBs, children[i]!,
+      ts[i + 1]!, h, proof]
+  g.assign (mkAppN (mkConst ``checkTree_node_of_branches)
+    #[F, S, σ, fs, s, cs, bs, mkConst hbr, proof])
+
+/-- The proof of `g`, split as described in the module documentation. The kernel checks of the
+pieces count against the heartbeats of the command, so each piece starts a fresh count, as it would
+in a theorem of its own. -/
+partial def go (budget : Nat × Nat) (k : Known) (g : MVarId) : TacticM Unit := g.withContext do
+  let ty ← instantiateMVars (← g.getType)
+  if (← closeByKnown k g ty) then return
+  let some (_, lhs, _) := ty.eq? | decideKernel g
+  if lhs.isAppOfArity ``List.all 3 then
+    let #[α, l, f] := lhs.getAppArgs | decideKernel g
+    let some xs ← elems l | decideKernel g
+    let u ← getDecLevel α
+    let ts ← tails l
+    let mut proof := mkApp2 (mkConst ``all_nil_true [u]) α f
+    for i in (List.range xs.length).reverse do
+      let x := xs[i]!
+      let h ← mkFreshExprSyntheticOpaqueMVar
+        (← mkEq (reducePairProj (mkApp f x).headBeta) (mkConst ``Bool.true))
+      withCurrHeartbeats <| go budget k h.mvarId!
+      proof := mkApp6 (mkConst ``all_cons_of_true [u]) α f x ts[i + 1]! h proof
+    g.assign proof
+  else if lhs.isAppOfArity ``checkTree 5 then
+    let #[F, S, σ, fs, t] := lhs.getAppArgs | decideKernel g
+    -- the facts below the root: `fs₀`, and the path of splits from it, if `fs` is `pathFacts`
+    let (fs₀, path) :=
+      if fs.isAppOfArity ``pathFacts 5 then
+        match fs.appArg!.listLit? with
+        | some (_, p) => (fs.appFn!.appArg!, p)
+        | none => (fs, [])
+      else (fs, [])
+    -- the initial facts as a literal, once; the piece states them as the goal does
+    let fsLit ← kernelNorm fs
+    let g' ← mkFreshExprSyntheticOpaqueMVar
+      (← mkEq (mkAppN (mkConst ``checkTree) #[F, S, σ, fsLit, t]) (mkConst ``Bool.true))
+    goTree budget k g'.mvarId! F S σ fs₀ path fsLit t
+    g.assign g'
+  else
+    decideKernel g
+
+/-- `tree_decide n m` proves `checkTree σ fs T = true`, or `L.all f = true`, by kernel checks of
+subtrees of size at most `n` (certificate terms, and one per closed leaf; default `400`) and of at
+most `m` leaves (default: no limit). On any other goal it is `decide +kernel`.
+`tree_decide using h₁, …, hₖ` closes every piece whose statement is that of one of the `hᵢ`,
+proved elsewhere (for a tree split across modules), and fails if one of them is not used. It
+starts a fresh heartbeat count, so that after a case split, `<;> tree_decide` gives each case the
+count of a theorem of its own. -/
+syntax (name := treeDecide) "tree_decide" (ppSpace num)? (ppSpace num)? (" using " term,+)? :
+  tactic
+
+@[tactic treeDecide] def evalTreeDecide : Tactic := fun stx => withCurrHeartbeats do
+  let num (i : Nat) (d : Nat) : Nat := match stx[i].getOptional? with
+    | some n => n.isNatLit?.getD d
+    | none => d
+  let budget := (num 1 400, num 2 1000000000)
+  let g ← getMainGoal
+  -- the optional group `using h₁, …` is the node `[using, h₁, …]` itself
+  let terms := if stx[3].getNumArgs == 2 then stx[3][1].getSepArgs else #[]
+  let proofs ← g.withContext <| terms.mapM fun t => do
+    let pf ← instantiateMVars (← Term.elabTerm t none)
+    return (pf, ← instantiateMVars (← inferType pf))
+  let k : Known := { proofs, used := ← IO.mkRef (Array.replicate proofs.size false) }
+  go budget k g
+  let used ← k.used.get
+  for i in [:terms.size] do
+    unless used[i]! do
+      throwErrorAt terms[i]! "tree_decide: this theorem matches no piece of the tree"
+  replaceMainGoal []
+
+end Heilbronn.Cover.TreeDecide

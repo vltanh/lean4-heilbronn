@@ -2,12 +2,14 @@ module
 
 public import Heilbronn.Nine.C1.OneLower.GeomB
 
-/-! # Competitive C1 configurations for the hull packages of group B
+/-! # Competitive C1 configurations for the one-lower hull packages
+
+Used by the packages of the top triangle, the right top triangle, the convex top and the mixed
+caps.
 
 Helpers on `C1ZeroLower.Comp` (a competitive C1 configuration with labelled free points):
 
 * `inSquare_of_inTriangle`: a point strictly inside a triangle of square points is in the square;
-* `comp_areaOK`, `AreaOK.comp`: the nine-point area hypothesis, reindexed;
 * `not_lower_of_cap`, `comp_capWord`, `comp_capWordAt`: a cap point has the five-anchor cap word of its cap
   (`(1,0,4,3,2)`, `(2,1,0,4,3)`, `(3,2,1,0,4)`, the zero-lower words `0, 3, 8`);
 * `capTable`, `comp_capTable_holds`: the signs of anchor triples, of two anchors and a free point
@@ -22,7 +24,6 @@ noncomputable section
 namespace Heilbronn.Nine.C1OneLowerB
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1ZeroLower Cover Model
-open Heilbronn.Nine.C1OneLowerTopCap (ConvexPolygon)
 
 variable {h c d f : ℝ} {Q : Fin 4 → Point}
 
@@ -53,17 +54,6 @@ theorem inSquare_of_inTriangle {R A B C : Point} (hR : InTriangle R A B C) (hA :
   · by_contra hn; push Not at hn
     nlinarith [mul_nonneg r2.le (sub_nonneg.2 a4), mul_nonneg r3.le (sub_nonneg.2 b4),
       mul_nonneg r1.le (sub_nonneg.2 c4)]
-
-/-! ### Areas -/
-
-theorem comp_areaOK (H : Comp h c d f Q) : AreaOK (cfg h c d f Q) :=
-  fun a b e ha hb he hab hbe hae => H.area a b e ha hb he hab hbe hae
-
-theorem AreaOK.comp {P : ℕ → Point} (H : AreaOK P) (ι : ℕ → ℕ) (hι : ∀ i, i < 9 → ι i < 9)
-    (hinj : ∀ a b, a < 9 → b < 9 → ι a = ι b → a = b) : AreaOK (fun i => P (ι i)) := by
-  intro a b e ha hb he hab hbe hae
-  exact H (ι a) (ι b) (ι e) (hι a ha) (hι b hb) (hι e he) (fun h => hab (hinj a b ha hb h))
-    (fun h => hbe (hinj b e hb he h)) (fun h => hae (hinj a e ha he h))
 
 /-! ### Cap words -/
 
@@ -144,7 +134,7 @@ def capSign (ms : List (ℕ × ℕ)) (t : ℕ × ℕ × ℕ) : Option Bool :=
 
 /-- The table of `capSign`. -/
 def capTable (ms : List (ℕ × ℕ)) : List SFact :=
-  lexTriples.filterMap fun t => (capSign ms t).map fun sg => (t, sg)
+  (lexTriples 9).filterMap fun t => (capSign ms t).map fun sg => (t, sg)
 
 theorem lookup_mem {ms : List (ℕ × ℕ)} {a w : ℕ} (h : ms.lookup a = some w) : (a, w) ∈ ms := by
   induction ms with
@@ -160,7 +150,7 @@ theorem lookup_mem {ms : List (ℕ × ℕ)} {a w : ℕ} (h : ms.lookup a = some 
       subst this; exact List.mem_cons_self ..
     · exact List.mem_cons_of_mem _ (ih h)
 
-/-- **The anchor and cap table holds**, for free points with zero-lower words. -/
+/-- The anchor and cap table holds, for free points with zero-lower words. -/
 theorem comp_capTable_holds (H : Comp h c d f Q) {ms : List (ℕ × ℕ)}
     (hms : ∀ p ∈ ms, 5 ≤ p.1 ∧ p.1 < 9 ∧ p.2 < 11 ∧
       WordAt (cfg h c d f Q) (cfg h c d f Q p.1) p.2) :
@@ -168,7 +158,7 @@ theorem comp_capTable_holds (H : Comp h c d f Q) {ms : List (ℕ × ℕ)}
   intro g hg
   simp only [capTable, List.mem_filterMap, Option.map_eq_some_iff] at hg
   obtain ⟨t, ht, sg, hs, rfl⟩ := hg
-  obtain ⟨t1, t2, t3⟩ := lexTriples_valid t ht
+  obtain ⟨t1, t2, t3⟩ := mem_lexTriples ht
   unfold capSign at hs
   split_ifs at hs with a1 a2 a3
   · simp only [Option.some.injEq] at hs; subst hs
@@ -223,7 +213,7 @@ positive in a true table. -/
 theorem convex_of_table {P : ℕ → Point} {tb : List SFact} (htb : AllHold (SFact.Holds P) tb)
     {n : ℕ} (ι : Fin n → ℕ)
     (hι : ∀ i j k : Fin n, i < j → j < k → orientedLookup tb (ι i) (ι j) (ι k) = some true) :
-    ConvexPolygon (fun i => P (ι i)) := by
+    IsConvexPolygon (fun i => P (ι i)) := by
   intro i j k hij hjk
   have := orientedLookup_sound htb (hι i j k hij hjk)
   simpa [OrientHolds] using this
@@ -232,7 +222,7 @@ theorem convex_of_table {P : ℕ → Point} {tb : List SFact} (htb : AllHold (SF
 area against two vertices) has a radial word `w` (`C1OneLowerTopCap.exists_hullWord`) passing
 every pruned enumeration test checked by `enumW`, and `w` puts it inside `abc`. -/
 theorem word_of_inTriangle {n : ℕ} [NeZero n] (hn : 3 ≤ n) {V : Fin n → Point}
-    (hV : ConvexPolygon V) {a b e : Fin n} (hab : a < b) (hbe : b < e) {R : Point}
+    (hV : IsConvexPolygon V) {a b e : Fin n} (hab : a < b) (hbe : b < e) {R : Point}
     (hR : InTriangle R (V a) (V b) (V e))
     (hne : ∀ i j : Fin n, i ≠ j → sarea (V i) (V j) R ≠ 0) {p : List ℕ → Bool}
     (he : enumW n (n - 2) p n [] = true) :
@@ -268,19 +258,5 @@ theorem lb_of_prod {t a u M e : ℝ} (ht : 0 < t) (h : t ≤ a * u - e) (he : 0 
     nlinarith [mul_le_mul_of_nonneg_right haM hu.le, mul_nonpos_of_nonneg_of_nonpos hu.le hn]
   rw [div_le_iff₀ hM]
   nlinarith [mul_le_mul_of_nonneg_right haM hu.le]
-
-/-- An oriented area bound from `AreaOK`: a positive area is at least `2A₀`. -/
-theorem AreaOK.pos_ge {P : ℕ → Point} (H : AreaOK P) {a b e : ℕ} (ha : a < 9) (hb : b < 9)
-    (he : e < 9) (hab : a ≠ b) (hbe : b ≠ e) (hae : a ≠ e) (hp : 0 < sarea (P a) (P b) (P e)) :
-    2 * A₀ ≤ sarea (P a) (P b) (P e) := by
-  have := H a b e ha hb he hab hbe hae
-  rwa [abs_of_pos hp] at this
-
-/-- An oriented area bound from `AreaOK`: a negative area is at most `-2A₀`. -/
-theorem AreaOK.neg_ge {P : ℕ → Point} (H : AreaOK P) {a b e : ℕ} (ha : a < 9) (hb : b < 9)
-    (he : e < 9) (hab : a ≠ b) (hbe : b ≠ e) (hae : a ≠ e) (hp : sarea (P a) (P b) (P e) < 0) :
-    2 * A₀ ≤ -sarea (P a) (P b) (P e) := by
-  have := H a b e ha hb he hab hbe hae
-  rwa [abs_of_neg hp] at this
 
 end Heilbronn.Nine.C1OneLowerB

@@ -3,60 +3,61 @@ module
 public import Heilbronn.Nine.Setup.Families
 public import Heilbronn.Nine.EightBoundary.Setting
 
-/-! # Eight boundary points: complete orientation classification (`docs/proof/nine/RADIAL_CATALOGUE.md`)
+/-! # Eight boundary points: complete orientation classification
 
-**Role.** Primary-route component of `EIGHT_BOUNDARY:Theorem13` (`docs/proof/nine/EIGHT_BOUNDARY.md`,
-lines 1022–1024): the finite cover of the central region of the eight-boundary octagon by 36
-radial words in eight square-symmetry classes `R1, …, R8`. Its §§1–3 are reused verbatim for the
-exterior octagon `A, B, C, D, E, X, F, H` of the seven-boundary exterior case
-(`SEVEN_BOUNDARY_TOP_CAP_RADIAL:claim-octagon-cover`, `SEVEN_BOUNDARY_EXTERIOR_COMPLETION`), whose
-certificate records are indexed by the block pairs of §2.
+The finite cover of the central region of a convex octagon by 36 radial words in eight
+square-symmetry classes `R1, …, R8`. It is used for the eight-boundary octagon
+(`EightBoundary.minTriangleArea_le_A₀_of_eight_boundary`) and for the exterior octagon `A, B, C, D, E, X, F, H` of the
+seven-boundary exterior case (`SevenBoundaryTopCapRadial.radialWord_mem_catalogue`,
+`SevenBoundaryExteriorCompletion`), whose certificates are indexed by the block pairs.
 
-**General notions** (any `n`, reusable): a strictly convex counterclockwise polygon
-(`IsConvexPolygon`), a point strictly inside it (`InPolygon`) or in its closure
+**General notions** (any `n`, reusable): for a strictly convex counterclockwise polygon
+(`IsConvexPolygon`, shared), a point strictly inside it (`InPolygon`) or in its closure
 (`InClosedPolygon`), and the radial word of a point `O` with respect to a polygon `V`:
 `radialWord V O i` counts the `j ∈ {1, …, n-1}` with `det(V i - O, V (i+j) - O) > 0`, and
-`IsRadialWord V O k` is the geometric meaning (1): `det(V i - O, V (i+j) - O) > 0 ↔ j ≤ k i`
+`IsRadialWord V O k` is its geometric meaning: `det(V i - O, V (i+j) - O) > 0 ↔ j ≤ k i`
 for `1 ≤ j ≤ n - 1` (indices mod `n`; `det(V i - O, V j - O) = sarea O (V i) (V j)`).
 
-**Octagon data** (decidable): words `Word = Fin 8 → ℕ`; the relations (2)–(4)
-(`Complementary`, `EarBounds`, `SideQuadBounds`); the blocks `(k_{2i}, k_{2i+1}, k_{2i+4},
-k_{2i+5})` and the six solutions `T1, …, T6` (`blockT`, 1-based as in the manuscript); the 36 block
-pairs (`ofBlocks`, `catalogue`); the square-symmetry action (6) on labels and words (`labelPerm`,
-`wordAct`); the eight classes (`RClass`, `rep`, `InClass`, `classTable`, `orbitSize`).
+**Octagon data** (decidable): words `Word = Fin 8 → ℕ`; the necessary conditions
+`Complementary`, `EarBounds`, `SideQuadBounds` (together `Admissible`); the blocks
+`(k_{2i}, k_{2i+1}, k_{2i+4}, k_{2i+5})` and the six solutions `T1, …, T6` (`blockT`, 1-based);
+the 36 block pairs (`ofBlocks`, `catalogue`); the square-symmetry action on labels and words
+(`labelPerm`, `wordAct`); the eight classes (`RClass`, `rep`, `InClass`, `classTable`,
+`orbitSize`).
 
-**Results** (no numbered results in the manuscript; ids named in the inventory):
-* `claim_encoding` (§1, (1)–(2)): the radial word is well defined and satisfies (1) and (2);
-* `claim_ear_bounds` (§1, (3)): `2 ≤ k_i ≤ 5`;
-* `claim_side_quad_bounds` (§1, (4)): `k_0, k_2, k_4, k_6 ≥ 3`, `k_1, k_3, k_5, k_7 ≤ 4`;
-* `claim_six_blocks` (§2, (5)): every block satisfies (5), whose solutions are `T1, …, T6`;
-* `claim_36_cover` (§2): every word satisfying (2)–(4) is one of the 36 block pairs;
-* `claim_symmetry_action` (§3, (6)): relabelling by a square symmetry acts on words by (6);
-* `claim_symmetry_relabel` (§3): each symmetry of the square maps the eight-boundary normal form
-  to a normal form, with the labels permuted by `labelPerm`;
-* `claim_eight_classes` (§3): the 36 words split into the orbits `R1, …, R8`, with the 6×6 table;
-* `claim_R3_chamber` (§4): the R3 representative gives the five orientation conditions of
-  `HAND_PROOF.md` Theorem 1.
+## Main results
 
-Implicit in the manuscript: the hypotheses of §1 are stated (lines 16–22) as consequences of "every
-triangle has area at least `A₀`"; the claims here take exactly those consequences as hypotheses:
-`O` strictly inside the strictly convex octagon, outside the four closed side quadrilaterals, and
-no ray `OV_i` parallel or antiparallel to another (`RaysNondegenerate`). The cover is a cover by
-necessary conditions; realizability of the 36 words is not claimed.
+* `radialWord_spec`: the radial word is well defined and satisfies `IsRadialWord` and
+  `Complementary`;
+* `earBounds_of_outsideSideQuads`: `2 ≤ k_i ≤ 5`;
+* `sideQuadBounds_of_outsideSideQuads`: `k_0, k_2, k_4, k_6 ≥ 3`, `k_1, k_3, k_5, k_7 ≤ 4`;
+* `blockRelations_block_and_iff_blockT`: every block of an admissible word satisfies `BlockRelations`, whose
+  solutions are `T1, …, T6`;
+* `mem_catalogue_of_admissible`: every admissible word is one of the 36 block pairs;
+* `isRadialWord_wordAct`: relabelling by a square symmetry acts on radial words by `wordAct`;
+* `transfer`: each symmetry of the square maps the eight-boundary normal form to a normal form,
+  with the labels permuted by `labelPerm`;
+* `classes_partition_catalogue`: the 36 words split into the orbits `R1, …, R8`, with the 6×6 table
+  `classTable`;
+* `sarea_pos_of_isRadialWord_rep_R3`: the `R3` representative gives the five orientation conditions of
+  `Chamber.chamber_le`.
 
-**Proof tools added here.** The angular order (the hardest general fact) is proved once for any
-`n`: `sarea_pos_trans` (orientation is transitive inside a cone, by the identity
-`[PAC]ψ(B) = [PAB]ψ(C) + [PBC]ψ(A)`), `IsConvexPolygon.cyc_pos` (cyclic convexity),
-`radial_down` (the positive signs from an interior point form an initial segment) and
-`iff_le_card_filter` (counting); `complementary_of_isRadialWord` derives (2) from (1). For the
-octagon: `IsRadialWord.pos_of`/`nonpos_of` read signs off a word; `pos_of_not_quad` (outside a
-side quadrilateral means beyond its chord); `symOf` (the symmetry inducing each relabelling),
+The hypotheses on `O` are the consequences of "every triangle has area at least `A₀`" that the
+argument uses: `O` strictly inside the strictly convex octagon, outside the four closed side
+quadrilaterals, and no ray `OV_i` parallel or antiparallel to another (`RaysNondegenerate`). The
+cover is a cover by necessary conditions; realizability of the 36 words is not claimed.
+
+## Implementation notes
+
+The angular order (the hardest general fact) is proved once for any `n`: `sarea_pos_trans`
+(orientation is transitive inside a cone, by the identity `[PAC]ψ(B) = [PAB]ψ(C) + [PBC]ψ(A)`),
+`IsConvexPolygon.cyc_pos` (cyclic convexity), `radial_down` (the positive signs from an interior
+point form an initial segment) and `iff_le_card_filter` (counting);
+`complementary_of_isRadialWord` derives `Complementary` from `IsRadialWord`. For the octagon:
+`IsRadialWord.pos_of`/`nonpos_of` read signs off a word; `pos_of_not_quad` (outside a side
+quadrilateral means beyond its chord); `symOf` (the symmetry inducing each relabelling),
 `relabel_spec`, `extLabel`, `transfer` (a normal form carried by a symmetry, with the same least
 area) and `isRadialWord_transfer`; `catalogue_class` and `exists_wordAct_eq` (finite checks).
-
-Stale text (not formalized): lines 176–179 (the global normalization "still requires" a theorem;
-superseded by `UNRESTRICTED.md`); the table column "Hand bound currently available" lists R6 as
-"at most `7/128`", while `R6_BOUND.md` proves the strict bound (`R6Bound.mainTheorem`).
 -/
 
 @[expose] public section
@@ -65,11 +66,6 @@ noncomputable section
 namespace Heilbronn.Nine.RadialCatalogue
 
 /-! ### Polygons (any number of vertices) -/
-
-/-- `V 0, …, V (n-1)` are the vertices of a strictly convex polygon in counterclockwise order:
-every triple of vertices taken in increasing index order turns counterclockwise. -/
-def IsConvexPolygon {n : ℕ} (V : Fin n → Point) : Prop :=
-  ∀ i j k : Fin n, i < j → j < k → 0 < sarea (V i) (V j) (V k)
 
 /-- `O` lies strictly inside the counterclockwise polygon `V`: strictly to the left of every
 directed edge `V i → V (i+1)` (indices mod `n`). -/
@@ -90,16 +86,16 @@ def RaysNondegenerate {n : ℕ} (V : Fin n → Point) (O : Point) : Prop :=
 
 /-- The radial word of `O` with respect to the polygon `V`: `k i` is the number of `j ∈
 {1, …, n-1}` with `det(V i - O, V (i+j) - O) > 0`, the number of subsequent rays strictly before
-the direction `-OV_i` (`RADIAL_CATALOGUE.md` lines 26–28). -/
+the direction `-OV_i`. -/
 def radialWord {n : ℕ} (V : Fin n → Point) (O : Point) (i : Fin n) : ℕ :=
   (Finset.univ.filter fun j : Fin n => 0 < (j : ℕ) ∧ 0 < sarea O (V i) (V (i + j))).card
 
-/-- The geometric meaning (1) of a radial word: for every `i` and `1 ≤ j ≤ n-1`,
+/-- The geometric meaning of a radial word: for every `i` and `1 ≤ j ≤ n-1`,
 `det(V i - O, V (i+j) - O) > 0 ↔ j ≤ k i` (indices mod `n`). -/
 def IsRadialWord {n : ℕ} (V : Fin n → Point) (O : Point) (k : Fin n → ℕ) : Prop :=
   ∀ i j : Fin n, 0 < (j : ℕ) → (0 < sarea O (V i) (V (i + j)) ↔ (j : ℕ) ≤ k i)
 
-/-- The complementary relation (2): `j ≤ k i ↔ n - j > k (i+j)` for `1 ≤ j ≤ n-1`. -/
+/-- The complementary relation: `j ≤ k i ↔ n - j > k (i+j)` for `1 ≤ j ≤ n-1`. -/
 def Complementary {n : ℕ} (k : Fin n → ℕ) : Prop :=
   ∀ i j : Fin n, 0 < (j : ℕ) → ((j : ℕ) ≤ k i ↔ k (i + j) < n - (j : ℕ))
 
@@ -119,24 +115,22 @@ def OutsideSideQuads (V : Fin 8 → Point) (O : Point) : Prop :=
     ¬ InClosedPolygon ![V 4, V 5, V 6, V 7] O ∧ ¬ InClosedPolygon ![V 6, V 7, V 0, V 1] O
 
 /-- The central region `int conv(V₀,V₃,V₄,V₇) ∩ int conv(V₁,V₂,V₅,V₆)` (for the eight-boundary
-octagon: `int conv(A,D,E,H) ∩ int conv(B,C,F,G)`, `EIGHT_BOUNDARY.md` (11)). -/
+octagon: `int conv(A,D,E,H) ∩ int conv(B,C,F,G)`). -/
 def InCentralRegion (V : Fin 8 → Point) (O : Point) : Prop :=
   InPolygon ![V 0, V 3, V 4, V 7] O ∧ InPolygon ![V 1, V 2, V 5, V 6] O
 
-/-- The ear bounds (3): `2 ≤ k_i ≤ 5` for every `i`. -/
+/-- The ear bounds: `2 ≤ k_i ≤ 5` for every `i`. -/
 def EarBounds (k : Word) : Prop :=
   ∀ i, 2 ≤ k i ∧ k i ≤ 5
 
-/-- The side-quadrilateral bounds (4): `k₀, k₂, k₄, k₆ ≥ 3` and `k₁, k₃, k₅, k₇ ≤ 4`. -/
+/-- The side-quadrilateral bounds: `k₀, k₂, k₄, k₆ ≥ 3` and `k₁, k₃, k₅, k₇ ≤ 4`. -/
 def SideQuadBounds (k : Word) : Prop :=
   3 ≤ k 0 ∧ 3 ≤ k 2 ∧ 3 ≤ k 4 ∧ 3 ≤ k 6 ∧ k 1 ≤ 4 ∧ k 3 ≤ 4 ∧ k 5 ≤ 4 ∧ k 7 ≤ 4
 
-/-- A word satisfying the necessary conditions (2)–(4). -/
+/-- A word satisfying the necessary conditions `Complementary`, `EarBounds` and
+`SideQuadBounds`. -/
 def Admissible (k : Word) : Prop :=
   Complementary k ∧ EarBounds k ∧ SideQuadBounds k
-
-instance (k : Word) : Decidable (Admissible k) := by
-  unfold Admissible Complementary EarBounds SideQuadBounds; infer_instance
 
 /-! ### Blocks and the 36-word catalogue -/
 
@@ -146,17 +140,15 @@ def block (k : Word) (i : Fin 2) : Fin 4 → ℕ :=
   ![k (Fin.ofNat 8 (2 * i.val)), k (Fin.ofNat 8 (2 * i.val + 1)),
     k (Fin.ofNat 8 (2 * i.val + 4)), k (Fin.ofNat 8 (2 * i.val + 5))]
 
-/-- The block relations (5): `a ≥ 4 ↔ c = 3`, `b = 4 ↔ d ≤ 3`, `b = 2 ↔ c = 5`,
-`d = 2 ↔ a = 5`. -/
+/-- The block relations: `a ≥ 4 ↔ c = 3`, `b = 4 ↔ d ≤ 3`, `b = 2 ↔ c = 5`, `d = 2 ↔ a = 5`. -/
 def BlockRelations (t : Fin 4 → ℕ) : Prop :=
   (4 ≤ t 0 ↔ t 2 = 3) ∧ (t 1 = 4 ↔ t 3 ≤ 3) ∧ (t 1 = 2 ↔ t 2 = 5) ∧ (t 3 = 2 ↔ t 0 = 5)
 
 instance (t : Fin 4 → ℕ) : Decidable (BlockRelations t) := by
   unfold BlockRelations; infer_instance
 
-/-- The six blocks `T1, …, T6` (1-based, as in the manuscript's table, lines 90–97):
-`T1 = (3,2,5,4)`, `T2 = (3,3,4,4)`, `T3 = (3,4,4,3)`, `T4 = (4,3,3,4)`, `T5 = (4,4,3,3)`,
-`T6 = (5,4,3,2)`; other indices give `(0,0,0,0)`. -/
+/-- The six blocks `T1, …, T6` (1-based): `T1 = (3,2,5,4)`, `T2 = (3,3,4,4)`, `T3 = (3,4,4,3)`,
+`T4 = (4,3,3,4)`, `T5 = (4,4,3,3)`, `T6 = (5,4,3,2)`; other indices give `(0,0,0,0)`. -/
 def blockT : ℕ → Fin 4 → ℕ
   | 1 => ![3, 2, 5, 4]
   | 2 => ![3, 3, 4, 4]
@@ -167,7 +159,7 @@ def blockT : ℕ → Fin 4 → ℕ
   | _ => ![0, 0, 0, 0]
 
 /-- The word with first block `T_i = (k₀, k₁, k₄, k₅)` and second block `T_j = (k₂, k₃, k₆, k₇)`
-(1-based block indices, the row and column of the manuscript's 6×6 table). -/
+(1-based block indices, the row and column of `classTable`). -/
 def ofBlocks (i j : ℕ) : Word :=
   ![blockT i 0, blockT i 1, blockT j 0, blockT j 1, blockT i 2, blockT i 3, blockT j 2, blockT j 3]
 
@@ -175,18 +167,19 @@ def ofBlocks (i j : ℕ) : Word :=
 def blockPairs : List (ℕ × ℕ) :=
   (List.range' 1 6).flatMap fun i => (List.range' 1 6).map fun j => (i, j)
 
-/-- The 36 words of the cover (§2), in the order of `blockPairs`. -/
+/-- The 36 words of the cover, in the order of `blockPairs`. -/
 def catalogue : List Word :=
   blockPairs.map fun p => ofBlocks p.1 p.2
 
 /-! ### The square-symmetry action and the eight classes -/
 
-/-- The label permutation (6) induced by a square symmetry: a rotation `ρ_r` relabels
+/-- The label permutation induced by a square symmetry: a rotation `ρ_r` relabels
 `V'_i = V_{i+2r}`, a reflection `σ_r` relabels `V'_i = V_{1-i+2r}` (indices mod 8). -/
 def labelPerm (refl : Bool) (r : Fin 4) (i : Fin 8) : Fin 8 :=
   if refl then 1 - i + Fin.ofNat 8 (2 * r.val) else i + Fin.ofNat 8 (2 * r.val)
 
-/-- The action (6) on words: `(ρ_r k)_i = k_{i+2r}` and `(σ_r k)_i = 7 - k_{1-i+2r}`. -/
+/-- The action of the square symmetries on words: `(ρ_r k)_i = k_{i+2r}` and
+`(σ_r k)_i = 7 - k_{1-i+2r}`. -/
 def wordAct (refl : Bool) (r : Fin 4) (k : Word) : Word :=
   fun i => if refl then 7 - k (labelPerm refl r i) else k (labelPerm refl r i)
 
@@ -194,7 +187,7 @@ def wordAct (refl : Bool) (r : Fin 4) (k : Word) : Word :=
 def orbit (k : Word) : List Word :=
   [false, true].flatMap fun refl => (List.finRange 4).map fun r => wordAct refl r k
 
-/-- The eight radial classes of `RADIAL_CATALOGUE.md` §3. -/
+/-- The eight radial classes `R1, …, R8`. -/
 inductive RClass
   | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8
   deriving DecidableEq, Repr
@@ -202,7 +195,7 @@ inductive RClass
 instance : Fintype RClass :=
   ⟨⟨{.R1, .R2, .R3, .R4, .R5, .R6, .R7, .R8}, by decide⟩, fun c => by cases c <;> decide⟩
 
-/-- The class representatives (`RADIAL_CATALOGUE.md` lines 126–135). -/
+/-- The class representatives. -/
 def rep : RClass → Word
   | .R1 => ![3, 2, 3, 2, 5, 4, 5, 4]
   | .R2 => ![3, 2, 3, 3, 5, 4, 4, 4]
@@ -219,15 +212,15 @@ def orbitSize : RClass → ℕ
   | _ => 4
 
 /-- `w` is in class `c`: the image of the representative of `c` under one of the eight
-symmetries (6). -/
+symmetries (`wordAct`). -/
 def InClass (c : RClass) (w : Word) : Prop :=
   ∃ refl : Bool, ∃ r : Fin 4, wordAct refl r (rep c) = w
 
 instance (c : RClass) (w : Word) : Decidable (InClass c w) := by
   unfold InClass; infer_instance
 
-/-- The class table of the 36 block pairs (`RADIAL_CATALOGUE.md` lines 142–149): row `i` is the
-first block `(k₀,k₁,k₄,k₅) = T_i`, column `j` the second block `(k₂,k₃,k₆,k₇) = T_j`. -/
+/-- The class table of the 36 block pairs: row `i` is the first block `(k₀,k₁,k₄,k₅) = T_i`,
+column `j` the second block `(k₂,k₃,k₆,k₇) = T_j`. -/
 def classTable : ℕ → ℕ → RClass
   | 1, 1 => .R1 | 1, 2 => .R2 | 1, 3 => .R3 | 1, 4 => .R4 | 1, 5 => .R2 | 1, 6 => .R1
   | 2, 1 => .R2 | 2, 2 => .R5 | 2, 3 => .R6 | 2, 4 => .R7 | 2, 5 => .R5 | 2, 6 => .R2
@@ -240,10 +233,6 @@ def classTable : ℕ → ℕ → RClass
 /-! ### The angular order around an interior point (general lemmas) -/
 
 section General
-
-theorem sarea_self₁₂ (p q : Point) : sarea p p q = 0 := by unfold sarea; ring
-theorem sarea_self₂₃ (p q : Point) : sarea p q q = 0 := by unfold sarea; ring
-theorem sarea_self₁₃ (p q : Point) : sarea p q p = 0 := by unfold sarea; ring
 
 /-- **Orientation is transitive inside a cone.** Let `ψ(X) = [PQX] + [RPX]` (a linear function of
 `X - P`, positive on the open cone at `P` spanned by `Q - P` and `R - P` when `[PQR]`… is a
@@ -319,17 +308,17 @@ theorem radial_down {V : Fin n → Point} {O : Point} (hn : 3 ≤ n) (hV : IsCon
         sarea (V (Fin.ofNat n (i.val + (n - 1)))) (V i) (V (Fin.ofNat n (i.val + c))) := by
     intro c hc hcn
     rcases Nat.lt_or_ge 1 c with h1 | h1
-    · have e1 := hV.cyc_pos i.val 1 c one_pos h1 hcn
+    · have e1 := IsConvexPolygon.cyc_pos hV i.val 1 c one_pos h1 hcn
       rw [hP] at e1
       have e2 : 0 ≤ sarea (V (Fin.ofNat n (i.val + (n - 1)))) (V i) (V (Fin.ofNat n (i.val + c))) := by
         rcases Nat.lt_or_ge (c + 1) n with h3 | h3
-        · have := hV.cyc_pos (i.val + (n - 1)) 1 (c + 1) one_pos (by omega) h3
+        · have := IsConvexPolygon.cyc_pos hV (i.val + (n - 1)) 1 (c + 1) one_pos (by omega) h3
           rw [hRP, hRc] at this; exact this.le
         · rw [show i.val + c = i.val + (n - 1) by omega, sarea_self₁₃]
       linarith
     · have hc1 : c = 1 := by omega
       subst hc1
-      have := hV.cyc_pos (i.val + (n - 1)) 1 2 one_pos one_lt_two (by omega)
+      have := IsConvexPolygon.cyc_pos hV (i.val + (n - 1)) 1 2 one_pos one_lt_two (by omega)
       rw [hRP, hRc] at this
       rw [sarea_self₂₃]; linarith
   have hψO : 0 < sarea (V i) (V (Fin.ofNat n (i.val + 1))) O +
@@ -340,7 +329,7 @@ theorem radial_down {V : Fin n → Point} {O : Point} (hn : 3 ≤ n) (hV : IsCon
     rw [hRP] at h2
     rw [hP] at h1
     linarith
-  have hAB := hV.cyc_pos i.val j j' hj hjj hj'
+  have hAB := IsConvexPolygon.cyc_pos hV i.val j j' hj hjj hj'
   rw [hP] at hAB
   have hBC : 0 < sarea (V i) (V (Fin.ofNat n (i.val + j'.val))) O := by
     rw [sarea_cycle]; exact h
@@ -387,8 +376,8 @@ theorem iff_le_card_filter (p : Fin n → Prop) [DecidablePred p] (hp0 : ∀ j, 
 
 end General
 
-/-- The complementary relation (2) follows from the geometric meaning (1) when no two rays are
-parallel or antiparallel. -/
+/-- `Complementary` follows from `IsRadialWord` when no two rays are parallel or
+antiparallel. -/
 theorem complementary_of_isRadialWord {n : ℕ} {V : Fin n → Point} {O : Point} {k : Fin n → ℕ}
     (hnd : RaysNondegenerate V O) (hk : IsRadialWord V O k) : Complementary k := by
   intro i j hj
@@ -442,16 +431,13 @@ theorem IsRadialWord.nonpos_of {V : Fin 8 → Point} {O : Point} {k : Word}
   have := this.1 hc
   omega
 
-/-! ### §1. Encoding the directions -/
+/-! ### Encoding the directions -/
 
-/-- **Claim** (`RADIAL_CATALOGUE:claim-encoding`). For `O` strictly inside a strictly convex
-counterclockwise polygon, with no two rays `OV_i, OV_j` parallel or antiparallel, the rays occur
-in the counterclockwise order of the vertices, so the radial word is well defined: it satisfies
-the geometric meaning (1) and the complementary relation (2). (Stated for any `n`; the manuscript
-uses `n = 8`.)
-`docs/proof/nine/RADIAL_CATALOGUE.md`, lines 21–42.
-Uses: standard fact (angular order of the rays from an interior point of a convex polygon). -/
-theorem claim_encoding {n : ℕ} (V : Fin n → Point) (O : Point) (hV : IsConvexPolygon V)
+/-- For `O` strictly inside a strictly convex counterclockwise polygon, with no two rays
+`OV_i, OV_j` parallel or antiparallel, the rays occur in the counterclockwise order of the
+vertices, so the radial word is well defined: it satisfies `IsRadialWord` and `Complementary`.
+(Stated for any `n`.) -/
+theorem radialWord_spec {n : ℕ} (V : Fin n → Point) (O : Point) (hV : IsConvexPolygon V)
     (hO : InPolygon V O) (hnd : RaysNondegenerate V O) :
     IsRadialWord V O (radialWord V O) ∧ Complementary (radialWord V O) := by
   rcases Nat.lt_or_ge n 3 with hn | hn
@@ -500,12 +486,11 @@ theorem pos_of_not_quad {V : Fin 8 → Point} {O : Point} (hO : InPolygon V O) (
   · simp [finRotate_apply] at hi
     linarith [sarea_swap₂₃ O (V p) (V (p + 3)), sarea_cycle O (V (p + 3)) (V p)]
 
-/-- **Claim** (`RADIAL_CATALOGUE:claim-side-quad-bounds`). Under the same hypotheses, (4):
-`k₀, k₂, k₄, k₆ ≥ 3` and `k₁, k₃, k₅, k₇ ≤ 4` (`O` is on the inner side of the chords
-`V₀V₃, V₂V₅, V₄V₇, V₆V₁`; then (2) with `j = 3`).
-`docs/proof/nine/RADIAL_CATALOGUE.md`, lines 58–66.
-Uses: RADIAL_CATALOGUE:claim-encoding. -/
-theorem claim_side_quad_bounds (V : Fin 8 → Point) (O : Point) (_hV : IsConvexPolygon V)
+/-- If `O` is strictly inside the convex octagon, outside its four closed side quadrilaterals, and
+no rays are degenerate, its radial word satisfies `SideQuadBounds`: `k₀, k₂, k₄, k₆ ≥ 3` and
+`k₁, k₃, k₅, k₇ ≤ 4` (`O` is on the inner side of the chords `V₀V₃, V₂V₅, V₄V₇, V₆V₁`; then the
+complementary relation with `j = 3`). -/
+theorem sideQuadBounds_of_outsideSideQuads (V : Fin 8 → Point) (O : Point) (_hV : IsConvexPolygon V)
     (hO : InPolygon V O) (hnd : RaysNondegenerate V O) (hq : OutsideSideQuads V O) {k : Word}
     (hk : IsRadialWord V O k) : SideQuadBounds k := by
   have hc := complementary_of_isRadialWord hnd hk
@@ -524,15 +509,13 @@ theorem claim_side_quad_bounds (V : Fin 8 → Point) (O : Point) (_hV : IsConvex
   simp only [Fin.isValue, show ((3 : Fin 8) : ℕ) = 3 from rfl] at c0 c2 c4 c6
   exact ⟨q0, q2, q4, q6, by omega, by omega, by omega, by omega⟩
 
-/-- **Claim** (`RADIAL_CATALOGUE:claim-ear-bounds`). If `O` is strictly inside the convex octagon,
-outside its four closed side quadrilaterals (which contain the eight ears `V_iV_{i+1}V_{i+2}`),
-and no rays are degenerate, then its radial word satisfies (3): `2 ≤ k_i ≤ 5`.
-`docs/proof/nine/RADIAL_CATALOGUE.md`, lines 44–56.
-Uses: RADIAL_CATALOGUE:claim-encoding. -/
-theorem claim_ear_bounds (V : Fin 8 → Point) (O : Point) (hV : IsConvexPolygon V)
+/-- If `O` is strictly inside the convex octagon, outside its four closed side quadrilaterals
+(which contain the eight ears `V_iV_{i+1}V_{i+2}`), and no rays are degenerate, then its radial
+word satisfies `EarBounds`: `2 ≤ k_i ≤ 5`. -/
+theorem earBounds_of_outsideSideQuads (V : Fin 8 → Point) (O : Point) (hV : IsConvexPolygon V)
     (hO : InPolygon V O) (hnd : RaysNondegenerate V O) (hq : OutsideSideQuads V O) {k : Word}
     (hk : IsRadialWord V O k) : EarBounds k := by
-  have hs := claim_side_quad_bounds V O hV hO hnd hq hk
+  have hs := sideQuadBounds_of_outsideSideQuads V O hV hO hnd hq hk
   have hc := complementary_of_isRadialWord hnd hk
   obtain ⟨s0, s2, s4, s6, s1, s3, s5, s7⟩ := hs
   have c0 := hc 0 2 (by decide); have c1 := hc 1 2 (by decide)
@@ -543,14 +526,12 @@ theorem claim_ear_bounds (V : Fin 8 → Point) (O : Point) (hV : IsConvexPolygon
   intro i
   fin_cases i <;> simp only [Fin.zero_eta, Fin.isValue, Fin.mk_one, Fin.reduceFinMk] <;> omega
 
-/-! ### §2. The six blocks and the 36 words -/
+/-! ### The six blocks and the 36 words -/
 
-/-- **Claim** (`RADIAL_CATALOGUE:claim-six-blocks`). Every block of a word satisfying (2)–(4)
-satisfies the relations (5); and the 4-tuples with `a, c ∈ {3,4,5}`, `b, d ∈ {2,3,4}` satisfying
-(5) are exactly the six blocks `T1, …, T6`.
-`docs/proof/nine/RADIAL_CATALOGUE.md`, lines 68–103.
-Uses: RADIAL_CATALOGUE:claim-encoding (relation (2) with `j = 3, 4`). -/
-theorem claim_six_blocks :
+/-- Every block of an admissible word satisfies `BlockRelations`; and the 4-tuples with
+`a, c ∈ {3,4,5}`, `b, d ∈ {2,3,4}` satisfying `BlockRelations` are exactly the six blocks
+`T1, …, T6` (`blockT`). -/
+theorem blockRelations_block_and_iff_blockT :
     (∀ k : Word, Admissible k → ∀ i : Fin 2, BlockRelations (block k i)) ∧
       ∀ t : Fin 4 → ℕ,
         ((3 ≤ t 0 ∧ t 0 ≤ 5) ∧ (2 ≤ t 1 ∧ t 1 ≤ 4) ∧ (3 ≤ t 2 ∧ t 2 ≤ 5) ∧ (2 ≤ t 3 ∧ t 3 ≤ 4) ∧
@@ -585,20 +566,18 @@ theorem claim_six_blocks :
     · rintro ⟨i, h1, h6, rfl⟩
       interval_cases i <;> decide
 
-/-- **Claim** (`RADIAL_CATALOGUE:claim-36-cover`). Every word satisfying the necessary conditions
-(2)–(4) is one of the 36 block pairs. (Realizability of the 36 words is not claimed.)
-`docs/proof/nine/RADIAL_CATALOGUE.md`, lines 105–108.
-Uses: RADIAL_CATALOGUE:claim-six-blocks. -/
-theorem claim_36_cover (k : Word) (hk : Admissible k) : k ∈ catalogue := by
-  have hb := claim_six_blocks.1 k hk
+/-- Every admissible word is one of the 36 block pairs (`catalogue`). (Realizability of the 36
+words is not claimed.) -/
+theorem mem_catalogue_of_admissible (k : Word) (hk : Admissible k) : k ∈ catalogue := by
+  have hb := blockRelations_block_and_iff_blockT.1 k hk
   obtain ⟨hc, he, s0, s2, s4, s6, s1, s3, s5, s7⟩ := hk
   have e0 := he 0; have e1 := he 1; have e2 := he 2; have e3 := he 3
   have e4 := he 4; have e5 := he 5; have e6 := he 6; have e7 := he 7
   have b0 : block k 0 = ![k 0, k 1, k 4, k 5] := by funext i; fin_cases i <;> rfl
   have b1 : block k 1 = ![k 2, k 3, k 6, k 7] := by funext i; fin_cases i <;> rfl
-  obtain ⟨i, hi1, hi6, hi⟩ := (claim_six_blocks.2 (block k 0)).1 ⟨by rw [b0]; simp; omega,
+  obtain ⟨i, hi1, hi6, hi⟩ := (blockRelations_block_and_iff_blockT.2 (block k 0)).1 ⟨by rw [b0]; simp; omega,
     by rw [b0]; simp; omega, by rw [b0]; simp; omega, by rw [b0]; simp; omega, hb 0⟩
-  obtain ⟨j, hj1, hj6, hj⟩ := (claim_six_blocks.2 (block k 1)).1 ⟨by rw [b1]; simp; omega,
+  obtain ⟨j, hj1, hj6, hj⟩ := (blockRelations_block_and_iff_blockT.2 (block k 1)).1 ⟨by rw [b1]; simp; omega,
     by rw [b1]; simp; omega, by rw [b1]; simp; omega, by rw [b1]; simp; omega, hb 1⟩
   have hkij : k = ofBlocks i j := by
     funext m
@@ -617,19 +596,16 @@ theorem claim_36_cover (k : Word) (hk : Admissible k) : k ∈ catalogue := by
   simp only [catalogue, List.mem_map]
   exact ⟨(i, j), by simp [blockPairs]; omega, rfl⟩
 
-/-! ### §3. Square symmetries -/
+/-! ### Square symmetries -/
 
-/-- **Claim** (`RADIAL_CATALOGUE:claim-symmetry-action`). Relabelling by a square symmetry acts on
-radial words by (6). Precisely: let `φ` be a map of the plane multiplying every signed area by
-`+1` (a rotation, `refl = false`) or by `-1` (a reflection, `refl = true`); if `k` is the radial
-word of `O` with respect to `V` (no degenerate rays), then `wordAct refl r k` is the radial word of
-`φ O` with respect to the relabelled octagon `V'_i = φ (V (labelPerm refl r i))`
-(`V'_i = φ V_{i+2r}`, resp. `φ V_{1-i+2r}`). The reflection reverses the cyclic order, whence
-`k ↦ 7 - k`. The concrete relabelling induced by each symmetry of the square on the eight-boundary
-normal form is `EIGHT_BOUNDARY:claim-symmetry-relabel`.
-`docs/proof/nine/RADIAL_CATALOGUE.md`, lines 110–121.
-Uses: RADIAL_CATALOGUE:claim-encoding (relation (2)). -/
-theorem claim_symmetry_action (V : Fin 8 → Point) (O : Point) (hnd : RaysNondegenerate V O)
+/-- Relabelling by a square symmetry acts on radial words by `wordAct`. Precisely: let `φ` be a
+map of the plane multiplying every signed area by `+1` (a rotation, `refl = false`) or by `-1` (a
+reflection, `refl = true`); if `k` is the radial word of `O` with respect to `V` (no degenerate
+rays), then `wordAct refl r k` is the radial word of `φ O` with respect to the relabelled octagon
+`V'_i = φ (V (labelPerm refl r i))` (`V'_i = φ V_{i+2r}`, resp. `φ V_{1-i+2r}`). The reflection
+reverses the cyclic order, whence `k ↦ 7 - k`. The concrete relabelling induced by each symmetry
+of the square on the eight-boundary normal form is `relabel_spec`. -/
+theorem isRadialWord_wordAct (V : Fin 8 → Point) (O : Point) (hnd : RaysNondegenerate V O)
     (refl : Bool) (r : Fin 4) (φ : Point → Point)
     (hφ : ∀ p q t, sarea (φ p) (φ q) (φ t) = (if refl then -1 else 1) * sarea p q t)
     {k : Word} (hk : IsRadialWord V O k) :
@@ -652,7 +628,7 @@ theorem claim_symmetry_action (V : Fin 8 → Point) (O : Point) (hnd : RaysNonde
     rw [h1, h2]
     constructor <;> intro <;> omega
 
-/-- The square symmetry inducing the relabelling `(refl, r)` of (6): the rotations
+/-- The square symmetry inducing the relabelling `(refl, r)`: the rotations
 `id, (y,1-x), (1-x,1-y), (1-y,x)` for `r = 0, …, 3`, and the reflections
 `(y,x), (1-x,y), (1-y,1-x), (x,1-y)`. -/
 def symOf (refl : Bool) (r : Fin 4) : SquareSymmetry :=
@@ -705,30 +681,6 @@ theorem relabel_spec (refl : Bool) (r : Fin 4) {a b c d e f g h : ℝ}
         linarith, fun i => ?_⟩
     fin_cases i <;> simp [EightBoundary.octagon, labelPerm, symOf, SquareSymmetry.apply]
 
-/-- **Claim** (`RADIAL_CATALOGUE:claim-symmetry-relabel`, named here). Each of the eight
-symmetries `φ` of the square maps the eight-boundary normal form (`EightBoundary.EightAnchors`)
-to a normal form whose labels are permuted by (6): there are new anchors and `(refl, r)` with
-`V'_i = φ (V (labelPerm refl r i))`, where `refl` records whether `φ` reverses orientation.
-"The odd index in the reflection formula keeps the paired vertices on their corresponding square
-sides." Together with `claim_symmetry_action` this is the action of the square symmetries on the
-words of the normal form.
-`docs/proof/nine/RADIAL_CATALOGUE.md`, lines 110–121.
-Uses: standard fact (the symmetries of the square permute its sides). -/
-theorem claim_symmetry_relabel (φ : SquareSymmetry) {a b c d e f g h : ℝ}
-    (hA : EightBoundary.EightAnchors a b c d e f g h) :
-    ∃ (a' b' c' d' e' f' g' h' : ℝ) (refl : Bool) (r : Fin 4),
-      EightBoundary.EightAnchors a' b' c' d' e' f' g' h' ∧
-      (∀ p q t, sarea (φ.apply p) (φ.apply q) (φ.apply t) =
-        (if refl then -1 else 1) * sarea p q t) ∧
-      ∀ i, EightBoundary.octagon a' b' c' d' e' f' g' h' i =
-        φ.apply (EightBoundary.octagon a b c d e f g h (labelPerm refl r i)) := by
-  obtain ⟨refl, r, rfl⟩ : ∃ refl r, symOf refl r = φ := by
-    rcases φ with ⟨_ | _, _ | _, _ | _⟩
-    exacts [⟨false, 0, rfl⟩, ⟨true, 3, rfl⟩, ⟨true, 1, rfl⟩, ⟨false, 2, rfl⟩, ⟨true, 0, rfl⟩,
-      ⟨false, 1, rfl⟩, ⟨false, 3, rfl⟩, ⟨true, 2, rfl⟩]
-  obtain ⟨a', b', c', d', e', f', g', h', hA', hoct⟩ := relabel_spec refl r hA
-  exact ⟨a', b', c', d', e', f', g', h', refl, r, hA', symOf_sarea refl r, hoct⟩
-
 /-! ### Transfer of a normal-form configuration under a square symmetry -/
 
 /-- The relabelling of the nine points `A, …, H, O`: the octagon labels move by `labelPerm`, the
@@ -758,20 +710,20 @@ theorem eightConfig_relabel {refl : Bool} {r : Fin 4} {φ : SquareSymmetry}
     rfl
 
 theorem inOpenSquare_apply (φ : SquareSymmetry) {O : Point}
-    (hO : EightBoundary.InOpenSquare O) : EightBoundary.InOpenSquare (φ.apply O) := by
+    (hO : InOpenSquare O) : InOpenSquare (φ.apply O) := by
   obtain ⟨x, y⟩ := O
   obtain ⟨h1, h2, h3, h4⟩ := hO
   rcases φ with ⟨_ | _, _ | _, _ | _⟩ <;>
-    simp only [SquareSymmetry.apply, EightBoundary.InOpenSquare, Bool.false_eq_true,
+    simp only [SquareSymmetry.apply, InOpenSquare, Bool.false_eq_true,
       ↓reduceIte] <;> refine ⟨?_, ?_, ?_, ?_⟩ <;> simp only at h1 h2 h3 h4 ⊢ <;> linarith
 
-/-- **Transfer.** For each relabelling `(refl, r)` of (6), the symmetry `symOf refl r` carries the
+/-- **Transfer.** For each relabelling `(refl, r)`, the symmetry `symOf refl r` carries the
 normal form to a normal form with labels permuted by `labelPerm refl r` and the ninth point fixed;
 the least area is unchanged. -/
 theorem transfer (refl : Bool) (r : Fin 4) {a b c d e f g h : ℝ} {O : Point}
-    (hA : EightBoundary.EightAnchors a b c d e f g h) (hO : EightBoundary.InOpenSquare O) :
+    (hA : EightBoundary.EightAnchors a b c d e f g h) (hO : InOpenSquare O) :
     ∃ a' b' c' d' e' f' g' h' : ℝ, EightBoundary.EightAnchors a' b' c' d' e' f' g' h' ∧
-      EightBoundary.InOpenSquare ((symOf refl r).apply O) ∧
+      InOpenSquare ((symOf refl r).apply O) ∧
       (∀ i, EightBoundary.octagon a' b' c' d' e' f' g' h' i =
         (symOf refl r).apply (EightBoundary.octagon a b c d e f g h (labelPerm refl r i))) ∧
       EightBoundary.eightConfig a' b' c' d' e' f' g' h' ((symOf refl r).apply O) =
@@ -797,15 +749,13 @@ theorem isRadialWord_transfer {refl : Bool} {r : Fin 4} {a b c d e f g h a' b' c
       fun i => (symOf refl r).apply (EightBoundary.octagon a b c d e f g h (labelPerm refl r i)) :=
     funext hoct
   rw [e]
-  exact claim_symmetry_action _ O hnd refl r _ (symOf_sarea refl r) hk
+  exact isRadialWord_wordAct _ O hnd refl r _ (symOf_sarea refl r) hk
 
-/-- **Claim** (`RADIAL_CATALOGUE:claim-eight-classes`). The 36 words split into the eight
-disjoint orbits `R1, …, R8` of the action (6), of sizes `4, 8, 4, 4, 4, 4, 4, 4`: the block pair
-`(i, j)` lies in class `classTable i j`; every orbit lies in the catalogue; the orbit sizes are
-`orbitSize`; and the classes are pairwise disjoint.
-`docs/proof/nine/RADIAL_CATALOGUE.md`, lines 123–152.
-Uses: RADIAL_CATALOGUE:claim-symmetry-action (finite check of (6)). -/
-theorem claim_eight_classes :
+/-- The 36 words split into the eight disjoint orbits `R1, …, R8` of the action `wordAct`, of
+sizes `4, 8, 4, 4, 4, 4, 4, 4`: the block pair `(i, j)` lies in class `classTable i j`; every
+orbit lies in the catalogue; the orbit sizes are `orbitSize`; and the classes are pairwise
+disjoint. -/
+theorem classes_partition_catalogue :
     (∀ i j, 1 ≤ i → i ≤ 6 → 1 ≤ j → j ≤ 6 → InClass (classTable i j) (ofBlocks i j)) ∧
       (∀ c w, InClass c w → w ∈ catalogue) ∧
       (∀ c, (orbit (rep c)).dedup.length = orbitSize c) ∧
@@ -826,10 +776,10 @@ theorem catalogue_class (w : Word) (hw : w ∈ catalogue) : ∃ c, InClass c w :
   obtain ⟨⟨i, j⟩, hij, rfl⟩ := hw
   simp only [blockPairs, List.mem_flatMap, List.mem_range', List.mem_map, Prod.mk.injEq] at hij
   obtain ⟨i', hi', j', hj', rfl, rfl⟩ := hij
-  exact ⟨classTable i' j', claim_eight_classes.1 i' j' (by omega) (by omega) (by omega)
+  exact ⟨classTable i' j', classes_partition_catalogue.1 i' j' (by omega) (by omega) (by omega)
     (by omega)⟩
 
-/-- Two words of one class are related by one of the relabellings (6). -/
+/-- Two words of one class are related by one of the relabellings `wordAct`. -/
 theorem exists_wordAct_eq (c : RClass) (w w' : Word) (hw : InClass c w) (hw' : InClass c w') :
     ∃ refl r, wordAct refl r w = w' := by
   obtain ⟨r1, s1, rfl⟩ := hw
@@ -837,15 +787,13 @@ theorem exists_wordAct_eq (c : RClass) (w w' : Word) (hw : InClass c w) (hw' : I
   revert c r1 s1 r2 s2
   decide +kernel
 
-/-! ### §4. The class R3 -/
+/-! ### The class `R3` -/
 
-/-- **Claim** (`RADIAL_CATALOGUE:claim-R3-chamber`). The representative of R3 gives exactly the
-five interior orientation conditions of `HAND_PROOF.md` Theorem 1: `O` inside `ADH`
-(`[ADO], [DHO] > 0`), inside `CFG` (`[GCO], [OCF] > 0`), and on the side of `BE` containing the
-bottom-right corner (`[BOE] > 0`), where `A, …, H = V₀, …, V₇`.
-`docs/proof/nine/RADIAL_CATALOGUE.md`, lines 154–167.
-Uses: RADIAL_CATALOGUE:claim-encoding. -/
-theorem claim_R3_chamber (V : Fin 8 → Point) (O : Point) (hk : IsRadialWord V O (rep .R3)) :
+/-- The representative of `R3` gives the five interior orientation conditions of
+`Chamber.chamber_le`: `O` inside `ADH` (`[ADO], [DHO] > 0`), inside `CFG` (`[GCO], [OCF] > 0`),
+and on the side of `BE` containing the bottom-right corner (`[BOE] > 0`), where
+`A, …, H = V₀, …, V₇`. -/
+theorem sarea_pos_of_isRadialWord_rep_R3 (V : Fin 8 → Point) (O : Point) (hk : IsRadialWord V O (rep .R3)) :
     0 < sarea (V 0) (V 3) O ∧ 0 < sarea (V 3) (V 7) O ∧ 0 < sarea (V 1) O (V 4) ∧
       0 < sarea (V 6) (V 2) O ∧ 0 < sarea O (V 2) (V 5) := by
   refine ⟨?_, ?_, ?_, ?_, hk.pos_of 2 5 (by decide) (by decide)⟩

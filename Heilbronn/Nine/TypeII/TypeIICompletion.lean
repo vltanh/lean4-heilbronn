@@ -8,35 +8,44 @@ public import Heilbronn.Nine.TypeII.TypeIICompletion.Assembly
 public import Heilbronn.Nine.TypeII.TypeIICompletion.Unbalanced
 
 /-! # Type-II completion: capacity and the complete balanced-row exclusion
-(`docs/proof/nine/TYPE_II_COMPLETION.md`)
 
-The note strengthens global triangle capacity to containers with an arbitrary third vertex
-(Theorem 1, used by the C1 notes), gives the interval formulation of Type II (Corollary 2) and
-the enclosing-parallelogram consequence (Corollary 3), excludes the entire balanced count row
-`(2,2,2)` (Theorem 11, with `TYPE_II_BALANCED.md`, `BALANCED_RIGHT_MIXED.md` and
-`BALANCED_BOTTOM_INNER_SECTOR.md`), and excludes the triangular-right branch of the unbalanced row
-`(1,2,3)` (Theorem 14). The remaining nontriangular branch is `UNBALANCED_*.md` (other group).
+These modules (namespace `Heilbronn.Nine.TypeIICompletion`) strengthen global triangle capacity
+to containers with an arbitrary third vertex (`TypeIICompletion.card_mem_triangle_le_three`, also used in the C1
+case), give the interval formulation of Type II (`TypeIICompletion.card_mem_intervalI_le_three`) and the
+enclosing-parallelogram consequence (`TypeIICompletion.not_opposite_corners`), exclude the entire balanced
+count row `(2,2,2)` (`TypeIICompletion.minTriangleArea_lt_A₀_of_balanced_counts`, with `TypeIIBalanced`, `BalancedRightMixed`
+and `BalancedBottomInnerSector`), and exclude the triangular-right branch of the unbalanced row
+`(1,2,3)` (`TypeIICompletion.minTriangleArea_lt_A₀_of_triangular_right`). The remaining nontriangular branch is treated in the
+`Unbalanced` modules.
 
-Primary route: Theorems 11 and 12–14 (cited by `UNBALANCED_FINAL_LOWER_WEDGE.md` Theorem 2),
-Theorem 1 (C1 notes), Lemma 7 (`C1_TOP_CAP_OF_SPLIT.md`, at a general threshold), Theorem 13 and
-the §14 map (`UNBALANCED_RADIAL_SPLIT.md` Corollary 3). Off-route: Corollary 2, Corollary 3, (5)
-and (42).
+`TypeIICompletion.minTriangleArea_lt_A₀_of_balanced_counts` and `TypeIICompletion.minTriangleArea_lt_A₀_of_triangular_right` are used by the final assembly in
+`UnbalancedFinalLowerWedge`; `TypeIICompletion.minTriangleArea_lt_of_two_in_cellII` by `UnbalancedRadialSplit.atMostOne_inDBRandDER`;
+`TypeIICompletion.q_z_bounds_of_six_points`, at a general threshold, by `Heilbronn.Nine.C1.TopCapOfSplit`.
 
-Modules (namespace `Heilbronn.Nine.TypeIICompletion`):
+Modules:
 
-* `Capacity` (§§1–3): `theorem1`, `intervalI`, `eq2`, `corollary2`, `eq3`, `corollary3`,
-  `corollary3_parallelogram`;
-* `Balanced` (§§4–6): `FinalPlacement`, `eq5`, `lemma4`, `corollary5`, `theorem6`;
-* `ParameterBound` (§§6.3–7): `Zroot`, `claim_LP_identities`, `eq15`, `eq19` (the steps of
-  §§6.3–6.4 reused by Lemma 7), `lemma7` (general threshold), `eq25`;
-* `Sectors` (§§8–10): `secondShear`, `claim_second_shear`, `theorem8`,
-  `claim_containing_triangles`, `theorem9`, `claim_one_sided`, `theorem10`;
-* `Assembly` (§11): `theorem11`;
-* `Unbalanced` (§§12–14): `UnbalancedTriRight`, `theorem12`, `claim_sector_ledger`, `eq42`,
-  `theorem13`, `supportMap`, `claim_support_map`, `eq53`, `theorem14`.
+* `Capacity`: `TypeIICompletion.card_mem_triangle_le_three`, `TypeIICompletion.intervalI`,
+  `TypeIICompletion.mem_convexHull_DC_iff_mem_intervalI`, `TypeIICompletion.card_mem_intervalI_le_three`, `TypeIICompletion.exists_disjoint_intervalI_of_four`,
+  `TypeIICompletion.not_opposite_corners`, `TypeIICompletion.not_all_mem_parallelogram`;
+* `Balanced`: `TypeIICompletion.FinalPlacement`, `TypeIICompletion.Q_snd_lt_fst`,
+  `TypeIICompletion.QS_outside_EBR_inside_ECR`, `TypeIICompletion.quad_DERC_sectors`, `TypeIICompletion.triangularHull_BCRS`;
+* `ParameterBound`: `TypeIICompletion.Zroot`, `TypeIICompletion.sarea_LP_identities`,
+  `TypeIICompletion.LP_line_signs`, `TypeIICompletion.z_bounds_of_LP_isolates_D` (the steps used by `TypeIICompletion.q_z_bounds_of_six_points`),
+  `TypeIICompletion.q_z_bounds_of_six_points` (general threshold), `TypeIICompletion.q_lower_bounds_of_b_le`;
+* `Sectors`: `TypeIICompletion.secondShear`, `TypeIICompletion.secondShear_spec`,
+  `TypeIICompletion.minTriangleArea_lt_A₀_of_S_at_ER`, `TypeIICompletion.inTriangle_DES_CLR`,
+  `TypeIICompletion.minTriangleArea_lt_of_Q_above_ES_LR`, `TypeIICompletion.one_sided_bounds`, `TypeIICompletion.minTriangleArea_lt_of_Q_above_ES_below_LR`;
+* `Assembly`: `TypeIICompletion.minTriangleArea_lt_A₀_of_balanced_counts`;
+* `Unbalanced`: `TypeIICompletion.UnbalancedTriRight`, `TypeIICompletion.unbalancedTriRight_structure`,
+  `TypeIICompletion.minTriangleArea_lt_of_two_in_cellII`, `TypeIICompletion.supportMap`,
+  `TypeIICompletion.supportMap_spec`, `TypeIICompletion.supportMap_scale_bounds`, `TypeIICompletion.minTriangleArea_lt_A₀_of_triangular_right`.
 
-Thresholds (the manuscript's threshold mixing): Theorems 1, 6, 11, 12, 14 and Corollaries 2, 3,
-5 are at least area `A₀`, as stated; Lemma 4 and Theorems 9, 10 hold at doubled threshold `7/64`
-given their placements; Theorem 8 is stated at `A₀` (FLAG: its proof uses
-`TYPE_II_BALANCED.md` §6 at `79/720` and the Type-III exclusion); Lemma 7 at a general threshold.
+Thresholds: `TypeIICompletion.card_mem_triangle_le_three`, `TypeIICompletion.card_mem_intervalI_le_three`,
+`TypeIICompletion.not_opposite_corners`, `TypeIICompletion.quad_DERC_sectors`, `TypeIICompletion.triangularHull_BCRS`,
+`TypeIICompletion.minTriangleArea_lt_A₀_of_balanced_counts`, `TypeIICompletion.unbalancedTriRight_structure` and `TypeIICompletion.minTriangleArea_lt_A₀_of_triangular_right`
+assume least area at least `A₀`; `TypeIICompletion.QS_outside_EBR_inside_ECR`, `TypeIICompletion.minTriangleArea_lt_of_Q_above_ES_LR` and
+`TypeIICompletion.minTriangleArea_lt_of_Q_above_ES_below_LR` hold at doubled threshold `7/64` given their placements;
+`TypeIICompletion.minTriangleArea_lt_A₀_of_S_at_ER` is stated at `A₀` (its proof uses
+`TypeIIBalanced.not_both_central_in_DEC` at `79/720` and the Type-III exclusion);
+`TypeIICompletion.q_z_bounds_of_six_points` holds at a general threshold.
 -/

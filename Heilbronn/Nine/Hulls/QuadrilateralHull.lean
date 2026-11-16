@@ -4,47 +4,33 @@ public import Heilbronn.Nine.Setup.Families
 public import Heilbronn.Nine.Corners.CornerFamilies.SixPoint
 public import Heilbronn.Nine.Corners.OppositeCorners
 
-/-! # Quadrilateral hulls and restrictions on the low-contact families (`docs/proof/nine/QUADRILATERAL_HULL.md`)
+/-! # Quadrilateral hulls and restrictions on the low-contact families
 
-**Role.** A component on the primary route.
-* Theorem 1 is used by `SIX_BOUNDARY_SINGLE_SIDE`, `SIX_BOUNDARY_SINGLE_TOP(_COMPLETION)`,
-  `SEVEN_BOUNDARY_CAPS`, `C1_ZERO_LOWER`, `C1_ONE_LOWER_TOP_CAP`, `SIX_BOUNDARY_HULL` and
-  `ONE_CORNER`.
-* Theorem 2 and Corollary 3 are used by `C1_ZERO_LOWER`.
-* Theorem 4 is used by `SIX_BOUNDARY_SINGLE_SIDE`, `SIX_BOUNDARY_SINGLE_TOP(_COMPLETION)`,
-  `SIX_BOUNDARY_EXTERIOR` and `SEVEN_BOUNDARY_CAPS`.
-* §4 is used by `SIX_BOUNDARY_HULL` and `ONE_CORNER`.
-* Lemma 5 is used by `SIX_BOUNDARY_HULL` (lines 181-182).
+Small point sets with a quadrilateral hull, and the normal forms N (`NAnchors`/`nConfig`) and C1
+(`C1Anchors`/`c1Config`) of `Setup/Families.lean`. `K = 4 + 2√3` and `Γ = (11 + 3√5)/2` are the
+constants of `twoInteriorPointLemma` and
+`CornerFamilies.sixPointTriangularHullTheorem` (written out). A convex quadrilateral `ABCD` is
+given by its vertices in counterclockwise order (`ConvexQuad`). "The six (seven) points have that
+quadrilateral hull" means that the other points lie in the closed quadrilateral
+(`InClosedQuad`). "Contains" means strictly inside (`InQuad`). `quadArea` is the area,
+`(sarea A B C + sarea A C D)/2`.
 
-**Setting.** Small point sets with a quadrilateral hull, and the normal forms N
-(`NAnchors`/`nConfig`) and C1 (`C1Anchors`/`c1Config`) of `Setup/Families.lean`.
-`K = 4 + 2√3` and `Γ = (11 + 3√5)/2` are the triangular-hull constants of `CORNER_FAMILIES.md`
-(written out). A convex quadrilateral `ABCD` is given by its vertices in counterclockwise order
-(`ConvexQuad`). "The six (seven) points have that quadrilateral hull" means that the other points
-lie in the closed quadrilateral (`InClosedQuad`). "Contains" means strictly inside (`InQuad`).
-`quadArea` is the area, `(sarea A B C + sarea A C D)/2`.
+## Main results
 
-**Results.**
-* `theorem1`: six points with a quadrilateral hull of area `S` have least area at most `S/8`. Equality
-  holds only for an affine image of the square corners with `(1/4,1/2), (3/4,1/2)`.
-  `claim_attainment`: that configuration attains `1/8`.
-* `theorem2`: seven points with a quadrilateral hull of area `S` satisfy `S ≥ (Γ+1)t`.
-* `corollary3`: at least area `A₀`, a convex quadrilateral of four actual points with area at most
-  `1/2` contains at most two further points.
-* `theorem4`: in N, two free points in `T₀ = conv{(0,0), H, C}` force least area at most
+* `minTriangleArea_six_le_quadArea_div_eight`: six points with a quadrilateral hull of area `S` have least area at most `S/8`.
+  Equality holds only for an affine image of the square corners with `(1/4,1/2), (3/4,1/2)`.
+* `gamma_add_one_mul_minTriangleArea_le_quadArea`: seven points with a quadrilateral hull of area `S` satisfy `S ≥ (Γ+1)t`.
+* `ncard_inQuad_le_two`: in a configuration (of any number of points) with least area at least `A₀`, a
+  convex quadrilateral of four of its points with area at most `1/2` contains at most two further
+  points.
+* `nConfig_two_in_T0_exclusion`: in N, two free points in `T₀ = conv{(0,0), H, C}` force least area at most
   `7hc/128 ≤ 7/128 < A₀`.
-* `claim_13`, `claim_14_15`, `claim_16_18`: §4, the anchor hull consequences for N and C1.
-* `lemma5`: in N the ears `ABH` and `ABC` are not both occupied, and the transposition exchanging
+* `quadArea_Q0`, `inNHexagon_one_below_HC`: consequences for N when the anchors span the hull. "The hull is
+  exactly the hexagon `ABCDFH`" is stated as "every free point lies strictly inside it"
+  (`InNHexagon`). The lower part `HABC` is the side of the line `HC` containing `(0,0)`, where
+  `sarea H C X < 0`.
+* `lower_ears_not_both_occupied`: in N the ears `ABH` and `ABC` are not both occupied, and the transposition exchanging
   them preserves N.
-
-**Implicit in the manuscript.**
-* Corollary 3: the quadrilateral is convex (its four vertices in convex position). The manuscript
-  says only "a quadrilateral spanned by four actual configuration points". It is stated for any
-  configuration (any number of points; the threshold `A₀` is what matters).
-* §4 (14)-(18): "the hull is exactly the hexagon `ABCDFH`" (respectively the pentagon `ACDFH`) is
-  stated as "every free point lies strictly inside it" (`InNHexagon`, `InC1Pentagon`). The lower
-  part (`HABC`, respectively the triangle `AHC`) is the side of the line `HC` containing `(0,0)`,
-  where `sarea H C X < 0`.
 -/
 
 @[expose] public section
@@ -69,11 +55,10 @@ def InClosedQuad (X A B C D : Point) : Prop :=
 /-- The area of the counterclockwise quadrilateral `ABCD`. -/
 def quadArea (A B C D : Point) : ℝ := (sarea A B C + sarea A C D) / 2
 
-/-- The equality configuration of Theorem 1: the four corners of the square and
+/-- The equality configuration of `minTriangleArea_six_le_quadArea_div_eight`: the four corners of the square and
 `(1/4, 1/2), (3/4, 1/2)`. -/
 def sixQuadExtremal : Fin 6 → Point :=
   ![(0, 0), (1, 0), (1, 1), (0, 1), (1 / 4, 1 / 2), (3 / 4, 1 / 2)]
-
 
 /-! ### Helpers -/
 
@@ -98,10 +83,6 @@ theorem triangleArea_of_pos {p q r : Point} (h : 0 < sarea p q r) :
     triangleArea p q r = sarea p q r / 2 := by
   rw [triangleArea_eq, abs_of_pos h]
 
-theorem quadArea_eq (A B C D : Point) :
-    quadArea A B C D = (sarea A B D + sarea B C D) / 2 := by
-  unfold quadArea sarea; ring
-
 theorem ConvexQuad.rotate {A B C D : Point} (h : ConvexQuad A B C D) : ConvexQuad B C D A :=
   ⟨h.2.1, h.2.2.1, h.2.2.2, h.1⟩
 
@@ -113,14 +94,14 @@ theorem ConvexQuad.quadArea_pos {A B C D : Point} (h : ConvexQuad A B C D) :
   have h2 : 0 < sarea A C D := by rw [← sarea_cycle]; exact h.2.2.1
   unfold quadArea; linarith [h.1]
 
-/-- The signed-area identity behind `(5)`: for a point `P` and a quadrilateral `ABCD` of doubled
-area `W`, `W·[DAP] = [ABD][CDA] - [CDA][BDP] - [ABD][ACP]`. -/
+/-- The signed-area identity behind `sector_bound`: for a point `P` and a quadrilateral `ABCD` of
+doubled area `W`, `W·[DAP] = [ABD][CDA] - [CDA][BDP] - [ABD][ACP]`. -/
 theorem sector_identity (A B C D P : Point) :
     (sarea A B C + sarea A C D) * sarea D A P =
       sarea A B D * sarea C D A - sarea C D A * sarea B D P - sarea A B D * sarea A C P := by
   unfold sarea; ring
 
-/-- Inequality `(5)`: a point `P` in the diagonal sector `ODA` of the counterclockwise convex
+/-- A point `P` in the diagonal sector `ODA` of the counterclockwise convex
 quadrilateral `ABCD` whose three triangles `BDP, ACP, DAP` have doubled area at least `s` gives
 `s(W + [ABD] + [CDA]) ≤ [ABD][CDA]`, `W = [ABC] + [ACD]`. -/
 theorem sector_bound {A B C D P : Point} {s : ℝ} (hW : 0 < sarea A B C + sarea A C D)
@@ -132,7 +113,8 @@ theorem sector_bound {A B C D P : Point} {s : ℝ} (hW : 0 < sarea A B C + sarea
   nlinarith [mul_le_mul_of_nonneg_left h3 hW.le, mul_le_mul_of_nonneg_left h1 hδ.le,
     mul_le_mul_of_nonneg_left h2 hα.le]
 
-/-- The AM-GM step `(6)`. -/
+/-- The AM-GM step: for positive `α, β, γ, δ` with `α + β + γ + δ = 2W`, the bounds
+`s(W + α + δ) ≤ αδ` and `s(W + β + γ) ≤ βγ` give `8s ≤ W`. -/
 theorem amgm_bound {W α β γ δ s : ℝ} (_hW : 0 < W) (hα : 0 < α) (hβ : 0 < β) (hγ : 0 < γ)
     (hδ : 0 < δ) (hsum : α + β + γ + δ = 2 * W) (h1 : s * (W + α + δ) ≤ α * δ)
     (h2 : s * (W + β + γ) ≤ β * γ) : 8 * s ≤ W := by
@@ -145,7 +127,8 @@ theorem amgm_bound {W α β γ δ s : ℝ} (_hW : 0 < W) (hα : 0 < α) (hβ : 0
     nlinarith [sq_nonneg (β - γ), mul_nonneg (sub_nonneg.2 hv) (by linarith : (0 : ℝ) ≤ W + 2 * (β + γ)),
       mul_pos (sub_pos.2 hc) (by linarith : (0 : ℝ) < W + β + γ)]
 
-/-- The equality case of `(6)`: all four diagonal triangles have half the doubled area. -/
+/-- The equality case of `amgm_bound`: if moreover `8s = W` and `α + γ = W`, then all four
+diagonal triangles have half the doubled area, `α = β = γ = δ = W/2`. -/
 theorem amgm_eq {W α β γ δ s : ℝ} (_hW : 0 < W) (hα : 0 < α) (hβ : 0 < β) (hγ : 0 < γ)
     (hδ : 0 < δ) (hsum : α + β + γ + δ = 2 * W) (h1 : s * (W + α + δ) ≤ α * δ)
     (h2 : s * (W + β + γ) ≤ β * γ) (heq : 8 * s = W) (hαγ : α + γ = W) :
@@ -175,7 +158,7 @@ theorem eq_of_two_sarea {E F G H X Y : Point}
   · exact absurd h' hdet
   exact Prod.ext (by linarith) (by linarith)
 
-/-- `X` is a nondegenerate affine image of the extremal configuration of Theorem 1. -/
+/-- `X` is a nondegenerate affine image of the extremal configuration `sixQuadExtremal`. -/
 def IsExtremalImage (X : Fin 6 → Point) : Prop :=
   ∃ a b c d e f : ℝ, a * d - b * c ≠ 0 ∧ ∀ i, X i = affineMap a b c d e f (sixQuadExtremal i)
 
@@ -221,7 +204,7 @@ theorem isExtremalImage_of_eq {A B C D P Q : Point} {W : ℝ} (hW : 0 < W)
     · have : sarea A C Q = -sarea C A Q := by unfold sarea; ring
       rw [this, hQ2, show W / 8 = sarea A B D / 4 by rw [hα]; ring, hC]; unfold sarea affineMap; ring
 
-/-- The sector case of Theorem 1: `P` in the diagonal sector `ODA`, `Q` in `OBC`, all six
+/-- The sector case of `minTriangleArea_six_le_quadArea_div_eight`: `P` in the diagonal sector `ODA`, `Q` in `OBC`, all six
 relevant triangles of doubled area at least `s`. -/
 theorem sector_case {A B C D P Q : Point} {s : ℝ} (hq : ConvexQuad A B C D)
     (hP1 : s ≤ sarea B D P) (hP2 : s ≤ sarea A C P) (hP3 : s ≤ sarea D A P)
@@ -278,8 +261,7 @@ theorem sector_case {A B C D P Q : Point} {s : ℝ} (hq : ConvexQuad A B C D)
     have hy' : sarea C A Q = W / 8 := by linarith
     exact isExtremalImage_of_eq hW ea eb ed hx hy hx' hy'
 
-
-/-- The relabellings used in the equality case of Theorem 1. -/
+/-- The relabellings used in the equality case of `minTriangleArea_six_le_quadArea_div_eight`. -/
 def permRot : Equiv.Perm (Fin 6) :=
   ⟨![1, 2, 3, 0, 4, 5], ![3, 0, 1, 2, 4, 5], by decide, by decide⟩
 
@@ -296,16 +278,14 @@ theorem extremal_transfer {X Y : Fin 6 → Point} (σ : Equiv.Perm (Fin 6))
   obtain ⟨a, b, c, d, e, f, hdet, hY⟩ := hY
   exact ⟨a, b, c, d, e, f, σ, hdet, fun i => (h i).trans (hY i)⟩
 
-/-! ### §1. Six points with a quadrilateral hull -/
+/-! ### Six points with a quadrilateral hull -/
 
-/-- **Theorem 1** (`QUADRILATERAL_HULL:Theorem1`). Six points with a quadrilateral convex hull of
-area `S` have least triangle area at most `S/8`. Equality forces a parallelogram hull, and the
-configuration is then an affine image, up to relabelling, of the four square corners with
-`(1/4, 1/2), (3/4, 1/2)`. If a diagonal leaves both interior points on one side,
-`S ≥ (K+1)t > 8t`; otherwise diagonal coordinates and AM-GM give `t ≤ S/8`.
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 24-106.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem theorem1 {A B C D P Q : Point} (hq : ConvexQuad A B C D) (hP : InClosedQuad P A B C D)
+/-- Six points with a quadrilateral convex hull of area `S` have least triangle area at most
+`S/8`. Equality forces a parallelogram hull, and the configuration is then an affine image, up to
+relabelling, of the four square corners with `(1/4, 1/2), (3/4, 1/2)`. If a diagonal leaves both
+interior points on one side, `S ≥ (K+1)t > 8t` by `twoInteriorPointLemma`;
+otherwise diagonal coordinates and AM-GM give `t ≤ S/8` (`sector_case`). -/
+theorem minTriangleArea_six_le_quadArea_div_eight {A B C D P Q : Point} (hq : ConvexQuad A B C D) (hP : InClosedQuad P A B C D)
     (hQ : InClosedQuad Q A B C D) :
     minTriangleArea ![A, B, C, D, P, Q] ≤ quadArea A B C D / 8 ∧
       (minTriangleArea ![A, B, C, D, P, Q] = quadArea A B C D / 8 →
@@ -351,7 +331,7 @@ theorem theorem1 {A B C D P Q : Point} (hq : ConvexQuad A B C D) (hP : InClosedQ
     intro h1 h2
     have hsub : t ≤ minTriangleArea ![A, C, D, P, Q] :=
       le_min_sub (by norm_num) ![0, 2, 3, 4, 5] (by decide) (fun i => by fin_cases i <;> rfl) ht
-    have k := CornerFamilies.twoInteriorPointLemma A C D P Q (Or.inl ⟨h1, pCD, pDA⟩)
+    have k := twoInteriorPointLemma A C D P Q (Or.inl ⟨h1, pCD, pDA⟩)
       (Or.inl ⟨h2, qCD, qDA⟩) t hpos hsub
     have k2 : t ≤ triangleArea A B C := area_of_le_min ht 0 1 2
     have e : quadArea A B C D = triangleArea A B C + triangleArea A C D := by
@@ -364,7 +344,7 @@ theorem theorem1 {A B C D P Q : Point} (hq : ConvexQuad A B C D) (hP : InClosedQ
     have h2' : 0 < sarea C A Q := by rw [sarea_swap₁₂]; linarith
     have hsub : t ≤ minTriangleArea ![A, B, C, P, Q] :=
       le_min_sub (by norm_num) ![0, 1, 2, 4, 5] (by decide) (fun i => by fin_cases i <;> rfl) ht
-    have k := CornerFamilies.twoInteriorPointLemma A B C P Q (Or.inl ⟨pAB, pBC, h1'⟩)
+    have k := twoInteriorPointLemma A B C P Q (Or.inl ⟨pAB, pBC, h1'⟩)
       (Or.inl ⟨qAB, qBC, h2'⟩) t hpos hsub
     have k2 : t ≤ triangleArea A C D := area_of_le_min ht 0 2 3
     have e : quadArea A B C D = triangleArea A B C + triangleArea A C D := by
@@ -375,7 +355,7 @@ theorem theorem1 {A B C D P Q : Point} (hq : ConvexQuad A B C D) (hP : InClosedQ
     intro h1 h2
     have hsub : t ≤ minTriangleArea ![B, D, A, P, Q] :=
       le_min_sub (by norm_num) ![1, 3, 0, 4, 5] (by decide) (fun i => by fin_cases i <;> rfl) ht
-    have k := CornerFamilies.twoInteriorPointLemma B D A P Q (Or.inl ⟨h1, pDA, pAB⟩)
+    have k := twoInteriorPointLemma B D A P Q (Or.inl ⟨h1, pDA, pAB⟩)
       (Or.inl ⟨h2, qDA, qAB⟩) t hpos hsub
     have k2 : t ≤ triangleArea B C D := area_of_le_min ht 1 2 3
     have e : quadArea A B C D = triangleArea B D A + triangleArea B C D := by
@@ -388,7 +368,7 @@ theorem theorem1 {A B C D P Q : Point} (hq : ConvexQuad A B C D) (hP : InClosedQ
     have h2' : 0 < sarea D B Q := by rw [sarea_swap₁₂]; linarith
     have hsub : t ≤ minTriangleArea ![D, B, C, P, Q] :=
       le_min_sub (by norm_num) ![3, 1, 2, 4, 5] (by decide) (fun i => by fin_cases i <;> rfl) ht
-    have k := CornerFamilies.twoInteriorPointLemma D B C P Q (Or.inl ⟨h1', pBC, pCD⟩)
+    have k := twoInteriorPointLemma D B C P Q (Or.inl ⟨h1', pBC, pCD⟩)
       (Or.inl ⟨h2', qBC, qCD⟩) t hpos hsub
     have k2 : t ≤ triangleArea D A B := area_of_le_min ht 3 0 1
     have e : quadArea A B C D = triangleArea D B C + triangleArea D A B := by
@@ -474,31 +454,13 @@ theorem theorem1 {A B C D P Q : Point} (hq : ConvexQuad A B C D) (hP : InClosedQ
   | exact strict (cDBC b1 b2) | exact sODA a1 b1 a2 b2 | exact sOBC a1 b1 a2 b2
   | exact sOAB a1 b1 a2 b2 | exact sOCD a1 b1 a2 b2
 
-/-- **Claim** (`QUADRILATERAL_HULL:claim-attainment`, made up). Attainment in Theorem 1. The square
-configuration of the equality case has least area `1/8` and hull area `1`: every doubled area is at
-least `1/4`.
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 100-106. -/
-theorem claim_attainment :
-    minTriangleArea sixQuadExtremal = 1 / 8 ∧ quadArea (0, 0) (1, 0) (1, 1) (0, 1) = 1 := by
-  refine ⟨le_antisymm ?_ ?_, by unfold quadArea sarea; norm_num⟩
-  · have := minTriangleArea_le sixQuadExtremal (i := 0) (j := 3) (k := 4) (by decide) (by decide)
-      (by decide)
-    have e : triangleArea (sixQuadExtremal 0) (sixQuadExtremal 3) (sixQuadExtremal 4) = 1 / 8 := by
-      simp [sixQuadExtremal, triangleArea]; norm_num [abs_of_neg]
-    linarith
-  · apply le_minTriangleArea (by norm_num)
-    intro i j k hij hjk
-    fin_cases i <;> fin_cases j <;> fin_cases k <;> simp_all [triangleArea, sixQuadExtremal] <;>
-      norm_num [abs_of_neg, abs_of_pos]
+/-! ### Seven points with a quadrilateral hull -/
 
-/-! ### §2. Seven points with a quadrilateral hull -/
-
-/-- **Theorem 2** (`QUADRILATERAL_HULL:Theorem2`). Seven points with a quadrilateral convex hull of
-area `S` and least area `t` satisfy `S ≥ (Γ+1)t`, `Γ = (11+3√5)/2`. A `3+0` diagonal split gives
-`Γt + t`, and a `2+1` split gives `Kt + 3t` with `K + 3 = 7 + 2√3 > Γ + 1`.
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 108-132.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, CORNER_FAMILIES:SixPointTriangularHullTheorem -/
-theorem theorem2 {A B C D P Q R : Point} (hq : ConvexQuad A B C D)
+/-- Seven points with a quadrilateral convex hull of area `S` and least area `t` satisfy
+`S ≥ (Γ+1)t`, `Γ = (11+3√5)/2`. A `3+0` diagonal split gives `Γt + t`
+(`CornerFamilies.sixPointTriangularHullTheorem`), and a `2+1` split gives `Kt + 3t`
+(`twoInteriorPointLemma`) with `K + 3 = 7 + 2√3 > Γ + 1`. -/
+theorem gamma_add_one_mul_minTriangleArea_le_quadArea {A B C D P Q R : Point} (hq : ConvexQuad A B C D)
     (hP : InClosedQuad P A B C D) (hQ : InClosedQuad Q A B C D) (hR : InClosedQuad R A B C D) :
     ((11 + 3 * Real.sqrt 5) / 2 + 1) * minTriangleArea ![A, B, C, D, P, Q, R] ≤
       quadArea A B C D := by
@@ -546,7 +508,7 @@ theorem theorem2 {A B C D P Q R : Point} (hq : ConvexQuad A B C D)
       (le_min_sub (by norm_num) ![0, 1, 2, 4, 5, 6] (by decide) (fun i => by fin_cases i <;> rfl) ht)
     have k2 : t ≤ triangleArea A C D := area_of_le_min ht 0 2 3
     linarith
-  · have k := CornerFamilies.twoInteriorPointLemma A B C P Q
+  · have k := twoInteriorPointLemma A B C P Q
       (Or.inl ⟨abP, bcP, neg sP⟩) (Or.inl ⟨abQ, bcQ, neg sQ⟩) t hpos
       (le_min_sub (by norm_num) ![0, 1, 2, 4, 5] (by decide) (fun i => by fin_cases i <;> rfl) ht)
     have l1 : 2 * t ≤ sarea A C R := g (i := 0) (j := 2) (k := 6) (by decide) (by decide) (by decide) sR
@@ -555,7 +517,7 @@ theorem theorem2 {A B C D P Q R : Point} (hq : ConvexQuad A B C D)
     have l4 := sarea_add_sarea_add_sarea A C D R
     rw [triangleArea_of_pos hACD] at e
     linarith
-  · have k := CornerFamilies.twoInteriorPointLemma A B C P R
+  · have k := twoInteriorPointLemma A B C P R
       (Or.inl ⟨abP, bcP, neg sP⟩) (Or.inl ⟨abR, bcR, neg sR⟩) t hpos
       (le_min_sub (by norm_num) ![0, 1, 2, 4, 6] (by decide) (fun i => by fin_cases i <;> rfl) ht)
     have l1 : 2 * t ≤ sarea A C Q := g (i := 0) (j := 2) (k := 5) (by decide) (by decide) (by decide) sQ
@@ -564,7 +526,7 @@ theorem theorem2 {A B C D P Q R : Point} (hq : ConvexQuad A B C D)
     have l4 := sarea_add_sarea_add_sarea A C D Q
     rw [triangleArea_of_pos hACD] at e
     linarith
-  · have k := CornerFamilies.twoInteriorPointLemma A C D Q R
+  · have k := twoInteriorPointLemma A C D Q R
       (Or.inl ⟨sQ, cdQ, daQ⟩) (Or.inl ⟨sR, cdR, daR⟩) t hpos
       (le_min_sub (by norm_num) ![0, 2, 3, 5, 6] (by decide) (fun i => by fin_cases i <;> rfl) ht)
     have l1 : 2 * t ≤ sarea A B P := g (i := 0) (j := 1) (k := 4) (by decide) (by decide) (by decide) abP
@@ -573,7 +535,7 @@ theorem theorem2 {A B C D P Q R : Point} (hq : ConvexQuad A B C D)
     have l4 := sarea_add_sarea_add_sarea A B C P
     rw [triangleArea_of_pos hq1] at e
     linarith
-  · have k := CornerFamilies.twoInteriorPointLemma A B C Q R
+  · have k := twoInteriorPointLemma A B C Q R
       (Or.inl ⟨abQ, bcQ, neg sQ⟩) (Or.inl ⟨abR, bcR, neg sR⟩) t hpos
       (le_min_sub (by norm_num) ![0, 1, 2, 5, 6] (by decide) (fun i => by fin_cases i <;> rfl) ht)
     have l1 : 2 * t ≤ sarea A C P := g (i := 0) (j := 2) (k := 4) (by decide) (by decide) (by decide) sP
@@ -582,7 +544,7 @@ theorem theorem2 {A B C D P Q R : Point} (hq : ConvexQuad A B C D)
     have l4 := sarea_add_sarea_add_sarea A C D P
     rw [triangleArea_of_pos hACD] at e
     linarith
-  · have k := CornerFamilies.twoInteriorPointLemma A C D P R
+  · have k := twoInteriorPointLemma A C D P R
       (Or.inl ⟨sP, cdP, daP⟩) (Or.inl ⟨sR, cdR, daR⟩) t hpos
       (le_min_sub (by norm_num) ![0, 2, 3, 4, 6] (by decide) (fun i => by fin_cases i <;> rfl) ht)
     have l1 : 2 * t ≤ sarea A B Q := g (i := 0) (j := 1) (k := 5) (by decide) (by decide) (by decide) abQ
@@ -591,7 +553,7 @@ theorem theorem2 {A B C D P Q R : Point} (hq : ConvexQuad A B C D)
     have l4 := sarea_add_sarea_add_sarea A B C Q
     rw [triangleArea_of_pos hq1] at e
     linarith
-  · have k := CornerFamilies.twoInteriorPointLemma A C D P Q
+  · have k := twoInteriorPointLemma A C D P Q
       (Or.inl ⟨sP, cdP, daP⟩) (Or.inl ⟨sQ, cdQ, daQ⟩) t hpos
       (le_min_sub (by norm_num) ![0, 2, 3, 4, 5] (by decide) (fun i => by fin_cases i <;> rfl) ht)
     have l1 : 2 * t ≤ sarea A B R := g (i := 0) (j := 1) (k := 6) (by decide) (by decide) (by decide) abR
@@ -620,13 +582,13 @@ theorem ne_of_sarea_pos {n : ℕ} {P : Fin n → Point} {i j k : Fin n}
   · rw [sarea_eq_zero_right] at h; exact lt_irrefl _ h
   · rw [sarea_eq_zero_mid] at h; exact lt_irrefl _ h
 
-/-- `(Γ + 1)A₀ > 1/2`, inequality (9). -/
+/-- `(Γ + 1)A₀ > 1/2`. -/
 theorem gamma_one_A₀ : (1 / 2 : ℝ) < ((11 + 3 * Real.sqrt 5) / 2 + 1) * A₀ := by
   have := sqrt5_gt
   have hA := A₀_bounds.2.2.1
   nlinarith
 
-/-- The core of Corollary 3: three further points in a convex quadrilateral of four points and of
+/-- The core of `ncard_inQuad_le_two`: three further points in a convex quadrilateral of four points and of
 area at most `1/2` force least area below `A₀`. -/
 theorem no_three_in_quad {n : ℕ} {P : Fin n → Point} (hA : A₀ ≤ minTriangleArea P)
     {i j k l m₁ m₂ m₃ : Fin n} (hq : ConvexQuad (P i) (P j) (P k) (P l))
@@ -651,20 +613,17 @@ theorem no_three_in_quad {n : ℕ} {P : Fin n → Point} (hA : A₀ ≤ minTrian
     tauto
   have hsub : A₀ ≤ minTriangleArea ![P i, P j, P k, P l, P m₁, P m₂, P m₃] :=
     le_min_sub (by norm_num) _ hinj (fun a => by fin_cases a <;> rfl) hA
-  have k := theorem2 hq (P := P m₁) (Q := P m₂) (R := P m₃)
+  have k := gamma_add_one_mul_minTriangleArea_le_quadArea hq (P := P m₁) (Q := P m₂) (R := P m₃)
     h1.closed h2.closed h3.closed
   have g := gamma_one_A₀
   have hpos : 0 < (11 + 3 * Real.sqrt 5) / 2 + 1 := by positivity
   have := mul_le_mul_of_nonneg_left hsub hpos.le
   linarith
 
-/-- **Corollary 3** (`QUADRILATERAL_HULL:Corollary3`). Small-quadrilateral occupancy. In any
-configuration with least area at least `A₀`, a convex quadrilateral spanned by four of its points
-and of area at most `1/2` contains at most two further points. Otherwise Theorem 2 would give
-`t ≤ 1/(13 + 3√5) < 1/19 < A₀` (9).
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 134-150.
-Uses: QUADRILATERAL_HULL:Theorem2 -/
-theorem corollary3 {n : ℕ} {P : Fin n → Point} (hA : A₀ ≤ minTriangleArea P) {i j k l : Fin n}
+/-- Small-quadrilateral occupancy. In any configuration with least area at least `A₀`, a convex
+quadrilateral spanned by four of its points and of area at most `1/2` contains at most two further
+points. Otherwise `gamma_add_one_mul_minTriangleArea_le_quadArea` would give `t ≤ 1/(13 + 3√5) < 1/19 < A₀`. -/
+theorem ncard_inQuad_le_two {n : ℕ} {P : Fin n → Point} (hA : A₀ ≤ minTriangleArea P) {i j k l : Fin n}
     (hq : ConvexQuad (P i) (P j) (P k) (P l))
     (harea : quadArea (P i) (P j) (P k) (P l) ≤ 1 / 2) :
     Set.ncard {m | InQuad (P m) (P i) (P j) (P k) (P l)} ≤ 2 := by
@@ -673,14 +632,14 @@ theorem corollary3 {n : ℕ} {P : Fin n → Point} (hA : A₀ ≤ minTriangleAre
   obtain ⟨m₁, m₂, m₃, h1, h2, h3, h12, h13, h23⟩ := (Set.two_lt_ncard_iff).1 hc
   exact no_three_in_quad hA hq harea h1 h2 h3 h12 h13 h23
 
-/-! ### §3. The lower-left cap in family N -/
+/-! ### The lower-left cap in family N -/
 
-/-- `X` lies in the closed triangle `T₀ = conv{(0,0), H, C} = {x, y ≥ 0, hx + cy ≤ hc}` (11). -/
+/-- `X` lies in the closed triangle `T₀ = conv{(0,0), H, C} = {x, y ≥ 0, hx + cy ≤ hc}`. -/
 def InT0 (h c : ℝ) (X : Point) : Prop :=
   0 ≤ X.1 ∧ 0 ≤ X.2 ∧ h * X.1 + c * X.2 ≤ h * c
 
-/-- The affine reduction of Theorem 4: `H, C, A, B` and two points of `T₀` have least area at
-most `7hc/128`, by `OPPOSITE_CORNERS` Theorem 1 through `(x, y) ↦ (x/c, 1 - y/h)`. -/
+/-- The affine reduction of `nConfig_two_in_T0_exclusion`: `H, C, A, B` and two points of `T₀` have least area at
+most `7hc/128`, by `OppositeCorners.minTriangleArea_halfSquareConfig_le` through `(x, y) ↦ (x/c, 1 - y/h)`. -/
 theorem min_T0_le {a h b c : ℝ} (ha : 0 < a) (hah : a < h) (hb : 0 < b) (hbc : b < c)
     {P Q : Point} (hP : InT0 h c P) (hQ : InT0 h c Q) :
     minTriangleArea ![(0, h), (c, 0), (0, a), (b, 0), P, Q] ≤ 7 * h * c / 128 := by
@@ -703,7 +662,7 @@ theorem min_T0_le {a h b c : ℝ} (ha : 0 < a) (hah : a < h) (hb : 0 < b) (hbc :
         (affineMap (1 / c) 0 0 (-1 / h) 0 1 P) (affineMap (1 / c) 0 0 (-1 / h) 0 1 Q) := by
     funext i
     fin_cases i <;> simp [affineMap, OppositeCorners.halfSquareConfig] <;> field_simp <;> ring
-  have k := OppositeCorners.theorem1 (1 - a / h) (b / c)
+  have k := OppositeCorners.minTriangleArea_halfSquareConfig_le (1 - a / h) (b / c)
     (by rw [sub_pos, div_lt_one hh]; exact hah) (by have : 0 < a / h := by positivity
                                                     linarith)
     (by positivity) (by rw [div_lt_one hc]; exact hbc) _ _ (hmem P hP) (hmem Q hQ)
@@ -716,8 +675,8 @@ theorem min_T0_le {a h b c : ℝ} (ha : 0 < a) (hah : a < h) (hb : 0 < b) (hbc :
   rw [div_mul_eq_mul_div, one_mul, div_le_iff₀ hhc] at k
   linarith
 
-/-- Theorem 4 without the (unused) square hypotheses. -/
-theorem theorem4_min {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- `nConfig_two_in_T0_exclusion` without the (unused) square hypotheses. -/
+theorem minTriangleArea_nConfig_le_of_two_in_T0 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (h2 : (InT0 h c X ∧ InT0 h c Y) ∨ (InT0 h c X ∧ InT0 h c Z) ∨ (InT0 h c Y ∧ InT0 h c Z)) :
     minTriangleArea (nConfig a h b c d f X Y Z) ≤ 7 * h * c / 128 := by
   obtain ⟨ha, hah, hh1, hb, hbc, hc1, -⟩ := hN
@@ -732,29 +691,26 @@ theorem theorem4_min {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c 
       ![1, 3, 0, 2, 7, 8] (by decide) (fun i => by fin_cases i <;> rfl) le_rfl).trans
       (min_T0_le ha hah hb hbc h1 h2)
 
-/-- **Theorem 4** (`QUADRILATERAL_HULL:Theorem4`). The N cap exclusion. In family N, if two of the
-three free points lie in `T₀ = conv{(0,0), H, C}`, the least area of the nine points is at most
-`7hc/128 ≤ 7/128 < A₀`. The affine map of `T₀` onto a half-square sends `H, C, A, B, P, Q` to the
-family of `OPPOSITE_CORNERS.md` Theorem 1, with area factor `1/(hc)`.
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 152-194.
-Uses: OPPOSITE_CORNERS:Theorem1 -/
-theorem theorem4 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- The N cap exclusion. In family N, if two of the three free points lie in
+`T₀ = conv{(0,0), H, C}`, the least area of the nine points is at most `7hc/128 ≤ 7/128 < A₀`.
+The affine map of `T₀` onto a half-square sends `H, C, A, B, P, Q` to the configuration of
+`OppositeCorners.minTriangleArea_halfSquareConfig_le`, with area factor `1/(hc)`. -/
+theorem nConfig_two_in_T0_exclusion {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (_hX : X ∈ unitSquare) (_hY : Y ∈ unitSquare) (_hZ : Z ∈ unitSquare)
     (h2 : (InT0 h c X ∧ InT0 h c Y) ∨ (InT0 h c X ∧ InT0 h c Z) ∨ (InT0 h c Y ∧ InT0 h c Z)) :
     minTriangleArea (nConfig a h b c d f X Y Z) ≤ 7 * h * c / 128 ∧
       7 * h * c / 128 ≤ 7 / 128 ∧ (7 / 128 : ℝ) < A₀ := by
-  refine ⟨theorem4_min hN h2, ?_, A₀_bounds.1⟩
+  refine ⟨minTriangleArea_nConfig_le_of_two_in_T0 hN h2, ?_, A₀_bounds.1⟩
   obtain ⟨ha, hah, hh1, hb, hbc, hc1, -⟩ := hN
   have : h * c ≤ 1 := by nlinarith
   linarith
 
-/-! ### §4. Consequences when the prescribed anchors are the full hull -/
+/-! ### Consequences when the prescribed anchors are the full hull -/
 
-/-- **Claim** (`QUADRILATERAL_HULL:claim-(13)`). The upper quadrilateral
-`Q₀ = conv{H, C, D, F}`, with `H=(0,h), C=(c,0), D=(1,d), F=(f,1)` in this cyclic order, has area
-`(1 - (h-d)(c-f))/2`. This is at most `1/2` when `d ≤ h` and `f ≤ c`.
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 196-213. -/
-theorem claim_13 (h c d f : ℝ) :
+/-- The upper quadrilateral `Q₀ = conv{H, C, D, F}`, with `H=(0,h), C=(c,0), D=(1,d), F=(f,1)` in
+this cyclic order, has area `(1 - (h-d)(c-f))/2`. This is at most `1/2` when `d ≤ h` and
+`f ≤ c`. -/
+theorem quadArea_Q0 (h c d f : ℝ) :
     quadArea (0, h) (c, 0) (1, d) (f, 1) = (1 - (h - d) * (c - f)) / 2 ∧
       (d ≤ h → f ≤ c → quadArea (0, h) (c, 0) (1, d) (f, 1) ≤ 1 / 2) := by
   have e : quadArea (0, h) (c, 0) (1, d) (f, 1) = (1 - (h - d) * (c - f)) / 2 := by
@@ -776,10 +732,6 @@ theorem convexQuad_Q0 {h c d f : ℝ} (hC : C1Anchors h c d f) :
   · nlinarith [mul_nonneg (sub_nonneg.2 hh1.le) (sub_nonneg.2 hfc)]
 
 open Classical in
-theorem ncard_fin4 (p : Fin 4 → Prop) :
-    Set.ncard {m | p m} = (if p 0 then 1 else 0) + (if p 1 then 1 else 0) +
-      (if p 2 then 1 else 0) + (if p 3 then 1 else 0) := by
-  rw [Set.ncard_eq_toFinset_card', Set.toFinset_ofPred, Finset.card_filter, Fin.sum_univ_four]
 
 /-- `X` lies strictly inside the anchor hexagon `A B C D F H` of family N
 (`A=(0,a), B=(b,0), C=(c,0), D=(1,d), F=(f,1), H=(0,h)`, counterclockwise). -/
@@ -787,14 +739,10 @@ def InNHexagon (a h b c d f : ℝ) (X : Point) : Prop :=
   0 < sarea (0, a) (b, 0) X ∧ 0 < sarea (b, 0) (c, 0) X ∧ 0 < sarea (c, 0) (1, d) X ∧
     0 < sarea (1, d) (f, 1) X ∧ 0 < sarea (f, 1) (0, h) X ∧ 0 < sarea (0, h) (0, a) X
 
-/-- **Claim** (`QUADRILATERAL_HULL:claim-(14)(15)`). N with exactly the six prescribed hull
-vertices. If the three free points are strictly inside the hexagon `ABCDFH` and the least area is
-at least `A₀`, then exactly one of them is in the lower quadrilateral `HABC` (below `HC`) and two
-are in `Q₀` (14); and `1 - (h-d)(c-f) ≥ 16A₀` (15).
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 215-239.
-Uses: QUADRILATERAL_HULL:Theorem4, QUADRILATERAL_HULL:Corollary3, QUADRILATERAL_HULL:claim-(13),
-QUADRILATERAL_HULL:Theorem1 -/
-theorem claim_14_15 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- Family N with exactly the six prescribed hull vertices. If the three free points are strictly
+inside the hexagon `ABCDFH` and the least area is at least `A₀`, then exactly one of them is in the
+lower quadrilateral `HABC` (below `HC`) and two are in `Q₀`; and `1 - (h-d)(c-f) ≥ 16A₀`. -/
+theorem inNHexagon_one_below_HC {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : InNHexagon a h b c d f X) (hY : InNHexagon a h b c d f Y)
     (hZ : InNHexagon a h b c d f Z) (hA : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     ((sarea (0, h) (c, 0) X < 0 ∧ 0 < sarea (0, h) (c, 0) Y ∧ 0 < sarea (0, h) (c, 0) Z) ∨
@@ -806,7 +754,7 @@ theorem claim_14_15 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d
   have hC1 : C1Anchors h c d f := ⟨by linarith, hdh, hh1, by linarith, hfc, hc1⟩
   have hpos : 0 < minTriangleArea (nConfig a h b c d f X Y Z) := lt_of_lt_of_le A₀_pos hA
   have hq := convexQuad_Q0 hC1
-  have harea := (claim_13 h c d f).2 hdh hfc
+  have harea := (quadArea_Q0 h c d f).2 hdh hfc
   have lowT0 {W : Point} (hW : InNHexagon a h b c d f W) (hl : sarea (0, h) (c, 0) W < 0) :
       InT0 h c W := by
     obtain ⟨-, w2, -, -, -, w6⟩ := hW
@@ -818,7 +766,7 @@ theorem claim_14_15 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d
       by linarith⟩
   have low2 (h2 : (InT0 h c X ∧ InT0 h c Y) ∨ (InT0 h c X ∧ InT0 h c Z) ∨
       (InT0 h c Y ∧ InT0 h c Z)) : False := by
-    have k := theorem4_min hN h2
+    have k := minTriangleArea_nConfig_le_of_two_in_T0 hN h2
     have : h * c ≤ 1 := by nlinarith
     linarith [A₀_bounds.1]
   have upQ {W : Point} (hW : InNHexagon a h b c d f W) (hu : 0 < sarea (0, h) (c, 0) W) :
@@ -827,8 +775,8 @@ theorem claim_14_15 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d
       (hV : InQuad V (0, h) (c, 0) (1, d) (f, 1))
       (hmin : A₀ ≤ minTriangleArea ![(0, h), (c, 0), (1, d), (f, 1), U, V]) :
       16 * A₀ ≤ 1 - (h - d) * (c - f) := by
-    have k := (theorem1 hq hU.closed hV.closed).1
-    rw [(claim_13 h c d f).1] at k
+    have k := (minTriangleArea_six_le_quadArea_div_eight hq hU.closed hV.closed).1
+    rw [(quadArea_Q0 h c d f).1] at k
     linarith
   rcases lt_or_gt_of_ne (sarea_ne_zero_of_min_pos hpos 1 3 6) with xs | xs <;>
   rcases lt_or_gt_of_ne (sarea_ne_zero_of_min_pos hpos 1 3 7) with ys | ys <;>
@@ -850,165 +798,15 @@ theorem claim_14_15 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d
       (m₁ := 6) (m₂ := 7) (m₃ := 8) hA hq harea (upQ hX xs) (upQ hY ys) (upQ hZ zs) (by decide)
       (by decide) (by decide)).elim
 
-/-- `X` lies strictly inside the anchor pentagon `O C D F H` of family C1
-(`O=(0,0), C=(c,0), D=(1,d), F=(f,1), H=(0,h)`, counterclockwise). -/
-def InC1Pentagon (h c d f : ℝ) (X : Point) : Prop :=
-  0 < sarea (0, 0) (c, 0) X ∧ 0 < sarea (c, 0) (1, d) X ∧ 0 < sarea (1, d) (f, 1) X ∧
-    0 < sarea (f, 1) (0, h) X ∧ 0 < sarea (0, h) (0, 0) X
+/-! ### One of the two lower N ears is always empty -/
 
-/-- **Claim** (`QUADRILATERAL_HULL:claim-(16)-(18)`). C1 with exactly the five prescribed hull
-vertices. If the four free points are strictly inside the pentagon `OCDFH` and the least area is at
-least `A₀`, the lower/upper split by the line `HC` is `(2,2)` or `(3,1)` (16). For `(2,2)`:
-`hc ≥ 2KA₀` and `1 - (h-d)(c-f) ≥ 16A₀` (17). For `(3,1)`: `hc ≥ 2ΓA₀ = (11+3√5)A₀` (18).
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 241-278.
-Uses: CORNER_FAMILIES:GlobalOccupancyCorollary, QUADRILATERAL_HULL:Corollary3,
-QUADRILATERAL_HULL:claim-(13), CORNER_FAMILIES:TwoInteriorPointLemma, QUADRILATERAL_HULL:Theorem1,
-CORNER_FAMILIES:SixPointTriangularHullTheorem -/
-theorem claim_16_18 {h c d f : ℝ} {W X Y Z : Point} (hC : C1Anchors h c d f)
-    (hW : InC1Pentagon h c d f W) (hX : InC1Pentagon h c d f X) (hY : InC1Pentagon h c d f Y)
-    (hZ : InC1Pentagon h c d f Z) (hA : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) :
-    (Set.ncard {m : Fin 4 | sarea (0, h) (c, 0) (![W, X, Y, Z] m) < 0} = 2 ∧
-        2 * (4 + 2 * Real.sqrt 3) * A₀ ≤ h * c ∧ 16 * A₀ ≤ 1 - (h - d) * (c - f)) ∨
-      (Set.ncard {m : Fin 4 | sarea (0, h) (c, 0) (![W, X, Y, Z] m) < 0} = 3 ∧
-        (11 + 3 * Real.sqrt 5) * A₀ ≤ h * c) := by
-  have hC' := hC
-  obtain ⟨hd, hdh, hh1, hf, hfc, hc1⟩ := hC'
-  have hh : 0 < h := by linarith
-  have hc : 0 < c := by linarith
-  have hpos : 0 < minTriangleArea (c1Config h c d f W X Y Z) := lt_of_lt_of_le A₀_pos hA
-  have hq := convexQuad_Q0 hC
-  have harea := (claim_13 h c d f).2 hdh hfc
-  have hOCH : 0 < sarea ((0 : ℝ), (0 : ℝ)) (c, 0) (0, h) := by
-    have : sarea ((0 : ℝ), (0 : ℝ)) (c, 0) (0, h) = c * h := by unfold sarea; ring
-    rw [this]; positivity
-  have earea : triangleArea ((0 : ℝ), (0 : ℝ)) (c, 0) (0, h) = h * c / 2 := by
-    rw [triangleArea_of_pos hOCH]; unfold sarea; ring
-  have lowT {V : Point} (hV : InC1Pentagon h c d f V) (hl : sarea (0, h) (c, 0) V < 0) :
-      CornerFamilies.InsideTriangle V (0, 0) (c, 0) (0, h) :=
-    Or.inl ⟨hV.1, by rw [sarea_swap₁₂]; linarith, hV.2.2.2.2⟩
-  have upQ {V : Point} (hV : InC1Pentagon h c d f V) (hu : 0 < sarea (0, h) (c, 0) V) :
-      InQuad V (0, h) (c, 0) (1, d) (f, 1) := ⟨hu, hV.2.1, hV.2.2.1, hV.2.2.2.1⟩
-  have lowPair {U V : Point} (hU : CornerFamilies.InsideTriangle U (0, 0) (c, 0) (0, h))
-      (hV : CornerFamilies.InsideTriangle V (0, 0) (c, 0) (0, h))
-      (hmin : A₀ ≤ minTriangleArea ![(0, 0), (c, 0), (0, h), U, V]) :
-      2 * (4 + 2 * Real.sqrt 3) * A₀ ≤ h * c := by
-    have k := CornerFamilies.twoInteriorPointLemma _ _ _ U V hU hV A₀ A₀_pos hmin
-    rw [earea] at k
-    linarith
-  have lowTriple {U V T : Point} (hU : CornerFamilies.InsideTriangle U (0, 0) (c, 0) (0, h))
-      (hV : CornerFamilies.InsideTriangle V (0, 0) (c, 0) (0, h))
-      (hT : CornerFamilies.InsideTriangle T (0, 0) (c, 0) (0, h))
-      (hmin : A₀ ≤ minTriangleArea ![(0, 0), (c, 0), (0, h), U, V, T]) :
-      (11 + 3 * Real.sqrt 5) * A₀ ≤ h * c := by
-    have k := CornerFamilies.sixPointTriangularHullTheorem _ _ _ U V T hU hV hT A₀ hmin
-    rw [earea] at k
-    linarith
-  have upPair {U V : Point} (hU : InQuad U (0, h) (c, 0) (1, d) (f, 1))
-      (hV : InQuad V (0, h) (c, 0) (1, d) (f, 1))
-      (hmin : A₀ ≤ minTriangleArea ![(0, h), (c, 0), (1, d), (f, 1), U, V]) :
-      16 * A₀ ≤ 1 - (h - d) * (c - f) := by
-    have k := (theorem1 hq hU.closed hV.closed).1
-    rw [(claim_13 h c d f).1] at k
-    linarith
-  have four (hW' : CornerFamilies.InsideTriangle W (0, 0) (c, 0) (0, h))
-      (hX' : CornerFamilies.InsideTriangle X (0, 0) (c, 0) (0, h))
-      (hY' : CornerFamilies.InsideTriangle Y (0, 0) (c, 0) (0, h))
-      (hZ' : CornerFamilies.InsideTriangle Z (0, 0) (c, 0) (0, h)) : False := by
-    have k := CornerFamilies.triangularHullLemma (0, 0) (c, 0) (0, h) ![W, X, Y, Z]
-      (fun i => by fin_cases i <;> assumption) A₀
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 6, 7, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)
-    rw [earea] at k
-    have hs2 : (7 / 5 : ℝ) < Real.sqrt 2 := by rw [Real.lt_sqrt (by norm_num)]; norm_num
-    have : h * c ≤ 1 := by nlinarith
-    have := A₀_bounds.2.2.1
-    nlinarith
-  have nW : sarea (0, h) (c, 0) W ≠ 0 := sarea_ne_zero_of_min_pos hpos 4 1 5
-  have nX : sarea (0, h) (c, 0) X ≠ 0 := sarea_ne_zero_of_min_pos hpos 4 1 6
-  have nY : sarea (0, h) (c, 0) Y ≠ 0 := sarea_ne_zero_of_min_pos hpos 4 1 7
-  have nZ : sarea (0, h) (c, 0) Z ≠ 0 := sarea_ne_zero_of_min_pos hpos 4 1 8
-  rcases lt_or_gt_of_ne nW with ws | ws <;> rcases lt_or_gt_of_ne nX with xs | xs <;>
-  rcases lt_or_gt_of_ne nY with ys | ys <;> rcases lt_or_gt_of_ne nZ with zs | zs
-  · exact (four (lowT hW ws) (lowT hX xs) (lowT hY ys) (lowT hZ zs)).elim
-  · refine Or.inr ⟨by rw [ncard_fin4]; simp [ws, xs, ys, not_lt.2 zs.le], lowTriple (lowT hW ws) (lowT hX xs)
-      (lowT hY ys)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 6, 7] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inr ⟨by rw [ncard_fin4]; simp [ws, xs, not_lt.2 ys.le, zs], lowTriple (lowT hW ws) (lowT hX xs)
-      (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 6, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [ws, xs, not_lt.2 ys.le, not_lt.2 zs.le], lowPair (lowT hW ws) (lowT hX xs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 6] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hY ys) (upQ hZ zs)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 7, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inr ⟨by rw [ncard_fin4]; simp [ws, not_lt.2 xs.le, ys, zs], lowTriple (lowT hW ws) (lowT hY ys)
-      (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 7, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [ws, not_lt.2 xs.le, ys, not_lt.2 zs.le], lowPair (lowT hW ws) (lowT hY ys)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 7] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hX xs) (upQ hZ zs)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 6, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [ws, not_lt.2 xs.le, not_lt.2 ys.le, zs], lowPair (lowT hW ws) (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hX xs) (upQ hY ys)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 6, 7] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · exact (no_three_in_quad (P := c1Config h c d f W X Y Z) (i := 4) (j := 1) (k := 2) (l := 3)
-      (m₁ := 6) (m₂ := 7) (m₃ := 8) hA hq harea (upQ hX xs) (upQ hY ys)
-      (upQ hZ zs) (by decide) (by decide) (by decide)).elim
-  · refine Or.inr ⟨by rw [ncard_fin4]; simp [not_lt.2 ws.le, xs, ys, zs], lowTriple (lowT hX xs) (lowT hY ys)
-      (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 6, 7, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [not_lt.2 ws.le, xs, ys, not_lt.2 zs.le], lowPair (lowT hX xs) (lowT hY ys)
-      (le_min_sub (by norm_num) ![0, 1, 4, 6, 7] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hW ws) (upQ hZ zs)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 5, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [not_lt.2 ws.le, xs, not_lt.2 ys.le, zs], lowPair (lowT hX xs) (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 6, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hW ws) (upQ hY ys)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 5, 7] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · exact (no_three_in_quad (P := c1Config h c d f W X Y Z) (i := 4) (j := 1) (k := 2) (l := 3)
-      (m₁ := 5) (m₂ := 7) (m₃ := 8) hA hq harea (upQ hW ws) (upQ hY ys)
-      (upQ hZ zs) (by decide) (by decide) (by decide)).elim
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [not_lt.2 ws.le, not_lt.2 xs.le, ys, zs], lowPair (lowT hY ys) (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 7, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hW ws) (upQ hX xs)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 5, 6] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · exact (no_three_in_quad (P := c1Config h c d f W X Y Z) (i := 4) (j := 1) (k := 2) (l := 3)
-      (m₁ := 5) (m₂ := 6) (m₃ := 8) hA hq harea (upQ hW ws) (upQ hX xs)
-      (upQ hZ zs) (by decide) (by decide) (by decide)).elim
-  · exact (no_three_in_quad (P := c1Config h c d f W X Y Z) (i := 4) (j := 1) (k := 2) (l := 3)
-      (m₁ := 5) (m₂ := 6) (m₃ := 7) hA hq harea (upQ hW ws) (upQ hX xs)
-      (upQ hY ys) (by decide) (by decide) (by decide)).elim
-  · exact (no_three_in_quad (P := c1Config h c d f W X Y Z) (i := 4) (j := 1) (k := 2) (l := 3)
-      (m₁ := 5) (m₂ := 6) (m₃ := 7) hA hq harea (upQ hW ws) (upQ hX xs)
-      (upQ hY ys) (by decide) (by decide) (by decide)).elim
-
-/-! ### §5. One of the two lower N ears is always empty -/
-
-/-- **Lemma 5** (`QUADRILATERAL_HULL:Lemma5`). In family N, suppose every triangle has area at
-least `t` with `s = 2t > 1/12`. Then the two actual ears `ABH` and `ABC` (`A=(0,a), B=(b,0),
-H=(0,h), C=(c,0)`) do not both contain further configuration points. Otherwise `b(h-a) ≥ 3s` and
-`a(c-b) ≥ 3s`, and Cauchy-Schwarz gives `2√(3s) ≤ 1`. No hull hypothesis is needed. The
-normalization assertion: the transposition `(x,y) ↦ (y,x)`, followed by the relabelling
-`(A,H,B,C,D,F) ↦ (B,C,A,H,F,D)`, preserves family N and exchanges the two ears, so one may assume
-that `ABC` contains no further point.
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 280-313. -/
-theorem lemma5 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- In family N, suppose every triangle has area at least `t` with `s = 2t > 1/12`. Then the two
+actual ears `ABH` and `ABC` (`A=(0,a), B=(b,0), H=(0,h), C=(c,0)`) do not both contain further
+configuration points. Otherwise `b(h-a) ≥ 3s` and `a(c-b) ≥ 3s`, and Cauchy-Schwarz gives
+`2√(3s) ≤ 1`. No hull hypothesis is needed. Moreover the transposition `(x,y) ↦ (y,x)`, followed
+by the relabelling `(A,H,B,C,D,F) ↦ (B,C,A,H,F,D)`, preserves family N and exchanges the two ears,
+so one may assume that `ABC` contains no further point. -/
+theorem lower_ears_not_both_occupied {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (ht : 1 / 24 < minTriangleArea (nConfig a h b c d f X Y Z)) :
     ¬ ((∃ m, InTriangle (nConfig a h b c d f X Y Z m) (0, a) (b, 0) (0, h)) ∧
         (∃ m, InTriangle (nConfig a h b c d f X Y Z m) (0, a) (b, 0) (c, 0))) ∧

@@ -3,17 +3,18 @@ module
 public import Heilbronn.Nine.C1.OneLower.TopTriangle
 public import Heilbronn.Nine.C1.OneLower.MixedCapsTrees
 
-/-! # The mixed-cap cells of `docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md` (Theorem 1)
+/-! # The mixed-cap cells: one lower C1 point and two cap points in different caps
 
 The soundness of the kernel-checked package `Heilbronn.Nine.C1.OneLower.MixedCapsTrees`:
 
-* `WordL`: five-anchor words as lists; `radial_list`: the radial rule (14) for the 14 words of
+* `WordL`: five-anchor words as lists; `radial_list`: the radial rule for the 14 words of
   the package (cap, lower and upper words);
 * `table5_holds`: the initial signs `hullTable 5 ws` of four free points with five-anchor words;
 * `MCell`: a cell (a competitive configuration under `f ≤ d`, with the words of its case);
   `MCell.false`: every cell is impossible (`Cover.checkTree_sound`: the atoms are nonnegative, the
   splits exhaustive, the two closed leaves are inconsistent by `quad_false`);
-* the bounds behind the atoms (Sections 1–2 and (15) of the note), by class.
+* the bounds behind the atoms, by class (including `h ≥ ρ`, `f ≤ 803/1920` for two cases,
+  `MPre.doubleOD`).
 -/
 
 @[expose] public section
@@ -22,7 +23,7 @@ noncomputable section
 namespace Heilbronn.Nine.C1OneLowerMixedCaps
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1ZeroLower Heilbronn.Nine.C1OneLowerB Cover Cert Cert.Expr
-open Heilbronn.Nine.C1OneLowerTopCap (ConvexPolygon HasHullWord)
+open Heilbronn.Nine.C1OneLowerTopCap (HasHullWord)
 
 variable {h c d f : ℝ} {Q : Fin 4 → Point} {key : ℕ × ℕ × ℕ}
 
@@ -90,7 +91,8 @@ theorem radial_core (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j) {v m : �
   · exact h1
   · rw [← h1, abs_zero] at hne; linarith [A₀_pos]
 
-/-- **The radial rule (14)** for the words of the package. -/
+/-- The radial rule for the words of the package: if `Q i, Q j` have the words `wa, wb` and
+`wa_v < wb_v`, then `[V_v Q_i Q_j] > 0`. -/
 theorem radial_list (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j) {wa wb : List ℕ}
     (ha : wa ∈ allW) (hb : wb ∈ allW) (Wa : WordL (cfg h c d f Q) (Q i) wa)
     (Wb : WordL (cfg h c d f Q) (Q j) wb) {v : ℕ} (hv : v < 5)
@@ -106,19 +108,19 @@ theorem radial_list (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j) {wa wb : 
 
 /-! ### The initial signs -/
 
-/-- **The initial signs of four free points with five-anchor words** (two anchors and a free
+/-- The initial signs of four free points with five-anchor words hold (two anchors and a free
 point by its word; an anchor and two free points by the radial rule). -/
 theorem table5_holds (H : Comp h c d f Q) {ws : List (List ℕ)} (hlen : ws.length = 4)
     (hmem : ∀ a : Fin 4, ws.getD a [] ∈ allW)
     (hW : ∀ a : Fin 4, WordL (cfg h c d f Q) (Q a) (ws.getD a [])) :
-    AllHold (FHolds (cfg h c d f Q)) (hullTable 5 ws) := by
+    AllHold (FHolds 9 (cfg h c d f Q)) (hullTable 5 ws) := by
   have cf : ∀ m (hm : m < 4), cfg h c d f Q (5 + m) = Q ⟨m, hm⟩ := by
     intro m hm; rw [add_comm]; exact cfg_free h c d f Q ⟨m, hm⟩
   intro g hg
   simp only [hullTable, List.mem_append, List.mem_filterMap, Option.map_eq_some_iff,
     List.mem_flatMap] at hg
   rcases hg with ⟨t, ht, sg, hs, rfl⟩ | ⟨p, hp, hf⟩
-  · obtain ⟨t1, t2, t3⟩ := lexTriples_valid t ht
+  · obtain ⟨t1, t2, t3⟩ := mem_lexTriples ht
     refine ⟨t1, t2, t3, ?_⟩
     unfold hullTripleSign at hs
     split_ifs at hs with a1 a2 <;> simp only [Option.some.injEq] at hs <;> subst hs
@@ -164,7 +166,7 @@ theorem table5_holds (H : Comp h c d f Q) {ws : List (List ℕ)} (hlen : ws.leng
 /-- The facts of the package: signed triangles, and the cut `q_x ≤ 5/8` / `q_x ≥ 5/8`
 (first index `9`). -/
 def MHolds (P : ℕ → Point) (z : ℕ → ℝ) (f : SFact) : Prop :=
-  if f.1.1 = 9 then (if f.2 then 5 / 8 ≤ z 10 else z 10 ≤ 5 / 8) else FHolds P f
+  if f.1.1 = 9 then (if f.2 then 5 / 8 ≤ z 10 else z 10 ≤ 5 / 8) else FHolds 9 P f
 
 /-- A cell of the package: a competitive configuration (with `f ≤ d`) whose free points
 `X, Y, L, Q = Q 0, …, Q 3` have the words of the case `key` (`L ∈ OHC`, `Q ∈ HCDF`). -/
@@ -187,7 +189,7 @@ theorem keys_ok : ∀ key ∈ Model.caseKeys, key.1 < 3 ∧ key.2.1 < 3 ∧ key.
     lookup (hullTable 5 (Model.words key)) (4, 5, 6) = some true := by
   decide +kernel
 
-/-- `[XYL] > 0` (`C1_ONE_LOWER_MIXED_CAPS:(14)`): `[OXY], [CXY], [HXY] > 0` and `L ∈ OCH`. -/
+/-- `[XYL] > 0`: `[OXY], [CXY], [HXY] > 0` and `L ∈ OCH`. -/
 theorem xyl_pos {X Y L : Point} (hL : InLower h c L) (h0 : 0 < sarea ptO X Y)
     (h1 : 0 < sarea (ptC c) X Y) (h4 : 0 < sarea (ptH h) X Y) : 0 < sarea X Y L := by
   obtain ⟨r1, r2, r3⟩ := hL
@@ -202,9 +204,9 @@ theorem xyl_pos {X Y L : Point} (hL : InLower h c L) (h0 : 0 < sarea ptO X Y)
     rw [e]; nlinarith [mul_pos r2 h0, mul_pos r3 h1, mul_pos r1 h4]
   exact pos_of_mul_pos_right this hOCH.le
 
-/-- **The initial signs of a cell hold.** -/
+/-- The initial signs of a cell hold. -/
 theorem MCell.base (C : MCell key h c d f Q) :
-    AllHold (FHolds (cfg h c d f Q)) (Model.baseSigns key) := by
+    AllHold (FHolds 9 (cfg h c d f Q)) (Model.baseSigns key) := by
   obtain ⟨-, -, -, hmem, hlen, l0, l1, l4⟩ := keys_ok key C.hk
   have ht := table5_holds C.comp hlen hmem C.word
   intro g hg
@@ -248,8 +250,8 @@ theorem quad_false {P : ℕ → Point} {tb : List SFact} (htb : AllHold (SFact.H
 theorem MPre.sq (C : MPre key h c d f Q) (a : Fin 4) :
     0 ≤ (Q a).1 ∧ (Q a).1 ≤ 1 ∧ 0 ≤ (Q a).2 ∧ (Q a).2 ≤ 1 := C.comp.hQ a
 
-/-- **The common bounds** (`C1_ONE_LOWER_MIXED_CAPS:(1)`, claim-anchor, (4), (5)): `hc ≥ 3s`,
-`h, c ≥ 3s`, `s ≤ d, f ≤ 1 - s`, the lower-point bounds, `s ≤ q ≤ 1 - s`, `W ≥ 4s`. -/
+/-- The bounds common to all classes: `hc ≥ 3s`, `h, c ≥ 3s`, `s ≤ d, f ≤ 1 - s`, the
+lower-point bounds, `s ≤ q ≤ 1 - s`, `W ≥ 4s`. -/
 theorem MPre.common (C : MPre key h c d f Q) :
     24 / 73 ≤ h * c ∧ 24 / 73 ≤ h ∧ 24 / 73 ≤ c ∧ 8 / 73 ≤ d ∧ d ≤ 65 / 73 ∧ 8 / 73 ≤ f ∧
       f ≤ 65 / 73 ∧
@@ -302,7 +304,7 @@ theorem MPre.hc6 (C : MPre key h c d f Q) : 3 * (2 * A₀) ≤ h * c := by
       h * c := by unfold sarea; ring
   linarith
 
-/-- The right-cap bounds as real inequalities (`C1_ONE_LOWER_MIXED_CAPS:(9)`). -/
+/-- The right-cap bounds as real inequalities. -/
 theorem right_real {t c d x y : ℝ} (ht : 8 / 73 < t) (hd : 0 < d) (hd65 : d ≤ 65 / 73)
     (hc3 : 24 / 73 ≤ c) (hc67 : c ≤ 6 / 7) (x1 : x ≤ 1) (y0 : 0 ≤ y)
     (aR : t ≤ d * (x - c) - (1 - c) * y) (aR' : t ≤ c * y) :
@@ -319,7 +321,7 @@ theorem right_real {t c d x y : ℝ} (ht : 8 / 73 < t) (hd : 0 < d) (hd65 : d �
     (show 1 - c ≤ 41 / 73 by linarith)
   linarith
 
-/-- **A right-cap point** (`C1_ONE_LOWER_MIXED_CAPS:(9)`, (3), (8)): `x ≤ 1`, `x - c ≥ 8/65`,
+/-- The bounds for a right-cap point `(x, y)`: `x ≤ 1`, `x - c ≥ 8/65`,
 `y ≥ 7s/6`, `d - y ≥ 8/49` (and `≥ 8/41` when `c ≥ 4s`), `dc(1-c) ≥ s`, `d ≥ 4s`,
 `1/7 ≤ c ≤ 6/7`. -/
 theorem MPre.rightPt (C : MPre key h c d f Q) (a : Fin 4)
@@ -353,7 +355,7 @@ theorem MPre.rightPt (C : MPre key h c d f Q) (a : Fin 4)
   obtain ⟨k1, k2, k3, k4⟩ := right_real (by linarith) hd (by linarith) hc3 r3 x1 y0 aR aR'
   exact ⟨x1, by linarith, by linarith, k1, k2, k3, k4, by linarith, r1, r2, r3⟩
 
-/-- The top-cap bounds as real inequalities (`C1_ONE_LOWER_MIXED_CAPS:(10)`). -/
+/-- The top-cap bounds as real inequalities. -/
 theorem top_real {t d f x y : ℝ} (ht : 8 / 73 < t) (hd4 : 32 / 73 ≤ d) (hd1 : d < 1)
     (hf : 8 / 73 ≤ f) (hf1 : f < 1) (x1 : x ≤ 1) (y1 : y ≤ 1)
     (aT : t ≤ (1 - d) * (x - f) - (1 - f) * (1 - y)) :
@@ -371,7 +373,7 @@ theorem top_real {t d f x y : ℝ} (ht : 8 / 73 < t) (hd4 : 32 / 73 ≤ d) (hd1 
     (show 1 - f ≤ 41 / 73 by linarith)
   linarith
 
-/-- **A top-cap point** `Z = (x, y)` (`C1_ONE_LOWER_MIXED_CAPS:(10)`, (3), (12)): with `d ≥ 4s`,
+/-- The bounds for a top-cap point `Z = (x, y)`: with `d ≥ 4s`,
 `x - f ≥ 8/41`, `y - d ≥ 8/65` (and `≥ 8/41` when `f ≥ 4s`), `f ≤ 67/100`, `d ≤ 57/65`, and
 `[CDZ], [FHZ] < 1 - 7s/3`. -/
 theorem MPre.topPt (C : MPre key h c d f Q) (a : Fin 4)
@@ -422,7 +424,9 @@ theorem MPre.topPt (C : MPre key h c d f Q) (a : Fin 4)
     (k := (Q a).2) (by linarith) h3' hh hd (by linarith) hf (by linarith) x0 x1 y1 aT2
   exact ⟨x1, y1, by linarith, by linarith, k1, k2, k3, tb.1, tb.2, eC, eF⟩
 
-/-- **A left-cap point** (`C1_ONE_LOWER_MIXED_CAPS:(11)`, (3), (8)), from `C1ZeroLower`. -/
+/-- The bounds for a left-cap point `(x, y)`, from `C1ZeroLower.Comp.left_row`: `y ≤ 1`,
+`x, y ≥ s`, `fh(1-h) ≥ s`, `f - x ≥ 8/41`, `y - h ≥ 8/65`, `x ≥ 28/219`, `f ≥ 4s`,
+`1/7 ≤ h ≤ 6/7`. -/
 theorem MPre.leftPt (C : MPre key h c d f Q) (a : Fin 4)
     (hw : (Model.words key).getD a [] = Model.capW 2) :
     (Q a).2 ≤ 1 ∧ 8 / 73 ≤ (Q a).1 ∧ 8 / 73 ≤ (Q a).2 ∧ 8 / 73 ≤ f * h * (1 - h) ∧
@@ -438,13 +442,13 @@ theorem MPre.leftPt (C : MPre key h c d f Q) (a : Fin 4)
   have ht0 := two_A₀.1
   exact ⟨(H.hQ a).2.2.2, by linarith, by linarith, by linarith, l2, l3, l4, l5, l6, l7⟩
 
-/-- **Claim** (`C1_ONE_LOWER_MIXED_CAPS:(15)`). For the lower word `(2,3,2,2,1)` and the upper word
+/-- For the lower word `(2,3,2,2,1)` and the upper word
 `(2,1,2,3,2)` or `(2,2,2,2,2)`, both `L, Q` lie in `ODH` and `ODF`, so `h = [ODH] ≥ ρ`,
 `1 - df = [ODF] ≥ ρ`, and with `d ≥ 4s`, `f ≤ 803/1920`. -/
 theorem MPre.doubleOD (C : MPre key h c d f Q) (hd4 : 32 / 73 ≤ d) (hi : key.2.1 = 1)
     (hj : key.2.2 = 3 ∨ key.2.2 = 5) : 49 / 60 ≤ h ∧ f ≤ 803 / 1920 := by
   have H := C.comp
-  have A := comp_areaOK H
+  have A := H.areaOK
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
   have WL := C.word 2
   have WQ := C.word 3
@@ -508,7 +512,6 @@ theorem fixed_areas (hA : C1Anchors h c d f) :
       sarea (c, 0) (1, d) (f, 1) ≤ 1 - f := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA
   refine ⟨?_, by unfold sarea; ring, ?_⟩ <;> unfold sarea <;> nlinarith
-
 
 theorem factors_rt (i j : ℕ) : Model.factors (0, i, j) =
     [v 0 - k (24 / 73),
@@ -645,7 +648,6 @@ theorem factors_tl (i j : ℕ) : Model.factors (2, i, j) =
 
 theorem cubics_tl (i j : ℕ) : Model.cubics (2, i, j) = [v 3 * v 0 * (1 - v 0) - k (8 / 73)] := rfl
 
-
 /-! ### The atoms of each class -/
 
 /-- The affine factors of the class `RT` are nonnegative. -/
@@ -738,7 +740,7 @@ theorem MCell.factors_ok (C : MCell key h c d f Q) :
   · exact C.factors_rl_ok hk
   · exact C.factors_tl_ok hk
 
-/-- The cubic costs (8). -/
+/-- The cubic costs `dc(1-c) - s` (right cap) and `fh(1-h) - s` (left cap) are nonnegative. -/
 theorem MCell.cubics_ok (C : MCell key h c d f Q) :
     ∀ e ∈ Model.cubics key, 0 ≤ e.eval (zeta h c d f Q) := by
   have hk3 := (keys_ok key C.hk).1
@@ -847,7 +849,7 @@ theorem MCell.qcosts_ok (C : MCell key h c d f Q) :
 
 theorem MCell.table_holds (C : MCell key h c d f Q) {fs : List SFact}
     (hfs : AllHold (MHolds (cfg h c d f Q) (zeta h c d f Q)) fs) :
-    AllHold (FHolds (cfg h c d f Q)) (Model.baseSigns key ++ Model.realFacts fs) := by
+    AllHold (FHolds 9 (cfg h c d f Q)) (Model.baseSigns key ++ Model.realFacts fs) := by
   refine C.base.append fun g hg => ?_
   simp only [Model.realFacts, List.mem_filter, Model.isCut, Bool.not_eq_true', beq_eq_false_iff_ne,
     ne_eq] at hg
@@ -860,8 +862,8 @@ theorem MCell.atoms_nonneg (C : MCell key h c d f Q) (fs : List SFact)
     ∀ e ∈ Model.atoms key fs, 0 ≤ e.eval (zeta h c d f Q) := by
   intro e he
   unfold Model.atoms at he
-  simp only [List.mem_append, List.mem_map] at he
-  rcases he with (((he | he) | he) | ⟨g, hg, rfl⟩) | he
+  simp only [List.mem_append] at he
+  rcases he with (((he | he) | he) | he) | he
   · exact C.factors_ok e he
   · simp only [Model.cutAtoms, List.mem_map, List.mem_filter, Model.isCut, beq_iff_eq] at he
     obtain ⟨g, ⟨hg, hcut⟩, rfl⟩ := he
@@ -870,8 +872,8 @@ theorem MCell.atoms_nonneg (C : MCell key h c d f Q) (fs : List SFact)
     cases hs : g.2 <;> simp only [hs, Bool.false_eq_true, ite_false, ite_true, zeta] at this ⊢ <;>
       simp only [eval_minus, eval_v, eval_k, zeta] <;> push_cast <;> linarith
   · exact C.qcosts_ok e he
-  · exact (comp_areaOK C.comp).cost_nonneg (fun i _ => ptEval_zeta i) (by decide) (by decide)
-      (C.table_holds hfs) (List.mem_append.2 hg)
+  · exact (C.comp.areaOK.costHyp (by decide) (by decide)).tableCosts_nonneg
+      (fun i _ => ptEval_zeta i) (C.table_holds hfs) e he
   · exact C.cubics_ok e he
 
 theorem MCell.branch (C : MCell key h c d f Q) (fs : List SFact) (sp : Model.MSplit) :
@@ -882,7 +884,7 @@ theorem MCell.branch (C : MCell key h c d f Q) (fs : List SFact) (sp : Model.MSp
     split_ifs with hv
     · obtain ⟨hab, hbe, he9⟩ := hv
       have hne : sarea (cfg h c d f Q a) (cfg h c d f Q b) (cfg h c d f Q e) ≠ 0 :=
-        (comp_areaOK C.comp).ne_zero (by omega) (by omega) he9 (by omega) (by omega) (by omega)
+        C.comp.areaOK.ne_zero (by omega) (by omega) he9 (by omega) (by omega) (by omega)
       obtain ⟨br, hbr, hall⟩ := signBranches_exhaustive (P := cfg h c d f Q) (t := (a, b, e)) hne
       refine ⟨br, hbr, fun x hx => ?_⟩
       have hx' := hall x hx
@@ -899,8 +901,8 @@ theorem MCell.branch (C : MCell key h c d f Q) (fs : List SFact) (sp : Model.MSp
     · exact ⟨_, List.mem_cons_self .., by simp [AllHold, MHolds, hz]⟩
     · exact ⟨_, List.mem_cons_of_mem _ (List.mem_cons_self ..), by simp [AllHold, MHolds, hz]⟩
 
-/-- **The certificate package** (`C1_ONE_LOWER_MIXED_CAPS:(17)-(19)`): every cell is
-impossible (kernel check `Model.allCases_ok`; the two `inconsistent` leaves by `quad_false`). -/
+/-- Every cell is impossible (kernel check `Model.allCases_ok`; the two `inconsistent` leaves by
+`quad_false`). -/
 theorem MCell.false (C : MCell key h c d f Q) : False := by
   have hk : key ∈ Model.allCases.map Prod.fst := Model.caseKeys_eq ▸ C.hk
   obtain ⟨p, hp, hpk⟩ := List.mem_map.1 hk
@@ -920,7 +922,7 @@ theorem MCell.false (C : MCell key h c d f Q) : False := by
 
 /-! ### The retained cases -/
 
-/-- The pruning of `C1_ONE_LOWER_MIXED_CAPS:(13)`: no three free points below `OD` (first word
+/-- The pruning of the cases: no three free points below `OD` (first word
 entry `1`), and `L, Q` not both in `OFH`. -/
 def mcFilter (key : ℕ × ℕ × ℕ) : Bool :=
   let w0 := fun a => ((Model.words key).getD a []).getD 0 0 == 1
@@ -955,7 +957,7 @@ theorem MPre.ofh (C : MPre key h c d f Q) (hk : key.1 < 3) : f * h < 49 / 60 := 
     obtain ⟨-, -, -, -, -, -, -, x8, -⟩ := C.topPt 0 w0 (by linarith)
     nlinarith
 
-/-- **Claim** (`C1_ONE_LOWER_MIXED_CAPS:(13)`). A pre-cell passes the pruning: three free points
+/-- A pre-cell passes the pruning: three free points
 below `OD` contradict the two-actual-vertex capacity on `O, D, (1,0)` (`C1ZeroLower.Comp.fan_below`),
 and `OFH` has capacity one (`fh < ρ`). -/
 theorem MPre.filter (C : MPre key h c d f Q) (hk : key.1 < 3) : mcFilter key = true := by
@@ -981,7 +983,7 @@ theorem MPre.filter (C : MPre key h c d f Q) (hk : key.1 < 3) : mcFilter key = t
       exact ⟨(C.word a).pos (by norm_num) (by norm_num) (by norm_num) ha.1.1,
         (C.word a).pos (by norm_num) (by norm_num) (by norm_num) ha.1.2,
         (C.word a).pos (by norm_num) (by norm_num) (by norm_num) ha.2⟩
-    have := (comp_areaOK H).two_inside (a := 0) (b := 3) (e := 4) (j₁ := 7) (j₂ := 8)
+    have := H.areaOK.two_inside (a := 0) (b := 3) (e := 4) (j₁ := 7) (j₂ := 8)
       (by norm_num) (by norm_num) (by norm_num) (by norm_num) (by norm_num) (by decide)
       (Or.inl (ins 2 h1)) (Or.inl (ins 3 h2))
     have hf := C.ofh hk
