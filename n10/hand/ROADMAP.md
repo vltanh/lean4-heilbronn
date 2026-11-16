@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 59.
+Checkpoint 60.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -342,7 +342,15 @@ four-corner alternative and all zero-area faces.
         Separate Fraction/SymPy readers reproduce every exact bound.
         Proof: C1_TWO_LOWER_CENTRAL_TWO_TOP.md, using the same
         complete common two-lower/top geometry.
-  - [ ] C1-EXTERIOR. Exclude the remaining 15 exterior count rows
+  - [x] C1-ONE-LOWER-SIDE-PAIR-TOP. The entire (1,1,2,1,0)
+        count and its transpose. One forced cap ordering and 34
+        binary splits give 31 cubics with 7,430 printed terms and
+        four geometric exclusions. Independent geometry verifies
+        all 908 deductions, 114 interval updates, thirteen static
+        monotonicity certificates and 19,108 factor occurrences.
+        Separate Fraction/SymPy readers reproduce every exact bound.
+        Proof: C1_ONE_LOWER_SIDE_PAIR_TOP.md.
+  - [ ] C1-EXTERIOR. Exclude the remaining 14 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -439,7 +447,8 @@ four-corner alternative and all zero-area faces.
         of the BE and AF endpoint containers. Three would require
         area J*s, exceeding the proved maximum by 773/1000000.
         The top-pair hull also has its exhaustive 3s/4s cost
-        dichotomy. Both deductions have independent geometry and
+        dichotomy. Six further cross-cap orientations follow from
+        explicit sums of nonnegative products. All have independent geometry and
         exact identity audits; neither is a whole-count closure.
         Proof: N6_CORNER_CONTAINERS.md.
   - [x] SIDE-PAIR-TOP-BOUNDS. An occupied top cap gives the uniform
@@ -776,6 +785,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_SIDE_PAIR_TOP_BOUNDS.md | Uniform .897 contact ceiling, narrow side-pair box, inner 2/9 barycentric bounds and an explicit actual-area transfer to N6 |
 | N7_ONE_LOWER_SETUP.md | Exhaustive four-cell reduction for the remaining all-interior (1,2,0) count, four proved rational boxes, capacity-ray rule and complete factor definitions |
 | N7_ONE_LOWER_ABH.md | Entire lower-ear ABH child: 58 splits, 55 cubics / 21,373 terms, four geometric terminals, 1,993 deductions and 41 explicit rational squares |
+| C1_ONE_LOWER_SIDE_PAIR_TOP.md | Entire (1,1,2,1,0) count and transpose: 34 splits, 31 cubics / 7,430 terms, four geometric terminals, 908 deductions and 114 interval updates |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

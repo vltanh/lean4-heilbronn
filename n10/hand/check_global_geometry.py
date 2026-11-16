@@ -1991,6 +1991,25 @@ def c1_two_lower_central_two_top():
     print('PASS: complete C1 two-lower/central/two-top count, three exhaustive roots and 375-leaf inventory')
 
 
+def c1_one_lower_side_pair_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational
+    text=Path(__file__).with_name('C1_ONE_LOWER_SIDE_PAIR_TOP.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==34 and len(re.findall(r'^### Leaf ',text,re.M))==35
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==908
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==114
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==31 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==7430
+    assert len(re.findall(r'^Exclusion:',text,re.M))==4
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==31 and max(bounds)==q(-74919879,1000000000)<0
+    print('PASS: complete C1 one-lower/central/side-pair/top count and 35-leaf inventory')
+
+
 def n6_corner_containers():
     q=sp.Rational;s=q(93,1000);J=q(4427,500)
     a,b,c,e,f,h,x,y=sp.symbols('a b c e f h x y')
@@ -2002,7 +2021,16 @@ def n6_corner_containers():
     zero(1-f-D('CEF')-(1-e)*(c-f))
     zero(1-e-D('EFH')-(1-f)*(h-e))
     assert J*s-(1-s)**2==q(773,1000000)>0
-    print('PASS: both N6 endpoint-container capacities, exact six-point gap and top-pair hull dichotomy')
+    rx,ry,tx,ty,lx,ly=sp.symbols('rx ry tx ty lx ly')
+    pts.update(X=sp.Matrix([rx,ry]),Y=sp.Matrix([tx,ty]),Z=sp.Matrix([lx,ly]))
+    for word,expression in {
+        'EXY':-(1-rx)*(ty-e)-(e-ry)*(1-tx),
+        'FYZ':-(tx-f)*(1-ly)-(1-ty)*(f-lx),
+        'EXZ':-(1-rx)*(ly-e)-(e-ry)*(1-lx),
+        'FXZ':-(rx-f)*(1-ly)-(1-ry)*(f-lx),
+        'CXZ':(rx-c)*ly+ry*(c-lx),
+        'HXZ':rx*(ly-h)+(h-ry)*lx}.items():zero(D(word)-expression)
+    print('PASS: N6 endpoint-container capacities, six-point gap, top-pair hull and six cross-cap signs')
 
 
 def n6_projected_count_terminals():
@@ -2161,3 +2189,4 @@ if __name__ == "__main__":
     side_pair_top_bounds()
     n7_one_lower_setup()
     n7_one_lower_abh()
+    c1_one_lower_side_pair_top()

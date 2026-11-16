@@ -719,6 +719,18 @@ N6 transfer now also proves U<.406316<(35/8)s, giving four stronger
 affine inequalities from inner barycentric weights above 8/35.
 The exact global algebra checker has 81 passing groups.
 
+The entire C1 count (1,1,2,1,0) and its transpose are now excluded by
+C1_ONE_LOWER_SIDE_PAIR_TOP.md. The sole lower point, sole central
+point and the forced side-pair labeling give one root with 34 binary
+splits, 31 cubics containing 7,430 printed terms, and four geometric
+terminals. Independent geometry verifies all 908 deductions, 114
+conditional interval updates, thirteen monotonicity certificates and
+19,108 factor occurrences. Independent Fraction and SymPy readers
+reproduce every negative bound; the largest is -74919879/1000000000.
+Fourteen C1 exterior count rows remain. The N6 corner-container note
+now also proves all six cross-cap orientations by explicit determinant
+identities. The exact global algebra checker has 82 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

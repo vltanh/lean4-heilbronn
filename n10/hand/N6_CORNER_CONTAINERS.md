@@ -84,3 +84,34 @@ contact lower bound e,f>=alpha gives
 
 These are local reductions. None of them alone closes an entire
 remaining N6 exterior count.
+
+## 5. Six fixed orientations between distinct corner caps
+
+Let X be in the right cap, Y in the top cap, and Z in the left
+cap, whenever these points exist. Their cap tests and square bounds
+give
+
+    x_X>c>=f>x_Z,       y_Z>h>=e>y_X,
+    x_Y>f,             y_Y>e,
+    0<=x_X,x_Y,x_Z,y_X,y_Y,y_Z<=1.
+
+Consequently the following actual orientations are forced:
+
+    EXY<0, FYZ<0, EXZ<0, FXZ<0, CXZ>0, HXZ>0.
+
+The complete identities proving these assertions are
+
+    [EXY]=-(1-x_X)(y_Y-e)-(e-y_X)(1-x_Y),
+    [FYZ]=-(x_Y-f)(1-y_Z)-(1-y_Y)(f-x_Z),
+    [EXZ]=-(1-x_X)(y_Z-e)-(e-y_X)(1-x_Z),
+    [FXZ]=-(x_X-f)(1-y_Z)-(1-y_X)(f-x_Z),
+    [CXZ]=(x_X-c)y_Z+y_X(c-x_Z),
+    [HXZ]=x_X(y_Z-h)+(h-y_X)x_Z.
+
+All products on the indicated sides are nonnegative. The last four
+inequalities are already strict from the displayed cap inequalities.
+The first two are nonpositive, and cannot be zero because their
+three points are actual and have positive unsigned minimum area.
+This also covers permitted outer square faces. The signs may be
+used as initial facts in a finite placement table; they require no
+additional sign split or coordinate subdivision.

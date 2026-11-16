@@ -35,7 +35,7 @@ Put eta=93/790, ell=7347/69700, Fmax=1-ell,
 h0=4s/Fmax, B=1-4s/(1-s), Cmax=883/1000.
 The common all-interior heptagon box is proved in
 N7_HEPTAGON_ONE_EAR.md. In particular a,d and all free ordinates
-are at least eta, all contact/free abscissas are at least ell,
+are at least eta, b,c,f and every free abscissa are at least ell,
 e<=1-s, c,f<=Fmax, b<=B, e,h>=h0.
 
 Endpoint five applied to H,C,A,B,G inside the virtual triangle
