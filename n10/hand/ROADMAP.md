@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 64.
+Checkpoint 65.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -487,6 +487,23 @@ four-corner alternative and all zero-area faces.
         free point. Both counts and all six label maps are checked.
         Proof: N6_TOP_TRIPLE_TRANSPOSE.md. This is a normalization,
         not an additional count closure.
+  - [x] N6-TOP-AFFINE-CAPS. Actual top-cap triangles have explicit
+        contact/apex affine upper bounds, and actual containing-triangle
+        caps transfer to their subtriangles. Eight determinant identities
+        and all nonnegative deficits are independently checked.
+        Proof: N6_TOP_AFFINE_CAPS.md. This is a local reduction.
+  - [x] N6-TOP-PAIR-WEIGHTS. Every triangular top pair has inner
+        barycentric weights greater than 1/9. An occupied side cap
+        strengthens all three weights to 3/17. Both actual-area budgets,
+        exact scalar gaps and eight affine remainder identities are
+        independently checked. Proof: N6_TOP_PAIR_BARYCENTRIC_BOUNDS.md.
+        This is a local reduction, not an additional count closure.
+  - [x] ENDPOINT-SIX-REFINED. A nontriangular six-point endpoint hull
+        satisfies m<(125/1142)S. The exhaustive support-cell proof uses
+        an exact quadratic gap and the previously proved central-pair
+        threshold. Independent geometry and exact arithmetic pass.
+        Proof: SIX_POINT_ENDPOINT_REFINED.md. This strengthens the
+        reusable bound without changing earlier fixed factor meanings.
   - [x] SIDE-PAIR-TOP-BOUNDS. An occupied top cap gives the uniform
         contact ceiling .897. A side pair then gives a narrow
         bottom-contact interval and three inner-point barycentric
@@ -649,9 +666,16 @@ four-corner alternative and all zero-area faces.
         342 cap witnesses and 33 capacity-ray steps. Separate Fraction
         and SymPy readers reproduce every negative bound and all
         41 explicit rational squares. Proof: N7_ONE_LOWER_ABH.md.
-  - [ ] N7-INTERIOR-REMAINDER. Exclude the other three lower cells
-        ABC, CA and CB in the sole remaining all-interior heptagon
-        count (k,j,q)=(1,2,0). Its ABH child is complete above.
+  - [x] N7-ONE-LOWER-ABC. The entire lower-ear ABC child. Ninety-three
+        binary splits give 94 leaves: 84 cubics with 37,612 printed
+        terms and ten geometric contradictions. Independent geometry
+        checks all 3,411 deductions, 91,832 factor occurrences, every
+        scalar and endpoint cap, all six chord and ten mesh deductions.
+        Separate Fraction/SymPy readers reproduce every exact bound
+        and all 41 explicit rational squares. Proof: N7_ONE_LOWER_ABC.md.
+  - [ ] N7-INTERIOR-REMAINDER. Exclude the two central lower cells
+        CA and CB in the sole remaining all-interior heptagon count
+        (k,j,q)=(1,2,0). Both lower-ear children are complete above.
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -826,6 +850,10 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_SIDE_PAIR_TOP_BOUNDS.md | Uniform .897 contact ceiling, narrow side-pair box, inner 2/9 barycentric bounds and an explicit actual-area transfer to N6 |
 | N7_ONE_LOWER_SETUP.md | Exhaustive four-cell reduction for the remaining all-interior (1,2,0) count, four proved rational boxes, capacity-ray rule and complete factor definitions |
 | N7_ONE_LOWER_ABH.md | Entire lower-ear ABH child: 58 splits, 55 cubics / 21,373 terms, four geometric terminals, 1,993 deductions and 41 explicit rational squares |
+| N7_ONE_LOWER_ABC.md | Entire lower-ear ABC child: 93 splits, 84 cubics / 37,612 terms, ten geometric terminals, 3,411 deductions and 41 explicit rational squares |
+| N6_TOP_AFFINE_CAPS.md | Actual top-cap contact/apex affine upper bounds and inherited actual-container caps, with all determinant identities |
+| N6_TOP_PAIR_BARYCENTRIC_BOUNDS.md | Triangular top-pair weights above 1/9, strengthened to 3/17 by any side-cap point, and eight affine inequalities |
+| SIX_POINT_ENDPOINT_REFINED.md | Strict nontriangular six-point endpoint bound m<(125/1142)S, from the exhaustive support-cell catalogue |
 | C1_ONE_LOWER_SIDE_PAIR_TOP.md | Entire (1,1,2,1,0) count and transpose: 34 splits, 31 cubics / 7,430 terms, four geometric terminals, 908 deductions and 114 interval updates |
 | C1_TWO_LOWER_CENTRAL_SIDE_TOP.md | Entire (2,1,1,1,0) count and transpose: six roots, 205 splits, 193 cubics / 51,388 terms, eighteen geometric terminals, 5,961 deductions and 905 interval updates |
 | N6_TOP_TRIPLE_SETUP.md | Exhaustive sixteen-word top catalogue, continuous boxes, geometry rules, scalar support bounds and complete factor definitions for the two top-triple counts |

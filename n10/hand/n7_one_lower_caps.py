@@ -28,6 +28,8 @@ def basic(tri,known,low,high):
   if value<best and all(t in cap or g.ins(known,cap,t) for t in tri):best=value;record=['fixed',word(cap),str(value)]
  value=g.shifted_polynomial_upper(q.scale(q.det(*tri),g.get(known,tri)),low,high)
  if value<best:best=value;record=['box',str(value)]
+ values=g.vertex_polynomial_values(q.scale(q.det(*tri),g.get(known,tri)),low,high);value=max(values)
+ if value<best:best=value;record=['vertices',str(value),*map(str,values)]
  return best,record
 
 def make(name,known,low,high):
@@ -56,6 +58,9 @@ def verify(tokens,known,low,high):
   if kind=='square':assert args==['1'];return F(1)
   if kind=='box':
    assert len(args)==1;value=g.shifted_polynomial_upper(q.scale(q.det(*poly),g.get(known,poly)),low,high);assert value==F(args[0]);return value
+  if kind=='vertices':
+   assert len(args)>=2;values=g.vertex_polynomial_values(q.scale(q.det(*poly),g.get(known,poly)),low,high)
+   assert values==list(map(F,args[1:]));value=max(values);assert value==F(args[0]);return value
   assert kind=='fixed' and len(args)==2
   cap=g.wi(args[0]);value=F(args[1]);assert any(cap==pp and value==bb for pp,bb in fixed_caps(known))
   assert all(t in cap or g.ins(known,cap,t) for t in poly);return value

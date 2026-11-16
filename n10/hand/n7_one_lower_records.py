@@ -3,6 +3,7 @@ import n7_one_lower_rules as v
 def word(indices):return ''.join(v.L[i] for i in indices)
 def encode_step(item):
  why,target,sn=item;op=why[0]
+ if op=='mesh':return ' '.join(['mesh',word(why[1]),word(why[2]),target,str(sn)])
  if op=='plu':return 'plu '+v.L[why[1]]+word(why[2])+' '+target+' '+str(sn)
  if op in ['via','hullvia']:
   _,point,poly,i,j=why;return ' '.join([op,v.L[point],word(poly),word([i,j]),str(sn)])
@@ -19,6 +20,7 @@ def encode_step(item):
  raise ValueError(why)
 def decode_step(line):
  op,*args=line.split()
+ if op=='mesh':outer,points,target,sg=args;return [['mesh',v.wi(outer),v.wi(points)],target,int(sg)]
  if op=='plu':w,target,sg=args;return [['plu',v.wi(w)[0],v.wi(w)[1:]],target,int(sg)]
  if op in ['via','hullvia']:
   pt,poly,edge,sg=args;i,j=v.wi(edge);return [[op,v.wi(pt)[0],v.wi(poly),i,j],edge+pt,int(sg)]
@@ -33,21 +35,23 @@ def decode_step(line):
  raise ValueError(line)
 def encode_terminal(terminal):
  kind,*args=terminal
+ if kind=='nomesh':return 'nomesh '+word(args[0])+' '+word(args[1])
  if kind=='plucker':return 'plucker '+v.L[args[0]]+word(args[1])
  if kind=='regionline':return 'regionline '+word(args[0])+' '+word(args[1])
  if kind=='cap':return 'cap '+word(args[0])+' '+word(args[1])
  if kind=='lowerpaired':return 'lowerpaired '+v.L[args[1]]
  if kind=='cluster':outer,pivot,fan,rest=args;return ' '.join(['cluster',word(outer),v.L[pivot],word(fan),word(rest)])
  if kind=='smallquad':return 'smallquad '+word(args[0])+' '+word(args[1])
- if kind=='box_triangle':which,poly,occ,cost,bound=args;return ' '.join(['boxtri',which,word(poly),word(occ),cost,bound])
+ if kind in ['box_triangle','vertex_triangle']:which,poly,occ,cost,bound=args;return ' '.join(['boxtri'if kind=='box_triangle'else'vboxtri',which,word(poly),word(occ)or'none',cost,bound])
  if kind=='inconsistent':tri,sn,why=args;return 'contra '+encode_step([why,word(tri),sn])
  raise ValueError(terminal)
 def decode_terminal(line):
  kind,*args=line.split()
+ if kind=='nomesh':return [kind,*map(v.wi,args)]
  if kind=='plucker':idx=v.wi(args[0]);return [kind,idx[0],idx[1:]]
  if kind in ['regionline','cap','smallquad']:return [kind,*map(v.wi,args)]
  if kind=='lowerpaired':return [kind,[[0,1,2],[0,1,7]],v.wi(args[0])[0]]
  if kind=='cluster':return [kind,v.wi(args[0]),v.wi(args[1])[0],v.wi(args[2]),v.wi(args[3])]
- if kind=='boxtri':return ['box_triangle',args[0],v.wi(args[1]),v.wi(args[2]),args[3],args[4]]
+ if kind in ['boxtri','vboxtri']:return ['box_triangle'if kind=='boxtri'else'vertex_triangle',args[0],v.wi(args[1]),[]if args[2]=='none'else v.wi(args[2]),args[3],args[4]]
  if kind=='contra':why,target,sn=decode_step(' '.join(args));return ['inconsistent',v.wi(target),sn,why]
  raise ValueError(line)

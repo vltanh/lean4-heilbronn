@@ -1,6 +1,7 @@
 """Exact geometric and factor rules for the N7 one-lower-point manuscripts."""
 from fractions import Fraction as F
-from itertools import combinations, product
+from functools import lru_cache
+from itertools import combinations, product, permutations
 import n7_one_lower_polynomials as q
 L=q.LABELS;s=q.s;K=q.K;J=q.J;ell=q.ell;eta=q.eta;h0=4*s/(1-ell)
 a,b,c,d,e,f,g,h,z,x,y,u,v=q.vs;one=q.const(1)
@@ -25,6 +26,20 @@ def starting(extra):
  for tok in extra:put(k,wi(tok[:3]),1 if tok[-1]=='+' else -1)
  return k
 
+
+MESH_TEMPLATE=['ABZ','BCX','CAY','AZY','BXZ','CYX','ZXY','AZX','BXY','CYZ','AXY','BYZ','CZX']
+def mesh_patterns(k,outer,points):
+ assert len(outer)==len(points)==3
+ assert len(set(list(outer)+list(points)))==6 and get(k,outer)>0
+ assert all(ins(k,outer,pt)for pt in points)
+ patterns=[]
+ for order in permutations(points):
+  mp=dict(zip('ABCXYZ',list(outer)+list(order)));row={}
+  for word in MESH_TEMPLATE:
+   tri=tuple(mp[ch]for ch in word);key,sn=q.canonical(tri);row[key]=sn
+  if all(not k.get(tr)or k[tr]==sn for tr,sn in row.items()):patterns.append(row)
+ return patterns
+
 def step(k,item):
  why,target,sn=item;tri=wi(target)
  if get(k,tri):assert get(k,tri)==sn;return False
@@ -46,6 +61,9 @@ def step(k,item):
   assert all(t in [i,j] or vals[ii] for ii,t in enumerate(poly))
   assert sn in vals and all(t in [0,sn] for t in vals)
   assert tri==[i,j,point]
+ elif op=='mesh':
+  _,outer,points=why;patterns=mesh_patterns(k,outer,points);key,val=q.canonical(tuple(tri),sn)
+  assert patterns and all(row.get(key)==val for row in patterns)
  elif op=='line':
   _,poly,pair,vertex=why;I,J=pair
   assert poly in [HULL,*REG] and convex(k,poly)
@@ -84,6 +102,25 @@ def bound_proved(k,poly,B):
  if ins(k,[0,1,2],6):caps.append(([0,1,7],F(17,100)))
  if ins(k,[0,1,7],6):caps.append(([0,1,2],F(17,100)))
  return B>=1 or any(capB<=B and all(t in cap or ins(k,cap,t) for t in poly) for cap,capB in caps)
+
+
+def vertex_polynomial_values(poly,low,high):
+ return list(_vertex_polynomial_values(tuple(sorted(poly.items())),tuple(map(F,low)),tuple(map(F,high))))
+@lru_cache(None)
+def _vertex_polynomial_values(rows,low,high):
+ poly=dict(rows)
+ used=sorted({j for ex in poly for j,power in enumerate(ex)if power})
+ assert all(power<=1 for ex in poly for power in ex)
+ values=[]
+ for bits in product((0,1),repeat=len(used)):
+  at={j:(high[j]if bit else low[j])for j,bit in zip(used,bits)};value=F(0)
+  for ex,co in poly.items():
+   term=co
+   for j,power in enumerate(ex):
+    if power:term*=at[j]
+   value+=term
+  values.append(value)
+ return tuple(sorted(set(values)))
 
 def factors(data,k):
  low=list(map(F,data['low']));high=list(map(F,data['high']));LL=[]
@@ -128,7 +165,7 @@ def factors(data,k):
    for j,power in enumerate(ex):
     for _ in range(power):term=q.mul(term,q.add(q.const(low[j]),q.scale(q.vs[j],high[j]-low[j])))
    shifted=q.add(shifted,term)
-  box_cache[key]=shifted.get(q.Z,F(0))+sum(max(F(0),co) for ex,co in shifted.items() if ex!=q.Z)
+  box_cache[key]=min(shifted.get(q.Z,F(0))+sum(max(F(0),co) for ex,co in shifted.items() if ex!=q.Z),max(vertex_polynomial_values(poly,low,high)))
   return box_cache[key]
  def basic_cap(tri):
   key=tuple(sorted(tri))
@@ -325,8 +362,8 @@ def geometric_terminal(k,terminal,cell=None):
   signs=[co*get(k,t)*get(k,u) for t,u,co in pairs]
   assert all(signs) and len(set(signs))==1
  elif kind=='regionline':
-  poly,pair=args;I,J=pair;assert poly in [HULL,*REG] and convex(k,poly)
-  old=[get(k,(i,I,J)) for i in poly];counts=[2] if any(ins(k,poly,t) for t in pair) else [0,2]
+  poly,pair=args;ii,jj=pair;assert poly in [HULL,*REG] and convex(k,poly)
+  old=[get(k,(i,ii,jj)) for i in poly];counts=[2] if any(ins(k,poly,t) for t in pair) else [0,2]
   words=[w for w in product((-1,1),repeat=len(poly)) if sum(w[i]!=w[(i+1)%len(poly)] for i in range(len(poly))) in counts and all(not xx or xx==yy for xx,yy in zip(old,w))]
   assert not words
  elif kind=='cap':
@@ -344,13 +381,17 @@ def geometric_terminal(k,terminal,cell=None):
   poly,occ=args
   assert convex(k,poly) and set(occ)==set(FREE) and all(ins(k,poly,t) for t in occ)
   assert any(set(poly)<=set(reg) for reg in [REG[0],REG[1],[0,1,4,5]])
- elif kind=='box_triangle':
+ elif kind in ['box_triangle','vertex_triangle']:
   which,poly,occ,cost,bound=args
   if cell is not None:assert which==cell
+  assert len(set(occ))==len(occ) and set(occ)<=set(FREE)
   assert get(k,poly)>0 and all(ins(k,poly,point) for point in occ)
-  cost=F(cost);assert cost=={1:3*s,2:K*s,3:J*s}[len(occ)]
-  low,high=strong_box(which);actual=shifted_polynomial_upper(q.det(*poly),low,high)
+  cost=F(cost);assert cost=={0:s,1:3*s,2:K*s,3:J*s}[len(occ)]
+  low,high=strong_box(which)
+  actual=shifted_polynomial_upper(q.det(*poly),low,high)if kind=='box_triangle'else max(vertex_polynomial_values(q.det(*poly),low,high))
   assert actual==F(bound)<cost
+ elif kind=='nomesh':
+  outer,points=args;assert not mesh_patterns(k,outer,points)
  elif kind=='inconsistent':
   tri,sn,why=args;assert get(k,tri)==-sn and why is not None
   old=k.copy();key,_=q.canonical(tuple(tri));del old[key]

@@ -241,6 +241,23 @@ point known to be inside the polygon to the convex hull of the four
 endpoints of the two crossed edges. This containment is never applied
 to a point not already proved inside the parent polygon.
 
+The distributed-triple rule is also available. If three actual points
+lie inside a positive actual triangle ABC, CLUSTERED_TRIANGLE.md
+excludes a clustered fan at the present threshold. The complete
+six-labeling argument of TYPE_II_133_TRIANGULAR_RIGHT.md Section 2
+therefore gives some permutation X,Y,Z for which these thirteen
+actual determinants are positive:
+
+    ABZ BCX CAY AZY BXZ CYX ZXY AZX BXY CYZ AXY BYZ CZX.
+
+A record `mesh ABC UVW DEF e` tests the six permutations of the
+three named interior points U,V,W. It retains those consistent with
+all preceding signs. If every retained labeling gives sign e to DEF,
+that sign is forced. A terminal `nomesh ABC UVW` means that all six
+labelings have an already proved opposite sign. This finite sign
+argument introduces no coordinate subdivision. Every use first
+checks all nine inward edge tests for U,V,W in ABC.
+
 ## Occupied upper triangles: additional affine consequences
 
 Some rows prove that both O and P lie in one of HCF,CEF,HCE.
@@ -297,7 +314,12 @@ upper cap M has one of the following explicitly justified sources:
 * Expand the signed triangle area after substituting each coordinate
   as lower+(upper-lower)*t, with 0<=t<=1. Its constant coefficient
   plus the positive nonconstant coefficients is an upper bound.
-* One actual fan is applied to either of those bounds. If T contains
+* Alternatively, an actual triangle determinant is affine in each
+  coordinate separately. On a box it is a convex combination of its
+  endpoint values, so their maximum is an upper bound. A `vertices`
+  record prints that maximum and the complete sorted list of distinct
+  rational endpoint values. The reader reconstructs that entire list.
+* One actual fan is applied to one of those bounds. If T contains
   an actual point X, its three fan areas sum to T. An upper bound M0
   on T, minus the witnessed occupancy floors of two fan areas, bounds
   the third. Only one such fan refinement is used.
@@ -405,7 +427,8 @@ at most one. Consequently the following quadratic factors are valid:
 The ten positive cyclic triple signs witness strict convexity. A scalar
 cap record supplies B for each strengthened factor. Such a record is
 either a fixed containing triangle, an exact shifted-box coefficient
-bound, or (for PB factors only) the single-fan bound described above.
+bound, an exact endpoint maximum, or (for PB factors only) the
+single-fan bound described above.
 All stated cap values and their comparison with B are checked exactly.
 
 The E5/E6 support factors are exactly QUADRILATERAL_SUPPORT.md,
@@ -463,7 +486,14 @@ uses no optimizer, numerical tolerance, or external discovery record.
 
 A direct box-triangle leaf uses the same shifted-box coefficient bound
 on a positively oriented actual triangle, and compares it with its
-printed occupancy floor. A clustered leaf is exactly the forbidden
+printed occupancy floor. A `vboxtri` leaf instead uses the exact
+endpoint maximum on the stated lower-cell root box. With n distinct
+named actual interior points, the required cost is s,3s,Ks,Js for
+n=0,1,2,3 respectively. A strictly smaller endpoint maximum is a
+contradiction. All n inward containments and the actual orientation
+are checked before that comparison.
+
+A clustered leaf is exactly the forbidden
 fan pattern of CLUSTERED_TRIANGLE.md. The other geometric leaves
 are a failed Pluecker sign identity, no admissible zero-or-two-change
 word, two occupants in a capacity-one triangle, three occupants in a

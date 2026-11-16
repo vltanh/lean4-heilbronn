@@ -796,6 +796,30 @@ physical polynomial. Both saved interval probes and the published
 22-leaf manuscript replay pass. The exact global algebra checker
 has 87 passing groups.
 
+
+The entire N7 lower-ear ABC child of (1,2,0) is now excluded by
+N7_ONE_LOWER_ABC.md. Its 93 binary splits yield 84 cubic proofs with
+37,612 printed terms and ten geometric contradictions. Independent
+geometry checks 3,411 deductions, 91,832 factor occurrences, all
+338 fixed caps, 103 shifted-box caps, 214 endpoint-value lists,
+78 fan caps, six chord deductions and ten six-label mesh deductions.
+Separate Fraction/SymPy readers reproduce every exact negative bound
+and all 41 rational squares. The largest bound is
+-994624990470585513980867681904031135317/9791312602874290448399495750000000000000.
+The shared-reader regression reproduces the earlier ABH proof unchanged.
+Only the two central N7 lower cells CA and CB remain.
+
+Three independently audited local lemmas are also recorded. Actual
+N6 top-cap triangles have explicit contact/apex affine caps; triangular
+top pairs have inner barycentric weights above 1/9, or 3/17 when a side
+cap is occupied. A stronger nontriangular six-point endpoint theorem
+gives m<(125/1142)S by the complete support-cell catalogue and exact
+quadratic comparisons. Their algebra checks pass. Together with the
+new ABC inventory group, the exact global checker has 91 passing groups;
+the earlier 87 groups and their completed children retain their scope.
+The remaining whole-count inventories are twelve for C1 and seventeen
+for N6. No new parent closure is inferred from these local bounds.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
