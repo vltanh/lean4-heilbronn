@@ -1726,6 +1726,31 @@ def c1_side_pair_opposite_top():
     print('PASS: C1 side-pair/opposite/top cubic box and complete two-row determinant exclusion')
 
 
+def adjacent_133_nontriangular_cell_iii():
+    from pathlib import Path
+    import re
+    q=sp.Rational
+    b,a,k,c,d,r,j=sp.symbols('b a k c d r j')
+    pts={'B':sp.Matrix([b,0]),'H':sp.Matrix([a,k]),'F':sp.Matrix([c,d]),'C':sp.Matrix([1,1]),'R':sp.Matrix([r,j])}
+    D=lambda word:2*area(*(pts[ch] for ch in word))
+    zero((1-k)*D('FCR')+(1-d)*D('CHR')-D('HFC')*(1-j))
+    zero((1-a)*(2-d-k)-2*D('HFC')-(1-a)*(d-k)-2*(1-c)*(1-k))
+    zero((c-b)*D('CBR')+(1-b)*D('BFR')-D('BFC')*(r-b))
+    text=Path(__file__).with_name('TYPE_II_133_CELL_III.md').read_text()
+    assert len(re.findall(r'^## Leaf III_',text,re.M))==65
+    prefix=text.split('## Leaf ',1)[0]
+    splits=re.search(r'```text\n(.*?)```',prefix,re.S)[1].strip().splitlines()
+    assert len(splits)==5
+    traces=re.findall(r'^### Sign trace\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(traces)==65 and sum(len(block.strip().splitlines()) for block in traces)==2012
+    sums=re.findall(r'^### Fixed polynomial\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==38 and sum(len(block.strip().splitlines()) for block in sums)==1117
+    assert len(re.findall(r'^Exclusion:',text,re.M))==27
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==38 and max(bounds)==q(-693228701,25000000000)<0
+    print('PASS: Type-II133 third-support-cell identities and complete sixty-five-leaf inventory')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1789,3 +1814,4 @@ if __name__ == "__main__":
     n6_side_pair_reduction()
     one_lower_point()
     c1_side_pair_opposite_top()
+    adjacent_133_nontriangular_cell_iii()

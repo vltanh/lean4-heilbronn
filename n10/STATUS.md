@@ -556,6 +556,16 @@ excluded and both central contact-order cubics derived directly.
 Independent geometric and exact symbolic checks pass for all three
 notes. The global algebra checker now has 62 passing groups.
 
+TYPE_II_133_CELL_III.md now closes the entire third nontriangular
+support cell. Its sixty roots and five binary refinements give 65
+leaves: 27 geometric exclusions and 38 cubics with 1,117 printed
+terms. Independent geometry verifies 1,827 Pluecker, 176 mesh, six
+line, two chord and one barycentric deduction, and every conditional
+factor. It reconstructs the same ten already-proved rational boxes.
+Separate Fraction and SymPy expansions pass; the largest bound is
+-693228701/25000000000. Only support cell II remains for the entire
+Type-II parent. The global algebra checker now has 63 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

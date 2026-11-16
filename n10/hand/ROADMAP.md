@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 49.
+Checkpoint 50.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -213,7 +213,14 @@ four-corner alternative and all zero-area faces.
             Fraction/SymPy expansions reproduce the strict bounds.
             Proof: TYPE_II_133_NONTRIANGULAR.md and
             TYPE_II_133_CELL_I.md.
-      - [ ] II-133-CELLS-II-III. Exclude both remaining support cells.
+      - [x] II-133-CELL-III. The entire third support cell: sixty
+            ray roots and five binary refinements give 65 leaves,
+            27 geometric exclusions and 38 cubics with 1,117 terms.
+            All 2,012 deductions and every conditional factor have
+            an independent geometry audit; separate Fraction/SymPy
+            manuscript readers reproduce the exact negative bounds.
+            Proof: TYPE_II_133_CELL_III.md, using the same common model.
+      - [ ] II-133-CELL-II. Exclude the sole remaining support cell.
   - [x] II-223-CORE. In the entire eight-point side core of (2,2,3),
         the remaining support point lies in DCH, DCF, and CFP, with
         vertical clearance at least 2s above F. The complete rational
@@ -613,10 +620,11 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_THREE_TOP_NO_SIDE.md | Three top points force both side caps empty; two complete exterior count rows close by endpoint-container and determinant inequalities |
 | N6_TWO_LOWER_TOP.md and N6_TWO_LOWER_TOP_TABLES.md | Entire two-lower/upper/top-cap placement: eight roots, 267 nodes, 821 deductions, 113 cubics, 65 geometric exclusions, 27,514 printed terms and 572 explicit shifted affine squares |
 | N6_TWO_LOWER_COMPLETE.md | Exhaustive assembly of every k=2 placement from the exact hull, upper/side, upper/top and two-exterior theorems |
-| TYPE_II_133_NONTRIANGULAR.md and TYPE_II_133_CELL_I.md | Exhaustive three-cell right-hull reduction and complete cell-I exclusion: sixty roots, 1,899 deductions, 24 cubics / 932 terms and 36 geometric exclusions; cells II/III remain open |
+| TYPE_II_133_NONTRIANGULAR.md and TYPE_II_133_CELL_I.md | Exhaustive three-cell right-hull reduction and complete cell-I exclusion: sixty roots, 1,899 deductions, 24 cubics / 932 terms and 36 geometric exclusions |
 | N6_SIDE_PAIR_REDUCTION.md | Every side pair has a triangular cap hull and Gamma2 endpoint cost; a side pair and top pair are incompatible, closing (0,0,2,2,0) and reflection |
 | ONE_LOWER_POINT.md | Four exhaustive local alternatives for one point in HABC, including both central contact-order cubics and the impossible double-ear cell |
 | C1_SIDE_PAIR_OPPOSITE_TOP.md | A side pair, opposite side point and top point are incompatible; two complete count rows close by a cubic box and direct determinant inequalities |
+| TYPE_II_133_CELL_III.md | Complete third nontriangular support cell: sixty roots, five refinements, 65 leaves, 2,012 deductions, 38 cubics / 1,117 terms and 27 geometric exclusions; only cell II remains |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
