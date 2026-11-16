@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 12.
+Checkpoint 13.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -177,12 +177,11 @@ in this family.
         and two 4/4 classes, up to square symmetry. In the corner-edge
         4/4 class, projection overlap supplies the coordinatewise ordering
         needed by N8-CANDIDATE-SIGNS. Proof: N8_OP_LINE_CAPS.md.
-  - [ ] N8-3/5. The remaining three-versus-five boundary arc class.
-        The uniform triangle bound area2(AEF)<69/100 and all eight square
-        images force O into AHF and AEH, and P into AEF, with the explicit
-        additional signs in N8_TRIANGLE_CAPS.md. The final contradiction
-        for this remaining placement is still open. QUADRILATERAL_SPREAD.md
-        supplies two further uniform inequalities when EHP<0.
+  - [x] N8-3/5. The complete three-versus-five boundary arc class.
+        The triangle capacities force its placement, then ten exhaustive
+        actual-sign rows have printed cubic contradictions. All 1,807
+        positive integer entries, exact bounds, and occupancy/separation
+        premises are supplied. Proof: N8_THREE_FIVE.md.
   - [ ] N8-4/4-SIDE. The line crosses opposite same-side boundary edges.
   - [ ] N8-4/4-CORNER-OBLIQUE. The line crosses opposite corner edges,
         but at least one of ADO+,BGO-,CFP+,EHP+ fails.
@@ -233,6 +232,7 @@ remaining orientations.
 | TYPE_II_R4.md | Complete both-below-CE exclusion in (1,2,4), and uniform empty bottom fan in its both-above cut |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |
+| N8_THREE_FIVE.md | Entire 3/5 line class excluded by ten exhaustive cubic rows with all 1,807 integer entries printed |
 | N8_BOUNDARY_RANGES.md | Stronger uniform coordinate ranges and four definite contact-overlap bounds from the eight ears alone |
 | QUADRILATERAL_SPREAD.md | Two-diagonal spread bound 1-6t for t>=1/11, threshold-free bound 1-(3+2sqrt(2))t, and explicit N8 applications |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |

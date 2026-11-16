@@ -2,8 +2,9 @@
 
 This note proves that each square-symmetry image of the actual triangle
 AEF contains at most one of the two interior points. It then gives a
-complete placement reduction for the remaining 3/5 line class. It does
-not yet exclude that class, and does not close HP12-N8.
+complete placement reduction for the 3/5 line class. N8_THREE_FIVE.md
+uses this reduction to exclude the class. The complete HP12-N8 parent
+still requires the two remaining 4/4 classes.
 
 All areas below are doubled. Put s=93/1000 and use the literal boundary
 coordinates
@@ -204,5 +205,5 @@ Thus every competitive configuration in the entire 3/5 class satisfies
 
 All these are actual-triangle signs, so zero cases are excluded by the
 positive minimum area. This is a uniform reduction of the whole 3/5
-class. A quantitative contradiction for the remaining placement (8)
-is still needed; no closure of N8-3/5 is claimed here.
+class. The ten exhaustive cubic inequalities in N8_THREE_FIVE.md exclude
+the remaining placement (8) and close N8-3/5.

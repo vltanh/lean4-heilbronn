@@ -5,8 +5,8 @@ and excludes the complete 1/7 and 2/6 boundary sign patterns of their line.
 The proof uses actual boundary ears,
 the triangular occupancy bound proved in TRIANGLE_OCCUPANCY.md, and the
 short six-point argument reproduced below. It does not assume the
-candidate's signs or symmetries. The 3/5 and 4/4 patterns remain separate
-obligations.
+candidate's signs or symmetries. The 3/5 pattern is subsequently excluded
+in N8_THREE_FIVE.md. The two 4/4 patterns remain separate obligations.
 
 Every area in this note is a DOUBLED area. Put
 
@@ -220,7 +220,7 @@ positive side of directed OP.
 
 | Arc sizes | Representative positive vertices | Edges crossed by OP | Remaining obligation |
 |---|---|---|---|
-| 3/5 | H,G,F | AH and EF | Exclude or bound this one arc class |
+| 3/5 | H,G,F | AH and EF | Completely excluded in N8_THREE_FIVE.md |
 | 4/4, corner edges | A,H,G,F | AB and EF | Exclude the oblique sign failures described below |
 | 4/4, same-side edges | H,G,F,E | AH and DE | Exclude or bound this one arc class |
 
@@ -254,7 +254,7 @@ If additionally
 
 the complete sharp theorem in ASYMMETRIC_SIGN_CHAMBER.md applies. Its
 failure alternatives are precisely the corner-edge case with at least
-one of these four oblique signs reversed. Thus the three explicitly
-remaining orientation obligations are the 3/5 class, the same-side-edge
-4/4 class, and those oblique sign failures in the corner-edge 4/4 class.
-No exclusion of these three obligations is asserted here.
+one of these four oblique signs reversed. N8_THREE_FIVE.md excludes the
+3/5 class. The remaining orientation obligations are the same-side-edge
+4/4 class and those oblique sign failures in the corner-edge 4/4 class.
+No exclusion of either 4/4 obligation is asserted here.

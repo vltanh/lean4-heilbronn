@@ -115,6 +115,14 @@ and the complete asymmetric N8 domain. HP14 (assembly) and HP15 (final
 manuscript audit) depend on those obligations and remain unchecked. The
 computer-assisted completion above is not a substitute for these hand proofs.
 
+Within those remaining parents, the balanced U3 2/2 fan split is now
+excluded in full by seventeen printed cubic inequalities, and the entire
+N8 3/5 line class is excluded by ten. Both complete manuscripts include
+every positive integer coefficient and exact negative bound. The
+manuscript-reading Fraction checkers pass, as do independent SymPy
+expansions of all printed rows. U3 retains only 3/1 and its reflection;
+N8 retains its two explicitly catalogued 4/4 obligations.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
