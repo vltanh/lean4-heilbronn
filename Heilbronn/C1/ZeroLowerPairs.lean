@@ -546,6 +546,12 @@ theorem ell_pos (hA : C1Anchors h c d f) {R S P : Point} (hD : 0 < sarea R S (1,
   by_contra hn; push Not at hn
   nlinarith [mul_nonpos_of_nonneg_of_nonpos hΩ.le hn]
 
+theorem inj5 {s0 s1 s2 : ℕ} (h0 : 5 ≤ s0) (h1 : 5 ≤ s1) (h2 : 5 ≤ s2) (h01 : s0 ≠ s1)
+    (h02 : s0 ≠ s2) (h12 : s1 ≠ s2) : Function.Injective ![3, 2, s0, s1, s2] := by
+  intro x y hxy
+  fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> omega
+
+set_option maxHeartbeats 2000000 in
 /-- **Lemma 3 and the seeds (17)** (`C1_ZERO_LOWER:Lemma3`): in a three-top-cap case (16), with
 the free points labelled by angle from `O` among equal words, the seeds of one choice of the
 inner cap point hold. -/
@@ -641,6 +647,168 @@ theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
       | exact closeK e (fun p hp => by rcases sub _ _ _ p hp with rfl | rfl | rfl <;> simp [hP5])
       | exact closeK b (fun p hp => by rcases sub _ _ _ p hp with rfl | rfl | rfl <;> simp [hP5])
       | exact closeK a (fun p hp => by rcases sub _ _ _ p hp with rfl | rfl | rfl <;> simp [hP5])
-  sorry
+  have hm5 := H.min_sub (by norm_num) ![3, 2, 5, 6, 7] (by intro x; fin_cases x <;> simp)
+    (by decide)
+  have e5 : (fun x => cfg h c d f Q (![3, 2, 5, 6, 7] x)) = ![(f, 1), (1, d), Q 0, Q 1, Q 2] := by
+    funext x; fin_cases x <;> rfl
+  rw [e5] at hm5
+  obtain ⟨W', σ, hS, harea⟩ := TypeII.claim_support_normalization hFDE (hull 0) (hull 1) (hull 2)
+    (lt_of_lt_of_le A₀_pos hm5) hnt
+  have hQσ : ∀ k : Fin 3, ![Q (0 : Fin 3).castSucc, Q (1 : Fin 3).castSucc,
+      Q (2 : Fin 3).castSucc] k = Q k.castSucc := by intro k; fin_cases k <;> rfl
+  simp only [hQσ] at hS
+  have hm := H.min_sub (by norm_num) ![3, 2, (σ 0).val + 5, (σ 1).val + 5, (σ 2).val + 5]
+    (by intro x; fin_cases x <;> simp <;> omega)
+    (inj5 (by omega) (by omega) (by omega)
+      (fun e => (by decide : (0 : Fin 3) ≠ 1) (σ.injective (Fin.ext (by omega))))
+      (fun e => (by decide : (0 : Fin 3) ≠ 2) (σ.injective (Fin.ext (by omega))))
+      (fun e => (by decide : (1 : Fin 3) ≠ 2) (σ.injective (Fin.ext (by omega)))))
+  have e6 : (fun x => cfg h c d f Q (![3, 2, (σ 0).val + 5, (σ 1).val + 5, (σ 2).val + 5] x)) =
+      ![(f, 1), (1, d), Q (σ 0).castSucc, Q (σ 1).castSucc, Q (σ 2).castSucc] := by
+    funext x; fin_cases x
+    · rfl
+    · rfl
+    · exact cfg_free h c d f Q (σ 0).castSucc
+    · exact cfg_free h c d f Q (σ 1).castSucc
+    · exact cfg_free h c d f Q (σ 2).castSucc
+  rw [e6] at hm
+  have h1 : sarea (f, 1) (1, d) W' ≤ 1 := by nlinarith
+  have rl := rho_lt
+  rcases support_cells hS h1 hm with ⟨-, -, hK⟩ | ⟨hTR, hTS⟩ | ⟨-, -, hK⟩
+  · exfalso; nlinarith
+  rotate_left
+  · exfalso; nlinarith
+  -- the line `RS` (`R` on the leg of `D`, `S` on the leg of `F`)
+  obtain ⟨a2, b2, ha2, hb2, hab2, hSe⟩ := hS.2.1
+  obtain ⟨a1, b1, ha1, hb1, hab1, hRe⟩ := hS.2.2.1
+  have hW := hS.1
+  obtain rfl : a1 = 1 - b1 := by linarith
+  obtain rfl : a2 = 1 - b2 := by linarith
+  have lD : 0 < sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (1, d) := by
+    rw [← hRe, ← hSe]
+    have e : sarea ((1 - b1) • ((1 : ℝ), d) + b1 • W') ((1 - b2) • (f, (1 : ℝ)) + b2 • W') (1, d) =
+        b1 * (1 - b2) * sarea (f, 1) (1, d) W' := by
+      simp only [sarea, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul]
+      ring
+    rw [e]; exact mul_pos (mul_pos hb1 ha2) hW
+  have lF : 0 < sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (f, 1) := by
+    rw [← hRe, ← hSe]
+    have e : sarea ((1 - b1) • ((1 : ℝ), d) + b1 • W') ((1 - b2) • (f, (1 : ℝ)) + b2 • W') (f, 1) =
+        (1 - b1) * b2 * sarea (f, 1) (1, d) W' := by
+      simp only [sarea, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd, smul_eq_mul]
+      ring
+    rw [e]; exact mul_pos (mul_pos ha1 hb2) hW
+  have idf : ∀ R S P : Point, (1 - d) * (1 - f) * sarea R S P = (1 - f) * (1 - P.2) *
+      sarea R S (1, d) + (1 - d) * (1 - P.1) * sarea R S (f, 1) -
+        sarea (1, d) (f, 1) P * sarea R S (1, 1) := fun R S P => by unfold sarea; ring
+  have lE : sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (1, 1) < 0 := by
+    by_contra hn; push Not at hn
+    have dR : sarea (1, d) (f, 1) (Q (σ 1).castSucc) < 0 := topc (σ 1)
+    have dS : sarea (1, d) (f, 1) (Q (σ 0).castSucc) < 0 := topc (σ 0)
+    obtain ⟨x0, x1, y0, y1⟩ := H.sq (σ 1).castSucc
+    obtain ⟨u0, u1, v0, v1⟩ := H.sq (σ 0).castSucc
+    have iR := idf (Q (σ 1).castSucc) (Q (σ 0).castSucc) (Q (σ 1).castSucc)
+    have iS := idf (Q (σ 1).castSucc) (Q (σ 0).castSucc) (Q (σ 0).castSucc)
+    rw [show sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (Q (σ 1).castSucc) = 0 by
+      unfold sarea; ring, mul_zero] at iR
+    rw [show sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (Q (σ 0).castSucc) = 0 by
+      unfold sarea; ring, mul_zero] at iS
+    have q3 := mul_nonpos_of_nonpos_of_nonneg dR.le hn
+    have q3' := mul_nonpos_of_nonpos_of_nonneg dS.le hn
+    have f1 : (0 : ℝ) < 1 - f := by linarith
+    have d1 : (0 : ℝ) < 1 - d := by linarith
+    have qa := mul_nonneg (mul_nonneg f1.le (sub_nonneg.2 y1)) lD.le
+    have qb := mul_nonneg (mul_nonneg d1.le (sub_nonneg.2 x1)) lF.le
+    have qc := mul_nonneg (mul_nonneg f1.le (sub_nonneg.2 v1)) lD.le
+    have qd := mul_nonneg (mul_nonneg d1.le (sub_nonneg.2 u1)) lF.le
+    have ry : (Q (σ 1).castSucc).2 = 1 := by
+      by_contra hne; have := mul_pos (mul_pos f1 (sub_pos.2 (lt_of_le_of_ne y1 hne))) lD; linarith
+    have rx : (Q (σ 1).castSucc).1 = 1 := by
+      by_contra hne; have := mul_pos (mul_pos d1 (sub_pos.2 (lt_of_le_of_ne x1 hne))) lF; linarith
+    have sy : (Q (σ 0).castSucc).2 = 1 := by
+      by_contra hne; have := mul_pos (mul_pos f1 (sub_pos.2 (lt_of_le_of_ne v1 hne))) lD; linarith
+    have sx : (Q (σ 0).castSucc).1 = 1 := by
+      by_contra hne; have := mul_pos (mul_pos d1 (sub_pos.2 (lt_of_le_of_ne u1 hne))) lF; linarith
+    have : Q (σ 1).castSucc = Q (σ 0).castSucc := Prod.ext (by rw [rx, sx]) (by rw [ry, sy])
+    rw [this] at lD; simp [sarea] at lD
+  have pos : ∀ P : Point, P ∈ unitSquare → 0 < sarea (1, d) (f, 1) P →
+      0 < sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) P := fun P hP hDF =>
+    ell_pos H.hA lD lF lE hP hDF
+  have sq0 : ((0 : ℝ), (0 : ℝ)) ∈ unitSquare := ⟨le_rfl, zero_le_one, le_rfl, zero_le_one⟩
+  have lO := pos (0, 0) sq0 (by simp only [sarea]; nlinarith)
+  have lC := pos (c, 0) ⟨by linarith, by linarith, le_rfl, zero_le_one⟩ (by simp only [sarea]; nlinarith)
+  have lH := pos (0, h) ⟨le_rfl, zero_le_one, by linarith, by linarith⟩ (by simp only [sarea]; nlinarith)
+  have lX := pos (Q 3) (H.hQ 3) U3.df
+  have lT : 0 < sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (Q (σ 2).castSucc) := by
+    have iT : sarea (1, d) (f, 1) (Q (σ 1).castSucc) *
+        sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (Q (σ 2).castSucc) =
+        -sarea (Q (σ 1).castSucc) (f, 1) (Q (σ 2).castSucc) *
+          sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (1, d) -
+        sarea (1, d) (Q (σ 1).castSucc) (Q (σ 2).castSucc) *
+          sarea (Q (σ 1).castSucc) (Q (σ 0).castSucc) (f, 1) := by unfold sarea; ring
+    have dR : sarea (1, d) (f, 1) (Q (σ 1).castSucc) < 0 := topc (σ 1)
+    by_contra hn; push Not at hn
+    nlinarith [mul_nonneg_of_nonpos_of_nonpos dR.le hn, mul_pos hTR.2.2 lD, mul_pos hTR.2.1 lF]
+  have cyc : ∀ V R S : Point, sarea V R S = sarea R S V := fun V R S => (sarea_cycle V R S).symm
+  have fO : 0 < sarea (0, 0) (Q (σ 1).castSucc) (Q (σ 0).castSucc) := by rw [cyc]; exact lO
+  have fC : 0 < sarea (c, 0) (Q (σ 1).castSucc) (Q (σ 0).castSucc) := by rw [cyc]; exact lC
+  have fD : 0 < sarea (1, d) (Q (σ 1).castSucc) (Q (σ 0).castSucc) := by rw [cyc]; exact lD
+  have fF : 0 < sarea (f, 1) (Q (σ 1).castSucc) (Q (σ 0).castSucc) := by rw [cyc]; exact lF
+  have fH : 0 < sarea (0, h) (Q (σ 1).castSucc) (Q (σ 0).castSucc) := by rw [cyc]; exact lH
+  have gDR : 0 < sarea (1, d) (Q (σ 1).castSucc) (Q (σ 2).castSucc) := hTR.2.1
+  have gFR : sarea (f, 1) (Q (σ 1).castSucc) (Q (σ 2).castSucc) < 0 := by
+    rw [sw']; linarith [hTR.2.2]
+  have gDS : 0 < sarea (1, d) (Q (σ 0).castSucc) (Q (σ 2).castSucc) := hTS.2.1
+  have gFS : sarea (f, 1) (Q (σ 0).castSucc) (Q (σ 2).castSucc) < 0 := by
+    rw [sw']; linarith [hTS.2.2]
+  -- the labels: `R` comes before `S` (angle from `O`)
+  have kw3 : ∀ k : Fin 3, kw ks k.castSucc = 3 := by intro k; fin_cases k; exacts [k0, k1, k2]
+  have hord : σ 1 < σ 0 := by
+    rcases lt_trichotomy (σ 1) (σ 0) with hl | hl | hl
+    · exact hl
+    · exact absurd (σ.injective hl) (by decide)
+    · have := horder (σ 0).castSucc (σ 1).castSucc (Fin.castSucc_lt_castSucc_iff.2 hl)
+        (by rw [kw3, kw3])
+      rw [sarea_swap₂₃] at this; linarith
+  have hperm : ∀ τ : Equiv.Perm (Fin 3), τ 1 < τ 0 → (τ 0 = 1 ∧ τ 1 = 0 ∧ τ 2 = 2) ∨
+      (τ 0 = 2 ∧ τ 1 = 0 ∧ τ 2 = 1) ∨ (τ 0 = 2 ∧ τ 1 = 1 ∧ τ 2 = 0) := by decide
+  rcases hperm σ hord with ⟨e0, e1, e2⟩ | ⟨e0, e1, e2⟩ | ⟨e0, e1, e2⟩ <;>
+    simp only [e0, e1, e2] at fO fC fD fF fH lT lX gDR gFR gDS gFS
+  · refine ⟨2, by norm_num, fun g hg => ?_⟩
+    have e : seedRaw ks 2 = [orient 0 5 6 true, orient 1 5 6 true, orient 2 5 6 true,
+        orient 3 5 6 true, orient 4 5 6 true, orient 5 6 7 true, orient 5 6 8 true,
+        orient 2 5 7 true, orient 3 5 7 false, orient 2 6 7 true, orient 3 6 7 false] := by
+      unfold seedRaw; rw [hcaps]; rfl
+    rw [e] at hg
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at hg
+    rcases hg with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
+      apply orient_holds (by norm_num) (by norm_num) (by norm_num) <;>
+      simp only [OrientHolds, ite_true, ite_false, Bool.false_eq_true] <;>
+      first | exact fO | exact fC | exact fD | exact fF | exact fH | exact lT | exact lX |
+        exact gDR | exact gFR | exact gDS | exact gFS
+  · refine ⟨1, by norm_num, fun g hg => ?_⟩
+    have e : seedRaw ks 1 = [orient 0 5 7 true, orient 1 5 7 true, orient 2 5 7 true,
+        orient 3 5 7 true, orient 4 5 7 true, orient 5 7 6 true, orient 5 7 8 true,
+        orient 2 5 6 true, orient 3 5 6 false, orient 2 7 6 true, orient 3 7 6 false] := by
+      unfold seedRaw; rw [hcaps]; rfl
+    rw [e] at hg
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at hg
+    rcases hg with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
+      apply orient_holds (by norm_num) (by norm_num) (by norm_num) <;>
+      simp only [OrientHolds, ite_true, ite_false, Bool.false_eq_true] <;>
+      first | exact fO | exact fC | exact fD | exact fF | exact fH | exact lT | exact lX |
+        exact gDR | exact gFR | exact gDS | exact gFS
+  · refine ⟨0, by norm_num, fun g hg => ?_⟩
+    have e : seedRaw ks 0 = [orient 0 6 7 true, orient 1 6 7 true, orient 2 6 7 true,
+        orient 3 6 7 true, orient 4 6 7 true, orient 6 7 5 true, orient 6 7 8 true,
+        orient 2 6 5 true, orient 3 6 5 false, orient 2 7 5 true, orient 3 7 5 false] := by
+      unfold seedRaw; rw [hcaps]; rfl
+    rw [e] at hg
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at hg
+    rcases hg with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
+      apply orient_holds (by norm_num) (by norm_num) (by norm_num) <;>
+      simp only [OrientHolds, ite_true, ite_false, Bool.false_eq_true] <;>
+      first | exact fO | exact fC | exact fD | exact fF | exact fH | exact lT | exact lX |
+        exact gDR | exact gFR | exact gDS | exact gFS
 
 end Heilbronn.C1ZeroLower
