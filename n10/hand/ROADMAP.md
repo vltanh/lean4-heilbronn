@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 44.
+Checkpoint 45.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -404,8 +404,15 @@ four-corner alternative and all zero-area faces.
         covered. The AB/EF good word uses the strict sharp projection
         theorem; the other cases have the rational sigma gap.
         Proof: N7_SINGLE_EXTERIOR.md assembles the complete catalogue.
-  - [ ] N7-INTERIOR-REMAINDER. Exclude the two remaining all-interior
-        heptagon counts (k,j,q)=(1,2,0) and (0,2,1).
+  - [x] N7-INTERIOR-TWO-UPPER-EAR. The entire all-interior count
+        (k,j,q)=(0,2,1). Sixty-four exhaustive leaves have 58 cubics
+        with 13,979 printed terms and six clustered-triangle exclusions.
+        Both boxes, all 2,166 explicit deductions, 248 triangle,
+        357 quadrilateral, eleven spread and 250 convex-five factor
+        occurrences have independent geometry and Fraction/SymPy audits.
+        Proof: N7_HEPTAGON_TWO_UPPER_EAR.md.
+  - [ ] N7-INTERIOR-REMAINDER. Exclude the sole remaining all-interior
+        heptagon count (k,j,q)=(1,2,0).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -549,6 +556,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_HEPTAGON_ONE_EAR.md | Five exhaustive all-interior heptagon counts; complete (2,0,1) and (1,1,1) exclusions by an analytic budget and two cubics, 52 explicit deductions and 349 printed terms |
 | N7_SIDE_AH_DE.md | Entire literal AH/DE side-line class at every height: 56 exhaustive leaves, 19,348 printed terms and two explicit rational boxes |
 | N7_SINGLE_EXTERIOR.md | Complete single-exterior N7 sharp exclusion m<A*, assembling all literal arc positions and four 4/4 edge pairs, including the projected good-word terminal |
+| N7_HEPTAGON_TWO_UPPER_EAR.md | Entire all-interior (0,2,1) count: 64 exhaustive leaves, 58 cubics / 13,979 printed terms, six clustered-triangle exclusions and 2,166 explicit deductions |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

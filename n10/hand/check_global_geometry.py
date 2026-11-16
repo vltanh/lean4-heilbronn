@@ -1440,6 +1440,32 @@ def n6_two_lower_two_exterior():
     print("PASS: complete N6 two-lower/two-exterior cap identities, TT catalogue, exterior line rule, and full printed inventory")
 
 
+def n7_heptagon_two_upper_ear():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);K=q(149,20);eta=q(93,790);ell=q(7347,69700)
+    assert q(77,100)*(1-ell)<K*s and (1-s)*(1-q(237,1000))<K*s
+    assert (1-q(647,1000))*(1-s-eta)<3*s
+    assert q(17,100)*(q(647,1000)-ell)<s
+    assert (1-4*s)*(1-s-q(463,1000))<3*s
+    assert q(237,1000)*(1-q(76,125))<s
+    assert q(14,125)*(1-q(17,100))<s
+    assert (1-q(883,1000))*(1-s-eta)<s
+    note=Path(__file__).with_name('N7_HEPTAGON_TWO_UPPER_EAR.md').read_text()
+    rows=re.findall(r'^\| (R\d+) \| ([WTG]) \| ([A-Z+\-, ]+) \|$',note,re.M)
+    assert len(rows)==64 and sum(kind=='G' for _,kind,_ in rows)==6
+    def complete(paths):
+        if paths==[[]]:return 1
+        assert paths and all(paths) and len({pp[0][:3] for pp in paths})==1
+        return sum(complete([pp[1:] for pp in paths if pp[0][-1]==sg]) for sg in '-+')
+    assert complete([path.split(', ') for _,_,path in rows])==64
+    traces=re.findall(r'^```n7-h2-R\d+-trace\n(.*?)^```$',note,re.M|re.S)
+    assert len(traces)==64 and sum(len(z.strip().splitlines()) for z in traces)==2166
+    sums=re.findall(r'^```n7-h2-R\d+-sum\n(.*?)^```$',note,re.M|re.S)
+    assert len(sums)==58 and sum(len(z.strip().splitlines()) for z in sums)==13979
+    print("PASS: complete N7 two-upper/occupied-ear rational boxes and exhaustive sixty-four-leaf inventory")
+
+
 def adjacent_133_triangular_right():
     from pathlib import Path
     import re
@@ -1629,3 +1655,4 @@ if __name__ == "__main__":
     n7_heptagon_occupied_ear()
     n7_ah_de_and_single_exterior()
     adjacent_133_triangular_right()
+    n7_heptagon_two_upper_ear()

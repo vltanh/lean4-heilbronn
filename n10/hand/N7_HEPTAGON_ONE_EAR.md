@@ -295,8 +295,9 @@ The all-interior count (2,1,0) is excluded by
 N6_TWO_LOWER_SIDE.md, Section 6, using the right contact D as a
 boundary side-cap point. Both normalized side locations are retained
 there. Together with the two counts proved here, this leaves only
-(1,2,0) and (0,2,1) in the catalogue of Section 1. Those two counts
-remain separate obligations.
+(1,2,0) and (0,2,1) in the catalogue of Section 1. The latter is
+excluded separately in N7_HEPTAGON_TWO_UPPER_EAR.md; only (1,2,0)
+remains open.
 
 ### Row R1
 

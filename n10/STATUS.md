@@ -489,6 +489,19 @@ exact bound and the exhaustive tree. Only nontriangular right hulls
 remain in Type II. The global algebra checker now has 54 passing
 groups.
 
+The entire all-interior N7 count (k,j,q)=(0,2,1) is now excluded by
+N7_HEPTAGON_TWO_UPPER_EAR.md. An occupied actual ear gives stronger
+contact and free-point ranges through ten explicit scalar comparisons.
+The complete binary tree has 64 leaves: 58 fixed cubics with 13,979
+printed integer terms and six witnessed clustered-triangle exclusions.
+A fresh independent manuscript reader validates all 2,111 Pluecker
+and 55 barycentric deductions, every branch, both boxes, 248 actual
+triangle and 357 quadrilateral witnesses, eleven spread witnesses and
+250 convex-five factor occurrences, including free-point pentagons.
+Separate Fraction and SymPy expansions reproduce every exact negative
+bound. Only the all-interior (1,2,0) count remains in N7. The global
+algebra checker now has 55 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

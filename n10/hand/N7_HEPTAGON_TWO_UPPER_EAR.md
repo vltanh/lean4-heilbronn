@@ -1,0 +1,18044 @@
+# Seven boundary points: two upper points and an occupied right ear
+
+**Theorem.** In the all-interior seven-contact normalization h>=e,
+the free-point count (k,j,q)=(0,2,1) in HABC,HCEF,CDE is impossible
+when every actual triangle has unsigned doubled area at least
+s=93/1000. Thus this entire count has minimum ordinary triangle area
+less than 93/2000<A*.
+
+The complete proof has 64 leaves: 58 fixed cubic contradictions and
+six applications of the clustered-triangle theorem. The cubic sums
+contain 13,979 positive integer terms. Their signs are justified by
+2,166 explicitly printed deductions. The optional standard-library
+checker reads only this manuscript and rebuilds every factor; no
+search, optimization or external certificate is a premise.
+
+All areas are doubled, and [XYZ]=det(Y-X,Z-X).
+
+## 1. Normalization and the exhaustive binary tree
+
+Use the actual contacts
+
+    A=(0,a), B=(b,0), C=(c,0), D=(1,d),
+    E=(1,e), F=(f,1), H=(0,h),
+    0<a<h<1, 0<b<c<1, 0<d<e<1,
+    a<=e<=h, b<=f<=c.
+
+The three other actual points are
+
+    G=(g,z), O=(x,y) in HCEF,       P=(u,v) in CDE.
+
+They all lie strictly inside the contact heptagon ABCDEFH. Here G is
+an interior point, not the exterior point used in the earlier N7
+line-class manuscripts. Interchange the two upper points if necessary
+so that HGO<0. This is a permutation of two free points and uses no
+additional square reflection. It is exhaustive because HGO cannot be
+zero.
+
+The common starting signs are exactly these:
+
+* Every triple of A,B,C,D,E,F,H in its cyclic order is positive.
+* Every directed edge test of ABCDEFH at G,O,P is positive.
+* Every directed edge test of HCEF at G,O, and of CDE at P, is positive.
+* HGO is negative.
+
+The table gives all 64 complete paths of strict actual-triangle signs.
+It is a complete binary trie: every nonterminal prefix has exactly
+two children, the opposite signs of one actual triangle. The first
+cut is DOP. Since every unsigned actual area is at least s, no zero
+case has been omitted. A W or T entry specifies the affine-factor box
+of Section 2; G means a geometric leaf.
+
+| Row | Box or geometric leaf | Complete strict-sign path |
+|---|---|---|
+| R01 | W | DOP-, AGP-, EGO-, BGO-, DHP-, AEG- |
+| R02 | W | DOP-, AGP-, EGO-, BGO-, DHP-, AEG+ |
+| R03 | W | DOP-, AGP-, EGO-, BGO-, DHP+ |
+| R04 | W | DOP-, AGP-, EGO-, BGO+, AGO- |
+| R05 | T | DOP-, AGP-, EGO-, BGO+, AGO+, DFP-, CFO-, GOP- |
+| R06 | T | DOP-, AGP-, EGO-, BGO+, AGO+, DFP-, CFO-, GOP+ |
+| R07 | T | DOP-, AGP-, EGO-, BGO+, AGO+, DFP-, CFO+, DGO- |
+| R08 | T | DOP-, AGP-, EGO-, BGO+, AGO+, DFP-, CFO+, DGO+ |
+| R09 | W | DOP-, AGP-, EGO-, BGO+, AGO+, DFP+, GOP- |
+| R10 | W | DOP-, AGP-, EGO-, BGO+, AGO+, DFP+, GOP+ |
+| R11 | W | DOP-, AGP-, EGO+, AEG-, CFO-, DFP- |
+| R12 | W | DOP-, AGP-, EGO+, AEG-, CFO-, DFP+ |
+| R13 | W | DOP-, AGP-, EGO+, AEG-, CFO+, CGO- |
+| R14 | W | DOP-, AGP-, EGO+, AEG-, CFO+, CGO+, DHP- |
+| R15 | W | DOP-, AGP-, EGO+, AEG-, CFO+, CGO+, DHP+ |
+| R16 | T | DOP-, AGP-, EGO+, AEG+, DGP-, AOP-, DFP-, CFO- |
+| R17 | T | DOP-, AGP-, EGO+, AEG+, DGP-, AOP-, DFP-, CFO+ |
+| R18 | W | DOP-, AGP-, EGO+, AEG+, DGP-, AOP-, DFP+ |
+| R19 | T | DOP-, AGP-, EGO+, AEG+, DGP-, AOP+, DFP-, BEO- |
+| R20 | T | DOP-, AGP-, EGO+, AEG+, DGP-, AOP+, DFP-, BEO+ |
+| R21 | W | DOP-, AGP-, EGO+, AEG+, DGP-, AOP+, DFP+ |
+| R22 | G | DOP-, AGP-, EGO+, AEG+, DGP+, GHP- |
+| R23 | T | DOP-, AGP-, EGO+, AEG+, DGP+, GHP+, DFG-, ADO- |
+| R24 | T | DOP-, AGP-, EGO+, AEG+, DGP+, GHP+, DFG-, ADO+ |
+| R25 | W | DOP-, AGP-, EGO+, AEG+, DGP+, GHP+, DFG+ |
+| R26 | W | DOP-, AGP+ |
+| R27 | G | DOP+, ADP-, CFO-, GHP- |
+| R28 | W | DOP+, ADP-, CFO-, GHP+, EGO-, DGH- |
+| R29 | W | DOP+, ADP-, CFO-, GHP+, EGO-, DGH+, DFG-, HOP- |
+| R30 | W | DOP+, ADP-, CFO-, GHP+, EGO-, DGH+, DFG-, HOP+ |
+| R31 | W | DOP+, ADP-, CFO-, GHP+, EGO-, DGH+, DFG+ |
+| R32 | W | DOP+, ADP-, CFO-, GHP+, EGO+, FGP-, BGO-, HOP- |
+| R33 | W | DOP+, ADP-, CFO-, GHP+, EGO+, FGP-, BGO-, HOP+ |
+| R34 | W | DOP+, ADP-, CFO-, GHP+, EGO+, FGP-, BGO+, AEG- |
+| R35 | W | DOP+, ADP-, CFO-, GHP+, EGO+, FGP-, BGO+, AEG+ |
+| R36 | W | DOP+, ADP-, CFO-, GHP+, EGO+, FGP+, HOP- |
+| R37 | W | DOP+, ADP-, CFO-, GHP+, EGO+, FGP+, HOP+ |
+| R38 | W | DOP+, ADP-, CFO+, AGO-, CGO- |
+| R39 | W | DOP+, ADP-, CFO+, AGO-, CGO+, BFO- |
+| R40 | W | DOP+, ADP-, CFO+, AGO-, CGO+, BFO+, AEO- |
+| R41 | W | DOP+, ADP-, CFO+, AGO-, CGO+, BFO+, AEO+ |
+| R42 | G | DOP+, ADP-, CFO+, AGO+, GHP- |
+| R43 | W | DOP+, ADP-, CFO+, AGO+, GHP+, BFO- |
+| R44 | T | DOP+, ADP-, CFO+, AGO+, GHP+, BFO+, FGP-, DFG-, EGO- |
+| R45 | T | DOP+, ADP-, CFO+, AGO+, GHP+, BFO+, FGP-, DFG-, EGO+ |
+| R46 | W | DOP+, ADP-, CFO+, AGO+, GHP+, BFO+, FGP-, DFG+ |
+| R47 | W | DOP+, ADP-, CFO+, AGO+, GHP+, BFO+, FGP+ |
+| R48 | W | DOP+, ADP+, DGP-, DHP- |
+| R49 | G | DOP+, ADP+, DGP-, DHP+ |
+| R50 | G | DOP+, ADP+, DGP+, CFO-, GHP- |
+| R51 | W | DOP+, ADP+, DGP+, CFO-, GHP+, BGO-, FGP-, GOP- |
+| R52 | W | DOP+, ADP+, DGP+, CFO-, GHP+, BGO-, FGP-, GOP+ |
+| R53 | G | DOP+, ADP+, DGP+, CFO-, GHP+, BGO-, FGP+, FGO- |
+| R54 | W | DOP+, ADP+, DGP+, CFO-, GHP+, BGO-, FGP+, FGO+ |
+| R55 | W | DOP+, ADP+, DGP+, CFO-, GHP+, BGO+, EGO-, HOP- |
+| R56 | W | DOP+, ADP+, DGP+, CFO-, GHP+, BGO+, EGO-, HOP+ |
+| R57 | W | DOP+, ADP+, DGP+, CFO-, GHP+, BGO+, EGO+ |
+| R58 | W | DOP+, ADP+, DGP+, CFO+, AGO-, BFO- |
+| R59 | W | DOP+, ADP+, DGP+, CFO+, AGO-, BFO+ |
+| R60 | W | DOP+, ADP+, DGP+, CFO+, AGO+, FGP-, BFO- |
+| R61 | W | DOP+, ADP+, DGP+, CFO+, AGO+, FGP-, BFO+, AFO- |
+| R62 | T | DOP+, ADP+, DGP+, CFO+, AGO+, FGP-, BFO+, AFO+, HOP- |
+| R63 | T | DOP+, ADP+, DGP+, CFO+, AGO+, FGP-, BFO+, AFO+, HOP+ |
+| R64 | W | DOP+, ADP+, DGP+, CFO+, AGO+, FGP+ |
+
+Each leaf prints its deductions after imposing its path signs. The
+following two rules justify all of them.
+
+A record "plu ABCDE XYZ sign" uses
+
+    [ABC][ADE]-[ABD][ACE]+[ABE][ACD]=0.
+
+Two summands have known equal nonzero signs, and the third has exactly
+one unknown factor. Its summand must have the opposite sign, forcing
+XYZ. Permutations of triangle labels have their usual determinant
+sign. Each record's premises occur in the common facts, that row's
+path, or an earlier record.
+
+A record "via X ABC IJ sign" has all three positive edge tests putting
+X strictly inside the positively oriented actual triangle ABC. Every
+vertex of ABC lies in the indicated closed half-plane of IJ, and at
+least one lies in its open half-plane. A vertex on IJ is one of I,J;
+all other listed vertex tests have proved nonzero signs. Strict
+barycentric interpolation forces the indicated sign of IJX.
+
+## 2. Two valid rational boxes
+
+Put
+
+    eta=93/790, ell=7347/69700, Fmax=1-ell,
+    h0=4s/Fmax, K=149/20, J=4427/500.
+
+Box W is the common all-interior box proved in
+N7_HEPTAGON_ONE_EAR.md Section 2. The occupied CDE ear allows the
+stronger Box T. Both are valid for every configuration in this theorem;
+a row can use either collection of weaker affine bounds.
+
+The actual fan about P gives CDE>=3s. The paired-ear Cauchy inequality
+then gives
+
+    e(1-b)>=(sqrt(BCD)+sqrt(CDE))^2
+           >=(1+sqrt(3))^2*s>Ks.                   (1)
+
+Likewise hc>=4s. The earlier normalization gives b>=ell,
+d>=eta, e<=1-s, h<=1, and f<=c. The following rational comparisons
+prove the refined bounds without any numerical premise:
+
+| Comparison | Consequence |
+|---|---|
+| (77/100)Fmax<Ks | e,h>77/100 |
+| (1-s)(1-237/1000)<Ks | b<237/1000 |
+| hc>=4s and h<=1 | c>=4s=372/1000 |
+| (1-647/1000)(1-s-eta)<3s | c,f<647/1000 |
+| (17/100)(647/1000-ell)<s | a,d>17/100 from ABC,BCD |
+| (1-4s)(1-s-463/1000)<3s | d<463/1000 |
+| (237/1000)(1-76/125)<s | a<76/125 from ABH |
+| (14/125)(1-17/100)<s | every free abscissa exceeds 14/125 |
+| (1-883/1000)(1-s-eta)<s | every free abscissa is below 883/1000 |
+| (17/100)(647/1000-ell)<s | every free ordinate exceeds 17/100 |
+
+For example, CDE=(1-c)(e-d)>=3s proves the fourth and sixth rows.
+ABC=a(c-b), BCD=d(c-b), and the BC clearance at each free point prove
+the two ordinate rows. The AH and DE clearances give the two free
+abscissa rows. All weak endpoint versions remain valid.
+
+In coordinate order (a,b,c,d,e,f,g,h,z,x,y,u,v), the full boxes are:
+
+| Coordinate | W lower | W upper | T lower | T upper |
+|---|---|---|---|---|
+| a | eta | 1-s | 17/100 | 76/125 |
+| b | ell | 1-4s/(1-s) | 14/125 | 237/1000 |
+| c | ell | Fmax | 4s | 647/1000 |
+| d | eta | 1-2s | 17/100 | 463/1000 |
+| e | h0 | 1-s | 77/100 | 1-s |
+| f | ell | Fmax | ell | 647/1000 |
+| g | ell | Fmax | 14/125 | 883/1000 |
+| h | h0 | 1 | 77/100 | 1 |
+| z | eta | 1-s | 17/100 | 1-s |
+| x | ell | Fmax | 14/125 | 883/1000 |
+| y | eta | 1-s | 17/100 | 1-s |
+| u | ell | Fmax | 14/125 | 883/1000 |
+| v | eta | 1-s | 17/100 | 1-s |
+
+The bound b>14/125 also follows from ABH and h-a<1-17/100.
+The upper ordinate bound 1-s is the common heptagon bound from the
+positive EF and FH clearances, recalled in the preceding note.
+
+For coordinate i, let L_(2i) be its value minus its selected lower
+bound, and L_(2i+1) its selected upper bound minus its value.
+The additional affine factors, identical in the two boxes, are:
+
+| Index | Factor | Index | Factor |
+|---:|---|---:|---|
+| 26 | h-a-s | 27 | 697/790-h+a |
+| 28 | e-d-s | 29 | 697/790-e+d |
+| 30 | c-b-117/1000 | 31 | 79/100-c+b |
+| 32 | f-b | 33 | c-f |
+| 34 | h-e | 35 | e-a |
+
+The published side-span estimates in N7_PLACEMENTS.md and the
+normalization prove their nonnegativity.
+
+## 3. Every polynomial factor and its premise
+
+A signed triangle token XYZ+ means [XYZ]-s, and XYZ- means -[XYZ]-s.
+Its sign is established by the row's explicit deductions. The common
+support factors are
+
+    EL=hc-4s,          ER=e(1-b)-Ks,
+
+which are nonnegative by (1) and its lower-left counterpart.
+
+For a positively ordered actual triangle W, CW_n means
+
+    area(W)-c_n,   c_1=3s, c_2=Ks, c_3=Js.
+
+For a positively ordered convex actual quadrilateral W, QW_n means
+
+    area(W)-d_n,   d_1=(24/5)s, d_2=8s, d_3=93/91.
+
+Every factor's n actual occupants are printed in that row's witness
+block, and all their edge tests are checked against the same deductions.
+The triangle costs are the fan and triangle-occupancy theorems, with
+K<4+2sqrt(3) and J<(11+3sqrt(5))/2. The one-point quadrilateral cost
+is the weaker rational form of 2(1+sqrt(2))s, proved by its four fan
+areas in N7_HEPTAGON_ONE_EAR.md Section 4. The two-point cost is proved
+in N8_OP_LINE_CAPS.md Section 2; the original-square three-point cost
+is SQUARE_QUADRILATERAL_THREE.md. The last cost is the number 93/91,
+not that number multiplied by s.
+
+For a positively ordered convex actual quadrilateral W and actual
+points U,V inside it, RW_UV_IJ means
+
+    area(W)-(29/5)s-epsilon*([IJU]-[IJV]),          (2)
+
+where IJ is one of its diagonals and epsilon is the sign of IJU.
+Both diagonals must separate U,V; their four signs and both point
+containments are proved by the row's deductions. The threshold-free
+spread inequality in QUADRILATERAL_SPREAD.md gives (2), since
+29/5<3+2sqrt(2).
+
+Finally, F5_ABCDE is allowed for any five actual points in strictly
+convex cyclic order, including any of G,O,P. Put
+
+    X=ABE, Y=ADE, Z=ABD.
+
+The universal five-chain theorem of
+N7_THREE_FIVE_UPPER_HEIGHT.md Section 6 gives XY>=11s(X-Z).
+For X-Z>0 the two supporting rays meet beyond B,D and enclose the
+five points in an actual-endpoint triangle of area XY/(X-Z)>11s;
+for X-Z<=0 the inequality is immediate. Since every actual triangle
+in the unit square has doubled area X<=1 and Y>0, the factor
+
+    F5_ABCDE=Y-11s(X-Z)                            (3)
+
+is nonnegative. The checker verifies every one of the ten cyclic
+triangle signs needed for each such convex pentagon. No assumption
+that these five points are all contact vertices is made.
+
+Each product in the fixed sums has degree at most three.
+
+## 4. Six geometric leaves and the exact cubic rule
+
+A leaf printed as "cluster ABC X IJK YZ" has X,Y,Z inside actual
+triangle ABC and Y,Z inside the fan triangle IJK made by X and two
+outer vertices. Every edge sign is given in the same row. The outer
+triangle lies in the unit square, so CLUSTERED_TRIANGLE.md directly
+provides an actual triangle of doubled area below s. These are the
+six geometric leaves.
+
+For a polynomial leaf, let W be its displayed positive integer sum
+of products of nonnegative factors. Thus W>=0. Expand W as
+sum(c_alpha X^alpha). On that row's selected positive rational box,
+
+    B(W)=sum_(c_alpha>0)c_alpha product_i(upper_i^alpha_i)
+         +sum_(c_alpha<0)c_alpha product_i(lower_i^alpha_i)
+
+is an exact upper bound. Every displayed B(W) is negative. This
+contradicts W>=0 in all 58 polynomial leaves. Together with the six
+geometric leaves and the complete binary tree, it proves the theorem.
+
+The other all-interior count (1,2,0) remains a separate obligation.
+The count (2,1,0) is excluded by N6_TWO_LOWER_SIDE.md Section 6;
+N7_HEPTAGON_ONE_EAR.md excludes (1,1,1) and (2,0,1).
+
+## 5. Complete fixed leaf proofs
+
+### Row R01
+
+Path: DOP-,AGP-,EGO-,BGO-,DHP-,AEG-.
+
+```n7-h2-R01-trace
+plu ABEFG AFG -1
+plu ABEGP AEP -1
+plu ABFGP AFP -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACHP DAP -1
+plu DBCHP DBP -1
+plu EABCP EBP 1
+plu EACGH EGH -1
+plu EACGP EGP 1
+plu EADHP EHP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GABHO GAO 1
+plu GACEO GCO -1
+plu GACOP GOP 1
+plu GAEFO GFO 1
+plu GBCEO GBE -1
+plu GBEFH GBF -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu OACEG OAE -1
+plu OAEFH OAF -1
+plu OBCEG OBE -1
+plu OBEFH OBF -1
+plu OCDGP ODG 1
+via G EAP AD 1
+via G EAP BD 1
+```
+
+Exact upper bound: `-7953943166110509333642772835958762454156176021/133176082145782589765470360107417724000000000`.
+
+```n7-h2-R01-witnesses
+CACG_1 O
+CBCE_2 GO
+CBCG_1 O
+CCEO_1 G
+CDEO_2 GP
+CEAP_1 G
+QABCE_2 GO
+QACPG_1 O
+QBCDE_3 GOP
+QBCDG_1 O
+QBCEH_2 GO
+QBCPE_2 GO
+QBCPG_1 O
+QBPEH_1 G
+QCDEO_2 GP
+```
+
+```n7-h2-R01-sum
+1 1 L0*L0*L34
+2 1 L0*L1*L34
+3 1 L0*L2*L5
+4 10 L0*L2*L7
+5 21 L0*L2*L18
+6 18 L0*L7*L34
+7 2 L0*L10*L26
+8 1 L0*L17*L17
+9 2 L0*L17*L23
+10 14 L0*L18*L29
+11 7 L0*L18*L33
+12 16 L0*L19*L29
+13 2 L0*L21*L29
+14 1 L1*L2*L27
+15 14 L1*L4*L6
+16 15 L1*L6*L19
+17 18 L1*L7*L34
+18 7 L1*L9*L9
+19 5 L1*L13*L18
+20 1 L1*L13*L24
+21 4 L1*L13*L34
+22 1 L1*L16*L16
+23 12 L2*L2*L24
+24 11 L2*L3*L6
+25 6 L2*L4*L28
+26 11 L2*L6*L21
+27 70 L2*L8*L22
+28 49 L2*L8*L24
+29 1 L2*L11*L16
+30 2 L2*L12*L27
+31 9 L2*L12*L35
+32 143 L2*L14*L22
+33 11 L2*L15*L15
+34 1 L2*L15*L30
+35 11 L2*L16*L28
+36 3 L2*L17*L26
+37 23 L2*L18*L21
+38 17 L2*L18*L25
+39 19 L2*L19*L21
+40 24 L2*L19*L22
+41 9 L2*L19*L28
+42 10 L2*L20*L21
+43 13 L2*L20*L29
+44 98 L2*L21*L22
+45 163 L2*L22*L28
+46 14 L2*L28*L31
+47 2 L2*L28*L33
+48 1 L3*L15*L16
+49 24 L3*L18*L23
+50 2 L3*L20*L30
+51 7 L4*L7*L15
+52 6 L4*L9*L18
+53 2 L4*L13*L29
+54 7 L4*L15*L34
+55 123 L5*L6*L22
+56 21 L5*L9*L22
+57 3 L5*L16*L35
+58 5 L5*L17*L18
+59 11 L5*L20*L26
+60 7 L5*L21*L30
+61 26 L5*L24*L24
+62 2 L5*L24*L27
+63 54 L5*L24*L30
+64 7 L6*L6*L8
+65 11 L6*L6*L22
+66 3 L6*L7*L16
+67 44 L6*L10*L22
+68 9 L6*L12*L21
+69 3 L6*L16*L22
+70 29 L6*L16*L34
+71 3 L6*L17*L28
+72 132 L6*L18*L23
+73 65 L6*L19*L20
+74 56 L6*L19*L21
+75 30 L6*L19*L24
+76 14 L6*L19*L31
+77 30 L6*L20*L22
+78 12 L6*L21*L21
+79 44 L6*L22*L22
+80 158 L6*L22*L31
+81 7 L6*L28*L34
+82 2 L6*L31*L31
+83 7 L7*L7*L34
+84 3 L7*L9*L16
+85 9 L7*L13*L20
+86 29 L7*L15*L18
+87 12 L7*L20*L20
+88 2 L7*L20*L26
+89 52 L7*L22*L23
+90 7 L8*L9*L26
+91 3 L8*L11*L23
+92 12 L8*L13*L29
+93 12 L8*L15*L18
+94 9 L8*L15*L22
+95 3 L8*L16*L23
+96 29 L8*L17*L34
+97 7 L8*L29*L34
+98 3 L9*L10*L13
+99 47 L9*L10*L22
+100 4 L9*L13*L23
+101 14 L9*L14*L29
+102 15 L9*L18*L20
+103 15 L9*L18*L21
+104 132 L9*L19*L22
+105 108 L9*L19*L28
+106 2 L9*L20*L27
+107 4 L9*L20*L33
+108 118 L9*L22*L22
+109 23 L9*L22*L24
+110 37 L9*L22*L27
+111 70 L9*L22*L29
+112 36 L9*L22*L35
+113 25 L9*L25*L30
+114 3 L9*L25*L33
+115 7 L9*L28*L28
+116 3 L10*L12*L25
+117 2 L10*L18*L20
+118 3 L10*L24*L24
+119 2 L10*L27*L34
+120 1 L11*L14*L23
+121 41 L11*L22*L29
+122 5 L11*L25*L34
+123 3 L12*L18*L18
+124 6 L12*L19*L29
+125 10 L12*L20*L29
+126 13 L12*L24*L31
+127 10 L12*L28*L34
+128 1 L12*L30*L34
+129 2 L13*L14*L34
+130 2 L13*L18*L34
+131 3 L13*L19*L19
+132 2 L13*L22*L34
+133 1 L13*L23*L24
+134 1 L13*L24*L32
+135 2 L13*L26*L27
+136 23 L14*L15*L18
+137 4 L14*L15*L22
+138 3 L14*L16*L23
+139 18 L14*L29*L30
+140 118 L15*L18*L22
+141 2 L15*L20*L28
+142 32 L15*L22*L22
+143 56 L15*L22*L23
+144 13 L15*L23*L30
+145 5 L15*L23*L34
+146 2 L15*L24*L32
+147 5 L16*L18*L32
+148 1 L16*L22*L23
+149 11 L16*L23*L31
+150 29 L16*L28*L34
+151 25 L16*L30*L34
+152 8 L17*L17*L30
+153 2 L18*L18*L25
+154 68 L18*L18*L28
+155 2 L18*L21*L23
+156 8 L18*L25*L30
+157 4 L18*L29*L31
+158 2 L18*L33*L34
+159 22 L18*L34*L34
+160 1 L19*L20*L34
+161 16 L19*L24*L31
+162 46 L20*L22*L23
+163 46 L21*L22*L23
+164 3 L21*L24*L30
+165 99 L22*L30*L34
+166 7 L23*L29*L35
+167 1 L26*L31*L32
+168 22 L28*L30*L34
+169 7 ABC+*L5
+170 9 ABC+*L6
+171 3 ABH+*L12
+172 7 ABH+*L28
+173 2 AFH+*L26
+174 19 BCD+*L35
+175 5 ABG+*L6
+176 6 DEG+*L6
+177 4 FGH-*L23
+178 1 FGH-*L30
+179 8 CEG+*L16
+180 5 CEG+*L29
+181 1 CEG+*L33
+182 4 CEG+*L34
+183 2 ABO+*L32
+184 20 BCO+*L34
+185 20 CDO+*L14
+186 98 CDO+*L22
+187 2 FHO+*L18
+188 18 CHO-*L0
+189 2 CHO-*L18
+190 1 CHO-*L20
+191 112 CHO-*L22
+192 1 CHO-*L26
+193 16 CHO-*L35
+194 3 ABP+*L17
+195 2 BCP+*L15
+196 2 CDP+*L3
+197 3 CDP+*L5
+198 2 CDP+*L12
+199 119 CDP+*L22
+200 62 DEP+*L18
+201 2 FHP+*L34
+202 52 CEP-*L30
+203 8 GHO+*L29
+204 9 DOP-*L5
+205 8 EGO-*L9
+206 2 BGO-*L7
+207 14 BGO-*L8
+208 2 BGO-*L18
+209 10 BGO-*L20
+210 5 BGO-*L22
+211 3 BGO-*L25
+212 11 DHP-*L1
+213 19 DHP-*L9
+214 2 DHP-*L13
+215 12 DHP-*L14
+216 3 DHP-*L16
+217 5 DHP-*L18
+218 24 DHP-*L23
+219 10 DHP-*L27
+220 11 DHP-*L29
+221 3 DHP-*L32
+222 16 AEG-*L2
+223 1 AEG-*L20
+224 5 AFG-*L18
+225 1 ACO+*L16
+226 7 ACO+*L31
+227 3 CFP-*L24
+228 1 CGP-*L0
+229 1 CGP-*L22
+230 5 COP-*L12
+231 3 COP-*L17
+232 9 BDP+*L34
+233 4 EGH-*L6
+234 27 EGP+*L4
+235 3 EGP+*L10
+236 28 EHP+*L2
+237 30 EOP+*L6
+238 5 BFP-*L9
+239 12 BGP-*L30
+240 26 AGO-*L2
+241 1 AGO-*L35
+242 1 CGO+*L20
+243 3 GOP+
+244 26 GOP+*L2
+245 5 GOP+*L4
+246 2 GOP+*L18
+247 10 BEG-*L3
+248 10 BEG-*L4
+249 8 BEG-*L16
+250 14 BEG-*L20
+251 3 BEG-*L22
+252 1 BEG-*L26
+253 3 BEG-*L29
+254 16 BEG-*L30
+255 2 EHO+*L13
+256 1 AEO-*L0
+257 4 AFO-*L8
+258 20 BEO-*L14
+259 2 BEO-*L18
+260 119 BEO-*L22
+261 2 BEO-*L33
+262 10 DGO+*L20
+263 6 DGO+*L29
+264 1 EL*L13
+265 3 CACG_1*L8
+266 1 CACG_1*L30
+267 8 CEAP_1*L29
+268 10 CBCE_2*L0
+269 52 CBCE_2*L4
+270 8 CBCE_2*L16
+271 7 CBCE_2*L20
+272 53 CBCE_2*L28
+273 13 CBCG_1*L3
+274 21 CBCG_1*L15
+275 2 CCEO_1*L18
+276 6 CCEO_1*L26
+277 98 CDEO_2*L0
+278 6 CDEO_2*L7
+279 27 CDEO_2*L8
+280 6 CDEO_2*L12
+281 68 CDEO_2*L18
+282 173 CDEO_2*L22
+283 111 CDEO_2*L35
+284 15 QABCE_2*L9
+285 1 QACPG_1*L5
+286 52 QBCDE_3*L22
+287 5 QBCDG_1*L27
+288 7 QBCEH_2*L29
+289 17 QBCPE_2*L3
+290 28 QBCPE_2*L7
+291 3 QBCPE_2*L16
+292 15 QBCPE_2*L19
+293 118 QBCPE_2*L22
+294 23 QBCPE_2*L24
+295 28 QBCPE_2*L29
+296 7 QBCPG_1*L19
+297 3 QBCPG_1*L20
+298 5 QBPEH_1*L34
+299 5 QCDEO_2*L16
+300 18 QCDEO_2*L27
+301 33 F5_DEABC*L2
+302 6 F5_EHABC*L34
+303 2 F5_DFHAB*L2
+304 1 F5_DFHAB*L9
+305 2 F5_EFACD*L2
+306 18 F5_CDEHA*L9
+307 2 F5_ACDFH*L15
+308 22 F5_FBCDE*L2
+```
+
+
+### Row R02
+
+Path: DOP-,AGP-,EGO-,BGO-,DHP-,AEG+.
+
+```n7-h2-R02-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu CABEP CAP -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DACHP DAP -1
+plu DBCHP DBP -1
+plu EABCG EBG -1
+plu EACDP EAP 1
+plu EACGO EAO -1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EADOP EOP 1
+plu EBCDP EBP 1
+plu EBCGO EBO -1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GABHO GAO 1
+plu GACEO GCO 1
+plu GADEO GDO 1
+plu GADHO GDH -1
+plu GAEHO GEH -1
+plu GAEHP GHP 1
+plu GAEOP GOP -1
+plu GEFHO GFO -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDE OAD 1
+plu OACEP OAP 1
+plu OADGH ODH -1
+plu OAEGH OEH -1
+plu OAEHP OHP 1
+plu OBCDE OBD 1
+plu OBCEP OBP 1
+plu PADGO PDG -1
+```
+
+Exact upper bound: `-18746875235434283535610671651834080471763/267863166875574386649965277755000000000`.
+
+```n7-h2-R02-witnesses
+CCDE_1 P
+CDEO_1 P
+CEFG_1 O
+CEFH_2 GO
+CFHO_1 G
+QCDEG_1 P
+QDEFH_3 GOP
+QDEGH_1 P
+QDEOG_1 P
+QEFHP_2 GO
+```
+
+```n7-h2-R02-sum
+1 14 L6*L22
+2 1 L18*L33
+3 7 L0*L0*L12
+4 19 L0*L1*L2
+5 2 L0*L6*L19
+6 18 L0*L6*L20
+7 3 L0*L15*L18
+8 4 L1*L6*L22
+9 4 L1*L10*L12
+10 4 L1*L14*L23
+11 5 L2*L2*L7
+12 1 L2*L2*L28
+13 2 L2*L3*L16
+14 20 L2*L4*L6
+15 101 L2*L6*L16
+16 7 L2*L7*L22
+17 116 L2*L8*L22
+18 2 L2*L8*L32
+19 24 L2*L9*L29
+20 2 L2*L11*L17
+21 1 L2*L11*L19
+22 7 L2*L12*L34
+23 9 L2*L14*L33
+24 4 L2*L15*L20
+25 27 L2*L15*L28
+26 161 L2*L16*L28
+27 2 L2*L17*L30
+28 19 L2*L17*L35
+29 1 L2*L22*L24
+30 35 L2*L22*L27
+31 5 L2*L25*L35
+32 7 L2*L28*L33
+33 1 L3*L16*L23
+34 19 L3*L22*L34
+35 14 L4*L5*L24
+36 1 L4*L13*L22
+37 4 L4*L21*L26
+38 13 L5*L6*L17
+39 7 L5*L6*L33
+40 5 L5*L6*L34
+41 1 L5*L12*L23
+42 1 L5*L12*L25
+43 1 L5*L14*L26
+44 2 L5*L14*L34
+45 13 L6*L6*L13
+46 37 L6*L6*L22
+47 38 L6*L6*L23
+48 18 L6*L6*L32
+49 17 L6*L8*L18
+50 34 L6*L9*L12
+51 15 L6*L10*L18
+52 15 L6*L10*L19
+53 5 L6*L10*L31
+54 2 L6*L11*L28
+55 2 L6*L11*L33
+56 10 L6*L12*L34
+57 5 L6*L13*L26
+58 3 L6*L13*L34
+59 20 L6*L18*L21
+60 4 L6*L18*L22
+61 14 L6*L19*L31
+62 6 L6*L20*L26
+63 4 L6*L20*L31
+64 4 L6*L20*L33
+65 32 L6*L22*L28
+66 40 L6*L22*L31
+67 22 L6*L26*L31
+68 20 L6*L31*L31
+69 3 L7*L18*L35
+70 12 L7*L21*L26
+71 34 L8*L8*L33
+72 3 L8*L10*L12
+73 16 L8*L10*L15
+74 1 L8*L10*L18
+75 18 L8*L15*L20
+76 59 L8*L16*L32
+77 20 L8*L18*L20
+78 18 L8*L20*L28
+79 40 L8*L23*L31
+80 9 L8*L28*L33
+81 2 L8*L32*L33
+82 12 L9*L20*L33
+83 1 L10*L10*L28
+84 11 L10*L12*L28
+85 1 L10*L15*L18
+86 11 L10*L20*L28
+87 50 L11*L14*L16
+88 27 L11*L14*L22
+89 51 L11*L20*L34
+90 69 L11*L22*L34
+91 17 L11*L30*L34
+92 17 L12*L15*L15
+93 1 L12*L15*L23
+94 1 L12*L18*L28
+95 20 L12*L23*L28
+96 1 L12*L28*L32
+97 3 L13*L14*L33
+98 1 L13*L22*L34
+99 22 L14*L16*L33
+100 7 L14*L18*L23
+101 1 L14*L19*L31
+102 27 L14*L23*L33
+103 1 L14*L27*L30
+104 11 L14*L29*L33
+105 4 L15*L22*L23
+106 1 L15*L23*L28
+107 16 L16*L31*L34
+108 21 L16*L33*L34
+109 3 L18*L23*L25
+110 6 L18*L27*L28
+111 12 L18*L33*L34
+112 6 L19*L19*L35
+113 11 L19*L26*L34
+114 7 L19*L29*L34
+115 2 L20*L23*L23
+116 4 L21*L22*L22
+117 18 L21*L29*L34
+118 4 L21*L30*L34
+119 32 L22*L31*L34
+120 111 L22*L33*L34
+121 1 L23*L23*L28
+122 12 L23*L26*L29
+123 58 L28*L31*L34
+124 1 L30*L31*L34
+125 16 L30*L34*L34
+126 35 ABH+*L22
+127 1 ACE+*L35
+128 22 BCD+*L1
+129 14 BCD+*L2
+130 13 BCD+*L17
+131 14 BCD+*L19
+132 1 BFH+*L30
+133 1 CEF+*L31
+134 19 ABG+*L35
+135 4 AGH+*L11
+136 6 AGH+*L13
+137 12 AGH+*L35
+138 2 BCO+*L10
+139 13 CDO+*L34
+140 26 DEO+*L6
+141 6 AHO-*L6
+142 4 CEO+*L0
+143 1 BCP+*L12
+144 15 CDP+*L0
+145 14 CDP+*L31
+146 16 DEP+
+147 6 DEP+*L2
+148 93 CEP-*L7
+149 1 CEP-*L13
+150 17 CEP-*L29
+151 6 GHO+*L12
+152 11 GHO+*L27
+153 23 GHO+*L28
+154 12 GHO+*L33
+155 33 DOP-*L7
+156 21 DOP-*L22
+157 1 EGO-*L19
+158 6 EGO-*L26
+159 20 DHP-*L1
+160 20 DHP-*L12
+161 22 DHP-*L23
+162 26 DHP-*L31
+163 10 AEG+*L34
+164 17 ACP+*L8
+165 15 CHP-*L0
+166 76 CHP-*L6
+167 3 AEO+*L34
+168 65 EHP+*L2
+169 64 EHP+*L6
+170 26 EHP+*L30
+171 20 EOP+*L7
+172 14 BEP-*L4
+173 1 BEP-*L23
+174 5 BEP-*L35
+175 4 BEO+*L29
+176 48 BGH+*L6
+177 16 BGH+*L15
+178 2 BGH+*L33
+179 6 AGO-*L13
+180 6 AGO-*L19
+181 5 CGO-*L34
+182 1 DGO-*L0
+183 13 DGO-*L6
+184 5 DGO-*L8
+185 18 EGH+*L5
+186 26 EGH+*L7
+187 9 EGH+*L26
+188 25 GHP+*L19
+189 13 FGO+*L0
+190 10 FGO+*L28
+191 13 FGO+*L35
+192 13 AOP-*L6
+193 31 DHO-*L12
+194 20 DHO-*L28
+195 1 EHO-*L10
+196 18 HOP-*L23
+197 1 DGP-*L5
+198 25 DGP-*L18
+199 1 DGP-*L30
+200 4 EL*L11
+201 16 EL*L20
+202 12 EL*L27
+203 17 EL*L28
+204 14 ER*L1
+205 33 ER*L7
+206 2 ER*L11
+207 87 ER*L16
+208 97 ER*L22
+209 39 ER*L28
+210 35 ER*L29
+211 3 ER*L34
+212 12 CCDE_1*L12
+213 1 CCDE_1*L25
+214 16 CCDE_1*L26
+215 20 CDEO_1*L20
+216 10 CEFG_1*L29
+217 147 CEFH_2*L16
+218 70 CEFH_2*L20
+219 19 CEFH_2*L21
+220 180 CEFH_2*L22
+221 2 CEFH_2*L28
+222 19 CEFH_2*L30
+223 5 CFHO_1*L7
+224 2 CFHO_1*L30
+225 22 QCDEG_1*L14
+226 86 QDEFH_3*L0
+227 15 QDEFH_3*L12
+228 54 QDEFH_3*L17
+229 85 QDEFH_3*L35
+230 20 QDEGH_1*L23
+231 7 QDEGH_1*L30
+232 6 QDEOG_1*L1
+233 7 QDEOG_1*L18
+234 12 QDEOG_1*L31
+235 12 QDEOG_1*L32
+236 13 QEFHP_2*L8
+237 1 F5_BCDHA*L0
+238 1 F5_ABCFH*L35
+239 37 F5_ACDFH*L8
+240 19 F5_ADEFH*L6
+241 134 F5_BCDEF*L34
+242 17 F5_FBCDE*L6
+243 56 F5_FBCDE*L34
+244 1 F5_BCDFH*L5
+245 12 F5_CDEFH*L2
+246 9 F5_DEFHC*L2
+```
+
+
+### Row R03
+
+Path: DOP-,AGP-,EGO-,BGO-,DHP+.
+
+```n7-h2-R03-trace
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DCFHP DFP 1
+plu DCFOP DFO 1
+plu DCHOP DHO 1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACDP FAP 1
+plu FBCDP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GABHO GAO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADEO HEO -1
+plu OAEGH OAE -1
+plu OBEGH OBE -1
+plu OCDHP OHP -1
+plu OCEGH OCG 1
+plu ODEFP OFP -1
+plu OEFGH OFG -1
+via G CEO AE -1
+via G CEO BE -1
+via G CEO EH 1
+via O ACE AF -1
+via O BCE BF -1
+via O ACG GP -1
+plu ABEFG AFG -1
+plu BAEFG BFG -1
+plu OCDGP ODG 1
+```
+
+Exact upper bound: `-436920160077232651536450177989538334359411/6971359895441778154706413398100000000000`.
+
+```n7-h2-R03-witnesses
+CBCE_2 GO
+CCDE_1 P
+CCDH_2 OP
+CCEO_1 G
+CDEO_2 GP
+CEOP_1 G
+CHCP_1 O
+QACDE_3 GOP
+QACDH_2 OP
+QACGH_1 O
+QAPEH_1 G
+QBCDE_3 GOP
+QBCPE_2 GO
+QBCPG_1 O
+QBPEH_1 G
+QCDEO_2 GP
+QCPEO_1 G
+QDEHO_2 GP
+QEFOP_1 G
+QEHOP_1 G
+```
+
+```n7-h2-R03-sum
+1 2 L2*L19
+2 2 L11*L18
+3 5 L0*L0*L2
+4 2 L0*L2*L35
+5 7 L0*L6*L16
+6 6 L0*L6*L22
+7 9 L0*L6*L24
+8 9 L0*L9*L12
+9 1 L0*L14*L33
+10 3 L0*L15*L18
+11 5 L0*L18*L23
+12 5 L0*L23*L28
+13 1 L1*L1*L18
+14 3 L1*L9*L19
+15 1 L1*L10*L35
+16 3 L1*L20*L22
+17 2 L1*L23*L34
+18 11 L2*L2*L16
+19 5 L2*L2*L25
+20 39 L2*L2*L28
+21 22 L2*L4*L17
+22 17 L2*L4*L28
+23 22 L2*L6*L10
+24 21 L2*L6*L12
+25 4 L2*L6*L17
+26 4 L2*L6*L19
+27 38 L2*L6*L21
+28 30 L2*L6*L22
+29 22 L2*L6*L28
+30 5 L2*L6*L30
+31 7 L2*L8*L16
+32 3 L2*L10*L16
+33 1 L2*L10*L35
+34 10 L2*L11*L14
+35 14 L2*L12*L24
+36 21 L2*L12*L28
+37 2 L2*L14*L32
+38 8 L2*L16*L18
+39 11 L2*L16*L22
+40 2 L2*L17*L34
+41 28 L2*L18*L34
+42 8 L2*L20*L27
+43 61 L2*L21*L22
+44 107 L2*L21*L28
+45 111 L2*L22*L28
+46 1 L2*L24*L32
+47 91 L2*L28*L28
+48 35 L3*L9*L22
+49 5 L3*L12*L15
+50 3 L3*L13*L21
+51 3 L3*L15*L26
+52 3 L3*L24*L27
+53 11 L3*L24*L31
+54 6 L4*L6*L6
+55 7 L4*L13*L34
+56 35 L4*L20*L23
+57 3 L4*L20*L31
+58 96 L4*L22*L34
+59 2 L4*L33*L34
+60 14 L5*L6*L26
+61 5 L5*L8*L9
+62 16 L5*L9*L22
+63 43 L5*L12*L24
+64 2 L5*L14*L18
+65 14 L5*L15*L20
+66 5 L5*L15*L35
+67 6 L5*L16*L31
+68 3 L5*L18*L20
+69 3 L5*L19*L24
+70 7 L5*L21*L24
+71 17 L5*L24*L27
+72 2 L5*L26*L29
+73 5 L6*L6*L10
+74 10 L6*L7*L22
+75 5 L6*L7*L31
+76 11 L6*L10*L28
+77 6 L6*L10*L34
+78 5 L6*L11*L14
+79 12 L6*L12*L24
+80 3 L6*L13*L27
+81 9 L6*L14*L25
+82 3 L6*L16*L24
+83 7 L6*L16*L26
+84 13 L6*L19*L22
+85 15 L6*L19*L24
+86 20 L6*L19*L26
+87 85 L6*L22*L31
+88 9 L6*L24*L26
+89 19 L6*L24*L32
+90 64 L6*L28*L31
+91 10 L6*L31*L35
+92 2 L7*L13*L35
+93 9 L7*L16*L23
+94 6 L8*L13*L25
+95 4 L9*L10*L24
+96 19 L9*L12*L22
+97 6 L9*L12*L24
+98 7 L9*L14*L16
+99 109 L9*L16*L22
+100 88 L9*L17*L22
+101 7 L9*L17*L28
+102 22 L9*L18*L28
+103 3 L9*L19*L19
+104 22 L9*L21*L22
+105 15 L9*L22*L27
+106 22 L9*L22*L29
+107 3 L10*L18*L25
+108 2 L10*L28*L28
+109 2 L11*L21*L35
+110 5 L12*L15*L31
+111 6 L12*L18*L23
+112 16 L12*L20*L28
+113 15 L12*L23*L25
+114 9 L12*L29*L35
+115 3 L13*L15*L18
+116 2 L13*L18*L25
+117 6 L13*L19*L22
+118 15 L13*L22*L24
+119 1 L14*L15*L28
+120 1 L14*L15*L29
+121 3 L15*L16*L24
+122 75 L15*L18*L22
+123 3 L15*L18*L25
+124 1 L15*L29*L32
+125 2 L16*L18*L23
+126 3 L16*L25*L29
+127 7 L16*L28*L34
+128 2 L17*L18*L31
+129 21 L17*L22*L29
+130 3 L17*L25*L34
+131 32 L18*L18*L28
+132 1 L18*L18*L35
+133 6 L18*L20*L26
+134 6 L18*L23*L25
+135 7 L18*L23*L26
+136 31 L18*L23*L34
+137 2 L18*L24*L32
+138 6 L19*L22*L24
+139 76 L19*L22*L29
+140 1 L19*L24*L27
+141 1 L20*L22*L25
+142 4 L20*L23*L26
+143 23 L20*L24*L31
+144 1 L21*L23*L24
+145 23 L21*L24*L31
+146 16 L22*L22*L34
+147 2 L22*L26*L34
+148 2 L23*L34*L34
+149 16 L28*L30*L34
+150 2 L30*L32*L34
+151 3 ABH+*L0
+152 4 ABH+*L19
+153 3 ABH+*L25
+154 10 ABH+*L28
+155 3 CDG+*L34
+156 1 CEG+*L2
+157 2 CEG+*L4
+158 1 ABO+*L23
+159 20 BCO+*L7
+160 3 BCO+*L18
+161 4 CDO+*L0
+162 16 CDO+*L17
+163 1 AHO-*L13
+164 38 CHO-*L8
+165 2 CHO-*L13
+166 112 CHO-*L22
+167 3 CHO-*L27
+168 19 BCP+*L18
+169 14 CDP+*L7
+170 17 CDP+*L26
+171 18 CEP-*L6
+172 3 GHO+*L15
+173 2 DOP-*L18
+174 17 DOP-*L21
+175 4 DOP-*L31
+176 5 EGO-*L5
+177 3 BGO-*L14
+178 3 BGO-*L18
+179 25 BGO-*L22
+180 30 BGO-*L28
+181 13 DHP+*L8
+182 6 ACO+*L20
+183 1 ACO+*L35
+184 1 CFP-*L19
+185 1 COP-*L15
+186 17 COP-*L20
+187 4 DFP+*L28
+188 28 AEP-*L6
+189 17 BEP-*L2
+190 25 EGP+*L30
+191 1 AFP-*L2
+192 2 BGH+*L9
+193 12 BGP-*L6
+194 15 AGO-*L6
+195 1 AGO-*L7
+196 1 AGO-*L19
+197 4 AEO-*L2
+198 5 BEO-*L14
+199 14 BEO-*L17
+200 57 BEO-*L22
+201 59 BEO-*L28
+202 8 BEO-*L35
+203 17 HOP+*L6
+204 25 CGO+*L22
+205 3 CGO+*L31
+206 14 BEG-*L20
+207 14 BEG-*L28
+208 25 BEG-*L30
+209 5 BEG-*L34
+210 2 AFO-*L8
+211 2 GOP+*L18
+212 3 BFG-*L2
+213 2 EL*L31
+214 11 CBCE_2*L8
+215 17 CBCE_2*L14
+216 56 CBCE_2*L22
+217 20 CCDE_1*L20
+218 2 CCDH_2*L19
+219 5 CCDH_2*L26
+220 10 CCEO_1*L21
+221 16 CHCP_1*L23
+222 5 CDEO_2*L4
+223 24 CDEO_2*L6
+224 41 CDEO_2*L7
+225 88 CDEO_2*L14
+226 29 CDEO_2*L18
+227 10 CDEO_2*L20
+228 92 CDEO_2*L22
+229 1 CDEO_2*L25
+230 35 CDEO_2*L27
+231 37 CDEO_2*L35
+232 1 CEOP_1*L9
+233 5 CEOP_1*L15
+234 2 QACDE_3*L13
+235 1 QACDH_2*L0
+236 2 QACDH_2*L12
+237 5 QACDH_2*L15
+238 3 QACGH_1*L34
+239 19 QAPEH_1*L9
+240 8 QBCDE_3*L8
+241 32 QBCDE_3*L22
+242 61 QBCDE_3*L28
+243 5 QBCPE_2*L6
+244 52 QBCPE_2*L7
+245 19 QBCPE_2*L12
+246 24 QBCPE_2*L19
+247 24 QBCPE_2*L21
+248 16 QBCPE_2*L22
+249 11 QBCPG_1*L3
+250 6 QBPEH_1*L6
+251 12 QCDEO_2*L14
+252 16 QCDEO_2*L16
+253 49 QCDEO_2*L22
+254 9 QCDEO_2*L35
+255 1 QCPEO_1*L0
+256 6 QDEHO_2*L20
+257 17 QDEHO_2*L29
+258 1 QEFOP_1*L0
+259 24 QEHOP_1*L2
+260 3 F5_DHABC*L34
+261 36 F5_FABDE*L9
+262 11 F5_EFACD*L2
+263 15 F5_EFACD*L24
+264 43 F5_FBCDE*L2
+265 48 F5_FBCDE*L9
+266 29 F5_CDEHB*L9
+267 10 F5_BDEFH*L2
+268 4 F5_HCDEF*L2
+```
+
+
+### Row R04
+
+Path: DOP-,AGP-,EGO-,BGO+,AGO-.
+
+```n7-h2-R04-trace
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GABCO GCO -1
+plu GABCP GBP 1
+plu GABOP GOP 1
+plu GACEO GAE -1
+plu GCEHO GEH 1
+plu GEFHO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu OACEG OAE -1
+plu OAEFH OAF -1
+plu OBCGP OBP 1
+plu OCDGP ODG 1
+plu PBCDO PBD 1
+via G ACE AF -1
+via G EAP BD 1
+via O ABG BD 1
+```
+
+Exact upper bound: `-200630571405749116965827011018915878196630475267/3329402053644564744136759002685443100000000000`.
+
+```n7-h2-R04-witnesses
+CBGH_1 O
+CCDE_1 P
+CDEO_2 GP
+QBCDE_1 P
+QBPEH_2 GO
+QCDEG_1 P
+QCPEO_1 G
+```
+
+```n7-h2-R04-sum
+1 117 L0*L0*L2
+2 91 L0*L0*L18
+3 38 L0*L0*L23
+4 23 L0*L2*L6
+5 6 L0*L2*L25
+6 49 L0*L3*L9
+7 18 L0*L6*L6
+8 27 L0*L8*L9
+9 24 L0*L10*L15
+10 4 L0*L13*L30
+11 7 L0*L14*L23
+12 6 L0*L20*L23
+13 1 L0*L20*L33
+14 38 L0*L23*L35
+15 27 L0*L34*L35
+16 21 L1*L1*L19
+17 9 L1*L1*L34
+18 97 L1*L2*L14
+19 4 L1*L3*L13
+20 16 L1*L5*L15
+21 28 L1*L6*L31
+22 30 L1*L6*L32
+23 50 L1*L9*L18
+24 1 L1*L11*L24
+25 1 L1*L13*L23
+26 3 L1*L13*L26
+27 20 L1*L15*L32
+28 49 L1*L16*L23
+29 49 L1*L17*L23
+30 49 L1*L29*L30
+31 9 L1*L29*L34
+32 1 L2*L5*L26
+33 138 L2*L6*L20
+34 970 L2*L6*L28
+35 21 L2*L8*L25
+36 1 L2*L11*L23
+37 182 L2*L12*L21
+38 4 L2*L13*L17
+39 182 L2*L13*L21
+40 1 L2*L15*L23
+41 51 L2*L18*L25
+42 1 L2*L22*L33
+43 5 L2*L25*L26
+44 1 L3*L3*L23
+45 74 L3*L6*L24
+46 5 L3*L8*L34
+47 1 L3*L9*L23
+48 75 L3*L9*L24
+49 41 L3*L9*L25
+50 32 L3*L11*L34
+51 1 L4*L4*L26
+52 70 L4*L7*L9
+53 90 L4*L9*L14
+54 1 L4*L12*L13
+55 1 L4*L13*L13
+56 5 L4*L16*L29
+57 63 L4*L20*L34
+58 1 L4*L23*L34
+59 5 L4*L24*L34
+60 81 L4*L27*L34
+61 13 L5*L6*L6
+62 51 L5*L9*L18
+63 1 L5*L10*L35
+64 4 L5*L12*L35
+65 1 L5*L20*L20
+66 1 L5*L22*L33
+67 42 L5*L27*L29
+68 179 L6*L6*L7
+69 129 L6*L6*L8
+70 107 L6*L6*L12
+71 153 L6*L9*L12
+72 36 L6*L9*L22
+73 212 L6*L9*L28
+74 49 L6*L11*L24
+75 42 L6*L12*L13
+76 4 L6*L12*L26
+77 55 L6*L12*L31
+78 107 L6*L13*L29
+79 1 L6*L18*L21
+80 34 L6*L18*L24
+81 32 L6*L19*L22
+82 34 L6*L20*L26
+83 7 L6*L21*L24
+84 6 L6*L22*L34
+85 49 L6*L24*L32
+86 734 L6*L26*L31
+87 179 L6*L29*L29
+88 9 L6*L34*L34
+89 60 L7*L8*L9
+90 45 L7*L9*L12
+91 2 L7*L11*L17
+92 27 L7*L18*L18
+93 3 L7*L21*L33
+94 6 L8*L30*L34
+95 8 L8*L33*L34
+96 2 L9*L11*L16
+97 45 L9*L12*L13
+98 9 L9*L14*L26
+99 27 L9*L14*L29
+100 51 L9*L18*L30
+101 8 L9*L19*L22
+102 7 L9*L20*L25
+103 34 L9*L20*L26
+104 28 L9*L21*L23
+105 115 L9*L22*L22
+106 115 L9*L22*L23
+107 86 L9*L22*L29
+108 5 L9*L23*L26
+109 1 L9*L23*L32
+110 132 L9*L26*L28
+111 95 L9*L26*L29
+112 1 L10*L20*L25
+113 1 L11*L13*L17
+114 1 L11*L13*L20
+115 1 L11*L16*L21
+116 12 L11*L20*L34
+117 1 L11*L23*L31
+118 42 L11*L24*L34
+119 1 L12*L15*L23
+120 4 L12*L17*L31
+121 1 L12*L23*L31
+122 1 L12*L23*L33
+123 42 L13*L13*L29
+124 1 L13*L14*L21
+125 1 L13*L15*L18
+126 1 L13*L21*L35
+127 1 L13*L22*L32
+128 1 L13*L23*L27
+129 3 L13*L25*L30
+130 58 L14*L15*L18
+131 12 L14*L21*L33
+132 128 L15*L18*L27
+133 4 L16*L18*L28
+134 2 L17*L29*L33
+135 27 L18*L18*L24
+136 43 L18*L18*L26
+137 157 L18*L18*L28
+138 27 L18*L20*L23
+139 3 L18*L20*L27
+140 299 L18*L27*L28
+141 433 L18*L28*L28
+142 160 L18*L31*L35
+143 6 L19*L24*L35
+144 7 L20*L24*L29
+145 34 L21*L26*L29
+146 2 L22*L30*L34
+147 1 L22*L31*L31
+148 7 L23*L34*L35
+149 5 L24*L31*L34
+150 9 L26*L28*L34
+151 14 L29*L29*L33
+152 18 L29*L29*L35
+153 18 L34*L35*L35
+154 66 ABC+*L26
+155 183 ABH+*L0
+156 4 AEF+*L34
+157 1 AFH+*L24
+158 4 AFH+*L29
+159 55 BCD+*L12
+160 63 BCD+*L14
+161 138 BCD+*L20
+162 123 BCD+*L25
+163 671 BCD+*L26
+164 970 BCD+*L28
+165 601 CDE+*L6
+166 7 CDH+*L15
+167 10 DEF+*L6
+168 32 EFH+*L3
+169 66 EFH+*L24
+170 24 EFH+*L25
+171 1 AGH+*L15
+172 4 CEG+*L12
+173 82 DEO+*L23
+174 9 FHO+*L6
+175 1 FHO+*L25
+176 12 FHO+*L28
+177 1 AHO-*L13
+178 3 AHO-*L14
+179 43 AHO-*L19
+180 885 AHO-*L28
+181 131 CHO-
+182 1 CHO-*L20
+183 1 CHO-*L25
+184 74 CHO-*L27
+185 126 CHO-*L28
+186 9 CHO-*L35
+187 3 BCP+*L13
+188 111 CDP+*L20
+189 11 CEP-
+190 112 CEP-*L20
+191 1 GHO+*L21
+192 27 DOP-*L18
+193 106 DOP-*L21
+194 6 DOP-*L34
+195 56 AGP-*L9
+196 63 EGO-*L9
+197 1 EGO-*L12
+198 40 EGO-*L15
+199 107 EGO-*L21
+200 13 EGO-*L26
+201 37 EGO-*L34
+202 61 AGO-*L0
+203 58 AGO-*L1
+204 59 AGO-*L8
+205 3 AGO-*L20
+206 66 ACO+*L26
+207 5 CHP-*L9
+208 5 COP-*L6
+209 51 BEP-*L18
+210 1 EGP+*L2
+211 56 EGP+*L9
+212 106 EGP+*L21
+213 6 EGP+*L26
+214 28 EOP+*L9
+215 40 CGO+*L9
+216 106 GOP+*L21
+217 6 GOP+*L26
+218 83 AEG-*L18
+219 4 EGH-*L0
+220 1 FGO-*L13
+221 83 AEO-*L13
+222 160 AEO-*L30
+223 4 DGO+*L26
+224 1 AFG-*L20
+225 42 EL*L21
+226 3 CBGH_1*L9
+227 210 CCDE_1*L6
+228 4 CCDE_1*L25
+229 455 CDEO_2*L7
+230 699 CDEO_2*L14
+231 4 CDEO_2*L16
+232 157 CDEO_2*L18
+233 107 CDEO_2*L20
+234 140 CDEO_2*L22
+235 29 CDEO_2*L25
+236 73 CDEO_2*L28
+237 94 CDEO_2*L29
+238 583 CDEO_2*L35
+239 3 QBCDE_1*L17
+240 8 QBPEH_2*L9
+241 43 QCDEG_1*L9
+242 122 QCPEO_1*L6
+243 1 F5_BCDHA*L31
+244 11 F5_ABCEF*L9
+245 1 F5_ABCFH*L23
+246 11 F5_CFHAB*L6
+247 385 F5_FABDE*L9
+248 22 F5_HABEF*L6
+249 474 F5_CDEHA*L9
+250 157 F5_FHACD*L6
+251 157 F5_FHACD*L9
+252 4 F5_HCDEF*L15
+```
+
+
+### Row R05
+
+Path: DOP-,AGP-,EGO-,BGO+,AGO+,DFP-,CFO-,GOP-.
+
+```n7-h2-R05-trace
+plu ABGOP AOP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DAP -1
+plu DAFHP DHP -1
+plu DBCFP DBP -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GACHO GCO -1
+plu GAHOP GHP -1
+plu GCEHO GEH 1
+plu GEFHO GFO 1
+plu GEFHP GFP -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu HAGOP HOP 1
+plu OABCP OBP 1
+plu OACDP OAD 1
+plu OAFGP OFP -1
+plu OBCDP OBD 1
+plu PADFG PDG -1
+via G HAP AD 1
+via G OAP AF -1
+via G HAP BD 1
+via G OBP BF -1
+via G CEO CF -1
+```
+
+Exact upper bound: `-62295636770991853276237/873120225250000000000`.
+
+```n7-h2-R05-witnesses
+CAGH_1 O
+CBGH_1 O
+CCEF_2 GO
+CDEG_1 P
+CFAP_2 GO
+CFCP_2 GO
+CHAP_2 GO
+CHBP_2 GO
+COAP_1 G
+COCP_1 G
+QABGH_1 O
+QACGH_1 O
+QACPH_2 GO
+QACPO_1 G
+QADEF_3 GOP
+QADPF_2 GO
+QAGFH_1 O
+QAPEH_2 GO
+QAPFH_2 GO
+QBCEF_2 GO
+QBCGF_1 O
+QCDEF_3 GOP
+QCDPH_2 GO
+QCDPO_1 G
+QCGFH_1 O
+QCPEF_2 GO
+QDEFH_1 P
+```
+
+```n7-h2-R05-sum
+1 674 L0*L21
+2 263166 L2*L6
+3 27845 L2*L10
+4 3733 L6*L7
+5 28217 L6*L25
+6 118545 L27*L31
+7 67199 L0*L2*L24
+8 401054 L0*L2*L26
+9 185124 L0*L2*L31
+10 285083 L0*L4*L7
+11 1545 L0*L5*L20
+12 449382 L0*L5*L26
+13 313223 L0*L5*L28
+14 152762 L0*L8*L10
+15 26494 L0*L11*L31
+16 38 L0*L13*L20
+17 1790903 L0*L16*L30
+18 1790904 L0*L17*L30
+19 1 L0*L17*L33
+20 100 L0*L18*L33
+21 55932 L0*L22*L22
+22 59673 L0*L22*L34
+23 127289 L0*L28*L31
+24 461507 L0*L31*L31
+25 80233 L1*L2*L10
+26 73949 L1*L6*L23
+27 208339 L1*L10*L23
+28 6693 L1*L13*L15
+29 101 L1*L13*L29
+30 342783 L1*L15*L30
+31 278404 L1*L23*L26
+32 202182 L2*L4*L27
+33 21432 L2*L4*L29
+34 84788 L2*L6*L14
+35 15208 L2*L6*L20
+36 208176 L2*L6*L28
+37 45847 L2*L6*L35
+38 49887 L2*L7*L27
+39 50928 L2*L10*L17
+40 12804 L2*L11*L24
+41 4784 L2*L12*L16
+42 156355 L2*L14*L27
+43 979 L2*L15*L19
+44 112 L2*L16*L18
+45 60657 L2*L16*L23
+46 1 L2*L16*L24
+47 18059 L2*L20*L20
+48 6521 L2*L20*L27
+49 16 L2*L21*L25
+50 3581 L2*L21*L32
+51 49829 L2*L22*L24
+52 244415 L2*L24*L32
+53 180522 L2*L28*L28
+54 14999 L3*L6*L16
+55 191150 L3*L7*L10
+56 4742 L3*L18*L35
+57 1708 L3*L21*L26
+58 151799 L4*L6*L23
+59 13663 L4*L9*L20
+60 12748 L4*L11*L17
+61 140458 L4*L11*L25
+62 4784 L4*L12*L17
+63 38359 L4*L12*L25
+64 59012 L4*L15*L26
+65 6 L4*L16*L25
+66 16 L4*L20*L25
+67 56156 L4*L22*L35
+68 35156 L4*L25*L28
+69 92615 L4*L29*L34
+70 202182 L5*L6*L10
+71 154173 L5*L8*L22
+72 59012 L5*L8*L27
+73 56364 L5*L9*L33
+74 34 L5*L13*L20
+75 4725 L5*L14*L17
+76 36199 L5*L15*L18
+77 102020 L5*L16*L23
+78 35 L5*L17*L17
+79 98142 L5*L20*L23
+80 60072 L5*L27*L28
+81 3617 L6*L9*L12
+82 51152 L6*L10*L13
+83 4021 L6*L10*L18
+84 439753 L6*L10*L22
+85 6750 L6*L10*L24
+86 18011 L6*L17*L32
+87 4 L6*L18*L19
+88 15138 L6*L21*L31
+89 62938 L6*L22*L23
+90 356057 L6*L23*L26
+91 56301 L7*L11*L34
+92 29 L7*L12*L34
+93 146 L8*L12*L18
+94 66340 L8*L19*L23
+95 186954 L8*L26*L32
+96 39550 L9*L11*L19
+97 32296 L9*L12*L23
+98 15496 L9*L12*L29
+99 35 L9*L13*L17
+100 146 L9*L13*L33
+101 34 L9*L18*L19
+102 2589 L9*L18*L28
+103 43155 L9*L18*L33
+104 1317 L9*L18*L34
+105 38 L9*L21*L22
+106 11084 L9*L21*L30
+107 156695 L9*L22*L23
+108 341329 L9*L22*L33
+109 28927 L9*L23*L35
+110 3152 L9*L24*L33
+111 3138 L9*L31*L33
+112 2479 L9*L31*L34
+113 1790 L10*L10*L20
+114 179 L10*L12*L14
+115 51118 L10*L12*L24
+116 16107 L10*L14*L15
+117 514877 L10*L15*L22
+118 6 L10*L16*L24
+119 12940 L10*L16*L29
+120 47417 L10*L16*L31
+121 21826 L10*L17*L22
+122 30 L10*L18*L20
+123 12255 L10*L18*L31
+124 12255 L10*L18*L33
+125 132903 L10*L21*L23
+126 12255 L11*L19*L32
+127 18059 L11*L21*L21
+128 57369 L11*L24*L32
+129 6538 L11*L34*L35
+130 10885 L12*L15*L16
+131 38 L12*L21*L25
+132 1303 L12*L22*L34
+133 66968 L12*L23*L35
+134 556 L12*L24*L31
+135 10885 L13*L14*L17
+136 4784 L13*L16*L31
+137 2 L13*L24*L35
+138 3987 L13*L25*L30
+139 2 L13*L35*L35
+140 116 L14*L19*L20
+141 116 L15*L18*L21
+142 64846 L15*L18*L23
+143 196931 L15*L22*L32
+144 158477 L15*L24*L33
+145 211112 L15*L26*L32
+146 16 L16*L16*L19
+147 112 L16*L18*L32
+148 33 L16*L18*L34
+149 1 L16*L23*L27
+150 1 L16*L23*L29
+151 1488 L16*L28*L32
+152 16 L17*L17*L18
+153 68 L17*L18*L29
+154 38 L17*L21*L23
+155 106367 L17*L23*L31
+156 2521 L17*L29*L33
+157 11 L17*L31*L32
+158 38 L18*L25*L27
+159 9661 L19*L21*L34
+160 99860 L19*L23*L24
+161 990 L19*L27*L32
+162 36042 L19*L33*L34
+163 18059 L20*L20*L32
+164 99860 L20*L22*L23
+165 38 L20*L23*L35
+166 16 L20*L24*L32
+167 144045 L22*L23*L29
+168 251043 L22*L24*L32
+169 229897 L23*L26*L34
+170 153478 L23*L29*L31
+171 199168 L23*L32*L35
+172 60577 L24*L30*L32
+173 134675 L26*L29*L32
+174 134675 L28*L32*L35
+175 72922 L32*L33*L35
+176 48327 L32*L35*L35
+177 72922 L33*L33*L35
+178 449381 ABC+*L1
+179 223023 ABC+*L7
+180 475573 ABC+*L8
+181 99507 ABC+*L11
+182 4813 ABC+*L20
+183 388584 ABC+*L31
+184 67200 ABF+*L24
+185 255067 ACF+*L34
+186 18162 AEF+*L23
+187 33 AFH+*L13
+188 58254 AFH+*L23
+189 115527 AFH+*L24
+190 79 BCD+*L12
+191 4021 BCD+*L18
+192 45819 BCD+*L22
+193 4500 BCD+*L24
+194 27653 BCD+*L28
+195 1545 CDH+*L21
+196 11452 EFH+*L17
+197 37071 EFH+*L19
+198 287571 EFH+*L26
+199 240020 EFH+*L28
+200 13295 DEG+*L8
+201 34658 FGH-*L5
+202 3514 ABO+*L14
+203 146 EFO+*L13
+204 318872 FHO+*L22
+205 15888 FHO+*L28
+206 17132 FHO+*L29
+207 35 CHO-*L16
+208 20278 CEO+*L23
+209 208334 DEP+*L22
+210 534309 DEP+*L26
+211 70782 DEP+*L35
+212 3152 FHP+*L8
+213 209881 FHP+*L30
+214 352568 CEP-*L3
+215 39274 CEP-*L12
+216 86651 CEP-*L19
+217 90135 CEP-*L28
+218 307267 CEP-*L33
+219 33376 GHO+*L22
+220 11 GHO+*L32
+221 157 GHO+*L33
+222 4184 DOP-*L5
+223 1 AGP-*L16
+224 101613 AGP-*L19
+225 33 AGP-*L33
+226 79 BGO+*L4
+227 11 BGO+*L30
+228 33 AGO+*L4
+229 5542 DFP-*L10
+230 49340 CFO-*L14
+231 48901 CFO-*L17
+232 4 CFO-*L19
+233 6598 GOP-*L6
+234 34 GOP-*L18
+235 143451 GOP-*L22
+236 34 ACG+*L19
+237 52387 DHP-*L8
+238 255075 BEP-*L4
+239 1 EGP+*L16
+240 2 EGP+*L26
+241 2199 EGP+*L28
+242 79537 EOP+*L4
+243 34 EOP+*L18
+244 12316 BFO-*L8
+245 1790 BFO-*L32
+246 1 BGP-*L34
+247 2521 CGO+*L6
+248 35 CGO+*L16
+249 38 GHP-*L21
+250 4038 FGO-*L7
+251 1613 FGO-*L16
+252 34 FGO-*L19
+253 75180 FGO-*L23
+254 9661 EHO+*L20
+255 32560 HOP+*L18
+256 32560 HOP+*L19
+257 1631 HOP+*L27
+258 1 BOP-*L8
+259 34699 FOP+*L30
+260 2198 DGP-*L8
+261 51152 DGP-*L10
+262 1392 ADG+*L9
+263 79 BDG+*L4
+264 42278 BFG-*L23
+265 67052 CFAP_2*L14
+266 229380 CFAP_2*L19
+267 48327 CFAP_2*L26
+268 34678 CAGH_1*L23
+269 104086 CHAP_2*L6
+270 287402 CHAP_2*L18
+271 277259 CHAP_2*L22
+272 230078 CHAP_2*L26
+273 286592 CHAP_2*L28
+274 226541 COAP_1*L10
+275 101647 COAP_1*L12
+276 43591 COAP_1*L23
+277 68 CBGH_1*L21
+278 1 CHBP_2*L15
+279 174842 CCEF_2*L4
+280 57369 CFCP_2*L11
+281 158723 CFCP_2*L14
+282 6 CFCP_2*L16
+283 31769 CFCP_2*L19
+284 16 CFCP_2*L20
+285 583042 CFCP_2*L22
+286 307267 CFCP_2*L31
+287 1348 COCP_1*L9
+288 34608 COCP_1*L10
+289 79 CDEG_1*L2
+290 2 CDEG_1*L21
+291 1 QABGH_1*L25
+292 13942 QACGH_1*L15
+293 60088 QACPH_2*L3
+294 246 QACPO_1*L15
+295 146944 QADEF_3*L23
+296 1 QADPF_2*L17
+297 267067 QAPEH_2*L4
+298 101883 QAPEH_2*L23
+299 1 QAGFH_1*L16
+300 24862 QAPFH_2*L30
+301 171045 QBCEF_2*L1
+302 754 QBCGF_1*L21
+303 2521 QBCGF_1*L34
+304 11072 QCDEF_3*L21
+305 25810 QCDPH_2*L9
+306 4254 QCDPH_2*L27
+307 202182 QCDPH_2*L32
+308 3268 QCDPO_1*L0
+309 50480 QCPEF_2*L29
+310 49654 QCGFH_1*L20
+311 82385 QDEFH_1*L2
+312 340292 F5_BCDHA*L23
+313 163 F5_OABCD*L18
+314 306085 F5_DPABC*L23
+315 179706 F5_CPEAB*L2
+316 2 F5_OABCG*L27
+317 4399 F5_ABCPG*L6
+318 53527 F5_OHABC*L34
+319 274979 F5_FABDE*L2
+320 74148 F5_BPEFA*L23
+321 64678 F5_GFHAB*L9
+322 37 F5_BOFHA*L17
+323 78340 F5_OFHAB*L2
+324 283231 F5_ACDEH*L23
+325 27653 F5_EHACD*L6
+326 180670 F5_PFACD*L2
+327 58722 F5_PFACD*L23
+328 3930 F5_CDPOA*L32
+329 268566 F5_EHACP*L23
+330 292719 F5_GFHAC*L15
+331 46694 F5_ADEFH*L15
+332 240950 F5_FHADP*L10
+333 4260 F5_FHAPE*L15
+334 68 F5_CDPGB*L21
+335 121 F5_GBCDP
+336 4635 F5_HBCEF*L18
+337 91168 F5_HBCPF*L5
+338 109395 F5_HBCPF*L23
+339 1578 F5_EFHOG*L17
+340 1436 F5_HOGEF*L7
+341 13658 F5_OGEFH*L15
+342 1243 F5_GEFHO*L28
+343 143451 F5_EFHGP*L23
+344 153138 F5_GPEFH*L2
+345 38326 F5_PEFHG*L4
+346 6598 F5_EFHOP*L6
+347 3432 F5_EHOGP*L31
+348 1637 F5_GPEHO*L0
+349 1317 F5_GPEHO*L34
+350 33918 F5_HOGPF*L2
+```
+
+
+### Row R06
+
+Path: DOP-,AGP-,EGO-,BGO+,AGO+,DFP-,CFO-,GOP+.
+
+```n7-h2-R06-trace
+plu ABGOP AOP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DAP -1
+plu DAFHP DHP -1
+plu DBCFP DBP -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GACHO GCO -1
+plu GCEHO GEH 1
+plu GEFHO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu OABCP OBP 1
+plu OACDP OAD 1
+plu OADGP ODG 1
+plu OBCDG OBD 1
+via G DEO AD 1
+via G CEO AF -1
+via G DEO BD 1
+via G CEO BF -1
+via G CEO CF -1
+```
+
+Exact upper bound: `-2105157342878610220522947/27590599117900000000000`.
+
+```n7-h2-R06-witnesses
+CCDE_1 P
+CDEO_2 GP
+CEOP_1 G
+CFCG_1 O
+QABGH_1 O
+QACGH_1 O
+QADEH_3 GOP
+QAPEH_2 GO
+QCDEF_3 GOP
+QCDEG_1 P
+QCPEF_2 GO
+QCPEO_1 G
+```
+
+```n7-h2-R06-sum
+1 3 L17*L33
+2 27 L0*L0*L2
+3 5 L0*L1*L4
+4 31 L0*L2*L10
+5 14 L0*L2*L13
+6 39 L0*L2*L19
+7 71 L0*L2*L20
+8 30 L0*L2*L33
+9 19 L0*L7*L10
+10 7 L0*L10*L35
+11 2 L0*L13*L15
+12 2 L0*L16*L18
+13 1 L0*L18*L22
+14 5 L0*L18*L25
+15 5 L0*L20*L22
+16 88 L0*L20*L32
+17 10 L0*L24*L34
+18 11 L0*L26*L33
+19 12 L1*L2*L26
+20 9 L1*L6*L28
+21 5 L1*L9*L31
+22 59 L1*L12*L32
+23 5 L1*L13*L24
+24 32 L1*L14*L18
+25 29 L2*L2*L34
+26 29 L2*L2*L35
+27 13 L2*L3*L24
+28 26 L2*L4*L7
+29 87 L2*L6*L21
+30 15 L2*L6*L23
+31 188 L2*L7*L29
+32 4 L2*L10*L34
+33 1 L2*L11*L24
+34 21 L2*L12*L21
+35 104 L2*L15*L28
+36 80 L2*L18*L27
+37 56 L2*L22*L27
+38 12 L2*L25*L29
+39 21 L2*L26*L29
+40 34 L2*L27*L35
+41 6 L2*L29*L29
+42 4 L2*L33*L34
+43 9 L3*L8*L17
+44 12 L4*L6*L13
+45 13 L4*L6*L17
+46 20 L4*L15*L29
+47 10 L4*L15*L32
+48 42 L4*L15*L35
+49 8 L4*L16*L17
+50 8 L4*L17*L17
+51 6 L4*L17*L23
+52 92 L4*L18*L34
+53 7 L4*L21*L25
+54 16 L4*L27*L27
+55 4 L5*L6*L10
+56 12 L5*L6*L19
+57 20 L5*L6*L21
+58 7 L5*L6*L25
+59 154 L5*L6*L28
+60 1 L5*L8*L11
+61 8 L5*L8*L24
+62 12 L5*L14*L35
+63 8 L5*L17*L20
+64 7 L5*L18*L24
+65 27 L5*L20*L26
+66 95 L5*L28*L34
+67 3 L6*L6*L6
+68 3 L6*L6*L28
+69 4 L6*L6*L33
+70 3 L6*L8*L9
+71 90 L6*L10*L18
+72 3 L6*L11*L25
+73 130 L6*L12*L19
+74 14 L6*L12*L22
+75 8 L6*L12*L30
+76 2 L6*L16*L33
+77 6 L6*L17*L22
+78 40 L6*L19*L19
+79 170 L6*L19*L22
+80 105 L6*L19*L28
+81 9 L6*L23*L26
+82 7 L6*L23*L34
+83 9 L6*L26*L29
+84 317 L6*L26*L31
+85 230 L6*L28*L31
+86 9 L6*L28*L34
+87 2 L6*L31*L35
+88 4 L7*L10*L28
+89 26 L7*L19*L34
+90 26 L7*L21*L30
+91 33 L7*L22*L32
+92 46 L8*L8*L18
+93 6 L8*L9*L33
+94 8 L8*L10*L33
+95 130 L8*L12*L18
+96 2 L8*L13*L21
+97 74 L8*L17*L32
+98 164 L8*L18*L22
+99 14 L8*L25*L32
+100 10 L8*L25*L34
+101 13 L8*L29*L34
+102 56 L9*L10*L18
+103 44 L9*L11*L12
+104 2 L9*L12*L24
+105 13 L9*L15*L28
+106 9 L9*L17*L22
+107 40 L9*L18*L18
+108 119 L9*L22*L27
+109 1 L9*L23*L28
+110 103 L9*L26*L31
+111 13 L9*L28*L28
+112 12 L9*L29*L31
+113 6 L10*L10*L24
+114 6 L10*L11*L17
+115 8 L10*L12*L24
+116 14 L10*L13*L35
+117 9 L10*L16*L21
+118 7 L10*L16*L24
+119 5 L10*L16*L29
+120 7 L10*L17*L28
+121 23 L10*L19*L27
+122 114 L10*L20*L35
+123 1 L10*L21*L23
+124 11 L10*L24*L31
+125 4 L10*L26*L34
+126 20 L11*L22*L34
+127 5 L12*L21*L24
+128 2 L12*L21*L27
+129 9 L12*L22*L34
+130 6 L12*L23*L29
+131 21 L13*L15*L19
+132 31 L13*L21*L30
+133 102 L15*L18*L29
+134 2 L15*L21*L22
+135 8 L15*L23*L33
+136 47 L15*L29*L30
+137 1 L16*L18*L25
+138 57 L16*L18*L32
+139 2 L16*L19*L34
+140 35 L16*L20*L32
+141 13 L16*L30*L32
+142 7 L16*L32*L34
+143 110 L17*L18*L30
+144 35 L17*L20*L32
+145 6 L17*L21*L22
+146 315 L18*L18*L28
+147 2 L18*L25*L34
+148 7 L18*L27*L33
+149 275 L18*L28*L28
+150 60 L18*L33*L34
+151 4 L19*L26*L32
+152 80 L20*L22*L32
+153 80 L21*L22*L30
+154 16 L21*L22*L33
+155 10 L21*L29*L31
+156 32 L21*L33*L34
+157 13 L23*L27*L30
+158 10 L24*L34*L35
+159 18 L28*L31*L34
+160 4 ABE+*L0
+161 16 ABH+*L21
+162 82 ABH+*L22
+163 189 ABH+*L28
+164 29 ABH+*L30
+165 93 ACH+*L21
+166 4 AFH+*L16
+167 98 AFH+*L20
+168 6 AFH+*L25
+169 4 AFH+*L27
+170 15 AFH+*L28
+171 20 BCD+*L22
+172 281 BCD+*L26
+173 412 BCD+*L28
+174 15 BFH+*L13
+175 11 EFH+*L1
+176 57 EFH+*L19
+177 26 EFH+*L22
+178 2 EFH+*L24
+179 37 DEG+*L32
+180 7 EFG+*L1
+181 43 FGH-*L19
+182 3 CEG+*L10
+183 13 ABO+*L10
+184 11 ABO+*L15
+185 13 ABO+*L32
+186 27 ABO+*L34
+187 10 EFO+*L14
+188 8 EFO+*L33
+189 16 FHO+*L0
+190 15 FHO+*L6
+191 23 FHO+*L12
+192 93 FHO+*L22
+193 93 FHO+*L23
+194 10 FHO+*L30
+195 89 AHO-*L28
+196 32 CHO-*L0
+197 56 CEO+*L6
+198 35 DEP+*L10
+199 2 FHP+*L0
+200 10 FHP+*L2
+201 77 CEP-*L8
+202 2 CEP-*L21
+203 17 CEP-*L28
+204 23 GHO+*L3
+205 6 GHO+*L15
+206 6 DOP-*L17
+207 5 DOP-*L27
+208 2 AGP-*L15
+209 9 EGO-*L0
+210 3 EGO-*L10
+211 13 BGO+*L32
+212 10 AGO+*L6
+213 5 AGO+*L24
+214 8 DFP-*L12
+215 6 DFP-*L19
+216 5 DFP-*L20
+217 4 DFP-*L27
+218 82 CFO-*L8
+219 99 CFO-*L11
+220 78 CFO-*L12
+221 9 CFO-*L17
+222 227 CFO-*L22
+223 124 CFO-*L23
+224 5 CFO-*L25
+225 152 CFO-*L26
+226 20 GOP+*L24
+227 20 GOP+*L25
+228 2 GOP+*L34
+229 7 AOP-*L5
+230 6 CFP-*L10
+231 5 ADP+*L21
+232 21 DHP-*L5
+233 12 EOP+*L6
+234 16 AFP-*L9
+235 42 CGO+*L2
+236 3 EGH-*L22
+237 7 EGH-*L32
+238 10 FGO-*L6
+239 11 FGO-*L26
+240 106 FGO-*L33
+241 17 BHO-*L8
+242 54 EHO+*L6
+243 135 EHO+*L33
+244 12 BOP-*L6
+245 4 DGO+*L5
+246 45 ADG+*L32
+247 96 CFG-*L10
+248 3 EL*L9
+249 16 EL*L15
+250 22 CCDE_1*L18
+251 4 CCDE_1*L32
+252 7 CFCG_1*L24
+253 66 CDEO_2*L9
+254 115 CDEO_2*L11
+255 130 CDEO_2*L12
+256 6 CDEO_2*L16
+257 275 CDEO_2*L18
+258 164 CDEO_2*L22
+259 344 CDEO_2*L26
+260 106 CDEO_2*L27
+261 381 CDEO_2*L28
+262 31 CDEO_2*L31
+263 31 CDEO_2*L32
+264 5 CEOP_1*L27
+265 7 QABGH_1*L14
+266 6 QACGH_1*L23
+267 2 QADEH_3*L17
+268 1 QAPEH_2*L18
+269 41 QCDEF_3*L23
+270 29 QCDEG_1*L2
+271 5 QCPEF_2*L17
+272 1 QCPEO_1*L17
+273 24 F5_OABCD*L6
+274 84 F5_DPABC*L9
+275 13 F5_CPEAB*L2
+276 88 F5_ABCGF*L9
+277 131 F5_COFAB*L6
+278 10 F5_HABCG*L6
+279 107 F5_HABCO*L9
+280 186 F5_FABDE*L9
+281 185 F5_BDEHA*L9
+282 96 F5_FABPE*L9
+283 24 F5_HABOF*L2
+284 112 F5_FHABP*L9
+285 55 F5_CDEHA*L9
+286 10 F5_EHACP*L6
+287 42 F5_FHACO*L2
+288 5 F5_GOACP*L10
+289 3 F5_FHADP*L32
+290 3 F5_CPEFH*L6
+291 15 F5_EFHOG*L10
+292 6 F5_GEFHO*L34
+```
+
+
+### Row R07
+
+Path: DOP-,AGP-,EGO-,BGO+,AGO+,DFP-,CFO+,DGO-.
+
+```n7-h2-R07-trace
+plu ABGOP AOP -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DAP -1
+plu DAFHP DHP -1
+plu DBCFP DBP -1
+plu DCGOP DGP -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu FCDEO FDO -1
+plu FCEOP FOP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GACDP GAD 1
+plu GACHO GCO -1
+plu GADHO GDH 1
+plu GADHP GHP -1
+plu GADOP GOP -1
+plu GBCDP GBD 1
+plu GCDEH GEH 1
+plu GDEFH GDF 1
+plu GDEFP GFP -1
+plu GDFHO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADGO HDO -1
+plu HADOP HOP 1
+plu HAEGO HEO -1
+plu OABCP OBP 1
+plu OACDP OAD 1
+plu OBCDP OBD 1
+```
+
+Exact upper bound: `-135541261244286808253167/1746240450500000000000`.
+
+```n7-h2-R07-witnesses
+CADH_2 GO
+CAGH_1 O
+CCDE_1 P
+CCDH_2 GO
+CCGH_1 O
+CDEF_1 P
+CDEG_1 P
+CHAP_2 GO
+CHCP_2 GO
+COAP_1 G
+QABDO_1 G
+QACPO_1 G
+QAPEH_2 GO
+QBDEH_3 GOP
+QBDFH_2 GO
+QCDEO_2 GP
+QCDFO_1 G
+QCDPO_1 G
+QDEFG_1 P
+QDEOG_1 P
+```
+
+```n7-h2-R07-sum
+1 305 L0*L0*L12
+2 3 L0*L0*L19
+3 189 L0*L2*L2
+4 6 L0*L2*L6
+5 1723 L0*L2*L26
+6 1037 L0*L2*L28
+7 45 L0*L5*L7
+8 1726 L0*L5*L26
+9 56 L0*L6*L30
+10 36 L0*L9*L11
+11 3 L0*L9*L13
+12 95 L0*L9*L16
+13 2 L0*L11*L17
+14 45 L0*L11*L31
+15 271 L0*L12*L15
+16 26 L0*L12*L32
+17 303 L0*L13*L27
+18 33 L0*L15*L22
+19 3 L0*L16*L19
+20 1 L0*L17*L23
+21 1 L0*L18*L29
+22 2 L0*L20*L33
+23 516 L0*L23*L28
+24 392 L0*L23*L30
+25 48 L1*L4*L33
+26 1 L1*L14*L23
+27 4 L1*L17*L18
+28 191 L2*L2*L26
+29 102 L2*L3*L6
+30 39 L2*L3*L34
+31 1 L2*L4*L16
+32 166 L2*L4*L28
+33 1 L2*L6*L12
+34 36 L2*L6*L28
+35 42 L2*L7*L18
+36 34 L2*L7*L24
+37 26 L2*L9*L19
+38 22 L2*L9*L23
+39 553 L2*L14*L22
+40 43 L2*L14*L25
+41 191 L2*L16*L22
+42 3 L2*L16*L28
+43 17 L2*L16*L31
+44 5 L2*L17*L18
+45 191 L2*L17*L22
+46 26 L2*L22*L22
+47 92 L2*L22*L30
+48 391 L2*L23*L24
+49 1 L2*L26*L27
+50 39 L2*L31*L34
+51 16 L3*L4*L15
+52 32 L3*L5*L21
+53 5 L3*L12*L21
+54 3 L3*L16*L32
+55 92 L3*L23*L31
+56 59 L4*L5*L29
+57 152 L4*L8*L30
+58 44 L4*L9*L31
+59 119 L4*L11*L25
+60 5 L4*L12*L21
+61 1 L4*L15*L20
+62 19 L4*L17*L33
+63 12 L4*L21*L29
+64 11 L4*L21*L30
+65 70 L4*L22*L25
+66 124 L4*L23*L26
+67 48 L4*L27*L33
+68 33 L5*L6*L8
+69 16 L5*L6*L18
+70 315 L5*L6*L26
+71 286 L5*L15*L26
+72 5 L5*L20*L23
+73 1 L5*L20*L34
+74 109 L5*L33*L34
+75 4 L6*L7*L18
+76 2 L6*L9*L12
+77 1 L6*L11*L25
+78 1 L6*L16*L23
+79 4 L6*L17*L25
+80 7 L6*L19*L34
+81 621 L6*L22*L23
+82 26 L6*L23*L34
+83 149 L7*L8*L10
+84 2 L7*L12*L33
+85 4 L7*L16*L24
+86 15 L7*L33*L33
+87 48 L8*L10*L10
+88 9 L8*L10*L18
+89 20 L8*L10*L35
+90 1 L8*L12*L32
+91 9 L8*L18*L25
+92 3 L8*L18*L27
+93 94 L9*L9*L10
+94 6 L9*L9*L17
+95 5 L9*L9*L18
+96 44 L9*L11*L24
+97 518 L9*L11*L26
+98 48 L9*L11*L33
+99 15 L9*L13*L32
+100 7 L9*L13*L33
+101 6 L9*L14*L25
+102 21 L9*L14*L33
+103 101 L9*L15*L16
+104 95 L9*L17*L27
+105 5 L9*L18*L23
+106 3 L9*L18*L29
+107 49 L9*L18*L33
+108 476 L9*L22*L23
+109 85 L9*L22*L33
+110 9 L9*L25*L33
+111 9 L9*L31*L33
+112 239 L10*L10*L15
+113 64 L10*L12*L23
+114 32 L10*L15*L17
+115 1 L10*L15*L20
+116 377 L10*L15*L26
+117 176 L10*L15*L28
+118 3 L10*L15*L29
+119 239 L10*L15*L33
+120 5 L10*L17*L18
+121 15 L10*L25*L33
+122 64 L11*L12*L23
+123 26 L11*L23*L23
+124 15 L11*L23*L29
+125 10 L12*L15*L18
+126 12 L12*L15*L32
+127 10 L12*L20*L33
+128 9 L12*L33*L35
+129 6 L14*L15*L24
+130 58 L14*L18*L33
+131 114 L14*L23*L29
+132 124 L14*L26*L33
+133 6 L15*L16*L34
+134 1 L15*L17*L19
+135 9 L15*L18*L25
+136 315 L15*L22*L22
+137 35 L15*L23*L33
+138 6 L15*L24*L35
+139 6 L15*L25*L26
+140 96 L15*L25*L33
+141 358 L15*L26*L28
+142 358 L15*L27*L28
+143 113 L15*L30*L30
+144 35 L16*L23*L33
+145 6 L16*L34*L34
+146 1 L17*L18*L27
+147 5 L17*L18*L33
+148 17 L18*L23*L29
+149 22 L19*L23*L27
+150 8 L19*L29*L33
+151 99 L19*L33*L34
+152 4 L20*L23*L26
+153 9 L20*L23*L34
+154 1 L20*L29*L33
+155 26 L22*L23*L33
+156 26 L23*L23*L30
+157 96 L23*L25*L31
+158 779 L23*L26*L26
+159 341 L23*L29*L30
+160 45 ABC+*L11
+161 26 ABC+*L13
+162 960 ABC+*L22
+163 1726 ABC+*L26
+164 1040 ABC+*L28
+165 46 ABH+*L7
+166 36 BCD+*L7
+167 36 BCD+*L8
+168 117 BCD+*L15
+169 3 BCD+*L17
+170 34 BCD+*L25
+171 6 BFH+*L3
+172 49 EFH+*L19
+173 1 EFH+*L20
+174 501 EFH+*L26
+175 322 EFH+*L28
+176 208 EFH+*L29
+177 3 ABG+*L9
+178 8 CDG+*L23
+179 3 FGH-*L30
+180 3 CEG+*L7
+181 9 FHO+*L2
+182 10 FHO+*L13
+183 12 CHO-*L29
+184 30 CHO-*L30
+185 72 CDP+*L15
+186 52 DEP+*L5
+187 442 DEP+*L15
+188 621 DEP+*L22
+189 1614 DEP+*L26
+190 395 DEP+*L30
+191 8 DEP+*L35
+192 34 FHP+*L4
+193 318 CEP-*L4
+194 70 CEP-*L11
+195 22 CEP-*L19
+196 309 CEP-*L22
+197 74 GHO+*L3
+198 16 GHO+*L16
+199 20 GHO+*L30
+200 31 AGP-*L1
+201 7 AGP-*L19
+202 31 AGP-*L27
+203 35 AGP-*L33
+204 2 AGO+*L0
+205 61 DFP-*L1
+206 15 DFP-*L10
+207 35 DFP-*L12
+208 96 DFP-*L27
+209 35 DFP-*L35
+210 5 DGO-*L22
+211 16 DGO-*L31
+212 55 COP-*L23
+213 1 DGP-*L7
+214 35 EGP+*L4
+215 30 EGP+*L15
+216 62 EOP+*L4
+217 8 EOP+*L8
+218 1 FOP+*L6
+219 16 CGO+*L15
+220 16 CGO+*L16
+221 1 CGO+*L23
+222 29 DGH-*L4
+223 22 DGH-*L22
+224 1 DGH-*L24
+225 3 DGH-*L28
+226 37 DGH-*L33
+227 2 GHP-*L7
+228 28 GHP-*L23
+229 20 BDG+*L2
+230 2 FGO-*L0
+231 4 DHO+*L29
+232 8 DHO+*L33
+233 62 CADH_2*L33
+234 7 CAGH_1*L23
+235 35 CHAP_2*L10
+236 1 CHAP_2*L12
+237 1 CHAP_2*L16
+238 4 CHAP_2*L20
+239 164 CHAP_2*L22
+240 713 CHAP_2*L26
+241 1106 CHAP_2*L28
+242 665 CHAP_2*L30
+243 66 CHAP_2*L34
+244 66 CHAP_2*L35
+245 7 COAP_1*L12
+246 1040 CCDE_1*L0
+247 56 CCDE_1*L4
+248 35 CCDH_2*L6
+249 30 CCDH_2*L11
+250 48 CCDH_2*L13
+251 168 CCDH_2*L24
+252 419 CCDH_2*L26
+253 15 CCGH_1*L11
+254 16 CCGH_1*L17
+255 16 CCGH_1*L20
+256 224 CHCP_2*L5
+257 143 CHCP_2*L7
+258 40 CHCP_2*L19
+259 243 CHCP_2*L22
+260 9 CHCP_2*L29
+261 76 CHCP_2*L31
+262 9 CDEF_1*L2
+263 5 CDEG_1*L6
+264 1 QABDO_1*L0
+265 21 QABDO_1*L23
+266 8 QACPO_1*L23
+267 164 QAPEH_2*L23
+268 82 QBDEH_3*L2
+269 1 QBDFH_2*L15
+270 16 RCDEH_GP_CE*L2
+271 82 RCDEH_GP_DH*L2
+272 59 RCDEH_OP_CE*L2
+273 2 QCDEO_2*L27
+274 19 RCDEO_GP_CE*L4
+275 9 QCDFO_1*L2
+276 1 QCDPO_1*L6
+277 6 QDEFG_1*L15
+278 85 QDEOG_1*L2
+279 26 F5_ABCDF*L15
+280 42 F5_ABCDP*L15
+281 288 F5_DPABC*L23
+282 417 F5_FABDE*L15
+283 116 F5_BPEHA*L2
+284 446 F5_CDEHA*L15
+285 28 F5_ACDPG*L23
+286 8 F5_FOCPE*L15
+287 26 F5_HGDEF*L15
+288 56 F5_GDEHO*L2
+289 62 F5_DPFHO*L23
+```
+
+
+### Row R08
+
+Path: DOP-,AGP-,EGO-,BGO+,AGO+,DFP-,CFO+,DGO+.
+
+```n7-h2-R08-trace
+plu ABGOP AOP -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DAP -1
+plu DAFHP DHP -1
+plu DBCFP DBP -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu FCDEO FDO -1
+plu FCEOP FOP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GACHO GCO -1
+plu GBCDO GBD 1
+plu GCEHO GEH 1
+plu GEFHO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu OABCP OBP 1
+plu OACDG OAD 1
+plu OBCDG OBD 1
+via G DEO AD 1
+```
+
+Exact upper bound: `-23357941693883921739600597/275905991179000000000000`.
+
+```n7-h2-R08-witnesses
+CAGH_1 O
+CCDE_1 P
+CDEO_2 GP
+QADEF_1 P
+QAPEH_2 GO
+QAPFH_1 O
+QCDEF_1 P
+QCDEG_1 P
+QCDEH_3 GOP
+```
+
+```n7-h2-R08-sum
+1 79 L0*L0*L4
+2 8 L0*L0*L13
+3 40 L0*L2*L6
+4 79 L0*L2*L26
+5 21 L0*L3*L18
+6 2 L0*L3*L33
+7 52 L0*L3*L34
+8 27 L0*L4*L12
+9 55 L0*L5*L19
+10 60 L0*L6*L19
+11 58 L0*L8*L23
+12 3 L0*L11*L25
+13 14 L0*L12*L29
+14 8 L0*L13*L35
+15 2 L0*L14*L25
+16 6 L0*L20*L33
+17 6 L0*L22*L27
+18 6 L0*L24*L32
+19 21 L0*L27*L31
+20 9 L1*L4*L34
+21 43 L1*L6*L29
+22 2 L1*L15*L24
+23 4 L2*L2*L16
+24 13 L2*L2*L25
+25 30 L2*L2*L34
+26 33 L2*L5*L28
+27 20 L2*L6*L11
+28 28 L2*L8*L31
+29 11 L2*L11*L28
+30 2 L2*L12*L25
+31 1 L2*L13*L27
+32 29 L2*L15*L31
+33 29 L2*L19*L27
+34 28 L2*L20*L27
+35 80 L2*L21*L26
+36 108 L2*L21*L27
+37 9 L2*L21*L30
+38 3 L2*L22*L32
+39 6 L2*L24*L27
+40 6 L2*L25*L33
+41 50 L2*L28*L34
+42 19 L2*L29*L32
+43 24 L3*L6*L24
+44 11 L3*L6*L29
+45 108 L3*L9*L18
+46 4 L3*L16*L33
+47 76 L3*L18*L22
+48 1 L4*L5*L35
+49 341 L4*L7*L18
+50 18 L4*L8*L33
+51 28 L4*L9*L11
+52 62 L4*L9*L16
+53 121 L4*L9*L20
+54 32 L4*L10*L15
+55 24 L4*L11*L17
+56 43 L4*L21*L22
+57 9 L5*L5*L20
+58 31 L5*L8*L17
+59 3 L5*L13*L24
+60 9 L5*L14*L30
+61 24 L5*L16*L32
+62 42 L5*L19*L23
+63 3 L5*L22*L32
+64 15 L5*L26*L29
+65 9 L5*L29*L33
+66 53 L6*L6*L10
+67 3 L6*L6*L19
+68 43 L6*L7*L26
+69 3 L6*L10*L35
+70 2 L6*L12*L22
+71 37 L6*L12*L25
+72 20 L6*L13*L31
+73 43 L6*L15*L28
+74 44 L6*L16*L20
+75 31 L6*L16*L22
+76 213 L6*L19*L22
+77 649 L6*L19*L26
+78 249 L6*L19*L31
+79 16 L6*L20*L31
+80 64 L6*L21*L32
+81 13 L6*L22*L35
+82 29 L6*L25*L31
+83 220 L6*L29*L30
+84 49 L6*L31*L31
+85 46 L6*L33*L34
+86 87 L7*L10*L18
+87 6 L7*L13*L18
+88 38 L7*L14*L18
+89 14 L7*L16*L18
+90 24 L7*L18*L22
+91 42 L7*L18*L35
+92 289 L8*L12*L18
+93 230 L8*L18*L22
+94 75 L8*L18*L29
+95 4 L8*L21*L33
+96 33 L8*L27*L27
+97 29 L9*L10*L33
+98 87 L9*L11*L22
+99 1 L9*L12*L22
+100 14 L9*L12*L29
+101 9 L9*L12*L30
+102 14 L9*L13*L20
+103 43 L9*L14*L27
+104 79 L9*L16*L20
+105 5 L9*L17*L22
+106 64 L9*L19*L32
+107 84 L9*L22*L29
+108 32 L9*L25*L33
+109 33 L9*L26*L26
+110 371 L9*L26*L28
+111 328 L9*L26*L29
+112 6 L9*L26*L32
+113 43 L9*L26*L34
+114 72 L9*L27*L30
+115 21 L9*L28*L33
+116 3 L9*L30*L35
+117 22 L9*L31*L31
+118 4 L9*L31*L32
+119 182 L10*L14*L23
+120 2 L10*L17*L23
+121 124 L10*L21*L23
+122 14 L10*L24*L29
+123 6 L10*L24*L32
+124 2 L11*L16*L32
+125 6 L11*L16*L34
+126 295 L11*L17*L18
+127 118 L11*L18*L23
+128 2 L12*L25*L32
+129 14 L12*L33*L34
+130 2 L13*L20*L23
+131 6 L13*L20*L34
+132 3 L13*L22*L34
+133 6 L13*L27*L34
+134 14 L13*L29*L34
+135 5 L13*L30*L34
+136 6 L14*L15*L18
+137 148 L14*L18*L30
+138 460 L14*L18*L33
+139 87 L14*L22*L33
+140 46 L14*L25*L33
+141 27 L14*L32*L33
+142 35 L15*L16*L21
+143 6 L15*L16*L33
+144 90 L15*L18*L23
+145 70 L16*L18*L33
+146 31 L16*L18*L34
+147 64 L17*L18*L28
+148 118 L17*L18*L29
+149 2 L17*L19*L23
+150 35 L17*L20*L34
+151 44 L17*L21*L28
+152 18 L18*L18*L22
+153 152 L18*L18*L28
+154 118 L18*L22*L33
+155 76 L18*L23*L30
+156 114 L18*L26*L33
+157 178 L18*L27*L28
+158 89 L18*L28*L30
+159 114 L18*L32*L35
+160 18 L19*L19*L23
+161 6 L19*L22*L34
+162 42 L20*L21*L34
+163 88 L20*L23*L33
+164 42 L21*L21*L34
+165 8 L23*L28*L32
+166 3 L23*L31*L32
+167 6 L24*L29*L32
+168 6 L25*L33*L33
+169 1 L27*L32*L32
+170 48 L29*L31*L34
+171 1 L33*L33*L35
+172 58 ABC+*L35
+173 2 ABF+*L5
+174 183 ABH+*L6
+175 65 ABH+*L18
+176 8 ABH+*L22
+177 63 ABH+*L28
+178 20 BCD+*L13
+179 117 BCD+*L14
+180 330 BCD+*L19
+181 59 BCD+*L25
+182 232 BCD+*L28
+183 39 BCD+*L31
+184 10 BCD+*L32
+185 3 CDH+*L2
+186 35 EFH+*L19
+187 55 EFH+*L22
+188 5 EFH+*L30
+189 28 EFH+*L32
+190 20 ABG+*L5
+191 37 CDG+*L9
+192 2 EFG+*L32
+193 40 FGH-*L3
+194 140 FGH-*L18
+195 6 FGH-*L35
+196 8 AGH+*L9
+197 79 ABO+*L7
+198 193 DEO+*L6
+199 302 FHO+*L10
+200 85 FHO+*L12
+201 212 FHO+*L22
+202 302 FHO+*L33
+203 60 AHO-*L5
+204 551 AHO-*L6
+205 702 AHO-*L28
+206 150 CHO-*L0
+207 301 CHO-*L10
+208 225 CHO-*L12
+209 131 CHO-*L22
+210 35 CHO-*L29
+211 9 CHO-*L31
+212 1 CHO-*L32
+213 156 CHO-*L35
+214 39 CDP+*L9
+215 5 DEP+*L16
+216 6 DEP+*L33
+217 15 CEP-*L5
+218 77 CEP-*L9
+219 31 CEP-*L11
+220 3 CEP-*L13
+221 51 CEP-*L28
+222 21 CEP-*L30
+223 46 CEP-*L34
+224 225 GHO+*L4
+225 14 GHO+*L6
+226 131 GHO+*L11
+227 6 GHO+*L15
+228 3 GHO+*L22
+229 46 GHO+*L32
+230 6 GHO+*L35
+231 2 AGP-*L11
+232 10 EGO-*L2
+233 9 BGO+*L2
+234 14 AGO+*L29
+235 29 DFP-
+236 3 DFP-*L0
+237 19 DFP-*L5
+238 46 DFP-*L34
+239 4 CFO+*L9
+240 2 DGO+*L22
+241 46 CHP-*L6
+242 6 DHP-*L3
+243 2 DHP-*L32
+244 19 BDP+*L5
+245 13 EGP+*L2
+246 37 EGP+*L6
+247 6 AFP-*L9
+248 20 FOP+*L6
+249 15 EGH-*L33
+250 6 FGO-*L0
+251 44 FGO-*L2
+252 44 BHO-*L11
+253 25 EHO+*L16
+254 126 EHO+*L33
+255 5 CAGH_1*L4
+256 2 CAGH_1*L33
+257 31 CCDE_1*L15
+258 101 CDEO_2*L0
+259 46 CDEO_2*L4
+260 252 CDEO_2*L6
+261 87 CDEO_2*L10
+262 6 CDEO_2*L13
+263 221 CDEO_2*L16
+264 153 CDEO_2*L17
+265 152 CDEO_2*L18
+266 236 CDEO_2*L22
+267 639 CDEO_2*L26
+268 871 CDEO_2*L28
+269 170 CDEO_2*L30
+270 2 QADEF_1*L23
+271 12 QAPEH_2*L9
+272 6 QAPFH_1*L0
+273 12 QCDEF_1*L6
+274 295 QCDEG_1*L18
+275 44 QCDEH_3*L23
+276 110 F5_DFABC*L9
+277 6 F5_BCDGA*L34
+278 12 F5_GABCD*L2
+279 12 F5_GABCD*L34
+280 8 F5_BCDPA*L2
+281 6 F5_CPEAB*L34
+282 13 F5_ABCPG*L2
+283 1 F5_DGOAB*L2
+284 15 F5_DPFAC*L6
+285 20 F5_ACDPO*L6
+286 49 F5_CPEHA*L9
+287 176 F5_PEFHA*L9
+288 44 F5_CDEFO*L6
+289 374 F5_FOCDE*L6
+290 925 F5_FOCDE*L9
+```
+
+
+### Row R09
+
+Path: DOP-,AGP-,EGO-,BGO+,AGO+,DFP+,GOP-.
+
+```n7-h2-R09-trace
+plu ABGOP AOP -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DCFOP DFO 1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACDP FAP 1
+plu FBCDP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GACHO GCO -1
+plu GAHOP GHP -1
+plu GCEHO GEH 1
+plu GEFHO GFO 1
+plu GEFHP GFP -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu HAGOP HOP 1
+plu OABCP OBP 1
+plu OACDP OAD 1
+plu OBCDP OBD 1
+plu ODEFP OFP -1
+plu PACDO PAD 1
+plu PADGO PDG -1
+plu PBCDG PBD 1
+via G HAP AD 1
+via G HAP BD 1
+via G HAP DF 1
+```
+
+Exact upper bound: `-390875190565820009556321938012752417504449/6066531806909427285395014788100000000000`.
+
+```n7-h2-R09-witnesses
+CCDE_1 P
+CCEO_1 G
+CCGH_1 O
+CDEG_1 P
+CDEO_1 P
+CHAP_2 GO
+CHCP_2 GO
+COBP_1 G
+QABGH_1 O
+QADPO_1 G
+QBCPH_2 GO
+QBDPO_1 G
+QCDEF_1 P
+QCDEG_1 P
+QCDEO_2 GP
+QCDFH_3 GOP
+QCDPO_1 G
+QCPEO_1 G
+QDEFG_1 P
+```
+
+```n7-h2-R09-sum
+1 34 L2*L32
+2 64 L0*L0*L23
+3 52 L0*L2*L14
+4 1 L0*L2*L21
+5 128 L0*L2*L22
+6 7 L0*L2*L33
+7 5 L0*L5*L19
+8 1 L0*L6*L11
+9 67 L0*L8*L33
+10 75 L0*L9*L32
+11 146 L0*L11*L23
+12 3 L0*L12*L15
+13 1 L0*L12*L18
+14 1 L0*L12*L23
+15 1 L0*L12*L33
+16 2 L0*L13*L29
+17 2 L0*L17*L31
+18 2 L0*L18*L26
+19 24 L0*L18*L30
+20 73 L0*L26*L31
+21 3 L1*L6*L23
+22 107 L1*L15*L30
+23 45 L2*L2*L20
+24 2 L2*L3*L16
+25 13 L2*L3*L21
+26 69 L2*L4*L14
+27 33 L2*L4*L21
+28 63 L2*L5*L24
+29 7 L2*L5*L27
+30 35 L2*L6*L8
+31 1 L2*L6*L16
+32 9 L2*L8*L17
+33 172 L2*L8*L23
+34 21 L2*L11*L20
+35 1 L2*L11*L29
+36 133 L2*L11*L34
+37 3 L2*L13*L34
+38 112 L2*L14*L33
+39 1 L2*L16*L18
+40 1 L2*L17*L27
+41 1 L2*L17*L30
+42 1 L2*L17*L32
+43 18 L2*L21*L29
+44 4 L2*L24*L34
+45 192 L2*L25*L33
+46 2 L2*L27*L27
+47 11 L2*L28*L28
+48 392 L2*L28*L33
+49 15 L3*L15*L18
+50 34 L3*L15*L25
+51 1 L3*L18*L35
+52 15 L3*L27*L34
+53 51 L4*L5*L9
+54 270 L4*L6*L23
+55 5 L4*L9*L18
+56 20 L4*L9*L23
+57 61 L4*L10*L15
+58 2 L4*L15*L19
+59 106 L4*L15*L23
+60 2 L4*L17*L34
+61 74 L4*L23*L29
+62 23 L4*L29*L34
+63 6 L5*L14*L33
+64 121 L5*L15*L22
+65 80 L6*L6*L32
+66 4 L6*L10*L16
+67 18 L6*L15*L29
+68 11 L6*L18*L28
+69 285 L6*L23*L32
+70 230 L6*L33*L34
+71 13 L7*L9*L15
+72 211 L7*L14*L33
+73 18 L7*L15*L29
+74 38 L7*L18*L33
+75 628 L7*L22*L33
+76 196 L7*L26*L33
+77 196 L7*L29*L33
+78 59 L7*L32*L33
+79 13 L8*L15*L28
+80 45 L8*L18*L33
+81 14 L9*L10*L27
+82 8 L9*L11*L26
+83 72 L9*L11*L30
+84 2 L9*L12*L31
+85 8 L9*L13*L33
+86 13 L9*L14*L15
+87 14 L9*L15*L23
+88 10 L9*L18*L23
+89 2 L9*L18*L24
+90 2 L9*L21*L22
+91 6 L9*L31*L34
+92 58 L9*L32*L32
+93 2 L10*L11*L17
+94 164 L10*L15*L22
+95 14 L10*L18*L25
+96 24 L10*L21*L23
+97 1 L10*L23*L24
+98 1 L11*L25*L27
+99 9 L11*L28*L33
+100 1 L12*L23*L25
+101 12 L12*L23*L29
+102 1 L12*L26*L33
+103 29 L12*L28*L33
+104 1 L12*L29*L29
+105 12 L13*L24*L33
+106 12 L13*L29*L32
+107 13 L14*L15*L34
+108 4 L15*L15*L23
+109 108 L15*L18*L26
+110 17 L15*L18*L29
+111 1 L15*L21*L31
+112 326 L15*L22*L32
+113 153 L15*L24*L32
+114 123 L15*L25*L30
+115 13 L15*L27*L34
+116 57 L15*L29*L32
+117 47 L15*L32*L33
+118 13 L15*L34*L35
+119 1 L16*L22*L23
+120 2 L16*L27*L31
+121 1 L17*L18*L30
+122 231 L18*L23*L30
+123 231 L18*L23*L31
+124 4 L18*L25*L28
+125 2 L19*L25*L30
+126 1 L19*L31*L34
+127 4 L20*L23*L29
+128 155 L20*L23*L33
+129 6 L20*L24*L33
+130 11 L20*L30*L33
+131 217 L22*L28*L33
+132 573 L22*L33*L34
+133 102 L23*L23*L27
+134 81 L23*L23*L28
+135 81 L23*L25*L33
+136 3 L23*L26*L34
+137 237 L23*L30*L34
+138 1 L23*L35*L35
+139 315 L24*L26*L33
+140 45 L25*L27*L33
+141 50 L25*L33*L33
+142 706 L26*L28*L33
+143 576 L26*L33*L34
+144 17 L30*L34*L34
+145 189 ABC+
+146 10 ABC+*L1
+147 22 ABC+*L19
+148 609 ABC+*L22
+149 63 ABC+*L35
+150 27 ABH+*L6
+151 27 ABH+*L28
+152 17 BCD+*L21
+153 118 BCD+*L23
+154 70 BCD+*L28
+155 57 BCD+*L34
+156 194 EFH+*L5
+157 49 EFH+*L11
+158 3 EFH+*L12
+159 13 EFH+*L15
+160 145 EFH+*L22
+161 34 EFH+*L35
+162 2 ABG+*L0
+163 8 BCG+*L9
+164 17 DEG+*L33
+165 2 FGH-*L30
+166 2 FGH-*L32
+167 45 CHO-*L2
+168 18 CHO-*L6
+169 1 CHO-*L12
+170 1 CHO-*L26
+171 1 CHO-*L28
+172 4 BCP+*L9
+173 80 CDP+*L0
+174 38 CDP+*L11
+175 6 CDP+*L20
+176 440 CDP+*L26
+177 11 CDP+*L31
+178 65 CDP+*L34
+179 23 DEP+*L12
+180 165 DEP+*L18
+181 390 DEP+*L30
+182 34 EFP+*L9
+183 6 CEP-*L19
+184 99 CEP-*L28
+185 51 CEP-*L30
+186 65 CEP-*L34
+187 2 GHO+*L4
+188 1 GHO+*L8
+189 3 GHO+*L16
+190 2 GHO+*L17
+191 165 DOP-*L11
+192 11 DOP-*L29
+193 1 AGP-*L19
+194 1 BGO+*L26
+195 1 BGO+*L28
+196 12 BGO+*L33
+197 1 AGO+*L23
+198 2 AGO+*L27
+199 151 DFP+*L0
+200 157 DFP+*L4
+201 36 DFP+*L8
+202 50 DFP+*L10
+203 12 DFP+*L13
+204 165 DFP+*L19
+205 6 DFP+*L20
+206 82 DFP+*L22
+207 513 DFP+*L26
+208 2 DFP+*L29
+209 1 GOP-*L23
+210 5 GOP-*L28
+211 2 GOP-*L31
+212 12 GOP-*L33
+213 107 AOP-*L15
+214 128 AEP-*L2
+215 174 BEP-*L2
+216 232 BEP-*L30
+217 211 BEP-*L33
+218 2 EGP+*L0
+219 4 EGP+*L28
+220 4 EGP+*L34
+221 1 CGO+*L16
+222 11 CGO+*L30
+223 1 CGO+*L35
+224 4 FGO-*L6
+225 11 FGO-*L30
+226 107 HOP+*L15
+227 2 FOP+*L6
+228 2 DGP-*L0
+229 12 DGP-*L11
+230 9 DGP-*L28
+231 2 DGP-*L31
+232 4 DGP-*L34
+233 4 EL*L15
+234 44 EL*L25
+235 6 EL*L31
+236 50 CHAP_2*L0
+237 146 CHAP_2*L10
+238 102 CHAP_2*L22
+239 114 CHAP_2*L26
+240 609 CHAP_2*L30
+241 58 COBP_1*L2
+242 9 CCDE_1*L7
+243 255 CCDE_1*L10
+244 103 CCDE_1*L24
+245 79 CCEO_1*L23
+246 1 CCGH_1*L17
+247 1 CCGH_1*L27
+248 4 CCGH_1*L28
+249 183 CHCP_2*L4
+250 5 CHCP_2*L6
+251 294 CHCP_2*L11
+252 51 CHCP_2*L16
+253 51 CHCP_2*L17
+254 93 CHCP_2*L22
+255 9 CHCP_2*L28
+256 196 CHCP_2*L31
+257 9 CDEG_1*L6
+258 12 CDEG_1*L30
+259 45 CDEO_1*L33
+260 1 QABGH_1*L19
+261 7 QADPO_1*L5
+262 93 QBCPH_2*L23
+263 9 QBDPO_1*L11
+264 7 QCDEF_1*L15
+265 5 QCDEG_1*L21
+266 12 QCDEG_1*L23
+267 11 QCDEG_1*L33
+268 4 QCDEO_2*L16
+269 1 QCDEO_2*L30
+270 275 QCDFH_3*L6
+271 47 QCDFH_3*L14
+272 1067 QCDFH_3*L22
+273 542 QCDFH_3*L26
+274 1 QCDPO_1*L22
+275 81 QCPEO_1*L23
+276 2 QDEFG_1*L30
+277 1 F5_ABCPG*L18
+278 17 F5_ABCOH*L9
+279 67 F5_FABPE*L15
+280 296 F5_APEFH*L2
+281 315 F5_OBCDP*L33
+282 1 F5_PEFHG*L15
+283 1 F5_OGPEH*L21
+284 59 F5_GPEHO*L2
+```
+
+
+### Row R10
+
+Path: DOP-,AGP-,EGO-,BGO+,AGO+,DFP+,GOP+.
+
+```n7-h2-R10-trace
+plu ABGOP AOP -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DCFOP DFO 1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACDP FAP 1
+plu FBCDP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GACHO GCO -1
+plu GCEHO GEH 1
+plu GEFHO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu OABCP OBP 1
+plu OACDP OAD 1
+plu OADGP ODG 1
+plu OBCDG OBD 1
+plu ODEFP OFP -1
+plu PACDO PAD 1
+plu PBCDO PBD 1
+via G DEO AD 1
+via G DEO BD 1
+```
+
+Exact upper bound: `-3564187579308011520603474212985897453190901/53396020298054059053080990532700000000000`.
+
+```n7-h2-R10-witnesses
+CCDE_1 P
+CCDF_1 P
+CDEO_2 GP
+CDFO_1 P
+QBPEH_2 GO
+QCPEO_1 G
+QCPFH_1 O
+QDEFO_2 GP
+QEFOP_1 G
+```
+
+```n7-h2-R10-sum
+1 38 L21*L33
+2 7 L33*L33
+3 5 L0*L0*L10
+4 159 L0*L2*L2
+5 106 L0*L2*L20
+6 22 L0*L2*L22
+7 3 L0*L4*L31
+8 1 L0*L10*L33
+9 5 L0*L11*L27
+10 18 L0*L13*L18
+11 1 L0*L13*L30
+12 68 L0*L15*L16
+13 44 L0*L15*L26
+14 9 L0*L16*L19
+15 59 L0*L18*L33
+16 23 L0*L20*L23
+17 5 L0*L31*L33
+18 61 L1*L2*L29
+19 7 L1*L2*L33
+20 160 L1*L2*L34
+21 86 L1*L9*L31
+22 7 L2*L2*L23
+23 160 L2*L2*L29
+24 162 L2*L3*L27
+25 160 L2*L5*L6
+26 94 L2*L6*L20
+27 48 L2*L7*L7
+28 100 L2*L8*L20
+29 104 L2*L8*L21
+30 3 L2*L11*L16
+31 1 L2*L11*L25
+32 20 L2*L12*L24
+33 5 L2*L12*L34
+34 22 L2*L13*L15
+35 16 L2*L13*L27
+36 50 L2*L16*L23
+37 14 L2*L17*L18
+38 296 L2*L18*L28
+39 19 L2*L19*L24
+40 51 L2*L20*L24
+41 58 L2*L20*L27
+42 33 L2*L22*L30
+43 41 L2*L25*L27
+44 160 L2*L26*L33
+45 48 L2*L28*L29
+46 159 L2*L31*L35
+47 400 L3*L6*L31
+48 37 L3*L9*L19
+49 1 L3*L9*L31
+50 5 L3*L12*L29
+51 4 L3*L14*L34
+52 13 L3*L21*L31
+53 46 L3*L23*L31
+54 160 L3*L33*L34
+55 14 L4*L5*L23
+56 10 L4*L9*L23
+57 7 L4*L10*L23
+58 41 L4*L11*L34
+59 35 L4*L13*L34
+60 78 L4*L15*L15
+61 16 L4*L15*L19
+62 57 L4*L21*L29
+63 171 L4*L33*L34
+64 8 L5*L5*L27
+65 379 L5*L6*L24
+66 685 L5*L6*L26
+67 199 L5*L9*L24
+68 5 L5*L10*L27
+69 45 L5*L13*L15
+70 87 L5*L14*L29
+71 109 L5*L19*L34
+72 19 L5*L21*L22
+73 163 L5*L33*L34
+74 37 L6*L6*L10
+75 323 L6*L9*L16
+76 336 L6*L9*L22
+77 23 L6*L10*L33
+78 30 L6*L12*L23
+79 19 L6*L12*L27
+80 184 L6*L14*L18
+81 29 L6*L16*L20
+82 45 L6*L18*L24
+83 152 L6*L18*L29
+84 318 L6*L19*L31
+85 71 L6*L21*L23
+86 2333 L6*L28*L31
+87 543 L6*L31*L35
+88 13 L7*L15*L31
+89 226 L7*L18*L18
+90 18 L7*L18*L33
+91 78 L7*L23*L26
+92 3 L7*L30*L33
+93 114 L8*L10*L18
+94 29 L8*L16*L21
+95 223 L8*L21*L33
+96 50 L8*L24*L33
+97 8 L8*L33*L33
+98 50 L9*L10*L13
+99 202 L9*L11*L25
+100 65 L9*L11*L26
+101 21 L9*L11*L29
+102 17 L9*L12*L14
+103 27 L9*L12*L23
+104 60 L9*L12*L26
+105 17 L9*L13*L20
+106 391 L9*L14*L17
+107 44 L9*L15*L26
+108 265 L9*L16*L26
+109 318 L9*L16*L28
+110 19 L9*L16*L31
+111 323 L9*L16*L34
+112 265 L9*L17*L26
+113 23 L9*L19*L20
+114 99 L9*L19*L28
+115 107 L9*L20*L22
+116 22 L9*L23*L30
+117 434 L9*L26*L35
+118 390 L9*L27*L35
+119 155 L9*L31*L35
+120 60 L10*L15*L35
+121 226 L10*L18*L21
+122 26 L10*L21*L21
+123 13 L10*L23*L35
+124 151 L10*L33*L34
+125 3 L11*L11*L16
+126 12 L11*L13*L15
+127 35 L11*L13*L21
+128 132 L11*L15*L18
+129 34 L11*L17*L18
+130 17 L11*L17*L34
+131 41 L11*L21*L25
+132 13 L11*L21*L32
+133 7 L11*L22*L33
+134 1 L11*L27*L33
+135 3 L12*L15*L19
+136 8 L12*L20*L23
+137 1 L12*L27*L33
+138 40 L12*L33*L34
+139 27 L13*L15*L23
+140 18 L13*L18*L26
+141 8 L13*L21*L22
+142 60 L13*L21*L26
+143 51 L13*L21*L30
+144 61 L13*L26*L34
+145 1 L13*L28*L33
+146 8 L14*L17*L18
+147 113 L15*L16*L29
+148 68 L15*L17*L27
+149 117 L15*L17*L29
+150 68 L15*L17*L34
+151 449 L15*L18*L28
+152 27 L15*L20*L23
+153 90 L15*L23*L28
+154 69 L17*L18*L26
+155 65 L17*L18*L30
+156 29 L17*L20*L29
+157 17 L17*L28*L33
+158 5 L17*L29*L34
+159 197 L18*L18*L27
+160 197 L18*L18*L35
+161 150 L18*L19*L29
+162 3 L18*L20*L24
+163 23 L18*L21*L35
+164 1835 L18*L28*L28
+165 95 L18*L34*L34
+166 3 L20*L20*L23
+167 20 L21*L22*L30
+168 51 L21*L24*L31
+169 58 L21*L27*L31
+170 13 L21*L30*L32
+171 18 L22*L27*L32
+172 48 L22*L29*L29
+173 14 L22*L31*L33
+174 7 L23*L32*L32
+175 44 L27*L34*L35
+176 135 L28*L30*L34
+177 96 L29*L29*L30
+178 164 L30*L34*L35
+179 106 ABC+*L20
+180 420 ABH+*L6
+181 295 ABH+*L8
+182 15 ABH+*L13
+183 37 ABH+*L25
+184 162 ABH+*L32
+185 240 BCD+*L3
+186 5 BCD+*L13
+187 125 BCD+*L16
+188 324 BCD+*L19
+189 94 BCD+*L20
+190 31 BCD+*L23
+191 568 BCD+*L26
+192 2429 BCD+*L28
+193 581 BCD+*L35
+194 75 EFH+*L1
+195 118 EFH+*L5
+196 80 EFH+*L12
+197 18 EFH+*L22
+198 159 EFH+*L32
+199 125 ABG+*L6
+200 3 FGH-*L32
+201 204 FHO+*L0
+202 1 FHO+*L13
+203 17 FHO+*L17
+204 226 FHO+*L19
+205 10 FHO+*L33
+206 194 FHO+*L35
+207 112 AHO-*L15
+208 27 AHO-*L22
+209 823 AHO-*L28
+210 59 AHO-*L33
+211 164 CHO-*L1
+212 337 CHO-*L7
+213 600 CHO-*L8
+214 14 CHO-*L12
+215 78 CHO-*L14
+216 27 CHO-*L25
+217 1 BCP+*L18
+218 79 CDP+*L1
+219 15 CDP+*L14
+220 157 CDP+*L20
+221 31 DEP+*L33
+222 48 CEP-*L9
+223 91 CEP-*L15
+224 133 CEP-*L20
+225 79 CEP-*L26
+226 36 GHO+*L6
+227 27 GHO+*L22
+228 61 GHO+*L26
+229 17 GHO+*L28
+230 31 GHO+*L30
+231 27 GHO+*L33
+232 1 DOP-*L4
+233 48 DOP-*L6
+234 27 DOP-*L15
+235 125 EGO-*L6
+236 27 EGO-*L23
+237 10 EGO-*L33
+238 144 AGO+*L6
+239 54 DFP+*L8
+240 37 DFP+*L20
+241 20 GOP+*L2
+242 23 AOP-*L21
+243 142 CGP-*L6
+244 295 BEP-*L18
+245 142 EGP+*L6
+246 29 EHO+*L18
+247 149 EHO+*L28
+248 31 ADP+*L11
+249 27 ADP+*L18
+250 295 BDP+*L18
+251 21 BDG+*L23
+252 20 EL*L21
+253 4 CCDE_1*L12
+254 380 CCDE_1*L20
+255 3 CCDF_1*L30
+256 926 CDEO_2*L7
+257 424 CDEO_2*L14
+258 17 CDEO_2*L16
+259 375 CDEO_2*L18
+260 585 CDEO_2*L22
+261 263 CDEO_2*L23
+262 1147 CDEO_2*L28
+263 5 CDEO_2*L32
+264 976 CDEO_2*L35
+265 37 CDFO_1*L6
+266 17 CDFO_1*L17
+267 23 CDFO_1*L33
+268 4 QBPEH_2*L27
+269 237 QCPEO_1*L6
+270 201 QCPFH_1*L9
+271 9 QDEFO_2*L0
+272 3 QDEFO_2*L24
+273 26 QEFOP_1*L21
+274 1413 F5_FABDE*L9
+275 153 F5_BDGOA*L9
+276 1 F5_HABEF*L12
+277 77 F5_GOACD*L9
+278 4 F5_CPEHA*L2
+279 73 F5_CPEHA*L9
+280 22 F5_FHAPE*L2
+281 18 F5_OBCDG*L9
+282 9 F5_OBCDG*L23
+283 1 F5_CDEFH*L13
+284 54 F5_HOGEF*L9
+285 31 F5_GEFHO*L2
+286 116 F5_GEFHO*L33
+```
+
+
+### Row R11
+
+Path: DOP-,AGP-,EGO+,AEG-,CFO-,DFP-.
+
+```n7-h2-R11-trace
+plu ABEFG AFG -1
+plu ABEGP AEP -1
+plu ABFGP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DAP -1
+plu DAFHP DHP -1
+plu DBCFP DBP -1
+plu EABCP EBP 1
+plu EACGH EGH -1
+plu EACGO EAO 1
+plu EACGP EGP 1
+plu EACHO EHO 1
+plu EACOP EOP 1
+plu EADHP EHP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FBCEO FBO 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GAEHO GAO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+via G EAP AD 1
+via G EAP BD 1
+```
+
+Exact upper bound: `-365844086677598209654718508598910155943/4412253098380872249814185695000000000`.
+
+```n7-h2-R11-witnesses
+CACE_2 GO
+CADE_2 GP
+CCDE_1 P
+QACDE_3 GOP
+QACPE_2 GO
+QBCEF_1 O
+```
+
+```n7-h2-R11-sum
+1 1859 L0*L0*L2
+2 2402 L0*L2*L2
+3 2700 L0*L2*L6
+4 1831 L0*L2*L15
+5 166 L0*L23*L23
+6 914 L0*L23*L34
+7 209 L0*L30*L34
+8 367 L1*L2*L23
+9 284 L1*L6*L9
+10 166 L1*L23*L23
+11 914 L1*L23*L34
+12 378 L1*L32*L34
+13 84 L2*L2*L28
+14 2393 L2*L5*L6
+15 62 L2*L5*L15
+16 2217 L2*L9*L30
+17 367 L2*L15*L22
+18 2302 L2*L15*L31
+19 2345 L3*L6*L9
+20 4552 L3*L6*L34
+21 371 L3*L9*L23
+22 1375 L3*L9*L24
+23 84 L3*L9*L32
+24 146 L3*L23*L29
+25 2302 L3*L30*L34
+26 71 L4*L10*L15
+27 7181 L5*L6*L6
+28 1833 L5*L9*L26
+29 13 L5*L14*L32
+30 1083 L6*L6*L31
+31 284 L6*L9*L14
+32 1291 L6*L9*L22
+33 4109 L6*L9*L23
+34 709 L6*L10*L15
+35 1364 L6*L11*L23
+36 868 L6*L15*L32
+37 846 L6*L23*L26
+38 938 L6*L23*L29
+39 813 L6*L23*L35
+40 135 L7*L9*L32
+41 1410 L7*L23*L23
+42 419 L7*L23*L32
+43 284 L9*L9*L26
+44 1442 L9*L11*L24
+45 2424 L9*L16*L29
+46 2424 L9*L17*L29
+47 28 L9*L18*L34
+48 512 L9*L19*L28
+49 512 L9*L19*L29
+50 404 L9*L20*L32
+51 236 L9*L21*L30
+52 1410 L9*L22*L23
+53 3563 L9*L22*L30
+54 542 L9*L23*L32
+55 258 L9*L23*L35
+56 1375 L9*L25*L30
+57 284 L9*L27*L29
+58 3678 L9*L29*L30
+59 84 L9*L31*L32
+60 994 L10*L15*L22
+61 2154 L23*L29*L30
+62 1577 L25*L33*L34
+63 196 ABC+*L0
+64 2402 ABC+*L2
+65 3381 ABH+
+66 1663 ABH+*L0
+67 2590 ABH+*L6
+68 367 ABH+*L22
+69 75 ACH+*L32
+70 716 AFH+*L5
+71 984 BCD+*L1
+72 4010 BCD+*L2
+73 4095 BCD+*L5
+74 11441 BCD+*L6
+75 2231 BCD+*L22
+76 1094 BCD+*L27
+77 10357 BCD+*L28
+78 4095 BCD+*L30
+79 148 CDH+*L9
+80 725 EFH+*L4
+81 1281 EFH+*L14
+82 253 EFH+*L22
+83 1281 EFH+*L27
+84 903 EFH+*L35
+85 169 ABO+*L9
+86 28 EFO+*L9
+87 432 FHO+*L9
+88 404 AHO-*L9
+89 7280 CDP+*L6
+90 692 CDP+*L10
+91 1410 CDP+*L23
+92 351 CDP+*L32
+93 2625 DEP+
+94 1660 DEP+*L1
+95 7630 DEP+*L6
+96 2423 DEP+*L14
+97 588 DEP+*L29
+98 175 CEP-*L0
+99 8485 CEP-*L6
+100 2755 CEP-*L7
+101 640 CEP-*L11
+102 1410 CEP-*L23
+103 1577 CEP-*L26
+104 1332 DFP-*L5
+105 135 DFP-*L7
+106 1577 DFP-*L14
+107 135 DFP-*L29
+108 236 ACO+*L9
+109 741 DHP-*L10
+110 846 EHP+*L9
+111 405 CACE_2*L0
+112 10797 CADE_2*L30
+113 335 CADE_2*L32
+114 2952 CCDE_1*L24
+115 884 CCDE_1*L34
+116 2554 QACDE_3*L2
+117 274 QACDE_3*L4
+118 100 QACDE_3*L7
+119 289 QACDE_3*L10
+120 1402 QACDE_3*L25
+121 209 QACDE_3*L26
+122 274 QACDE_3*L31
+123 351 QACPE_2*L32
+124 480 QBCEF_1*L34
+125 3595 F5_DEABC*L9
+126 395 F5_HCDEF*L9
+```
+
+
+### Row R12
+
+Path: DOP-,AGP-,EGO+,AEG-,CFO-,DFP+.
+
+```n7-h2-R12-trace
+plu ABEFG AFG -1
+plu ABEGP AEP -1
+plu ABFGP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DCFOP DFO 1
+plu EABCP EBP 1
+plu EACGH EGH -1
+plu EACGO EAO 1
+plu EACGP EGP 1
+plu EACHO EHO 1
+plu EACOP EOP 1
+plu EADHP EHP 1
+plu FABCP FBP 1
+plu FACDO FAO 1
+plu FBCDO FBO 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GAEHO GAO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OCDFP OFP -1
+```
+
+Exact upper bound: `-66205867145464225663566759413369013/972933428529409536893977000000000`.
+
+```n7-h2-R12-witnesses
+CACE_2 GO
+CCDF_2 OP
+CDEO_1 P
+CDFO_1 P
+CFCP_1 O
+QACDE_3 GOP
+QBCDE_1 P
+QBCPF_1 O
+QCDEO_1 P
+QEFHO_1 G
+```
+
+```n7-h2-R12-sum
+1 552 L2*L15
+2 357 L0*L2*L20
+3 1641 L0*L2*L27
+4 79 L0*L2*L32
+5 20 L1*L6*L32
+6 281 L1*L9*L31
+7 111 L2*L2*L20
+8 1031 L2*L4*L9
+9 133 L2*L6*L10
+10 354 L2*L7*L15
+11 1370 L2*L9*L26
+12 6 L2*L11*L20
+13 6 L2*L15*L16
+14 163 L2*L15*L24
+15 507 L2*L15*L27
+16 446 L2*L15*L28
+17 2 L2*L16*L24
+18 68 L2*L16*L30
+19 68 L2*L17*L33
+20 105 L2*L18*L24
+21 3191 L2*L20*L27
+22 612 L2*L25*L32
+23 254 L2*L32*L35
+24 121 L3*L9*L14
+25 626 L3*L9*L22
+26 207 L3*L9*L24
+27 18 L4*L9*L16
+28 514 L4*L9*L23
+29 28 L4*L9*L28
+30 388 L4*L15*L32
+31 1 L4*L17*L20
+32 413 L4*L25*L30
+33 219 L4*L28*L33
+34 688 L4*L33*L34
+35 309 L5*L9*L22
+36 882 L5*L30*L34
+37 64 L6*L6*L10
+38 19 L6*L6*L19
+39 21 L6*L9*L19
+40 891 L6*L10*L10
+41 1747 L6*L10*L23
+42 309 L6*L20*L23
+43 41 L6*L20*L31
+44 3763 L6*L20*L32
+45 558 L6*L23*L32
+46 1444 L6*L24*L32
+47 982 L6*L29*L32
+48 473 L7*L7*L30
+49 1 L7*L16*L18
+50 1073 L7*L26*L30
+51 516 L7*L30*L35
+52 16 L8*L9*L12
+53 98 L8*L10*L32
+54 1 L8*L16*L32
+55 120 L8*L30*L32
+56 159 L9*L10*L35
+57 98 L9*L11*L11
+58 469 L9*L11*L12
+59 466 L9*L11*L13
+60 297 L9*L11*L22
+61 159 L9*L11*L26
+62 1 L9*L12*L33
+63 2 L9*L13*L21
+64 120 L9*L13*L26
+65 5 L9*L14*L19
+66 2 L9*L16*L23
+67 7 L9*L16*L33
+68 20 L9*L17*L20
+69 20 L9*L17*L25
+70 25 L9*L18*L24
+71 5 L9*L18*L28
+72 416 L9*L18*L31
+73 2 L9*L19*L20
+74 105 L9*L19*L22
+75 330 L9*L20*L23
+76 376 L9*L20*L33
+77 43 L9*L22*L26
+78 143 L9*L22*L34
+79 138 L9*L23*L29
+80 311 L9*L25*L33
+81 3 L10*L12*L15
+82 129 L10*L15*L15
+83 48 L10*L15*L18
+84 376 L10*L15*L20
+85 8 L10*L15*L28
+86 219 L10*L15*L31
+87 68 L10*L17*L32
+88 134 L10*L25*L30
+89 1 L11*L17*L18
+90 2 L12*L23*L34
+91 1 L13*L20*L21
+92 1 L13*L33*L34
+93 20 L15*L16*L25
+94 20 L15*L17*L21
+95 5 L15*L20*L23
+96 129 L15*L22*L34
+97 175 L15*L30*L32
+98 583 L16*L18*L20
+99 20 L16*L20*L34
+100 68 L16*L32*L32
+101 585 L17*L18*L20
+102 1 L17*L22*L28
+103 20 L17*L24*L34
+104 2 L17*L25*L30
+105 1 L17*L31*L34
+106 219 L18*L20*L21
+107 219 L18*L21*L21
+108 232 L18*L23*L34
+109 17 L18*L25*L33
+110 60 L19*L24*L33
+111 5 L19*L24*L34
+112 47 L19*L33*L34
+113 287 L20*L20*L33
+114 18 L20*L22*L32
+115 25 L20*L32*L33
+116 696 L21*L23*L30
+117 354 L24*L33*L34
+118 478 L25*L30*L32
+119 163 L25*L30*L34
+120 396 L25*L33*L34
+121 196 L26*L26*L30
+122 76 L27*L33*L34
+123 28 L28*L30*L35
+124 219 ABC+*L33
+125 1683 ABH+*L0
+126 699 ABH+*L7
+127 1032 ABH+*L11
+128 3191 ABH+*L20
+129 311 ABH+*L27
+130 1173 ABH+*L28
+131 1251 ABH+*L31
+132 1076 ABH+*L32
+133 549 ABH+*L35
+134 1683 AFH+*L6
+135 276 BCD+*L0
+136 133 BCD+*L2
+137 71 BCD+*L6
+138 465 BCD+*L19
+139 1526 BCD+*L28
+140 133 BCD+*L32
+141 6 BCH+*L17
+142 1032 EFH+*L4
+143 87 EFH+*L7
+144 3 EFH+*L12
+145 393 EFH+*L20
+146 959 EFH+*L22
+147 724 EFH+*L23
+148 76 EFH+*L27
+149 151 EFH+*L29
+150 145 CDG+*L9
+151 145 DEG+*L9
+152 8 EFG+*L15
+153 8 EFG+*L34
+154 120 CGH+*L9
+155 357 BCO+*L0
+156 140 BCO+*L2
+157 3721 BCO+*L7
+158 688 BCO+*L23
+159 354 BCO+*L31
+160 384 BCO+*L32
+161 145 CDO+*L6
+162 287 CDO+*L20
+163 1950 CDO+*L23
+164 36 EFO+*L2
+165 235 FHO+*L23
+166 30 CEO+*L32
+167 43 ABP+*L9
+168 1444 BCP+*L7
+169 79 BCP+*L18
+170 1122 CDP+*L20
+171 52 DEP+*L15
+172 1117 DEP+*L18
+173 1024 DEP+*L30
+174 129 FHP+*L15
+175 593 CEP-
+176 1165 CEP-*L3
+177 2 CEP-*L17
+178 877 CEP-*L19
+179 309 CEP-*L21
+180 347 CEP-*L22
+181 413 CEP-*L33
+182 1 GHO+*L4
+183 1 GHO+*L11
+184 2 GHO+*L22
+185 465 DOP-*L3
+186 875 DOP-*L5
+187 138 DOP-*L8
+188 2639 DOP-*L11
+189 1 DOP-*L16
+190 2379 DOP-*L22
+191 2379 DOP-*L23
+192 163 DOP-*L29
+193 1 EGO+*L21
+194 2 EGO+*L22
+195 1 EGO+*L33
+196 120 AEG-*L9
+197 2737 CFO-*L23
+198 1432 CFO-*L24
+199 329 CFO-*L30
+200 25 CFO-*L33
+201 1025 DFP+*L4
+202 52 DFP+*L14
+203 3067 DFP+*L19
+204 1432 DFP+*L20
+205 163 DFP+*L29
+206 140 COP-*L2
+207 1444 COP-*L6
+208 1 COP-*L17
+209 347 COP-*L23
+210 134 BEP-*L30
+211 347 EOP+*L23
+212 351 EOP+*L32
+213 5 EOP+*L34
+214 17 AFO-*L34
+215 1607 FOP+*L6
+216 659 EL*L7
+217 6 EL*L16
+218 48 EL*L18
+219 18 EL*L25
+220 120 EL*L27
+221 194 EL*L30
+222 234 CACE_2*L0
+223 1032 CACE_2*L2
+224 913 CACE_2*L19
+225 67 CACE_2*L20
+226 197 CACE_2*L27
+227 891 CCDF_2*L10
+228 3651 CCDF_2*L20
+229 334 CCDF_2*L22
+230 1703 CCDF_2*L26
+231 883 CCDF_2*L29
+232 293 CFCP_1*L9
+233 428 CDEO_1*L33
+234 287 CDFO_1*L20
+235 234 QACDE_3*L15
+236 913 QACDE_3*L18
+237 290 QACDE_3*L20
+238 234 QACDE_3*L26
+239 45 QACDE_3*L28
+240 219 QACDE_3*L33
+241 28 QBCDE_1*L34
+242 223 QBCPF_1*L34
+243 1308 QCDEO_1*L23
+244 17 QEFHO_1*L15
+245 17 QEFHO_1*L26
+```
+
+
+### Row R13
+
+Path: DOP-,AGP-,EGO+,AEG-,CFO+,CGO-.
+
+```n7-h2-R13-trace
+plu ABEFG AFG -1
+plu ABEGP AEP -1
+plu ABFGP AFP -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABGO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu CAFGO CFG 1
+plu EABCP EBP 1
+plu EACGH EGH -1
+plu EACGO EAO 1
+plu EACGP EGP 1
+plu EACHO EHO 1
+plu EACOP EOP 1
+plu EADHP EHP 1
+plu FABCP FBP 1
+plu FACDG FDG -1
+plu FACGP FGP 1
+plu FCDEO FDO -1
+plu FCEOP FOP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GACHO GAO 1
+plu GBCHO GBO 1
+plu GCEFO GFO -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACEF OAF -1
+```
+
+Exact upper bound: `-2208992101484207972497696908819370503179/33906729984249922360755098450000000000`.
+
+```n7-h2-R13-witnesses
+CACE_2 GO
+CACF_2 GO
+CCDE_1 P
+CCFG_1 O
+CCFH_2 GO
+CDEO_1 P
+CEAO_1 G
+QABCF_2 GO
+QACDE_3 GOP
+QACPE_2 GO
+QAOEH_1 G
+QAOFH_1 G
+QCDEG_2 OP
+QCDEO_1 P
+QCPFG_1 O
+QEFHO_1 G
+```
+
+```n7-h2-R13-sum
+1 34 L5*L6
+2 162 L0*L0*L33
+3 117 L0*L2*L2
+4 97 L0*L4*L33
+5 62 L0*L7*L33
+6 2 L0*L10*L12
+7 74 L0*L11*L23
+8 1 L0*L12*L12
+9 156 L0*L15*L33
+10 4 L0*L19*L33
+11 807 L0*L28*L33
+12 12 L1*L19*L33
+13 4 L1*L21*L23
+14 1 L1*L23*L23
+15 918 L2*L6*L28
+16 2 L2*L7*L17
+17 4 L2*L8*L15
+18 28 L2*L8*L31
+19 26 L2*L9*L9
+20 8 L2*L12*L35
+21 2 L2*L23*L25
+22 122 L2*L23*L26
+23 103 L2*L23*L31
+24 103 L2*L23*L32
+25 95 L2*L27*L33
+26 1 L3*L6*L20
+27 144 L3*L8*L23
+28 9 L3*L9*L16
+29 27 L3*L9*L29
+30 103 L3*L22*L33
+31 8 L3*L22*L34
+32 11 L4*L6*L35
+33 115 L4*L9*L11
+34 4 L4*L9*L27
+35 211 L4*L14*L33
+36 2 L4*L15*L24
+37 58 L4*L15*L31
+38 117 L5*L6*L9
+39 330 L5*L6*L10
+40 15 L5*L6*L16
+41 684 L5*L6*L22
+42 97 L5*L9*L10
+43 58 L5*L9*L13
+44 21 L5*L9*L18
+45 224 L5*L9*L22
+46 579 L5*L23*L28
+47 24 L5*L24*L29
+48 338 L5*L24*L33
+49 58 L5*L30*L34
+50 6 L5*L34*L34
+51 123 L6*L6*L11
+52 1 L6*L8*L24
+53 86 L6*L10*L23
+54 123 L6*L10*L29
+55 22 L6*L11*L31
+56 2 L6*L12*L24
+57 2 L6*L13*L26
+58 103 L6*L14*L23
+59 3 L6*L18*L27
+60 38 L6*L18*L29
+61 2 L6*L19*L21
+62 772 L6*L22*L29
+63 16 L6*L22*L34
+64 3 L6*L23*L23
+65 61 L6*L26*L30
+66 22 L6*L32*L33
+67 90 L7*L8*L33
+68 1 L7*L9*L25
+69 16 L7*L14*L33
+70 394 L7*L22*L33
+71 63 L7*L30*L34
+72 42 L8*L9*L32
+73 3 L8*L10*L33
+74 55 L8*L12*L33
+75 87 L8*L15*L23
+76 6 L9*L10*L17
+77 21 L9*L10*L18
+78 55 L9*L11*L12
+79 324 L9*L11*L22
+80 16 L9*L11*L25
+81 1 L9*L13*L20
+82 2 L9*L16*L18
+83 9 L9*L16*L31
+84 7 L9*L18*L27
+85 2 L9*L19*L35
+86 2 L9*L21*L22
+87 182 L9*L22*L29
+88 626 L9*L22*L31
+89 475 L9*L22*L32
+90 4 L9*L26*L32
+91 36 L9*L29*L32
+92 28 L9*L30*L30
+93 48 L10*L14*L33
+94 1 L10*L20*L23
+95 30 L10*L20*L33
+96 4 L11*L14*L23
+97 1 L11*L17*L22
+98 2 L11*L17*L24
+99 1 L12*L15*L21
+100 1 L12*L15*L35
+101 3 L12*L27*L33
+102 1 L13*L14*L34
+103 1 L13*L20*L23
+104 2 L13*L24*L29
+105 13 L14*L16*L33
+106 497 L14*L22*L33
+107 57 L14*L26*L33
+108 625 L14*L28*L33
+109 14 L15*L18*L29
+110 6 L15*L23*L31
+111 2 L15*L25*L33
+112 21 L15*L31*L33
+113 1 L16*L19*L34
+114 1 L16*L22*L33
+115 1 L17*L19*L23
+116 30 L17*L32*L33
+117 2 L18*L21*L24
+118 2 L18*L24*L34
+119 8 L18*L33*L35
+120 2 L20*L21*L23
+121 29 L20*L30*L33
+122 18 L20*L33*L34
+123 1 L21*L25*L33
+124 3 L22*L23*L35
+125 31 L23*L27*L33
+126 118 L23*L28*L34
+127 3 L32*L33*L34
+128 123 ABH+*L22
+129 66 BCD+*L4
+130 65 BCD+*L16
+131 1 BCD+*L21
+132 918 BCD+*L28
+133 208 CDE+*L23
+134 103 EFH+*L20
+135 99 EFH+*L21
+136 6 EFH+*L34
+137 61 ABG+*L6
+138 2 FGH-*L24
+139 1 AGH+*L34
+140 30 CGH+*L20
+141 61 CDO+*L6
+142 67 CDO+*L9
+143 11 CDO+*L15
+144 7 DEO+*L34
+145 30 CHO-*L17
+146 29 CEO+*L33
+147 2 ABP+*L23
+148 328 CDP+*L0
+149 221 CDP+*L3
+150 243 CDP+*L4
+151 772 CDP+*L6
+152 311 CDP+*L9
+153 308 CDP+*L10
+154 1887 CDP+*L22
+155 221 CDP+*L31
+156 295 DEP+*L14
+157 2 DEP+*L21
+158 1884 DEP+*L22
+159 325 DEP+*L27
+160 325 CEP-*L0
+161 330 CEP-*L4
+162 956 CEP-*L6
+163 406 CEP-*L7
+164 20 CEP-*L21
+165 1887 CEP-*L22
+166 206 CEP-*L29
+167 22 GHO+*L0
+168 22 GHO+*L1
+169 2 GHO+*L24
+170 3 DOP-*L1
+171 24 DOP-*L20
+172 26 DOP-*L21
+173 14 EGO+*L15
+174 2 EGO+*L24
+175 9 AEG-*L3
+176 3 AEG-*L4
+177 1 AEG-*L26
+178 85 AEG-*L29
+179 1 CFO+*L16
+180 1 CFO+*L25
+181 18 CGO-*L0
+182 1 CGO-*L22
+183 25 CGO-*L26
+184 1 AFG-*L0
+185 1 AFG-*L12
+186 30 ACP+*L33
+187 22 ACG+*L6
+188 99 ACG+*L9
+189 1 ACO+*L23
+190 4 ACO+*L24
+191 7 FOP+*L1
+192 16 FOP+*L9
+193 2 BGH+*L6
+194 1 AGO-*L34
+195 29 BGO-*L33
+196 7 FGO+*L26
+197 30 FGO+*L33
+198 2 FGO+*L34
+199 117 CACE_2*L2
+200 67 CACE_2*L33
+201 1 CACF_2*L16
+202 71 CACF_2*L26
+203 232 CACF_2*L27
+204 870 CACF_2*L28
+205 22 CACF_2*L32
+206 10 CEAO_1*L5
+207 10 CCDE_1*L19
+208 69 CCDE_1*L20
+209 35 CCDE_1*L24
+210 88 CCDE_1*L31
+211 200 CCDE_1*L35
+212 1 CCFG_1*L12
+213 5 CCFG_1*L34
+214 50 CCFH_2*L10
+215 3 CCFH_2*L13
+216 24 CCFH_2*L20
+217 523 CCFH_2*L22
+218 51 CCFH_2*L26
+219 640 CCFH_2*L28
+220 116 CCFH_2*L30
+221 23 CDEO_1*L6
+222 117 QABCF_2*L2
+223 13 QACDE_3*L16
+224 10 QACDE_3*L18
+225 7 QACDE_3*L21
+226 1 QACDE_3*L27
+227 21 QACPE_2*L6
+228 94 QACPE_2*L9
+229 9 QAOEH_1*L9
+230 1 QAOFH_1*L23
+231 14 QCDEG_2*L26
+232 85 QCDEG_2*L29
+233 16 QCDEO_1*L25
+234 7 QCPFG_1*L0
+235 1 QCPFG_1*L21
+236 1 QEFHO_1*L35
+237 4 F5_CEFAB*L9
+238 74 F5_HABEF*L23
+239 68 F5_CDEFA*L9
+240 22 F5_EFHAD*L33
+241 113 F5_BCDEH*L33
+242 78 F5_HCDEF*L23
+```
+
+
+### Row R14
+
+Path: DOP-,AGP-,EGO+,AEG-,CFO+,CGO+,DHP-.
+
+```n7-h2-R14-trace
+plu ABEFG AFG -1
+plu ABEGP AEP -1
+plu ABFGP AFP -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACHP DAP -1
+plu DBCHP DBP -1
+plu EABCP EBP 1
+plu EACGH EGH -1
+plu EACGO EAO 1
+plu EACGP EGP 1
+plu EACHO EHO 1
+plu EACOP EOP 1
+plu EADHP EHP 1
+plu FABCP FBP 1
+plu FCDEO FDO -1
+plu FCEOP FOP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GACEO GAO 1
+plu GACOP GOP 1
+plu GCDEO GDO -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACEF OAF -1
+via G EAP AD 1
+via G EAP BD 1
+```
+
+Exact upper bound: `-555112324738798966576874876631003869/6949524489495782406385550000000000`.
+
+```n7-h2-R14-witnesses
+CACE_2 GO
+CADE_2 GP
+CCDE_1 P
+QACDE_3 GOP
+QCDEG_1 P
+QDEGO_1 P
+```
+
+```n7-h2-R14-sum
+1 1641 L9*L26
+2 2962 L0*L2*L27
+3 5175 L0*L3*L9
+4 387 L1*L5*L9
+5 75 L1*L6*L23
+6 41 L2*L6*L16
+7 2454 L2*L6*L27
+8 43 L2*L17*L29
+9 124 L2*L19*L34
+10 1883 L2*L27*L27
+11 1920 L3*L5*L34
+12 9258 L3*L6*L9
+13 865 L3*L6*L23
+14 45 L3*L9*L17
+15 677 L3*L11*L34
+16 1441 L3*L34*L34
+17 4827 L4*L6*L9
+18 4 L4*L13*L34
+19 1125 L4*L15*L23
+20 1216 L4*L34*L34
+21 9575 L5*L6*L6
+22 140 L5*L6*L20
+23 284 L5*L6*L34
+24 457 L5*L9*L20
+25 1125 L5*L15*L23
+26 1157 L6*L6*L31
+27 2 L6*L7*L12
+28 776 L6*L9*L18
+29 865 L6*L10*L23
+30 28 L6*L12*L34
+31 683 L6*L20*L23
+32 9 L7*L17*L23
+33 691 L7*L33*L34
+34 1064 L8*L9*L23
+35 1043 L8*L9*L31
+36 50 L8*L15*L23
+37 42 L9*L11*L20
+38 691 L9*L11*L35
+39 11 L9*L12*L14
+40 9 L9*L13*L24
+41 392 L9*L13*L26
+42 45 L9*L14*L18
+43 4285 L9*L15*L30
+44 1180 L9*L19*L24
+45 356 L9*L20*L30
+46 497 L9*L21*L23
+47 865 L9*L22*L33
+48 744 L10*L15*L34
+49 677 L10*L33*L34
+50 31 L11*L13*L34
+51 3070 L12*L23*L34
+52 4 L12*L30*L34
+53 3077 L13*L23*L34
+54 28 L13*L29*L34
+55 1441 L15*L30*L34
+56 1 L16*L33*L34
+57 9 L17*L23*L29
+58 17 L17*L29*L30
+59 539 L18*L23*L34
+60 124 L18*L33*L34
+61 124 L19*L30*L34
+62 42 L21*L33*L34
+63 1066 L22*L33*L34
+64 75 L23*L27*L29
+65 115 L23*L29*L30
+66 773 L23*L29*L33
+67 1611 L25*L33*L34
+68 578 L26*L26*L30
+69 354 L27*L30*L34
+70 2463 L28*L33*L34
+71 972 ABH+
+72 4266 ABH+*L0
+73 1916 ABH+*L5
+74 7710 ABH+*L6
+75 4 ABH+*L12
+76 1658 ABH+*L15
+77 4 ABH+*L19
+78 5515 ABH+*L28
+79 691 AFH+*L9
+80 15131 BCD+*L0
+81 15131 BCD+*L1
+82 10416 BCD+*L6
+83 6 BCD+*L16
+84 865 BCD+*L22
+85 259 BCD+*L27
+86 9258 BCD+*L28
+87 681 EFH+*L5
+88 31 EFH+*L13
+89 744 EFH+*L14
+90 1 EFH+*L16
+91 128 EFH+*L18
+92 1066 EFH+*L22
+93 1611 EFH+*L25
+94 3153 EFH+*L28
+95 677 EFH+*L32
+96 10 BCG+*L9
+97 9 BCG+*L29
+98 8 AGH+*L9
+99 7 AGH+*L23
+100 142 CHO-*L0
+101 142 CHO-*L1
+102 4 CHO-*L2
+103 4 CHO-*L11
+104 1687 CDP+*L6
+105 75 CDP+*L34
+106 221 DEP+*L4
+107 2659 DEP+*L8
+108 1287 DEP+*L11
+109 7 DEP+*L13
+110 539 DEP+*L18
+111 683 DEP+*L20
+112 1687 DEP+*L29
+113 1263 DEP+*L31
+114 1378 DEP+*L32
+115 1987 CEP-*L0
+116 1987 CEP-*L1
+117 1687 CEP-*L14
+118 401 GHO+*L9
+119 1097 DOP-*L8
+120 4 EGO+*L10
+121 385 AEG-*L9
+122 4 AEG-*L32
+123 42 CFO+*L15
+124 1 CGO+*L8
+125 1066 DHP-*L5
+126 1083 DHP-*L15
+127 539 DHP-*L18
+128 1083 DHP-*L34
+129 4 ACO+*L32
+130 92 EGP+*L9
+131 4 AGO-*L10
+132 356 BHO-*L9
+133 7 ADG+*L23
+134 2687 ER*L34
+135 1916 CACE_2*L2
+136 3 CADE_2*L12
+137 87 CADE_2*L21
+138 17239 CADE_2*L30
+139 10 CADE_2*L33
+140 11476 CCDE_1*L6
+141 140 CCDE_1*L20
+142 1687 CCDE_1*L24
+143 4423 CCDE_1*L26
+144 4 CCDE_1*L32
+145 4 QACDE_3*L2
+146 350 QACDE_3*L10
+147 354 QACDE_3*L11
+148 225 QACDE_3*L15
+149 578 QACDE_3*L27
+150 3683 QACDE_3*L28
+151 1 QCDEG_1*L14
+152 321 QDEGO_1*L9
+153 95 F5_GABCD*L6
+154 8847 F5_EFABC*L9
+155 654 F5_HABDP*L9
+156 580 F5_BPEHA*L9
+157 81 F5_CPEGO*L9
+```
+
+
+### Row R15
+
+Path: DOP-,AGP-,EGO+,AEG-,CFO+,CGO+,DHP+.
+
+```n7-h2-R15-trace
+plu ABEFG AFG -1
+plu ABEGP AEP -1
+plu ABFGP AFP -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DCFHP DFP 1
+plu DCFOP DFO 1
+plu DCHOP DHO 1
+plu EABCP EBP 1
+plu EACGH EGH -1
+plu EACGO EAO 1
+plu EACGP EGP 1
+plu EACHO EHO 1
+plu EACOP EOP 1
+plu EADHP EHP 1
+plu FABCP FBP 1
+plu FCDOP FOP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GACEO GAO 1
+plu GACOP GOP 1
+plu GCDEO GDO -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACEF OAF -1
+plu OCDHP OHP -1
+```
+
+Exact upper bound: `-2403533124665583449770748696325557433827/37790826571887709806684604483562500000`.
+
+```n7-h2-R15-witnesses
+CACE_2 GO
+CACG_1 O
+CCDE_1 P
+CCDH_2 OP
+CDHO_1 P
+CEAO_1 G
+CEAP_1 G
+QABCE_2 GO
+QABCG_1 O
+QACDE_3 GOP
+QBCDE_1 P
+QCDEG_1 P
+QCDEO_1 P
+QDEGO_1 P
+QDEHO_2 GP
+```
+
+```n7-h2-R15-sum
+1 124 L9*L33
+2 5 L0*L0*L2
+3 1 L0*L13*L27
+4 994 L0*L20*L33
+5 4 L1*L13*L32
+6 1 L1*L13*L34
+7 7 L1*L18*L23
+8 1 L2*L2*L27
+9 2 L2*L3*L6
+10 3 L2*L4*L29
+11 92 L2*L6*L9
+12 391 L2*L6*L28
+13 70 L2*L7*L15
+14 45 L2*L7*L20
+15 46 L2*L7*L33
+16 92 L2*L9*L35
+17 1 L2*L17*L34
+18 32 L2*L18*L25
+19 197 L2*L18*L34
+20 56 L2*L20*L20
+21 5 L2*L20*L33
+22 144 L2*L20*L34
+23 36 L2*L23*L34
+24 229 L2*L24*L28
+25 7 L2*L24*L33
+26 8 L3*L26*L30
+27 3 L4*L9*L11
+28 615 L4*L23*L34
+29 66 L4*L33*L34
+30 5 L4*L34*L35
+31 417 L5*L6*L24
+32 5 L5*L9*L12
+33 277 L5*L9*L24
+34 53 L5*L9*L33
+35 14 L5*L14*L33
+36 124 L6*L6*L18
+37 88 L6*L15*L18
+38 124 L6*L18*L25
+39 34 L6*L18*L32
+40 180 L6*L33*L34
+41 24 L7*L19*L33
+42 2 L8*L15*L28
+43 2 L9*L9*L28
+44 18 L9*L10*L19
+45 4 L9*L11*L13
+46 37 L9*L11*L20
+47 244 L9*L11*L24
+48 17 L9*L14*L32
+49 19 L9*L15*L23
+50 31 L9*L18*L30
+51 100 L9*L19*L22
+52 124 L9*L20*L23
+53 342 L9*L20*L33
+54 330 L9*L22*L29
+55 5 L9*L27*L30
+56 297 L9*L28*L33
+57 2 L9*L29*L34
+58 10 L9*L32*L33
+59 15 L10*L15*L19
+60 71 L10*L15*L29
+61 10 L10*L15*L32
+62 4 L10*L16*L30
+63 7 L10*L21*L33
+64 7 L11*L24*L33
+65 4 L11*L26*L34
+66 10 L11*L33*L34
+67 259 L12*L15*L23
+68 1 L12*L26*L34
+69 4 L12*L33*L34
+70 1 L13*L14*L26
+71 259 L13*L15*L23
+72 228 L14*L24*L33
+73 351 L14*L28*L33
+74 2 L15*L17*L24
+75 2 L15*L17*L25
+76 750 L15*L18*L28
+77 1 L15*L18*L34
+78 56 L15*L19*L20
+79 140 L15*L19*L23
+80 1 L15*L19*L26
+81 80 L15*L22*L34
+82 387 L15*L23*L29
+83 5 L15*L32*L35
+84 1 L16*L33*L34
+85 1 L17*L30*L34
+86 42 L18*L24*L33
+87 32 L18*L28*L33
+88 14 L19*L31*L34
+89 18 L20*L20*L31
+90 56 L20*L21*L33
+91 933 L20*L26*L33
+92 647 L20*L28*L33
+93 74 L21*L21*L30
+94 48 L21*L23*L30
+95 320 L22*L33*L34
+96 80 L22*L34*L34
+97 5 L23*L28*L34
+98 37 L25*L30*L33
+99 7 L25*L33*L33
+100 3 L27*L30*L33
+101 114 L28*L30*L34
+102 257 L30*L33*L34
+103 308 L31*L33*L34
+104 25 ABC+*L18
+105 5 ABH+*L0
+106 97 ABH+*L8
+107 572 ABH+*L19
+108 8 ABH+*L32
+109 61 BCD+*L19
+110 45 BCD+*L21
+111 40 BCD+*L22
+112 391 BCD+*L28
+113 2 BCD+*L32
+114 183 BCD+*L34
+115 5 EFH+*L1
+116 171 EFH+*L6
+117 413 EFH+*L12
+118 412 EFH+*L13
+119 1 EFH+*L16
+120 10 EFH+*L19
+121 637 EFH+*L20
+122 234 EFH+*L22
+123 259 EFH+*L24
+124 4 EFH+*L26
+125 302 EFH+*L28
+126 41 EFH+*L31
+127 4 FGH-*L30
+128 7 ABO+*L23
+129 88 BCO+*L23
+130 144 BCO+*L34
+131 12 AHO-*L4
+132 1 AHO-*L35
+133 1046 CHO-*L7
+134 1 CHO-*L11
+135 56 CHO-*L21
+136 498 CHO-*L23
+137 1134 CHO-*L24
+138 660 CHO-*L28
+139 1 CEO+*L33
+140 229 BCP+*L28
+141 444 CDP+*L15
+142 1351 CDP+*L20
+143 339 DEP+*L4
+144 145 DEP+*L6
+145 85 DEP+*L10
+146 29 DEP+*L15
+147 595 DEP+*L18
+148 462 CEP-*L0
+149 140 CEP-*L6
+150 627 CEP-*L12
+151 627 CEP-*L13
+152 124 CEP-*L21
+153 462 CEP-*L26
+154 415 CEP-*L29
+155 44 CEP-*L30
+156 4 GHO+*L32
+157 1 GHO+*L35
+158 32 DOP-*L3
+159 42 DOP-*L4
+160 214 DOP-*L7
+161 1224 DOP-*L14
+162 1414 DOP-*L16
+163 1414 DOP-*L17
+164 90 DOP-*L27
+165 90 DOP-*L35
+166 4 EGO+*L32
+167 388 AEG-*L2
+168 4 AEG-*L4
+169 357 CFO+*L0
+170 5 CFO+*L2
+171 600 CFO+*L6
+172 7 CFO+*L11
+173 56 CFO+*L21
+174 341 CFO+*L25
+175 296 CFO+*L26
+176 906 CFO+*L28
+177 1 CGO+*L5
+178 359 DHP+*L7
+179 86 DHP+*L11
+180 637 DHP+*L19
+181 1134 DHP+*L20
+182 37 DHP+*L30
+183 90 COP-*L29
+184 17 DFP+*L7
+185 42 DFP+*L18
+186 341 DFP+*L20
+187 32 DFP+*L27
+188 17 DFP+*L29
+189 44 DFP+*L31
+190 32 DFP+*L35
+191 391 AGO-*L2
+192 1 AGO-*L9
+193 1 AGO-*L27
+194 136 EL*L21
+195 647 EL*L28
+196 95 CACE_2*L6
+197 3 CACG_1*L33
+198 169 CEAO_1*L2
+199 13 CEAO_1*L30
+200 7 CEAP_1*L2
+201 129 CCDE_1*L20
+202 508 CCDH_2*L6
+203 360 CCDH_2*L19
+204 702 CCDH_2*L20
+205 166 CCDH_2*L22
+206 46 CCDH_2*L31
+207 43 CCDH_2*L33
+208 90 CDHO_1*L29
+209 4 QABCE_2*L33
+210 1 QABCG_1*L2
+211 95 QACDE_3*L7
+212 5 QACDE_3*L15
+213 22 QBCDE_1*L28
+214 4 QCDEG_1*L33
+215 495 QCDEO_1*L23
+216 392 QDEGO_1*L2
+217 1 QDEGO_1*L15
+218 386 QDEHO_2*L30
+219 5 F5_HABEF*L9
+```
+
+
+### Row R16
+
+Path: DOP-,AGP-,EGO+,AEG+,DGP-,AOP-,DFP-,CFO-.
+
+```n7-h2-R16-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DACFP DAP -1
+plu DAFHP DHP -1
+plu DBCFP DBP -1
+plu EABCG EBG -1
+plu EACDP EAP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OABCP OBP 1
+plu OACDP OAD 1
+plu OBCDP OBD 1
+```
+
+Exact upper bound: `-333529023164260619653/3837891100000000000`.
+
+```n7-h2-R16-witnesses
+CDEO_1 P
+QCDEF_2 OP
+```
+
+```n7-h2-R16-sum
+1 59392 L0*L2*L2
+2 269222 L0*L2*L5
+3 59655 L0*L2*L6
+4 8005 L0*L2*L19
+5 39515 L0*L2*L20
+6 15787 L0*L2*L23
+7 50363 L0*L2*L24
+8 4447 L0*L2*L32
+9 50762 L0*L5*L5
+10 5372 L0*L5*L6
+11 11192 L0*L5*L19
+12 6840 L0*L5*L20
+13 823 L0*L5*L32
+14 534 L0*L6*L18
+15 1552 L0*L9*L10
+16 55448 L0*L9*L23
+17 12221 L0*L11*L23
+18 15787 L0*L19*L32
+19 3273 L0*L23*L33
+20 42630 L0*L23*L34
+21 8629 L1*L4*L34
+22 13316 L1*L5*L9
+23 23346 L1*L6*L23
+24 11360 L1*L22*L34
+25 48723 L2*L2*L6
+26 1066 L2*L2*L21
+27 322064 L2*L5*L6
+28 123214 L2*L5*L9
+29 19467 L2*L6*L6
+30 293 L2*L6*L19
+31 2778 L2*L6*L20
+32 54265 L2*L6*L23
+33 601 L2*L6*L25
+34 893 L2*L7*L32
+35 3307 L2*L9*L16
+36 15408 L2*L9*L18
+37 44723 L2*L9*L24
+38 19198 L2*L9*L31
+39 3624 L2*L9*L32
+40 10569 L2*L20*L32
+41 6751 L2*L24*L32
+42 17219 L2*L30*L34
+43 17205 L2*L34*L34
+44 162825 L3*L5*L34
+45 47098 L3*L7*L9
+46 16965 L3*L9*L12
+47 11427 L3*L9*L21
+48 30286 L3*L20*L34
+49 41896 L3*L23*L34
+50 58981 L3*L24*L34
+51 50125 L3*L29*L34
+52 1645 L3*L32*L34
+53 79366 L4*L4*L4
+54 64141 L4*L4*L25
+55 45047 L4*L5*L9
+56 5458 L4*L6*L32
+57 8576 L4*L15*L34
+58 79366 L5*L5*L5
+59 339605 L5*L5*L6
+60 1066 L5*L5*L20
+61 19467 L5*L6*L6
+62 20840 L5*L8*L34
+63 11316 L5*L9*L11
+64 24026 L5*L9*L21
+65 67104 L5*L9*L23
+66 19094 L5*L9*L30
+67 18320 L5*L11*L34
+68 3566 L5*L20*L23
+69 12702 L5*L20*L32
+70 8576 L5*L27*L34
+71 10455 L5*L29*L34
+72 534 L6*L6*L19
+73 88484 L6*L6*L23
+74 7751 L6*L9*L19
+75 10773 L6*L9*L23
+76 13625 L6*L9*L32
+77 64843 L6*L11*L23
+78 26487 L6*L11*L34
+79 4389 L6*L19*L23
+80 16524 L6*L20*L23
+81 2525 L6*L20*L32
+82 25615 L6*L23*L34
+83 6600 L7*L9*L12
+84 6751 L7*L32*L32
+85 2193 L9*L9*L19
+86 12514 L9*L10*L19
+87 16965 L9*L11*L13
+88 7615 L9*L11*L23
+89 5950 L9*L11*L24
+90 1552 L9*L11*L27
+91 5558 L9*L12*L21
+92 16965 L9*L12*L31
+93 16965 L9*L12*L33
+94 470 L9*L12*L34
+95 5558 L9*L13*L15
+96 9907 L9*L13*L25
+97 3307 L9*L15*L33
+98 9907 L9*L16*L23
+99 5558 L9*L17*L19
+100 3307 L9*L17*L31
+101 3273 L9*L18*L33
+102 823 L9*L19*L23
+103 5558 L9*L19*L34
+104 16524 L9*L20*L23
+105 21247 L9*L20*L31
+106 73687 L9*L23*L26
+107 49897 L9*L23*L28
+108 5687 L9*L23*L31
+109 7675 L9*L28*L32
+110 10986 L9*L31*L34
+111 6213 L10*L17*L34
+112 39990 L10*L33*L34
+113 19469 L11*L19*L34
+114 50815 L11*L23*L34
+115 5558 L13*L34*L34
+116 10919 L18*L23*L34
+117 379 L18*L33*L34
+118 5558 L18*L34*L34
+119 2389 L19*L25*L34
+120 379 L19*L30*L34
+121 11635 L20*L32*L32
+122 2389 L21*L22*L34
+123 2389 L21*L31*L34
+124 18745 L21*L33*L34
+125 53990 L23*L34*L35
+126 6751 L24*L32*L32
+127 1779 L32*L33*L34
+128 40194 ABC+*L2
+129 50762 ABC+*L5
+130 17205 ABC+*L14
+131 7918 ABC+*L19
+132 6840 ABC+*L20
+133 5641 ABC+*L24
+134 9530 ABC+*L29
+135 823 ABC+*L32
+136 15574 ABH+*L2
+137 178266 ABH+*L5
+138 46608 ABH+*L6
+139 3624 ABH+*L10
+140 379 ABH+*L19
+141 32675 ABH+*L20
+142 44723 ABH+*L24
+143 17205 ABH+*L27
+144 7675 ABH+*L29
+145 17205 ABH+*L35
+146 296740 BCD+*L5
+147 28445 BCD+*L6
+148 199765 BCD+*L10
+149 193907 BCD+*L11
+150 253 BCD+*L20
+151 57614 BCD+*L23
+152 601 BCD+*L25
+153 4158 BCD+*L26
+154 8977 BCD+*L28
+155 42865 BCD+*L31
+156 60089 EFH+*L5
+157 25867 EFH+*L8
+158 38012 EFH+*L10
+159 21839 EFH+*L13
+160 6213 EFH+*L16
+161 2749 EFH+*L18
+162 81792 EFH+*L23
+163 5950 EFH+*L24
+164 20537 EFH+*L29
+165 3757 EFH+*L32
+166 470 EFG+*L9
+167 470 FGH-*L7
+168 29715 FGH-*L18
+169 29715 FGH-*L19
+170 10919 FGH-*L23
+171 470 FGH-*L29
+172 54948 CDP+*L32
+173 3962 CDP+*L34
+174 13983 DEP+*L0
+175 115595 DEP+*L5
+176 178045 DEP+*L6
+177 156119 DEP+*L10
+178 128286 DEP+*L11
+179 10919 DEP+*L12
+180 4096 DEP+*L19
+181 13746 DEP+*L20
+182 37862 DEP+*L26
+183 89028 DEP+*L28
+184 106945 DEP+*L30
+185 1732 CEP-*L1
+186 2124 CEP-*L11
+187 104913 CEP-*L18
+188 108186 CEP-*L19
+189 2778 CEP-*L21
+190 3908 CEP-*L26
+191 601 CEP-*L29
+192 54948 CEP-*L30
+193 9193 CEP-*L33
+194 5558 GHO+*L0
+195 21839 GHO+*L10
+196 10919 GHO+*L23
+197 5558 GHO+*L26
+198 534 DOP-*L6
+199 2389 DOP-*L34
+200 6839 EGO+*L4
+201 15000 EGO+*L10
+202 10919 EGO+*L23
+203 6839 EGO+*L31
+204 6839 EGO+*L32
+205 5558 EGO+*L34
+206 6600 DGP-*L9
+207 10919 DGP-*L11
+208 4999 DGP-*L18
+209 4999 DGP-*L19
+210 12346 AOP-*L5
+211 534 AOP-*L9
+212 8779 AOP-*L10
+213 534 AOP-*L28
+214 9072 AOP-*L30
+215 6715 AOP-*L32
+216 66265 DFP-*L3
+217 10919 DFP-*L12
+218 5950 DFP-*L14
+219 293 DFP-*L18
+220 2778 DFP-*L21
+221 21939 DFP-*L28
+222 21939 DFP-*L29
+223 66265 DFP-*L31
+224 6751 DFP-*L32
+225 1066 CFO-*L3
+226 1066 CFO-*L5
+227 253 CFO-*L7
+228 293 CFO-*L23
+229 2778 CFO-*L24
+230 11635 CFO-*L32
+231 18745 CFO-*L34
+232 3307 CGP-*L9
+233 41896 DHP-*L32
+234 14258 BEP-*L34
+235 15787 EOP+*L32
+236 293 ADO+*L32
+237 7751 CDEO_1*L9
+238 12534 QCDEF_2*L9
+239 2335 F5_POACD*L34
+```
+
+
+### Row R17
+
+Path: DOP-,AGP-,EGO+,AEG+,DGP-,AOP-,DFP-,CFO+.
+
+```n7-h2-R17-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu CABEP CAP -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DACFP DAP -1
+plu DAFHP DHP -1
+plu DBCFP DBP -1
+plu EABCG EBG -1
+plu EACDP EAP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDOP EOP 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu FCDEO FDO -1
+plu FCEOP FOP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OABCP OBP 1
+plu OACDP OAD 1
+plu OBCDP OBD 1
+```
+
+Exact upper bound: `-175572313994252737633/2174988500000000000`.
+
+```n7-h2-R17-witnesses
+CCDE_1 P
+```
+
+```n7-h2-R17-sum
+1 707 L9*L11
+2 1313 L0*L0*L2
+3 441 L0*L0*L5
+4 1318 L0*L2*L3
+5 11676 L0*L2*L6
+6 252 L0*L2*L19
+7 179 L0*L2*L21
+8 1236 L0*L2*L27
+9 3757 L0*L2*L33
+10 18 L0*L4*L12
+11 1239 L0*L5*L5
+12 1988 L0*L5*L6
+13 861 L0*L5*L11
+14 31 L0*L5*L21
+15 17 L0*L6*L8
+16 17 L0*L6*L15
+17 1468 L0*L9*L11
+18 543 L0*L9*L12
+19 17 L0*L9*L15
+20 1468 L0*L10*L15
+21 772 L0*L23*L29
+22 1110 L0*L30*L34
+23 1758 L1*L5*L9
+24 655 L1*L12*L34
+25 1141 L1*L33*L34
+26 562 L2*L2*L24
+27 5712 L2*L3*L6
+28 1318 L2*L3*L9
+29 107 L2*L4*L17
+30 1600 L2*L5*L6
+31 4997 L2*L5*L27
+32 792 L2*L5*L29
+33 12255 L2*L6*L11
+34 270 L2*L6*L13
+35 9483 L2*L6*L15
+36 543 L2*L6*L17
+37 1090 L2*L6*L19
+38 1347 L2*L6*L23
+39 1753 L2*L9*L15
+40 174 L2*L9*L21
+41 63 L2*L9*L24
+42 318 L2*L9*L33
+43 59 L2*L13*L27
+44 1269 L2*L14*L23
+45 655 L2*L17*L34
+46 119 L2*L18*L34
+47 179 L2*L20*L34
+48 562 L2*L24*L32
+49 1989 L3*L4*L34
+50 136 L3*L6*L6
+51 125 L3*L9*L13
+52 449 L3*L9*L17
+53 188 L3*L9*L27
+54 3003 L3*L11*L34
+55 107 L3*L17*L33
+56 1318 L3*L30*L34
+57 2196 L4*L4*L4
+58 204 L4*L4*L21
+59 2078 L4*L4*L25
+60 260 L4*L20*L34
+61 6309 L4*L25*L33
+62 448 L4*L30*L34
+63 2196 L5*L5*L5
+64 8104 L5*L5*L6
+65 14588 L5*L6*L11
+66 336 L5*L6*L13
+67 543 L5*L6*L17
+68 1090 L5*L6*L19
+69 579 L5*L6*L20
+70 1315 L5*L6*L31
+71 49 L5*L6*L34
+72 3399 L5*L9*L11
+73 66 L5*L9*L13
+74 47 L5*L9*L18
+75 809 L5*L9*L20
+76 11 L5*L9*L24
+77 5471 L5*L9*L30
+78 3121 L5*L9*L33
+79 114 L5*L12*L34
+80 352 L5*L15*L34
+81 66 L5*L16*L23
+82 1242 L5*L31*L34
+83 1485 L5*L33*L34
+84 1754 L6*L7*L23
+85 1306 L6*L9*L32
+86 876 L6*L11*L34
+87 6382 L6*L13*L23
+88 1201 L6*L16*L23
+89 34 L6*L21*L23
+90 924 L6*L23*L26
+91 7637 L6*L23*L33
+92 205 L6*L32*L34
+93 17 L7*L9*L9
+94 597 L7*L9*L13
+95 1148 L7*L9*L23
+96 740 L7*L12*L34
+97 548 L7*L20*L34
+98 788 L8*L12*L34
+99 17 L9*L9*L35
+100 692 L9*L10*L14
+101 2685 L9*L11*L31
+102 5254 L9*L13*L23
+103 692 L9*L13*L24
+104 543 L9*L13*L27
+105 1240 L9*L13*L28
+106 1145 L9*L13*L29
+107 290 L9*L15*L18
+108 17 L9*L15*L29
+109 509 L9*L16*L23
+110 657 L9*L17*L26
+111 657 L9*L17*L27
+112 247 L9*L17*L31
+113 692 L9*L17*L32
+114 34 L9*L18*L24
+115 28 L9*L19*L23
+116 244 L9*L19*L27
+117 252 L9*L19*L31
+118 548 L9*L21*L34
+119 529 L9*L23*L26
+120 340 L9*L23*L33
+121 396 L9*L23*L35
+122 1034 L10*L17*L23
+123 2155 L11*L12*L34
+124 247 L11*L16*L34
+125 498 L11*L21*L34
+126 2353 L11*L23*L29
+127 661 L11*L24*L34
+128 327 L11*L34*L35
+129 28 L12*L20*L23
+130 5348 L12*L23*L29
+131 298 L12*L24*L34
+132 7 L12*L31*L34
+133 49 L13*L14*L34
+134 590 L15*L19*L34
+135 1769 L15*L23*L31
+136 31 L15*L23*L34
+137 100 L16*L23*L29
+138 298 L16*L23*L34
+139 28 L17*L18*L23
+140 247 L17*L33*L34
+141 200 L18*L28*L34
+142 87 L18*L33*L34
+143 548 L20*L29*L34
+144 1769 L22*L33*L34
+145 9405 L23*L23*L28
+146 875 L23*L24*L33
+147 31 L23*L26*L34
+148 866 L23*L29*L29
+149 17 L27*L29*L34
+150 17 L29*L34*L34
+151 893 L31*L34*L34
+152 441 ABC+*L0
+153 1239 ABC+*L5
+154 1726 ABC+*L8
+155 861 ABC+*L11
+156 18 ABC+*L13
+157 1318 ABH+*L3
+158 11124 ABH+*L6
+159 2896 ABH+*L11
+160 41 ABH+*L13
+161 252 ABH+*L19
+162 179 ABH+*L21
+163 2107 ABH+*L27
+164 1436 ABH+*L28
+165 1214 ABH+*L34
+166 1988 BCD+*L0
+167 15131 BCD+*L3
+168 1312 BCD+*L6
+169 11693 BCD+*L11
+170 270 BCD+*L13
+171 543 BCD+*L17
+172 1090 BCD+*L19
+173 1019 BCD+*L22
+174 2429 BCD+*L23
+175 1448 BCD+*L28
+176 9420 BCD+*L31
+177 1655 EFH+*L5
+178 1362 EFH+*L6
+179 327 EFH+*L8
+180 80 EFH+*L13
+181 2322 EFH+*L18
+182 1269 EFH+*L22
+183 655 ABG+*L34
+184 170 EFG+*L4
+185 3142 FGH-*L10
+186 3079 FGH-*L11
+187 247 FGH-*L21
+188 692 FGH-*L24
+189 692 FGH-*L28
+190 107 FGH-*L30
+191 63 FGH-*L33
+192 121 CHO-*L6
+193 204 CHO-*L10
+194 247 CHO-*L17
+195 692 CHO-*L24
+196 541 CHO-*L27
+197 2373 CHO-*L28
+198 2203 CHO-*L29
+199 204 CHO-*L33
+200 572 CHO-*L35
+201 136 CDP+*L6
+202 152 DEP+*L1
+203 5314 DEP+*L11
+204 609 DEP+*L16
+205 594 DEP+*L20
+206 10280 DEP+*L22
+207 7112 DEP+*L24
+208 7112 DEP+*L25
+209 751 DEP+*L28
+210 6084 DEP+*L33
+211 1222 DEP+*L34
+212 8387 CEP-*L2
+213 136 CEP-*L6
+214 9205 CEP-*L11
+215 3288 CEP-*L12
+216 3355 CEP-*L13
+217 692 CEP-*L14
+218 64 CEP-*L21
+219 875 CEP-*L22
+220 8387 CEP-*L30
+221 291 GHO+*L4
+222 2103 GHO+*L10
+223 692 GHO+*L24
+224 249 GHO+*L28
+225 132 GHO+*L32
+226 49 GHO+*L34
+227 291 EGO+*L4
+228 49 EGO+*L7
+229 2103 EGO+*L10
+230 199 EGO+*L15
+231 28 EGO+*L22
+232 692 EGO+*L24
+233 200 EGO+*L28
+234 132 EGO+*L32
+235 66 DGP-*L5
+236 1034 DGP-*L11
+237 587 DGP-*L12
+238 587 DGP-*L13
+239 298 DGP-*L34
+240 31 AOP-*L34
+241 2333 DFP-*L5
+242 1983 DFP-*L6
+243 4377 DFP-*L12
+244 3343 DFP-*L13
+245 692 DFP-*L17
+246 628 DFP-*L20
+247 875 DFP-*L22
+248 1983 DFP-*L28
+249 562 DFP-*L31
+250 926 CFO+*L8
+251 247 CFO+*L17
+252 1888 CFO+*L22
+253 1888 CFO+*L23
+254 628 CFO+*L24
+255 281 CFO+*L27
+256 628 CFO+*L28
+257 281 CFO+*L35
+258 499 DHP-*L32
+259 893 BEG+*L9
+260 1306 FOP+*L9
+261 31 FOP+*L34
+262 893 CCDE_1*L9
+263 213 F5_BDPOA*L9
+264 468 F5_POACD*L9
+265 62 F5_HBCDP*L9
+266 633 F5_FOCDP*L9
+```
+
+
+### Row R18
+
+Path: DOP-,AGP-,EGO+,AEG+,DGP-,AOP-,DFP+.
+
+```n7-h2-R18-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu CABEP CAP -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DACGP DAP -1
+plu DAFGP DFG 1
+plu DBCGP DBP -1
+plu DCFOP DFO 1
+plu EABCG EBG -1
+plu EACDP EAP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDOP EOP 1
+plu FACDP FAP 1
+plu FBCDP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GDEFP GFP -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OABCP OBP 1
+plu OACDP OAD 1
+plu OBCDP OBD 1
+plu ODEFP OFP -1
+```
+
+Exact upper bound: `-46094082367125547636967090504756072630183/768835102392866989530121857353750000000`.
+
+```n7-h2-R18-witnesses
+CCDE_1 P
+CDEG_1 P
+QABDE_1 P
+QADEF_1 P
+QADFH_3 GOP
+QAPFH_2 GO
+QBCDE_1 P
+QBDEH_1 P
+QBDFH_3 GOP
+QBPFH_2 GO
+QCDEG_1 P
+QCDEO_1 P
+QCDFH_3 GOP
+```
+
+```n7-h2-R18-sum
+1 114 L0*L33
+2 1 L10*L15
+3 2 L0*L1*L2
+4 1 L0*L2*L24
+5 3 L0*L2*L29
+6 163 L0*L12*L33
+7 1 L0*L17*L33
+8 12 L0*L23*L31
+9 1 L0*L23*L34
+10 2718 L0*L28*L33
+11 23 L1*L10*L23
+12 1 L1*L19*L23
+13 18 L1*L32*L33
+14 47 L2*L4*L8
+15 8 L2*L5*L6
+16 1 L2*L5*L24
+17 21 L2*L6*L10
+18 3 L2*L6*L23
+19 28 L2*L6*L28
+20 77 L2*L6*L32
+21 1 L2*L8*L18
+22 31 L2*L8*L27
+23 1 L2*L13*L35
+24 2 L2*L17*L24
+25 46 L2*L23*L28
+26 21 L3*L3*L15
+27 21 L3*L11*L34
+28 1 L3*L12*L34
+29 78 L3*L33*L34
+30 1 L4*L9*L17
+31 19 L4*L9*L33
+32 62 L4*L14*L33
+33 19 L4*L15*L23
+34 18 L4*L23*L35
+35 1 L5*L24*L34
+36 23 L5*L26*L33
+37 46 L5*L30*L34
+38 25 L6*L6*L32
+39 1 L6*L9*L13
+40 2 L6*L10*L27
+41 1 L6*L23*L27
+42 3 L6*L30*L30
+43 1093 L6*L33*L34
+44 24 L7*L9*L33
+45 1 L7*L17*L30
+46 1 L7*L18*L23
+47 68 L7*L31*L33
+48 1 L8*L12*L15
+49 25 L8*L15*L30
+50 1 L8*L17*L30
+51 2 L8*L25*L30
+52 1650 L8*L33*L34
+53 1 L9*L9*L30
+54 95 L9*L13*L33
+55 2 L9*L17*L23
+56 1 L9*L17*L33
+57 19 L9*L22*L30
+58 1 L9*L23*L34
+59 10 L9*L30*L31
+60 2 L10*L15*L15
+61 47 L10*L15*L22
+62 30 L10*L15*L30
+63 19 L10*L24*L33
+64 34 L10*L28*L33
+65 149 L10*L33*L34
+66 19 L11*L11*L34
+67 2 L11*L16*L33
+68 195 L11*L33*L34
+69 1 L12*L15*L29
+70 1 L12*L18*L30
+71 1 L12*L19*L32
+72 259 L13*L14*L33
+73 1 L13*L18*L33
+74 2 L13*L23*L34
+75 1 L13*L26*L32
+76 1 L14*L18*L29
+77 17 L14*L23*L33
+78 228 L14*L31*L33
+79 1 L15*L15*L23
+80 1 L15*L24*L32
+81 24 L15*L25*L30
+82 21 L15*L30*L31
+83 2 L16*L23*L34
+84 1 L17*L26*L33
+85 1 L17*L31*L33
+86 1 L18*L22*L34
+87 11 L18*L28*L33
+88 1 L19*L29*L34
+89 262 L19*L33*L34
+90 1 L24*L28*L33
+91 3810 L26*L28*L33
+92 1092 L26*L33*L34
+93 1650 L28*L28*L33
+94 117 L28*L32*L33
+95 99 ABC+
+96 2 ABC+*L15
+97 1 ABC+*L24
+98 24 ABC+*L28
+99 27 ABH+*L6
+100 1 ABH+*L24
+101 1 ABH+*L35
+102 198 AFH+*L33
+103 29 BCD+*L22
+104 53 BCD+*L28
+105 64 BCD+*L32
+106 27 BCD+*L34
+107 1 DFH+*L0
+108 1 FGH-
+109 1 FGH-*L31
+110 2 AGH+*L23
+111 161 AGH+*L33
+112 1 CGH+*L31
+113 272 DEO+*L33
+114 1 CHO-*L24
+115 22 BCP+*L15
+116 24 CDP+*L0
+117 60 CDP+*L30
+118 26 DEP+*L0
+119 1 DEP+*L29
+120 2 EFP+*L12
+121 24 CEP-*L0
+122 58 CEP-*L3
+123 37 CEP-*L4
+124 1 CEP-*L6
+125 1 CEP-*L8
+126 27 CEP-*L13
+127 1 CEP-*L21
+128 1 GHO+*L22
+129 1 GHO+*L24
+130 41 DOP-*L7
+131 41 DOP-*L8
+132 41 DOP-*L29
+133 1 EGO+*L22
+134 1 EGO+*L24
+135 1 AEG+*L5
+136 26 DGP-*L5
+137 1 DGP-*L7
+138 2 DGP-*L11
+139 1 DGP-*L14
+140 8 AOP-*L31
+141 8 AOP-*L32
+142 8 AOP-*L33
+143 12 DFP+*L10
+144 40 DFP+*L28
+145 39 DFP+*L29
+146 63 DFP+*L30
+147 23 ACP+*L33
+148 58 ADP+*L18
+149 10 BDP+*L31
+150 16 BDP+*L33
+151 1 BEG+*L28
+152 55 AEP-*L2
+153 2 BEP-*L16
+154 1 EOP+*L9
+155 1 EOP+*L20
+156 1 EOP+*L21
+157 1 FGP+*L28
+158 2 FGP+*L33
+159 57 ADO+*L23
+160 19 EL*L11
+161 48 EL*L31
+162 18 ER*L10
+163 2 ER*L15
+164 1 ER*L17
+165 105 ER*L18
+166 104 ER*L19
+167 8 ER*L23
+168 2 ER*L24
+169 3 ER*L27
+170 27 CCDE_1*L12
+171 1 CCDE_1*L20
+172 1 CDEG_1*L29
+173 97 CDEG_1*L33
+174 18 QABDE_1*L33
+175 216 QADEF_1*L33
+176 1 QADFH_3*L13
+177 28 QADFH_3*L22
+178 25 QADFH_3*L28
+179 51 QADFH_3*L30
+180 2 QAPFH_2*L12
+181 2 QAPFH_2*L15
+182 53 QAPFH_2*L30
+183 26 QBCDE_1*L23
+184 73 QBDEH_1*L33
+185 4543 QBDFH_3*L33
+186 6 QBPFH_2*L33
+187 27 QCDEG_1*L23
+188 2 QCDEO_1*L6
+189 2745 QCDFH_3*L6
+190 98 QCDFH_3*L13
+191 1 QCDFH_3*L17
+192 261 QCDFH_3*L19
+193 182 QCDFH_3*L22
+194 180 QCDFH_3*L23
+195 1092 QCDFH_3*L26
+196 4343 QCDFH_3*L28
+197 130 QCDFH_3*L31
+198 4681 QCDFH_3*L32
+199 129 F5_FHABC*L33
+200 14 F5_PEFAB*L23
+201 1 F5_PFHAC*L15
+202 9 F5_GBCPE*L2
+```
+
+
+### Row R19
+
+Path: DOP-,AGP-,EGO+,AEG+,DGP-,AOP+,DFP-,BEO-.
+
+```n7-h2-R19-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu ABGOP AGO -1
+plu BAEFO BFO -1
+plu BAEHO BHO -1
+plu CABEP CAP -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DACFP DAP -1
+plu DAFHP DHP -1
+plu DBCFP DBP -1
+plu EABCG EBG -1
+plu EABCO EAO 1
+plu EACDP EAP 1
+plu EACHO EHO 1
+plu EACOP EOP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu FABEO FAO 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu HABCP HBP 1
+plu OABEG OBG -1
+plu OACHP OHP -1
+plu OAEFP OFP -1
+plu OAEGP OGP -1
+```
+
+Exact upper bound: `-3133164242901700466311/38378911000000000000`.
+
+```n7-h2-R19-witnesses
+CCDE_1 P
+CDEF_1 P
+QABCP_1 O
+QACDP_1 O
+QBCDE_2 OP
+QBCPG_1 O
+QBCPH_1 O
+QCDEO_1 P
+QCEFH_2 GO
+QCPFH_1 O
+```
+
+```n7-h2-R19-sum
+1 1063 L1*L6
+2 484 L3*L9
+3 422 L6*L10
+4 2783 L0*L2*L2
+5 1 L0*L2*L19
+6 612 L0*L2*L25
+7 54606 L0*L2*L28
+8 931 L0*L2*L30
+9 2 L0*L3*L21
+10 1171 L0*L4*L6
+11 2 L0*L4*L17
+12 1024 L0*L5*L33
+13 1 L0*L6*L12
+14 3112 L0*L9*L30
+15 2 L0*L10*L13
+16 247 L0*L10*L23
+17 3 L0*L13*L23
+18 1 L0*L13*L29
+19 2 L0*L16*L33
+20 1 L0*L20*L28
+21 1 L0*L21*L26
+22 2 L0*L21*L31
+23 7046 L0*L22*L23
+24 1542 L1*L5*L24
+25 4250 L1*L6*L7
+26 2226 L1*L6*L23
+27 4250 L1*L6*L29
+28 4250 L1*L9*L9
+29 4250 L1*L9*L28
+30 3 L1*L10*L19
+31 38 L1*L10*L24
+32 1 L1*L20*L24
+33 260 L2*L2*L9
+34 648 L2*L2*L10
+35 289 L2*L2*L20
+36 906 L2*L3*L22
+37 1296 L2*L5*L10
+38 906 L2*L5*L23
+39 3731 L2*L6*L9
+40 287 L2*L6*L18
+41 6401 L2*L6*L22
+42 1 L2*L6*L32
+43 550 L2*L7*L27
+44 4039 L2*L8*L10
+45 260 L2*L9*L30
+46 6085 L2*L10*L15
+47 2521 L2*L10*L22
+48 648 L2*L10*L32
+49 6305 L2*L11*L27
+50 4 L2*L15*L21
+51 22486 L2*L15*L28
+52 3 L2*L17*L27
+53 35 L2*L18*L21
+54 67 L2*L18*L22
+55 28 L2*L18*L26
+56 285 L2*L18*L28
+57 289 L2*L21*L31
+58 906 L2*L22*L31
+59 302 L2*L27*L32
+60 7815 L2*L29*L34
+61 1750 L3*L9*L22
+62 1565 L3*L9*L35
+63 2521 L3*L11*L23
+64 35 L3*L19*L20
+65 4 L3*L20*L28
+66 6 L3*L20*L34
+67 20626 L3*L28*L34
+68 648 L3*L33*L33
+69 4 L4*L4*L16
+70 648 L4*L5*L5
+71 648 L4*L5*L30
+72 2497 L4*L6*L24
+73 8436 L4*L6*L31
+74 1 L4*L17*L23
+75 3 L5*L5*L17
+76 1 L5*L5*L24
+77 5 L5*L6*L19
+78 928 L5*L9*L25
+79 1 L5*L11*L17
+80 292 L5*L11*L26
+81 2524 L5*L11*L34
+82 1 L5*L13*L15
+83 1 L5*L13*L24
+84 3 L5*L15*L16
+85 67 L5*L19*L23
+86 2 L5*L20*L24
+87 2 L5*L21*L26
+88 18429 L5*L22*L24
+89 3192 L5*L22*L34
+90 10279 L5*L23*L24
+91 4840 L5*L23*L28
+92 328 L6*L6*L22
+93 912 L6*L11*L33
+94 2818 L6*L12*L31
+95 2817 L6*L13*L31
+96 1 L6*L16*L22
+97 3 L6*L18*L26
+98 2 L6*L18*L34
+99 1 L6*L21*L35
+100 2395 L6*L22*L23
+101 676 L6*L22*L24
+102 4059 L6*L23*L31
+103 8725 L6*L31*L31
+104 4 L7*L9*L18
+105 418 L7*L9*L33
+106 242 L7*L10*L23
+107 8 L7*L18*L20
+108 58 L7*L18*L23
+109 8 L7*L29*L33
+110 8 L8*L18*L20
+111 56 L8*L18*L23
+112 1 L9*L11*L19
+113 1548 L9*L11*L28
+114 230 L9*L11*L31
+115 1 L9*L12*L15
+116 1 L9*L12*L24
+117 675 L9*L12*L29
+118 1 L9*L12*L31
+119 1 L9*L12*L32
+120 676 L9*L13*L29
+121 9 L9*L19*L27
+122 2 L9*L20*L22
+123 1 L9*L20*L28
+124 1 L9*L21*L34
+125 2 L9*L21*L35
+126 3376 L9*L22*L22
+127 676 L9*L22*L24
+128 12 L9*L31*L35
+129 2178 L9*L32*L35
+130 768 L10*L10*L15
+131 913 L10*L11*L29
+132 1 L10*L13*L15
+133 3 L10*L19*L24
+134 4 L10*L20*L29
+135 303 L10*L23*L29
+136 1031 L10*L23*L34
+137 38 L10*L24*L27
+138 1215 L11*L11*L34
+139 145 L11*L14*L32
+140 94 L11*L15*L24
+141 2 L11*L16*L26
+142 1 L11*L19*L28
+143 4 L11*L20*L23
+144 22024 L11*L28*L34
+145 1 L12*L33*L34
+146 1 L13*L15*L23
+147 1 L14*L20*L24
+148 13 L15*L15*L31
+149 2 L15*L17*L32
+150 4667 L15*L22*L23
+151 63 L15*L30*L30
+152 13 L15*L31*L34
+153 1 L16*L22*L28
+154 1 L16*L22*L30
+155 2 L18*L22*L34
+156 67 L18*L23*L31
+157 1 L18*L25*L30
+158 8 L19*L21*L29
+159 1 L20*L22*L33
+160 3 L20*L24*L29
+161 3 L20*L25*L29
+162 1 L21*L25*L27
+163 2 L21*L30*L34
+164 1 L21*L34*L35
+165 1 L21*L35*L35
+166 3192 L23*L26*L31
+167 243 L23*L26*L32
+168 1 L27*L33*L33
+169 301 L32*L33*L34
+170 612 ABC+*L25
+171 732 ABC+*L33
+172 1789 ABF+*L2
+173 3483 ABH+*L11
+174 3 ABH+*L17
+175 21 ABH+*L19
+176 50911 ABH+*L28
+177 240 ABH+*L30
+178 5035 ACD+*L23
+179 1171 BCD+*L1
+180 8724 BCD+*L2
+181 9635 BCD+*L12
+182 9634 BCD+*L13
+183 12020 CDE+*L6
+184 8 CDF+*L24
+185 44 CDH+*L6
+186 418 CFH+*L6
+187 826 DEF+*L9
+188 3 DEF+*L21
+189 1274 EFH+*L22
+190 24020 EFH+*L28
+191 3056 EFH+*L31
+192 8 AHO-*L3
+193 2 CDP+*L33
+194 223 DEP+*L5
+195 8222 DEP+*L18
+196 8280 DEP+*L19
+197 676 DEP+*L25
+198 512 DEP+*L27
+199 930 CEP-*L1
+200 5631 CEP-*L12
+201 5631 CEP-*L13
+202 2 CEP-*L20
+203 8256 CEP-*L22
+204 1 GHO+*L22
+205 3 AOP+*L10
+206 49 DFP-*L9
+207 57 DFP-*L14
+208 7 DFP-*L22
+209 1 DFP-*L32
+210 1666 DHP-*L23
+211 1 EGP+*L14
+212 1 BHP-*L19
+213 20115 CCDE_1*L6
+214 1994 CDEF_1*L34
+215 2843 QABCP_1*L22
+216 3074 QABCP_1*L28
+217 292 QACDP_1*L5
+218 1554 QACDP_1*L22
+219 915 QBCDE_2*L10
+220 1 QBCDE_2*L16
+221 3474 QBCDE_2*L18
+222 3479 QBCDE_2*L19
+223 4197 QBCDE_2*L22
+224 32172 QBCDE_2*L28
+225 1 QBCPG_1*L34
+226 570 QBCPH_1*L6
+227 2949 QBCPH_1*L23
+228 290 QCDEO_1*L2
+229 1 QCEFH_2*L34
+230 1 QCPFH_1*L15
+231 3 F5_BCDGA*L23
+232 1 F5_DPABC*L33
+233 2113 F5_EHABC*L16
+234 2116 F5_EHABC*L17
+235 2145 F5_FABCP*L9
+236 1 F5_CGHAB*L9
+237 62 F5_GHABC*L33
+238 1 F5_ABCPG*L4
+239 1 F5_EFABD*L19
+240 8487 F5_FABDE*L9
+241 328 F5_FABDP*L6
+242 41 F5_OEFAB*L5
+243 104 F5_FABPE*L2
+244 2589 F5_FABPE*L23
+245 2 F5_GABOE*L7
+246 135 F5_BPEHA*L9
+247 1 F5_OGHAB*L10
+248 4 F5_GHABO*L7
+249 463 F5_EFACD*L34
+250 2129 F5_PFHAD*L9
+251 1 F5_EFHAO*L33
+252 1 F5_EFAOP*L33
+253 367 F5_OPEHA*L9
+254 1 F5_BCDEG*L29
+255 2290 F5_FBCDP*L23
+256 2290 F5_HBCPE*L23
+```
+
+
+### Row R20
+
+Path: DOP-,AGP-,EGO+,AEG+,DGP-,AOP+,DFP-,BEO+.
+
+```n7-h2-R20-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu ABGOP AGO -1
+plu BADEO BDO 1
+plu CABEP CAP -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DACFP DAP -1
+plu DAFHP DHP -1
+plu DBCFP DBP -1
+plu EABCG EBG -1
+plu EACDP EAP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu EBDOP EOP 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACEP OAE -1
+plu OACHP OHP -1
+plu OAEGH OEH 1
+plu OAEGP OGP -1
+plu OBCEP OBP 1
+plu OEFHP OFP -1
+via O ABE AF -1
+```
+
+Exact upper bound: `-3202287039456725319237/38378911000000000000`.
+
+```n7-h2-R20-witnesses
+CCDE_1 P
+QADEG_1 P
+QAEFH_1 G
+QBDEG_1 P
+```
+
+```n7-h2-R20-sum
+1 2741 L0*L0*L2
+2 2368 L0*L2*L9
+3 2756 L0*L2*L23
+4 354 L0*L5*L32
+5 293 L0*L6*L18
+6 2220 L0*L23*L29
+7 1295 L1*L1*L3
+8 4478 L1*L3*L3
+9 451 L1*L4*L20
+10 1212 L1*L5*L5
+11 59 L1*L5*L21
+12 143 L1*L12*L32
+13 70 L1*L17*L32
+14 1375 L1*L18*L34
+15 233 L1*L29*L32
+16 94 L1*L31*L34
+17 7040 L2*L2*L6
+18 1698 L2*L2*L25
+19 35 L2*L2*L34
+20 3380 L2*L3*L9
+21 2224 L2*L4*L8
+22 14731 L2*L5*L6
+23 3676 L2*L5*L15
+24 442 L2*L6*L6
+25 33 L2*L6*L20
+26 329 L2*L6*L25
+27 1064 L2*L8*L32
+28 738 L2*L9*L18
+29 979 L2*L9*L21
+30 73 L2*L9*L24
+31 1236 L2*L15*L32
+32 525 L2*L20*L32
+33 3686 L3*L3*L34
+34 1512 L3*L6*L9
+35 482 L3*L9*L26
+36 940 L3*L9*L34
+37 1590 L3*L11*L34
+38 145 L3*L12*L34
+39 1021 L3*L14*L34
+40 1622 L3*L18*L34
+41 746 L3*L20*L34
+42 433 L3*L22*L34
+43 833 L3*L31*L34
+44 2975 L4*L4*L8
+45 7229 L4*L4*L25
+46 4085 L4*L6*L23
+47 75 L4*L12*L34
+48 30 L4*L17*L32
+49 949 L4*L20*L23
+50 742 L4*L23*L24
+51 9496 L5*L5*L6
+52 442 L5*L6*L6
+53 3416 L5*L6*L31
+54 2767 L5*L9*L18
+55 2029 L5*L9*L19
+56 125 L5*L9*L21
+57 3095 L5*L9*L30
+58 603 L5*L10*L34
+59 519 L5*L15*L34
+60 1159 L5*L19*L34
+61 525 L5*L20*L32
+62 959 L5*L21*L23
+63 1159 L5*L33*L34
+64 293 L6*L6*L19
+65 1730 L6*L6*L23
+66 829 L6*L9*L24
+67 611 L6*L9*L25
+68 2299 L6*L18*L23
+69 330 L6*L20*L32
+70 2246 L6*L21*L23
+71 2809 L6*L22*L23
+72 1327 L6*L23*L34
+73 112 L7*L8*L34
+74 1242 L7*L23*L32
+75 143 L7*L31*L32
+76 1090 L7*L32*L32
+77 233 L7*L32*L35
+78 112 L8*L8*L34
+79 113 L8*L12*L32
+80 905 L8*L30*L34
+81 218 L9*L9*L24
+82 112 L9*L9*L28
+83 428 L9*L9*L30
+84 555 L9*L10*L11
+85 564 L9*L11*L15
+86 555 L9*L11*L33
+87 1327 L9*L14*L23
+88 377 L9*L15*L18
+89 112 L9*L15*L29
+90 738 L9*L19*L31
+91 2246 L9*L21*L23
+92 2588 L9*L22*L23
+93 1221 L9*L23*L29
+94 775 L9*L23*L30
+95 326 L9*L23*L35
+96 2835 L9*L24*L29
+97 3052 L9*L25*L29
+98 303 L9*L33*L35
+99 1126 L10*L11*L34
+100 43 L10*L15*L23
+101 521 L10*L23*L25
+102 524 L11*L19*L34
+103 483 L11*L28*L34
+104 2357 L12*L23*L23
+105 2357 L13*L23*L23
+106 75 L13*L33*L34
+107 261 L15*L15*L32
+108 391 L15*L18*L23
+109 257 L15*L25*L32
+110 502 L18*L34*L34
+111 330 L20*L25*L32
+112 177 L20*L33*L34
+113 872 L22*L33*L34
+114 5041 L23*L23*L28
+115 1263 L23*L30*L34
+116 1602 L23*L32*L34
+117 657 L24*L32*L32
+118 433 L25*L32*L33
+119 519 L25*L33*L34
+120 1281 L27*L30*L34
+121 261 L33*L34*L34
+122 1212 ABC+*L4
+123 354 ABC+*L32
+124 1446 ABH+*L0
+125 1212 ABH+*L5
+126 4478 ABH+*L11
+127 1225 ABH+*L12
+128 70 ABH+*L17
+129 2756 ABH+*L19
+130 1071 ABH+*L20
+131 4124 ABH+*L32
+132 6529 BCD+*L3
+133 1820 BCD+*L8
+134 4269 BCD+*L18
+135 4269 BCD+*L19
+136 4717 BCD+*L23
+137 329 BCD+*L25
+138 442 BCD+*L29
+139 12912 BCD+*L31
+140 291 BCD+*L32
+141 70 EFH+*L1
+142 1126 EFH+*L10
+143 1154 EFH+*L13
+144 735 EFH+*L20
+145 558 EFH+*L21
+146 1610 EFH+*L28
+147 70 ABG+*L34
+148 70 FGH-*L0
+149 2166 FGH-*L10
+150 2166 FGH-*L11
+151 30 CGH+*L32
+152 1844 ABO+*L9
+153 865 BCO+*L1
+154 2139 BCO+*L3
+155 1159 BCO+*L4
+156 325 BCO+*L34
+157 874 CHO-*L0
+158 3538 CHO-*L2
+159 843 CHO-*L5
+160 627 CHO-*L8
+161 391 CHO-*L23
+162 502 CHO-*L27
+163 315 CHO-*L31
+164 525 CHO-*L32
+165 4382 DEP+*L0
+166 1759 DEP+*L10
+167 2299 DEP+*L18
+168 2576 DEP+*L21
+169 8370 DEP+*L22
+170 2454 DEP+*L26
+171 2022 DEP+*L29
+172 7653 DEP+*L30
+173 351 EFP+*L34
+174 329 CEP-*L6
+175 7885 CEP-*L10
+176 5818 CEP-*L11
+177 2299 CEP-*L18
+178 742 CEP-*L22
+179 4447 CEP-*L32
+180 7229 CEP-*L33
+181 519 CEP-*L34
+182 1049 GHO+*L32
+183 293 DOP-*L6
+184 297 DOP-*L9
+185 1049 EGO+*L32
+186 1082 AEG+*L2
+187 947 AEG+*L8
+188 143 AEG+*L10
+189 326 AOP+*L0
+190 2756 AOP+*L4
+191 293 AOP+*L29
+192 2756 AOP+*L31
+193 326 AOP+*L35
+194 257 DFP-*L0
+195 1806 DFP-*L11
+196 330 DFP-*L21
+197 521 DFP-*L22
+198 257 DFP-*L26
+199 1682 DFP-*L28
+200 1682 DFP-*L29
+201 1149 DFP-*L31
+202 2896 DFP-*L32
+203 870 DFP-*L34
+204 572 BEO+*L2
+205 3458 BEO+*L5
+206 297 BEO+*L7
+207 613 BEO+*L10
+208 88 BEO+*L11
+209 330 BEO+*L24
+210 206 BEO+*L35
+211 1714 COP-*L2
+212 2431 DHP-*L32
+213 257 BEP-*L34
+214 296 AEO-*L9
+215 1041 BOP-*L2
+216 2299 BOP-*L4
+217 715 CCDE_1*L32
+218 876 QADEG_1*L9
+219 734 QAEFH_1*L9
+220 70 QBDEG_1*L9
+221 1049 F5_FABCD*L9
+```
+
+
+### Row R21
+
+Path: DOP-,AGP-,EGO+,AEG+,DGP-,AOP+,DFP+.
+
+```n7-h2-R21-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu ABGOP AGO -1
+plu CABEP CAP -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DACGP DAP -1
+plu DAFGP DFG 1
+plu DBCGP DBP -1
+plu DCFOP DFO 1
+plu EABCG EBG -1
+plu EACDP EAP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDOP EOP 1
+plu FACDP FAP 1
+plu FBCDP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GDEFP GFP -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACEP OAE -1
+plu OACHP OHP -1
+plu OAEGH OEH 1
+plu OAEGP OGP -1
+plu ODEFP OFP -1
+via O ACE AF -1
+```
+
+Exact upper bound: `-160669585461356338336516021058888243470494573/2429518923561459686915185069237850000000000`.
+
+```n7-h2-R21-witnesses
+CCDE_1 P
+CCDF_1 P
+CDEG_1 P
+CDEO_1 P
+QABCP_1 O
+QACDE_2 OP
+QACDP_1 O
+QACPG_1 O
+QADFH_2 GP
+QAPFH_1 G
+QBCDE_1 P
+QBDEF_1 P
+QBDEG_1 P
+QCDEO_1 P
+QCDFH_3 GOP
+QCPFH_2 GO
+QEFHO_1 G
+```
+
+```n7-h2-R21-sum
+1 3 L0*L0*L6
+2 51 L0*L2*L6
+3 67 L0*L2*L27
+4 50 L0*L5*L33
+5 3 L0*L6*L15
+6 3 L0*L6*L35
+7 428 L0*L7*L33
+8 23 L0*L12*L33
+9 24 L0*L13*L23
+10 6 L0*L18*L33
+11 2 L0*L19*L27
+12 1 L0*L23*L34
+13 205 L0*L26*L33
+14 981 L0*L28*L33
+15 5 L1*L1*L23
+16 1 L1*L9*L19
+17 10 L1*L12*L32
+18 10 L2*L2*L8
+19 11 L2*L2*L25
+20 51 L2*L2*L28
+21 20 L2*L2*L35
+22 28 L2*L6*L12
+23 14 L2*L9*L31
+24 6 L2*L12*L15
+25 4 L2*L15*L24
+26 4 L2*L15*L35
+27 33 L2*L16*L33
+28 37 L2*L17*L23
+29 4 L2*L19*L24
+30 4 L2*L20*L22
+31 86 L2*L22*L23
+32 5 L2*L25*L27
+33 26 L2*L25*L30
+34 23 L2*L27*L28
+35 51 L2*L28*L30
+36 4 L3*L9*L28
+37 4 L3*L9*L34
+38 37 L3*L12*L24
+39 48 L3*L14*L33
+40 245 L3*L33*L34
+41 1 L4*L5*L15
+42 86 L4*L23*L23
+43 47 L4*L23*L34
+44 88 L4*L27*L33
+45 255 L4*L28*L33
+46 399 L4*L33*L34
+47 66 L5*L6*L6
+48 53 L5*L7*L33
+49 7 L5*L12*L15
+50 22 L5*L16*L23
+51 80 L5*L24*L33
+52 40 L5*L30*L34
+53 8 L6*L6*L10
+54 109 L6*L6*L32
+55 2 L6*L24*L32
+56 2 L7*L9*L34
+57 6 L7*L18*L33
+58 1 L7*L20*L33
+59 131 L7*L23*L33
+60 632 L7*L26*L33
+61 48 L8*L10*L15
+62 1 L8*L23*L27
+63 1 L8*L29*L34
+64 1171 L8*L33*L34
+65 2 L9*L9*L35
+66 34 L9*L11*L23
+67 10 L9*L12*L23
+68 1 L9*L14*L26
+69 3 L9*L15*L34
+70 12 L9*L25*L33
+71 17 L9*L32*L33
+72 1 L10*L15*L19
+73 41 L10*L15*L22
+74 11 L10*L15*L25
+75 91 L10*L24*L33
+76 420 L10*L28*L33
+77 403 L10*L33*L34
+78 23 L11*L13*L34
+79 1 L11*L14*L18
+80 25 L11*L23*L34
+81 12 L12*L15*L22
+82 1 L12*L27*L31
+83 1 L13*L27*L30
+84 126 L13*L28*L33
+85 265 L13*L33*L34
+86 496 L14*L14*L33
+87 1 L14*L15*L26
+88 9 L14*L17*L33
+89 191 L14*L23*L33
+90 20 L14*L30*L30
+91 81 L14*L33*L33
+92 2 L15*L18*L26
+93 37 L15*L23*L32
+94 2 L16*L18*L34
+95 911 L16*L28*L33
+96 911 L16*L33*L34
+97 2 L17*L18*L34
+98 9 L17*L25*L33
+99 1 L18*L25*L26
+100 47 L18*L28*L33
+101 63 L21*L28*L33
+102 63 L21*L33*L34
+103 247 L22*L33*L34
+104 86 L23*L23*L31
+105 68 L23*L25*L33
+106 35 L23*L27*L32
+107 5 L23*L30*L34
+108 131 L24*L28*L33
+109 15 L25*L30*L30
+110 205 L26*L26*L33
+111 2307 L26*L28*L33
+112 435 L26*L33*L34
+113 1 L26*L34*L34
+114 4263 L28*L28*L33
+115 2201 L28*L33*L34
+116 3 L28*L34*L35
+117 258 L31*L33*L34
+118 891 L33*L34*L35
+119 5 ABC+*L25
+120 63 ABH+*L0
+121 28 ABH+*L6
+122 22 ABH+*L8
+123 3 ABH+*L18
+124 67 ABH+*L22
+125 20 ABH+*L30
+126 109 BCD+*L28
+127 54 BCD+*L34
+128 23 AGH+*L11
+129 8 AGH+*L22
+130 1 AHO-*L24
+131 3 AHO-*L26
+132 4 CHO-*L22
+133 91 CDP+*L23
+134 39 CDP+*L33
+135 122 DEP+*L4
+136 134 DEP+*L6
+137 29 CEP-*L2
+138 153 CEP-*L4
+139 118 CEP-*L11
+140 22 CEP-*L13
+141 7 GHO+*L4
+142 1 GHO+*L12
+143 1 GHO+*L13
+144 4 GHO+*L22
+145 8 GHO+*L31
+146 1 DOP-*L33
+147 20 AGP-*L4
+148 8 AGP-*L27
+149 12 AGP-*L32
+150 1 EGO+*L5
+151 33 AEG+*L5
+152 10 AEG+*L19
+153 12 AEG+*L23
+154 87 DGP-*L11
+155 159 DGP-*L22
+156 33 DGP-*L30
+157 6 AOP+*L33
+158 33 DFP+*L3
+159 68 DFP+*L22
+160 134 DFP+*L28
+161 4 AGO-*L23
+162 10 ACO+*L12
+163 1 ACO+*L35
+164 159 ADP+*L12
+165 33 BDP+*L33
+166 69 AEP-*L2
+167 89 AEP-*L30
+168 75 EGP+*L33
+169 1 BEP-*L15
+170 4 EOP+*L32
+171 1 AEO-*L2
+172 8 GOP+*L2
+173 1 EL*L1
+174 8 EL*L13
+175 4 EL*L18
+176 12 EL*L25
+177 47 EL*L28
+178 14 EL*L30
+179 62 ER*L7
+180 16 ER*L13
+181 76 CCDE_1*L7
+182 34 CCDE_1*L12
+183 131 CCDE_1*L24
+184 7 CCDF_1*L32
+185 5 CDEG_1*L2
+186 51 CDEO_1*L33
+187 5 QABCP_1*L0
+188 20 QABCP_1*L5
+189 4 QABCP_1*L19
+190 1 QACDE_2*L6
+191 4 QACDE_2*L15
+192 17 QACDE_2*L23
+193 38 QACDP_1*L33
+194 159 QACPG_1*L23
+195 1 QADFH_2*L3
+196 1 QADFH_2*L35
+197 91 QAPFH_1*L33
+198 16 QBCDE_1*L2
+199 11 QBCDE_1*L12
+200 2 QBDEF_1*L24
+201 105 QBDEG_1*L33
+202 10 QCDEO_1*L12
+203 1093 QCDFH_3*L1
+204 1744 QCDFH_3*L6
+205 413 QCDFH_3*L10
+206 195 QCDFH_3*L13
+207 1124 QCDFH_3*L14
+208 911 QCDFH_3*L16
+209 63 QCDFH_3*L21
+210 5757 QCDFH_3*L28
+211 128 QCDFH_3*L30
+212 436 QCDFH_3*L35
+213 9 QCPFH_2*L17
+214 12 QCPFH_2*L34
+215 5 QEFHO_1*L30
+216 3 F5_ABCDF*L34
+217 70 F5_ABCGH*L33
+218 820 F5_GABDE*L33
+219 1 F5_DFHAB*L35
+220 8 F5_BPEGA*L26
+221 3 F5_EFACD*L31
+222 28 F5_CDEHB*L33
+```
+
+
+### Row R22
+
+Path: DOP-,AGP-,EGO+,AEG+,DGP+,GHP-.
+
+```n7-h2-R22-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu CABEP CAP -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DCGOP DGO 1
+plu EABCG EBG -1
+plu EACDP EAP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDOP EOP 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GADHP GDH 1
+plu GAEHP GEH 1
+plu GDEFH GDF 1
+plu GDFHP GFP -1
+plu GDHOP GOP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADGO HDO -1
+plu HAEGO HEO -1
+plu HAGOP HOP 1
+plu ODEFH ODF 1
+plu ODEFP OFP -1
+plu PCDFG PDF 1
+plu PCDGH PDH 1
+```
+
+```n7-h2-R22-exclusion
+cluster CDH O DHO GP
+```
+
+### Row R23
+
+Path: DOP-,AGP-,EGO+,AEG+,DGP+,GHP+,DFG-,ADO-.
+
+```n7-h2-R23-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu ABDEO AEO -1
+plu ABDFO AFO -1
+plu ABDGO AGO -1
+plu CABEP CAP -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DACFO DFO 1
+plu DACGO DGO 1
+plu DACHO DHO 1
+plu DAFGH DGH 1
+plu EABCG EBG -1
+plu EACDP EAP 1
+plu EACHO EHO 1
+plu EACOP EOP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu FACEP FAP 1
+plu FADEG FAG 1
+plu FADGO FGO -1
+plu FBCEP FBP 1
+plu FBDEG FBG 1
+plu FCDEG FCG 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GADFP GFP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDP OAP -1
+plu OACHP OHP -1
+plu OAEFP OFP -1
+plu OAEGP OGP -1
+```
+
+Exact upper bound: `-1570612390735822897/19189455500000000`.
+
+```n7-h2-R23-witnesses
+CCDE_1 P
+CDEO_1 P
+QABCD_1 O
+QABCP_1 O
+QCDEO_1 P
+QDEFO_2 GP
+```
+
+```n7-h2-R23-sum
+1 2724 L0*L2*L2
+2 997 L0*L2*L13
+3 159 L0*L2*L20
+4 417 L0*L2*L33
+5 580 L0*L4*L18
+6 847 L0*L7*L13
+7 278 L0*L23*L33
+8 192 L1*L3*L20
+9 153 L1*L5*L6
+10 602 L1*L5*L34
+11 63 L1*L12*L34
+12 232 L1*L17*L23
+13 176 L1*L22*L34
+14 599 L2*L2*L25
+15 1659 L2*L3*L6
+16 2882 L2*L6*L9
+17 580 L2*L6*L19
+18 1954 L2*L6*L20
+19 2599 L2*L6*L23
+20 1542 L2*L7*L13
+21 232 L2*L9*L17
+22 109 L2*L9*L19
+23 34 L2*L15*L20
+24 1037 L2*L20*L23
+25 2477 L2*L20*L25
+26 8770 L3*L3*L26
+27 33 L3*L4*L9
+28 2998 L3*L6*L6
+29 1026 L3*L6*L34
+30 534 L3*L9*L11
+31 739 L3*L9*L25
+32 500 L3*L9*L32
+33 952 L3*L11*L34
+34 872 L3*L12*L34
+35 544 L3*L13*L15
+36 109 L3*L19*L34
+37 1733 L3*L22*L34
+38 596 L3*L24*L33
+39 98 L3*L33*L34
+40 3136 L4*L4*L8
+41 220 L4*L4*L14
+42 2958 L4*L4*L25
+43 1065 L4*L4*L28
+44 4235 L4*L7*L7
+45 347 L4*L8*L23
+46 2203 L4*L8*L32
+47 598 L4*L13*L34
+48 216 L4*L15*L32
+49 232 L4*L17*L24
+50 1632 L4*L25*L32
+51 4952 L5*L6*L6
+52 2365 L5*L6*L9
+53 1533 L5*L6*L24
+54 109 L5*L9*L19
+55 1613 L5*L9*L20
+56 3667 L5*L9*L24
+57 364 L5*L15*L23
+58 1271 L5*L19*L34
+59 968 L5*L20*L23
+60 2232 L6*L6*L12
+61 541 L6*L7*L23
+62 1392 L6*L9*L19
+63 177 L6*L10*L23
+64 983 L6*L11*L17
+65 3643 L6*L12*L23
+66 341 L6*L12*L34
+67 1989 L6*L20*L23
+68 22 L6*L23*L34
+69 1103 L7*L7*L13
+70 1130 L7*L7*L33
+71 31 L7*L9*L33
+72 103 L7*L13*L34
+73 178 L7*L14*L33
+74 956 L8*L9*L10
+75 1554 L8*L23*L30
+76 22 L8*L23*L32
+77 867 L9*L9*L22
+78 257 L9*L10*L15
+79 994 L9*L10*L17
+80 700 L9*L14*L33
+81 232 L9*L17*L30
+82 2896 L9*L18*L23
+83 14 L9*L18*L25
+84 502 L9*L20*L22
+85 293 L9*L22*L34
+86 167 L9*L23*L29
+87 255 L9*L24*L31
+88 20 L9*L25*L34
+89 63 L11*L14*L34
+90 48 L11*L17*L34
+91 491 L11*L24*L34
+92 129 L11*L29*L34
+93 314 L12*L23*L34
+94 63 L13*L15*L34
+95 3643 L13*L20*L23
+96 20 L14*L25*L34
+97 678 L15*L18*L23
+98 994 L15*L24*L32
+99 63 L15*L33*L34
+100 3643 L17*L19*L23
+101 309 L17*L23*L26
+102 86 L17*L23*L34
+103 1790 L17*L33*L34
+104 426 L19*L33*L34
+105 541 L20*L23*L26
+106 2200 L20*L23*L34
+107 598 L20*L33*L34
+108 314 L23*L33*L34
+109 20 L24*L34*L34
+110 63 L26*L33*L34
+111 993 L28*L33*L34
+112 1742 L31*L33*L34
+113 677 L33*L33*L34
+114 4746 ABH+*L3
+115 153 ABH+*L6
+116 4023 ABH+*L11
+117 1416 ABH+*L12
+118 2307 ABH+*L19
+119 890 ABH+*L20
+120 1733 ABH+*L22
+121 338 ABH+*L30
+122 3686 ABH+*L32
+123 153 BCD+*L1
+124 1659 BCD+*L3
+125 789 BCD+*L4
+126 2998 BCD+*L7
+127 1856 BCD+*L9
+128 2413 BCD+*L12
+129 872 BCD+*L15
+130 3065 BCD+*L19
+131 1954 BCD+*L20
+132 425 BCD+*L22
+133 276 BCD+*L33
+134 1030 EFH+*L2
+135 124 EFH+*L8
+136 1221 EFH+*L10
+137 1898 EFH+*L13
+138 381 EFH+*L20
+139 63 EFG+*L1
+140 872 EFG+*L3
+141 82 EFG+*L5
+142 894 EFG+*L7
+143 1105 EFG+*L14
+144 426 EFG+*L19
+145 2178 EFG+*L22
+146 2491 EFG+*L23
+147 395 EFG+*L24
+148 1898 EFG+*L33
+149 171 FGH-*L5
+150 1898 FGH-*L11
+151 3397 FGH-*L12
+152 3397 FGH-*L13
+153 426 FGH-*L19
+154 314 FGH-*L23
+155 395 FGH-*L24
+156 63 FGH-*L26
+157 1041 FGH-*L28
+158 2463 ABO+*L23
+159 317 BCO+*L0
+160 1542 BCO+*L5
+161 2177 BCO+*L10
+162 2177 BCO+*L11
+163 3500 BCO+*L23
+164 2477 BCO+*L25
+165 856 BCO+*L26
+166 539 CHO-*L0
+167 2198 CHO-*L2
+168 845 CHO-*L5
+169 2043 CHO-*L7
+170 426 CHO-*L13
+171 678 CHO-*L23
+172 2741 CHO-*L24
+173 599 BCP+*L3
+174 994 BCP+*L34
+175 2326 CDP+*L23
+176 2787 DEP+*L4
+177 2728 DEP+*L18
+178 1448 DEP+*L20
+179 868 DEP+*L30
+180 22 DEP+*L33
+181 942 CEP-
+182 1087 CEP-*L2
+183 1533 CEP-*L6
+184 2413 CEP-*L12
+185 700 CEP-*L15
+186 232 CEP-*L16
+187 1764 CEP-*L19
+188 264 CEP-*L21
+189 5265 CEP-*L30
+190 993 CEP-*L34
+191 922 DOP-*L0
+192 2614 DOP-*L3
+193 2313 DOP-*L6
+194 199 DOP-*L11
+195 3643 DOP-*L13
+196 1411 DOP-*L18
+197 2326 DOP-*L22
+198 1463 DOP-*L26
+199 1772 DOP-*L28
+200 2963 DOP-*L30
+201 1089 DOP-*L31
+202 1388 AEG+*L7
+203 2413 AEG+*L22
+204 541 AEG+*L24
+205 1711 DGP+*L4
+206 491 DGP+*L7
+207 596 DGP+*L11
+208 1485 DGP+*L14
+209 3643 DGP+*L19
+210 3000 DGP+*L22
+211 3000 DGP+*L23
+212 491 DGP+*L29
+213 596 DGP+*L32
+214 541 DGP+*L35
+215 1130 DFG-*L6
+216 276 DFG-*L30
+217 2002 ADO-*L2
+218 380 ADO-*L4
+219 541 ADO-*L7
+220 199 ADO-*L10
+221 1411 ADO-*L19
+222 541 ADO-*L24
+223 363 ADO-*L34
+224 539 ACO+*L9
+225 3740 COP-*L2
+226 2387 COP-*L5
+227 481 COP-*L9
+228 2326 COP-*L23
+229 1454 COP-*L34
+230 1790 CFG-*L34
+231 596 FGP-*L3
+232 1711 FGP-*L4
+233 994 FGP-*L14
+234 96 FGP-*L34
+235 747 AOP+*L3
+236 1411 AOP+*L18
+237 199 AOP+*L33
+238 176 AOP+*L34
+239 364 ER*L4
+240 500 ER*L32
+241 2674 CCDE_1*L20
+242 811 CDEO_1*L4
+243 2724 QABCD_1*L2
+244 18 QABCD_1*L23
+245 2413 QABCP_1*L13
+246 1052 QABCP_1*L18
+247 79 QABCP_1*L33
+248 2585 QCDEO_1*L6
+249 426 QCDEO_1*L13
+250 1597 QCDEO_1*L23
+251 217 QDEFO_2*L34
+```
+
+
+### Row R24
+
+Path: DOP-,AGP-,EGO+,AEG+,DGP+,GHP+,DFG-,ADO+.
+
+```n7-h2-R24-trace
+plu ABCDO ACO 1
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu CABEP CAP -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DABCO DBO -1
+plu DACOP DAP -1
+plu DAFGH DGH 1
+plu DAGOP DGO 1
+plu DBCOP DBP -1
+plu EABCG EBG -1
+plu EACDP EAP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDOP EOP 1
+plu FACEP FAP 1
+plu FADEG FAG 1
+plu FBCEP FBP 1
+plu FBDEG FBG 1
+plu FCDEG FCG 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GADFP GFP 1
+plu GDEFO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu ODEGP OGP -1
+```
+
+Exact upper bound: `-317037252118379269/3837891100000000`.
+
+```n7-h2-R24-witnesses
+CDEO_1 P
+CDGO_1 P
+QCDEG_1 P
+QCDEO_1 P
+QCPEF_1 G
+```
+
+```n7-h2-R24-sum
+1 2113 L0*L0*L2
+2 366 L0*L0*L5
+3 2814 L0*L2*L2
+4 8281 L0*L2*L5
+5 5194 L0*L2*L6
+6 186 L0*L2*L8
+7 3178 L0*L2*L13
+8 2476 L0*L2*L15
+9 215 L0*L2*L18
+10 217 L0*L2*L20
+11 5338 L0*L2*L23
+12 1184 L0*L2*L25
+13 149 L0*L4*L34
+14 3534 L0*L5*L5
+15 505 L0*L5*L13
+16 6963 L0*L5*L23
+17 340 L0*L6*L12
+18 276 L0*L6*L18
+19 276 L0*L6*L23
+20 1492 L0*L7*L13
+21 239 L0*L13*L19
+22 68 L0*L13*L20
+23 6548 L0*L13*L23
+24 2281 L0*L13*L24
+25 6 L0*L15*L18
+26 151 L0*L18*L24
+27 643 L0*L19*L23
+28 276 L0*L21*L23
+29 294 L1*L9*L13
+30 2814 L2*L3*L6
+31 5059 L2*L5*L6
+32 1722 L2*L5*L15
+33 243 L2*L5*L20
+34 1639 L2*L6*L8
+35 2683 L2*L6*L12
+36 5193 L2*L6*L15
+37 1000 L2*L6*L19
+38 707 L2*L6*L20
+39 3637 L2*L6*L23
+40 609 L2*L6*L24
+41 962 L2*L6*L27
+42 84 L2*L13*L15
+43 688 L2*L14*L34
+44 133 L2*L15*L19
+45 1184 L2*L15*L25
+46 1625 L2*L23*L27
+47 104 L2*L23*L29
+48 821 L2*L33*L34
+49 1625 L3*L22*L34
+50 325 L3*L34*L34
+51 2686 L4*L4*L7
+52 4201 L4*L4*L8
+53 4984 L4*L4*L25
+54 3549 L4*L8*L9
+55 2079 L4*L8*L23
+56 1275 L4*L8*L32
+57 1581 L4*L8*L34
+58 3409 L4*L9*L17
+59 593 L4*L9*L25
+60 204 L4*L15*L17
+61 295 L4*L17*L20
+62 865 L4*L17*L23
+63 4473 L4*L17*L24
+64 393 L4*L18*L34
+65 101 L4*L22*L34
+66 1729 L4*L25*L32
+67 523 L4*L28*L34
+68 10558 L5*L5*L6
+69 782 L5*L5*L20
+70 1466 L5*L6*L19
+71 122 L5*L6*L20
+72 2742 L5*L6*L24
+73 95 L5*L9*L13
+74 1228 L5*L9*L15
+75 487 L5*L9*L21
+76 2540 L5*L9*L23
+77 5920 L5*L9*L24
+78 614 L5*L10*L15
+79 160 L5*L10*L24
+80 693 L5*L20*L23
+81 1700 L5*L24*L34
+82 782 L5*L33*L34
+83 427 L6*L6*L19
+84 427 L6*L7*L23
+85 141 L6*L9*L11
+86 380 L6*L9*L19
+87 3679 L6*L9*L22
+88 737 L6*L9*L31
+89 354 L6*L11*L34
+90 6114 L6*L12*L23
+91 209 L6*L19*L23
+92 123 L6*L19*L34
+93 1525 L7*L13*L23
+94 427 L7*L17*L23
+95 325 L8*L9*L30
+96 500 L8*L13*L23
+97 294 L8*L13*L34
+98 1310 L8*L33*L34
+99 60 L9*L9*L19
+100 5365 L9*L9*L22
+101 275 L9*L11*L19
+102 751 L9*L11*L23
+103 411 L9*L13*L25
+104 295 L9*L17*L19
+105 344 L9*L17*L33
+106 1057 L9*L18*L23
+107 275 L9*L18*L33
+108 875 L9*L22*L34
+109 681 L10*L15*L23
+110 551 L11*L17*L34
+111 512 L11*L20*L34
+112 3265 L11*L23*L34
+113 4048 L12*L23*L34
+114 825 L12*L24*L34
+115 68 L13*L15*L20
+116 239 L13*L18*L24
+117 1456 L13*L20*L23
+118 852 L13*L33*L34
+119 427 L14*L20*L23
+120 1353 L15*L17*L23
+121 185 L17*L18*L34
+122 1217 L17*L19*L23
+123 390 L18*L33*L34
+124 28 L20*L33*L34
+125 101 L23*L33*L34
+126 367 L32*L33*L34
+127 2814 ABC+*L2
+128 3534 ABC+*L5
+129 1369 ABC+*L12
+130 4463 ABC+*L13
+131 591 ABC+*L18
+132 217 ABC+*L20
+133 6963 ABC+*L23
+134 366 ABC+*L27
+135 149 ABC+*L28
+136 1385 ABH+*L0
+137 1934 ABH+*L5
+138 6194 ABH+*L6
+139 84 ABH+*L13
+140 1803 ABH+*L18
+141 2179 ABH+*L19
+142 1184 ABH+*L25
+143 363 ABH+*L27
+144 38 ABH+*L28
+145 1050 BCD+*L0
+146 10687 BCD+*L3
+147 459 BCD+*L10
+148 459 BCD+*L11
+149 2683 BCD+*L12
+150 1 BCD+*L14
+151 1000 BCD+*L19
+152 707 BCD+*L20
+153 3741 BCD+*L23
+154 609 BCD+*L24
+155 7873 BCD+*L31
+156 901 BCD+*L35
+157 454 EFH+*L2
+158 911 EFH+*L5
+159 1514 EFH+*L8
+160 485 EFH+*L13
+161 390 EFH+*L18
+162 363 EFG+
+163 2574 EFG+*L0
+164 967 EFG+*L4
+165 1882 EFG+*L7
+166 367 EFG+*L10
+167 178 EFG+*L20
+168 4048 EFG+*L23
+169 528 EFG+*L25
+170 2574 EFG+*L26
+171 852 FGH-*L5
+172 1882 FGH-*L7
+173 2371 FGH-*L8
+174 2388 FGH-*L10
+175 2021 FGH-*L11
+176 178 FGH-*L20
+177 4048 FGH-*L23
+178 528 FGH-*L25
+179 157 CHO-*L1
+180 243 CHO-*L2
+181 782 CHO-*L5
+182 585 CHO-*L7
+183 295 CHO-*L16
+184 427 CHO-*L24
+185 60 CHO-*L35
+186 1253 DEP+*L34
+187 457 CEP-*L1
+188 3254 CEP-*L2
+189 2572 CEP-*L9
+190 70 CEP-*L10
+191 865 CEP-*L13
+192 4473 CEP-*L16
+193 1057 CEP-*L19
+194 427 CEP-*L21
+195 365 CEP-*L22
+196 457 CEP-*L27
+197 2133 CEP-*L29
+198 4984 CEP-*L30
+199 2584 CEP-*L34
+200 276 DOP-*L1
+201 1057 DOP-*L5
+202 1282 DOP-*L6
+203 1456 DOP-*L13
+204 427 DOP-*L17
+205 5929 DOP-*L22
+206 5564 DOP-*L23
+207 855 DOP-*L28
+208 427 DOP-*L34
+209 427 EGO+*L7
+210 427 EGO+*L24
+211 2589 AEG+*L4
+212 1832 AEG+*L7
+213 294 AEG+*L8
+214 68 AEG+*L20
+215 2281 AEG+*L24
+216 2400 DGP+*L0
+217 2683 DGP+*L2
+218 1217 DGP+*L19
+219 427 DGP+*L21
+220 365 DGP+*L22
+221 825 DGP+*L27
+222 9933 DGP+*L30
+223 7250 DGP+*L31
+224 3225 DGP+*L35
+225 141 DFG-*L9
+226 2236 DFG-*L34
+227 591 ADO+*L5
+228 223 ADO+*L8
+229 239 ADO+*L13
+230 4983 ADO+*L23
+231 427 ADO+*L25
+232 223 ADO+*L34
+233 720 CGP-*L9
+234 365 COP-*L23
+235 6548 ADP+*L13
+236 4340 ADP+*L18
+237 365 EGP+*L23
+238 1819 FGP-*L4
+239 528 FGP-*L34
+240 362 FGO-*L34
+241 32 CDEO_1*L34
+242 471 CDGO_1*L34
+243 91 QCDEG_1*L15
+244 28 QCDEO_1*L34
+245 204 QCPEF_1*L9
+```
+
+
+### Row R25
+
+Path: DOP-,AGP-,EGO+,AEG+,DGP+,GHP+,DFG+.
+
+```n7-h2-R25-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu CABEP CAP -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DCFGP DFP 1
+plu DCFOP DFO 1
+plu DCGOP DGO 1
+plu EABCG EBG -1
+plu EACDP EAP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDOP EOP 1
+plu FACDP FAP 1
+plu FBCDP FBP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu ODEFP OFP -1
+plu ODEGP OGP -1
+```
+
+Exact upper bound: `-336449249801005352799624545447650815614937/5357263337511487732999305555100000000000`.
+
+```n7-h2-R25-witnesses
+CCDE_1 P
+CDGO_1 P
+QBCDE_1 P
+QBCDG_1 P
+QCDEO_1 P
+QCDFH_3 GOP
+QEFHP_1 G
+```
+
+```n7-h2-R25-sum
+1 1 L18*L33
+2 18 L0*L2*L24
+3 50 L0*L2*L27
+4 68 L0*L10*L33
+5 190 L0*L20*L33
+6 1857 L0*L28*L33
+7 7 L1*L1*L4
+8 10 L1*L1*L33
+9 11 L1*L2*L17
+10 1 L1*L3*L12
+11 7 L1*L26*L31
+12 9 L1*L31*L34
+13 86 L2*L2*L6
+14 66 L2*L2*L28
+15 18 L2*L4*L27
+16 27 L2*L6*L8
+17 51 L2*L6*L15
+18 14 L2*L6*L20
+19 5 L2*L6*L28
+20 20 L2*L7*L31
+21 122 L2*L7*L33
+22 1 L2*L9*L12
+23 11 L2*L9*L18
+24 2 L2*L12*L30
+25 1 L2*L13*L27
+26 21 L2*L14*L33
+27 2 L2*L15*L18
+28 51 L2*L15*L28
+29 13 L2*L16*L27
+30 2 L2*L19*L19
+31 2 L2*L19*L24
+32 16 L2*L20*L25
+33 2 L2*L21*L23
+34 18 L2*L25*L27
+35 16 L2*L27*L29
+36 4 L3*L6*L9
+37 1 L3*L12*L15
+38 4 L3*L17*L35
+39 2 L3*L18*L18
+40 113 L3*L33*L34
+41 31 L3*L34*L34
+42 2 L4*L5*L9
+43 4 L4*L15*L17
+44 31 L4*L15*L21
+45 2 L4*L17*L20
+46 8 L4*L20*L23
+47 63 L4*L28*L33
+48 15 L5*L7*L15
+49 10 L5*L12*L33
+50 1 L5*L23*L24
+51 53 L5*L26*L33
+52 6 L6*L6*L20
+53 24 L6*L11*L34
+54 3 L6*L12*L19
+55 1 L6*L12*L24
+56 41 L6*L12*L33
+57 8 L6*L12*L34
+58 3 L6*L20*L23
+59 2 L6*L20*L24
+60 20 L6*L26*L33
+61 701 L6*L33*L34
+62 408 L7*L22*L33
+63 8 L8*L8*L17
+64 1 L8*L10*L23
+65 10 L8*L15*L31
+66 1 L8*L17*L22
+67 6 L8*L20*L34
+68 1 L8*L23*L23
+69 1254 L8*L33*L34
+70 8 L9*L9*L16
+71 2 L9*L13*L34
+72 13 L9*L15*L20
+73 19 L9*L15*L21
+74 8 L9*L17*L18
+75 12 L9*L20*L29
+76 2 L9*L21*L25
+77 2 L10*L10*L15
+78 2 L10*L12*L15
+79 10 L10*L12*L33
+80 10 L10*L15*L15
+81 132 L10*L15*L28
+82 553 L10*L28*L33
+83 665 L10*L33*L34
+84 2 L11*L12*L30
+85 30 L11*L17*L33
+86 7 L11*L20*L23
+87 2 L12*L15*L21
+88 3 L12*L18*L20
+89 2 L12*L24*L30
+90 216 L12*L28*L33
+91 8 L12*L30*L33
+92 2 L12*L31*L31
+93 216 L12*L33*L34
+94 3 L12*L34*L34
+95 44 L13*L14*L33
+96 32 L13*L21*L33
+97 10 L13*L32*L33
+98 18 L14*L15*L23
+99 13 L14*L20*L23
+100 190 L14*L21*L33
+101 433 L14*L22*L33
+102 16 L14*L23*L30
+103 12 L15*L16*L18
+104 3 L15*L18*L19
+105 10 L15*L18*L28
+106 7 L15*L22*L31
+107 13 L15*L23*L29
+108 92 L15*L32*L33
+109 20 L15*L32*L34
+110 643 L16*L28*L33
+111 30 L16*L31*L33
+112 3 L17*L18*L18
+113 32 L17*L18*L33
+114 8 L17*L19*L34
+115 643 L17*L28*L33
+116 6 L18*L18*L28
+117 10 L18*L22*L28
+118 33 L18*L33*L34
+119 23 L19*L25*L33
+120 17 L20*L23*L33
+121 2 L20*L24*L28
+122 190 L20*L26*L33
+123 6 L21*L28*L28
+124 9 L21*L32*L33
+125 1681 L22*L28*L33
+126 1578 L22*L33*L34
+127 2 L23*L33*L35
+128 2 L24*L28*L34
+129 2 L24*L29*L34
+130 1 L24*L32*L32
+131 4 L25*L31*L33
+132 2 L25*L33*L33
+133 10 L26*L27*L33
+134 2 L26*L28*L30
+135 2734 L26*L28*L33
+136 7 L26*L30*L34
+137 69 L26*L32*L33
+138 4386 L28*L28*L33
+139 121 L28*L32*L33
+140 2248 L28*L33*L34
+141 884 L33*L34*L35
+142 9 ABC+*L15
+143 6 ABC+*L34
+144 58 ABH+*L0
+145 87 ABH+*L4
+146 14 ABH+*L6
+147 69 ABH+*L11
+148 20 ABH+*L16
+149 53 ACH+*L33
+150 2 BCD+*L10
+151 1 BCD+*L12
+152 14 BCD+*L20
+153 5 BCD+*L28
+154 1 BDE+*L18
+155 7 EFH+*L1
+156 17 EFH+*L6
+157 1 EFH+*L18
+158 30 BCG+*L33
+159 3 DEG+*L15
+160 30 FGH-*L33
+161 3 CGH+*L15
+162 16 BCO+*L25
+163 6 CDO+*L19
+164 54 CDO+*L23
+165 7 EFO+*L2
+166 9 EFO+*L33
+167 11 CHO-*L7
+168 2 CHO-*L16
+169 2 CHO-*L23
+170 13 CHO-*L24
+171 10 CHO-*L28
+172 2 BCP+*L5
+173 1 BCP+*L13
+174 1 BCP+*L31
+175 2 CDP+*L5
+176 112 CDP+*L18
+177 3 CDP+*L21
+178 103 DEP+*L4
+179 78 DEP+*L11
+180 72 DEP+*L18
+181 142 CEP-*L12
+182 142 CEP-*L13
+183 13 CEP-*L14
+184 25 CEP-*L19
+185 1 CEP-*L23
+186 3 GHO+*L18
+187 1 GHO+*L24
+188 1 GHO+*L30
+189 32 GHO+*L33
+190 87 DOP-*L3
+191 26 DOP-*L5
+192 11 DOP-*L14
+193 87 DOP-*L31
+194 1 DGP+*L9
+195 2 DGP+*L15
+196 3 DGP+*L19
+197 3 GHP+*L19
+198 1 GHP+*L29
+199 1 BEP-*L16
+200 24 EOP+*L10
+201 2 FOP+*L2
+202 2 GOP+*L15
+203 31 EL*L21
+204 1 EL*L23
+205 131 EL*L28
+206 66 ER*L2
+207 20 ER*L4
+208 1 ER*L13
+209 76 ER*L16
+210 64 ER*L17
+211 14 ER*L19
+212 7 ER*L26
+213 31 ER*L29
+214 4 CCDE_1*L1
+215 27 CCDE_1*L3
+216 5 CCDE_1*L8
+217 10 CCDE_1*L20
+218 5 CCDE_1*L29
+219 64 CCDE_1*L33
+220 1 CDGO_1*L30
+221 3 QBCDE_1*L15
+222 2 QBCDE_1*L27
+223 7 QBCDG_1*L34
+224 9 QCDEO_1*L2
+225 6 QCDEO_1*L18
+226 87 QCDEO_1*L23
+227 1990 QCDFH_3*L8
+228 674 QCDFH_3*L10
+229 175 QCDFH_3*L12
+230 2583 QCDFH_3*L22
+231 571 QCDFH_3*L23
+232 4386 QCDFH_3*L28
+233 856 QCDFH_3*L35
+234 2 QEFHP_1*L4
+235 9 F5_PHABC*L22
+236 1 F5_BPEFA*L33
+237 18 F5_FHABP*L15
+238 1 F5_FHABP*L17
+239 1 F5_CPEFH*L18
+```
+
+
+### Row R26
+
+Path: DOP-,AGP+.
+
+```n7-h2-R26-trace
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GACEP GAE -1
+plu GACHP GHP -1
+plu GCEHP GEH 1
+plu GEFHP GFP -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu HAGOP HOP 1
+plu OEFHP OFP -1
+via G ACE AF -1
+```
+
+Exact upper bound: `-752644608193307091824285015125869931/9697259556881037911679529000000000`.
+
+```n7-h2-R26-witnesses
+CACP_1 G
+CHCP_2 GO
+QABCP_1 G
+QBCEH_2 GO
+QCDEF_1 P
+```
+
+```n7-h2-R26-sum
+1 57 L9*L23
+2 10 L0*L0*L23
+3 994 L0*L2*L6
+4 171 L0*L2*L15
+5 88 L0*L2*L27
+6 757 L0*L3*L23
+7 16 L0*L6*L11
+8 51 L0*L8*L31
+9 86 L0*L9*L33
+10 134 L0*L15*L23
+11 14 L0*L23*L23
+12 14 L0*L23*L32
+13 431 L1*L23*L34
+14 68 L2*L2*L8
+15 14 L2*L2*L27
+16 51 L2*L5*L6
+17 626 L2*L5*L34
+18 365 L2*L6*L29
+19 6 L2*L8*L27
+20 161 L2*L9*L32
+21 388 L2*L15*L23
+22 111 L2*L15*L29
+23 32 L2*L24*L32
+24 53 L2*L25*L33
+25 299 L2*L34*L34
+26 510 L3*L6*L9
+27 247 L3*L9*L25
+28 36 L3*L9*L35
+29 338 L3*L23*L29
+30 197 L3*L30*L34
+31 332 L4*L4*L15
+32 1210 L4*L6*L23
+33 133 L4*L9*L11
+34 83 L4*L15*L32
+35 31 L4*L34*L35
+36 365 L5*L6*L6
+37 324 L5*L9*L33
+38 55 L5*L23*L25
+39 60 L5*L29*L34
+40 781 L5*L33*L34
+41 133 L6*L6*L9
+42 2734 L6*L6*L23
+43 133 L6*L9*L9
+44 1934 L6*L9*L23
+45 133 L6*L9*L28
+46 121 L6*L11*L23
+47 623 L6*L15*L30
+48 216 L6*L23*L24
+49 526 L6*L23*L26
+50 44 L6*L27*L31
+51 328 L6*L31*L31
+52 1912 L7*L23*L23
+53 275 L8*L10*L15
+54 237 L8*L23*L23
+55 182 L9*L10*L11
+56 301 L9*L11*L30
+57 1605 L9*L22*L23
+58 216 L9*L23*L24
+59 626 L9*L23*L35
+60 247 L9*L24*L30
+61 20 L9*L30*L35
+62 70 L9*L33*L35
+63 21 L10*L25*L33
+64 97 L11*L33*L34
+65 458 L14*L23*L29
+66 984 L14*L23*L34
+67 98 L14*L33*L34
+68 16 L15*L28*L32
+69 182 L15*L32*L32
+70 234 L15*L32*L34
+71 1303 L22*L33*L34
+72 216 L23*L25*L29
+73 14 L23*L27*L33
+74 531 L23*L27*L34
+75 204 L23*L29*L30
+76 21 L24*L32*L33
+77 16 L26*L29*L33
+78 355 L30*L34*L34
+79 186 L31*L33*L34
+80 20 ABC+*L14
+81 14 ABF+*L2
+82 77 ABH+*L0
+83 977 ABH+*L6
+84 14 ABH+*L10
+85 178 ABH+*L15
+86 176 ABH+*L22
+87 1490 BCD+*L0
+88 365 BCD+*L6
+89 145 BCD+*L8
+90 331 BCD+*L23
+91 1429 BCD+*L26
+92 328 BCD+*L31
+93 220 EFH+*L3
+94 882 EFH+*L5
+95 275 EFH+*L8
+96 86 EFH+*L10
+97 333 EFH+*L14
+98 1412 EFH+*L22
+99 1975 DEP+*L0
+100 751 DEP+*L4
+101 2017 DEP+*L6
+102 1912 DEP+*L22
+103 983 DEP+*L26
+104 717 DEP+*L29
+105 874 DEP+*L30
+106 121 DEP+*L33
+107 1518 DEP+*L35
+108 959 CEP-*L3
+109 1317 CEP-*L4
+110 174 CEP-*L8
+111 95 CEP-*L10
+112 69 CEP-*L22
+113 596 AEP-*L2
+114 1523 BEP-*L2
+115 1490 BEP-*L30
+116 107 BEP-*L33
+117 430 EL*L25
+118 806 EL*L28
+119 19 EL*L31
+120 14 CACP_1*L23
+121 515 CHCP_2*L0
+122 563 CHCP_2*L3
+123 1317 CHCP_2*L5
+124 95 CHCP_2*L11
+125 1426 CHCP_2*L26
+126 973 CHCP_2*L27
+127 72 CHCP_2*L35
+128 13 QABCP_1*L15
+129 10 QABCP_1*L27
+130 27 QBCEH_2*L33
+131 51 QCDEF_1*L2
+132 205 QCDEF_1*L9
+```
+
+
+### Row R27
+
+Path: DOP+,ADP-,CFO-,GHP-.
+
+```n7-h2-R27-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FBCEO FBO 1
+plu GABCH GBH -1
+plu GCEHP GEH 1
+plu GEFHP GFP -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADGP HDG -1
+plu HAEGO HEO -1
+plu HAGOP HOP 1
+plu HBDGO HDO -1
+plu OCDFH ODF 1
+plu OCFHP OFP -1
+via G CDH DF 1
+```
+
+```n7-h2-R27-exclusion
+cluster CDH P HCP GO
+```
+
+### Row R28
+
+Path: DOP+,ADP-,CFO-,GHP+,EGO-,DGH-.
+
+```n7-h2-R28-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu DCFGH DFG 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FBCEO FBO 1
+plu GABCH GBH -1
+plu GACHP GAP 1
+plu GBCHP GBP 1
+plu GCDEH GEH 1
+plu GCDHP GDP -1
+plu GCEHO GCO -1
+plu GCHOP GOP 1
+plu GEFHO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADGO HDO -1
+plu HAEGO HEO -1
+plu OCDFH ODF 1
+via G CEO AF -1
+via G CEO BF -1
+via G CEO CF -1
+```
+
+Exact upper bound: `-21018306091763084116701926719768550376250037112163/302975586881655391716445069244375322100000000000`.
+
+```n7-h2-R28-witnesses
+CCDE_1 P
+CCDF_3 GOP
+CCDH_3 GOP
+CCGH_1 O
+CDHP_1 G
+CEOP_1 G
+CFCG_1 O
+QACDH_3 GOP
+QACEF_2 GO
+QAPDH_1 G
+QAPEF_1 G
+QBCDE_1 P
+QBCDF_3 GOP
+QCDEF_3 GOP
+QCDEG_1 P
+QCDEO_2 GP
+QCDFH_3 GOP
+QDFHP_1 G
+QEFHP_1 G
+```
+
+```n7-h2-R28-sum
+1 3 L10*L21
+2 16 L0*L1*L2
+3 3 L0*L2*L5
+4 265 L0*L2*L13
+5 368 L0*L2*L17
+6 1 L0*L2*L20
+7 186 L0*L2*L29
+8 10 L0*L9*L22
+9 26 L0*L10*L15
+10 2 L0*L15*L19
+11 1 L0*L18*L24
+12 1 L0*L21*L31
+13 2 L1*L2*L23
+14 1 L1*L4*L10
+15 1 L1*L14*L23
+16 1 L2*L2*L22
+17 4 L2*L4*L9
+18 2 L2*L4*L24
+19 2 L2*L5*L17
+20 85 L2*L7*L29
+21 1 L2*L9*L21
+22 33 L2*L9*L34
+23 1 L2*L10*L18
+24 1 L2*L10*L24
+25 2 L2*L11*L16
+26 269 L2*L12*L14
+27 265 L2*L13*L26
+28 368 L2*L14*L16
+29 3 L2*L14*L24
+30 56 L2*L16*L29
+31 368 L2*L17*L26
+32 1 L2*L18*L24
+33 1 L2*L18*L32
+34 55 L2*L20*L34
+35 3 L2*L21*L22
+36 1 L2*L22*L30
+37 3 L2*L23*L29
+38 2 L2*L24*L35
+39 149 L2*L27*L28
+40 2 L3*L19*L24
+41 1 L3*L19*L33
+42 2 L4*L4*L34
+43 124 L4*L6*L9
+44 64 L4*L9*L12
+45 11 L4*L9*L24
+46 11 L4*L9*L27
+47 1 L4*L10*L19
+48 3 L4*L10*L20
+49 3 L4*L11*L34
+50 140 L4*L15*L34
+51 269 L4*L18*L34
+52 270 L4*L19*L34
+53 1 L4*L22*L31
+54 1 L4*L25*L33
+55 3 L4*L28*L33
+56 4 L5*L6*L24
+57 51 L5*L9*L16
+58 3 L5*L9*L22
+59 21 L5*L15*L27
+60 751 L6*L6*L32
+61 155 L6*L7*L33
+62 69 L6*L9*L13
+63 11 L6*L9*L24
+64 63 L6*L10*L12
+65 1 L6*L12*L24
+66 83 L6*L15*L32
+67 8 L6*L22*L34
+68 10 L7*L8*L25
+69 336 L7*L8*L30
+70 49 L7*L12*L15
+71 294 L7*L12*L33
+72 1 L7*L14*L25
+73 3 L7*L18*L33
+74 2 L7*L23*L27
+75 1 L7*L25*L33
+76 23 L8*L9*L12
+77 1 L8*L9*L25
+78 49 L8*L10*L29
+79 7 L8*L23*L34
+80 222 L8*L30*L34
+81 17 L9*L10*L34
+82 46 L9*L12*L14
+83 23 L9*L12*L29
+84 1 L9*L16*L31
+85 1 L9*L17*L23
+86 2 L9*L24*L31
+87 38 L9*L26*L31
+88 1 L9*L30*L30
+89 2 L10*L10*L16
+90 1 L10*L10*L23
+91 1 L10*L10*L25
+92 183 L10*L12*L15
+93 291 L10*L15*L28
+94 1 L10*L20*L24
+95 53 L10*L21*L34
+96 1 L11*L23*L32
+97 1 L12*L15*L15
+98 1 L12*L22*L34
+99 4 L12*L24*L32
+100 673 L12*L28*L33
+101 424 L12*L33*L34
+102 1 L14*L15*L24
+103 1 L14*L20*L33
+104 52 L14*L27*L34
+105 1 L15*L17*L31
+106 1 L15*L22*L34
+107 1 L15*L25*L34
+108 52 L15*L27*L34
+109 4 L16*L23*L32
+110 62 L17*L28*L33
+111 15 L17*L33*L34
+112 3 L18*L28*L32
+113 1 L18*L30*L32
+114 54 L20*L28*L33
+115 3 L20*L31*L33
+116 2 L20*L33*L33
+117 1 L21*L23*L26
+118 16 L22*L28*L33
+119 1 L22*L30*L33
+120 1 L22*L32*L33
+121 1 L22*L32*L34
+122 3 L23*L33*L34
+123 1 L24*L29*L35
+124 1 L25*L27*L28
+125 63 L25*L28*L30
+126 218 L29*L30*L34
+127 1 ABF+*L3
+128 37 ABF+*L6
+129 16 ABH+*L1
+130 3 ABH+*L25
+131 2 AEF+*L0
+132 2 AFH+*L27
+133 33 AFH+*L29
+134 1 AFH+*L30
+135 41 BCD+*L9
+136 836 BCD+*L28
+137 33 BCE+*L28
+138 2 EFH+*L26
+139 249 DEG+*L33
+140 1 FGH-*L0
+141 2 FGH-*L4
+142 50 FGH-*L6
+143 2 ABO+*L15
+144 1 BCO+*L9
+145 53 BCO+*L34
+146 3 CDO+*L2
+147 1 BCP+*L0
+148 1 BCP+*L26
+149 63 BCP+*L28
+150 5 CDP+*L1
+151 6 CDP+*L14
+152 8 CDP+*L22
+153 8 CDP+*L23
+154 4 DEP+*L12
+155 2 DEP+*L30
+156 21 DEP+*L33
+157 6 DEP+*L35
+158 1 FHP+*L2
+159 6 CEP-*L3
+160 12 CEP-*L8
+161 5 CEP-*L26
+162 2 CEP-*L29
+163 1 CEP-*L33
+164 1 GHO+*L24
+165 1 DOP+*L17
+166 1 CFO-*L1
+167 1 CFO-*L4
+168 2 CFO-*L6
+169 1 CFO-*L11
+170 2 CFO-*L14
+171 1 GHP+*L27
+172 4 GHP+*L32
+173 46 DGH-*L9
+174 3 COP-*L2
+175 1 DFP+*L10
+176 4 DFG+*L23
+177 3 BFO-*L10
+178 1 BGP-*L34
+179 1 DGP+*L15
+180 1 DGP+*L20
+181 1 GOP+*L6
+182 1 GOP+*L35
+183 1 FGO-*L35
+184 1 DHO+*L23
+185 1 EHO+*L9
+186 1 DFO+*L25
+187 56 BFG-*L28
+188 163 EL*L0
+189 40 EL*L7
+190 181 EL*L12
+191 160 EL*L26
+192 398 EL*L28
+193 95 EL*L30
+194 97 EL*L31
+195 132 CCDE_1*L6
+196 64 CCDE_1*L13
+197 5 CCDE_1*L16
+198 140 CCDE_1*L18
+199 139 CCDE_1*L19
+200 565 CCDF_3*L0
+201 236 CCDF_3*L12
+202 252 CCDF_3*L14
+203 21 CCDF_3*L17
+204 5 CCDF_3*L21
+205 560 CCDF_3*L26
+206 76 CCDH_3*L6
+207 15 CFCG_1*L14
+208 20 CFCG_1*L22
+209 23 CFCG_1*L23
+210 2 CFCG_1*L32
+211 1 CCGH_1*L23
+212 2 CDHP_1*L31
+213 1 CEOP_1*L34
+214 1 QACDH_3*L11
+215 24 QACEF_2*L34
+216 2 QAPDH_1*L2
+217 9 QAPEF_1*L9
+218 2 QBCDE_1*L4
+219 123 QBCDE_1*L7
+220 57 QBCDF_3*L13
+221 67 QBCDF_3*L14
+222 35 QBCDF_3*L17
+223 1 QBCDF_3*L33
+224 316 QBCDF_3*L34
+225 10 QCDEF_3*L17
+226 3 QCDEF_3*L18
+227 5 QCDEG_1*L23
+228 3 QCDEO_2*L3
+229 2 QCDEO_2*L12
+230 2 QCDEO_2*L13
+231 906 QCDFH_3*L6
+232 366 QCDFH_3*L8
+233 603 QCDFH_3*L12
+234 196 QCDFH_3*L18
+235 196 QCDFH_3*L19
+236 55 QCDFH_3*L20
+237 1 QDFHP_1*L18
+238 1 QEFHP_1*L16
+239 14 F5_CDEAB*L15
+240 20 F5_BCDHA*L9
+241 219 F5_EHABC*L9
+242 103 F5_CDEHA*L2
+```
+
+
+### Row R29
+
+Path: DOP+,ADP-,CFO-,GHP+,EGO-,DGH+,DFG-,HOP-.
+
+```n7-h2-R29-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFG DAG -1
+plu DACFP DFP 1
+plu DACGP DGP 1
+plu DACHP DHP 1
+plu DBCFG DBG -1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FADEG FAG 1
+plu FADGP FGP -1
+plu FBCEO FBO 1
+plu FBDEG FBG 1
+plu FCDEG FCG 1
+plu GABCH GBH -1
+plu GACDP GAP 1
+plu GBCDP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACHP OAP 1
+plu OBCHP OBP 1
+```
+
+Exact upper bound: `-442368272071983177415691956035631334408231/5266549590613678632375891958900000000000`.
+
+```n7-h2-R29-witnesses
+CACD_1 P
+CCDE_1 P
+QABCD_1 P
+QCDEF_3 GOP
+QCPEF_2 GO
+QEFHP_2 GO
+```
+
+```n7-h2-R29-sum
+1 7 L0*L0*L27
+2 68 L0*L2*L6
+3 1004 L0*L2*L27
+4 21 L0*L6*L24
+5 116 L1*L23*L35
+6 314 L2*L6*L28
+7 68 L2*L7*L34
+8 114 L2*L9*L22
+9 183 L2*L23*L27
+10 736 L2*L24*L27
+11 3202 L2*L24*L28
+12 3 L2*L27*L27
+13 391 L3*L6*L9
+14 888 L3*L9*L24
+15 36 L3*L24*L34
+16 78 L4*L6*L15
+17 80 L4*L9*L34
+18 740 L5*L6*L6
+19 107 L5*L6*L9
+20 240 L5*L6*L23
+21 888 L5*L6*L24
+22 240 L5*L8*L9
+23 111 L5*L9*L23
+24 91 L5*L9*L27
+25 225 L5*L22*L34
+26 175 L5*L23*L26
+27 116 L5*L26*L26
+28 116 L5*L27*L34
+29 100 L6*L6*L15
+30 100 L6*L7*L9
+31 26 L6*L9*L11
+32 787 L6*L9*L26
+33 645 L6*L9*L27
+34 15 L6*L10*L23
+35 350 L6*L10*L34
+36 142 L6*L15*L27
+37 9 L6*L22*L24
+38 15 L6*L22*L32
+39 398 L6*L23*L35
+40 100 L7*L7*L34
+41 114 L7*L26*L34
+42 14 L8*L9*L10
+43 21 L8*L9*L24
+44 14 L8*L9*L27
+45 72 L9*L9*L30
+46 14 L9*L10*L29
+47 72 L9*L11*L26
+48 9 L9*L22*L24
+49 116 L9*L23*L27
+50 604 L9*L24*L30
+51 125 L9*L24*L32
+52 112 L9*L25*L28
+53 91 L9*L25*L29
+54 21 L9*L25*L35
+55 14 L9*L27*L27
+56 26 L9*L27*L30
+57 15 L9*L27*L31
+58 72 L9*L32*L35
+59 663 L11*L30*L34
+60 7 L15*L15*L27
+61 116 L15*L23*L34
+62 116 L15*L32*L34
+63 811 L22*L30*L34
+64 62 L23*L25*L30
+65 320 L23*L29*L34
+66 21 L24*L26*L29
+67 21 L24*L28*L34
+68 7 L26*L26*L26
+69 27 L26*L28*L34
+70 14 L27*L34*L35
+71 2592 L28*L33*L34
+72 116 ABC+*L0
+73 96 ABC+*L2
+74 127 ABH+*L8
+75 773 ABH+*L14
+76 223 ABH+*L20
+77 223 ABH+*L21
+78 133 ABH+*L23
+79 773 ABH+*L24
+80 892 ABH+*L27
+81 458 BCD+*L8
+82 225 BCD+*L11
+83 1653 BCD+*L24
+84 68 BCD+*L27
+85 314 BCD+*L28
+86 225 BCD+*L31
+87 225 BCD+*L32
+88 34 EFH+*L31
+89 36 BCP+*L1
+90 129 BCP+*L4
+91 62 BCP+*L23
+92 4855 BCP+*L28
+93 4166 CDP+*L0
+94 129 CDP+*L4
+95 350 CDP+*L6
+96 752 CDP+*L10
+97 881 CDP+*L11
+98 9 CDP+*L24
+99 2738 CDP+*L26
+100 129 CDP+*L32
+101 1496 CDP+*L35
+102 1156 CEP-*L0
+103 3359 CEP-*L6
+104 9 CEP-*L24
+105 845 CEP-*L26
+106 729 CEP-*L29
+107 1471 CEP-*L34
+108 225 ADP-*L3
+109 777 ADP-*L6
+110 116 ADP-*L26
+111 427 ADP-*L28
+112 175 ADP-*L31
+113 3 CGP-*L9
+114 64 DHP+*L30
+115 343 CACD_1*L24
+116 692 CCDE_1*L6
+117 188 QABCD_1*L9
+118 96 QABCD_1*L30
+119 13 QCDEF_3*L6
+120 306 QCPEF_2*L34
+121 2942 QEFHP_2*L28
+122 697 QEFHP_2*L30
+123 116 QEFHP_2*L34
+124 113 F5_FABCP*L34
+125 3 F5_EFACP*L34
+126 122 F5_GFACP*L9
+```
+
+
+### Row R30
+
+Path: DOP+,ADP-,CFO-,GHP+,EGO-,DGH+,DFG-,HOP+.
+
+```n7-h2-R30-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFG DAG -1
+plu DACFP DFP 1
+plu DACGP DGP 1
+plu DACHP DHP 1
+plu DBCFG DBG -1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FADEG FAG 1
+plu FADGP FGP -1
+plu FBCEO FBO 1
+plu FBDEG FBG 1
+plu FCDEG FCG 1
+plu GABCH GBH -1
+plu GACDP GAP 1
+plu GBCDP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADOP HDO -1
+plu HAEOP HEO -1
+plu OCDFH ODF 1
+plu OCEGH OCG 1
+plu OCFGH OFG -1
+plu OCFHP OFP -1
+plu PCFGO PGO 1
+via G DEF DO -1
+via G CEO EH 1
+```
+
+Exact upper bound: `-44814659561278387083385865461437388193/766083504993601995022682791000000000`.
+
+```n7-h2-R30-witnesses
+CCDE_1 P
+CCDF_2 OP
+CCDG_1 P
+CCDH_2 OP
+CEOP_1 G
+QABCD_1 P
+QCDEG_1 P
+QCDEO_2 GP
+QCDGO_1 P
+QCPGF_1 O
+QDEFO_1 G
+QDEHP_1 G
+QDEOP_1 G
+```
+
+```n7-h2-R30-sum
+1 34 L4*L9
+2 27 L9*L13
+3 131 L0*L0*L15
+4 5 L0*L0*L27
+5 71 L0*L2*L20
+6 999 L0*L2*L27
+7 40 L0*L6*L15
+8 40 L0*L7*L9
+9 131 L0*L9*L15
+10 112 L0*L9*L19
+11 121 L0*L9*L35
+12 677 L0*L10*L15
+13 640 L0*L10*L20
+14 125 L0*L10*L24
+15 40 L1*L1*L34
+16 30 L1*L9*L23
+17 684 L1*L10*L15
+18 1 L1*L12*L32
+19 6 L1*L13*L21
+20 10 L1*L15*L34
+21 19 L1*L18*L32
+22 81 L1*L34*L35
+23 19 L2*L2*L14
+24 38 L2*L2*L16
+25 27 L2*L4*L9
+26 179 L2*L6*L18
+27 148 L2*L7*L15
+28 163 L2*L7*L24
+29 6 L2*L7*L30
+30 187 L2*L9*L25
+31 184 L2*L10*L20
+32 27 L2*L10*L28
+33 43 L2*L12*L24
+34 91 L2*L15*L24
+35 164 L2*L15*L27
+36 836 L2*L15*L28
+37 18 L2*L16*L30
+38 9 L2*L20*L20
+39 219 L2*L20*L32
+40 219 L2*L21*L32
+41 157 L2*L23*L29
+42 493 L2*L24*L27
+43 96 L2*L24*L29
+44 23 L3*L10*L15
+45 13 L3*L34*L35
+46 277 L4*L7*L9
+47 314 L4*L8*L32
+48 6 L4*L9*L12
+49 245 L4*L9*L19
+50 91 L4*L9*L24
+51 160 L4*L15*L18
+52 195 L4*L15*L20
+53 29 L4*L22*L34
+54 218 L4*L34*L34
+55 229 L5*L6*L6
+56 214 L5*L6*L10
+57 27 L5*L10*L15
+58 49 L5*L10*L24
+59 1 L5*L13*L24
+60 122 L5*L23*L26
+61 102 L6*L9*L19
+62 111 L6*L10*L27
+63 109 L6*L12*L32
+64 1 L6*L13*L16
+65 137 L6*L13*L21
+66 26 L6*L23*L34
+67 540 L6*L24*L32
+68 67 L6*L26*L32
+69 121 L6*L31*L32
+70 45 L6*L32*L35
+71 221 L7*L9*L30
+72 71 L7*L21*L30
+73 348 L7*L30*L34
+74 38 L8*L13*L32
+75 333 L8*L31*L32
+76 33 L9*L9*L23
+77 93 L9*L11*L19
+78 49 L9*L11*L23
+79 119 L9*L13*L21
+80 6 L9*L13*L22
+81 3 L9*L17*L26
+82 25 L9*L17*L33
+83 12 L9*L18*L23
+84 9 L9*L19*L20
+85 341 L9*L19*L29
+86 49 L9*L19*L30
+87 78 L9*L19*L34
+88 97 L9*L25*L33
+89 45 L9*L28*L33
+90 19 L9*L30*L33
+91 18 L10*L13*L29
+92 30 L10*L15*L17
+93 12 L10*L18*L24
+94 328 L10*L20*L27
+95 125 L10*L24*L31
+96 27 L11*L33*L34
+97 38 L12*L15*L23
+98 1 L12*L27*L32
+99 11 L13*L15*L21
+100 1 L13*L17*L24
+101 38 L13*L18*L34
+102 85 L13*L20*L32
+103 338 L14*L20*L32
+104 112 L15*L15*L18
+105 5 L15*L15*L27
+106 3 L15*L17*L27
+107 191 L15*L19*L34
+108 431 L15*L20*L30
+109 93 L15*L21*L32
+110 51 L15*L23*L32
+111 479 L15*L28*L30
+112 40 L15*L28*L34
+113 126 L15*L32*L34
+114 1 L16*L16*L23
+115 147 L16*L21*L32
+116 43 L16*L22*L32
+117 3 L16*L34*L34
+118 3 L16*L34*L35
+119 85 L17*L19*L32
+120 147 L17*L21*L30
+121 21 L17*L30*L32
+122 67 L18*L19*L34
+123 198 L18*L24*L32
+124 59 L20*L21*L32
+125 199 L20*L23*L32
+126 124 L20*L28*L32
+127 68 L21*L21*L30
+128 94 L21*L23*L30
+129 53 L21*L28*L30
+130 66 L21*L30*L33
+131 71 L21*L30*L35
+132 126 L22*L28*L32
+133 90 L22*L32*L35
+134 532 L23*L26*L26
+135 116 L23*L26*L29
+136 9 L23*L27*L30
+137 91 L24*L32*L35
+138 6 L24*L33*L34
+139 5 L26*L26*L26
+140 40 L26*L28*L34
+141 19 L27*L30*L32
+142 19 L30*L30*L35
+143 27 L32*L33*L34
+144 19 ABC+*L4
+145 173 ABC+*L9
+146 570 ABH+*L0
+147 835 ABH+*L11
+148 19 ABH+*L18
+149 50 ABH+*L22
+150 1093 ABH+*L24
+151 290 ABH+*L27
+152 173 ABH+*L28
+153 767 AFH+*L2
+154 920 AFH+*L20
+155 284 BCD+*L0
+156 116 BCD+*L32
+157 613 BCD+*L34
+158 323 BCH+*L9
+159 45 EFH+*L8
+160 171 EFH+*L14
+161 294 EFH+*L16
+162 294 EFH+*L17
+163 747 EFH+*L19
+164 230 EFH+*L20
+165 688 EFH+*L22
+166 18 DEG+*L18
+167 372 DEG+*L23
+168 5 EFG+*L18
+169 240 CEG+*L6
+170 45 CEG+*L12
+171 29 CEG+*L19
+172 276 CEG+*L21
+173 225 BCO+*L10
+174 8 FHO+*L1
+175 59 FHO+*L21
+176 230 AHO-*L23
+177 8 CHO-*L32
+178 174 CEO+*L9
+179 49 ABP+*L32
+180 49 BCP+*L3
+181 11 BCP+*L5
+182 607 BCP+*L7
+183 174 BCP+*L10
+184 93 BCP+*L19
+185 509 BCP+*L26
+186 60 CDP+*L7
+187 5 CDP+*L13
+188 1 CDP+*L17
+189 320 CDP+*L19
+190 509 CDP+*L26
+191 51 DEP+*L1
+192 8 DEP+*L9
+193 21 DEP+*L30
+194 95 AHP-*L34
+195 225 CEP-*L18
+196 161 CEP-*L20
+197 141 DOP+*L5
+198 610 DOP+*L22
+199 41 DOP+*L31
+200 131 ADP-*L5
+201 395 ADP-*L11
+202 445 ADP-*L14
+203 584 ADP-*L18
+204 532 ADP-*L26
+205 1170 CFO-*L0
+206 67 CFO-*L6
+207 5 CFO-*L12
+208 646 CFO-*L17
+209 598 CFO-*L18
+210 598 CFO-*L19
+211 84 CFO-*L22
+212 1086 CFO-*L26
+213 107 CFO-*L30
+214 106 CFO-*L34
+215 25 EGO-*L8
+216 59 EGO-*L21
+217 373 EGO-*L23
+218 46 DGH+*L15
+219 1 DGH+*L32
+220 21 DFG-*L2
+221 45 DFG-*L14
+222 505 DFG-*L20
+223 243 DFG-*L22
+224 474 HOP+
+225 11 HOP+*L2
+226 160 HOP+*L5
+227 739 HOP+*L11
+228 38 HOP+*L13
+229 310 HOP+*L14
+230 67 HOP+*L19
+231 59 HOP+*L20
+232 8 HOP+*L27
+233 19 ACO+*L10
+234 39 CGP-*L5
+235 20 CGP-*L19
+236 6 DGP+*L1
+237 25 DGP+*L9
+238 31 DGP+*L14
+239 1 DGP+*L17
+240 18 DGP+*L18
+241 6 AFO-*L17
+242 355 AFO-*L23
+243 6 FGP-*L26
+244 238 DHO+*L9
+245 297 DHO+*L23
+246 59 DHO+*L24
+247 199 FGO-*L23
+248 28 FOP+*L0
+249 43 GOP+*L2
+250 139 DGO+*L30
+251 1 DGO+*L33
+252 11 EGH-*L21
+253 354 EL*L7
+254 114 EL*L15
+255 30 EL*L17
+256 198 EL*L21
+257 30 EL*L25
+258 105 EL*L27
+259 1214 EL*L28
+260 314 ER*L32
+261 173 CCDE_1*L1
+262 30 CCDF_2*L5
+263 1 CCDF_2*L19
+264 314 CCDF_2*L20
+265 189 CCDF_2*L23
+266 540 CCDF_2*L24
+267 29 CCDG_1*L15
+268 310 CCDG_1*L21
+269 105 CCDH_2*L0
+270 24 CCDH_2*L29
+271 438 CEOP_1*L10
+272 21 CEOP_1*L15
+273 139 QABCD_1*L0
+274 49 QABCD_1*L2
+275 11 QCDEG_1*L5
+276 21 QCDEG_1*L11
+277 39 QCDEG_1*L23
+278 94 QCDEO_2*L9
+279 301 QCDEO_2*L10
+280 8 QCDEO_2*L12
+281 95 QCDEO_2*L16
+282 152 QCDEO_2*L24
+283 76 QCDEO_2*L27
+284 88 RCDEO_GP_CE*L3
+285 121 RCDEO_GP_CE*L6
+286 45 RCDEO_GP_CE*L12
+287 9 RCDEO_GP_CE*L20
+288 25 RCDEO_GP_CE*L29
+289 50 RCDEO_GP_CE*L31
+290 258 RCDEO_GP_DO*L0
+291 80 RCDEO_GP_DO*L4
+292 59 RCDEO_GP_DO*L6
+293 152 RCDEO_GP_DO*L9
+294 90 RCDEO_GP_DO*L11
+295 59 RCDEO_GP_DO*L20
+296 610 RCDEO_GP_DO*L22
+297 222 RCDEO_GP_DO*L26
+298 11 RCDEO_GP_DO*L30
+299 42 QCDGO_1*L0
+300 59 QCDGO_1*L6
+301 222 QCDGO_1*L34
+302 25 QCPGF_1*L34
+303 83 QDEFO_1*L23
+304 134 QDEHP_1*L15
+305 67 QDEOP_1*L18
+306 13 F5_PEFAB*L9
+307 45 F5_OGEFH*L15
+```
+
+
+### Row R31
+
+Path: DOP+,ADP-,CFO-,GHP+,EGO-,DGH+,DFG+.
+
+```n7-h2-R31-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACGH DAG -1
+plu DACGP DGP 1
+plu DACHP DHP 1
+plu DBCGH DBG -1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FBCEO FBO 1
+plu GABCH GBH -1
+plu GACDP GAP 1
+plu GBCDP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+```
+
+Exact upper bound: `-49971408035180679954484312396757884693/766083504993601995022682791000000000`.
+
+```n7-h2-R31-witnesses
+CCDE_1 P
+CCDG_1 P
+CCDO_1 P
+CDFH_1 G
+QBCDG_1 P
+QCDEO_1 P
+QDFHP_1 G
+```
+
+```n7-h2-R31-sum
+1 249 L0*L0*L0
+2 386 L0*L0*L15
+3 20 L0*L2*L3
+4 153 L0*L2*L15
+5 481 L0*L2*L23
+6 943 L0*L2*L24
+7 2815 L0*L2*L27
+8 14 L0*L9*L12
+9 39 L0*L20*L33
+10 300 L1*L5*L34
+11 25 L1*L9*L14
+12 19 L1*L15*L23
+13 249 L1*L26*L26
+14 75 L2*L2*L9
+15 20 L2*L2*L21
+16 241 L2*L2*L24
+17 894 L2*L8*L24
+18 271 L2*L9*L19
+19 22 L2*L9*L30
+20 209 L2*L9*L35
+21 34 L2*L13*L21
+22 5 L2*L13*L24
+23 20 L2*L15*L18
+24 1902 L2*L15*L27
+25 1629 L2*L15*L28
+26 141 L2*L16*L24
+27 39 L2*L19*L24
+28 218 L2*L21*L33
+29 449 L2*L22*L24
+30 1009 L2*L24*L27
+31 1584 L2*L24*L28
+32 1 L2*L24*L33
+33 603 L3*L9*L34
+34 153 L3*L15*L34
+35 943 L3*L24*L34
+36 235 L3*L33*L34
+37 287 L5*L6*L6
+38 5254 L5*L6*L24
+39 2325 L5*L9*L24
+40 407 L5*L9*L34
+41 7 L5*L23*L26
+42 2334 L5*L24*L34
+43 2299 L5*L30*L34
+44 384 L6*L9*L12
+45 333 L6*L9*L19
+46 114 L6*L9*L22
+47 2443 L6*L9*L31
+48 105 L6*L10*L17
+49 39 L6*L12*L12
+50 167 L6*L12*L24
+51 894 L6*L15*L32
+52 41 L6*L18*L23
+53 152 L6*L18*L24
+54 11 L6*L21*L23
+55 10 L6*L21*L32
+56 516 L6*L23*L23
+57 513 L6*L23*L24
+58 179 L6*L31*L34
+59 642 L7*L21*L33
+60 276 L7*L30*L33
+61 16 L8*L9*L12
+62 479 L9*L9*L19
+63 74 L9*L10*L35
+64 129 L9*L11*L17
+65 93 L9*L11*L32
+66 1999 L9*L11*L34
+67 366 L9*L12*L12
+68 366 L9*L12*L19
+69 5 L9*L12*L22
+70 26 L9*L12*L24
+71 35 L9*L12*L33
+72 1039 L9*L13*L26
+73 16 L9*L15*L19
+74 25 L9*L15*L34
+75 606 L9*L16*L32
+76 1121 L9*L17*L33
+77 5 L9*L19*L22
+78 38 L9*L19*L30
+79 163 L9*L21*L23
+80 4 L9*L22*L32
+81 573 L9*L22*L34
+82 63 L9*L23*L23
+83 513 L9*L23*L24
+84 74 L9*L26*L33
+85 125 L10*L10*L15
+86 34 L10*L12*L15
+87 328 L10*L12*L17
+88 332 L10*L13*L21
+89 92 L10*L15*L15
+90 895 L10*L15*L17
+91 3 L10*L21*L23
+92 490 L11*L33*L34
+93 1 L12*L15*L32
+94 4 L12*L24*L33
+95 126 L12*L24*L34
+96 34 L13*L21*L30
+97 578 L13*L33*L34
+98 112 L14*L15*L15
+99 3 L15*L23*L23
+100 112 L15*L26*L26
+101 41 L15*L31*L32
+102 25 L15*L34*L35
+103 801 L16*L33*L34
+104 293 L17*L17*L32
+105 324 L17*L21*L33
+106 97 L18*L23*L35
+107 3 L18*L24*L33
+108 98 L18*L33*L34
+109 10 L21*L28*L30
+110 1603 L21*L28*L33
+111 32 L21*L30*L33
+112 968 L21*L33*L34
+113 343 L22*L34*L34
+114 343 L23*L26*L26
+115 7 L23*L26*L33
+116 2438 L23*L26*L35
+117 408 L25*L33*L34
+118 300 L26*L30*L34
+119 8 L27*L33*L33
+120 1657 L28*L28*L33
+121 1942 L28*L30*L33
+122 519 L28*L33*L33
+123 2258 L28*L33*L34
+124 2024 L30*L33*L34
+125 8 L33*L33*L35
+126 92 L33*L34*L34
+127 1727 ABH+
+128 41 ABH+*L3
+129 36 ABH+*L10
+130 15 ABH+*L19
+131 4527 ABH+*L24
+132 2815 ABH+*L27
+133 2781 ABH+*L28
+134 1059 ABH+*L34
+135 2702 BCD+*L0
+136 457 BCD+*L5
+137 2622 BCD+*L9
+138 1 BCD+*L12
+139 3945 BCD+*L24
+140 79 BCD+*L27
+141 130 EFH+*L10
+142 1423 EFH+*L12
+143 1481 EFH+*L19
+144 332 ABG+*L9
+145 388 DEG+*L33
+146 266 FGH-*L6
+147 527 FGH-*L12
+148 1099 FGH-*L18
+149 4 FGH-*L23
+150 646 FGH-*L30
+151 1385 AGH+*L9
+152 169 CGH+*L9
+153 21 ABO+*L2
+154 1564 EFO+*L9
+155 11 FHO+*L6
+156 735 FHO+*L13
+157 3 FHO+*L30
+158 32 FHO+*L32
+159 253 AHO-*L23
+160 241 BCP+*L2
+161 448 BCP+*L4
+162 1443 BCP+*L7
+163 5 BCP+*L13
+164 141 BCP+*L16
+165 39 BCP+*L19
+166 449 BCP+*L22
+167 2575 BCP+*L26
+168 4086 BCP+*L28
+169 1 BCP+*L33
+170 5636 CDP+*L0
+171 3979 CDP+*L1
+172 519 CDP+*L2
+173 7038 CDP+*L8
+174 487 CDP+*L11
+175 4 CDP+*L12
+176 293 CDP+*L16
+177 56 CDP+*L18
+178 485 CDP+*L20
+179 513 CDP+*L22
+180 556 CDP+*L25
+181 3938 CDP+*L26
+182 1626 CDP+*L28
+183 3194 CDP+*L30
+184 2195 DEP+*L30
+185 487 DEP+*L33
+186 717 CEP-*L1
+187 206 CEP-*L3
+188 4377 CEP-*L6
+189 5 CEP-*L12
+190 4988 CEP-*L14
+191 152 CEP-*L16
+192 92 CEP-*L18
+193 485 CEP-*L20
+194 63 CEP-*L22
+195 835 CEP-*L25
+196 1292 CEP-*L27
+197 915 CEP-*L29
+198 2262 CEP-*L30
+199 483 CEP-*L33
+200 1088 GHO+
+201 11 GHO+*L7
+202 16 GHO+*L9
+203 417 GHO+*L11
+204 366 GHO+*L13
+205 253 GHO+*L23
+206 95 GHO+*L33
+207 322 DOP+*L8
+208 253 DOP+*L12
+209 322 DOP+*L25
+210 324 ADP-*L0
+211 481 ADP-*L3
+212 2512 ADP-*L6
+213 7 ADP-*L11
+214 350 ADP-*L18
+215 280 ADP-*L24
+216 3643 ADP-*L26
+217 538 ADP-*L27
+218 3013 ADP-*L28
+219 186 CFO-*L2
+220 423 CFO-*L6
+221 3012 CFO-*L17
+222 39 CFO-*L26
+223 32 CFO-*L33
+224 930 CFO-*L34
+225 151 EGO-*L5
+226 27 EGO-*L6
+227 1579 EGO-*L10
+228 366 EGO-*L12
+229 1779 EGO-*L28
+230 1763 EGO-*L29
+231 647 DGH+*L3
+232 117 DGH+*L11
+233 893 DGH+*L12
+234 2 DGH+*L19
+235 249 DGH+*L22
+236 959 DGH+*L25
+237 531 DGH+*L28
+238 1129 DGH+*L33
+239 854 DFG+*L12
+240 1040 DFG+*L14
+241 293 DFG+*L17
+242 32 DFG+*L18
+243 2688 DFG+*L21
+244 1657 DFG+*L28
+245 646 DFG+*L30
+246 601 DFG+*L34
+247 280 ACP+*L24
+248 408 CFP-*L34
+249 474 COP-*L6
+250 3 COP-*L11
+251 141 DGP+*L9
+252 4 DGP+*L10
+253 253 DGP+*L19
+254 1126 DGP+*L28
+255 833 DGP+*L34
+256 322 EOP+*L24
+257 36 AFO-*L2
+258 393 EL*L15
+259 801 EL*L17
+260 1922 EL*L28
+261 284 EL*L33
+262 813 ER*L9
+263 637 ER*L15
+264 274 ER*L16
+265 233 ER*L18
+266 10 ER*L20
+267 269 ER*L23
+268 665 ER*L25
+269 1480 ER*L26
+270 53 ER*L30
+271 409 ER*L33
+272 257 CCDE_1*L6
+273 500 CCDE_1*L26
+274 56 CCDG_1*L19
+275 2688 CCDG_1*L21
+276 32 CCDO_1*L11
+277 90 CCDO_1*L12
+278 902 CDFH_1*L17
+279 1572 CDFH_1*L30
+280 519 CDFH_1*L33
+281 293 QBCDG_1*L17
+282 2059 QCDEO_1*L9
+283 833 QDFHP_1*L17
+284 3 QDFHP_1*L23
+```
+
+
+### Row R32
+
+Path: DOP+,ADP-,CFO-,GHP+,EGO+,FGP-,BGO-,HOP-.
+
+```n7-h2-R32-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FAEGP FAG 1
+plu FBCEO FBO 1
+plu FBEGP FBG 1
+plu FCEGP FCG 1
+plu GABCH GBH -1
+plu GABHO GAO 1
+plu GACFP GAP 1
+plu GBCFP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACHP OAP 1
+plu OBCHP OBP 1
+plu PACDG PDG 1
+```
+
+Exact upper bound: `-33443452532859590541954720704780017/417726852466431268557740125000000`.
+
+```n7-h2-R32-witnesses
+CCEF_2 GO
+QAPEF_2 GO
+QCDEF_3 GOP
+QCPEF_2 GO
+QEFHP_2 GO
+```
+
+```n7-h2-R32-sum
+1 28 L0*L0*L9
+2 56 L0*L0*L27
+3 3 L0*L0*L33
+4 524 L0*L2*L24
+5 628 L0*L2*L27
+6 153 L0*L3*L9
+7 83 L0*L9*L23
+8 89 L0*L9*L29
+9 48 L0*L10*L15
+10 390 L0*L11*L34
+11 28 L0*L34*L34
+12 3 L1*L1*L5
+13 28 L1*L1*L35
+14 30 L1*L4*L34
+15 3 L1*L5*L9
+16 13 L1*L5*L23
+17 28 L1*L26*L26
+18 10 L2*L3*L9
+19 439 L2*L5*L6
+20 811 L2*L8*L24
+21 10 L2*L8*L32
+22 56 L2*L9*L14
+23 147 L2*L14*L15
+24 147 L2*L15*L35
+25 2850 L2*L24*L28
+26 147 L2*L27*L27
+27 51 L2*L28*L30
+28 5 L3*L9*L10
+29 51 L3*L9*L31
+30 524 L3*L24*L34
+31 8 L4*L5*L34
+32 174 L4*L6*L9
+33 439 L5*L5*L6
+34 8 L5*L6*L23
+35 1179 L5*L6*L24
+36 54 L5*L8*L9
+37 16 L5*L9*L32
+38 54 L5*L23*L26
+39 425 L5*L24*L34
+40 47 L5*L27*L34
+41 43 L6*L6*L15
+42 43 L6*L6*L34
+43 43 L6*L7*L9
+44 26 L6*L7*L32
+45 111 L6*L9*L11
+46 61 L6*L9*L15
+47 28 L6*L9*L35
+48 5 L6*L10*L10
+49 800 L6*L10*L34
+50 73 L6*L11*L24
+51 28 L6*L15*L15
+52 38 L6*L23*L29
+53 463 L6*L23*L31
+54 5 L6*L23*L32
+55 99 L6*L29*L32
+56 26 L7*L9*L32
+57 51 L7*L30*L30
+58 5 L7*L30*L33
+59 252 L7*L33*L34
+60 28 L7*L34*L34
+61 61 L8*L9*L14
+62 51 L8*L15*L32
+63 4 L9*L10*L33
+64 310 L9*L11*L24
+65 35 L9*L23*L27
+66 60 L9*L23*L31
+67 61 L9*L26*L29
+68 56 L9*L29*L34
+69 56 L9*L34*L35
+70 16 L10*L10*L15
+71 5 L10*L11*L24
+72 310 L10*L15*L24
+73 3 L10*L15*L34
+74 3 L10*L33*L34
+75 5 L11*L29*L32
+76 468 L11*L30*L34
+77 7 L14*L33*L33
+78 1 L15*L23*L32
+79 79 L22*L28*L34
+80 621 L22*L30*L34
+81 445 L23*L26*L35
+82 91 L23*L29*L34
+83 54 L23*L33*L34
+84 68 L23*L35*L35
+85 5 L25*L30*L32
+86 5 L25*L32*L33
+87 1630 L28*L33*L34
+88 393 ABH+
+89 775 ABH+*L0
+90 297 ABH+*L7
+91 1111 ABH+*L24
+92 216 ABH+*L28
+93 54 AFH+*L9
+94 3 AFH+*L26
+95 383 BCD+*L5
+96 404 BCD+*L23
+97 1335 BCD+*L24
+98 512 BCD+*L27
+99 73 BCD+*L28
+100 82 CDE+*L9
+101 341 CDH+*L9
+102 30 EFH+*L23
+103 310 EFH+*L24
+104 153 EFH+*L31
+105 12 EFH+*L33
+106 5 BCP+*L3
+107 1097 BCP+*L26
+108 510 BCP+*L27
+109 4185 BCP+*L28
+110 2000 CDP+*L0
+111 2842 CDP+*L6
+112 5 CDP+*L11
+113 611 CDP+*L20
+114 611 CDP+*L21
+115 2512 CDP+*L26
+116 2807 CDP+*L28
+117 54 DEP+*L2
+118 1227 CEP-*L0
+119 3459 CEP-*L6
+120 1153 CEP-*L26
+121 605 CEP-*L29
+122 5 CEP-*L32
+123 889 CEP-*L34
+124 67 ADP-*L5
+125 704 ADP-*L6
+126 704 ADP-*L28
+127 512 ADP-*L35
+128 73 DFP+*L6
+129 30 EL*L0
+130 47 EL*L27
+131 117 EL*L28
+132 2 EL*L33
+133 63 ER*L26
+134 1 CCEF_2*L4
+135 6 CCEF_2*L22
+136 10 CCEF_2*L31
+137 574 QAPEF_2*L34
+138 38 QCDEF_3*L6
+139 102 QCDEF_3*L9
+140 309 QCPEF_2*L34
+141 196 QEFHP_2*L7
+142 24 QEFHP_2*L10
+143 2485 QEFHP_2*L28
+144 621 QEFHP_2*L30
+145 129 QEFHP_2*L35
+```
+
+
+### Row R33
+
+Path: DOP+,ADP-,CFO-,GHP+,EGO+,FGP-,BGO-,HOP+.
+
+```n7-h2-R33-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FAEGP FAG 1
+plu FBCEO FBO 1
+plu FBEGP FBG 1
+plu FCEGP FCG 1
+plu GABCH GBH -1
+plu GABHO GAO 1
+plu GACFP GAP 1
+plu GBCFP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADOP HDO -1
+plu HAEOP HEO -1
+plu OCDFH ODF 1
+plu OCFHP OFP -1
+plu ODEGH ODG 1
+plu ODGHP OGP -1
+plu PACDG PDG 1
+via G EFP FO 1
+```
+
+Exact upper bound: `-335569595876385050484479570309567920587/4979542782458412967647438141500000000`.
+
+```n7-h2-R33-witnesses
+CCDE_1 P
+CCDF_2 OP
+CCDH_2 OP
+CCDO_1 P
+CCEF_2 GO
+CEFO_1 G
+QBCDE_1 P
+QBCPG_1 O
+QCDEF_3 GOP
+QCEFH_2 GO
+QCPGF_1 O
+QEFHO_1 G
+QEFOP_1 G
+```
+
+```n7-h2-R33-sum
+1 297 L2*L15
+2 23 L0*L0*L27
+3 53 L0*L2*L18
+4 508 L0*L2*L27
+5 13 L0*L2*L33
+6 162 L0*L4*L9
+7 325 L0*L10*L15
+8 10 L0*L26*L34
+9 13 L1*L1*L26
+10 27 L1*L9*L18
+11 397 L1*L10*L15
+12 38 L2*L13*L15
+13 876 L2*L16*L27
+14 71 L2*L23*L27
+15 1363 L2*L24*L27
+16 2035 L2*L24*L28
+17 137 L2*L24*L32
+18 18 L2*L27*L32
+19 81 L2*L28*L30
+20 479 L2*L29*L34
+21 7 L3*L9*L23
+22 101 L4*L9*L12
+23 122 L4*L9*L29
+24 234 L4*L15*L28
+25 143 L4*L17*L34
+26 119 L4*L20*L32
+27 58 L4*L29*L34
+28 259 L5*L6*L32
+29 104 L5*L9*L33
+30 137 L5*L33*L34
+31 1028 L6*L6*L10
+32 151 L6*L8*L32
+33 681 L6*L9*L10
+34 53 L6*L10*L19
+35 27 L6*L10*L20
+36 4 L6*L10*L31
+37 81 L6*L10*L32
+38 380 L6*L10*L34
+39 116 L6*L16*L32
+40 209 L6*L18*L32
+41 726 L6*L24*L32
+42 151 L6*L29*L32
+43 342 L7*L10*L15
+44 90 L7*L13*L15
+45 1 L7*L15*L17
+46 90 L7*L30*L33
+47 124 L8*L10*L10
+48 130 L8*L20*L32
+49 122 L9*L9*L12
+50 1 L9*L9*L16
+51 10 L9*L9*L26
+52 308 L9*L11*L13
+53 175 L9*L11*L23
+54 101 L9*L13*L33
+55 85 L9*L17*L30
+56 1 L9*L17*L34
+57 202 L9*L18*L30
+58 3 L9*L18*L34
+59 202 L9*L19*L33
+60 180 L9*L20*L33
+61 156 L9*L22*L26
+62 44 L9*L24*L33
+63 56 L9*L26*L33
+64 640 L9*L28*L33
+65 10 L9*L34*L35
+66 10 L9*L35*L35
+67 69 L10*L10*L15
+68 5 L10*L10*L35
+69 370 L10*L13*L15
+70 33 L10*L15*L17
+71 182 L10*L15*L23
+72 871 L10*L15*L28
+73 100 L10*L15*L30
+74 113 L10*L24*L27
+75 5 L10*L28*L30
+76 495 L11*L33*L34
+77 352 L12*L29*L34
+78 38 L12*L30*L34
+79 586 L12*L33*L34
+80 92 L12*L34*L35
+81 1 L15*L17*L29
+82 164 L15*L19*L32
+83 211 L15*L23*L29
+84 10 L15*L27*L27
+85 5 L15*L30*L32
+86 85 L17*L28*L33
+87 44 L17*L30*L34
+88 16 L17*L32*L35
+89 281 L18*L23*L34
+90 27 L18*L27*L34
+91 202 L19*L30*L34
+92 60 L20*L26*L32
+93 317 L20*L29*L32
+94 97 L21*L23*L29
+95 367 L21*L24*L32
+96 232 L21*L33*L34
+97 365 L22*L29*L34
+98 111 L22*L30*L34
+99 534 L23*L23*L26
+100 50 L23*L23*L34
+101 50 L23*L25*L32
+102 13 L23*L27*L30
+103 77 L23*L27*L33
+104 50 L24*L24*L32
+105 10 L26*L26*L26
+106 81 L28*L32*L32
+107 479 L29*L30*L34
+108 5 ABF+*L32
+109 508 ABH+*L0
+110 50 ABH+*L6
+111 551 ABH+*L10
+112 556 ABH+*L11
+113 876 ABH+*L16
+114 53 ABH+*L18
+115 27 ABH+*L21
+116 1363 ABH+*L24
+117 50 ABH+*L28
+118 13 ABH+*L30
+119 313 AFH+*L23
+120 151 BCD+*L7
+121 63 EFH+*L0
+122 42 EFH+*L5
+123 258 EFH+*L10
+124 550 EFH+*L13
+125 113 EFH+*L16
+126 202 EFH+*L19
+127 10 EFH+*L21
+128 561 EFH+*L22
+129 113 EFH+*L24
+130 27 EFH+*L26
+131 1205 EFH+*L28
+132 142 EFG+*L3
+133 215 EFG+*L9
+134 50 EFG+*L23
+135 92 EFG+*L26
+136 624 EFG+*L33
+137 167 EFG+*L34
+138 92 FGH-*L1
+139 142 FGH-*L11
+140 1040 FGH-*L20
+141 1040 FGH-*L21
+142 624 FGH-*L33
+143 187 BCO+*L28
+144 16 FHO+*L1
+145 702 AHO-*L23
+146 37 CHO-*L32
+147 130 BCP+*L5
+148 726 BCP+*L7
+149 345 BCP+*L12
+150 345 BCP+*L13
+151 608 BCP+*L16
+152 147 BCP+*L21
+153 50 BCP+*L23
+154 50 BCP+*L25
+155 2035 BCP+*L28
+156 137 BCP+*L32
+157 2386 CDP+*L0
+158 608 CDP+*L16
+159 473 CDP+*L19
+160 157 CDP+*L21
+161 35 CDP+*L24
+162 882 CDP+*L26
+163 3264 CDP+*L28
+164 1556 CDP+*L29
+165 111 CDP+*L30
+166 391 DEP+*L33
+167 205 DEP+*L35
+168 1972 CEP-*L0
+169 423 CEP-*L6
+170 615 CEP-*L16
+171 615 CEP-*L17
+172 202 CEP-*L18
+173 97 CEP-*L20
+174 50 CEP-*L22
+175 624 CEP-*L26
+176 241 CEP-*L33
+177 108 CEP-*L34
+178 53 DOP+*L3
+179 473 DOP+*L5
+180 221 DOP+*L10
+181 221 DOP+*L11
+182 35 DOP+*L15
+183 608 DOP+*L16
+184 584 DOP+*L22
+185 35 DOP+*L24
+186 43 ADP-*L0
+187 91 ADP-*L5
+188 332 ADP-*L10
+189 152 ADP-*L13
+190 854 ADP-*L18
+191 534 ADP-*L23
+192 43 ADP-*L26
+193 1708 ADP-*L28
+194 58 ADP-*L32
+195 758 CFO-*L6
+196 389 CFO-*L17
+197 80 CFO-*L23
+198 284 CFO-*L34
+199 90 EGO+*L7
+200 50 EGO+*L23
+201 317 FGP-*L20
+202 50 FGP-*L23
+203 69 FGP-*L35
+204 130 BGO-*L6
+205 513 BGO-*L25
+206 87 BGO-*L26
+207 326 HOP+
+208 43 HOP+*L0
+209 149 HOP+*L5
+210 35 HOP+*L6
+211 584 HOP+*L23
+212 53 HOP+*L31
+213 179 COP-*L24
+214 52 COP-*L34
+215 104 EGP+*L32
+216 186 CFG-*L34
+217 152 AGO-*L23
+218 46 DHO+*L23
+219 44 FOP+*L0
+220 50 FOP+*L24
+221 102 DGO+*L23
+222 95 GOP+*L24
+223 87 GOP+*L26
+224 219 DGP+*L21
+225 50 DGP+*L23
+226 263 DGP+*L34
+227 659 EL*L7
+228 2096 EL*L28
+229 137 EL*L30
+230 55 ER*L10
+231 311 CCDE_1*L23
+232 209 CCDE_1*L25
+233 1453 CCDE_1*L26
+234 21 CCDF_2*L5
+235 1179 CCDF_2*L6
+236 214 CCDF_2*L17
+237 414 CCDF_2*L21
+238 726 CCDF_2*L24
+239 388 CCDF_2*L34
+240 78 CCDH_2*L24
+241 788 CCDH_2*L29
+242 90 CCDO_1*L9
+243 389 CCDO_1*L17
+244 595 CCDO_1*L22
+245 157 CCDO_1*L32
+246 128 CCEF_2*L34
+247 80 CEFO_1*L23
+248 3 CEFO_1*L34
+249 50 QBCDE_1*L26
+250 245 QBCPG_1*L7
+251 85 QBCPG_1*L9
+252 38 QBCPG_1*L11
+253 95 QBCPG_1*L25
+254 71 QBCPG_1*L27
+255 28 QBCPG_1*L34
+256 108 QCDEF_3*L7
+257 90 QCDEF_3*L17
+258 81 QCEFH_2*L32
+259 85 QCPGF_1*L0
+260 245 QCPGF_1*L6
+261 38 QCPGF_1*L10
+262 72 QCPGF_1*L20
+263 104 QCPGF_1*L32
+264 219 QCPGF_1*L34
+265 27 QEFHO_1*L15
+266 353 QEFHO_1*L23
+267 52 QEFOP_1*L9
+```
+
+
+### Row R34
+
+Path: DOP+,ADP-,CFO-,GHP+,EGO+,FGP-,BGO+,AEG-.
+
+```n7-h2-R34-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu ABEFG AFG -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EACGH EGH -1
+plu EACGO EAO 1
+plu EACGP EGP 1
+plu EACHO EHO 1
+plu EACOP EOP 1
+plu EADHP EHP 1
+plu FABCP FBP 1
+plu FABGP FBG 1
+plu FACEO FAO 1
+plu FACGP FCG 1
+plu FBCEO FBO 1
+plu GABCH GBH -1
+plu GACFP GAP 1
+plu GAEHO GAO 1
+plu GBCFP GBP 1
+plu GBCHO GCO -1
+plu GBEHO GBE 1
+plu GBEOP GOP 1
+plu GBFHO GFO 1
+plu GCDEO GDO -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OABEG OBE 1
+plu OBCDE OBD 1
+plu OBCDP OBP 1
+plu PACDG PDG 1
+via G ABE BD 1
+```
+
+Exact upper bound: `-1430137711714739426231279429454552470963/22061265491904361249070928475000000000`.
+
+```n7-h2-R34-witnesses
+CABE_2 GO
+CBEF_2 GO
+CCDE_1 P
+CCDO_1 P
+CCEF_2 GO
+CEAO_1 G
+CEFO_1 G
+CFCG_1 O
+QABPE_2 GO
+QACPG_1 O
+QBCDE_1 P
+QBCDO_1 P
+QBGFH_1 O
+QBPEF_2 GO
+QBPGH_1 O
+QCDEF_3 GOP
+QCDEO_1 P
+QCDGO_1 P
+QCPEF_2 GO
+```
+
+```n7-h2-R34-sum
+1 62 L10*L15
+2 6 L0*L2*L15
+3 2 L0*L2*L23
+4 3 L0*L2*L30
+5 14 L0*L23*L30
+6 684 L0*L26*L32
+7 739 L1*L6*L9
+8 371 L1*L7*L9
+9 368 L1*L9*L9
+10 81 L1*L28*L30
+11 10 L2*L2*L28
+12 823 L2*L2*L34
+13 6 L2*L3*L21
+14 11 L2*L4*L7
+15 15 L2*L7*L28
+16 8 L2*L7*L30
+17 5 L2*L8*L13
+18 60 L2*L9*L17
+19 43 L2*L9*L18
+20 15 L2*L9*L23
+21 404 L2*L9*L34
+22 43 L2*L10*L20
+23 23 L2*L12*L15
+24 14 L2*L13*L17
+25 14 L2*L13*L21
+26 2 L2*L14*L25
+27 2 L2*L15*L31
+28 15 L2*L17*L28
+29 1 L2*L20*L20
+30 225 L2*L20*L27
+31 86 L3*L9*L29
+32 15 L3*L15*L23
+33 22 L3*L20*L34
+34 47 L3*L26*L32
+35 44 L4*L9*L9
+36 7 L4*L17*L32
+37 2 L4*L21*L23
+38 6 L4*L27*L34
+39 92 L5*L6*L24
+40 298 L5*L9*L18
+41 864 L5*L9*L26
+42 1 L5*L15*L15
+43 36 L6*L6*L19
+44 15 L6*L6*L32
+45 323 L6*L9*L31
+46 16 L6*L13*L13
+47 16 L6*L13*L19
+48 67 L6*L16*L32
+49 32 L6*L18*L32
+50 101 L6*L18*L34
+51 633 L6*L20*L32
+52 11 L6*L23*L32
+53 17 L6*L24*L32
+54 46 L6*L27*L32
+55 2 L6*L30*L30
+56 348 L6*L32*L34
+57 81 L7*L9*L33
+58 16 L7*L18*L21
+59 506 L7*L30*L34
+60 17 L8*L23*L26
+61 368 L9*L9*L28
+62 45 L9*L10*L20
+63 135 L9*L11*L35
+64 50 L9*L12*L35
+65 528 L9*L13*L26
+66 7 L9*L13*L33
+67 26 L9*L17*L30
+68 15 L9*L18*L20
+69 291 L9*L18*L33
+70 27 L9*L18*L34
+71 8 L9*L19*L25
+72 8 L9*L21*L22
+73 162 L9*L21*L31
+74 11 L9*L22*L33
+75 13 L9*L22*L34
+76 368 L9*L26*L28
+77 1636 L9*L26*L30
+78 368 L9*L29*L34
+79 2 L9*L30*L31
+80 8 L9*L30*L32
+81 6 L9*L32*L33
+82 257 L10*L15*L18
+83 46 L10*L29*L35
+84 15 L11*L17*L30
+85 2 L12*L12*L34
+86 2 L12*L19*L24
+87 2 L13*L13*L15
+88 20 L13*L18*L26
+89 22 L13*L30*L34
+90 136 L14*L32*L35
+91 25 L15*L16*L32
+92 236 L15*L21*L32
+93 2 L15*L22*L34
+94 16 L15*L25*L32
+95 51 L15*L28*L32
+96 13 L16*L17*L32
+97 2 L17*L18*L23
+98 15 L17*L18*L29
+99 1 L17*L24*L32
+100 7 L17*L32*L32
+101 2 L18*L24*L32
+102 357 L18*L32*L35
+103 87 L18*L33*L34
+104 67 L19*L26*L30
+105 120 L19*L26*L32
+106 137 L19*L32*L35
+107 10 L21*L21*L30
+108 3 L21*L23*L30
+109 75 L21*L30*L34
+110 1 L22*L29*L34
+111 17 L23*L26*L32
+112 7 L24*L32*L32
+113 165 L27*L32*L35
+114 15 L28*L28*L33
+115 130 L32*L35*L35
+116 6 L33*L34*L35
+117 3 ABC+*L10
+118 1353 ABH+
+119 719 ABH+*L0
+120 1156 ABH+*L11
+121 72 ABH+*L12
+122 237 ABH+*L19
+123 202 ABH+*L20
+124 2 ABH+*L23
+125 153 ABH+*L28
+126 868 ABH+*L32
+127 719 AFH+*L35
+128 26 BCD+*L0
+129 22 BCD+*L5
+130 447 BCD+*L9
+131 333 EFH+*L2
+132 454 EFH+*L6
+133 48 EFH+*L13
+134 514 EFH+*L18
+135 574 EFH+*L20
+136 454 EFH+*L21
+137 17 EFH+*L22
+138 16 EFH+*L25
+139 807 EFH+*L28
+140 11 DEG+*L2
+141 20 FGH-*L19
+142 21 AGH+*L32
+143 3 DEO+*L30
+144 102 AHO-*L29
+145 8 CEO+*L2
+146 92 BCP+*L0
+147 17 BCP+*L7
+148 31 BCP+*L12
+149 8 BCP+*L15
+150 36 BCP+*L19
+151 1 BCP+*L20
+152 101 BCP+*L35
+153 21 CDP+*L8
+154 35 CDP+*L12
+155 86 CDP+*L14
+156 78 CDP+*L16
+157 54 CDP+*L17
+158 94 CDP+*L21
+159 43 DEP+*L21
+160 91 CEP-*L0
+161 10 CEP-*L3
+162 10 CEP-*L11
+163 13 CEP-*L12
+164 26 CEP-*L16
+165 17 CEP-*L26
+166 12 CEP-*L29
+167 65 CEP-*L35
+168 20 GHO+*L30
+169 30 GHO+*L32
+170 10 DOP+*L1
+171 19 DOP+*L12
+172 96 DOP+*L14
+173 25 DOP+*L16
+174 36 DOP+*L30
+175 10 ADP-*L28
+176 14 ADP-*L31
+177 717 CFO-*L6
+178 162 CFO-*L14
+179 22 CFO-*L22
+180 102 EGO+*L0
+181 14 EGO+*L6
+182 530 EGO+*L11
+183 14 EGO+*L12
+184 274 EGO+*L18
+185 15 EGO+*L20
+186 3 EGO+*L23
+187 26 EGO+*L24
+188 303 EGO+*L30
+189 571 EGO+*L32
+190 102 EGO+*L35
+191 17 FGP-*L7
+192 20 FGP-*L18
+193 7 FGP-*L33
+194 52 BGO+*L6
+195 41 BGO+*L8
+196 14 BGO+*L13
+197 38 BGO+*L15
+198 295 BGO+*L19
+199 25 BGO+*L21
+200 31 BGO+*L22
+201 1 BGO+*L25
+202 7 BGO+*L31
+203 307 AEG-*L5
+204 14 AEG-*L6
+205 153 AEG-*L8
+206 302 AEG-*L19
+207 593 AEG-*L30
+208 5 ACP+*L9
+209 77 COP-*L34
+210 16 EGP+*L13
+211 2 EGP+*L18
+212 285 BFO-*L34
+213 17 AGP-*L32
+214 102 AGO-*L0
+215 235 AGO-*L5
+216 14 AGO-*L6
+217 521 AGO-*L30
+218 102 AGO-*L35
+219 9 CGO+*L23
+220 10 GOP+*L15
+221 26 GOP+*L29
+222 84 FGO-*L6
+223 38 FGO-*L15
+224 21 DGO+*L18
+225 10 DGO+*L28
+226 11 DGO+*L33
+227 242 BEO+*L13
+228 274 BEO+*L18
+229 77 BDO+*L9
+230 20 BOP-*L10
+231 10 BOP-*L26
+232 2 BOP-*L32
+233 11 DGP+*L2
+234 10 DGP+*L6
+235 11 DGP+*L10
+236 16 DGP+*L12
+237 10 DGP+*L15
+238 25 DGP+*L21
+239 98 EL*L28
+240 7 EL*L34
+241 38 ER*L10
+242 60 ER*L16
+243 144 ER*L18
+244 195 ER*L19
+245 101 ER*L25
+246 1688 ER*L26
+247 40 ER*L28
+248 148 ER*L35
+249 818 CABE_2*L2
+250 337 CABE_2*L10
+251 827 CABE_2*L18
+252 141 CABE_2*L20
+253 35 CEAO_1*L3
+254 219 CEAO_1*L5
+255 100 CEAO_1*L11
+256 323 CEAO_1*L12
+257 25 CBEF_2*L18
+258 222 CBEF_2*L26
+259 31 CCDE_1*L6
+260 639 CCDO_1*L6
+261 26 CCDO_1*L24
+262 2 CCEF_2*L5
+263 16 CCEF_2*L24
+264 687 CCEF_2*L26
+265 6 CCEF_2*L32
+266 1 CFCG_1*L25
+267 129 CEFO_1*L34
+268 6 QABPE_2*L33
+269 3 QACPG_1*L32
+270 21 QBCDE_1*L33
+271 685 QBCDO_1*L7
+272 21 QBCDO_1*L10
+273 24 QBCDO_1*L13
+274 25 QBCDO_1*L17
+275 21 QBCDO_1*L18
+276 16 QBCDO_1*L20
+277 214 QBCDO_1*L26
+278 107 QBCDO_1*L27
+279 1 QBCDO_1*L31
+280 5 QBPEF_2*L30
+281 13 QBGFH_1*L17
+282 2 QBPGH_1*L33
+283 59 QCDEF_3
+284 9 QCDEF_3*L21
+285 22 QCDEF_3*L23
+286 401 QCDEF_3*L34
+287 69 QCDEO_1*L24
+288 10 QCDGO_1*L20
+289 10 QCDGO_1*L34
+290 66 QCPEF_2*L9
+291 2 F5_FHAPD*L15
+292 516 F5_PGFHA*L9
+```
+
+
+### Row R35
+
+Path: DOP+,ADP-,CFO-,GHP+,EGO+,FGP-,BGO+,AEG+.
+
+```n7-h2-R35-trace
+plu ABCEG ACG 1
+plu ABDEG ADG 1
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu ABDGP AGP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DACFP DFP 1
+plu DACGP DGP 1
+plu DACHP DHP 1
+plu EABCG EBG -1
+plu EABCP EBP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FAEGP FAG 1
+plu FBCEO FBO 1
+plu FBEGP FBG 1
+plu FCEGP FCG 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GBCEO GCO -1
+plu GBDEO GDO -1
+plu GBDOP GOP 1
+plu GBEFO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OBCDG OBD 1
+plu OBCDP OBP 1
+plu OBCEG OBE 1
+```
+
+Exact upper bound: `-455980752218737732910194357802457982388933/6971359895441778154706413398100000000000`.
+
+```n7-h2-R35-witnesses
+CCDE_1 P
+CCDO_1 P
+CCEF_2 GO
+CEFO_1 G
+CFCG_1 O
+QABCD_1 P
+QAEFH_1 G
+QCDEF_3 GOP
+```
+
+```n7-h2-R35-sum
+1 687 L0*L2*L5
+2 259 L0*L2*L9
+3 169 L0*L2*L15
+4 1 L0*L2*L21
+5 1614 L0*L2*L23
+6 3130 L0*L2*L24
+7 7571 L0*L2*L27
+8 3675 L0*L2*L32
+9 353 L0*L9*L13
+10 1680 L0*L13*L32
+11 32 L0*L17*L32
+12 71 L1*L23*L23
+13 2880 L2*L2*L6
+14 2881 L2*L2*L9
+15 688 L2*L2*L24
+16 16929 L2*L6*L34
+17 263 L2*L7*L9
+18 1 L2*L7*L21
+19 349 L2*L9*L17
+20 147 L2*L9*L23
+21 8311 L2*L9*L28
+22 2844 L2*L9*L33
+23 3078 L2*L15*L28
+24 4362 L2*L15*L32
+25 4 L2*L17*L17
+26 111 L2*L17*L32
+27 478 L2*L22*L24
+28 2928 L2*L23*L34
+29 15755 L2*L24*L27
+30 3234 L2*L28*L30
+31 203 L5*L6*L6
+32 4912 L5*L6*L9
+33 28234 L5*L6*L24
+34 26490 L5*L9*L24
+35 6061 L5*L23*L26
+36 19048 L5*L24*L34
+37 1 L6*L6*L18
+38 1722 L6*L6*L22
+39 1 L6*L9*L17
+40 81 L6*L10*L32
+41 5647 L6*L10*L34
+42 1 L6*L15*L16
+43 25 L6*L16*L20
+44 25 L6*L17*L20
+45 131 L6*L18*L32
+46 21 L6*L18*L34
+47 1 L6*L20*L32
+48 549 L6*L23*L23
+49 632 L6*L23*L24
+50 809 L6*L23*L26
+51 259 L6*L23*L32
+52 3005 L6*L23*L35
+53 1583 L7*L9*L33
+54 1 L7*L17*L34
+55 76 L8*L32*L32
+56 1696 L9*L11*L34
+57 4 L9*L12*L17
+58 70 L9*L12*L34
+59 337 L9*L15*L23
+60 312 L9*L17*L30
+61 131 L9*L18*L32
+62 2 L9*L18*L34
+63 5 L9*L21*L32
+64 2028 L9*L22*L32
+65 16762 L9*L22*L34
+66 632 L9*L23*L24
+67 5423 L9*L26*L33
+68 11651 L9*L28*L30
+69 1591 L9*L28*L33
+70 156 L9*L30*L32
+71 3341 L9*L30*L34
+72 12831 L9*L33*L34
+73 3173 L10*L15*L28
+74 9 L10*L17*L27
+75 147 L10*L24*L32
+76 4 L12*L13*L34
+77 3 L12*L26*L30
+78 29 L12*L30*L34
+79 1568 L13*L15*L32
+80 4 L13*L17*L34
+81 70 L15*L17*L32
+82 6 L15*L20*L32
+83 1870 L15*L23*L32
+84 792 L15*L23*L34
+85 654 L15*L30*L30
+86 33 L15*L30*L32
+87 559 L15*L30*L34
+88 1371 L16*L32*L32
+89 226 L17*L33*L34
+90 1 L18*L30*L34
+91 214 L18*L32*L34
+92 3 L18*L34*L34
+93 57 L20*L27*L32
+94 4 L21*L21*L30
+95 537 L21*L26*L30
+96 1378 L21*L30*L32
+97 32 L21*L30*L34
+98 104 L21*L32*L32
+99 792 L23*L26*L26
+100 131 L23*L32*L35
+101 6061 L23*L33*L34
+102 147 L25*L32*L32
+103 6114 L28*L30*L30
+104 81 L28*L32*L32
+105 559 L33*L34*L34
+106 556 ABC+*L9
+107 1 ABC+*L20
+108 6918 ABH+*L0
+109 687 ABH+*L3
+110 6807 ABH+*L12
+111 500 ABH+*L17
+112 63 ABH+*L21
+113 5015 ABH+*L22
+114 217 ABH+*L23
+115 17686 ABH+*L24
+116 559 ABH+*L27
+117 687 ABH+*L31
+118 3675 ABH+*L32
+119 297 ABH+*L35
+120 4456 AFH+*L32
+121 1 BCD+*L20
+122 81 BCD+*L32
+123 20007 BCD+*L34
+124 118 EFH+*L2
+125 804 EFH+*L10
+126 7038 EFH+*L13
+127 63 EFH+*L20
+128 9846 EFH+*L22
+129 8840 EFH+*L28
+130 65 EFH+*L34
+131 20 EFG+*L6
+132 234 EFG+*L11
+133 4 EFG+*L19
+134 294 EFG+*L31
+135 327 EFG+*L33
+136 429 EFG+*L34
+137 437 FGH-*L0
+138 4992 FGH-*L2
+139 5227 FGH-*L11
+140 4 FGH-*L13
+141 4 FGH-*L16
+142 4101 FGH-*L24
+143 4102 FGH-*L25
+144 54 FGH-*L27
+145 20 FGH-*L29
+146 33 FGH-*L33
+147 54 FGH-*L34
+148 1 FHO+*L29
+149 3 FHO+*L34
+150 15324 BCP+*L1
+151 603 BCP+*L4
+152 16931 BCP+*L14
+153 478 BCP+*L22
+154 14999 BCP+*L27
+155 688 BCP+*L31
+156 147 BCP+*L32
+157 35661 CDP+*L6
+158 5154 CDP+*L11
+159 5317 CDP+*L14
+160 478 CDP+*L22
+161 6683 CDP+*L25
+162 4542 CDP+*L27
+163 62271 CDP+*L28
+164 26813 CDP+*L29
+165 86 CDP+*L31
+166 5027 CDP+*L32
+167 7404 DEP+*L2
+168 6051 DEP+*L25
+169 6061 DEP+*L30
+170 5568 CEP-*L3
+171 16835 CEP-*L6
+172 274 CEP-*L11
+173 22758 CEP-*L14
+174 6683 CEP-*L25
+175 4867 CEP-*L27
+176 3965 CEP-*L28
+177 20727 CEP-*L29
+178 20 GHO+*L6
+179 1 GHO+*L30
+180 214 GHO+*L32
+181 1 DOP+*L6
+182 1 DOP+*L9
+183 12472 ADP-*L11
+184 4139 ADP-*L14
+185 8144 ADP-*L16
+186 8144 ADP-*L17
+187 71 ADP-*L23
+188 2555 ADP-*L27
+189 1520 ADP-*L28
+190 6061 ADP-*L31
+191 12604 ADP-*L32
+192 3347 ADP-*L35
+193 1 CFO-*L9
+194 4 CFO-*L21
+195 538 CFO-*L26
+196 1510 CFO-*L32
+197 53 CFO-*L34
+198 1 EGO+*L1
+199 4 EGO+*L3
+200 20 EGO+*L6
+201 4 EGO+*L9
+202 4 EGO+*L12
+203 58 EGO+*L15
+204 1 EGO+*L30
+205 341 EGO+*L32
+206 4 BGO+*L17
+207 4 BGO+*L21
+208 532 BGO+*L26
+209 1482 BGO+*L32
+210 37 BGO+*L34
+211 672 AEG+*L4
+212 1177 AEG+*L8
+213 6135 AEG+*L10
+214 1040 AEG+*L15
+215 669 AEG+*L31
+216 1532 AEG+*L34
+217 63 AFO-*L9
+218 4456 AFG-*L32
+219 22 CGO+*L34
+220 63 FGO-*L9
+221 4 FGO-*L12
+222 4 FGO-*L17
+223 5 FGO-*L21
+224 533 FGO-*L26
+225 1613 FGO-*L32
+226 6283 EL*L7
+227 21022 EL*L28
+228 654 EL*L30
+229 1677 ER*L23
+230 6114 CCDE_1*L30
+231 131 CCDO_1*L32
+232 1229 CCEF_2*L9
+233 312 CCEF_2*L17
+234 19023 CCEF_2*L34
+235 204 CFCG_1*L34
+236 62 CEFO_1*L26
+237 390 QABCD_1*L0
+238 1523 QABCD_1*L24
+239 17777 QAEFH_1*L23
+240 491 QAEFH_1*L26
+241 2274 QCDEF_3*L2
+242 564 QCDEF_3*L23
+243 4932 QCDEF_3*L26
+244 86 QCDEF_3*L33
+245 1591 QCDEF_3*L34
+246 1 F5_GOBCP*L29
+```
+
+
+### Row R36
+
+Path: DOP+,ADP-,CFO-,GHP+,EGO+,FGP+,HOP-.
+
+```n7-h2-R36-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FBCEO FBO 1
+plu FDEGP FDG -1
+plu GABCH GBH -1
+plu GACHP GAP 1
+plu GBCHP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACHP OAP 1
+plu OBCHP OBP 1
+plu PACDG PDG 1
+```
+
+Exact upper bound: `-1124006960926769807899208839180570779623/13166373976534196580939729897250000000`.
+
+```n7-h2-R36-witnesses
+CACD_1 P
+CCDE_1 P
+QABCD_1 P
+QBCDE_1 P
+QBCDH_1 P
+QCPEF_1 O
+QEFHP_2 GO
+```
+
+```n7-h2-R36-sum
+1 21 L0*L0*L0
+2 162 L0*L2*L22
+3 693 L0*L2*L27
+4 109 L0*L23*L34
+5 62 L0*L34*L35
+6 134 L1*L1*L23
+7 40 L1*L9*L26
+8 24 L1*L23*L26
+9 162 L2*L6*L23
+10 532 L2*L9*L26
+11 551 L2*L15*L24
+12 88 L2*L24*L25
+13 802 L2*L24*L27
+14 2584 L2*L24*L28
+15 70 L2*L27*L27
+16 48 L2*L34*L34
+17 429 L3*L6*L9
+18 1369 L3*L9*L24
+19 63 L4*L9*L34
+20 1342 L5*L6*L6
+21 313 L5*L6*L24
+22 73 L5*L24*L34
+23 83 L5*L30*L34
+24 158 L6*L6*L22
+25 889 L6*L9*L23
+26 426 L6*L10*L34
+27 101 L6*L23*L24
+28 247 L6*L23*L34
+29 109 L7*L33*L34
+30 21 L8*L9*L14
+31 41 L8*L9*L34
+32 496 L9*L11*L24
+33 22 L9*L14*L27
+34 13 L9*L23*L24
+35 132 L9*L23*L26
+36 496 L9*L24*L32
+37 37 L9*L26*L31
+38 88 L9*L31*L35
+39 600 L11*L30*L34
+40 85 L11*L34*L35
+41 30 L14*L33*L34
+42 22 L15*L27*L27
+43 30 L15*L30*L34
+44 837 L22*L30*L34
+45 79 L23*L24*L34
+46 85 L23*L31*L34
+47 266 L23*L35*L35
+48 2 L26*L26*L26
+49 19 L26*L26*L35
+50 21 L26*L34*L34
+51 1645 L28*L33*L34
+52 83 L32*L33*L34
+53 83 L33*L33*L34
+54 41 L34*L35*L35
+55 291 ABH+
+56 536 ABH+*L0
+57 311 ABH+*L6
+58 1226 ABH+*L24
+59 148 ABH+*L27
+60 657 ABH+*L28
+61 429 BCD+*L6
+62 1314 BCD+*L24
+63 346 BCD+*L27
+64 429 BCD+*L28
+65 176 EFH+*L6
+66 79 EFH+*L24
+67 238 EFH+*L31
+68 30 EFH+*L34
+69 440 BCP+*L24
+70 528 BCP+*L25
+71 127 BCP+*L27
+72 3898 BCP+*L28
+73 551 BCP+*L35
+74 2519 CDP+*L6
+75 1684 CDP+*L14
+76 907 CDP+*L18
+77 907 CDP+*L19
+78 101 CDP+*L25
+79 424 CDP+*L26
+80 2361 CDP+*L28
+81 2000 CEP-*L6
+82 1290 CEP-*L14
+83 13 CEP-*L25
+84 1156 CEP-*L29
+85 337 CEP-*L34
+86 162 ADP-*L2
+87 485 ADP-*L28
+88 485 ADP-*L29
+89 424 ADP-*L35
+90 9 EL*L28
+91 125 CACD_1*L9
+92 1184 CCDE_1*L6
+93 78 QABCD_1*L0
+94 40 QBCDE_1*L9
+95 38 QBCDH_1*L9
+96 680 QCPEF_1*L34
+97 79 QEFHP_2*L25
+98 2355 QEFHP_2*L28
+99 922 QEFHP_2*L30
+100 85 QEFHP_2*L35
+```
+
+
+### Row R37
+
+Path: DOP+,ADP-,CFO-,GHP+,EGO+,FGP+,HOP+.
+
+```n7-h2-R37-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FACEO FAO 1
+plu FBCEO FBO 1
+plu FDEGP FDG -1
+plu GABCH GBH -1
+plu GACHP GAP 1
+plu GBCHP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADOP HDO -1
+plu HAEOP HEO -1
+plu OCDFH ODF 1
+plu OCFHP OFP -1
+plu ODEGH ODG 1
+plu ODGHP OGP -1
+plu PACDG PDG 1
+```
+
+Exact upper bound: `-14321935945240955225421703339999577919/176490123935234889992567427800000000`.
+
+```n7-h2-R37-witnesses
+CCDE_1 P
+CCDF_2 OP
+QABCD_1 P
+QACDH_2 OP
+QBCDE_1 P
+QBCPF_1 O
+QCDFH_3 GOP
+QCPFH_2 GO
+QDFHP_1 G
+QEFHO_1 G
+QEFHP_1 G
+QFHOP_1 G
+```
+
+```n7-h2-R37-sum
+1 36 L0*L0*L2
+2 66 L0*L2*L9
+3 41 L0*L2*L20
+4 177 L0*L2*L24
+5 9 L0*L2*L29
+6 7 L0*L2*L33
+7 9 L0*L19*L24
+8 7 L0*L28*L33
+9 95 L1*L18*L23
+10 2 L2*L5*L34
+11 29 L2*L6*L6
+12 4 L2*L6*L31
+13 9 L2*L7*L20
+14 89 L2*L9*L14
+15 127 L2*L10*L15
+16 120 L2*L10*L24
+17 1 L2*L10*L27
+18 4 L2*L14*L27
+19 123 L2*L15*L28
+20 41 L2*L21*L27
+21 11 L2*L22*L34
+22 173 L2*L24*L27
+23 65 L2*L24*L28
+24 1 L2*L27*L31
+25 20 L3*L9*L35
+26 5 L3*L28*L30
+27 25 L3*L33*L34
+28 141 L4*L6*L34
+29 79 L4*L7*L9
+30 249 L4*L7*L33
+31 32 L4*L9*L24
+32 124 L4*L10*L15
+33 42 L4*L22*L34
+34 56 L5*L23*L35
+35 37 L6*L11*L34
+36 1 L6*L15*L19
+37 57 L6*L20*L32
+38 4 L6*L23*L31
+39 154 L6*L24*L32
+40 29 L6*L29*L32
+41 9 L7*L9*L19
+42 162 L7*L14*L33
+43 9 L7*L18*L34
+44 95 L7*L19*L23
+45 152 L7*L20*L33
+46 406 L7*L22*L33
+47 1 L7*L23*L34
+48 124 L7*L31*L33
+49 123 L7*L32*L33
+50 44 L9*L11*L14
+51 3 L9*L14*L19
+52 105 L9*L14*L30
+53 12 L9*L19*L24
+54 12 L9*L21*L23
+55 112 L9*L28*L30
+56 13 L9*L31*L35
+57 114 L10*L10*L24
+58 225 L10*L15*L20
+59 141 L10*L15*L24
+60 35 L10*L15*L27
+61 183 L10*L15*L28
+62 114 L10*L15*L32
+63 40 L10*L15*L34
+64 81 L10*L33*L34
+65 33 L11*L23*L35
+66 4 L14*L33*L34
+67 28 L15*L16*L24
+68 28 L15*L17*L24
+69 6 L15*L19*L25
+70 15 L15*L20*L23
+71 9 L15*L23*L26
+72 42 L15*L32*L35
+73 95 L18*L23*L26
+74 93 L18*L23*L35
+75 4 L19*L27*L27
+76 72 L19*L33*L34
+77 194 L20*L24*L32
+78 229 L20*L28*L33
+79 41 L20*L30*L34
+80 149 L20*L33*L34
+81 1 L21*L23*L29
+82 23 L21*L26*L33
+83 1812 L22*L28*L33
+84 1779 L22*L33*L34
+85 66 L23*L23*L29
+86 58 L23*L25*L33
+87 50 L23*L26*L33
+88 11 L23*L27*L30
+89 69 L24*L30*L34
+90 123 L29*L30*L34
+91 1 L30*L30*L34
+92 1 L31*L33*L34
+93 4 L31*L34*L34
+94 1 ABD+*L2
+95 97 ABH+
+96 36 ABH+*L0
+97 50 ABH+*L9
+98 327 ABH+*L24
+99 1 DEF+*L30
+100 28 EFH+*L7
+101 101 EFH+*L10
+102 93 EFH+*L19
+103 228 FGH-*L4
+104 9 ABO+*L6
+105 57 BCO+*L28
+106 4 AHO-*L26
+107 6 ABP+*L33
+108 23 BCP+*L0
+109 4 BCP+*L2
+110 124 BCP+*L10
+111 194 BCP+*L21
+112 219 BCP+*L28
+113 85 BCP+*L34
+114 20 CDP+*L0
+115 102 CDP+*L10
+116 223 CDP+*L19
+117 441 CDP+*L22
+118 32 CDP+*L24
+119 445 CDP+*L28
+120 412 CDP+*L29
+121 7 DEP+*L1
+122 27 DEP+*L3
+123 7 DEP+*L7
+124 20 DEP+*L31
+125 29 CEP-*L0
+126 3 CEP-*L14
+127 93 CEP-*L18
+128 66 CEP-*L22
+129 223 DOP+*L5
+130 375 DOP+*L22
+131 9 DOP+*L27
+132 335 DOP+*L30
+133 335 DOP+*L31
+134 3 ADP-*L8
+135 88 ADP-*L11
+136 6 ADP-*L14
+137 282 ADP-*L18
+138 9 ADP-*L21
+139 32 ADP-*L24
+140 26 ADP-*L28
+141 11 ADP-*L31
+142 269 CFO-*L6
+143 129 CFO-*L14
+144 219 CFO-*L25
+145 23 CFO-*L26
+146 96 CFO-*L34
+147 228 GHP+*L4
+148 228 FGP+*L4
+149 12 HOP+*L9
+150 32 ACP+*L24
+151 316 COP-*L22
+152 8 DHP+*L1
+153 8 DHP+*L20
+154 4 BEP-*L2
+155 36 DHO+*L23
+156 16 FOP+*L34
+157 17 EL*L2
+158 20 EL*L7
+159 168 EL*L20
+160 234 EL*L22
+161 358 EL*L28
+162 32 ER*L1
+163 41 ER*L6
+164 16 ER*L21
+165 4 CCDE_1*L6
+166 103 CCDE_1*L11
+167 20 CCDE_1*L35
+168 7 CCDF_2*L0
+169 101 CCDF_2*L4
+170 55 CCDF_2*L6
+171 123 CCDF_2*L10
+172 78 CCDF_2*L12
+173 78 CCDF_2*L13
+174 160 CCDF_2*L14
+175 239 CCDF_2*L22
+176 93 CCDF_2*L34
+177 2 QABCD_1*L15
+178 15 QACDH_2*L9
+179 23 QBCDE_1*L33
+180 3 QBCPF_1*L7
+181 106 QCDFH_3*L8
+182 170 QCDFH_3*L20
+183 1788 QCDFH_3*L22
+184 157 QCDFH_3*L24
+185 25 QCDFH_3*L28
+186 10 QCPFH_2*L3
+187 114 QCPFH_2*L10
+188 413 QCPFH_2*L20
+189 2 QDFHP_1*L34
+190 1 QEFHO_1*L24
+191 21 QEFHO_1*L33
+192 7 QEFHP_1*L26
+193 93 QFHOP_1*L3
+194 15 QFHOP_1*L8
+195 265 QFHOP_1*L12
+196 265 QFHOP_1*L13
+197 58 QFHOP_1*L23
+198 93 QFHOP_1*L31
+```
+
+
+### Row R38
+
+Path: DOP+,ADP-,CFO+,AGO-,CGO-.
+
+```n7-h2-R38-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABGO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu CAFGO CFG 1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FCDEG FDG -1
+plu FCDEO FDO -1
+plu FCDGP FGP 1
+plu FCDOP FOP 1
+plu GABCH GBH -1
+plu GABCO GBO 1
+plu GCFHO GFO -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+via G FHO DP -1
+```
+
+Exact upper bound: `-42507693450845040122472000810419095710127/606653180690942728539501478810000000000`.
+
+```n7-h2-R38-witnesses
+CCDE_1 P
+CCDG_1 P
+CCDO_1 P
+CCFH_2 GO
+CFHO_1 G
+QBCDF_1 P
+QCDEO_1 P
+QCDFG_2 OP
+QCDFH_3 GOP
+QCPFG_1 O
+```
+
+```n7-h2-R38-sum
+1 21 L7*L33
+2 75 L0*L2*L27
+3 44 L0*L8*L33
+4 4 L0*L18*L33
+5 181 L0*L22*L33
+6 3 L0*L23*L26
+7 18 L1*L1*L14
+8 21 L1*L3*L9
+9 2 L1*L5*L21
+10 18 L1*L8*L34
+11 11 L1*L10*L24
+12 2 L1*L12*L20
+13 18 L1*L15*L35
+14 5 L1*L32*L34
+15 3 L2*L5*L15
+16 107 L2*L7*L33
+17 78 L2*L9*L26
+18 1 L2*L11*L20
+19 1 L2*L12*L20
+20 1 L2*L14*L18
+21 4 L2*L20*L24
+22 340 L2*L24*L28
+23 3 L2*L27*L28
+24 26 L2*L29*L33
+25 3 L3*L6*L26
+26 9 L3*L9*L16
+27 5 L3*L14*L34
+28 49 L3*L22*L34
+29 5 L3*L26*L27
+30 26 L4*L6*L15
+31 15 L4*L9*L9
+32 23 L4*L9*L20
+33 8 L4*L23*L25
+34 73 L4*L28*L33
+35 27 L4*L28*L34
+36 25 L4*L30*L34
+37 39 L5*L5*L24
+38 278 L5*L6*L6
+39 25 L5*L6*L13
+40 146 L5*L6*L16
+41 133 L5*L9*L16
+42 39 L5*L9*L22
+43 131 L5*L9*L24
+44 5 L5*L12*L34
+45 8 L5*L17*L23
+46 57 L5*L17*L33
+47 52 L5*L25*L33
+48 259 L6*L6*L18
+49 120 L6*L6*L22
+50 20 L6*L6*L34
+51 18 L6*L7*L9
+52 36 L6*L8*L9
+53 88 L6*L9*L18
+54 195 L6*L9*L20
+55 195 L6*L9*L21
+56 1 L6*L12*L18
+57 1 L6*L12*L24
+58 2 L6*L15*L18
+59 89 L6*L23*L23
+60 6 L6*L23*L34
+61 320 L6*L28*L33
+62 41 L6*L28*L34
+63 17 L7*L17*L33
+64 4 L7*L20*L23
+65 123 L7*L30*L33
+66 20 L8*L9*L26
+67 2 L8*L10*L16
+68 67 L8*L12*L33
+69 43 L8*L26*L33
+70 38 L9*L9*L35
+71 2 L9*L10*L18
+72 26 L9*L11*L13
+73 196 L9*L11*L20
+74 1 L9*L13*L35
+75 9 L9*L16*L31
+76 2 L9*L17*L18
+77 11 L9*L18*L22
+78 4 L9*L19*L32
+79 117 L9*L22*L29
+80 89 L9*L23*L23
+81 229 L9*L23*L28
+82 1 L9*L23*L30
+83 12 L9*L24*L32
+84 1 L9*L28*L34
+85 3 L10*L14*L33
+86 140 L10*L23*L29
+87 4 L10*L24*L33
+88 1 L11*L15*L21
+89 109 L11*L15*L28
+90 2 L11*L19*L34
+91 2 L11*L20*L33
+92 2 L11*L21*L32
+93 80 L11*L24*L29
+94 8 L12*L15*L22
+95 1 L12*L15*L24
+96 1 L12*L24*L34
+97 57 L12*L25*L33
+98 4 L12*L33*L35
+99 3 L13*L21*L34
+100 8 L13*L23*L34
+101 15 L13*L29*L34
+102 17 L13*L33*L34
+103 90 L14*L16*L33
+104 6 L14*L19*L33
+105 391 L14*L20*L33
+106 93 L14*L23*L33
+107 3 L14*L23*L35
+108 313 L14*L28*L33
+109 25 L14*L31*L33
+110 19 L15*L18*L23
+111 2 L15*L21*L31
+112 18 L15*L28*L28
+113 1 L16*L20*L33
+114 65 L16*L22*L33
+115 1 L17*L18*L34
+116 8 L18*L23*L24
+117 3 L18*L24*L34
+118 4 L18*L30*L34
+119 8 L20*L23*L23
+120 8 L20*L23*L33
+121 21 L20*L25*L33
+122 335 L20*L28*L33
+123 2 L20*L30*L34
+124 141 L20*L33*L34
+125 181 L22*L26*L33
+126 625 L22*L28*L33
+127 15 L22*L30*L34
+128 641 L22*L33*L34
+129 69 L23*L25*L33
+130 22 L23*L31*L35
+131 11 L24*L26*L33
+132 151 L24*L28*L33
+133 12 L24*L31*L34
+134 311 L28*L28*L33
+135 439 L28*L33*L34
+136 39 L29*L29*L34
+137 156 ABH+*L0
+138 22 ABH+*L22
+139 12 ABH+*L25
+140 76 ABH+*L35
+141 42 BCD+*L11
+142 37 CDH+*L9
+143 5 EFH+*L0
+144 128 EFH+*L28
+145 26 EFH+*L31
+146 14 DEG+*L9
+147 1 DEG+*L26
+148 5 EFG+*L5
+149 3 FGH-*L30
+150 2 AGH+*L21
+151 6 CGH+*L10
+152 14 CGH+*L29
+153 1 BCO+*L12
+154 1 AHO-*L6
+155 78 CHO-*L6
+156 12 BCP+*L0
+157 1 BCP+*L10
+158 4 BCP+*L20
+159 39 BCP+*L24
+160 39 BCP+*L25
+161 340 BCP+*L28
+162 498 CDP+*L0
+163 42 CDP+*L3
+164 152 CDP+*L4
+165 154 CDP+*L11
+166 3 CDP+*L12
+167 173 CDP+*L18
+168 162 CDP+*L19
+169 242 CDP+*L20
+170 221 CDP+*L22
+171 6 CDP+*L27
+172 200 CDP+*L28
+173 191 CDP+*L35
+174 1 DEP+*L17
+175 256 DEP+*L20
+176 56 DEP+*L22
+177 316 CEP-*L0
+178 41 CEP-*L3
+179 42 CEP-*L11
+180 8 CEP-*L12
+181 259 CEP-*L20
+182 144 CEP-*L22
+183 3 CEP-*L26
+184 108 CEP-*L28
+185 454 CEP-*L29
+186 1 GHO+*L5
+187 3 GHO+*L32
+188 11 DOP+*L4
+189 70 DOP+*L8
+190 1 DOP+*L12
+191 8 DOP+*L22
+192 3 ADP-*L0
+193 22 ADP-*L5
+194 39 ADP-*L6
+195 38 ADP-*L9
+196 350 ADP-*L28
+197 1 AGO-*L6
+198 4 AGO-*L33
+199 1 CGO-*L10
+200 8 CGO-*L22
+201 1 CGO-*L34
+202 1 CFP-*L3
+203 17 CFP-*L9
+204 8 CFP-*L15
+205 63 CFP-*L29
+206 57 CGP-*L33
+207 67 COP-*L8
+208 1 COP-*L12
+209 4 COP-*L33
+210 7 DFP+*L7
+211 17 DFP+*L21
+212 69 DFP+*L22
+213 27 DHP+*L3
+214 19 DHP+*L18
+215 15 DHP+*L30
+216 114 EGP+*L33
+217 1 FOP+*L16
+218 4 FOP+*L33
+219 2 FGO+*L8
+220 8 FGO+*L22
+221 1 FGO+*L24
+222 3 FGO+*L30
+223 6 DGP+*L5
+224 1 DGP+*L21
+225 1 DGP+*L28
+226 21 ER*L1
+227 40 ER*L4
+228 2 ER*L20
+229 47 CCDE_1*L4
+230 416 CCDE_1*L6
+231 35 CCDE_1*L13
+232 131 CCDE_1*L16
+233 4 CCDE_1*L19
+234 119 CCDE_1*L25
+235 312 CCDE_1*L26
+236 206 CCDE_1*L28
+237 1 CCDG_1*L6
+238 2 CCDG_1*L23
+239 4 CCDO_1*L5
+240 98 CCDO_1*L6
+241 1 CCDO_1*L16
+242 161 CCDO_1*L29
+243 2 CCDO_1*L35
+244 36 CCFH_2*L7
+245 42 CCFH_2*L10
+246 36 CCFH_2*L11
+247 26 CCFH_2*L13
+248 92 CCFH_2*L16
+249 5 CCFH_2*L19
+250 259 CCFH_2*L20
+251 160 CCFH_2*L22
+252 558 CCFH_2*L28
+253 3 CFHO_1*L4
+254 78 CFHO_1*L6
+255 3 CFHO_1*L24
+256 9 QBCDF_1*L9
+257 11 QCDEO_1*L23
+258 17 QCDFG_2*L6
+259 2 QCDFG_2*L15
+260 274 QCDFH_3*L20
+261 570 QCDFH_3*L22
+262 3 QCPFG_1*L9
+263 3 F5_ABCFH*L33
+```
+
+
+### Row R39
+
+Path: DOP+,ADP-,CFO+,AGO-,CGO+,BFO-.
+
+```n7-h2-R39-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu BAFHO BHO -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCO FAO 1
+plu FABCP FBP 1
+plu FACDO FDO -1
+plu FACOP FOP 1
+plu GABCH GBH -1
+plu HABCP HBP 1
+```
+
+Exact upper bound: `-23358667333608025155264441798716949822297/302326612575101678453476835868500000000`.
+
+```n7-h2-R39-witnesses
+CBCF_1 O
+CCDE_1 P
+QABCD_1 P
+QBCPF_1 O
+```
+
+```n7-h2-R39-sum
+1 216 L0*L0*L2
+2 112 L0*L0*L15
+3 2831 L0*L2*L24
+4 330 L0*L2*L27
+5 16 L0*L6*L33
+6 112 L0*L9*L15
+7 92 L0*L14*L33
+8 4 L0*L20*L33
+9 16 L0*L28*L33
+10 392 L1*L1*L23
+11 98 L1*L5*L23
+12 13 L1*L9*L19
+13 112 L1*L9*L27
+14 29 L1*L9*L32
+15 8 L1*L23*L23
+16 55 L1*L23*L32
+17 32 L1*L23*L35
+18 1 L2*L2*L8
+19 2 L2*L2*L25
+20 1 L2*L3*L15
+21 611 L2*L6*L20
+22 10 L2*L7*L33
+23 11 L2*L8*L33
+24 163 L2*L9*L15
+25 291 L2*L9*L25
+26 3 L2*L10*L28
+27 74 L2*L15*L21
+28 3288 L2*L15*L24
+29 133 L2*L15*L28
+30 1 L2*L15*L30
+31 683 L2*L21*L24
+32 434 L2*L21*L27
+33 56 L2*L22*L24
+34 847 L2*L27*L27
+35 3526 L2*L27*L28
+36 991 L3*L9*L24
+37 1 L4*L5*L9
+38 342 L4*L9*L15
+39 10 L5*L6*L6
+40 5621 L5*L6*L24
+41 3993 L5*L9*L24
+42 452 L5*L9*L29
+43 557 L5*L23*L26
+44 455 L5*L23*L35
+45 263 L5*L24*L34
+46 92 L5*L34*L34
+47 87 L6*L6*L22
+48 1040 L6*L9*L22
+49 64 L6*L23*L23
+50 707 L6*L23*L24
+51 329 L6*L23*L35
+52 747 L6*L24*L31
+53 175 L6*L33*L34
+54 112 L8*L15*L34
+55 112 L9*L9*L9
+56 555 L9*L9*L22
+57 13 L9*L11*L23
+58 106 L9*L11*L26
+59 1 L9*L11*L31
+60 112 L9*L14*L15
+61 15 L9*L19*L24
+62 698 L9*L21*L23
+63 115 L9*L21*L32
+64 609 L9*L22*L34
+65 707 L9*L23*L24
+66 395 L9*L23*L35
+67 1851 L9*L24*L31
+68 1027 L9*L24*L32
+69 258 L9*L25*L33
+70 199 L9*L26*L32
+71 112 L9*L34*L35
+72 92 L10*L15*L15
+73 151 L10*L33*L34
+74 92 L11*L26*L34
+75 508 L15*L23*L29
+76 112 L15*L34*L35
+77 15 L18*L24*L34
+78 567 L20*L24*L33
+79 581 L20*L28*L33
+80 459 L20*L33*L34
+81 560 L21*L23*L26
+82 626 L21*L23*L35
+83 500 L23*L23*L35
+84 471 L23*L26*L32
+85 332 L23*L26*L35
+86 44 L23*L30*L34
+87 513 L23*L33*L34
+88 5 L24*L31*L33
+89 5 L24*L32*L33
+90 361 L25*L33*L34
+91 92 L26*L30*L34
+92 112 L26*L34*L35
+93 8 L28*L30*L33
+94 1016 L28*L33*L34
+95 1 L30*L30*L34
+96 2 ABC+*L2
+97 176 ABC+*L20
+98 748 ABH+
+99 422 ABH+*L0
+100 453 ABH+*L7
+101 513 ABH+*L21
+102 515 ABH+*L23
+103 3288 ABH+*L24
+104 755 ABH+*L27
+105 3207 ABH+*L28
+106 2 ABH+*L30
+107 133 BCD+*L0
+108 153 EFH+*L3
+109 25 EFH+*L6
+110 150 EFH+*L8
+111 152 EFH+*L10
+112 6 EFH+*L20
+113 361 EFH+*L25
+114 865 EFH+*L28
+115 153 EFH+*L31
+116 625 BCO+*L20
+117 433 BCO+*L28
+118 42 FHO+*L23
+119 1 FHO+*L33
+120 42 AHO-*L23
+121 560 CHO-*L6
+122 575 CHO-*L25
+123 1 CHO-*L33
+124 2 BCP+*L3
+125 747 BCP+*L6
+126 2817 BCP+*L20
+127 56 BCP+*L22
+128 458 BCP+*L35
+129 2903 CDP+
+130 1051 CDP+*L0
+131 997 CDP+*L3
+132 5473 CDP+*L6
+133 42 CDP+*L18
+134 1697 CDP+*L21
+135 445 CDP+*L23
+136 1124 CDP+*L25
+137 1401 CDP+*L26
+138 5463 CDP+*L28
+139 986 CDP+*L31
+140 8 CDP+*L33
+141 417 DEP+*L25
+142 534 DEP+*L33
+143 2701 CEP-*L0
+144 988 CEP-*L3
+145 4052 CEP-*L6
+146 8 CEP-*L11
+147 72 CEP-*L20
+148 500 CEP-*L23
+149 1124 CEP-*L25
+150 1450 CEP-*L26
+151 2703 CEP-*L29
+152 978 CEP-*L31
+153 1143 CEP-*L35
+154 560 DOP+*L0
+155 42 DOP+*L4
+156 1539 DOP+*L16
+157 1539 DOP+*L17
+158 560 DOP+*L26
+159 424 ADP-*L1
+160 595 ADP-*L5
+161 42 ADP-*L18
+162 1186 ADP-*L21
+163 509 ADP-*L23
+164 332 ADP-*L26
+165 947 ADP-*L28
+166 870 ADP-*L29
+167 515 ADP-*L31
+168 526 ADP-*L32
+169 727 CFO+*L0
+170 1 CFO+*L4
+171 2136 CFO+*L7
+172 1 CFO+*L11
+173 459 CFO+*L14
+174 625 CFO+*L20
+175 42 CFO+*L23
+176 4578 CFO+*L24
+177 547 CFO+*L35
+178 176 BFO-*L0
+179 1044 BFO-*L7
+180 548 BFO-*L8
+181 6 BFO-*L14
+182 625 BFO-*L20
+183 4439 BFO-*L24
+184 940 BFO-*L25
+185 1285 CFP-*L9
+186 511 DFP+*L21
+187 13 AFO-*L9
+188 53 ER*L23
+189 2359 CBCF_1*L28
+190 1000 CCDE_1*L2
+191 64 CCDE_1*L21
+192 986 CCDE_1*L30
+193 216 QABCD_1*L0
+194 79 QABCD_1*L20
+195 5 QBCPF_1*L33
+```
+
+
+### Row R40
+
+Path: DOP+,ADP-,CFO+,AGO-,CGO+,BFO+,AEO-.
+
+```n7-h2-R40-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu ABEFO AFO -1
+plu BADFO BDO 1
+plu BAEFO BEO 1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EABHO EHO 1
+plu EABOP EOP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu FABCP FBP 1
+plu FABDO FDO -1
+plu FABOP FOP 1
+plu GABCH GBH -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OBCDP OBP 1
+```
+
+Exact upper bound: `-27966676797557657287450937509370076427/422436869446630214027539482062500000`.
+
+```n7-h2-R40-witnesses
+CCDE_1 P
+CCDO_1 P
+QBCDO_1 P
+```
+
+```n7-h2-R40-sum
+1 376 L0*L0*L33
+2 189 L0*L6*L33
+3 121 L0*L13*L33
+4 112 L0*L18*L23
+5 256 L0*L24*L33
+6 376 L0*L26*L33
+7 248 L0*L29*L33
+8 136 L0*L33*L33
+9 319 L1*L9*L13
+10 1247 L1*L9*L19
+11 411 L1*L21*L23
+12 61 L2*L2*L17
+13 114 L2*L2*L21
+14 262 L2*L5*L15
+15 330 L2*L6*L21
+16 431 L2*L9*L20
+17 61 L2*L12*L15
+18 130 L2*L15*L32
+19 99 L2*L17*L20
+20 72 L2*L17*L24
+21 61 L2*L17*L30
+22 303 L2*L18*L34
+23 47 L2*L20*L33
+24 144 L2*L20*L34
+25 459 L2*L21*L24
+26 6 L2*L22*L24
+27 27 L2*L22*L33
+28 3 L2*L23*L25
+29 209 L2*L23*L34
+30 793 L2*L24*L28
+31 71 L2*L24*L34
+32 1516 L2*L28*L30
+33 516 L2*L28*L33
+34 2475 L3*L9*L26
+35 499 L3*L9*L29
+36 828 L4*L28*L33
+37 491 L4*L33*L34
+38 1501 L5*L6*L9
+39 4056 L5*L6*L24
+40 4271 L5*L9*L24
+41 691 L5*L9*L26
+42 55 L5*L23*L26
+43 437 L6*L7*L33
+44 1899 L6*L9*L26
+45 7 L6*L17*L22
+46 1281 L6*L18*L24
+47 68 L6*L23*L23
+48 85 L6*L23*L24
+49 397 L6*L23*L35
+50 1899 L7*L9*L26
+51 7 L7*L17*L18
+52 101 L7*L23*L33
+53 169 L7*L27*L33
+54 437 L7*L28*L33
+55 203 L7*L32*L33
+56 326 L8*L9*L33
+57 1 L8*L13*L24
+58 41 L8*L33*L34
+59 740 L9*L9*L22
+60 121 L9*L10*L15
+61 319 L9*L11*L17
+62 114 L9*L11*L19
+63 238 L9*L11*L21
+64 38 L9*L11*L22
+65 146 L9*L11*L33
+66 24 L9*L13*L19
+67 99 L9*L13*L21
+68 958 L9*L13*L26
+69 285 L9*L13*L34
+70 788 L9*L18*L24
+71 738 L9*L18*L33
+72 65 L9*L19*L22
+73 1468 L9*L19*L26
+74 541 L9*L21*L23
+75 387 L9*L21*L33
+76 1111 L9*L22*L29
+77 59 L9*L23*L23
+78 85 L9*L23*L24
+79 32 L9*L25*L30
+80 385 L9*L25*L33
+81 128 L9*L30*L35
+82 233 L10*L14*L33
+83 540 L10*L33*L34
+84 453 L11*L20*L33
+85 47 L11*L21*L23
+86 27 L11*L22*L33
+87 71 L12*L15*L24
+88 61 L12*L24*L33
+89 61 L12*L27*L33
+90 24 L13*L15*L18
+91 88 L13*L20*L34
+92 5 L13*L21*L26
+93 74 L15*L18*L29
+94 114 L15*L18*L32
+95 652 L15*L21*L30
+96 351 L15*L23*L29
+97 110 L15*L30*L30
+98 21 L15*L32*L32
+99 128 L15*L32*L35
+100 60 L16*L20*L33
+101 7 L16*L21*L23
+102 10 L16*L23*L33
+103 65 L16*L24*L33
+104 61 L16*L33*L33
+105 7 L17*L18*L24
+106 2 L17*L18*L33
+107 50 L17*L22*L33
+108 92 L18*L23*L34
+109 2 L18*L24*L33
+110 14 L18*L28*L34
+111 95 L20*L23*L33
+112 1632 L20*L24*L33
+113 2181 L20*L26*L33
+114 1499 L20*L28*L33
+115 2070 L21*L28*L30
+116 45 L22*L24*L33
+117 13 L22*L30*L30
+118 247 L22*L33*L34
+119 59 L23*L23*L35
+120 209 L23*L30*L34
+121 13 L23*L32*L32
+122 13 L23*L33*L33
+123 1434 L24*L31*L33
+124 16 L24*L32*L33
+125 136 L26*L33*L33
+126 1516 L28*L30*L30
+127 203 L28*L33*L33
+128 1107 L28*L33*L34
+129 516 L31*L33*L34
+130 248 L33*L34*L35
+131 446 ABC+*L18
+132 313 ABD+*L33
+133 665 ABH+*L3
+134 3804 ABH+*L8
+135 665 ABH+*L10
+136 2 ABH+*L12
+137 1076 ABH+*L18
+138 1827 ABH+*L19
+139 2181 ABH+*L20
+140 665 ABH+*L31
+141 87 BCD+*L5
+142 668 BCD+*L9
+143 570 EFH+*L0
+144 684 EFH+*L5
+145 658 EFH+*L10
+146 61 EFH+*L13
+147 804 EFH+*L20
+148 247 EFH+*L22
+149 867 EFH+*L28
+150 570 EFH+*L35
+151 61 ABG+*L33
+152 285 EFG+*L8
+153 61 EFG+*L11
+154 1710 EFG+*L18
+155 11 EFG+*L20
+156 5 EFG+*L25
+157 34 FGH-*L1
+158 61 FGH-*L3
+159 61 FGH-*L5
+160 1712 FGH-*L18
+161 83 FGH-*L21
+162 71 FGH-*L25
+163 34 FGH-*L27
+164 34 FGH-*L34
+165 1276 AGH+*L9
+166 128 ABO+*L15
+167 292 ABO+*L33
+168 66 BCO+*L17
+169 42 AHO-*L6
+170 2730 AHO-*L9
+171 1378 AHO-*L11
+172 1686 AHO-*L12
+173 5 AHO-*L21
+174 2220 CHO-*L0
+175 114 CHO-*L2
+176 868 CHO-*L6
+177 1173 CHO-*L8
+178 2 CHO-*L12
+179 5 CHO-*L20
+180 92 CHO-*L22
+181 218 CHO-*L31
+182 220 CHO-*L33
+183 71 BCP+*L0
+184 72 BCP+*L17
+185 3516 BCP+*L21
+186 9 BCP+*L22
+187 71 BCP+*L26
+188 1207 BCP+*L28
+189 414 BCP+*L29
+190 1417 BCP+*L33
+191 1415 CDP+*L0
+192 2973 CDP+*L8
+193 1439 CDP+*L21
+194 55 CDP+*L22
+195 1159 CDP+*L26
+196 4947 CDP+*L28
+197 4947 CDP+*L29
+198 1031 CDP+*L33
+199 45 DEP+*L18
+200 930 DEP+*L33
+201 351 CEP-*L0
+202 4321 CEP-*L6
+203 2518 CEP-*L7
+204 6 CEP-*L16
+205 1726 CEP-*L20
+206 85 CEP-*L25
+207 351 CEP-*L26
+208 1851 CEP-*L29
+209 968 CEP-*L33
+210 2 GHO+*L30
+211 864 DOP+*L0
+212 630 DOP+*L6
+213 2617 DOP+*L12
+214 2617 DOP+*L13
+215 7 DOP+*L16
+216 45 DOP+*L22
+217 85 DOP+*L24
+218 737 DOP+*L26
+219 630 DOP+*L28
+220 55 ADP-*L5
+221 538 ADP-*L21
+222 59 ADP-*L23
+223 2 AGO-*L2
+224 5 AGO-*L20
+225 2131 AGO-*L24
+226 2131 AGO-*L25
+227 5 CGO+*L20
+228 114 BFO+*L3
+229 218 BFO+*L10
+230 34 BFO+*L17
+231 1011 BFO+*L20
+232 1011 BFO+*L21
+233 3057 BFO+*L24
+234 1460 BFO+*L26
+235 2400 BFO+*L28
+236 671 BFO+*L33
+237 721 BFO+*L35
+238 1040 AEO-*L2
+239 193 AEO-*L7
+240 1086 AEO-*L10
+241 1686 AEO-*L13
+242 112 AEO-*L23
+243 397 AEO-*L25
+244 14 AEO-*L28
+245 738 AEO-*L30
+246 524 AFO-*L24
+247 2092 ACO+*L15
+248 16 CFP-*L33
+249 6 CGP-*L9
+250 61 CGP-*L33
+251 85 COP-*L24
+252 2 COP-*L33
+253 737 COP-*L34
+254 901 DFP+*L21
+255 71 DFP+*L26
+256 197 DFP+*L35
+257 182 FOP+*L9
+258 45 FOP+*L23
+259 87 ER*L2
+260 796 ER*L6
+261 803 ER*L21
+262 103 ER*L25
+263 6408 ER*L26
+264 371 ER*L29
+265 87 ER*L30
+266 562 CCDE_1*L26
+267 1603 CCDE_1*L30
+268 39 CCDO_1*L0
+269 1196 CCDO_1*L24
+270 739 QBCDO_1*L9
+271 84 QBCDO_1*L34
+```
+
+
+### Row R41
+
+Path: DOP+,ADP-,CFO+,AGO-,CGO+,BFO+,AEO+.
+
+```n7-h2-R41-trace
+plu ABCEO ACO 1
+plu ABCGO ACG 1
+plu ABDEO ADO 1
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu ABDGO ADG 1
+plu ABDGP AGP -1
+plu ABDOP AOP -1
+plu ABEGO AEG 1
+plu BADFO BDO 1
+plu BAEFO BEO 1
+plu CABEP CAP -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCG DBG -1
+plu DACFP DFP 1
+plu DACGP DGP 1
+plu DACHP DHP 1
+plu EABCG EBG -1
+plu EABCP EBP 1
+plu EADGP EGP 1
+plu EADHP EHP 1
+plu EADOP EOP 1
+plu FABCP FBP 1
+plu FBDEO FDO -1
+plu FBDOP FOP 1
+plu GABCH GBH -1
+plu GABCP GBP 1
+plu GACDO GDO -1
+plu GACEO GEO -1
+plu GACOP GOP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OABCP OBP 1
+```
+
+Exact upper bound: `-46991791161646544918395669120876191973/766083504993601995022682791000000000`.
+
+```n7-h2-R41-witnesses
+CAEG_1 O
+CCDE_1 P
+CCDF_1 P
+CCGH_1 O
+QABCD_1 P
+QABFH_1 O
+QAEFH_2 GO
+QBCDE_1 P
+QBCGH_1 O
+QCDEO_1 P
+QCDFO_1 P
+QCDGO_1 P
+```
+
+```n7-h2-R41-sum
+1 19 L10*L15
+2 1 L12*L17
+3 86 L17*L18
+4 4 L0*L0*L20
+5 178 L0*L2*L2
+6 1522 L0*L2*L24
+7 688 L0*L2*L27
+8 3 L0*L6*L18
+9 406 L0*L9*L11
+10 7 L0*L9*L20
+11 14 L0*L10*L18
+12 189 L0*L12*L33
+13 395 L0*L13*L18
+14 183 L0*L15*L23
+15 342 L0*L15*L31
+16 180 L0*L16*L33
+17 11 L0*L17*L35
+18 6 L0*L18*L23
+19 7 L0*L19*L24
+20 30 L0*L23*L32
+21 11 L1*L9*L17
+22 31 L1*L9*L19
+23 188 L1*L18*L33
+24 12 L1*L23*L30
+25 53 L2*L2*L21
+26 170 L2*L2*L24
+27 2062 L2*L2*L28
+28 9 L2*L6*L17
+29 3 L2*L7*L27
+30 288 L2*L8*L18
+31 17 L2*L8*L33
+32 15 L2*L11*L27
+33 2 L2*L12*L24
+34 44 L2*L15*L30
+35 40 L2*L17*L24
+36 2 L2*L20*L28
+37 95 L2*L21*L27
+38 1961 L2*L24*L28
+39 8 L2*L27*L33
+40 73 L2*L28*L28
+41 3694 L2*L28*L30
+42 108 L2*L28*L33
+43 35 L3*L5*L9
+44 46 L3*L15*L17
+45 113 L3*L17*L30
+46 26 L3*L17*L33
+47 220 L4*L15*L30
+48 349 L4*L17*L18
+49 8 L4*L17*L20
+50 7 L4*L17*L23
+51 27 L4*L20*L27
+52 301 L5*L6*L6
+53 2053 L5*L6*L24
+54 2 L5*L9*L13
+55 4 L5*L9*L32
+56 59 L5*L17*L17
+57 27 L5*L17*L28
+58 6 L5*L21*L23
+59 442 L5*L23*L26
+60 249 L5*L23*L35
+61 24 L6*L9*L19
+62 449 L6*L9*L22
+63 363 L6*L11*L34
+64 3 L6*L12*L24
+65 48 L6*L13*L34
+66 5 L6*L15*L18
+67 282 L6*L15*L23
+68 108 L6*L31*L33
+69 3 L7*L15*L30
+70 2 L7*L20*L33
+71 135 L7*L28*L33
+72 421 L7*L33*L34
+73 4 L8*L9*L21
+74 1 L8*L17*L18
+75 430 L8*L24*L33
+76 2 L8*L31*L33
+77 112 L9*L9*L13
+78 1857 L9*L11*L24
+79 131 L9*L11*L33
+80 164 L9*L12*L33
+81 10 L9*L14*L17
+82 12 L9*L17*L22
+83 28 L9*L18*L35
+84 12 L9*L19*L24
+85 1 L9*L21*L23
+86 353 L9*L22*L29
+87 284 L9*L22*L34
+88 110 L9*L24*L32
+89 7 L9*L27*L32
+90 69 L9*L30*L31
+91 49 L10*L15*L17
+92 41 L10*L15*L19
+93 1317 L10*L15*L24
+94 276 L10*L15*L35
+95 121 L10*L24*L33
+96 125 L10*L25*L33
+97 47 L11*L17*L19
+98 8 L11*L17*L23
+99 7 L12*L15*L20
+100 139 L12*L17*L24
+101 190 L12*L22*L34
+102 311 L12*L33*L34
+103 80 L13*L17*L24
+104 19 L13*L17*L26
+105 46 L13*L17*L28
+106 46 L13*L17*L34
+107 4 L13*L21*L24
+108 13 L14*L17*L34
+109 1 L15*L15*L16
+110 117 L15*L17*L23
+111 120 L15*L18*L31
+112 319 L15*L22*L30
+113 236 L15*L23*L29
+114 127 L16*L33*L33
+115 59 L17*L17*L22
+116 4 L17*L18*L24
+117 8 L17*L22*L33
+118 153 L17*L23*L29
+119 48 L17*L25*L31
+120 11 L17*L27*L27
+121 23 L17*L27*L34
+122 50 L17*L30*L32
+123 115 L17*L33*L35
+124 1 L18*L23*L29
+125 153 L19*L27*L33
+126 138 L19*L33*L34
+127 95 L20*L26*L33
+128 36 L20*L33*L33
+129 7 L21*L23*L34
+130 53 L21*L31*L32
+131 4 L21*L35*L35
+132 82 L23*L26*L33
+133 319 L23*L27*L30
+134 360 L23*L33*L34
+135 173 L24*L27*L31
+136 305 L25*L33*L34
+137 49 L26*L33*L34
+138 73 L28*L28*L30
+139 135 L28*L29*L33
+140 1633 L28*L30*L30
+141 4 L28*L33*L33
+142 20 L31*L31*L34
+143 575 L33*L34*L35
+144 79 ABC+*L2
+145 50 ABC+*L13
+146 470 ABC+*L18
+147 352 ABC+*L25
+148 16 ABC+*L28
+149 688 ABH+*L0
+150 369 ABH+*L24
+151 64 ABH+*L30
+152 62 ADF+*L15
+153 9 BCD+*L17
+154 95 EFH+*L22
+155 121 EFH+*L28
+156 22 EFH+*L32
+157 175 EFH+*L35
+158 163 ABG+*L2
+159 8 ABG+*L9
+160 24 ABG+*L33
+161 19 EFG+*L0
+162 128 EFG+*L2
+163 42 EFG+*L8
+164 395 EFG+*L18
+165 190 EFG+*L22
+166 117 EFG+*L25
+167 70 EFG+*L28
+168 128 EFG+*L30
+169 127 FGH-*L10
+170 349 FGH-*L18
+171 190 FGH-*L22
+172 117 FGH-*L25
+173 49 FGH-*L26
+174 227 FGH-*L35
+175 31 AHO-*L2
+176 19 AHO-*L21
+177 9 CHO-*L2
+178 121 CHO-*L3
+179 53 CHO-*L6
+180 349 CHO-*L12
+181 58 CHO-*L17
+182 19 CHO-*L20
+183 7 CHO-*L25
+184 48 CHO-*L28
+185 201 CHO-*L31
+186 1 CEO+*L17
+187 170 BCP+*L2
+188 112 BCP+*L11
+189 2 BCP+*L12
+190 142 BCP+*L26
+191 1961 BCP+*L28
+192 110 BCP+*L35
+193 742 CDP+*L0
+194 2250 CDP+*L6
+195 116 CDP+*L11
+196 155 CDP+*L16
+197 9 CDP+*L19
+198 3 CDP+*L21
+199 701 CDP+*L26
+200 4881 CDP+*L28
+201 2593 CDP+*L29
+202 587 DEP+*L2
+203 691 DEP+*L30
+204 1347 CEP-*L0
+205 282 CEP-*L3
+206 1788 CEP-*L6
+207 2 CEP-*L13
+208 266 CEP-*L16
+209 1 CEP-*L19
+210 1 CEP-*L20
+211 528 CEP-*L26
+212 515 CEP-*L28
+213 1152 CEP-*L29
+214 65 GHO+*L17
+215 35 GHO+*L35
+216 8 DOP+*L5
+217 3 DOP+*L6
+218 811 ADP-*L5
+219 626 ADP-*L8
+220 112 ADP-*L11
+221 183 ADP-*L14
+222 8 ADP-*L19
+223 1302 ADP-*L28
+224 1264 ADP-*L29
+225 104 ADP-*L31
+226 35 AGO-*L0
+227 159 AGO-*L5
+228 1183 AGO-*L12
+229 1183 AGO-*L13
+230 19 AGO-*L16
+231 19 AGO-*L20
+232 2 AGO-*L22
+233 35 AGO-*L26
+234 213 AGO-*L32
+235 164 CGO+*L5
+236 302 CGO+*L12
+237 302 CGO+*L13
+238 19 CGO+*L20
+239 2 CGO+*L22
+240 4 CGO+*L25
+241 3 CGO+*L28
+242 213 CGO+*L32
+243 67 CGO+*L35
+244 233 BFO+*L4
+245 36 BFO+*L11
+246 327 BFO+*L12
+247 327 BFO+*L13
+248 95 BFO+*L26
+249 2 BFO+*L28
+250 8 AEO+*L9
+251 142 AEO+*L11
+252 395 AEO+*L12
+253 5 AEO+*L24
+254 288 AEO+*L31
+255 2 ACO+*L9
+256 3 ADO+*L24
+257 155 ACP+*L9
+258 30 CFP-*L2
+259 59 CGP-*L17
+260 107 CGP-*L34
+261 4 DFP+*L11
+262 7 BEP-*L15
+263 8 BEP-*L17
+264 82 EOP+*L33
+265 46 BGP-*L15
+266 24 DGO+*L9
+267 344 EGO+*L5
+268 13 EGO+*L27
+269 7 GOP+*L34
+270 66 BHO-*L33
+271 82 BOP-*L33
+272 254 EL*L28
+273 110 ER*L2
+274 151 ER*L4
+275 178 ER*L23
+276 4 CAEG_1*L5
+277 2 CAEG_1*L23
+278 1091 CCDE_1*L2
+279 1082 CCDE_1*L4
+280 253 CCDE_1*L6
+281 1 CCDE_1*L18
+282 382 CCDE_1*L25
+283 25 CCDE_1*L26
+284 602 CCDE_1*L30
+285 70 CCDF_1*L17
+286 49 CCGH_1*L26
+287 179 CCGH_1*L35
+288 13 QABCD_1*L6
+289 233 QABCD_1*L22
+290 1931 QABCD_1*L24
+291 70 QABFH_1*L15
+292 3 RACDG_OP_AD*L6
+293 48 RACDG_OP_CG*L15
+294 3 RACDG_OP_CG*L28
+295 105 QAEFH_2*L3
+296 303 QAEFH_2*L8
+297 149 QAEFH_2*L11
+298 476 QAEFH_2*L12
+299 309 QAEFH_2*L19
+300 727 QAEFH_2*L23
+301 1128 QAEFH_2*L24
+302 70 QAEFH_2*L26
+303 61 QBCDE_1*L30
+304 38 QBCGH_1*L33
+305 20 QCDEO_1*L9
+306 2 QCDFO_1*L9
+307 46 QCDGO_1*L17
+308 271 F5_CFHAB*L15
+309 39 F5_HABEF*L15
+```
+
+
+### Row R42
+
+Path: DOP+,ADP-,CFO+,AGO+,GHP-.
+
+```n7-h2-R42-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCP FBP 1
+plu FCDEO FDO -1
+plu FCDOP FOP 1
+plu GABCH GBH -1
+plu GABHO GBO -1
+plu GACHO GCO -1
+plu GCEHP GEH 1
+plu GEFHP GFP -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADGP HDG -1
+plu HAEGO HEO -1
+plu HAGOP HOP 1
+plu HBDGO HDO -1
+via G CDH DF 1
+```
+
+```n7-h2-R42-exclusion
+cluster CDH P HCP GO
+```
+
+### Row R43
+
+Path: DOP+,ADP-,CFO+,AGO+,GHP+,BFO-.
+
+```n7-h2-R43-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu BAFHO BHO -1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCO FAO 1
+plu FABCP FBP 1
+plu FACDO FDO -1
+plu FACOP FOP 1
+plu GABCH GBH -1
+plu GABHO GBO -1
+plu GACHO GCO -1
+plu GACHP GAP 1
+plu GAHOP GOP 1
+plu GBCHP GBP 1
+plu HABCP HBP 1
+plu OACFG OFG -1
+plu OACGP OAP 1
+plu OBCGP OBP 1
+plu PACDG PDG 1
+plu ABFGO AFG -1
+plu BAFGO BFG -1
+```
+
+Exact upper bound: `-700979868394467363470183729976773/10691576137685819086747000000000`.
+
+```n7-h2-R43-witnesses
+CACD_1 P
+CAGH_1 O
+CBCF_1 O
+CCDE_1 P
+QABCD_1 P
+QAGFH_1 O
+QBPEF_2 GO
+QCDEG_1 P
+QEFOP_1 G
+```
+
+```n7-h2-R43-sum
+1 740 L0*L0*L2
+2 607 L0*L2*L15
+3 8 L0*L2*L33
+4 115 L0*L5*L9
+5 7 L0*L5*L33
+6 47 L0*L8*L33
+7 49 L0*L9*L19
+8 2 L0*L13*L27
+9 1 L0*L13*L29
+10 147 L0*L15*L31
+11 1 L0*L16*L33
+12 170 L0*L20*L33
+13 58 L0*L28*L33
+14 141 L1*L15*L23
+15 388 L1*L23*L35
+16 1 L2*L4*L15
+17 1 L2*L4*L34
+18 108 L2*L9*L15
+19 2 L2*L9*L19
+20 290 L2*L9*L25
+21 223 L2*L9*L35
+22 85 L2*L15*L21
+23 207 L2*L15*L24
+24 2 L2*L17*L18
+25 43 L2*L21*L24
+26 181 L2*L21*L27
+27 292 L2*L21*L28
+28 3234 L2*L24*L27
+29 335 L2*L27*L27
+30 2489 L2*L27*L28
+31 1501 L3*L9*L24
+32 199 L4*L9*L15
+33 2 L5*L6*L18
+34 51 L5*L6*L23
+35 4731 L5*L6*L24
+36 19 L5*L9*L17
+37 13 L5*L9*L21
+38 2564 L5*L9*L24
+39 299 L5*L9*L29
+40 217 L5*L9*L34
+41 51 L5*L15*L23
+42 479 L5*L23*L26
+43 636 L5*L23*L35
+44 170 L5*L24*L34
+45 49 L5*L34*L34
+46 448 L6*L9*L22
+47 58 L6*L9*L32
+48 21 L6*L10*L24
+49 21 L6*L19*L24
+50 22 L6*L22*L34
+51 58 L6*L26*L32
+52 2 L7*L13*L15
+53 205 L7*L33*L34
+54 2 L8*L17*L19
+55 13 L9*L9*L13
+56 107 L9*L10*L35
+57 19 L9*L11*L19
+58 6 L9*L12*L24
+59 1 L9*L13*L22
+60 2 L9*L13*L30
+61 7 L9*L17*L22
+62 23 L9*L21*L23
+63 580 L9*L22*L34
+64 1675 L9*L24*L31
+65 333 L9*L24*L32
+66 33 L9*L25*L33
+67 48 L9*L26*L30
+68 58 L9*L29*L31
+69 19 L10*L15*L19
+70 2 L10*L16*L18
+71 3 L10*L21*L24
+72 84 L10*L33*L34
+73 5 L12*L15*L34
+74 2 L12*L30*L34
+75 1 L13*L15*L23
+76 1 L13*L20*L25
+77 9 L13*L20*L27
+78 5 L13*L21*L34
+79 66 L13*L26*L34
+80 5 L15*L16*L18
+81 30 L15*L18*L27
+82 72 L15*L19*L34
+83 134 L15*L33*L34
+84 2 L16*L17*L19
+85 3 L16*L18*L18
+86 2 L17*L17*L19
+87 3 L17*L19*L19
+88 1 L17*L19*L24
+89 2 L17*L19*L33
+90 2 L17*L21*L23
+91 2 L17*L23*L35
+92 2 L17*L24*L31
+93 2 L17*L24*L32
+94 1 L17*L26*L31
+95 2 L18*L20*L33
+96 1 L18*L23*L26
+97 2 L18*L23*L35
+98 1 L18*L24*L27
+99 2 L19*L30*L34
+100 352 L20*L28*L33
+101 32 L20*L33*L34
+102 221 L21*L23*L26
+103 41 L21*L23*L35
+104 114 L22*L33*L34
+105 294 L23*L29*L35
+106 371 L23*L30*L34
+107 489 L23*L32*L35
+108 326 L23*L34*L35
+109 590 L25*L33*L34
+110 165 L30*L34*L35
+111 2 L33*L34*L35
+112 278 ABC+*L20
+113 7 ABC+*L33
+114 549 ABH+
+115 655 ABH+*L0
+116 1 ABH+*L16
+117 200 ABH+*L21
+118 371 ABH+*L23
+119 3282 ABH+*L24
+120 335 ABH+*L27
+121 2431 ABH+*L28
+122 67 ABH+*L35
+123 84 EFH+*L5
+124 27 EFH+*L7
+125 57 EFH+*L8
+126 84 EFH+*L10
+127 19 EFH+*L19
+128 238 EFH+*L21
+129 351 EFH+*L22
+130 369 EFH+*L25
+131 236 EFH+*L28
+132 1 EFG+*L0
+133 1 EFG+*L8
+134 237 EFG+*L23
+135 9 CEG+*L9
+136 134 FHO+*L15
+137 169 AHO-*L13
+138 183 CHO-*L15
+139 1 CHO-*L16
+140 171 CHO-*L22
+141 220 CHO-*L25
+142 21 CHO-*L35
+143 3385 BCP+*L20
+144 48 BCP+*L35
+145 95 CDP+*L1
+146 398 CDP+*L3
+147 4164 CDP+*L6
+148 173 CDP+*L18
+149 849 CDP+*L21
+150 236 CDP+*L22
+151 8419 CDP+*L28
+152 4255 CDP+*L29
+153 398 CDP+*L31
+154 205 CDP+*L34
+155 118 DEP+*L2
+156 31 DEP+*L21
+157 489 DEP+*L33
+158 1678 CEP-
+159 1181 CEP-*L0
+160 398 CEP-*L5
+161 3722 CEP-*L6
+162 10 CEP-*L17
+163 2 CEP-*L18
+164 46 CEP-*L21
+165 236 CEP-*L22
+166 745 CEP-*L26
+167 799 CEP-*L29
+168 1 GHO+*L22
+169 2 GHO+*L31
+170 53 GHO+*L34
+171 2 GHO+*L35
+172 171 DOP+*L2
+173 1039 DOP+*L13
+174 171 DOP+*L30
+175 744 ADP-*L5
+176 1275 ADP-*L12
+177 866 ADP-*L19
+178 261 ADP-*L21
+179 371 ADP-*L31
+180 489 ADP-*L32
+181 185 ADP-*L34
+182 388 ADP-*L35
+183 275 CFO+*L0
+184 694 CFO+*L7
+185 454 CFO+*L8
+186 2 CFO+*L12
+187 1 CFO+*L16
+188 2 CFO+*L18
+189 3968 CFO+*L24
+190 151 CFO+*L27
+191 507 CFO+*L28
+192 869 AGO+*L23
+193 347 AGO+*L24
+194 348 AGO+*L25
+195 49 AGO+*L34
+196 170 GHP+*L18
+197 193 BFO-*L0
+198 477 BFO-*L3
+199 477 BFO-*L4
+200 2 BFO-*L12
+201 3428 BFO-*L24
+202 66 BFO-*L27
+203 292 BFO-*L28
+204 477 BFO-*L31
+205 586 COP-*L9
+206 535 DFP+*L21
+207 2 EGP+*L21
+208 236 EGP+*L23
+209 2 EGP+*L34
+210 21 FOP+*L6
+211 365 FOP+*L9
+212 221 FOP+*L34
+213 2 FGO-*L0
+214 2 FGO-*L25
+215 170 AOP-*L13
+216 1 DGP+*L7
+217 2 DGP+*L15
+218 1039 DGP+*L18
+219 236 DGP+*L22
+220 1 DGP+*L29
+221 196 DGP+*L30
+222 196 DGP+*L31
+223 1 DGP+*L35
+224 482 CACD_1*L24
+225 10 CAGH_1*L21
+226 17 CAGH_1*L34
+227 1 CBCF_1*L5
+228 2281 CBCF_1*L28
+229 398 CCDE_1*L2
+230 230 CCDE_1*L23
+231 263 CCDE_1*L25
+232 398 CCDE_1*L30
+233 152 QABCD_1*L0
+234 237 QAGFH_1*L23
+235 2 QAGFH_1*L35
+236 241 QBPEF_2*L9
+237 159 QBPEF_2*L34
+238 8 QCDEG_1*L25
+239 1 QEFOP_1*L17
+```
+
+
+### Row R44
+
+Path: DOP+,ADP-,CFO+,AGO+,GHP+,BFO+,FGP-,DFG-,EGO-.
+
+```n7-h2-R44-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu BADFO BDO 1
+plu BAEFO BEO 1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFG DAG -1
+plu DACFP DFP 1
+plu DACGP DGP 1
+plu DACHP DHP 1
+plu DAFGH DGH 1
+plu DBCFG DBG -1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu EBDOP EOP 1
+plu ECDGP EGP 1
+plu FABCP FBP 1
+plu FADEG FAG 1
+plu FBDEG FBG 1
+plu FBDEO FDO -1
+plu FBDOP FOP 1
+plu FBEGO FGO -1
+plu FCDEG FCG 1
+plu GABCH GBH -1
+plu GABFO GBO -1
+plu GACDP GAP 1
+plu GACFO GCO -1
+plu GADFO GDO -1
+plu GADOP GOP 1
+plu GBCDP GBP 1
+plu GCEHO GEH 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu OABDG OAD 1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+```
+
+Exact upper bound: `-134965225419265476577751/1515966984500000000000`.
+
+```n7-h2-R44-witnesses
+CBFH_1 O
+CCDH_1 P
+CCFH_1 O
+CCGH_1 O
+CDEF_1 G
+CEFP_1 G
+QABEH_1 O
+QACDG_1 P
+QACFH_1 O
+QAGFH_1 O
+QAPFH_1 O
+QAPGH_1 O
+QBCDE_1 P
+QBCGH_1 O
+QCDEG_1 P
+QDEFP_1 G
+QEFHP_1 G
+```
+
+```n7-h2-R44-sum
+1 33 L0*L0*L4
+2 9 L0*L0*L33
+3 150 L0*L2*L2
+4 30 L0*L2*L13
+5 47 L0*L2*L17
+6 1287 L0*L2*L27
+7 3155 L0*L4*L7
+8 648 L0*L4*L8
+9 1157 L0*L5*L9
+10 182 L0*L9*L9
+11 30 L0*L9*L17
+12 314 L0*L11*L34
+13 9 L0*L26*L33
+14 33 L1*L1*L5
+15 173 L1*L1*L13
+16 1161 L1*L3*L8
+17 174 L1*L3*L16
+18 1605 L1*L3*L28
+19 388 L1*L5*L17
+20 215 L1*L9*L13
+21 9 L1*L11*L11
+22 97 L1*L15*L22
+23 87 L1*L23*L30
+24 150 L1*L23*L35
+25 201 L1*L25*L32
+26 9 L1*L32*L33
+27 145 L2*L2*L15
+28 10 L2*L2*L17
+29 692 L2*L2*L24
+30 31 L2*L4*L7
+31 452 L2*L5*L24
+32 25 L2*L6*L34
+33 27 L2*L9*L11
+34 1 L2*L12*L25
+35 5 L2*L15*L22
+36 2326 L2*L15*L28
+37 5 L2*L15*L31
+38 10 L2*L17*L33
+39 8116 L2*L24*L28
+40 150 L3*L3*L26
+41 330 L3*L6*L23
+42 11 L3*L7*L12
+43 127 L3*L9*L17
+44 711 L3*L9*L34
+45 1 L3*L17*L22
+46 331 L3*L23*L35
+47 9 L3*L27*L33
+48 979 L3*L28*L34
+49 47 L3*L29*L33
+50 14 L4*L4*L27
+51 513 L4*L7*L7
+52 261 L4*L7*L8
+53 7 L4*L7*L13
+54 20 L4*L7*L17
+55 7193 L4*L7*L28
+56 100 L4*L7*L32
+57 19 L4*L12*L15
+58 152 L4*L15*L28
+59 53 L4*L28*L33
+60 935 L5*L6*L9
+61 58 L5*L9*L23
+62 150 L5*L24*L34
+63 1398 L6*L6*L6
+64 861 L6*L6*L24
+65 917 L6*L9*L10
+66 299 L6*L9*L13
+67 1893 L6*L9*L27
+68 182 L6*L9*L28
+69 959 L6*L9*L34
+70 1322 L6*L9*L35
+71 299 L6*L12*L34
+72 5 L6*L13*L33
+73 55 L6*L17*L34
+74 182 L6*L34*L34
+75 1398 L7*L7*L7
+76 861 L7*L7*L25
+77 644 L7*L10*L15
+78 25 L7*L14*L17
+79 182 L7*L15*L15
+80 47 L7*L30*L33
+81 55 L9*L9*L17
+82 571 L9*L9*L27
+83 440 L9*L9*L30
+84 182 L9*L9*L35
+85 215 L9*L10*L11
+86 131 L9*L11*L13
+87 279 L9*L11*L16
+88 398 L9*L11*L27
+89 71 L9*L11*L33
+90 97 L9*L14*L22
+91 30 L9*L17*L26
+92 55 L9*L17*L28
+93 87 L9*L18*L22
+94 87 L9*L19*L22
+95 516 L9*L24*L26
+96 516 L9*L24*L27
+97 53 L9*L25*L33
+98 571 L9*L26*L29
+99 182 L9*L29*L29
+100 34 L9*L31*L33
+101 329 L9*L33*L35
+102 131 L10*L10*L15
+103 153 L10*L12*L14
+104 688 L11*L12*L34
+105 15 L11*L33*L34
+106 348 L12*L18*L35
+107 348 L12*L19*L35
+108 92 L13*L28*L30
+109 80 L13*L28*L31
+110 30 L14*L17*L28
+111 10 L16*L30*L32
+112 127 L17*L31*L34
+113 29 L22*L33*L34
+114 102 L27*L33*L34
+115 111 L33*L34*L35
+116 1287 ABH+*L0
+117 584 ABH+*L9
+118 753 ABH+*L12
+119 127 ABH+*L16
+120 408 ABH+*L24
+121 257 ABH+*L25
+122 3350 ABH+*L28
+123 261 AEF+*L9
+124 1745 BCD+*L0
+125 487 EFH+*L0
+126 129 EFH+*L10
+127 549 EFH+*L12
+128 152 EFH+*L16
+129 28 EFH+*L22
+130 1142 EFH+*L28
+131 90 EFH+*L34
+132 25 EFG+
+133 173 EFG+*L1
+134 127 EFG+*L34
+135 1 FGH-*L22
+136 752 AHO-*L3
+137 201 BCP+*L1
+138 692 BCP+*L2
+139 1155 BCP+*L18
+140 1155 BCP+*L19
+141 150 BCP+*L26
+142 8116 BCP+*L28
+143 3506 CDP+*L0
+144 5565 CDP+*L26
+145 5415 CDP+*L27
+146 6703 CDP+*L28
+147 87 CDP+*L30
+148 1564 CDP+*L35
+149 4560 DEP+*L1
+150 3654 CEP-*L0
+151 221 CEP-*L3
+152 2982 CEP-*L26
+153 2885 CEP-*L27
+154 1413 CEP-*L29
+155 87 CEP-*L32
+156 87 CEP-*L33
+157 1413 CEP-*L35
+158 752 GHO+*L3
+159 87 ADP-*L4
+160 150 ADP-*L6
+161 417 ADP-*L11
+162 973 ADP-*L26
+163 823 ADP-*L27
+164 6853 ADP-*L28
+165 417 ADP-*L32
+166 752 AGO+*L3
+167 1 FGP-*L10
+168 279 DFG-*L14
+169 1 DFG-*L33
+170 53 CFP-*L34
+171 1 ADG+*L32
+172 6 DFP+*L12
+173 1 DHP+*L13
+174 9 AFG-*L4
+175 15 EL*L4
+176 637 EL*L7
+177 29 EL*L23
+178 321 ER*L4
+179 13 CBFH_1*L33
+180 37 CCDH_1*L34
+181 138 CCFH_1*L15
+182 1 CCGH_1*L4
+183 225 CDEF_1*L34
+184 1 CEFP_1*L11
+185 31 QABEH_1*L13
+186 12 QACDG_1*L4
+187 2 QACFH_1*L4
+188 6 QACFH_1*L7
+189 173 QAGFH_1*L1
+190 53 QAPFH_1*L15
+191 1 QAPGH_1*L3
+192 1004 QBCDE_1*L7
+193 171 QBCDE_1*L34
+194 20 QBCGH_1*L7
+195 19 RCDEF_GP_CE*L2
+196 388 QCDEG_1*L1
+197 1 QCDEG_1*L30
+198 127 QCDEG_1*L34
+199 201 QDEFP_1*L1
+200 5 QDEFP_1*L13
+201 5 QEFHP_1*L3
+202 31 F5_FABDE*L33
+203 140 F5_CDEHA*L13
+204 27 F5_ACDFH*L13
+205 12 F5_FHOGE*L33
+```
+
+
+### Row R45
+
+Path: DOP+,ADP-,CFO+,AGO+,GHP+,BFO+,FGP-,DFG-,EGO+.
+
+```n7-h2-R45-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu BADFO BDO 1
+plu BAEFO BEO 1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFG DAG -1
+plu DACFP DFP 1
+plu DACGP DGP 1
+plu DACHP DHP 1
+plu DAFGH DGH 1
+plu DBCFG DBG -1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu EBCGO EBG -1
+plu EBDGP EGP 1
+plu EBDOP EOP 1
+plu FABCP FBP 1
+plu FADEG FAG 1
+plu FBDEG FBG 1
+plu FBDEO FDO -1
+plu FBDOP FOP 1
+plu FBEGO FGO -1
+plu FCDEG FCG 1
+plu GABCH GBH -1
+plu GABFO GBO -1
+plu GACDP GAP 1
+plu GACFO GCO -1
+plu GADFO GDO -1
+plu GADOP GOP 1
+plu GAEFO GAE 1
+plu GBCDP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OABDG OAD 1
+plu OABEG OAE 1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+```
+
+Exact upper bound: `-14310402383902897762843/189495873062500000000`.
+
+```n7-h2-R45-witnesses
+CCDE_1 P
+CDEF_1 G
+CEFO_1 G
+QABCD_1 P
+QABFH_1 O
+QAEFH_2 GO
+QAGFH_1 O
+QBCDO_1 P
+QCDFO_1 P
+QDEFP_1 G
+```
+
+```n7-h2-R45-sum
+1 35 L0*L33
+2 15 L7*L18
+3 350 L0*L0*L4
+4 11 L0*L2*L4
+5 8 L0*L2*L17
+6 47 L0*L2*L22
+7 363 L0*L2*L24
+8 1118 L0*L2*L28
+9 1 L0*L3*L19
+10 202 L0*L4*L7
+11 2 L0*L4*L18
+12 9 L0*L4*L20
+13 193 L0*L4*L23
+14 9 L0*L4*L27
+15 359 L0*L4*L35
+16 52 L0*L7*L13
+17 62 L0*L7*L18
+18 59 L0*L7*L33
+19 135 L0*L9*L11
+20 6 L0*L9*L19
+21 99 L0*L9*L24
+22 27 L0*L12*L13
+23 1 L0*L12*L21
+24 1 L0*L16*L18
+25 17 L0*L16*L33
+26 59 L0*L17*L23
+27 8 L0*L17*L32
+28 61 L0*L19*L33
+29 106 L0*L23*L23
+30 63 L1*L2*L34
+31 33 L1*L15*L22
+32 12 L1*L20*L32
+33 1 L2*L4*L7
+34 10 L2*L5*L16
+35 33 L2*L6*L29
+36 156 L2*L6*L34
+37 67 L2*L7*L20
+38 25 L2*L7*L23
+39 289 L2*L7*L24
+40 118 L2*L9*L34
+41 1 L2*L10*L30
+42 4 L2*L15*L16
+43 53 L2*L15*L28
+44 74 L2*L16*L24
+45 9 L2*L18*L22
+46 1 L2*L18*L29
+47 1 L2*L21*L30
+48 122 L2*L22*L24
+49 146 L2*L24*L35
+50 63 L2*L28*L29
+51 1 L3*L6*L33
+52 4 L3*L8*L30
+53 8 L3*L17*L25
+54 9 L3*L19*L23
+55 8 L4*L4*L14
+56 7 L4*L4*L21
+57 31 L4*L7*L12
+58 1681 L4*L7*L28
+59 190 L4*L7*L35
+60 121 L4*L8*L24
+61 366 L4*L8*L28
+62 13 L4*L10*L28
+63 14 L4*L14*L15
+64 38 L4*L18*L27
+65 2559 L4*L24*L28
+66 158 L5*L6*L24
+67 186 L5*L6*L29
+68 2 L5*L9*L16
+69 254 L5*L24*L34
+70 15 L6*L6*L23
+71 72 L6*L9*L33
+72 8 L6*L13*L13
+73 216 L6*L15*L34
+74 16 L6*L23*L23
+75 289 L6*L24*L31
+76 216 L6*L29*L29
+77 125 L6*L29*L34
+78 216 L6*L34*L34
+79 216 L7*L7*L7
+80 125 L7*L7*L15
+81 30 L7*L7*L31
+82 510 L7*L8*L10
+83 340 L7*L8*L15
+84 556 L7*L8*L28
+85 8 L7*L13*L14
+86 24 L7*L13*L24
+87 21 L7*L13*L33
+88 1 L7*L20*L33
+89 71 L7*L23*L30
+90 104 L7*L29*L33
+91 51 L7*L33*L35
+92 355 L8*L8*L10
+93 122 L8*L10*L15
+94 56 L8*L12*L15
+95 99 L8*L15*L25
+96 10 L8*L17*L18
+97 7 L8*L19*L30
+98 120 L8*L23*L26
+99 1 L8*L24*L33
+100 15 L9*L11*L12
+101 18 L9*L12*L24
+102 36 L9*L13*L14
+103 4 L9*L13*L18
+104 10 L9*L13*L20
+105 5 L9*L13*L29
+106 30 L9*L14*L31
+107 6 L9*L15*L18
+108 16 L9*L15*L21
+109 113 L9*L16*L34
+110 113 L9*L17*L34
+111 16 L9*L20*L34
+112 137 L9*L24*L26
+113 37 L9*L24*L27
+114 63 L9*L28*L31
+115 188 L9*L28*L33
+116 4 L9*L31*L31
+117 4 L9*L31*L33
+118 8 L9*L31*L34
+119 10 L10*L15*L18
+120 26 L10*L15*L24
+121 137 L10*L15*L27
+122 575 L10*L15*L28
+123 4 L10*L15*L31
+124 38 L10*L23*L23
+125 1 L10*L32*L32
+126 1 L10*L32*L33
+127 25 L10*L34*L34
+128 1 L11*L11*L31
+129 6 L11*L13*L20
+130 38 L11*L23*L23
+131 19 L12*L13*L15
+132 13 L13*L13*L26
+133 19 L13*L13*L29
+134 8 L13*L13*L34
+135 2 L13*L15*L18
+136 6 L13*L27*L33
+137 3 L13*L33*L34
+138 25 L14*L17*L33
+139 15 L14*L20*L30
+140 23 L14*L21*L33
+141 16 L15*L15*L20
+142 4 L15*L17*L31
+143 4 L15*L18*L26
+144 61 L15*L23*L27
+145 53 L15*L23*L29
+146 61 L15*L23*L34
+147 4 L15*L27*L32
+148 13 L17*L18*L30
+149 5 L17*L24*L33
+150 79 L17*L29*L33
+151 1 L18*L23*L25
+152 7 L18*L29*L34
+153 40 L18*L33*L34
+154 1 L19*L22*L24
+155 1 L21*L23*L29
+156 16 L21*L34*L34
+157 3 L24*L24*L33
+158 6 L28*L33*L33
+159 256 L28*L33*L34
+160 22 L33*L34*L34
+161 909 ABC+*L28
+162 14 ABH+*L13
+163 192 ABH+*L24
+164 209 ABH+*L28
+165 141 EFH+*L0
+166 54 EFH+*L3
+167 27 EFH+*L13
+168 88 EFH+*L18
+169 147 EFH+*L22
+170 18 EFG+*L0
+171 67 EFG+*L12
+172 52 EFG+*L19
+173 58 EFG+*L28
+174 6 EFG+*L32
+175 8 FGH-*L9
+176 40 FGH-*L12
+177 2 FGH-*L18
+178 11 ABO+*L4
+179 3 AHO-*L7
+180 8 CHO-*L4
+181 61 CHO-*L11
+182 13 CHO-*L12
+183 8 CHO-*L34
+184 9 CHO-*L35
+185 66 BCP+*L16
+186 122 BCP+*L22
+187 192 BCP+*L26
+188 146 BCP+*L35
+189 1105 CDP+*L0
+190 1783 CDP+*L6
+191 1031 CDP+*L12
+192 1031 CDP+*L13
+193 79 CDP+*L16
+194 1 CDP+*L20
+195 122 CDP+*L22
+196 3 CDP+*L24
+197 158 CDP+*L26
+198 3144 CDP+*L28
+199 379 DEP+*L1
+200 63 DEP+*L8
+201 1517 CEP-*L0
+202 1278 CEP-*L6
+203 18 CEP-*L16
+204 1 CEP-*L20
+205 1033 CEP-*L26
+206 784 CEP-*L27
+207 10 GHO+*L33
+208 4 DOP+*L14
+209 575 ADP-*L0
+210 146 ADP-*L5
+211 23 ADP-*L7
+212 59 ADP-*L16
+213 106 ADP-*L22
+214 93 ADP-*L26
+215 1302 ADP-*L28
+216 47 ADP-*L31
+217 482 ADP-*L35
+218 59 AGO+*L6
+219 40 AGO+*L13
+220 10 AGO+*L31
+221 67 BFO+*L7
+222 19 BFO+*L27
+223 3 FGP-*L24
+224 6 DFG-*L10
+225 27 DFG-*L12
+226 34 DFG-*L26
+227 26 DFG-*L27
+228 21 DFG-*L29
+229 69 EGO+*L9
+230 65 EGO+*L11
+231 40 EGO+*L12
+232 59 EGO+*L28
+233 6 EGO+*L30
+234 18 CGP-*L15
+235 21 DGP+*L7
+236 3 DGP+*L24
+237 4 EOP+*L15
+238 4 AEG+*L5
+239 6 AEG+*L11
+240 64 AEG+*L18
+241 14 BHO-*L13
+242 4 BHO-*L15
+243 41 AEO+*L11
+244 24 AEO+*L13
+245 5 AEO+*L14
+246 20 AEO+*L33
+247 6 CCDE_1*L4
+248 125 CDEF_1*L7
+249 61 CEFO_1*L4
+250 63 CEFO_1*L6
+251 49 CEFO_1*L12
+252 3 CEFO_1*L29
+253 6 CEFO_1*L35
+254 11 QABCD_1*L12
+255 363 QABCD_1*L24
+256 86 QABCD_1*L34
+257 149 QABFH_1*L8
+258 145 QABFH_1*L15
+259 11 QABFH_1*L18
+260 7 QABFH_1*L21
+261 3 QAEFH_2*L20
+262 147 QAEFH_2*L23
+263 838 QAEFH_2*L28
+264 65 QAEFH_2*L31
+265 7 QAGFH_1*L3
+266 1 QBCDO_1*L2
+267 80 RCDEF_GP_CE*L9
+268 12 RCDEF_GP_CE*L14
+269 17 RCDEF_GP_CE*L35
+270 27 RCDEF_GP_DF*L9
+271 1 QCDFO_1*L2
+272 1 QDEFP_1*L17
+273 8 QDEFP_1*L34
+274 10 F5_PGFOC*L2
+275 18 F5_OPDGF*L34
+```
+
+
+### Row R46
+
+Path: DOP+,ADP-,CFO+,AGO+,GHP+,BFO+,FGP-,DFG+.
+
+```n7-h2-R46-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu BADFO BDO 1
+plu BAEFO BEO 1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu EBDOP EOP 1
+plu ECDGP EGP 1
+plu FABCP FBP 1
+plu FADGP FAG 1
+plu FBDEO FDO -1
+plu FBDGP FBG 1
+plu FBDOP FOP 1
+plu FBEGO FGO -1
+plu FCDGP FCG 1
+plu GABCH GBH -1
+plu GABFO GBO -1
+plu GACFO GCO -1
+plu GACFP GAP 1
+plu GAFOP GOP 1
+plu GBCFP GBP 1
+plu GCDFP GDP -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACGP OAP 1
+plu OBCDP OBP 1
+```
+
+Exact upper bound: `-43529779503114482389452157867836278464363/615068081914293591624097485883000000000`.
+
+```n7-h2-R46-witnesses
+CAGH_1 O
+CCDF_2 GP
+CCEF_1 G
+CCGH_1 O
+CDFP_1 G
+QABCD_1 P
+QABFH_1 O
+QACGH_1 O
+QAGFH_1 O
+QAPGH_1 O
+QBCDE_1 P
+QBCFH_1 O
+QCDEG_1 P
+QCDFH_3 GOP
+QDFHP_1 G
+```
+
+```n7-h2-R46-sum
+1 49 L9*L33
+2 4 L0*L0*L23
+3 247 L0*L2*L6
+4 172 L0*L2*L15
+5 186 L0*L2*L31
+6 3 L0*L12*L32
+7 145 L0*L13*L33
+8 8 L0*L15*L22
+9 35 L0*L22*L33
+10 383 L0*L33*L34
+11 26 L0*L34*L34
+12 2 L1*L6*L15
+13 70 L1*L7*L33
+14 55 L1*L10*L23
+15 2 L1*L11*L33
+16 26 L1*L23*L30
+17 2 L1*L32*L33
+18 26 L1*L34*L34
+19 6 L2*L2*L3
+20 6 L2*L2*L4
+21 5 L2*L2*L12
+22 58 L2*L2*L24
+23 2 L2*L2*L26
+24 2 L2*L2*L28
+25 58 L2*L5*L6
+26 16 L2*L5*L12
+27 26 L2*L6*L7
+28 2 L2*L6*L34
+29 4 L2*L7*L23
+30 5 L2*L10*L12
+31 6 L2*L10*L32
+32 2 L2*L11*L35
+33 26 L2*L16*L27
+34 5 L2*L23*L31
+35 5 L2*L23*L32
+36 76 L2*L23*L34
+37 137 L2*L27*L34
+38 6 L2*L31*L31
+39 17 L3*L9*L30
+40 11 L3*L13*L33
+41 21 L3*L22*L33
+42 6 L3*L32*L33
+43 9 L4*L5*L30
+44 17 L4*L7*L33
+45 10 L4*L9*L31
+46 16 L4*L22*L33
+47 169 L4*L29*L34
+48 79 L4*L33*L34
+49 3 L5*L15*L32
+50 78 L5*L23*L34
+51 5 L5*L24*L27
+52 5 L5*L24*L29
+53 2 L6*L6*L15
+54 449 L6*L6*L32
+55 2 L6*L6*L34
+56 2 L6*L8*L29
+57 2 L6*L9*L26
+58 5 L6*L24*L31
+59 2 L6*L34*L35
+60 210 L7*L9*L30
+61 4 L7*L9*L35
+62 162 L7*L12*L33
+63 97 L7*L16*L33
+64 826 L7*L28*L33
+65 5 L7*L32*L33
+66 50 L8*L10*L15
+67 324 L8*L33*L34
+68 57 L9*L11*L30
+69 18 L9*L13*L22
+70 3 L9*L13*L34
+71 13 L9*L14*L23
+72 2 L9*L18*L32
+73 2 L9*L18*L33
+74 2 L9*L19*L30
+75 12 L9*L22*L35
+76 77 L9*L25*L33
+77 74 L9*L31*L33
+78 5 L10*L10*L12
+79 3 L10*L10*L33
+80 3 L10*L11*L32
+81 150 L10*L12*L15
+82 2 L10*L12*L24
+83 180 L10*L15*L27
+84 466 L10*L15*L28
+85 153 L10*L15*L35
+86 12 L10*L30*L30
+87 5 L11*L13*L33
+88 19 L11*L15*L34
+89 17 L12*L15*L22
+90 29 L12*L15*L30
+91 5 L12*L31*L32
+92 17 L13*L23*L34
+93 4 L13*L24*L34
+94 26 L13*L25*L30
+95 148 L13*L26*L33
+96 37 L13*L33*L34
+97 79 L14*L30*L34
+98 172 L14*L33*L34
+99 91 L15*L16*L32
+100 2 L15*L17*L30
+101 515 L15*L22*L28
+102 76 L15*L22*L32
+103 45 L15*L23*L29
+104 1 L15*L32*L32
+105 2 L16*L22*L33
+106 1 L16*L25*L33
+107 508 L16*L28*L33
+108 511 L16*L33*L34
+109 4 L17*L23*L34
+110 3 L17*L30*L33
+111 16 L22*L31*L33
+112 12 L22*L34*L34
+113 13 L23*L26*L34
+114 9 L23*L29*L32
+115 34 L23*L33*L34
+116 591 L24*L28*L33
+117 52 L24*L30*L33
+118 102 L25*L28*L30
+119 840 L26*L28*L33
+120 1428 L26*L33*L34
+121 205 L28*L33*L35
+122 9 L30*L33*L33
+123 6 L32*L33*L33
+124 185 ABC+*L2
+125 97 ABH+*L1
+126 210 ABH+*L6
+127 64 ABH+*L17
+128 180 ABH+*L34
+129 10 ACH+*L9
+130 2 BCD+*L3
+131 475 BCD+*L7
+132 12 BCD+*L11
+133 35 BCD+*L23
+134 211 BCD+*L34
+135 169 EFH+*L28
+136 26 BCG+*L23
+137 3 FGH-*L3
+138 2 CEG+*L15
+139 1 AHO-*L13
+140 1 CHO-*L12
+141 4 ABP+*L9
+142 106 BCP+*L22
+143 106 BCP+*L23
+144 97 BCP+*L28
+145 58 BCP+*L31
+146 569 CDP+*L0
+147 7 CDP+*L6
+148 236 CDP+*L24
+149 236 CDP+*L25
+150 564 CDP+*L26
+151 604 CDP+*L28
+152 4 CDP+*L32
+153 4 DEP+*L6
+154 570 CEP-*L0
+155 24 CEP-*L13
+156 22 CEP-*L22
+157 715 CEP-*L26
+158 155 CEP-*L27
+159 5 CEP-*L30
+160 62 CEP-*L32
+161 55 ADP-*L10
+162 4 ADP-*L26
+163 9 ADP-*L28
+164 3 GHP+*L0
+165 1 BFO+*L14
+166 2 FGP-*L4
+167 44 FGP-*L7
+168 46 FGP-*L8
+169 549 FGP-*L28
+170 1 DFG+*L25
+171 591 DFG+*L28
+172 1 ACO+*L13
+173 65 CFP-*L9
+174 22 CGP-*L23
+175 3 EGP+*L0
+176 24 EGP+*L4
+177 22 EGP+*L23
+178 37 EGP+*L33
+179 3 AGP-*L15
+180 591 DGP+*L28
+181 69 EL
+182 148 EL*L12
+183 2 EL*L23
+184 70 EL*L26
+185 1256 EL*L28
+186 31 ER*L26
+187 15 ER*L32
+188 2 CAGH_1*L9
+189 3 CAGH_1*L30
+190 315 CCDF_2
+191 211 CCDF_2*L6
+192 4 CCDF_2*L10
+193 162 CCDF_2*L12
+194 93 CCDF_2*L16
+195 601 CCDF_2*L28
+196 59 CCDF_2*L31
+197 50 CCEF_1*L9
+198 3 CCGH_1*L30
+199 7 CDFP_1*L0
+200 60 CDFP_1*L3
+201 7 CDFP_1*L31
+202 7 CDFP_1*L35
+203 31 QABCD_1*L6
+204 126 QABFH_1*L15
+205 90 QABFH_1*L16
+206 186 QABFH_1*L27
+207 6 QABFH_1*L29
+208 89 QABFH_1*L35
+209 1 QACGH_1*L24
+210 1 QAGFH_1*L4
+211 26 QAPGH_1*L30
+212 35 QAPGH_1*L33
+213 4 QBCDE_1*L26
+214 36 QBCFH_1*L15
+215 1 QBCFH_1*L21
+216 3 QCDEG_1*L34
+217 634 QCDFH_3*L0
+218 76 QCDFH_3*L4
+219 605 QCDFH_3*L6
+220 1 QCDFH_3*L10
+221 511 QCDFH_3*L16
+222 42 QCDFH_3*L22
+223 1749 QCDFH_3*L26
+224 1 QDFHP_1*L16
+225 1 F5_HBCPF*L9
+```
+
+
+### Row R47
+
+Path: DOP+,ADP-,CFO+,AGO+,GHP+,BFO+,FGP+.
+
+```n7-h2-R47-trace
+plu ABDEP AEP -1
+plu ABDFP AFP -1
+plu BADFO BDO 1
+plu BAEFO BEO 1
+plu CABEP CAP -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DACFP DFP 1
+plu DACHP DHP 1
+plu EABCP EBP 1
+plu EADHP EHP 1
+plu EBDOP EOP 1
+plu ECDGP EGP 1
+plu FABCP FBP 1
+plu FBDEO FDO -1
+plu FBDOP FOP 1
+plu FDEGP FDG -1
+plu GABCH GBH -1
+plu GABHO GBO -1
+plu GACHO GCO -1
+plu GACHP GAP 1
+plu GAHOP GOP 1
+plu GBCHP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACGP OAP 1
+plu OBCDP OBP 1
+plu PACDG PDG 1
+```
+
+Exact upper bound: `-51511619406577941939261077861798791251467/697135989544177815470641339810000000000`.
+
+```n7-h2-R47-witnesses
+CACD_1 P
+CCDG_1 P
+CCGH_1 O
+CFHP_1 G
+QABFH_1 O
+QAPFH_2 GO
+QAPGH_1 O
+QCDEG_1 P
+QCDFH_3 GOP
+QCPFH_2 GO
+QDFHP_1 G
+```
+
+```n7-h2-R47-sum
+1 1 L3*L12
+2 280 L22*L33
+3 1 L0*L0*L11
+4 1 L0*L0*L23
+5 4 L0*L9*L10
+6 4 L0*L10*L34
+7 464 L0*L14*L33
+8 26 L0*L25*L33
+9 4 L0*L28*L28
+10 9 L1*L6*L34
+11 1 L1*L13*L33
+12 1 L1*L17*L30
+13 3 L1*L23*L34
+14 25 L2*L4*L25
+15 3 L2*L8*L13
+16 49 L2*L8*L27
+17 53 L2*L9*L14
+18 46 L2*L10*L24
+19 20 L2*L11*L27
+20 1 L2*L13*L28
+21 3 L2*L15*L27
+22 32 L2*L15*L28
+23 230 L2*L24*L28
+24 2 L2*L24*L32
+25 1 L2*L27*L27
+26 27 L3*L9*L33
+27 1 L3*L12*L29
+28 19 L3*L34*L35
+29 28 L4*L6*L34
+30 436 L4*L28*L33
+31 4 L6*L6*L26
+32 173 L6*L7*L33
+33 6 L6*L9*L11
+34 17 L6*L9*L23
+35 9 L6*L9*L35
+36 43 L6*L24*L32
+37 49 L6*L30*L33
+38 107 L7*L10*L33
+39 184 L7*L22*L33
+40 357 L7*L28*L33
+41 9 L7*L34*L35
+42 1 L8*L9*L12
+43 265 L8*L9*L33
+44 485 L8*L26*L33
+45 4 L9*L9*L26
+46 38 L9*L11*L34
+47 18 L9*L15*L32
+48 21 L9*L24*L32
+49 11 L9*L27*L32
+50 50 L9*L32*L34
+51 107 L10*L14*L33
+52 1 L12*L15*L15
+53 1 L12*L21*L33
+54 31 L13*L33*L34
+55 2 L14*L17*L33
+56 894 L14*L28*L33
+57 5 L14*L32*L34
+58 1 L15*L18*L33
+59 135 L15*L23*L33
+60 15 L15*L24*L32
+61 4 L15*L28*L28
+62 48 L15*L30*L35
+63 36 L16*L26*L33
+64 1 L16*L32*L34
+65 1 L17*L19*L33
+66 1 L17*L27*L32
+67 30 L17*L29*L33
+68 34 L17*L33*L35
+69 3161 L22*L28*L33
+70 3597 L22*L33*L34
+71 2 L23*L35*L35
+72 1 L24*L24*L32
+73 3 L24*L26*L33
+74 6 L24*L30*L34
+75 1 L25*L25*L33
+76 51 L25*L30*L33
+77 490 L26*L28*L33
+78 1 L27*L30*L34
+79 14 L27*L33*L34
+80 3309 L28*L28*L33
+81 457 L28*L32*L33
+82 2063 L28*L33*L34
+83 461 L32*L33*L34
+84 1 L32*L35*L35
+85 968 L33*L34*L35
+86 34 ABF+*L15
+87 84 ABH+*L6
+88 20 ABH+*L11
+89 6 ABH+*L25
+90 84 ABH+*L28
+91 32 BCD+*L34
+92 53 BDE+*L33
+93 1 EFG+*L8
+94 3 FGH-*L8
+95 1 AHO-*L33
+96 2 BCP+*L11
+97 1 BCP+*L25
+98 273 BCP+*L28
+99 2 BCP+*L30
+100 1 CDP+*L0
+101 167 CDP+*L4
+102 106 CDP+*L8
+103 167 CDP+*L11
+104 195 CDP+*L14
+105 3 CDP+*L16
+106 3 CDP+*L25
+107 155 CDP+*L28
+108 221 CDP+*L33
+109 4 DEP+*L6
+110 10 DEP+*L35
+111 3 CEP-*L0
+112 21 CEP-*L3
+113 148 CEP-*L4
+114 28 CEP-*L6
+115 12 CEP-*L8
+116 148 CEP-*L11
+117 192 CEP-*L14
+118 288 CEP-*L33
+119 1 GHO+*L22
+120 1 GHO+*L23
+121 52 ADP-*L8
+122 3 ADP-*L26
+123 4 ADP-*L28
+124 1 AGO+*L4
+125 1 AGO+*L11
+126 3 GHP+*L0
+127 3 FGP+*L7
+128 3 FGP+*L24
+129 1 FGP+*L26
+130 2 CFP-*L34
+131 3 CGP-*L34
+132 2 BGP-*L15
+133 3 DGP+*L25
+134 1 DGP+*L27
+135 76 EL*L28
+136 21 ER*L10
+137 3 ER*L13
+138 36 ER*L15
+139 1 ER*L16
+140 21 ER*L23
+141 15 ER*L25
+142 40 ER*L26
+143 32 ER*L29
+144 2 CACD_1*L9
+145 22 CACD_1*L34
+146 1 CCDG_1*L26
+147 31 CCGH_1*L33
+148 37 CFHP_1*L28
+149 6 QABFH_1*L24
+150 10 QAPFH_2*L7
+151 45 QAPFH_2*L9
+152 3 QAPFH_2*L27
+153 3 QAPGH_1*L35
+154 31 QCDEG_1*L33
+155 31 QCDFH_3*L5
+156 934 QCDFH_3*L8
+157 107 QCDFH_3*L10
+158 27 QCDFH_3*L16
+159 3732 QCDFH_3*L22
+160 3338 QCDFH_3*L28
+161 461 QCDFH_3*L32
+162 490 QCDFH_3*L35
+163 12 QCPFH_2*L0
+164 82 QCPFH_2*L6
+165 3 QCPFH_2*L16
+166 3 QCPFH_2*L25
+167 15 QCPFH_2*L27
+168 12 QCPFH_2*L29
+169 155 QDFHP_1*L28
+170 201 F5_FABDE*L33
+```
+
+
+### Row R48
+
+Path: DOP+,ADP+,DGP-,DHP-.
+
+```n7-h2-R48-trace
+plu ABCDP ACP 1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACOP DAO -1
+plu DAHOP DHO -1
+plu DBCHO DBO -1
+plu DCGOP DGO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADGO HDG 1
+plu OACDP OAP 1
+plu OADGH OAG -1
+plu OADGP OGP 1
+plu OADHP OHP 1
+plu OBCDP OBP 1
+plu OBDGH OBG -1
+plu OCDGH OCG -1
+via P ADO GH 1
+plu ABDGO ADG 1
+plu ABGOP AGP -1
+plu BADGO BDG 1
+plu BAGOP BGP -1
+```
+
+Exact upper bound: `-948995289756020915998829339965191141/13899048978991564812771100000000000`.
+
+```n7-h2-R48-witnesses
+CCDE_1 P
+CCDO_1 P
+CDEG_1 P
+CGDO_1 P
+CHDO_1 P
+QCDEO_1 P
+QCDOG_1 P
+QDEFH_3 GOP
+QDOGH_1 P
+QEFHP_2 GO
+```
+
+```n7-h2-R48-sum
+1 10 L12*L19
+2 15 L19*L20
+3 1 L0*L0*L5
+4 42 L0*L2*L13
+5 7 L0*L2*L16
+6 60 L0*L2*L22
+7 7 L0*L4*L22
+8 3 L0*L5*L9
+9 3 L0*L5*L24
+10 13 L0*L9*L23
+11 4 L0*L10*L20
+12 5 L0*L10*L21
+13 1 L0*L13*L21
+14 1 L0*L18*L23
+15 1 L0*L18*L24
+16 1 L0*L18*L32
+17 1 L0*L19*L34
+18 5 L0*L20*L33
+19 1 L1*L31*L34
+20 2 L1*L33*L34
+21 11 L2*L4*L20
+22 1 L2*L6*L31
+23 27 L2*L8*L20
+24 7 L2*L9*L16
+25 10 L2*L9*L18
+26 6 L2*L9*L35
+27 42 L2*L12*L24
+28 1 L2*L12*L34
+29 1 L2*L13*L20
+30 11 L2*L14*L23
+31 4 L2*L16*L20
+32 58 L2*L17*L22
+33 10 L2*L18*L20
+34 10 L2*L19*L25
+35 45 L2*L20*L29
+36 11 L2*L20*L31
+37 6 L2*L20*L34
+38 11 L2*L21*L22
+39 7 L2*L22*L24
+40 7 L2*L24*L28
+41 11 L2*L24*L30
+42 19 L3*L6*L17
+43 1 L3*L15*L34
+44 7 L3*L16*L23
+45 5 L3*L16*L34
+46 15 L3*L24*L29
+47 1 L4*L5*L21
+48 15 L4*L6*L15
+49 14 L4*L10*L15
+50 24 L4*L11*L34
+51 1 L4*L12*L24
+52 16 L4*L15*L21
+53 1 L4*L15*L24
+54 6 L4*L17*L28
+55 181 L4*L23*L34
+56 1 L4*L29*L33
+57 13 L4*L34*L34
+58 2 L5*L6*L12
+59 9 L5*L6*L18
+60 64 L5*L6*L20
+61 1 L5*L7*L32
+62 12 L5*L9*L10
+63 2 L5*L14*L21
+64 3 L5*L17*L27
+65 4 L5*L21*L27
+66 65 L5*L22*L29
+67 7 L5*L23*L26
+68 25 L5*L24*L34
+69 4 L5*L26*L34
+70 11 L5*L29*L29
+71 11 L6*L6*L18
+72 83 L6*L9*L18
+73 32 L6*L9*L19
+74 1 L6*L10*L28
+75 2 L6*L11*L20
+76 1 L6*L12*L16
+77 8 L6*L12*L35
+78 1 L6*L13*L20
+79 27 L6*L14*L18
+80 5 L6*L16*L28
+81 12 L6*L18*L18
+82 15 L6*L18*L24
+83 17 L6*L18*L27
+84 226 L6*L20*L31
+85 20 L6*L21*L22
+86 3 L6*L22*L22
+87 114 L6*L22*L29
+88 512 L6*L22*L31
+89 8 L6*L22*L35
+90 20 L6*L23*L24
+91 57 L7*L11*L34
+92 5 L7*L17*L29
+93 2 L7*L20*L33
+94 6 L7*L29*L31
+95 12 L8*L10*L34
+96 5 L9*L11*L20
+97 1 L9*L12*L18
+98 4 L9*L17*L18
+99 1 L9*L19*L30
+100 4 L9*L22*L22
+101 8 L9*L22*L27
+102 1 L10*L15*L34
+103 214 L11*L20*L34
+104 6 L11*L21*L27
+105 244 L11*L22*L34
+106 1 L11*L28*L29
+107 40 L11*L28*L34
+108 27 L11*L29*L34
+109 53 L12*L14*L24
+110 10 L12*L15*L18
+111 1 L12*L15*L20
+112 29 L12*L15*L24
+113 1 L12*L17*L20
+114 10 L12*L18*L24
+115 8 L12*L20*L23
+116 1 L12*L22*L34
+117 8 L12*L23*L27
+118 63 L12*L23*L28
+119 8 L12*L23*L35
+120 3 L12*L24*L28
+121 1 L12*L31*L34
+122 4 L13*L27*L34
+123 24 L14*L16*L23
+124 23 L14*L19*L24
+125 1 L14*L19*L25
+126 27 L14*L21*L23
+127 9 L14*L23*L23
+128 20 L14*L23*L25
+129 44 L14*L23*L29
+130 1 L16*L17*L19
+131 4 L16*L19*L21
+132 1 L16*L19*L27
+133 10 L16*L23*L30
+134 36 L16*L31*L34
+135 4 L17*L18*L20
+136 2 L17*L18*L22
+137 1 L17*L18*L30
+138 4 L17*L21*L30
+139 6 L17*L25*L33
+140 38 L17*L31*L34
+141 10 L18*L19*L34
+142 2 L19*L19*L25
+143 2 L19*L20*L23
+144 10 L19*L20*L31
+145 16 L19*L22*L34
+146 16 L19*L23*L34
+147 1 L19*L24*L32
+148 5 L20*L23*L34
+149 1 L21*L23*L26
+150 50 L22*L22*L34
+151 59 L22*L23*L34
+152 20 L22*L25*L34
+153 267 L22*L33*L34
+154 3 L23*L25*L30
+155 2 L26*L29*L31
+156 1 L27*L31*L34
+157 6 L29*L29*L31
+158 33 ABH+*L13
+159 7 ABH+*L16
+160 55 ABH+*L22
+161 2 ABH+*L28
+162 291 BCD+*L20
+163 512 BCD+*L22
+164 1 BCD+*L31
+165 1 DEG+*L0
+166 7 FGH-*L26
+167 7 FGH-*L27
+168 6 AGH+*L3
+169 8 CEG+*L23
+170 24 CDO+*L34
+171 1 EFO+*L8
+172 8 AHO-*L6
+173 1 CEO+*L4
+174 1 CEO+*L13
+175 8 CEO+*L16
+176 1 CEO+*L28
+177 3 CDP+*L22
+178 146 CDP+*L34
+179 89 DEP+*L6
+180 3 DEP+*L16
+181 38 CEP-
+182 11 CEP-*L3
+183 18 CEP-*L7
+184 21 CEP-*L15
+185 23 CEP-*L20
+186 23 CEP-*L25
+187 1 GHO+*L0
+188 26 GHO+*L7
+189 10 GHO+*L19
+190 20 DOP+*L16
+191 2 DOP+*L18
+192 5 ADP+*L29
+193 2 DGP-*L6
+194 21 DGP-*L14
+195 34 DGP-*L18
+196 20 DGP-*L20
+197 20 DGP-*L25
+198 3 DGP-*L26
+199 54 DHP-*L5
+200 196 DHP-*L6
+201 30 DHP-*L9
+202 25 DHP-*L21
+203 36 DHP-*L26
+204 36 DHP-*L27
+205 10 ACG+*L6
+206 6 CFP-*L17
+207 194 CFP-*L34
+208 3 CGP-*L0
+209 18 CHP-*L6
+210 23 COP-*L24
+211 1 COP-*L27
+212 1 ADO+*L2
+213 5 ADO+*L34
+214 28 BDO+*L34
+215 7 EHP+*L2
+216 22 BEP-*L6
+217 4 BEP-*L23
+218 10 EGP+*L6
+219 3 EOP+*L24
+220 1 AFP-*L19
+221 22 BFP-*L34
+222 2 DGH+*L29
+223 3 AGO-*L34
+224 12 GOP-*L6
+225 20 GOP-*L25
+226 3 GOP-*L29
+227 11 BOP-*L2
+228 22 BOP-*L15
+229 19 BGO-*L6
+230 39 GHP+*L2
+231 24 GHP+*L19
+232 1 GHP+*L30
+233 4 AGP-*L2
+234 10 EL*L15
+235 6 ER*L0
+236 11 ER*L4
+237 29 ER*L7
+238 2 ER*L13
+239 11 ER*L19
+240 3 ER*L20
+241 4 CCDE_1*L9
+242 9 CCDE_1*L22
+243 9 CCDO_1*L27
+244 63 CDEG_1*L23
+245 1 CGDO_1*L4
+246 1 CGDO_1*L17
+247 27 CGDO_1*L18
+248 61 CHDO_1*L12
+249 24 CHDO_1*L23
+250 4 QCDEO_1*L17
+251 10 QCDEO_1*L18
+252 1 QCDEO_1*L22
+253 1 QCDEO_1*L23
+254 11 QCDOG_1*L6
+255 97 QDEFH_3*L7
+256 246 QDEFH_3*L20
+257 511 QDEFH_3*L22
+258 216 QDEFH_3*L24
+259 2 QDEFH_3*L26
+260 1 QDOGH_1*L3
+261 6 QDOGH_1*L8
+262 4 QDOGH_1*L15
+263 17 QDOGH_1*L19
+264 8 QDOGH_1*L23
+265 38 QEFHP_2*L4
+266 25 QEFHP_2*L21
+267 1 F5_FABCD*L26
+268 87 F5_ABCEF*L6
+269 88 F5_ABCFH*L6
+270 125 F5_ACDEH*L6
+271 60 F5_HBCDF*L34
+```
+
+
+### Row R49
+
+Path: DOP+,ADP+,DGP-,DHP+.
+
+```n7-h2-R49-trace
+plu ABCDP ACP 1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACOP DAO -1
+plu DAFHP DFP 1
+plu DBCOP DBO -1
+plu DCFGP DFG 1
+plu DCGHP DGH -1
+plu DCGOP DGO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACDP FAP 1
+plu FBCDP FBP 1
+plu GABCH GBH -1
+plu GCDEH GEH 1
+plu GCDHO GCO -1
+plu GCDHP GHP -1
+plu GCDOP GOP -1
+plu GCEOP GEO 1
+plu GDEFP GFP -1
+plu GDFHO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADGO HDO -1
+plu HAEGO HEO -1
+plu HAGOP HOP 1
+plu OACDG OAG 1
+plu OACDP OAP 1
+plu OBCDG OBG 1
+plu OBCDP OBP 1
+plu ODEFG ODF 1
+plu ODFGP OFP -1
+```
+
+```n7-h2-R49-exclusion
+cluster CDH O CDO GP
+```
+
+### Row R50
+
+Path: DOP+,ADP+,DGP+,CFO-,GHP-.
+
+```n7-h2-R50-trace
+plu ABCDP ACP 1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GACDP GAP 1
+plu GADHP GDH 1
+plu GBCDP GBP 1
+plu GCDEH GEH 1
+plu GDEFH GDF 1
+plu GDFHP GFP -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HADGO HDO -1
+plu HAEGO HEO -1
+plu HAGOP HOP 1
+plu OACDP OAP 1
+plu OADFH ODF 1
+plu OAFHP OFP -1
+plu OBCDP OBP 1
+plu PADFG PDF 1
+plu PADGH PDH 1
+```
+
+```n7-h2-R50-exclusion
+cluster ADH P HAP GO
+```
+
+### Row R51
+
+Path: DOP+,ADP+,DGP+,CFO-,GHP+,BGO-,FGP-,GOP-.
+
+```n7-h2-R51-trace
+plu ABCDP ACP 1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FAEGP FAG 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu FBEGP FBG 1
+plu FCEGP FCG 1
+plu GABCH GBH -1
+plu GABHO GAO 1
+plu GACDP GAP 1
+plu GACOP GCO 1
+plu GBCDP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OAGHP OHP 1
+plu OBCDP OBP 1
+plu PAFGO PFO -1
+```
+
+Exact upper bound: `-1062093778472336203345206453966018033/12161667856617619211174712500000000`.
+
+```n7-h2-R51-witnesses
+CCDE_1 P
+CCEF_2 GO
+CEFP_2 GO
+QADEF_3 GOP
+QCDEF_3 GOP
+QEFHP_2 GO
+```
+
+```n7-h2-R51-sum
+1 102 L0*L1*L31
+2 10 L0*L2*L2
+3 648 L0*L2*L7
+4 482 L0*L2*L8
+5 61 L0*L2*L25
+6 112 L0*L2*L35
+7 71 L0*L3*L23
+8 175 L0*L4*L29
+9 59 L0*L5*L25
+10 53 L0*L6*L27
+11 53 L0*L6*L35
+12 493 L0*L8*L10
+13 163 L0*L16*L23
+14 163 L0*L17*L23
+15 251 L0*L23*L26
+16 70 L0*L23*L29
+17 93 L0*L23*L33
+18 175 L0*L24*L30
+19 144 L0*L28*L32
+20 53 L0*L29*L34
+21 404 L1*L2*L27
+22 192 L2*L2*L6
+23 213 L2*L2*L28
+24 24 L2*L5*L35
+25 71 L2*L6*L23
+26 79 L2*L6*L31
+27 58 L2*L8*L32
+28 126 L2*L9*L34
+29 13 L2*L11*L14
+30 141 L2*L14*L15
+31 375 L2*L14*L27
+32 447 L2*L15*L28
+33 253 L2*L15*L35
+34 16 L2*L24*L33
+35 6 L2*L28*L31
+36 32 L3*L9*L30
+37 579 L4*L9*L28
+38 20 L4*L10*L27
+39 7 L4*L14*L23
+40 21 L4*L24*L27
+41 31 L5*L6*L10
+42 77 L5*L6*L26
+43 8 L5*L9*L31
+44 7 L5*L15*L22
+45 60 L5*L24*L31
+46 25 L6*L6*L11
+47 53 L6*L6*L27
+48 53 L6*L6*L35
+49 53 L6*L8*L9
+50 53 L6*L9*L28
+51 145 L6*L10*L15
+52 13 L6*L10*L25
+53 409 L6*L10*L28
+54 53 L6*L14*L14
+55 16 L6*L15*L22
+56 183 L6*L23*L27
+57 354 L6*L23*L29
+58 463 L6*L24*L31
+59 697 L6*L24*L32
+60 107 L6*L29*L34
+61 74 L6*L31*L34
+62 48 L7*L22*L32
+63 264 L8*L10*L28
+64 41 L8*L10*L32
+65 45 L8*L23*L32
+66 95 L8*L25*L32
+67 53 L9*L9*L26
+68 20 L9*L10*L10
+69 53 L9*L15*L27
+70 103 L9*L29*L31
+71 10 L10*L10*L26
+72 22 L10*L22*L27
+73 8 L10*L23*L35
+74 128 L10*L25*L35
+75 146 L10*L27*L34
+76 22 L11*L23*L34
+77 426 L11*L24*L34
+78 53 L15*L15*L28
+79 55 L15*L24*L32
+80 53 L15*L29*L29
+81 8 L22*L29*L31
+82 75 L23*L29*L32
+83 402 L25*L28*L32
+84 49 L26*L34*L34
+85 49 L27*L34*L34
+86 434 L28*L28*L32
+87 60 L28*L30*L34
+88 10 L30*L32*L35
+89 182 ABC+*L25
+90 102 ABC+*L35
+91 348 ABH+*L8
+92 23 ABH+*L22
+93 188 ABH+*L25
+94 516 ABH+*L26
+95 10 ACF+*L32
+96 337 AFH+*L8
+97 144 AFH+*L28
+98 434 BCD+*L7
+99 152 BCD+*L22
+100 415 BCD+*L25
+101 336 BCD+*L26
+102 177 BCD+*L27
+103 52 BCD+*L31
+104 212 BCD+*L35
+105 10 BCH+*L10
+106 289 BFH+*L6
+107 146 EFH+*L26
+108 10 EFH+*L33
+109 221 BCP+*L28
+110 52 CDP+*L4
+111 218 CDP+*L9
+112 52 CDP+*L14
+113 489 DEP+*L0
+114 3 DEP+*L34
+115 16 FHP+*L3
+116 8 CEP-*L5
+117 73 CEP-*L26
+118 862 CEP-*L29
+119 259 ADP+*L6
+120 123 ADP+*L11
+121 145 ADP+*L12
+122 145 ADP+*L13
+123 251 ADP+*L26
+124 613 ADP+*L28
+125 93 ADP+*L30
+126 44 ACP+*L2
+127 133 BDP+*L27
+128 138 ER*L2
+129 188 CCDE_1*L6
+130 120 CCDE_1*L28
+131 423 CCEF_2*L24
+132 430 CEFP_2*L0
+133 227 CEFP_2*L7
+134 78 CEFP_2*L15
+135 558 CEFP_2*L26
+136 859 CEFP_2*L28
+137 164 QADEF_3*L9
+138 120 QCDEF_3*L0
+139 366 QCDEF_3*L6
+140 237 QCDEF_3*L24
+141 31 QCDEF_3*L32
+142 38 QEFHP_2*L2
+143 268 F5_ABCDP*L9
+144 142 F5_FBCDE*L9
+145 538 F5_CPEHB*L9
+```
+
+
+### Row R52
+
+Path: DOP+,ADP+,DGP+,CFO-,GHP+,BGO-,FGP-,GOP+.
+
+```n7-h2-R52-trace
+plu ABCDP ACP 1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FAEGP FAG 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu FBEGP FBG 1
+plu FCEGP FCG 1
+plu GABCH GBH -1
+plu GABHO GAO 1
+plu GACDP GAP 1
+plu GADOP GDO -1
+plu GAFOP GFO 1
+plu GBCDP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+```
+
+Exact upper bound: `-56192311776200953035873611402523851631463/871419986930222269338301674762500000000`.
+
+```n7-h2-R52-witnesses
+CADG_2 OP
+CBDG_2 OP
+CCDE_1 P
+CCDG_1 P
+CCDO_1 P
+CGBP_1 O
+QACDG_2 OP
+QBCDG_2 OP
+QCDEF_3 GOP
+QCPGF_1 O
+QEFHP_1 G
+```
+
+```n7-h2-R52-sum
+1 12 L0*L0*L6
+2 2 L0*L0*L12
+3 180 L0*L2*L2
+4 13 L0*L2*L8
+5 108 L0*L2*L11
+6 11 L0*L2*L22
+7 108 L0*L2*L30
+8 98 L0*L5*L9
+9 3 L0*L5*L15
+10 36 L0*L5*L19
+11 14 L0*L5*L21
+12 135 L0*L6*L12
+13 104 L0*L6*L23
+14 24 L0*L6*L35
+15 4 L0*L10*L19
+16 1 L0*L10*L32
+17 3 L0*L11*L15
+18 5 L0*L11*L18
+19 14 L0*L13*L27
+20 282 L0*L13*L31
+21 14 L0*L18*L24
+22 146 L0*L19*L23
+23 24 L0*L29*L34
+24 96 L0*L32*L34
+25 79 L1*L17*L30
+26 2 L2*L2*L21
+27 78 L2*L2*L25
+28 40 L2*L4*L15
+29 67 L2*L5*L34
+30 137 L2*L6*L15
+31 48 L2*L6*L19
+32 191 L2*L6*L28
+33 44 L2*L8*L30
+34 9 L2*L9*L18
+35 62 L2*L9*L24
+36 17 L2*L12*L21
+37 62 L2*L14*L17
+38 19 L2*L16*L21
+39 3 L2*L16*L25
+40 1271 L2*L16*L27
+41 4 L2*L17*L32
+42 106 L2*L19*L25
+43 27 L2*L19*L27
+44 16 L2*L20*L24
+45 45 L2*L25*L33
+46 131 L2*L27*L28
+47 90 L2*L27*L32
+48 77 L3*L10*L15
+49 17 L3*L17*L18
+50 1 L3*L23*L34
+51 92 L4*L9*L17
+52 110 L4*L9*L25
+53 108 L4*L27*L32
+54 118 L5*L6*L24
+55 148 L5*L6*L34
+56 2 L5*L9*L16
+57 20 L5*L10*L29
+58 118 L5*L24*L27
+59 34 L5*L24*L32
+60 118 L5*L24*L34
+61 12 L6*L8*L15
+62 36 L6*L10*L10
+63 41 L6*L10*L13
+64 83 L6*L10*L16
+65 48 L6*L10*L19
+66 85 L6*L10*L23
+67 33 L6*L10*L24
+68 1 L6*L10*L34
+69 72 L6*L12*L24
+70 848 L6*L16*L32
+71 19 L6*L17*L19
+72 2 L6*L18*L24
+73 6 L6*L18*L31
+74 157 L6*L22*L32
+75 29 L6*L23*L31
+76 153 L6*L25*L32
+77 12 L6*L27*L27
+78 32 L6*L31*L32
+79 12 L7*L15*L34
+80 12 L7*L19*L34
+81 7 L8*L9*L12
+82 5 L8*L10*L15
+83 7 L8*L17*L18
+84 130 L8*L17*L23
+85 126 L9*L10*L31
+86 96 L9*L11*L34
+87 154 L9*L12*L24
+88 42 L9*L12*L32
+89 14 L9*L13*L21
+90 37 L9*L13*L31
+91 24 L9*L26*L34
+92 29 L10*L10*L20
+93 50 L10*L13*L15
+94 17 L10*L15*L18
+95 33 L10*L15*L27
+96 70 L10*L15*L30
+97 15 L10*L15*L33
+98 17 L10*L17*L21
+99 40 L10*L21*L23
+100 2 L10*L21*L27
+101 27 L10*L21*L32
+102 51 L11*L17*L24
+103 178 L11*L17*L34
+104 159 L11*L30*L34
+105 320 L11*L33*L34
+106 9 L12*L14*L34
+107 211 L12*L16*L34
+108 113 L12*L22*L34
+109 8 L12*L27*L32
+110 398 L12*L30*L34
+111 274 L12*L33*L34
+112 123 L13*L15*L29
+113 14 L13*L23*L34
+114 18 L13*L34*L34
+115 27 L15*L19*L32
+116 2 L15*L19*L34
+117 128 L15*L22*L32
+118 6 L15*L29*L32
+119 24 L15*L29*L34
+120 268 L17*L17*L26
+121 268 L17*L17*L27
+122 2 L17*L18*L27
+123 2 L17*L18*L34
+124 21 L17*L20*L32
+125 24 L17*L22*L34
+126 20 L17*L23*L32
+127 20 L17*L23*L33
+128 228 L17*L25*L30
+129 255 L17*L28*L32
+130 411 L17*L33*L34
+131 22 L19*L24*L32
+132 9 L19*L32*L35
+133 17 L20*L24*L32
+134 2 L20*L30*L30
+135 2 L21*L33*L33
+136 44 L23*L27*L30
+137 94 L23*L29*L32
+138 62 L24*L29*L32
+139 24 L25*L33*L34
+140 1 L26*L32*L32
+141 36 L28*L32*L32
+142 131 ABC+*L7
+143 108 ABC+*L11
+144 1378 ABC+*L13
+145 17 ABC+*L16
+146 62 ABC+*L17
+147 62 ABC+*L19
+148 55 ABC+*L22
+149 103 ABC+*L27
+150 1 ABC+*L31
+151 103 ABC+*L35
+152 8 ABE+*L2
+153 137 ABH+*L8
+154 1237 ABH+*L16
+155 91 ABH+*L32
+156 1 ACD+*L31
+157 25 AFH+*L15
+158 236 BCD+*L7
+159 1132 BCD+*L12
+160 491 BCD+*L17
+161 191 BCD+*L18
+162 140 BCD+*L25
+163 566 BCD+*L28
+164 7 BFH+*L0
+165 5 EFH+*L6
+166 13 EFH+*L10
+167 117 EFH+*L13
+168 9 EFH+*L19
+169 184 EFG+*L4
+170 349 EFG+*L11
+171 211 EFG+*L16
+172 19 EFG+*L20
+173 168 EFG+*L22
+174 96 EFG+*L26
+175 774 EFG+*L28
+176 748 EFG+*L29
+177 485 EFG+*L30
+178 106 FGH-*L1
+179 390 FGH-*L3
+180 672 FGH-*L4
+181 349 FGH-*L11
+182 666 FGH-*L16
+183 454 FGH-*L17
+184 128 FGH-*L22
+185 24 FGH-*L25
+186 8 FGH-*L27
+187 15 CEO+*L24
+188 159 BCP+*L19
+189 78 BCP+*L32
+190 20 CDP+*L13
+191 228 CDP+*L16
+192 159 CDP+*L19
+193 57 CDP+*L22
+194 107 CDP+*L24
+195 377 CDP+*L34
+196 201 DEP+*L0
+197 79 DEP+*L2
+198 118 CEP-*L0
+199 89 CEP-*L2
+200 95 CEP-*L6
+201 44 CEP-*L11
+202 40 CEP-*L13
+203 338 CEP-*L20
+204 323 CEP-*L21
+205 12 GHO+*L6
+206 14 DOP+*L1
+207 255 DOP+*L3
+208 95 DOP+*L9
+209 17 DOP+*L16
+210 417 DOP+*L22
+211 16 DOP+*L24
+212 83 DOP+*L28
+213 11 ADP+*L5
+214 442 ADP+*L19
+215 14 ADP+*L21
+216 83 ADP+*L28
+217 20 DGP+*L4
+218 22 DGP+*L10
+219 360 DGP+*L23
+220 92 DGP+*L24
+221 377 DGP+*L34
+222 782 CFO-*L6
+223 4 BGO-*L4
+224 70 BGO-*L10
+225 288 BGO-*L23
+226 33 FGP-*L2
+227 58 FGP-*L6
+228 52 GOP+*L0
+229 52 GOP+*L1
+230 33 GOP+*L3
+231 96 GOP+*L6
+232 12 GOP+*L8
+233 22 GOP+*L10
+234 417 GOP+*L23
+235 86 CFP-*L9
+236 15 COP-*L9
+237 16 COP-*L24
+238 263 CFG-*L6
+239 505 CFG-*L34
+240 296 AGO-*L23
+241 26 AGO-*L31
+242 699 DGO+*L6
+243 184 DGO+*L23
+244 26 DGO+*L31
+245 48 DGO+*L32
+246 101 FGO-*L3
+247 782 FGO-*L6
+248 19 FGO-*L8
+249 17 FGO-*L23
+250 17 FGO-*L25
+251 2 FGO-*L27
+252 4 FGO-*L31
+253 128 EL*L17
+254 44 EL*L23
+255 94 ER*L10
+256 8 ER*L13
+257 55 CADG_2*L7
+258 64 CADG_2*L8
+259 2 CADG_2*L20
+260 296 CADG_2*L22
+261 13 CADG_2*L27
+262 33 CADG_2*L28
+263 1113 CADG_2*L30
+264 8 CADG_2*L33
+265 236 CBDG_2*L7
+266 104 CBDG_2*L11
+267 268 CBDG_2*L22
+268 231 CBDG_2*L25
+269 375 CBDG_2*L28
+270 4 CBDG_2*L31
+271 1 CGBP_1*L20
+272 84 CCDE_1*L0
+273 22 CCDE_1*L2
+274 34 CCDG_1*L27
+275 14 CCDO_1*L0
+276 782 CCDO_1*L6
+277 100 QACDG_2*L15
+278 121 QBCDG_2*L9
+279 95 QBCDG_2*L15
+280 1 QCDEF_3*L4
+281 101 QCDEF_3*L9
+282 117 QCDEF_3*L23
+283 20 QCDEF_3*L29
+284 52 QCDEF_3*L32
+285 56 QCPGF_1*L6
+286 142 QCPGF_1*L9
+287 16 QCPGF_1*L20
+288 57 QCPGF_1*L22
+289 92 QCPGF_1*L24
+290 401 QCPGF_1*L34
+291 85 QEFHP_1*L2
+292 63 F5_CDEAB*L2
+293 2 F5_FHAOG*L34
+```
+
+
+### Row R53
+
+Path: DOP+,ADP+,DGP+,CFO-,GHP+,BGO-,FGP+,FGO-.
+
+```n7-h2-R53-trace
+plu ABCDP ACP 1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FAEGO FAG 1
+plu FAGOP FOP 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu FBEGO FBG 1
+plu FCEGO FCG 1
+plu GABCH GBH -1
+plu GABFO GAO 1
+plu GACDP GAP 1
+plu GADFP GDF 1
+plu GAFOP GOP 1
+plu GBCDP GBP 1
+plu GBDFO GDO -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OADFP ODF 1
+plu OBCDP OBP 1
+plu PADFG PDF 1
+```
+
+```n7-h2-R53-exclusion
+cluster ADF G ADG OP
+```
+
+### Row R54
+
+Path: DOP+,ADP+,DGP+,CFO-,GHP+,BGO-,FGP+,FGO+.
+
+```n7-h2-R54-trace
+plu ABCDP ACP 1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GABHO GAO 1
+plu GACDP GAP 1
+plu GBCDP GBP 1
+plu GDEFP GDF 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OACFG OCG -1
+plu OBCDP OBP 1
+plu PADFG PDF 1
+```
+
+Exact upper bound: `-3242212060197844166228150661542107633/45063735587858940883687223000000000`.
+
+```n7-h2-R54-witnesses
+CADO_1 P
+CCDE_1 P
+CCDG_1 P
+CCDO_1 P
+CFHO_1 G
+QACDG_1 P
+QBCDO_1 P
+QCDEF_2 OP
+QCDEO_1 P
+```
+
+```n7-h2-R54-sum
+1 38 L0*L0*L2
+2 4 L0*L0*L13
+3 207 L0*L2*L15
+4 294 L0*L2*L20
+5 338 L0*L2*L28
+6 169 L0*L2*L34
+7 202 L0*L5*L6
+8 187 L0*L5*L9
+9 349 L0*L5*L23
+10 140 L0*L5*L31
+11 104 L0*L6*L10
+12 7 L0*L6*L16
+13 318 L0*L6*L18
+14 31 L0*L6*L23
+15 10 L0*L9*L32
+16 7 L0*L13*L33
+17 7 L0*L17*L29
+18 1402 L0*L19*L23
+19 716 L0*L23*L31
+20 104 L0*L24*L33
+21 63 L1*L2*L6
+22 134 L1*L33*L33
+23 543 L2*L2*L21
+24 758 L2*L2*L24
+25 414 L2*L3*L15
+26 6 L2*L3*L17
+27 248 L2*L5*L6
+28 843 L2*L6*L18
+29 3 L2*L6*L20
+30 861 L2*L6*L23
+31 6 L2*L6*L31
+32 44 L2*L8*L20
+33 93 L2*L8*L33
+34 15 L2*L11*L17
+35 85 L2*L12*L34
+36 713 L2*L15*L18
+37 97 L2*L19*L34
+38 2685 L2*L20*L27
+39 317 L2*L21*L34
+40 140 L2*L27*L33
+41 982 L2*L28*L33
+42 414 L2*L32*L34
+43 142 L3*L9*L19
+44 8 L3*L17*L33
+45 85 L3*L17*L34
+46 160 L4*L9*L15
+47 4 L4*L27*L34
+48 1412 L5*L6*L6
+49 687 L5*L6*L9
+50 2014 L5*L6*L24
+51 1021 L5*L6*L34
+52 1717 L5*L9*L24
+53 544 L5*L9*L34
+54 7 L5*L12*L34
+55 381 L5*L15*L19
+56 62 L5*L17*L34
+57 276 L5*L23*L34
+58 497 L5*L33*L34
+59 255 L6*L6*L22
+60 168 L6*L6*L31
+61 168 L6*L6*L32
+62 521 L6*L9*L22
+63 169 L6*L10*L17
+64 23 L6*L12*L21
+65 1615 L6*L18*L23
+66 1071 L6*L19*L33
+67 3 L6*L21*L31
+68 1 L6*L33*L33
+69 13 L7*L21*L33
+70 7 L8*L8*L17
+71 8 L8*L9*L32
+72 10 L8*L26*L33
+73 870 L9*L9*L30
+74 57 L9*L10*L17
+75 7 L9*L12*L30
+76 23 L9*L16*L19
+77 7 L9*L16*L34
+78 212 L9*L19*L22
+79 994 L9*L19*L29
+80 52 L9*L19*L32
+81 271 L9*L21*L30
+82 165 L9*L25*L33
+83 12 L9*L30*L32
+84 322 L9*L31*L34
+85 425 L10*L10*L34
+86 76 L10*L15*L23
+87 39 L10*L17*L34
+88 1 L10*L24*L33
+89 134 L10*L33*L35
+90 389 L11*L11*L34
+91 683 L11*L18*L34
+92 90 L11*L21*L34
+93 536 L11*L23*L34
+94 728 L11*L33*L34
+95 18 L12*L19*L34
+96 85 L12*L27*L34
+97 7 L14*L17*L27
+98 271 L14*L21*L33
+99 4 L14*L33*L34
+100 85 L15*L17*L30
+101 1021 L15*L19*L29
+102 74 L15*L23*L32
+103 7 L16*L27*L34
+104 6 L17*L31*L31
+105 1 L17*L32*L33
+106 309 L18*L23*L34
+107 795 L18*L33*L34
+108 378 L19*L23*L27
+109 45 L19*L27*L33
+110 45 L19*L33*L35
+111 166 L21*L23*L33
+112 1094 L21*L24*L33
+113 90 L21*L30*L34
+114 21 L21*L31*L33
+115 133 L21*L32*L33
+116 951 L21*L33*L34
+117 1 L23*L26*L33
+118 330 L25*L33*L34
+119 168 L28*L28*L33
+120 982 L28*L30*L33
+121 1 L28*L33*L33
+122 172 L28*L33*L34
+123 140 L31*L33*L34
+124 393 ABC+*L7
+125 193 ABC+*L10
+126 333 ABC+*L11
+127 1288 ABC+*L19
+128 314 ABC+*L20
+129 1469 ABC+*L23
+130 4 ABC+*L27
+131 8 ABC+*L28
+132 34 ABH+*L0
+133 171 ABH+*L8
+134 2666 ABH+*L20
+135 186 ABH+*L23
+136 1612 BCD+*L5
+137 1 BCD+*L12
+138 3253 BCD+*L18
+139 254 BCD+*L22
+140 6 BCD+*L31
+141 571 EFH+*L2
+142 4 EFH+*L34
+143 58 EFG+*L2
+144 18 EFG+*L6
+145 39 EFG+*L14
+146 18 EFG+*L19
+147 23 EFG+*L21
+148 53 FGH-*L0
+149 710 FGH-*L3
+150 804 FGH-*L4
+151 43 FGH-*L18
+152 172 FGH-*L28
+153 536 FGH-*L31
+154 53 FGH-*L35
+155 85 AGH+*L34
+156 85 CGH+*L9
+157 416 BCO+*L2
+158 231 DEO+*L33
+159 748 EFO+*L11
+160 521 EFO+*L23
+161 926 EFO+*L33
+162 758 BCP+*L2
+163 599 CDP+*L0
+164 78 CDP+*L5
+165 1480 CDP+*L8
+166 275 CDP+*L11
+167 1293 CDP+*L14
+168 1094 CDP+*L21
+169 43 CDP+*L29
+170 177 DEP+*L2
+171 166 DEP+*L23
+172 275 DEP+*L33
+173 1474 CEP-*L0
+174 1018 CEP-*L3
+175 78 CEP-*L5
+176 617 CEP-*L6
+177 166 CEP-*L19
+178 1440 CEP-*L20
+179 1293 CEP-*L26
+180 83 CEP-*L28
+181 83 CEP-*L29
+182 1161 GHO+*L6
+183 62 GHO+*L10
+184 914 GHO+*L15
+185 250 GHO+*L21
+186 1186 GHO+*L28
+187 914 GHO+*L34
+188 166 DOP+*L4
+189 1326 DOP+*L6
+190 332 DOP+*L9
+191 1607 DOP+*L14
+192 1070 DOP+*L16
+193 166 DOP+*L22
+194 314 DOP+*L27
+195 1326 DOP+*L28
+196 702 ADP+*L0
+197 702 ADP+*L1
+198 535 ADP+*L3
+199 31 ADP+*L6
+200 1781 ADP+*L19
+201 181 ADP+*L29
+202 404 ADP+*L30
+203 165 DGP+*L8
+204 1094 DGP+*L21
+205 1078 CFO-*L6
+206 1312 CFO-*L34
+207 16 GHP+*L2
+208 275 GHP+*L30
+209 16 FGP+*L2
+210 165 FGP+*L9
+211 23 FGP+*L20
+212 275 FGP+*L30
+213 1 FGP+*L33
+214 21 FGO+*L4
+215 797 FGO+*L7
+216 250 FGO+*L14
+217 250 FGO+*L21
+218 1070 FGO+*L24
+219 295 FGO+*L28
+220 21 FGO+*L31
+221 6 ACG+*L33
+222 330 CFP-*L34
+223 314 COP-*L0
+224 445 COP-*L9
+225 260 BEP-*L33
+226 1293 EOP+*L15
+227 166 EOP+*L23
+228 4 AGO-*L6
+229 1 AGP-*L33
+230 1 DFG+*L31
+231 21 CGO-*L2
+232 104 DFP+*L0
+233 1070 DFP+*L17
+234 637 EL*L33
+235 402 ER*L2
+236 540 ER*L9
+237 21 ER*L13
+238 151 ER*L15
+239 85 ER*L17
+240 151 ER*L18
+241 1195 ER*L23
+242 723 ER*L33
+243 1288 CADO_1*L30
+244 1223 CCDE_1*L6
+245 369 CCDE_1*L23
+246 1697 CCDE_1*L33
+247 147 CCDG_1*L34
+248 163 CCDO_1*L32
+249 669 CFHO_1
+250 1892 CFHO_1*L11
+251 62 CFHO_1*L13
+252 250 CFHO_1*L17
+253 250 CFHO_1*L20
+254 687 CFHO_1*L23
+255 810 CFHO_1*L32
+256 459 CFHO_1*L33
+257 4 QACDG_1*L0
+258 677 QBCDO_1*L10
+259 247 QBCDO_1*L15
+260 959 QBCDO_1*L30
+261 146 QCDEF_2*L6
+262 97 QCDEO_1*L3
+263 21 QCDEO_1*L4
+264 994 QCDEO_1*L9
+265 1440 QCDEO_1*L24
+266 150 QCDEO_1*L32
+```
+
+
+### Row R55
+
+Path: DOP+,ADP+,DGP+,CFO-,GHP+,BGO+,EGO-,HOP-.
+
+```n7-h2-R55-trace
+plu ABCDP ACP 1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GACDP GAP 1
+plu GBCDP GBP 1
+plu GBCHO GCO -1
+plu GBHOP GOP 1
+plu GCEHO GEH 1
+plu GEFHO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+via G CEO AF -1
+via G CEO BF -1
+via G CEO CF -1
+```
+
+Exact upper bound: `-156849898473415185724508981586482022122942001/2429518923561459686915185069237850000000000`.
+
+```n7-h2-R55-witnesses
+CBDG_1 P
+CCDE_1 P
+CCDO_1 P
+CEHP_2 GO
+CEOP_1 G
+CGHP_1 O
+QABGF_1 O
+QBGFH_1 O
+QCDEF_3 GOP
+QCDEG_1 P
+```
+
+```n7-h2-R55-sum
+1 239 L0*L2
+2 41 L2*L15
+3 3 L10*L17
+4 39 L15*L23
+5 356 L0*L4*L23
+6 4 L0*L6*L16
+7 3 L0*L6*L18
+8 231 L0*L8*L23
+9 541 L0*L9*L30
+10 1 L0*L10*L22
+11 8 L0*L15*L16
+12 4 L0*L17*L29
+13 4 L0*L17*L35
+14 12 L0*L20*L34
+15 5 L0*L22*L25
+16 173 L0*L22*L31
+17 2 L0*L25*L33
+18 114 L1*L2*L23
+19 2 L1*L2*L32
+20 12 L1*L15*L21
+21 2 L2*L2*L4
+22 2 L2*L2*L11
+23 21 L2*L2*L34
+24 2 L2*L3*L6
+25 2 L2*L5*L14
+26 2 L2*L5*L33
+27 140 L2*L6*L7
+28 3 L2*L6*L12
+29 151 L2*L6*L18
+30 711 L2*L6*L22
+31 1689 L2*L6*L28
+32 53 L2*L7*L27
+33 163 L2*L8*L15
+34 206 L2*L8*L23
+35 2 L2*L11*L15
+36 2 L2*L13*L14
+37 16 L2*L14*L25
+38 39 L2*L15*L28
+39 4 L2*L16*L35
+40 151 L2*L19*L24
+41 7 L2*L21*L25
+42 20 L2*L21*L29
+43 188 L2*L22*L27
+44 1 L2*L23*L24
+45 81 L2*L23*L29
+46 63 L2*L24*L25
+47 362 L2*L24*L28
+48 2 L2*L30*L33
+49 21 L2*L30*L34
+50 131 L3*L9*L22
+51 1 L3*L9*L33
+52 3 L3*L34*L34
+53 242 L4*L6*L6
+54 140 L4*L9*L9
+55 509 L4*L9*L22
+56 19 L4*L9*L30
+57 1 L4*L9*L32
+58 1 L4*L10*L16
+59 2 L4*L13*L27
+60 115 L4*L21*L23
+61 12 L4*L21*L34
+62 310 L4*L23*L27
+63 59 L5*L6*L26
+64 145 L5*L6*L31
+65 81 L5*L9*L29
+66 510 L5*L24*L29
+67 36 L6*L6*L19
+68 3 L6*L8*L10
+69 45 L6*L8*L18
+70 5 L6*L9*L21
+71 10 L6*L10*L25
+72 12 L6*L12*L15
+73 1 L6*L13*L17
+74 18 L6*L15*L18
+75 41 L6*L18*L23
+76 5 L6*L18*L25
+77 40 L6*L18*L29
+78 443 L6*L22*L29
+79 304 L6*L23*L23
+80 85 L6*L23*L26
+81 167 L6*L23*L28
+82 1 L7*L7*L13
+83 4 L7*L21*L33
+84 5 L8*L9*L20
+85 1 L8*L13*L29
+86 12 L8*L15*L21
+87 104 L8*L23*L23
+88 1 L9*L12*L16
+89 4 L9*L12*L25
+90 6 L9*L13*L20
+91 8 L9*L13*L24
+92 10 L9*L14*L33
+93 17 L9*L15*L18
+94 150 L9*L15*L22
+95 5 L9*L16*L17
+96 14 L9*L16*L22
+97 4 L9*L16*L31
+98 5 L9*L17*L17
+99 29 L9*L18*L28
+100 25 L9*L19*L22
+101 9 L9*L19*L31
+102 5 L9*L20*L29
+103 12 L9*L21*L27
+104 477 L9*L22*L22
+105 57 L9*L22*L24
+106 388 L9*L22*L28
+107 1 L9*L26*L31
+108 140 L9*L28*L31
+109 1 L10*L25*L31
+110 10 L11*L21*L29
+111 1 L12*L22*L34
+112 1 L12*L24*L24
+113 3 L13*L15*L26
+114 7 L13*L21*L25
+115 1 L13*L30*L34
+116 4 L14*L15*L17
+117 4 L15*L16*L32
+118 5 L15*L19*L34
+119 5 L15*L20*L31
+120 6 L15*L21*L22
+121 50 L15*L22*L23
+122 32 L15*L23*L31
+123 19 L15*L23*L35
+124 6 L16*L18*L34
+125 1 L16*L23*L24
+126 7 L17*L21*L22
+127 4 L17*L27*L27
+128 2 L17*L29*L33
+129 9 L18*L29*L31
+130 20 L19*L23*L25
+131 52 L19*L24*L29
+132 9 L19*L27*L29
+133 7 L20*L30*L34
+134 20 L21*L22*L23
+135 1 L21*L23*L27
+136 26 L21*L23*L29
+137 47 L21*L23*L31
+138 10 L21*L24*L33
+139 324 L22*L23*L27
+140 6 L22*L31*L34
+141 8 L22*L33*L34
+142 1 L23*L24*L32
+143 252 L23*L27*L28
+144 250 L23*L27*L30
+145 63 L24*L24*L31
+146 2 L24*L27*L33
+147 10 L24*L28*L33
+148 1 L27*L32*L35
+149 869 L28*L33*L34
+150 574 ABC+*L8
+151 2 ABC+*L12
+152 1 ABF+*L27
+153 19 ABH+*L5
+154 4 ABH+*L17
+155 1 ABH+*L20
+156 400 ABH+*L22
+157 127 BCD+*L5
+158 4 BCD+*L16
+159 113 BCD+*L18
+160 1003 BCD+*L22
+161 335 BCD+*L25
+162 85 BCD+*L26
+163 1829 BCD+*L28
+164 3 BFH+*L15
+165 2 EFH+*L3
+166 7 EFH+*L14
+167 11 EFH+*L20
+168 11 EFH+*L25
+169 867 EFH+*L28
+170 8 DEG+*L0
+171 2 DEG+*L8
+172 1 EFG+*L31
+173 3 AGH+*L9
+174 6 ABO+*L29
+175 4 FHO+*L7
+176 10 FHO+*L24
+177 1 ABP+*L21
+178 27 ABP+*L29
+179 16 BCP+*L15
+180 103 BCP+*L19
+181 4 BCP+*L20
+182 1 BCP+*L33
+183 464 CDP+*L1
+184 19 CDP+*L5
+185 1583 CDP+*L6
+186 150 CDP+*L9
+187 842 CDP+*L14
+188 35 CDP+*L19
+189 58 CDP+*L25
+190 1 CDP+*L30
+191 25 DEP+*L18
+192 26 DEP+*L21
+193 137 DEP+*L27
+194 19 CEP-*L5
+195 2227 CEP-*L6
+196 5 CEP-*L20
+197 459 CEP-*L26
+198 269 CEP-*L29
+199 401 CEP-*L34
+200 3 GHO+*L8
+201 6 GHO+*L16
+202 5 GHO+*L25
+203 47 DOP+*L2
+204 68 DOP+*L4
+205 35 DOP+*L8
+206 20 DOP+*L22
+207 57 DOP+*L25
+208 677 ADP+*L2
+209 87 ADP+*L4
+210 143 ADP+*L6
+211 14 ADP+*L14
+212 323 ADP+*L22
+213 1116 ADP+*L28
+214 1001 ADP+*L30
+215 2 DGP+*L1
+216 2 DGP+*L15
+217 1 DGP+*L16
+218 1 DGP+*L25
+219 10 DGP+*L27
+220 1 DGP+*L28
+221 2 BGO+*L24
+222 1 EGO-*L16
+223 5 HOP-*L15
+224 5 ACP+*L24
+225 2 BDP+*L16
+226 1 ADG+*L2
+227 7 EGP+*L9
+228 29 EOP+*L9
+229 1 AFP-*L23
+230 10 BFO-*L29
+231 3 GOP+*L9
+232 6 GOP+*L16
+233 4 EGH-*L0
+234 9 EGH-*L25
+235 3 AOP-*L9
+236 1 CBDG_1*L2
+237 491 CCDE_1*L0
+238 4 CCDO_1*L6
+239 530 CEHP_2*L4
+240 109 CEHP_2*L7
+241 191 CEHP_2*L10
+242 199 CEHP_2*L11
+243 1 CEHP_2*L12
+244 10 CEHP_2*L16
+245 373 CEHP_2*L22
+246 13 CEHP_2*L26
+247 1234 CEHP_2*L28
+248 57 CEOP_1*L24
+249 6 CGHP_1*L17
+250 8 CGHP_1*L27
+251 1 QABGF_1*L2
+252 2 QBGFH_1*L6
+253 2 QCDEF_3*L17
+254 6 QCDEG_1*L8
+255 19 F5_OABCD*L2
+256 11 F5_ABCOF*L34
+257 1 F5_HABEF*L9
+258 4 F5_FHABO*L6
+259 193 F5_FHABP*L9
+260 139 F5_FBCPE*L9
+261 4 F5_OGEFH*L15
+```
+
+
+### Row R56
+
+Path: DOP+,ADP+,DGP+,CFO-,GHP+,BGO+,EGO-,HOP+.
+
+```n7-h2-R56-trace
+plu ABCDP ACP 1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GACDP GAP 1
+plu GBCDP GBP 1
+plu GBCHO GCO -1
+plu GBHOP GOP 1
+plu GCEHO GEH 1
+plu GEFHO GFO 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEGO HEO -1
+plu OACDP OAP 1
+plu OADHP ODH 1
+plu OAFHP OFP -1
+plu OBCDP OBP 1
+plu OBDFH ODF 1
+plu PADFO PDF 1
+plu PADHO PDH 1
+via G CEO AF -1
+via G CEO BF -1
+via G CEO CF -1
+```
+
+Exact upper bound: `-3061910452427441749877698695661233733/42161998073395817007302300000000000`.
+
+```n7-h2-R56-witnesses
+CADH_2 OP
+CCDE_1 P
+CCDF_2 OP
+CCDH_2 OP
+CCDO_1 P
+CEOP_1 G
+QABPF_1 O
+QBCDO_1 P
+QBCEF_2 GO
+QCDEF_3 GOP
+QCDEO_2 GP
+QCPEO_1 G
+QDEOP_1 G
+```
+
+```n7-h2-R56-sum
+1 380 L0*L1*L15
+2 1058 L0*L2*L7
+3 114 L0*L2*L20
+4 265 L0*L2*L29
+5 691 L0*L2*L34
+6 1377 L0*L9*L30
+7 50 L0*L11*L15
+8 380 L0*L14*L15
+9 272 L0*L15*L19
+10 18 L0*L16*L27
+11 182 L0*L20*L23
+12 56 L0*L23*L29
+13 401 L0*L23*L31
+14 64 L2*L2*L21
+15 99 L2*L3*L25
+16 26 L2*L3*L28
+17 56 L2*L4*L7
+18 1 L2*L5*L6
+19 1178 L2*L6*L28
+20 813 L2*L6*L34
+21 185 L2*L8*L25
+22 484 L2*L8*L27
+23 170 L2*L8*L28
+24 125 L2*L9*L32
+25 70 L2*L10*L20
+26 137 L2*L10*L28
+27 23 L2*L14*L19
+28 461 L2*L14*L28
+29 389 L2*L15*L26
+30 156 L2*L21*L34
+31 744 L2*L24*L27
+32 281 L2*L24*L28
+33 96 L2*L24*L34
+34 108 L2*L25*L33
+35 5 L3*L5*L9
+36 232 L3*L6*L9
+37 114 L4*L9*L31
+38 272 L4*L15*L28
+39 21 L4*L21*L23
+40 4 L4*L31*L34
+41 43 L5*L6*L10
+42 35 L5*L20*L27
+43 594 L6*L6*L10
+44 78 L6*L6*L22
+45 531 L6*L9*L30
+46 263 L6*L10*L18
+47 111 L6*L10*L31
+48 170 L6*L10*L35
+49 182 L6*L18*L24
+50 57 L6*L18*L32
+51 690 L6*L24*L32
+52 26 L6*L31*L32
+53 46 L7*L10*L23
+54 390 L7*L15*L30
+55 176 L8*L10*L20
+56 31 L8*L10*L22
+57 300 L8*L10*L27
+58 89 L9*L9*L23
+59 5 L9*L11*L33
+60 131 L9*L11*L35
+61 79 L9*L15*L23
+62 21 L9*L18*L23
+63 30 L9*L18*L28
+64 24 L9*L19*L34
+65 156 L9*L20*L31
+66 203 L9*L21*L23
+67 413 L9*L22*L33
+68 296 L9*L23*L33
+69 233 L10*L15*L18
+70 366 L10*L15*L21
+71 354 L10*L15*L34
+72 193 L10*L19*L34
+73 196 L10*L20*L33
+74 203 L10*L21*L24
+75 277 L10*L23*L27
+76 196 L10*L24*L32
+77 4 L11*L15*L32
+78 104 L11*L34*L34
+79 380 L15*L15*L26
+80 18 L15*L16*L27
+81 205 L15*L22*L32
+82 127 L15*L23*L27
+83 192 L15*L23*L30
+84 380 L15*L27*L27
+85 23 L15*L28*L32
+86 18 L17*L27*L27
+87 23 L18*L27*L30
+88 22 L19*L23*L27
+89 3 L21*L30*L30
+90 89 L22*L29*L34
+91 135 L23*L27*L27
+92 53 L24*L31*L32
+93 144 L25*L30*L30
+94 170 L28*L32*L35
+95 1 L32*L32*L35
+96 4 L32*L33*L34
+97 1007 ABC+*L0
+98 23 ABC+*L19
+99 35 ABC+*L20
+100 489 ABC+*L23
+101 466 ABC+*L24
+102 1007 ABC+*L26
+103 1394 ABC+*L28
+104 319 ABD+*L9
+105 50 ABF+*L15
+106 752 ABH+*L6
+107 389 ABH+*L14
+108 80 ABH+*L20
+109 44 ABH+*L25
+110 971 BCD+*L25
+111 1178 BCD+*L28
+112 370 BCD+*L34
+113 196 EFH+*L8
+114 458 EFH+*L14
+115 128 EFH+*L20
+116 510 EFH+*L22
+117 155 EFH+*L23
+118 348 BCO+*L15
+119 24 FHO+*L8
+120 114 FHO+*L10
+121 53 CHO-*L6
+122 370 BCP+*L15
+123 98 CDP+*L2
+124 79 CDP+*L19
+125 629 DEP+*L27
+126 9 EFP+*L2
+127 114 FHP+*L33
+128 128 CEP-*L0
+129 458 CEP-*L7
+130 100 CEP-*L19
+131 804 CEP-*L20
+132 595 CEP-*L26
+133 117 CEP-*L30
+134 2 CEP-*L32
+135 869 DOP+*L0
+136 869 DOP+*L1
+137 9 DOP+*L2
+138 600 DOP+*L8
+139 231 DOP+*L10
+140 79 DOP+*L22
+141 582 ADP+*L0
+142 78 ADP+*L6
+143 277 ADP+*L10
+144 22 ADP+*L19
+145 182 ADP+*L20
+146 1661 ADP+*L26
+147 1214 ADP+*L27
+148 1039 ADP+*L28
+149 88 ADP+*L30
+150 495 CFO-*L0
+151 6 CFO-*L4
+152 24 CFO-*L6
+153 203 CFO-*L25
+154 495 CFO-*L26
+155 24 CFO-*L28
+156 4 CFO-*L31
+157 619 HOP+*L5
+158 129 HOP+*L7
+159 540 HOP+*L33
+160 9 COP-*L2
+161 321 BDP+*L27
+162 930 DHO+*L23
+163 309 FOP+*L10
+164 600 DHP+*L0
+165 908 DHP+*L18
+166 244 DHP+*L27
+167 1039 DHP+*L28
+168 86 EL*L25
+169 653 EL*L28
+170 4 EL*L33
+171 102 EL*L35
+172 854 CADH_2*L30
+173 484 CCDE_1*L0
+174 23 CCDF_2*L0
+175 594 CCDF_2*L6
+176 23 CCDF_2*L18
+177 690 CCDF_2*L24
+178 23 CCDF_2*L26
+179 910 CCDH_2*L0
+180 531 CCDH_2*L6
+181 111 CCDH_2*L9
+182 114 CCDH_2*L10
+183 56 CCDH_2*L18
+184 139 CCDH_2*L24
+185 389 CCDO_1*L9
+186 182 CCDO_1*L34
+187 53 CEOP_1*L7
+188 1 QABPF_1*L32
+189 67 QBCDO_1*L32
+190 1 QBCEF_2*L5
+191 11 QCDEF_3*L23
+192 600 QCDEO_2*L24
+193 53 QCDEO_2*L29
+194 193 QCPEO_1*L10
+195 100 QDEOP_1*L4
+196 79 QDEOP_1*L23
+197 266 F5_COFAB*L15
+198 27 F5_EFACP*L30
+199 17 F5_FHAPE*L15
+200 97 F5_FBCPE*L2
+201 12 F5_OPDEH*L2
+```
+
+
+### Row R57
+
+Path: DOP+,ADP+,DGP+,CFO-,GHP+,BGO+,EGO+.
+
+```n7-h2-R57-trace
+plu ABCDP ACP 1
+plu CABFO CAO -1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEO FAO 1
+plu FACEP FAP 1
+plu FBCEO FBO 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GACDP GAP 1
+plu GBCDP GBP 1
+plu GBCHO GCO -1
+plu GBHOP GOP 1
+plu GCDEO GDO -1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+plu OBCEG OBE 1
+plu OBEFG OFG -1
+via G EFO AF -1
+via G EFO BE 1
+via G EFO BF -1
+via G EFO CF -1
+```
+
+Exact upper bound: `-76844834451322467345695031559425587/972933428529409536893977000000000`.
+
+```n7-h2-R57-witnesses
+CADO_1 P
+CCDE_1 P
+CCDO_1 P
+CCEF_2 GO
+CEFO_1 G
+QCDEF_3 GOP
+QCDEG_1 P
+```
+
+```n7-h2-R57-sum
+1 585 L0*L0*L2
+2 82 L0*L0*L31
+3 29 L0*L2*L13
+4 392 L0*L2*L15
+5 87 L0*L2*L17
+6 308 L0*L2*L19
+7 392 L0*L2*L20
+8 292 L0*L2*L24
+9 357 L0*L2*L31
+10 790 L0*L2*L32
+11 48 L0*L5*L5
+12 112 L0*L5*L6
+13 29 L0*L5*L13
+14 1850 L0*L5*L23
+15 1339 L0*L6*L31
+16 562 L0*L8*L23
+17 358 L0*L9*L19
+18 889 L0*L9*L22
+19 174 L0*L18*L32
+20 6427 L0*L19*L23
+21 15 L0*L21*L32
+22 539 L0*L23*L31
+23 449 L0*L23*L34
+24 48 L1*L2*L2
+25 1057 L2*L2*L8
+26 790 L2*L2*L14
+27 3 L2*L2*L16
+28 8 L2*L2*L24
+29 42 L2*L5*L6
+30 49 L2*L6*L21
+31 1610 L2*L6*L23
+32 3660 L2*L6*L28
+33 124 L2*L8*L17
+34 2789 L2*L8*L23
+35 1597 L2*L8*L32
+36 175 L2*L8*L34
+37 1011 L2*L9*L22
+38 204 L2*L9*L25
+39 724 L2*L10*L15
+40 35 L2*L10*L21
+41 1 L2*L10*L24
+42 6 L2*L15*L30
+43 253 L2*L17*L17
+44 3 L2*L17*L31
+45 3000 L2*L20*L27
+46 1 L2*L21*L32
+47 114 L2*L21*L34
+48 29 L2*L27*L27
+49 84 L5*L6*L6
+50 3661 L5*L6*L24
+51 3980 L5*L9*L24
+52 8 L5*L9*L30
+53 1 L5*L13*L34
+54 1397 L6*L6*L18
+55 315 L6*L6*L22
+56 152 L6*L9*L18
+57 79 L6*L10*L15
+58 6427 L6*L18*L23
+59 2390 L6*L18*L24
+60 174 L6*L19*L32
+61 988 L6*L20*L32
+62 1397 L6*L21*L23
+63 553 L6*L22*L34
+64 40 L8*L9*L10
+65 59 L8*L10*L23
+66 440 L8*L15*L32
+67 58 L9*L9*L11
+68 203 L9*L9*L33
+69 103 L9*L10*L28
+70 80 L9*L10*L35
+71 1 L9*L11*L34
+72 14 L9*L12*L17
+73 118 L9*L13*L16
+74 9 L9*L13*L26
+75 3787 L9*L18*L24
+76 1302 L9*L21*L33
+77 8 L9*L22*L30
+78 2560 L9*L22*L32
+79 261 L9*L22*L34
+80 916 L9*L33*L34
+81 711 L10*L15*L15
+82 2347 L10*L15*L23
+83 1 L10*L15*L25
+84 534 L10*L22*L34
+85 1 L11*L24*L34
+86 241 L12*L13*L34
+87 122 L12*L15*L17
+88 105 L13*L17*L34
+89 562 L13*L32*L34
+90 187 L15*L15*L18
+91 137 L15*L15*L23
+92 3 L15*L18*L30
+93 158 L15*L25*L30
+94 26 L15*L28*L32
+95 6 L15*L30*L30
+96 15 L17*L26*L32
+97 253 L18*L18*L34
+98 3438 L18*L23*L34
+99 563 L18*L32*L34
+100 66 L18*L34*L34
+101 274 L19*L33*L34
+102 253 L21*L21*L32
+103 1 L21*L30*L30
+104 39 L21*L30*L34
+105 1776 L21*L33*L34
+106 137 L22*L34*L34
+107 8 L25*L30*L30
+108 29 L30*L34*L34
+109 964 L33*L34*L34
+110 308 ABC+*L2
+111 48 ABC+*L5
+112 2012 ABC+*L6
+113 29 ABC+*L13
+114 246 ABC+*L14
+115 922 ABC+*L16
+116 588 ABC+*L17
+117 3127 ABC+*L19
+118 15 ABC+*L20
+119 778 ABC+*L23
+120 31 ABC+*L24
+121 82 ABC+*L27
+122 699 ABC+*L28
+123 614 ABH+*L0
+124 347 ABH+*L6
+125 78 ABH+*L17
+126 69 ABH+*L19
+127 3034 ABH+*L20
+128 262 ABH+*L24
+129 699 ABH+*L29
+130 790 ABH+*L32
+131 2853 BCD+*L18
+132 1037 BCD+*L21
+133 1337 BCD+*L23
+134 1020 BCD+*L26
+135 3660 BCD+*L28
+136 787 EFH+*L13
+137 500 EFH+*L18
+138 557 EFH+*L22
+139 50 EFH+*L28
+140 27 EFG+*L17
+141 3167 EFG+*L19
+142 15 EFG+*L26
+143 1 EFG+*L30
+144 66 FGH-*L11
+145 241 FGH-*L13
+146 226 FGH-*L14
+147 226 FGH-*L16
+148 2239 FGH-*L18
+149 806 FGH-*L19
+150 4 FGH-*L30
+151 103 FHO+*L6
+152 1433 FHO+*L13
+153 27 FHO+*L14
+154 253 FHO+*L18
+155 3438 FHO+*L23
+156 4 FHO+*L31
+157 66 FHO+*L32
+158 1 BCP+*L32
+159 730 CDP+*L0
+160 3464 CDP+*L6
+161 2482 DEP+*L0
+162 1234 CEP-*L0
+163 50 CEP-*L3
+164 8 CEP-*L4
+165 413 CEP-*L6
+166 2731 CEP-*L8
+167 1 CEP-*L11
+168 274 CEP-*L18
+169 3787 CEP-*L20
+170 535 CEP-*L26
+171 2925 CEP-*L29
+172 97 GHO+*L8
+173 2390 GHO+*L10
+174 226 GHO+*L14
+175 567 GHO+*L32
+176 103 DOP+*L1
+177 174 DOP+*L4
+178 1397 DOP+*L6
+179 8467 DOP+*L10
+180 8641 DOP+*L11
+181 103 DOP+*L27
+182 274 DOP+*L31
+183 448 ADP+*L4
+184 1884 ADP+*L5
+185 1033 ADP+*L8
+186 174 ADP+*L11
+187 449 ADP+*L14
+188 6427 ADP+*L19
+189 1752 ADP+*L28
+190 30 CFO-*L2
+191 1037 CFO-*L6
+192 1317 CFO-*L9
+193 274 CFO-*L23
+194 15 CFO-*L26
+195 1 CFO-*L30
+196 1842 CFO-*L34
+197 421 BGO+*L0
+198 124 BGO+*L8
+199 772 BGO+*L10
+200 775 BGO+*L11
+201 253 BGO+*L17
+202 253 BGO+*L21
+203 63 BGO+*L26
+204 358 EGO+*L1
+205 563 EGO+*L3
+206 163 EGO+*L6
+207 1830 EGO+*L11
+208 241 EGO+*L12
+209 253 EGO+*L18
+210 639 EGO+*L20
+211 639 EGO+*L21
+212 163 EGO+*L28
+213 121 EGO+*L34
+214 34 COP-*L2
+215 3787 COP-*L9
+216 204 BEP-*L9
+217 3 CGO+*L32
+218 42 CGO+*L34
+219 240 AOP-*L2
+220 174 AOP-*L33
+221 103 BOP-*L15
+222 27 FGO-*L8
+223 66 FGO-*L10
+224 241 FGO-*L12
+225 253 FGO-*L17
+226 253 FGO-*L18
+227 253 FGO-*L21
+228 53 EL*L7
+229 3 EL*L12
+230 993 EL*L15
+231 42 EL*L17
+232 273 EL*L18
+233 693 EL*L25
+234 967 EL*L28
+235 6 EL*L30
+236 164 EL*L35
+237 1058 ER*L10
+238 49 ER*L21
+239 1282 ER*L23
+240 540 ER*L32
+241 2953 CADO_1*L30
+242 42 CCDE_1*L2
+243 280 CCDE_1*L6
+244 3787 CCDO_1*L24
+245 1 CCEF_2*L24
+246 2306 CCEF_2*L34
+247 152 CEFO_1*L6
+248 3179 CEFO_1*L12
+249 3712 CEFO_1*L23
+250 108 CEFO_1*L34
+251 95 QCDEF_3*L0
+252 333 QCDEG_1*L0
+253 42 QCDEG_1*L9
+```
+
+
+### Row R58
+
+Path: DOP+,ADP+,DGP+,CFO+,AGO-,BFO-.
+
+```n7-h2-R58-trace
+plu ABCDP ACP 1
+plu BAFHO BHO -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCO FAO 1
+plu FACDO FDO -1
+plu FACEP FAP 1
+plu FACOP FOP 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GACDP GAP 1
+plu GBCDP GBP 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+plu PADFO PDF 1
+```
+
+Exact upper bound: `-11164413762985545653966318186205687533/135179798222921668488812634260000000`.
+
+```n7-h2-R58-witnesses
+CADO_1 P
+CCDE_1 P
+```
+
+```n7-h2-R58-sum
+1 78 L0*L2*L5
+2 181 L0*L2*L10
+3 618 L0*L2*L19
+4 607 L0*L2*L28
+5 19 L0*L5*L31
+6 687 L0*L6*L31
+7 839 L0*L8*L23
+8 385 L0*L9*L22
+9 74 L0*L9*L31
+10 1388 L0*L11*L23
+11 58 L0*L11*L31
+12 46 L0*L14*L33
+13 1469 L0*L19*L23
+14 134 L0*L19*L33
+15 52 L0*L23*L29
+16 138 L0*L23*L31
+17 312 L2*L2*L10
+18 312 L2*L2*L11
+19 126 L2*L2*L22
+20 51 L2*L4*L15
+21 126 L2*L4*L23
+22 453 L2*L6*L23
+23 1772 L2*L6*L28
+24 122 L2*L6*L35
+25 89 L2*L8*L23
+26 16 L2*L8*L29
+27 339 L2*L9*L31
+28 144 L2*L10*L20
+29 493 L2*L15*L19
+30 232 L2*L15*L32
+31 53 L2*L18*L34
+32 1834 L2*L21*L23
+33 360 L2*L21*L31
+34 349 L2*L21*L33
+35 407 L2*L22*L27
+36 126 L2*L23*L31
+37 495 L2*L25*L29
+38 194 L2*L25*L33
+39 49 L2*L25*L34
+40 569 L2*L27*L27
+41 1086 L2*L27*L28
+42 193 L2*L27*L30
+43 193 L2*L27*L35
+44 245 L2*L29*L32
+45 46 L3*L15*L15
+46 73 L3*L15*L18
+47 197 L5*L5*L21
+48 1878 L5*L6*L6
+49 1532 L5*L6*L9
+50 1893 L5*L9*L24
+51 49 L5*L9*L27
+52 90 L5*L9*L33
+53 72 L5*L15*L27
+54 1633 L5*L21*L23
+55 2051 L6*L6*L22
+56 619 L6*L9*L22
+57 166 L6*L9*L31
+58 1048 L6*L10*L23
+59 1268 L6*L18*L23
+60 134 L6*L18*L33
+61 149 L6*L19*L31
+62 495 L6*L24*L31
+63 613 L8*L24*L33
+64 122 L8*L33*L34
+65 138 L9*L9*L22
+66 1591 L9*L10*L24
+67 430 L9*L23*L31
+68 545 L9*L24*L31
+69 66 L9*L25*L33
+70 16 L9*L29*L31
+71 90 L10*L15*L15
+72 51 L11*L27*L31
+73 44 L15*L15*L23
+74 131 L15*L20*L33
+75 43 L15*L23*L31
+76 43 L15*L23*L33
+77 145 L15*L24*L28
+78 94 L15*L24*L32
+79 145 L15*L25*L28
+80 90 L15*L26*L32
+81 72 L15*L31*L34
+82 24 L20*L23*L33
+83 31 L21*L27*L33
+84 44 L22*L27*L27
+85 44 L25*L33*L34
+86 520 ABC+*L8
+87 118 ABC+*L15
+88 2146 ABC+*L19
+89 570 ABC+*L20
+90 44 ABC+*L24
+91 86 ABC+*L28
+92 129 ABC+*L31
+93 109 ABC+*L33
+94 104 ABD+*L2
+95 373 ABH+*L0
+96 538 ABH+*L1
+97 165 ABH+*L6
+98 618 ABH+*L19
+99 364 ABH+*L22
+100 44 ABH+*L25
+101 541 ABH+*L27
+102 1207 ABH+*L28
+103 244 ABH+*L30
+104 181 ABH+*L32
+105 90 BCD+*L5
+106 1997 BCD+*L18
+107 207 BCD+*L23
+108 1772 BCD+*L28
+109 141 BCD+*L32
+110 44 BCD+*L34
+111 51 EFH+*L4
+112 122 EFH+*L8
+113 43 EFH+*L22
+114 5 EFH+*L24
+115 102 BCO+*L33
+116 53 EFO+*L2
+117 1711 CDP+
+118 629 CDP+*L5
+119 2000 CDP+*L6
+120 703 CDP+*L8
+121 341 CDP+*L10
+122 201 CDP+*L18
+123 1564 CDP+*L21
+124 524 CDP+*L23
+125 44 CDP+*L27
+126 237 CDP+*L30
+127 524 DEP+*L23
+128 392 CEP-*L5
+129 2357 CEP-*L6
+130 524 CEP-*L23
+131 2963 CEP-*L28
+132 3101 CEP-*L29
+133 341 CEP-*L32
+134 716 DOP+*L3
+135 916 DOP+*L10
+136 3069 DOP+*L24
+137 3069 DOP+*L25
+138 916 DOP+*L33
+139 621 ADP+*L3
+140 1224 ADP+*L8
+141 811 ADP+*L11
+142 1469 ADP+*L19
+143 44 ADP+*L26
+144 52 ADP+*L29
+145 578 ADP+*L33
+146 539 CFO+*L0
+147 1277 CFO+*L3
+148 1015 CFO+*L4
+149 1564 CFO+*L7
+150 120 CFO+*L11
+151 100 CFO+*L15
+152 1858 CFO+*L23
+153 1564 CFO+*L24
+154 1110 CFO+*L31
+155 283 BFO-*L4
+156 1431 BFO-*L7
+157 1431 BFO-*L8
+158 120 BFO-*L11
+159 570 BFO-*L14
+160 1834 BFO-*L23
+161 570 BFO-*L27
+162 1431 BFO-*L29
+163 360 BFO-*L31
+164 2320 CFP-*L9
+165 298 BEP-*L33
+166 44 AFP-*L15
+167 716 AOP-*L30
+168 104 DFP+*L2
+169 1564 DFP+*L21
+170 94 ER*L30
+171 1430 CADO_1*L30
+172 134 CADO_1*L33
+173 729 CCDE_1*L0
+174 288 CCDE_1*L2
+175 1651 CCDE_1*L6
+176 482 CCDE_1*L33
+```
+
+
+### Row R59
+
+Path: DOP+,ADP+,DGP+,CFO+,AGO-,BFO+.
+
+```n7-h2-R59-trace
+plu ABCDP ACP 1
+plu BADFO BDO 1
+plu BAEFO BEO 1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DABOP DAO -1
+plu DACGP DAG -1
+plu DBCGP DBG -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu EBDOP EOP 1
+plu ECDGP EGP 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu FBDEO FDO -1
+plu FBEOP FOP 1
+plu GABCH GBH -1
+plu GACDP GAP 1
+plu GBCDP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+plu PADFO PDF 1
+```
+
+Exact upper bound: `-706798282957176069226131461075611/10691576137685819086747000000000`.
+
+```n7-h2-R59-witnesses
+CADO_1 P
+CCDE_1 P
+CCDO_1 P
+QABFH_1 O
+```
+
+```n7-h2-R59-sum
+1 286 L0*L2*L2
+2 72 L0*L2*L17
+3 301 L0*L2*L18
+4 227 L0*L2*L20
+5 1357 L0*L5*L6
+6 927 L0*L5*L9
+7 3435 L0*L5*L23
+8 178 L0*L6*L11
+9 227 L0*L6*L12
+10 137 L0*L9*L11
+11 241 L0*L9*L31
+12 424 L0*L11*L23
+13 91 L0*L12*L33
+14 145 L0*L12*L34
+15 440 L0*L13*L15
+16 167 L0*L13*L17
+17 2257 L0*L13*L18
+18 419 L0*L13*L21
+19 2854 L0*L13*L23
+20 86 L0*L15*L18
+21 2 L0*L15*L31
+22 72 L0*L15*L33
+23 72 L0*L16*L33
+24 1349 L0*L17*L23
+25 1810 L0*L19*L23
+26 73 L0*L19*L34
+27 1342 L0*L23*L31
+28 178 L0*L28*L33
+29 70 L1*L15*L30
+30 126 L2*L2*L8
+31 494 L2*L2*L14
+32 69 L2*L2*L24
+33 336 L2*L6*L11
+34 320 L2*L6*L13
+35 324 L2*L6*L18
+36 71 L2*L6*L21
+37 3927 L2*L6*L23
+38 1916 L2*L6*L28
+39 59 L2*L8*L23
+40 160 L2*L11*L15
+41 267 L2*L13*L15
+42 727 L2*L13*L27
+43 40 L2*L15*L16
+44 1161 L2*L15*L18
+45 1611 L2*L17*L21
+46 77 L2*L17*L34
+47 302 L2*L19*L34
+48 25 L2*L20*L33
+49 41 L2*L28*L34
+50 264 L2*L30*L33
+51 494 L2*L30*L34
+52 162 L3*L9*L9
+53 605 L3*L9*L12
+54 806 L3*L9*L21
+55 199 L3*L15*L15
+56 684 L3*L15*L21
+57 736 L3*L17*L18
+58 72 L4*L6*L15
+59 23 L4*L9*L28
+60 323 L5*L6*L12
+61 1557 L5*L6*L24
+62 1968 L5*L6*L29
+63 53 L5*L9*L17
+64 816 L5*L9*L24
+65 706 L5*L9*L29
+66 35 L5*L9*L34
+67 48 L5*L15*L17
+68 494 L5*L15*L30
+69 2 L5*L23*L34
+70 357 L5*L24*L33
+71 99 L5*L33*L34
+72 530 L6*L6*L18
+73 1714 L6*L6*L22
+74 321 L6*L9*L19
+75 2616 L6*L9*L22
+76 2993 L6*L12*L18
+77 2843 L6*L12*L23
+78 1508 L6*L17*L18
+79 386 L6*L17*L23
+80 1810 L6*L18*L23
+81 87 L6*L18*L24
+82 601 L6*L21*L23
+83 101 L6*L32*L33
+84 41 L6*L33*L34
+85 41 L7*L9*L33
+86 101 L7*L10*L33
+87 220 L7*L25*L33
+88 227 L8*L12*L33
+89 1248 L8*L16*L33
+90 1731 L8*L24*L33
+91 676 L8*L33*L33
+92 248 L9*L9*L22
+93 186 L9*L9*L31
+94 42 L9*L10*L13
+95 351 L9*L11*L21
+96 45 L9*L11*L27
+97 352 L9*L12*L21
+98 73 L9*L15*L19
+99 227 L9*L17*L23
+100 103 L9*L18*L22
+101 103 L9*L19*L30
+102 689 L9*L21*L23
+103 581 L9*L22*L30
+104 813 L9*L25*L33
+105 3 L9*L26*L33
+106 186 L9*L28*L33
+107 116 L10*L15*L23
+108 244 L10*L15*L32
+109 291 L11*L15*L30
+110 92 L11*L17*L23
+111 432 L11*L17*L33
+112 264 L11*L30*L33
+113 676 L11*L33*L34
+114 1663 L12*L14*L33
+115 167 L12*L17*L20
+116 18 L12*L17*L34
+117 41 L12*L20*L34
+118 87 L12*L21*L33
+119 314 L12*L24*L33
+120 314 L12*L25*L33
+121 67 L12*L27*L34
+122 186 L12*L28*L34
+123 384 L12*L31*L34
+124 103 L13*L21*L23
+125 429 L14*L24*L33
+126 673 L15*L17*L18
+127 304 L15*L18*L33
+128 1386 L15*L21*L30
+129 77 L15*L21*L32
+130 118 L15*L22*L30
+131 167 L17*L17*L18
+132 103 L17*L18*L23
+133 1508 L17*L18*L25
+134 684 L17*L18*L30
+135 1508 L17*L21*L23
+136 255 L17*L21*L33
+137 1402 L17*L24*L33
+138 1175 L17*L28*L33
+139 118 L17*L30*L34
+140 90 L17*L33*L34
+141 1627 L18*L21*L27
+142 91 L18*L25*L33
+143 91 L18*L33*L35
+144 139 L19*L27*L34
+145 91 L19*L28*L33
+146 1277 L20*L25*L33
+147 227 L20*L27*L33
+148 132 L20*L33*L33
+149 1435 L21*L21*L32
+150 91 L21*L23*L33
+151 721 L21*L28*L33
+152 527 L21*L30*L30
+153 263 L21*L32*L33
+154 1159 L21*L33*L34
+155 220 L25*L29*L33
+156 69 L25*L30*L30
+157 429 L25*L33*L34
+158 264 L32*L32*L33
+159 264 L32*L33*L33
+160 818 ABC+*L13
+161 72 ABC+*L17
+162 818 ABC+*L18
+163 1365 ABC+*L23
+164 118 ABH+*L23
+165 41 ABH+*L29
+166 199 ABH+*L34
+167 17 BCD+*L1
+168 350 BCD+*L5
+169 235 BCD+*L11
+170 320 BCD+*L13
+171 103 BCD+*L19
+172 485 BCD+*L20
+173 3251 BCD+*L23
+174 1916 BCD+*L28
+175 24 BCD+*L35
+176 185 EFH+*L13
+177 162 EFH+*L21
+178 28 EFH+*L30
+179 49 EFG+*L2
+180 703 EFG+*L5
+181 18 EFG+*L17
+182 311 EFG+*L21
+183 92 EFG+*L22
+184 186 EFG+*L28
+185 654 FGH-*L5
+186 82 FGH-*L6
+187 18 FGH-*L17
+188 1506 FGH-*L18
+189 1045 FGH-*L20
+190 1914 FGH-*L22
+191 1914 FGH-*L23
+192 72 FGH-*L26
+193 42 FGH-*L28
+194 49 FGH-*L31
+195 432 FGH-*L33
+196 286 ABO+*L2
+197 199 ABO+*L15
+198 134 FHO+*L30
+199 1040 AHO-*L17
+200 1506 CHO-*L12
+201 255 CHO-*L17
+202 395 CHO-*L33
+203 21 BCP+*L11
+204 86 CDP+*L0
+205 3267 CDP+*L6
+206 336 CDP+*L10
+207 32 CDP+*L14
+208 1175 CDP+*L17
+209 103 CDP+*L18
+210 589 CDP+*L21
+211 249 CDP+*L30
+212 1726 DEP+*L6
+213 857 DEP+*L9
+214 598 DEP+*L33
+215 32 DEP+*L34
+216 116 AHP-*L33
+217 694 CEP-*L3
+218 675 CEP-*L4
+219 6943 CEP-*L6
+220 3255 CEP-*L7
+221 92 CEP-*L13
+222 118 CEP-*L14
+223 227 CEP-*L16
+224 103 CEP-*L18
+225 689 CEP-*L20
+226 86 CEP-*L27
+227 1136 CEP-*L29
+228 1054 GHO+*L1
+229 43 GHO+*L5
+230 87 GHO+*L10
+231 525 GHO+*L12
+232 525 GHO+*L13
+233 1627 GHO+*L20
+234 227 GHO+*L29
+235 1329 GHO+*L32
+236 139 GHO+*L34
+237 154 GHO+*L35
+238 321 DOP+*L0
+239 1686 DOP+*L4
+240 87 DOP+*L7
+241 1260 DOP+*L11
+242 5425 DOP+*L12
+243 1508 DOP+*L17
+244 1595 DOP+*L31
+245 1169 DOP+*L32
+246 321 DOP+*L35
+247 2811 ADP+*L5
+248 1024 ADP+*L11
+249 2582 ADP+*L12
+250 1349 ADP+*L17
+251 4989 ADP+*L19
+252 930 ADP+*L28
+253 1016 ADP+*L29
+254 3075 DGP+*L19
+255 2757 AGO-*L4
+256 2029 AGO-*L5
+257 227 AGO-*L7
+258 212 AGO-*L8
+259 484 AGO-*L14
+260 167 AGO-*L17
+261 1627 AGO-*L21
+262 3178 AGO-*L23
+263 91 AGO-*L32
+264 420 BFO+*L2
+265 1420 BFO+*L12
+266 2119 BFO+*L15
+267 1611 BFO+*L16
+268 1435 BFO+*L21
+269 331 BFO+*L24
+270 227 BFO+*L27
+271 887 BFO+*L28
+272 661 BFO+*L30
+273 395 BFO+*L33
+274 2622 CFP-*L9
+275 286 COP-*L2
+276 251 COP-*L9
+277 92 COP-*L12
+278 331 BDP+*L21
+279 485 AEP-*L33
+280 21 BEP-*L33
+281 572 FOP+*L9
+282 141 AOP-*L2
+283 2257 AOP-*L12
+284 1402 DFP+*L17
+285 1609 DFP+*L21
+286 620 ER*L2
+287 179 ER*L4
+288 270 ER*L12
+289 199 ER*L15
+290 40 ER*L17
+291 199 ER*L18
+292 1693 ER*L21
+293 173 ER*L23
+294 17 ER*L29
+295 227 CADO_1*L15
+296 1264 CCDE_1*L0
+297 101 CCDE_1*L33
+298 227 CCDO_1*L0
+299 618 CCDO_1*L6
+300 643 CCDO_1*L12
+301 72 QABFH_1*L15
+```
+
+
+### Row R60
+
+Path: DOP+,ADP+,DGP+,CFO+,AGO+,FGP-,BFO-.
+
+```n7-h2-R60-trace
+plu ABCDP ACP 1
+plu BAFHO BHO -1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FABCO FAO 1
+plu FACDO FDO -1
+plu FACEP FAP 1
+plu FACOP FOP 1
+plu FAEGP FAG 1
+plu FAGOP FGO -1
+plu FBCEP FBP 1
+plu FBEGO FBG 1
+plu FCEGP FCG 1
+plu GABCH GBH -1
+plu GABFO GBO -1
+plu GACDP GAP 1
+plu GACFO GCO -1
+plu GAFHP GHP 1
+plu GAFOP GOP 1
+plu GBCDP GBP 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+plu PADFO PDF 1
+```
+
+Exact upper bound: `-270426005932655713228114662911241/3565168954735675702823356250000`.
+
+```n7-h2-R60-witnesses
+CADO_1 P
+CCDE_1 P
+CCDO_1 P
+QCDEF_2 GP
+QCDEG_1 P
+QEFOP_1 G
+```
+
+```n7-h2-R60-sum
+1 9 L0*L0*L23
+2 1 L0*L0*L31
+3 100 L0*L2*L8
+4 546 L0*L2*L23
+5 930 L0*L2*L25
+6 1190 L0*L2*L27
+7 1387 L0*L2*L28
+8 283 L0*L2*L33
+9 306 L0*L5*L23
+10 25 L0*L6*L12
+11 134 L0*L6*L19
+12 157 L0*L9*L33
+13 1654 L0*L11*L23
+14 1518 L0*L19*L23
+15 125 L0*L21*L33
+16 9 L0*L22*L34
+17 511 L0*L24*L31
+18 2 L1*L2*L21
+19 663 L1*L2*L27
+20 90 L2*L2*L25
+21 372 L2*L3*L15
+22 283 L2*L4*L15
+23 273 L2*L5*L29
+24 20 L2*L6*L20
+25 1457 L2*L6*L28
+26 719 L2*L6*L31
+27 125 L2*L8*L9
+28 764 L2*L9*L25
+29 273 L2*L10*L29
+30 311 L2*L11*L27
+31 90 L2*L11*L34
+32 186 L2*L14*L24
+33 1267 L2*L15*L28
+34 143 L2*L21*L22
+35 1095 L2*L21*L23
+36 23 L2*L21*L24
+37 248 L2*L21*L30
+38 90 L2*L25*L30
+39 83 L2*L27*L30
+40 526 L2*L27*L35
+41 325 L2*L28*L29
+42 20 L5*L6*L17
+43 974 L5*L6*L24
+44 326 L5*L6*L29
+45 908 L5*L6*L31
+46 5 L5*L9*L9
+47 545 L5*L9*L23
+48 2810 L5*L9*L24
+49 134 L5*L15*L21
+50 20 L6*L6*L12
+51 1879 L6*L10*L23
+52 23 L6*L12*L15
+53 2 L6*L13*L20
+54 20 L6*L13*L29
+55 2 L6*L17*L19
+56 566 L6*L18*L23
+57 111 L6*L18*L27
+58 60 L6*L18*L33
+59 2 L6*L19*L24
+60 238 L6*L19*L31
+61 76 L6*L23*L32
+62 1992 L6*L24*L31
+63 180 L6*L29*L31
+64 151 L9*L9*L22
+65 1711 L9*L10*L24
+66 60 L9*L18*L33
+67 208 L9*L22*L33
+68 438 L9*L23*L28
+69 245 L9*L23*L31
+70 133 L9*L28*L33
+71 450 L9*L29*L31
+72 171 L9*L31*L31
+73 167 L10*L15*L22
+74 133 L10*L15*L28
+75 20 L15*L18*L22
+76 20 L15*L18*L23
+77 20 L15*L21*L23
+78 18 L15*L21*L31
+79 78 L15*L23*L35
+80 109 L15*L25*L33
+81 54 L19*L27*L33
+82 106 L19*L33*L34
+83 20 L20*L23*L27
+84 112 L20*L23*L33
+85 840 L21*L23*L31
+86 28 L21*L30*L33
+87 220 L21*L31*L31
+88 2 L24*L29*L32
+89 234 L24*L31*L34
+90 273 L28*L30*L33
+91 1 ABC+*L0
+92 508 ABC+*L6
+93 2432 ABC+*L19
+94 475 ABC+*L20
+95 753 ABC+*L28
+96 455 ABH+*L3
+97 1141 ABH+*L7
+98 1793 ABH+*L8
+99 144 ABH+*L10
+100 420 ABH+*L25
+101 366 ABH+*L33
+102 719 BCD+*L2
+103 737 BCD+*L5
+104 2194 BCD+*L18
+105 1990 BCD+*L24
+106 1603 BCD+*L28
+107 125 BCD+*L34
+108 167 EFH+*L22
+109 243 EFH+*L24
+110 133 EFH+*L28
+111 372 ABO+*L2
+112 52 AHO-*L33
+113 533 ABP+*L9
+114 2088 CDP+*L6
+115 90 CDP+*L11
+116 893 CDP+*L12
+117 893 CDP+*L13
+118 692 CDP+*L18
+119 2080 CDP+*L21
+120 260 CDP+*L22
+121 125 CDP+*L27
+122 82 CDP+*L31
+123 1605 CDP+*L35
+124 552 DEP+*L2
+125 617 DEP+*L6
+126 969 CEP-*L1
+127 2230 CEP-*L6
+128 260 CEP-*L22
+129 2391 CEP-*L28
+130 2980 CEP-*L29
+131 171 CEP-*L31
+132 90 CEP-*L33
+133 23 GHO+*L6
+134 780 DOP+*L3
+135 1426 DOP+*L4
+136 1218 DOP+*L8
+137 46 DOP+*L10
+138 1983 DOP+*L16
+139 1983 DOP+*L17
+140 260 DOP+*L22
+141 134 DOP+*L27
+142 134 DOP+*L35
+143 41 ADP+*L8
+144 1413 ADP+*L11
+145 1518 ADP+*L19
+146 20 ADP+*L20
+147 9 ADP+*L27
+148 1471 ADP+*L28
+149 233 ADP+*L32
+150 640 ADP+*L33
+151 347 CFO+*L0
+152 1740 CFO+*L4
+153 1989 CFO+*L5
+154 727 CFO+*L7
+155 152 CFO+*L15
+156 1644 CFO+*L23
+157 2080 CFO+*L24
+158 1352 CFO+*L28
+159 25 AGO+*L6
+160 472 BFO-*L0
+161 621 BFO-*L5
+162 20 BFO-*L7
+163 18 BFO-*L15
+164 1792 BFO-*L23
+165 3144 BFO-*L24
+166 3122 BFO-*L25
+167 400 BFO-*L30
+168 849 CFP-*L9
+169 78 AEP-*L15
+170 166 AEP-*L33
+171 46 EOP+*L33
+172 372 AFO-*L2
+173 2 FOP+*L6
+174 1218 FOP+*L9
+175 134 FOP+*L34
+176 780 AOP-*L30
+177 2057 DFP+*L21
+178 136 ER*L23
+179 171 ER*L30
+180 1652 CADO_1*L30
+181 106 CADO_1*L33
+182 1566 CCDE_1*L0
+183 1128 CCDE_1*L23
+184 184 CCDE_1*L33
+185 2 CCDO_1*L0
+186 1352 CCDO_1*L9
+187 157 QCDEF_2*L0
+188 90 QCDEF_2*L2
+189 245 QCDEF_2*L24
+190 20 QCDEG_1*L6
+191 260 QEFOP_1*L23
+```
+
+
+### Row R61
+
+Path: DOP+,ADP+,DGP+,CFO+,AGO+,FGP-,BFO+,AFO-.
+
+```n7-h2-R61-trace
+plu ABCDP ACP 1
+plu ABFGO AFG -1
+plu BADFO BDO 1
+plu BAEFO BEO 1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DABOP DAO -1
+plu DACGP DAG -1
+plu DBCGP DBG -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu EBDOP EOP 1
+plu ECDGP EGP 1
+plu FABDO FDO -1
+plu FACEP FAP 1
+plu FACGP FCG 1
+plu FACOP FOP 1
+plu FAGOP FGO -1
+plu FBCEG FBG 1
+plu FBCEP FBP 1
+plu GABCH GBH -1
+plu GABFO GBO -1
+plu GACDP GAP 1
+plu GACFO GCO -1
+plu GAFHP GHP 1
+plu GAFOP GOP 1
+plu GBCDP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+plu PADFO PDF 1
+```
+
+Exact upper bound: `-219107810853340420677520572328668983/3742051648190036680361450000000000`.
+
+```n7-h2-R61-witnesses
+CADF_2 OP
+CADO_1 P
+CCDE_1 P
+CCDG_1 P
+CCDO_1 P
+QADEF_3 GOP
+QAPFH_1 O
+QCDEF_2 GP
+QCDEG_1 P
+QCDFO_1 P
+QDEFP_1 G
+QEFOP_1 G
+```
+
+```n7-h2-R61-sum
+1 649 L0*L2*L2
+2 1 L0*L3*L15
+3 157 L0*L5*L6
+4 1765 L0*L5*L23
+5 32 L0*L5*L33
+6 257 L0*L6*L11
+7 1 L0*L6*L12
+8 254 L0*L6*L18
+9 32 L0*L9*L13
+10 87 L0*L9*L19
+11 98 L0*L9*L21
+12 727 L0*L9*L33
+13 21 L0*L15*L17
+14 800 L0*L19*L23
+15 1 L0*L23*L23
+16 1765 L0*L23*L33
+17 1091 L0*L24*L33
+18 1242 L0*L31*L33
+19 21 L1*L15*L17
+20 98 L1*L15*L21
+21 3 L1*L21*L23
+22 484 L1*L30*L30
+23 176 L2*L2*L9
+24 142 L2*L5*L24
+25 20 L2*L6*L7
+26 1 L2*L6*L12
+27 276 L2*L6*L20
+28 150 L2*L6*L23
+29 144 L2*L6*L25
+30 208 L2*L6*L35
+31 64 L2*L7*L33
+32 24 L2*L11*L20
+33 73 L2*L12*L34
+34 73 L2*L13*L34
+35 252 L2*L14*L15
+36 110 L2*L15*L32
+37 891 L2*L16*L21
+38 891 L2*L17*L21
+39 86 L2*L20*L34
+40 409 L2*L28*L33
+41 118 L3*L9*L9
+42 171 L3*L9*L21
+43 311 L3*L9*L23
+44 193 L3*L9*L30
+45 168 L3*L21*L34
+46 110 L3*L33*L34
+47 617 L4*L5*L34
+48 47 L4*L9*L11
+49 1 L4*L13*L34
+50 32 L4*L19*L34
+51 8 L4*L21*L30
+52 561 L5*L6*L6
+53 1529 L5*L6*L24
+54 79 L5*L9*L15
+55 34 L5*L9*L17
+56 1853 L5*L9*L24
+57 28 L5*L9*L34
+58 169 L5*L15*L24
+59 1 L5*L17*L33
+60 523 L5*L21*L23
+61 8 L5*L21*L33
+62 10 L5*L23*L34
+63 502 L5*L29*L34
+64 24 L6*L9*L16
+65 845 L6*L9*L19
+66 1 L6*L10*L16
+67 504 L6*L10*L23
+68 1 L6*L16*L18
+69 24 L6*L17*L34
+70 1315 L6*L18*L23
+71 927 L6*L18*L24
+72 541 L6*L18*L28
+73 209 L6*L18*L30
+74 70 L6*L21*L23
+75 1 L6*L22*L24
+76 187 L6*L23*L27
+77 79 L6*L24*L32
+78 859 L6*L31*L31
+79 251 L7*L9*L11
+80 365 L7*L9*L33
+81 24 L7*L15*L16
+82 1 L7*L17*L19
+83 1 L7*L17*L31
+84 521 L9*L11*L23
+85 158 L9*L11*L27
+86 68 L9*L11*L32
+87 213 L9*L12*L15
+88 33 L9*L12*L27
+89 279 L9*L13*L25
+90 262 L9*L15*L18
+91 279 L9*L17*L22
+92 997 L9*L18*L24
+93 98 L9*L21*L26
+94 1 L9*L22*L24
+95 853 L9*L22*L30
+96 214 L9*L23*L28
+97 357 L9*L23*L32
+98 121 L9*L32*L35
+99 1 L10*L13*L24
+100 21 L10*L15*L28
+101 246 L10*L15*L30
+102 591 L10*L28*L33
+103 32 L11*L18*L27
+104 8 L11*L21*L33
+105 528 L12*L20*L33
+106 528 L13*L20*L33
+107 2 L13*L21*L23
+108 1 L13*L23*L24
+109 1 L13*L24*L32
+110 7 L15*L17*L33
+111 10 L15*L18*L22
+112 3 L15*L21*L22
+113 98 L15*L21*L27
+114 98 L15*L21*L34
+115 448 L15*L30*L31
+116 1 L15*L32*L35
+117 1 L16*L23*L29
+118 2 L17*L18*L23
+119 1 L17*L23*L23
+120 7 L17*L33*L34
+121 278 L18*L24*L31
+122 69 L18*L24*L33
+123 32 L18*L29*L32
+124 32 L18*L33*L34
+125 234 L18*L34*L34
+126 1376 L21*L23*L30
+127 168 L21*L32*L35
+128 20 L21*L33*L34
+129 18 L22*L34*L34
+130 6 L23*L23*L28
+131 158 L23*L28*L34
+132 501 L24*L26*L32
+133 501 L24*L27*L32
+134 12 L25*L28*L33
+135 415 L26*L30*L30
+136 723 L30*L32*L35
+137 2 L30*L34*L34
+138 246 L31*L33*L34
+139 1401 ABC+*L11
+140 2173 ABC+*L33
+141 617 ABH+*L2
+142 1590 ABH+*L30
+143 1117 BCD+
+144 859 BCD+*L2
+145 1724 BCD+*L5
+146 2501 BCD+*L10
+147 1 BCD+*L12
+148 378 BCD+*L20
+149 243 BCD+*L25
+150 208 BCD+*L35
+151 159 EFH+*L14
+152 159 EFH+*L27
+153 160 EFH+*L35
+154 1 EFG+*L0
+155 26 EFG+*L9
+156 1971 ABO+*L20
+157 234 EFO+*L9
+158 20 EFO+*L15
+159 2 CHO-*L6
+160 10 CHO-*L22
+161 20 CHO-*L34
+162 523 BCP+*L21
+163 364 CDP+*L0
+164 128 CDP+*L14
+165 653 CDP+*L18
+166 1 CDP+*L24
+167 391 CDP+*L30
+168 472 CDP+*L33
+169 376 CDP+*L34
+170 591 DEP+*L23
+171 157 DEP+*L34
+172 727 CEP-*L1
+173 249 CEP-*L3
+174 863 CEP-*L4
+175 1032 CEP-*L7
+176 472 CEP-*L11
+177 351 CEP-*L14
+178 1 CEP-*L17
+179 997 CEP-*L20
+180 1 CEP-*L24
+181 528 CEP-*L29
+182 246 GHO+*L9
+183 2 DOP+*L1
+184 241 DOP+*L3
+185 847 DOP+*L6
+186 895 DOP+*L10
+187 2216 DOP+*L16
+188 2216 DOP+*L17
+189 597 DOP+*L22
+190 1388 DOP+*L28
+191 863 DOP+*L33
+192 2 DOP+*L34
+193 166 ADP+*L6
+194 2623 ADP+*L19
+195 1 ADP+*L23
+196 1494 ADP+*L26
+197 1494 ADP+*L27
+198 727 ADP+*L28
+199 1 DGP+*L0
+200 1 DGP+*L2
+201 1 DGP+*L23
+202 1 DGP+*L30
+203 1 AGO+*L22
+204 2 FGP-*L0
+205 1 FGP-*L6
+206 1 FGP-*L35
+207 2139 BFO+*L1
+208 102 BFO+*L4
+209 162 BFO+*L11
+210 1971 BFO+*L20
+211 1098 BFO+*L23
+212 1434 BFO+*L24
+213 1016 BFO+*L28
+214 102 BFO+*L31
+215 102 BFO+*L32
+216 344 AFO-*L6
+217 3039 AFO-*L10
+218 3071 AFO-*L11
+219 1971 AFO-*L20
+220 1765 AFO-*L23
+221 3 AFO-*L25
+222 87 AFO-*L28
+223 1688 CFP-*L9
+224 18 CHP-*L15
+225 20 BDP+*L6
+226 914 BDP+*L21
+227 1 EGP+*L10
+228 1 CFG-*L6
+229 88 FOP+*L29
+230 34 FGO-*L9
+231 1 FGO-*L23
+232 1 GHP+*L2
+233 1 GHP+*L30
+234 280 GOP+*L9
+235 254 BHO-*L15
+236 266 BHO-*L24
+237 269 BHO-*L25
+238 1184 DFP+*L21
+239 354 ER*L2
+240 24 ER*L18
+241 1273 ER*L21
+242 101 ER*L23
+243 121 ER*L26
+244 1437 CADF_2*L30
+245 591 CADF_2*L32
+246 57 CADO_1*L22
+247 561 CCDE_1*L6
+248 381 CCDE_1*L21
+249 1 CCDG_1*L25
+250 475 CCDO_1*L24
+251 1027 QADEF_3*L30
+252 558 QADEF_3*L33
+253 21 QAPFH_1*L7
+254 1790 QCDEF_2*L24
+255 26 QCDEG_1*L9
+256 1 QCDEG_1*L33
+257 616 QCDFO_1*L9
+258 1093 QDEFP_1*L0
+259 252 QDEFP_1*L21
+260 20 QEFOP_1*L9
+261 597 QEFOP_1*L23
+262 36 QEFOP_1*L32
+263 113 F5_PEABC*L15
+264 1 F5_ABCPG*L6
+265 8 F5_DEFOC*L2
+```
+
+
+### Row R62
+
+Path: DOP+,ADP+,DGP+,CFO+,AGO+,FGP-,BFO+,AFO+,HOP-.
+
+```n7-h2-R62-trace
+plu ABCDP ACP 1
+plu ABCFO ACO 1
+plu ABDFO ADO 1
+plu ABEFO AEO 1
+plu BADFO BDO 1
+plu BAEFO BEO 1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DBCGP DBG -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EADOP EOP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu FACEP FAP 1
+plu FADEO FDO -1
+plu FAEGP FAG 1
+plu FAEOP FOP 1
+plu FAGHO FGO -1
+plu FBCEP FBP 1
+plu FBEGP FBG 1
+plu FCEGP FCG 1
+plu GABCH GBH -1
+plu GABFO GBO -1
+plu GACDP GAP 1
+plu GACFO GCO -1
+plu GAFHP GHP 1
+plu GAFOP GOP 1
+plu GBCDP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+plu PADFO PDF 1
+```
+
+Exact upper bound: `-244560985210444234236431/3031933969000000000000`.
+
+```n7-h2-R62-witnesses
+CCDE_1 P
+CCDG_1 P
+CFHP_1 O
+QAPEF_1 G
+QCDEF_2 GP
+QCDEG_1 P
+QCPEF_1 G
+QDEFP_1 G
+QEFHP_2 GO
+QFHPG_1 O
+```
+
+```n7-h2-R62-sum
+1 170 L0*L15
+2 130 L14*L33
+3 14 L0*L0*L19
+4 157 L0*L0*L28
+5 57 L0*L2*L5
+6 289 L0*L2*L16
+7 339 L0*L2*L22
+8 746 L0*L2*L26
+9 460 L0*L2*L28
+10 528 L0*L3*L7
+11 57 L0*L4*L4
+12 854 L0*L4*L24
+13 564 L0*L5*L26
+14 577 L0*L6*L23
+15 80 L0*L8*L10
+16 73 L0*L8*L13
+17 322 L0*L8*L15
+18 13 L0*L10*L21
+19 33 L0*L11*L31
+20 339 L0*L12*L23
+21 5 L0*L13*L26
+22 8 L0*L16*L23
+23 402 L0*L17*L30
+24 787 L0*L18*L23
+25 60 L0*L18*L31
+26 787 L0*L19*L23
+27 54 L0*L23*L23
+28 1244 L0*L23*L26
+29 157 L0*L27*L29
+30 14 L0*L27*L32
+31 92 L0*L29*L33
+32 165 L1*L9*L14
+33 102 L1*L13*L21
+34 8 L1*L13*L24
+35 102 L1*L17*L18
+36 106 L1*L24*L33
+37 115 L2*L3*L21
+38 444 L2*L6*L20
+39 1383 L2*L6*L22
+40 1533 L2*L6*L26
+41 12 L2*L6*L30
+42 593 L2*L7*L29
+43 457 L2*L8*L29
+44 24 L2*L10*L27
+45 17 L2*L11*L14
+46 17 L2*L11*L24
+47 168 L2*L11*L35
+48 29 L2*L13*L14
+49 398 L2*L15*L16
+50 50 L2*L16*L18
+51 44 L2*L16*L34
+52 250 L2*L17*L22
+53 30 L2*L18*L24
+54 24 L2*L19*L29
+55 586 L2*L23*L26
+56 145 L2*L24*L24
+57 487 L2*L24*L28
+58 265 L2*L27*L29
+59 389 L3*L6*L6
+60 24 L3*L8*L18
+61 351 L3*L8*L34
+62 151 L3*L9*L22
+63 127 L3*L9*L25
+64 115 L3*L21*L32
+65 113 L3*L24*L34
+66 195 L3*L26*L34
+67 41 L3*L29*L33
+68 17 L4*L4*L8
+69 656 L4*L7*L24
+70 27 L4*L11*L29
+71 29 L4*L13*L21
+72 6 L4*L14*L23
+73 101 L4*L15*L21
+74 93 L4*L16*L34
+75 4 L4*L21*L32
+76 30 L4*L29*L33
+77 444 L5*L6*L20
+78 2091 L5*L6*L22
+79 73 L5*L6*L32
+80 89 L5*L6*L33
+81 636 L5*L6*L34
+82 516 L5*L6*L35
+83 179 L5*L8*L23
+84 115 L5*L11*L21
+85 14 L5*L12*L29
+86 147 L5*L17*L24
+87 28 L5*L17*L30
+88 17 L5*L17*L32
+89 30 L5*L18*L27
+90 290 L5*L23*L24
+91 364 L5*L24*L24
+92 212 L5*L24*L29
+93 1194 L5*L24*L34
+94 17 L5*L31*L34
+95 120 L6*L6*L22
+96 135 L6*L6*L32
+97 135 L6*L10*L28
+98 101 L6*L12*L18
+99 119 L6*L12*L24
+100 196 L6*L12*L31
+101 18 L6*L13*L23
+102 64 L6*L13*L28
+103 157 L6*L15*L15
+104 157 L6*L15*L26
+105 642 L6*L18*L31
+106 5 L6*L18*L32
+107 234 L6*L21*L23
+108 70 L6*L21*L28
+109 70 L6*L21*L29
+110 115 L6*L21*L31
+111 318 L6*L23*L23
+112 220 L6*L23*L24
+113 125 L6*L31*L34
+114 298 L6*L31*L35
+115 12 L6*L32*L32
+116 143 L7*L9*L18
+117 12 L7*L33*L33
+118 91 L8*L10*L21
+119 10 L8*L10*L23
+120 23 L8*L13*L24
+121 82 L8*L22*L23
+122 296 L8*L23*L28
+123 441 L8*L24*L33
+124 177 L9*L9*L22
+125 105 L9*L11*L17
+126 199 L9*L11*L26
+127 44 L9*L12*L31
+128 41 L9*L14*L26
+129 41 L9*L14*L27
+130 234 L9*L18*L24
+131 30 L9*L19*L22
+132 22 L9*L19*L27
+133 29 L10*L17*L31
+134 4 L10*L21*L33
+135 55 L11*L14*L18
+136 305 L11*L15*L34
+137 246 L11*L16*L34
+138 300 L11*L18*L34
+139 91 L11*L20*L34
+140 446 L11*L26*L34
+141 5 L13*L14*L15
+142 22 L13*L14*L18
+143 71 L13*L14*L23
+144 5 L13*L27*L27
+145 52 L14*L17*L23
+146 20 L14*L18*L32
+147 143 L14*L25*L33
+148 30 L15*L18*L33
+149 1 L15*L21*L31
+150 30 L15*L23*L34
+151 96 L17*L18*L27
+152 65 L17*L28*L34
+153 65 L17*L29*L34
+154 420 L18*L22*L34
+155 22 L19*L34*L35
+156 27 L20*L23*L33
+157 545 L21*L23*L28
+158 311 L21*L23*L29
+159 27 L21*L23*L30
+160 101 L21*L26*L33
+161 1 L21*L27*L32
+162 51 L21*L33*L35
+163 86 L22*L22*L34
+164 10 L22*L33*L34
+165 37 L23*L26*L33
+166 106 L28*L30*L34
+167 1670 L28*L33*L34
+168 57 L30*L33*L35
+169 337 ABC+*L16
+170 37 ABC+*L23
+171 564 ABC+*L26
+172 192 ABH+*L10
+173 354 ABH+*L16
+174 432 ABH+*L22
+175 195 ABH+*L26
+176 196 BCD+*L12
+177 613 BCD+*L18
+178 329 BCD+*L20
+179 1650 BCD+*L22
+180 343 BCD+*L25
+181 1498 BCD+*L26
+182 1118 BCD+*L28
+183 209 EFH+*L19
+184 111 EFH+*L26
+185 14 DEG+*L4
+186 167 EFG+*L6
+187 105 EFG+*L14
+188 84 EFG+*L25
+189 43 EFG+*L26
+190 313 FGH-*L18
+191 84 FGH-*L25
+192 56 FGH-*L35
+193 92 EFO+*L6
+194 22 EFO+*L34
+195 280 FHO+*L13
+196 30 FHO+*L14
+197 96 FHO+*L16
+198 80 FHO+*L22
+199 52 CHO-*L8
+200 317 BCP+*L8
+201 497 CDP+*L0
+202 951 CDP+*L6
+203 167 CDP+*L16
+204 458 CDP+*L22
+205 364 CDP+*L25
+206 774 CDP+*L26
+207 140 CDP+*L32
+208 1496 CEP-*L6
+209 29 CEP-*L17
+210 168 CEP-*L22
+211 1025 CEP-*L26
+212 1078 CEP-*L29
+213 698 CEP-*L34
+214 10 GHO+*L1
+215 259 GHO+*L4
+216 33 GHO+*L22
+217 259 GHO+*L31
+218 280 GHO+*L32
+219 92 DOP+*L1
+220 234 DOP+*L6
+221 5 DOP+*L10
+222 72 DOP+*L12
+223 480 DOP+*L22
+224 362 DOP+*L23
+225 234 DOP+*L28
+226 544 ADP+*L6
+227 463 ADP+*L11
+228 702 ADP+*L12
+229 362 ADP+*L13
+230 348 ADP+*L15
+231 54 ADP+*L23
+232 1244 ADP+*L26
+233 1374 ADP+*L28
+234 500 ADP+*L32
+235 250 DGP+*L3
+236 64 DGP+*L8
+237 152 CFO+*L0
+238 17 FGP-*L4
+239 33 FGP-*L19
+240 84 FGP-*L26
+241 4 BFO+*L33
+242 18 AFO+*L1
+243 92 AFO+*L7
+244 89 AFO+*L12
+245 88 AFO+*L13
+246 96 AFO+*L16
+247 32 AFO+*L27
+248 90 AFO+*L30
+249 91 HOP-*L10
+250 104 HOP-*L12
+251 86 HOP-*L22
+252 30 HOP-*L34
+253 17 CGP-*L5
+254 17 CHP-*L33
+255 250 BDP+*L13
+256 145 BDP+*L24
+257 140 BDP+*L33
+258 51 AFG-*L34
+259 1 FOP+*L13
+260 32 FOP+*L23
+261 29 FGO-*L30
+262 113 BFP-*L34
+263 92 GOP+*L0
+264 3 BHO-*L23
+265 30 AOP-*L2
+266 44 DFP+*L8
+267 32 DFP+*L23
+268 124 DFP+*L30
+269 17 EL*L2
+270 934 CCDE_1*L0
+271 27 CCDE_1*L4
+272 29 CCDG_1*L18
+273 48 CCDG_1*L25
+274 64 CCDG_1*L29
+275 17 CFHP_1*L5
+276 359 QAPEF_1*L34
+277 31 QCDEF_2*L9
+278 172 QCDEF_2*L34
+279 103 QCDEG_1*L6
+280 28 QCDEG_1*L14
+281 44 QCDEG_1*L30
+282 64 QCDEG_1*L34
+283 64 QCDEG_1*L35
+284 387 QCPEF_1*L34
+285 22 QDEFP_1*L1
+286 118 QDEFP_1*L18
+287 96 QEFHP_2*L6
+288 151 QEFHP_2*L11
+289 136 QEFHP_2*L16
+290 638 QEFHP_2*L18
+291 248 QEFHP_2*L19
+292 1933 QEFHP_2*L28
+293 151 QEFHP_2*L32
+294 707 QEFHP_2*L35
+295 167 QFHPG_1*L6
+296 43 F5_ABCPG*L9
+297 49 F5_ABCOH*L13
+298 1 F5_BPEFA*L12
+299 1 F5_CEFOB*L0
+300 167 F5_BPEFH*L9
+301 29 F5_CPEFO*L34
+```
+
+
+### Row R63
+
+Path: DOP+,ADP+,DGP+,CFO+,AGO+,FGP-,BFO+,AFO+,HOP+.
+
+```n7-h2-R63-trace
+plu ABCDP ACP 1
+plu ABCFO ACO 1
+plu ABDFO ADO 1
+plu ABEFO AEO 1
+plu BADFO BDO 1
+plu BAEFO BEO 1
+plu CABGH CAG -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DBCGP DBG -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EADOP EOP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu FACEP FAP 1
+plu FADEO FDO -1
+plu FAEGP FAG 1
+plu FAEOP FOP 1
+plu FAGHO FGO -1
+plu FBCEP FBP 1
+plu FBEGP FBG 1
+plu FCEGP FCG 1
+plu GABCH GBH -1
+plu GABFO GBO -1
+plu GACDP GAP 1
+plu GACFO GCO -1
+plu GAFHP GHP 1
+plu GAFOP GOP 1
+plu GBCDP GBP 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu HAEOP HEO -1
+plu OACDP OAP 1
+plu OADHP ODH 1
+plu OBCDP OBP 1
+plu PADFO PDF 1
+plu PADHO PDH 1
+```
+
+Exact upper bound: `-1409397368183599573449/19189455500000000000`.
+
+```n7-h2-R63-witnesses
+CADG_1 P
+CADH_2 OP
+CAFH_1 O
+CCDE_1 P
+CCDH_2 OP
+CCDO_1 P
+CHCP_1 O
+QADEF_2 GP
+QBCDO_1 P
+QCDEF_2 GP
+QCDEG_1 P
+QDEFP_1 G
+QEFHP_1 G
+```
+
+```n7-h2-R63-sum
+1 146 L2*L2
+2 48 L18*L33
+3 71 L33*L34
+4 190 L0*L1*L5
+5 448 L0*L2*L9
+6 215 L0*L2*L22
+7 1600 L0*L2*L28
+8 1014 L0*L4*L24
+9 1 L0*L5*L12
+10 119 L0*L10*L15
+11 128 L0*L10*L21
+12 132 L0*L11*L27
+13 309 L0*L11*L31
+14 13 L0*L12*L15
+15 39 L0*L15*L17
+16 95 L0*L15*L21
+17 1 L0*L16*L35
+18 117 L0*L18*L23
+19 201 L0*L18*L34
+20 14 L0*L23*L23
+21 8 L0*L23*L24
+22 426 L0*L23*L29
+23 324 L0*L23*L35
+24 476 L1*L4*L28
+25 19 L1*L11*L33
+26 46 L1*L18*L29
+27 132 L1*L27*L33
+28 356 L2*L4*L7
+29 5 L2*L4*L17
+30 121 L2*L4*L29
+31 310 L2*L6*L25
+32 449 L2*L6*L28
+33 346 L2*L7*L26
+34 77 L2*L8*L9
+35 505 L2*L8*L10
+36 54 L2*L8*L18
+37 164 L2*L8*L22
+38 77 L2*L8*L28
+39 2 L2*L9*L16
+40 313 L2*L10*L15
+41 5 L2*L12*L17
+42 8 L2*L12*L27
+43 3 L2*L12*L35
+44 5 L2*L13*L17
+45 3 L2*L13*L20
+46 203 L2*L15*L18
+47 2 L2*L16*L24
+48 35 L2*L19*L24
+49 112 L2*L20*L33
+50 165 L2*L27*L32
+51 296 L2*L27*L34
+52 346 L3*L15*L29
+53 4 L3*L17*L33
+54 19 L3*L21*L33
+55 401 L4*L6*L23
+56 28 L4*L7*L11
+57 50 L4*L7*L12
+58 214 L4*L7*L28
+59 139 L4*L8*L12
+60 364 L4*L8*L18
+61 685 L4*L8*L26
+62 140 L4*L9*L11
+63 1 L4*L12*L21
+64 227 L4*L15*L21
+65 277 L4*L15*L28
+66 1 L4*L16*L18
+67 730 L4*L18*L25
+68 60 L4*L21*L23
+69 478 L4*L21*L26
+70 283 L4*L21*L30
+71 128 L4*L28*L33
+72 374 L5*L6*L9
+73 421 L5*L6*L24
+74 2 L5*L12*L24
+75 100 L5*L13*L15
+76 550 L5*L15*L18
+77 64 L5*L15*L30
+78 22 L5*L24*L24
+79 8 L6*L8*L12
+80 236 L6*L8*L23
+81 288 L6*L15*L23
+82 4 L6*L16*L18
+83 363 L6*L18*L23
+84 210 L6*L18*L24
+85 167 L6*L18*L34
+86 8 L7*L7*L13
+87 37 L7*L11*L23
+88 104 L7*L15*L24
+89 203 L7*L18*L29
+90 14 L7*L23*L23
+91 19 L7*L24*L33
+92 225 L8*L8*L10
+93 3 L8*L13*L18
+94 1 L8*L13*L23
+95 39 L8*L14*L17
+96 2 L8*L17*L23
+97 226 L8*L18*L23
+98 80 L8*L23*L27
+99 51 L9*L11*L13
+100 18 L9*L11*L17
+101 9 L9*L13*L33
+102 95 L9*L14*L20
+103 104 L9*L14*L24
+104 210 L9*L21*L23
+105 14 L9*L22*L24
+106 355 L9*L27*L33
+107 205 L9*L31*L33
+108 27 L9*L33*L34
+109 63 L10*L13*L15
+110 114 L10*L15*L21
+111 420 L10*L15*L24
+112 28 L10*L23*L27
+113 141 L11*L15*L34
+114 5 L11*L17*L29
+115 3 L12*L15*L22
+116 3 L12*L19*L23
+117 3 L12*L23*L27
+118 152 L12*L33*L34
+119 4 L13*L14*L20
+120 3 L13*L15*L34
+121 3 L13*L18*L22
+122 4 L13*L21*L34
+123 3 L13*L23*L29
+124 2 L13*L25*L34
+125 10 L13*L27*L33
+126 3 L13*L30*L34
+127 38 L15*L16*L27
+128 38 L15*L16*L34
+129 95 L15*L21*L35
+130 420 L15*L24*L33
+131 104 L15*L25*L28
+132 2 L17*L25*L30
+133 1 L17*L27*L35
+134 24 L17*L28*L33
+135 131 L18*L24*L33
+136 35 L18*L25*L30
+137 100 L18*L33*L35
+138 127 L20*L22*L33
+139 200 L21*L23*L27
+140 26 L21*L32*L33
+141 98 L21*L33*L34
+142 14 L22*L23*L27
+143 367 L22*L33*L34
+144 8 L23*L24*L33
+145 27 L23*L34*L34
+146 13 L25*L33*L33
+147 327 L30*L33*L34
+148 384 ABC+*L9
+149 396 ABC+*L10
+150 276 ABC+*L11
+151 4 ABC+*L12
+152 433 ABC+*L19
+153 268 ABC+*L21
+154 57 ABC+*L26
+155 1241 ABC+*L28
+156 353 ABH+*L14
+157 4 ABH+*L18
+158 57 ABH+*L27
+159 165 ABH+*L32
+160 449 BCD+*L7
+161 371 BCD+*L8
+162 13 BCD+*L21
+163 310 BCD+*L25
+164 50 BCE+*L15
+165 186 EFH+
+166 198 EFH+*L8
+167 103 EFH+*L12
+168 135 EFH+*L18
+169 524 EFH+*L22
+170 395 EFH+*L31
+171 4 DEG+*L21
+172 11 EFG+*L10
+173 15 EFG+*L15
+174 3 EFG+*L18
+175 4 FGH-*L32
+176 3 CGH+*L15
+177 13 ABO+*L7
+178 108 DEO+*L15
+179 256 FHO+*L8
+180 161 FHO+*L10
+181 2 FHO+*L16
+182 141 FHO+*L27
+183 404 FHO+*L30
+184 210 CHO-*L1
+185 113 CHO-*L8
+186 3 CHO-*L17
+187 728 CHO-*L22
+188 203 CHO-*L25
+189 420 CHO-*L30
+190 378 BCP+*L11
+191 506 CDP+*L18
+192 56 FHP+*L18
+193 166 CEP-*L1
+194 7 CEP-*L4
+195 283 CEP-*L6
+196 149 CEP-*L10
+197 226 CEP-*L18
+198 210 CEP-*L20
+199 8 CEP-*L22
+200 14 CEP-*L24
+201 697 CEP-*L26
+202 216 CEP-*L32
+203 125 CEP-*L34
+204 152 CEP-*L35
+205 2 GHO+*L25
+206 646 DOP+
+207 203 DOP+*L7
+208 157 DOP+*L10
+209 382 DOP+*L22
+210 8 DOP+*L24
+211 59 DOP+*L26
+212 215 ADP+*L3
+213 782 ADP+*L6
+214 341 ADP+*L10
+215 3 ADP+*L12
+216 628 ADP+*L16
+217 627 ADP+*L17
+218 197 ADP+*L19
+219 400 ADP+*L21
+220 8 ADP+*L24
+221 324 ADP+*L26
+222 992 ADP+*L28
+223 9 DGP+*L2
+224 4 DGP+*L21
+225 8 DGP+*L28
+226 2 DGP+*L30
+227 7 DGP+*L32
+228 4 AGO+*L18
+229 1 AGO+*L33
+230 19 FGP-*L7
+231 7 FGP-*L10
+232 2 FGP-*L21
+233 268 BFO+*L0
+234 429 AFO+*L3
+235 155 AFO+*L8
+236 429 AFO+*L10
+237 4 AFO+*L12
+238 4 AFO+*L19
+239 314 AFO+*L22
+240 200 AFO+*L24
+241 294 AFO+*L33
+242 915 HOP+*L4
+243 956 HOP+*L10
+244 1140 HOP+*L11
+245 382 HOP+*L23
+246 141 HOP+*L26
+247 215 HOP+*L32
+248 11 ACP+*L15
+249 12 CGP-*L6
+250 13 CGP-*L9
+251 2 COP-*L17
+252 8 COP-*L24
+253 216 BEP-*L33
+254 161 FOP+*L2
+255 4 FGO-*L18
+256 2 BFG-*L8
+257 18 GHP+*L8
+258 5 AOP-*L33
+259 35 DHO+*L9
+260 5 DHO+*L17
+261 343 DHO+*L23
+262 171 DHP+*L0
+263 401 DHP+*L4
+264 937 DHP+*L8
+265 23 DHP+*L15
+266 1397 DHP+*L18
+267 400 DHP+*L21
+268 215 DHP+*L32
+269 183 EL*L15
+270 7 CADG_1*L33
+271 309 CADH_2*L4
+272 326 CADH_2*L33
+273 103 CADH_2*L34
+274 166 CAFH_1*L33
+275 355 CCDE_1*L0
+276 11 CCDE_1*L17
+277 121 CCDH_2*L0
+278 235 CCDH_2*L6
+279 58 CCDH_2*L12
+280 349 CCDH_2*L19
+281 13 CCDH_2*L20
+282 455 CCDH_2*L24
+283 290 CCDH_2*L27
+284 28 CCDH_2*L31
+285 248 CCDH_2*L34
+286 1 CCDO_1*L17
+287 136 CCDO_1*L33
+288 137 CHCP_1*L15
+289 11 QADEF_2*L33
+290 20 QBCDO_1*L33
+291 206 QCDEF_2*L2
+292 2 QCDEG_1*L23
+293 200 QDEFP_1*L0
+294 198 QDEFP_1*L21
+295 8 QDEFP_1*L23
+296 152 QEFHP_1*L4
+297 3 F5_ABCFO*L13
+298 13 F5_OABGF*L15
+299 353 F5_ACDFO*L15
+300 6 F5_GFACP*L33
+301 233 F5_PEFOA*L33
+302 53 F5_FOAPE*L2
+303 360 F5_EHOPD*L23
+```
+
+
+### Row R64
+
+Path: DOP+,ADP+,DGP+,CFO+,AGO+,FGP+.
+
+```n7-h2-R64-trace
+plu ABCDP ACP 1
+plu CABGH CAG -1
+plu CABHO CAO -1
+plu CAEFP CFP -1
+plu CAEGP CGP -1
+plu CAEHP CHP -1
+plu CAEOP COP -1
+plu DABCP DBP -1
+plu DACGP DAG -1
+plu DACOP DAO -1
+plu DBCGP DBG -1
+plu DBCOP DBO -1
+plu EACDP EAP 1
+plu EADHP EHP 1
+plu EBCDP EBP 1
+plu ECDGP EGP 1
+plu ECDOP EOP 1
+plu FACEP FAP 1
+plu FBCEP FBP 1
+plu FCDEO FDO -1
+plu FCEOP FOP 1
+plu GABCH GBH -1
+plu GABHO GBO -1
+plu GACDP GAP 1
+plu GACHO GCO -1
+plu GBCDP GBP 1
+plu GDEFP GDF 1
+plu HABCO HBO 1
+plu HABCP HBP 1
+plu OACDP OAP 1
+plu OBCDP OBP 1
+plu PADFG PDF 1
+```
+
+Exact upper bound: `-80825925913488411305472206397237687/1182488320828051590994218200000000`.
+
+```n7-h2-R64-witnesses
+CADE_1 P
+CADG_1 P
+CBDE_1 P
+CCDE_1 P
+CCDG_1 P
+CCDO_1 P
+CCFH_1 O
+CCGH_1 O
+QABGH_1 O
+QADEF_1 P
+QADFH_3 GOP
+QAPFH_2 GO
+QBCDE_1 P
+QBCDG_1 P
+QBCDO_1 P
+QCDEF_1 P
+QCDEG_1 P
+QCDEO_1 P
+QCDFH_3 GOP
+QCDFO_1 P
+QCPFH_2 GO
+```
+
+```n7-h2-R64-sum
+1 32 L0*L6*L23
+2 1 L0*L6*L25
+3 238 L0*L7*L33
+4 28 L0*L11*L24
+5 16 L0*L11*L35
+6 173 L0*L12*L33
+7 189 L0*L14*L33
+8 5 L0*L15*L31
+9 132 L0*L19*L23
+10 75 L0*L23*L33
+11 11 L0*L24*L31
+12 38 L0*L27*L32
+13 193 L0*L28*L33
+14 3 L0*L29*L31
+15 8 L0*L32*L33
+16 8 L1*L2*L31
+17 2 L1*L15*L24
+18 1 L1*L25*L35
+19 54 L1*L33*L35
+20 17 L2*L2*L8
+21 1 L2*L5*L20
+22 93 L2*L6*L31
+23 119 L2*L6*L32
+24 23 L2*L7*L20
+25 1 L2*L7*L28
+26 21 L2*L8*L15
+27 182 L2*L8*L33
+28 5 L2*L9*L13
+29 4 L2*L11*L28
+30 1 L2*L13*L15
+31 2 L2*L13*L29
+32 10 L2*L14*L21
+33 2 L2*L14*L23
+34 8 L2*L15*L32
+35 6 L2*L16*L28
+36 4 L2*L18*L24
+37 10 L2*L20*L34
+38 15 L2*L21*L28
+39 8 L2*L25*L27
+40 66 L2*L25*L33
+41 5 L2*L29*L31
+42 4 L2*L34*L35
+43 2 L3*L15*L22
+44 123 L3*L28*L33
+45 202 L4*L7*L33
+46 19 L4*L12*L15
+47 4 L4*L15*L18
+48 26 L5*L6*L24
+49 19 L5*L6*L27
+50 2 L5*L9*L9
+51 7 L5*L9*L30
+52 9 L5*L13*L21
+53 158 L5*L17*L33
+54 4 L5*L21*L33
+55 17 L5*L21*L34
+56 2 L5*L24*L29
+57 1 L5*L24*L33
+58 25 L5*L33*L34
+59 6 L6*L9*L22
+60 2 L6*L9*L32
+61 4 L6*L12*L23
+62 8 L6*L12*L24
+63 7 L6*L14*L18
+64 13 L6*L14*L23
+65 1 L6*L17*L28
+66 1 L6*L17*L29
+67 128 L6*L18*L23
+68 1 L6*L18*L28
+69 1 L6*L18*L34
+70 7 L6*L21*L32
+71 1 L6*L23*L32
+72 1 L6*L29*L32
+73 143 L7*L16*L33
+74 826 L7*L22*L33
+75 16 L8*L10*L11
+76 1 L8*L12*L15
+77 1 L8*L16*L23
+78 195 L8*L33*L34
+79 12 L9*L10*L27
+80 42 L9*L11*L20
+81 1 L9*L11*L28
+82 7 L9*L13*L25
+83 4 L9*L19*L33
+84 26 L9*L21*L31
+85 12 L9*L27*L31
+86 2 L9*L29*L31
+87 9 L10*L13*L21
+88 1 L10*L15*L18
+89 3 L10*L15*L20
+90 4 L10*L20*L33
+91 25 L10*L26*L33
+92 3 L10*L34*L34
+93 13 L11*L12*L15
+94 20 L11*L24*L34
+95 3 L12*L15*L15
+96 3 L12*L15*L24
+97 7 L12*L15*L31
+98 9 L12*L20*L33
+99 1 L13*L14*L34
+100 4 L13*L15*L22
+101 1 L13*L27*L34
+102 154 L13*L33*L34
+103 131 L14*L16*L33
+104 158 L14*L20*L33
+105 836 L14*L22*L33
+106 11 L14*L24*L33
+107 25 L14*L33*L33
+108 1 L15*L15*L25
+109 2 L15*L16*L32
+110 2 L15*L17*L22
+111 1 L15*L25*L29
+112 13 L15*L25*L30
+113 4 L16*L23*L33
+114 719 L16*L28*L33
+115 715 L16*L33*L34
+116 7 L17*L21*L33
+117 2 L17*L25*L33
+118 4 L18*L23*L34
+119 4 L18*L23*L35
+120 4 L18*L28*L33
+121 1 L19*L25*L30
+122 129 L20*L25*L33
+123 10 L20*L27*L33
+124 937 L20*L28*L33
+125 895 L20*L33*L34
+126 3588 L22*L28*L33
+127 3729 L22*L33*L34
+128 1 L23*L24*L29
+129 31 L24*L25*L33
+130 1 L24*L27*L27
+131 1 L24*L27*L29
+132 56 L24*L28*L33
+133 31 L25*L25*L33
+134 4 L25*L32*L34
+135 422 L26*L28*L33
+136 1523 L28*L28*L33
+137 1070 L28*L33*L34
+138 255 L33*L34*L35
+139 4 ABC+*L13
+140 46 ABC+*L14
+141 54 ABC+*L35
+142 6 ABD+*L23
+143 16 ABH+*L0
+144 6 ABH+*L18
+145 8 ABH+*L32
+146 4 BCD+*L12
+147 5 BCD+*L18
+148 42 CDE+*L33
+149 1 EFH+*L24
+150 7 BCG+*L21
+151 1 DEG+*L0
+152 2 DEG+*L2
+153 7 DEG+*L15
+154 1 AGH+*L15
+155 9 CGH+*L6
+156 4 FHO+*L23
+157 178 AHO-*L33
+158 4 CHO-*L2
+159 11 CDP+*L5
+160 1 CDP+*L18
+161 1 CDP+*L32
+162 26 CDP+*L35
+163 4 DEP+*L2
+164 1 EFP+*L32
+165 45 CEP-*L4
+166 55 CEP-*L5
+167 33 CEP-*L16
+168 1 CEP-*L25
+169 9 GHO+*L4
+170 7 GHO+*L9
+171 7 GHO+*L28
+172 10 GHO+*L31
+173 175 GHO+*L33
+174 1 DOP+*L9
+175 146 DOP+*L12
+176 142 DOP+*L13
+177 15 DOP+*L14
+178 7 DOP+*L17
+179 26 ADP+
+180 30 ADP+*L9
+181 1 ADP+*L16
+182 136 ADP+*L19
+183 80 ADP+*L33
+184 1 DGP+*L0
+185 21 DGP+*L6
+186 19 DGP+*L9
+187 2 DGP+*L15
+188 4 DGP+*L19
+189 1 DGP+*L24
+190 21 DGP+*L28
+191 6 AGO+*L2
+192 178 AGO+*L33
+193 1 FGP+*L5
+194 4 FGP+*L18
+195 1 FGP+*L25
+196 9 FGP+*L28
+197 4 FGP+*L34
+198 6 ACP+*L9
+199 27 CGP-*L9
+200 1 CGP-*L32
+201 3 BDP+*L0
+202 3 BDP+*L18
+203 78 EHP+*L33
+204 62 BEP-*L33
+205 5 EGP+*L2
+206 3 BFP-*L33
+207 4 FOP+*L10
+208 4 FOP+*L13
+209 14 FOP+*L15
+210 7 FOP+*L16
+211 6 AGP-*L2
+212 1 AGP-*L8
+213 5 AGP-*L33
+214 7 CGO+*L10
+215 4 CGO+*L31
+216 1 BGP-*L4
+217 1 BOP-*L34
+218 13 DFP+*L0
+219 21 EL*L28
+220 3 ER*L9
+221 63 ER*L15
+222 5 ER*L25
+223 59 ER*L26
+224 58 CADE_1*L2
+225 1 CADG_1*L25
+226 4 CADG_1*L30
+227 20 CBDE_1*L2
+228 47 CCDE_1*L0
+229 13 CCDE_1*L3
+230 10 CCDE_1*L23
+231 2 CCDG_1*L34
+232 1 CCDO_1*L30
+233 14 CCFH_1*L15
+234 4 CCGH_1*L3
+235 4 CCGH_1*L23
+236 2 QABGH_1*L15
+237 6 QABGH_1*L29
+238 17 QADEF_1*L33
+239 6 QADFH_3*L0
+240 4 QADFH_3*L18
+241 3 QADFH_3*L27
+242 23 QADFH_3*L35
+243 5 QAPFH_2*L6
+244 37 QAPFH_2*L9
+245 9 QBCDE_1*L30
+246 7 QBCDG_1*L20
+247 1 QBCDO_1*L28
+248 2 QCDEF_1*L22
+249 25 QCDEG_1*L24
+250 154 QCDEG_1*L33
+251 7 QCDEO_1*L33
+252 447 QCDFH_3*L7
+253 875 QCDFH_3*L8
+254 854 QCDFH_3*L16
+255 930 QCDFH_3*L20
+256 4491 QCDFH_3*L22
+257 37 QCDFH_3*L24
+258 1075 QCDFH_3*L28
+259 10 QCDFO_1*L0
+260 22 QCPFH_2*L6
+261 8 QCPFH_2*L12
+262 44 QCPFH_2*L16
+263 54 QCPFH_2*L17
+264 129 QCPFH_2*L20
+265 1 QCPFH_2*L24
+266 14 QCPFH_2*L26
+```
+
+
