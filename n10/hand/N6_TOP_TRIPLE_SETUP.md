@@ -211,7 +211,14 @@ The transcript uses only the actual signed-area factors, the witnessed
 triangle/quadrilateral costs, the side-order and endpoint factors, the
 central-coordinate inequalities (1), the top cap factors below, and
 the occupied-anchor affine caps below. Every factor is reconstructed
-before its endpoint lines are checked. No coordinate case or numerical
+before its endpoint lines are checked. The checker enforces that exact
+physical-factor whitelist and reconstructs each interval factor in a
+separate Context using the initial box. In particular, coordinate-bound
+factors L_i, DX/DY, box-dependent Pluecker/support caps, affine squares,
+and the final-ceiling Span factors are not permitted as interval sources.
+It also checks that the allowed factor has exactly the same polynomial
+under the final box. Thus no final endpoint can justify its own derivation.
+No coordinate case or numerical
 feasibility result is assumed. An empty union of feasible subintervals
 is itself a contradiction. Otherwise all final coefficient estimates
 use a printed box containing the exact refined interval. A zero-width

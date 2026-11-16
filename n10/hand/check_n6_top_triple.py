@@ -92,9 +92,13 @@ def verify(path):
    factor_names={step['factor'] for step in intervals}
    if contradiction:factor_names.add(contradiction['factor'])
    factors={}
+   initial_ctx=a.Context(loc,known,startlo,starthi,floor,top,order,squares,witnesses,rates,normalized=normalized)
    for name in factor_names:
+    assert a.interval_factor_allowed(name),('box-dependent interval factor',name)
+    initial_polynomial=initial_ctx.atom(name)
+    assert initial_polynomial==ctx.atom(name)
     physical={}
-    for mon,cc in ctx.atom(name).items():
+    for mon,cc in initial_polynomial.items():
      ex=[0]*a.N
      for i in mon:ex[i]+=1
      physical[tuple(ex)]=cc

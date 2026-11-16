@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 63.
+Checkpoint 64.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -358,7 +358,15 @@ four-corner alternative and all zero-area faces.
         all 5,961 deductions, 905 interval updates and 131,221
         factor occurrences; separate Fraction/SymPy readers reproduce
         all negative bounds. Proof: C1_TWO_LOWER_CENTRAL_SIDE_TOP.md.
-  - [ ] C1-EXTERIOR. Exclude the remaining 13 exterior count rows
+  - [x] C1-ONE-LOWER-THREE-CAPS. The entire (1,1,1,1,1) count.
+        One root and 37 binary splits give 37 cubics with 7,280
+        printed terms and one shared-central endpoint contradiction.
+        Independent geometry checks all 1,053 deductions, 250 interval
+        updates, two monotonicity caps and 18,500 factor occurrences;
+        separate Fraction/SymPy readers reproduce every negative bound.
+        The sole h>=c normalization and complete .876/.852 contact
+        box are proved explicitly. Proof: C1_ONE_LOWER_THREE_CAPS.md.
+  - [ ] C1-EXTERIOR. Exclude the remaining 12 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -823,6 +831,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_TOP_TRIPLE_SETUP.md | Exhaustive sixteen-word top catalogue, continuous boxes, geometry rules, scalar support bounds and complete factor definitions for the two top-triple counts |
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_TOP_TRIPLE_TRANSPOSE.md | Explicit transposition and six label maps preserve every residual top group; exact .168/.264 contact ceilings and anchor-span lower bounds |
+| C1_ONE_LOWER_THREE_CAPS.md | Entire (1,1,1,1,1) count: 37 splits, 37 cubics / 7,280 terms, one shared-central endpoint terminal, 1,053 deductions and 250 interval updates |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

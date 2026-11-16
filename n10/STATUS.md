@@ -780,6 +780,22 @@ trace/box guards have independent checks. These are local reductions;
 the remaining count totals are unchanged. The exact global algebra
 checker has 86 passing groups.
 
+The entire C1 count (1,1,1,1,1) is now excluded by
+C1_ONE_LOWER_THREE_CAPS.md: one lower point, one central point and
+one point in each cap. The sole h>=c transposition and explicit
+.876/.852 contact box give one root with 37 binary splits, 37
+cubics containing 7,280 printed terms, and one shared-central
+endpoint contradiction. Independent geometry checks all 1,053
+deductions, 250 interval updates, two static monotonicity caps and
+18,500 factor occurrences. Independent Fraction/SymPy readers
+reproduce every bound; the largest is -385707/20000000. Twelve C1
+exterior count rows remain. The N6 optional interval reader now
+constructs sources in a separate initial-box context, enforces its
+box-independent factor whitelist, and checks agreement with the final
+physical polynomial. Both saved interval probes and the published
+22-leaf manuscript replay pass. The exact global algebra checker
+has 87 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

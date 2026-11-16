@@ -96,6 +96,14 @@ def box(version,loc,known,floor,top_cost,central_box=False):
     assert all(0<ll<hh<=1 for ll,hh in zip(low,high))
     return low,high
 
+def interval_factor_allowed(name):
+    """Only physical factors independent of either coordinate box are allowed."""
+    if name in ('ha','ea','he','fb','cf','Sym_fe','Vlow','Qlow','Qup',
+                'Top5Strong','Lower5Strong','Lower_simple_sum','Central_x','Central_y'):
+        return True
+    if name.startswith(('T_','C_','Q_','ACAP_')):return True
+    return any(name==prefix+point for prefix in ('top_px_','top_py_','top_gap_x_','top_gap_y_') for point in 'QRS')
+
 class Context:
     def __init__(self,loc,known,low,high,floor,top_cost,order=None,squares=None,witnesses=None,rates=None,normalized=False):
         self.loc=loc;self.known=known;self.low=list(map(F,low));self.high=list(map(F,high))
