@@ -30,9 +30,10 @@ The note is split into the modules
   `claim_scope_four_rows`;
 * `Heilbronn.TypeII.TypeII.Chamber` (§§6, 12): `twoPointChamberLemma`, `claim_chamber_general`,
   `claim_PQ_line_table`, `claim_b_le_two_sevenths`;
-* `Heilbronn.TypeII.TypeII.CentralTriple` (§§7, 9, 10): `centralTripleTheorem`,
-  `claim_exclude_central_three`, `claim_mesh_kstar`, `claim_chamber_extension`,
-  `affineCorollary`, `coupledAffineCorollary`, `coupledAffineCorollary_geometric`;
+* `Heilbronn.TypeII.TypeII.CentralTriple` (§§7, 9, 10): `centralTripleTheorem` (and its §9
+  generality `centralTriple_gen`), `claim_exclude_central_three`, `claim_mesh_kstar`,
+  `claim_chamber_extension`, `affineCorollary`, `coupledAffineCorollary`,
+  `coupledAffineCorollary_geometric`;
 * `Heilbronn.TypeII.TypeII.Residual` (§§8, 11): `claim_two_residual_classes`,
   `unbalancedCutLemma`, `claim_unbalanced_right_cell`,
   `claim_unbalanced_right_cell_threshold`.
