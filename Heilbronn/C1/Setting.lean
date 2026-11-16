@@ -37,9 +37,8 @@ area, positive for counterclockwise `P, Q, R`.
   `SignTable.Holds` (geometric meaning), `certifiedInside` (the strengthened occupancy rule),
   `occupancyBound` (the costs `s, 3s, ρ` of (18)).
 
-The two facts `wordSign`/`HasWord` and `orientedSign`/`SignTable.Holds` are related by the
-helper lemmas `hasWord_inside_iff` and `SignTable.Holds.orientedSign` at the end (statements
-only).
+The zero-lower package itself (`Heilbronn.C1.ZeroLowerModel`, `Heilbronn.C1.ZeroLowerCover`) works
+with its own computable copies of the words and sign tables (on `ℕ`, kernel-friendly).
 -/
 
 @[expose] public section
@@ -265,22 +264,5 @@ def certifiedInside (σ : SignTable) (a b c j : Fin 9) (s : SignType) : Prop :=
 triangle certified to contain `k` further free points: `s = 8/73`, `3s`, `ρ = 49/60`. -/
 def occupancyBound (k : ℕ) : ℝ :=
   if k = 0 then 8 / 73 else if k = 1 then 3 * (8 / 73) else 49 / 60
-
-/-! ### Meaning of the combinatorial data (helper statements) -/
-
-/-- Helper: for a point with word `w`, `wordInside w a b c` (with `a < b < c`) says exactly that
-it is strictly inside the anchor triangle `V_a V_b V_c`. -/
-theorem hasWord_inside_iff {h c d f : ℝ} {X : Point} {w : Word} (hw : HasWord h c d f X w)
-    {a b e : Fin 5} (hab : a < b) (hbe : b < e) :
-    wordInside w a b e = true ↔
-      InTriangle X (anchor h c d f a) (anchor h c d f b) (anchor h c d f e) := by
-  sorry
-
-/-- Helper: a sign table that holds gives the orientation of every triple of distinct indices,
-in any order. -/
-theorem SignTable.Holds.orientedSign {σ : SignTable} {P : Fin 9 → Point} (hσ : σ.Holds P)
-    {a b c : Fin 9} {s : SignType} (h : C1.orientedSign σ a b c = some s) :
-    SignType.sign (sarea (P a) (P b) (P c)) = s := by
-  sorry
 
 end Heilbronn.C1
