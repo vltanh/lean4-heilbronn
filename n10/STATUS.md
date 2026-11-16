@@ -840,6 +840,26 @@ triangles have capacity at most one. Its independent identity and
 arithmetic audit and the new C1 inventory group pass, bringing the
 exact global checker to 93 passing groups.
 
+
+The entire N6 count (1,0,1,1,1), one lower point and one point in
+every exterior cap, is now excluded by N6_ONE_LOWER_THREE_CAPS.md.
+A fully explicit reflection reduces all lower locations to two rows.
+Their fixed sums have 324 and 418 positive terms. Independent geometry
+checks all 89 determinant deductions, both source boxes, 158 interval
+steps with 860 endpoint lines, forty scalar caps and 1,869 factor
+occurrences. Separate Fraction/SymPy expansions reproduce both strict
+negative bounds. Sixteen N6 count rows remain; ROADMAP.md now lists
+each one as a separate unchecked obligation.
+
+QUADRILATERAL_AREA_SUPPORT.md also records an independently audited
+support inequality that retains the actual quadrilateral area floor
+and the smaller of its two actual triangle-floor products. Its exact
+diagonal identity handles both denominator signs and either affine
+upper cap. The new inventory and identity checks pass, bringing the
+exact global checker to 95 passing groups. Eleven C1 count rows and
+the two central N7 lower cells CA/CB remain alongside those sixteen
+N6 rows; no global parent is marked complete prematurely.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

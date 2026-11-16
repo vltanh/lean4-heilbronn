@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 66.
+Checkpoint 67.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -483,6 +483,15 @@ four-corner alternative and all zero-area faces.
         explicit sums of nonnegative products. All have independent geometry and
         exact identity audits; neither is a whole-count closure.
         Proof: N6_CORNER_CONTAINERS.md.
+  - [x] N6-ONE-LOWER-THREE-CAPS. The entire (1,0,1,1,1) count.
+        Explicit square reflection reduces every lower location to
+        a bottom ear or the weak central order bh>=ac. The two
+        cubic sums contain 324 and 418 positive terms. Independent
+        geometry checks both source boxes, all 89 deductions, 158
+        interval refinements with 860 endpoint lines, forty scalar
+        caps and 1,869 factor occurrences. Separate Fraction/SymPy
+        readers reproduce both exact negative bounds.
+        Proof: N6_ONE_LOWER_THREE_CAPS.md.
   - [x] N6-LOWER-TOP-QUADRILATERAL-EARS. Both entire single-ear
         top-quadrilateral alternatives of the one-lower/three-top
         count: two roots, twenty exhaustive splits and 22 cubics
@@ -540,6 +549,13 @@ four-corner alternative and all zero-area faces.
         cubics are proved. This reusable local lemma is a reduction,
         not a closure of a remaining placement family.
         Proof: QUADRILATERAL_SUPPORT.md, also applicable in N7 and C1.
+  - [x] QUADRILATERAL-AREA-SUPPORT. The exact diagonal identity
+        XY-W(Y-Z)=ZV retains the actual quadrilateral area floor and
+        the smaller of its two witnessed triangle-floor products.
+        Both signs of Y-Z, both affine upper bounds and all occupancy
+        premises are proved explicitly. Independent geometry and exact
+        polynomial identities pass. Proof: QUADRILATERAL_AREA_SUPPORT.md.
+        This is a reusable local inequality, not a whole-count closure.
   - [x] EXACT-CONDITIONAL-BOXES. A proved multiaffine nonnegative
         factor gives exact coordinate bounds by affine endpoint
         interpolation and the hull of finitely many half-line
@@ -547,8 +563,25 @@ four-corner alternative and all zero-area faces.
         requirements are proved in MULTIAFFINE_BOX_BOUNDS.md.
         This supplies a rule for later printed tables, not a
         closure of a remaining placement family.
-  - [ ] Complete all surviving exterior-cap placements with k=0 or k=1
-        outside the two stated projection chambers.
+  - [ ] Complete the remaining sixteen exterior-cap counts with k=0
+        or k=1, outside the stated projection chambers. Counts below
+        are (k,j,r,t,l), up to exchange of the two side caps:
+    - [ ] N6-IRTL: (0,1,1,1,1).
+    - [ ] N6-IRTT: (0,1,1,2,0).
+    - [ ] N6-IRRT: (0,1,2,1,0).
+    - [ ] N6-IIRT: (0,2,1,1,0).
+    - [ ] N6-IITT: (0,2,0,2,0).
+    - [ ] N6-IIRR: (0,2,2,0,0).
+    - [ ] N6-IIRL: (0,2,1,0,1).
+    - [ ] N6-BRTT: (1,0,1,2,0).
+    - [ ] N6-BITT: (1,1,0,2,0).
+    - [ ] N6-BIRL: (1,1,1,0,1).
+    - [ ] N6-BIRT: (1,1,1,1,0).
+    - [ ] N6-BIRR: (1,1,2,0,0).
+    - [ ] N6-BIIT: (1,2,0,1,0).
+    - [ ] N6-BIIR: (1,2,1,0,0).
+    - [ ] N6-BTTT: (1,0,0,3,0), retaining only its unfinished top words.
+    - [ ] N6-ITTT: (0,1,0,3,0).
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
       points and three strictly interior points.
   - [x] N7-PLACEMENTS. Both lower caps are empty, each upper cap has
@@ -873,6 +906,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_TWO_LOWER_CENTRAL_SIDE_TOP.md | Entire (2,1,1,1,0) count and transpose: six roots, 205 splits, 193 cubics / 51,388 terms, eighteen geometric terminals, 5,961 deductions and 905 interval updates |
 | N6_TOP_TRIPLE_SETUP.md | Exhaustive sixteen-word top catalogue, continuous boxes, geometry rules, scalar support bounds and complete factor definitions for the two top-triple counts |
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
+| N6_ONE_LOWER_THREE_CAPS.md | Entire (1,0,1,1,1) count: two reflected lower alternatives, 89 deductions, 158 interval steps, forty scalar caps and two cubics / 742 terms |
+| QUADRILATERAL_AREA_SUPPORT.md | Support inequalities retain the actual quadrilateral floor and the minimum of two witnessed triangle-floor products; both denominator signs are proved |
 | N6_TOP_TRIPLE_TRANSPOSE.md | Explicit transposition and six label maps preserve every residual top group; exact .168/.264 contact ceilings and anchor-span lower bounds |
 | C1_ONE_LOWER_THREE_CAPS.md | Entire (1,1,1,1,1) count: 37 splits, 37 cubics / 7,280 terms, one shared-central endpoint terminal, 1,053 deductions and 250 interval updates |
 | C1_TWO_CENTRAL_SIDE_PAIR_TOP.md | Entire (0,2,2,1,0) count and transpose: 76 splits, 61 cubics / 9,344 terms, sixteen geometric terminals, 2,528 deductions and 274 interval updates |

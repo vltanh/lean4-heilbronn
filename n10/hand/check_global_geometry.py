@@ -2283,6 +2283,34 @@ def n6_top_transpose():
     run_path(str(Path(__file__).with_name('check_n6_top_triple_transpose.py')))
 
 
+def n6_one_lower_three_caps():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);alpha=q(1037,10000)
+    assert alpha*(1-alpha)==q(9294631,100000000)<s
+    U=1-s/(1-alpha);V=1-s/U;L=4*s/(1-alpha)
+    assert (U,V,L)==(q(8033,8963),q(7199441,8033000),q(3720,8963))
+    text=Path(__file__).with_name('N6_ONE_LOWER_THREE_CAPS.md').read_text()
+    def block(name):
+        matches=re.findall(r'^```n6-three-caps-'+re.escape(name)+r'\n(.*?)^```$',text,re.M|re.S)
+        assert len(matches)==1
+        rows=matches[0].strip().splitlines()
+        return [] if rows==['none'] else rows
+    assert [len(block(case+'-geometry')) for case in ('ear','central')]==[47,42]
+    assert [len(block(case+'-intervals')) for case in ('ear','central')]==[0,158]
+    assert [len(block(case+'-sum')) for case in ('ear','central')]==[324,418]
+    assert [len(block(case+'-caps')) for case in ('ear','central')]==[0,40]
+    bounds=[q(block(case+'-bound')[0]) for case in ('ear','central')]
+    assert max(bounds)==q(-22627498297744780901726036135497732552483099,13792133092661446489657248328000000000000000)<0
+    print('PASS: complete N6 one-lower/all-three-caps count, both reflected rows and742 printed terms')
+
+
+def quadrilateral_area_support():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_quadrilateral_area_support.py')))
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -2378,3 +2406,6 @@ if __name__ == "__main__":
 
     c1_two_central_side_pair_top()
     side_cap_base_triangles()
+
+    n6_one_lower_three_caps()
+    quadrilateral_area_support()
