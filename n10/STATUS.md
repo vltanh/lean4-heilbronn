@@ -649,6 +649,19 @@ consequence, and explicit monotone lower bounds for both coordinates
 in the central position. These inequalities have exact identity and
 derivative checks. The global algebra checker has 73 passing groups.
 
+The entire C1 count (2,0,0,3,0) is now excluded by
+C1_TWO_LOWER_THREE_TOP.md. Its complete common geometry is in
+C1_TWO_LOWER_TOP_GEOMETRY.md. One exhaustive root and 202 binary
+refinements give 203 leaves: 183 fixed cubics with 45,644 printed
+integer entries, twelve interval contradictions, seven clustered
+triples and one convex five-point top hull. Independent geometry
+checks all 3,644 sign deductions, 1,636 interval refinements, 183
+outward boxes, six static monotonicity certificates and 115,787
+factor occurrences. Separate Fraction and SymPy manuscript readers
+reproduce every exact negative bound; the largest is
+-6314102933/1000000000000. Sixteen C1 exterior count rows remain.
+The global algebra checker now has 74 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

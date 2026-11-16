@@ -1949,6 +1949,29 @@ def n6_two_top_both_sides():
     print('PASS: entire N6 two-top/both-side count by four actual-area transfer identities')
 
 
+def c1_two_lower_three_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);rho=q(347,500)
+    h,c,u,v,z,w=sp.symbols('h c u v z w')
+    zero(h*c*(1-u-v)-(h*c-h*u-c*v)-h*(1-c)*u-c*(1-h)*v)
+    assert q(707,500)**2<2 and q(1457,250)==3+2*q(707,500)
+    assert 1-3*s/(1-s)==q(628,907)<rho
+    text=Path(__file__).with_name('C1_TWO_LOWER_THREE_TOP.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==202 and len(re.findall(r'^### Leaf ',text,re.M))==203
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==3644
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==1636
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==183 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==45644
+    assert len(re.findall(r'^Exclusion:',text,re.M))==20
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==183 and max(bounds)==q(-6314102933,1000000000000)<0
+    print('PASS: complete C1 two-lower/three-top catalogue, exact coarse-box identities and 203-leaf inventory')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -2023,3 +2046,4 @@ if __name__ == "__main__":
     n6_one_lower_side_pair_top()
     c1_two_top_both_sides()
     n6_two_top_both_sides()
+    c1_two_lower_three_top()

@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 55.
+Checkpoint 56.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -324,7 +324,16 @@ four-corner alternative and all zero-area faces.
         -63250709/250000000. Both hulls, the uniform box and all
         factors have independent geometry and Fraction/SymPy audits.
         Proof: C1_TOP_PAIR_BOTH_SIDES.md.
-  - [ ] C1-EXTERIOR. Exclude the remaining 17 exterior count rows
+  - [x] C1-TWO-LOWER-THREE-TOP. The entire count (2,0,0,3,0).
+        One root and 202 refinements give 203 leaves: 183 cubics
+        with 45,644 printed terms and twenty geometric exclusions.
+        Independent geometry verifies all 3,644 deductions, 1,636
+        conditional box refinements, six monotonicity certificates
+        and 115,787 factor occurrences. Separate Fraction/SymPy
+        readers reproduce every exact negative bound.
+        Proof: C1_TWO_LOWER_THREE_TOP.md, using the complete common
+        model in C1_TWO_LOWER_TOP_GEOMETRY.md.
+  - [ ] C1-EXTERIOR. Exclude the remaining 16 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -707,6 +716,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_ONE_LOWER_SIDE_PAIR_TOP.md | Entire (1,0,2,1,0) count and transpose: analytic exclusion of both lower ears, two weak central orders, 38 deductions and 184 printed cubic terms |
 | C1_TOP_PAIR_BOTH_SIDES.md | Both side caps exclude two top points: two complete C1 counts, an analytic nontriangular-hull contradiction and one 158-term cubic for the triangular hull |
 | N6_TWO_TOP_BOTH_SIDES.md | Entire (0,0,1,2,1) count by four actual-area comparisons transferring both C1 top-hull arguments and the unchanged exact sum |
+| C1_TWO_LOWER_TOP_GEOMETRY.md | Complete common model for two lower and at least two top-cap points: barycentric normalization, all factors, exact sign and interval rules, and top-hull support costs |
+| C1_TWO_LOWER_THREE_TOP.md | Entire (2,0,0,3,0) count: one root, 202 refinements, 183 cubics / 45,644 terms, twenty geometric terminals, 3,644 deductions and 1,636 box refinements |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
