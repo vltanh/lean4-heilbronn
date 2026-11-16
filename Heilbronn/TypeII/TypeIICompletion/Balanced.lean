@@ -475,7 +475,7 @@ theorem corollary5 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b 
   · rcases hsplit with ⟨hq, hs⟩ | ⟨hs, hq⟩
     · rw [Finset.card_eq_two]
       refine ⟨0, 2, by decide, ?_⟩
-      ext m; fin_cases m <;> simp [hDRL, hDRP.le, not_lt.2 hDRP.le, hq, not_lt.2 hs.le]
+      ext m; fin_cases m <;> simp [hDRL, not_lt.2 hDRP.le, hq, not_lt.2 hs.le]
     · rw [Finset.card_eq_two]
       refine ⟨0, 3, by decide, ?_⟩
       ext m; fin_cases m <;> simp [hDRL, not_lt.2 hDRP.le, hs, not_lt.2 hq.le]
@@ -559,7 +559,7 @@ theorem theorem6_scalar {b q c : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hq1 : q 
 
 /-- §6.1, first step: the lower-vertex inequality of `TYPE_II_BALANCED.md` §1 after the map
 `(x,y) ↦ ((x-b)/w, y)`, for the right hull vertex `X` adjacent to `B`. -/
-theorem lower_vertex_step {b : ℝ} {X Y : Point} (hb : 0 < b) (hb1 : b < 1)
+theorem lower_vertex_step {b : ℝ} {X Y : Point} (_hb : 0 < b) (hb1 : b < 1)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hXr : IsRight b X) (hYr : IsRight b Y)
     (hq : ConvexQuad (ptB b) X Y ptC)
     (hmin4 : 7 / 128 ≤ minTriangleArea ![ptB b, X, Y, ptC]) :

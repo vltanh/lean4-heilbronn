@@ -575,7 +575,7 @@ theorem counts_to_labels {l b : ℝ} {V W X Y Z : Point} (hd : TypeII.TypeIIData
     TypeII.freeIdx m, TypeII.freeIdx n] ?_ ?_
   · intro x y hxy
     have hv := congrArg Fin.val hxy
-    fin_cases x <;> fin_cases y <;> first | rfl | (exfalso; simp [hfi] at hv <;> omega)
+    fin_cases x <;> fin_cases y <;> first | rfl | (exfalso; simp [hfi] at hv; try omega)
   · funext x
     fin_cases x
     any_goals rfl

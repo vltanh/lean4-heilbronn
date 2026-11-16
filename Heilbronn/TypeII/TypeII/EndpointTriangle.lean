@@ -404,7 +404,7 @@ least `s > 0`, writing `X = (x, x + w)`, `α = 1 - h`, `β = 1 - f`,
 `N = -fK - αβx = αL - hf(1-x-w)`. `hand/TYPE_II.md`, lines 80–99.
 
 Uses: OPPOSITE_CORNERS:eq2, OPPOSITE_CORNERS:eq5, OPPOSITE_CORNERS:eq6, OPPOSITE_CORNERS:eq7. -/
-theorem eq2 (hN : HSNormal h f X) (hs : 0 < s)
+theorem eq2 (hN : HSNormal h f X) (_hs : 0 < s)
     (hmin : s / 2 ≤ minTriangleArea (hsConfig h f X)) :
     s ≤ X.2 - X.1 ∧ s ≤ h * X.1 ∧ s ≤ (1 - f) * (1 - X.2) ∧
       s ≤ |f * (X.2 - X.1) - (1 - f) * X.1| ∧ s ≤ |h * (1 - X.1) - (X.2 - X.1)| ∧
