@@ -820,6 +820,26 @@ the earlier 87 groups and their completed children retain their scope.
 The remaining whole-count inventories are twelve for C1 and seventeen
 for N6. No new parent closure is inferred from these local bounds.
 
+
+The complete C1 count (0,2,2,1,0), with two central points, a right
+pair and a top point, and its transpose are excluded by
+C1_TWO_CENTRAL_SIDE_PAIR_TOP.md. One independent central-pair labeling
+and 76 binary splits give 61 cubic contradictions with 9,344 printed
+terms and sixteen geometric terminals. Independent geometry checks
+2,528 deductions, 274 interval updates, fourteen static monotonicity
+caps and 23,597 factor occurrences, including every nontriangular
+endpoint-six use. Separate Fraction/SymPy readers reproduce every
+negative bound; the largest is -11636437/1000000000. Eleven C1
+exterior count rows remain.
+
+SIDE_CAP_BASE_TRIANGLES.md proves the reusable uniform side-base
+bound 21/50, without an occupied top cap or a lower-point assumption.
+An actual anchor triangle, the side-cap clearance and AM-GM give
+an exact gap 251/250000. The corresponding actual C1 and N6 base
+triangles have capacity at most one. Its independent identity and
+arithmetic audit and the new C1 inventory group pass, bringing the
+exact global checker to 93 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

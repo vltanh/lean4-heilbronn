@@ -2010,6 +2010,36 @@ def c1_one_lower_side_pair_top():
     print('PASS: complete C1 one-lower/central/side-pair/top count and 35-leaf inventory')
 
 
+def c1_two_central_side_pair_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational
+    text=Path(__file__).with_name('C1_TWO_CENTRAL_SIDE_PAIR_TOP.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==76 and len(re.findall(r'^### Leaf ',text,re.M))==77
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==2528
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==274
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==61 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==9344
+    assert len(re.findall(r'^Exclusion:',text,re.M))==16
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==61 and max(bounds)==q(-11636437,1000000000)<0
+    print('PASS: complete C1 two-central/side-pair/top count and 77-leaf inventory')
+
+
+def side_cap_base_triangles():
+    from pathlib import Path
+    from runpy import run_path
+    c,y,z,h,d,f,x=sp.symbols('c y z h d f x')
+    q=sp.Rational;s=q(93,1000);a=1-s
+    zero((1-d)-(1-h+f*(h-d))-(1-f)*(h-d))
+    zero((1-c)*(d-y)-(d*(x-c)-(1-c)*y)-d*(1-x))
+    zero((1-c)*(1-c*y-a*(1-c))-s-c*((1-c)*(a-y)-s))
+    run_path(str(Path(__file__).with_name('check_side_cap_base_triangles.py')))
+
+
 def c1_two_lower_central_side_top():
     from pathlib import Path
     import re
@@ -2345,3 +2375,6 @@ if __name__ == "__main__":
     n6_top_affine_caps()
     n6_top_pair_barycentric_bounds()
     six_point_endpoint_refined()
+
+    c1_two_central_side_pair_top()
+    side_cap_base_triangles()

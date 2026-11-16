@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 65.
+Checkpoint 66.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -366,7 +366,22 @@ four-corner alternative and all zero-area faces.
         separate Fraction/SymPy readers reproduce every negative bound.
         The sole h>=c normalization and complete .876/.852 contact
         box are proved explicitly. Proof: C1_ONE_LOWER_THREE_CAPS.md.
-  - [ ] C1-EXTERIOR. Exclude the remaining 12 exterior count rows
+  - [x] C1-TWO-CENTRAL-SIDE-PAIR-TOP. The entire (0,2,2,1,0)
+        count and its transpose. The independent central-pair labeling
+        and 76 binary splits give 61 cubics with 9,344 printed terms
+        and sixteen geometric contradictions. Independent geometry
+        checks all 2,528 deductions, 274 interval updates, fourteen
+        monotonicity caps and 23,597 factor occurrences. Separate
+        Fraction/SymPy readers reproduce every exact negative bound.
+        Proof: C1_TWO_CENTRAL_SIDE_PAIR_TOP.md.
+  - [x] SIDE-CAP-BASE-TRIANGLES. A right-cap point satisfies cy<21/50;
+        a left-cap point satisfies hx<21/50. The corresponding actual
+        base triangles have capacity at most one, including the N6
+        transfer to BCV and AHV. The analytic argument uses only one
+        actual anchor clearance, the cap clearance and an exact AM-GM
+        comparison. Independent geometry and exact identities pass.
+        Proof: SIDE_CAP_BASE_TRIANGLES.md. This is a local reduction.
+  - [ ] C1-EXTERIOR. Exclude the remaining 11 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -860,6 +875,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_TOP_TRIPLE_TRANSPOSE.md | Explicit transposition and six label maps preserve every residual top group; exact .168/.264 contact ceilings and anchor-span lower bounds |
 | C1_ONE_LOWER_THREE_CAPS.md | Entire (1,1,1,1,1) count: 37 splits, 37 cubics / 7,280 terms, one shared-central endpoint terminal, 1,053 deductions and 250 interval updates |
+| C1_TWO_CENTRAL_SIDE_PAIR_TOP.md | Entire (0,2,2,1,0) count and transpose: 76 splits, 61 cubics / 9,344 terms, sixteen geometric terminals, 2,528 deductions and 274 interval updates |
+| SIDE_CAP_BASE_TRIANGLES.md | Uniform cy<21/50 and hx<21/50 side-cap bounds, actual capacity-one consequences, and the N6 actual-contact transfer |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
