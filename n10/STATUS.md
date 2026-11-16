@@ -923,6 +923,25 @@ SymPy/Fraction expansion; the separate author reader passes 39 checks.
 These are local consequences. The E-only word and both central N7 roots,
 ten C1 rows and the remaining N6 rows still require hand proofs.
 
+## Hand checkpoint 85: uniform central N7 EFG capacity one
+
+In both central lower roots, two upper points in CEF imply
+`EFG<(149/20)s`, independent of the upper-pair line. The
+[uniform actual-triangle theorem](hand/N7_CENTRAL_COMPLETION_EFG_CAP.md)
+uses only the eight actual points A,B,C,D,E,F,G,H, previously proved
+contact bounds and the occupied upper-ear costs. Six exhaustive G-sign
+words in each root close by six scalar and six physical-polynomial
+contradictions, with all literal rational tables printed.
+
+The fresh independent Fraction reader reconstructs every actual sign,
+250 relations, 701 scalar updates, 229 physical factors, 615 positive
+products, 910 endpoint values and 1,022 immutable bounds. It reproduces
+every negative bound, and rejects twelve deliberate corruptions. Actual
+geometry, all initial boxes and cap sources, normalized barycentric weights
+and every nonnegative factor have independent mathematical acceptance.
+This closes the stated capacity theorem. The E-only word and both central
+N7 roots still require contradictions; the global hand proof stays open.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

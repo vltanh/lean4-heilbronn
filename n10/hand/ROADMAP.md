@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 84.
+Checkpoint 85.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -957,6 +957,18 @@ four-corner alternative and all zero-area faces.
         author reader checks 39. Proof: N7_CENTRAL_COMPLETION.md,
         Sections 1–6. These lemmas leave the E-only word and both
         central parents open.
+  - [x] N7-CENTRAL-EFG-CAP. If CEF contains the two upper points,
+        actual EFG<(149/20)s in both central lower roots, independently
+        of the upper-pair line. Six exhaustive G-sign words in each
+        root close by six scalar and six polynomial contradictions.
+        Literal tables print 701 scalar updates, 229 physical source
+        factors and 615 positive products. Separate exact readers
+        verify all 250 relations, 910 endpoint values, 1,022 immutable
+        bounds and every translated coefficient. Twelve deliberate
+        corruptions are rejected. Independent actual geometry and
+        all source premises pass review.
+        Proof: N7_CENTRAL_COMPLETION_EFG_CAP.md and its literal tables.
+        This proves capacity one for EFG; both central parents stay open.
   - [ ] N7-INTERIOR-REMAINDER. Exclude the two central lower cells
         CA and CB in the sole remaining all-interior heptagon count
         (k,j,q)=(1,2,0). Both lower-ear children are complete above.
@@ -1141,6 +1153,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_CENTRAL_ACD_CAP.md | Both central roots satisfy actual ACD<27/40; one positive cubic proves capacity one and ADG<0 forces ADO,ADP>0 |
 | N7_CENTRAL_PAIR_CUT.md | After HOP<0, the full DGO>0 child is impossible in both central roots; three actual capacity-one triangles and a short occupied-triangle contradiction leave six pair words |
 | N7_CENTRAL_COMPLETION.md | Local lemmas for both central roots: three empty triangles, e>57/100, AEF capacity two and two E-only sign implications; independent geometric and exact arithmetic review |
+| N7_CENTRAL_COMPLETION_EFG_CAP.md and its literal tables | Uniform actual EFG<(149/20)s when CEF contains O,P, in both central roots; twelve exhaustive leaves, 701 scalar updates, 615 positive products and two independent exact readers |
 | N7_CENTRAL_AREA_ORIENTATION.md | In both central lower cells, every upper point T satisfies AGT<0 or DGT<0; four fans, five signed products and 72 exact rational steps give gap 1941/1000000 |
 | N7_ONE_LOWER_ABC.md | Entire lower-ear ABC child: 93 splits, 84 cubics / 37,612 terms, ten geometric terminals, 3,411 deductions and 41 explicit rational squares |
 | N6_TOP_AFFINE_CAPS.md | Actual top-cap contact/apex affine upper bounds and inherited actual-container caps, with all determinant identities |
