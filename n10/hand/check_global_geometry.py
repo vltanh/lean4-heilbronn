@@ -2037,6 +2037,48 @@ def side_pair_top_bounds():
     run_path(str(Path(__file__).with_name('check_c1_side_pair_top_bounds.py')))
 
 
+def n7_one_lower_setup():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_n7_one_lower_setup.py')))
+
+
+def n7_one_lower_abh():
+    from pathlib import Path
+    import re
+    text=Path(__file__).with_name('N7_ONE_LOWER_ABH.md').read_text()
+    def block(name):
+        return re.search(r'^```'+re.escape(name)+r'\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    rows=[line.split() for line in block('n7-l2u-rows')]
+    assert len(rows)==59 and sum(row[1]=='P' for row in rows)==55
+    tree={}
+    for row in rows:
+        node=tree
+        for token in row[4].split(','):
+            assert 'leaf' not in node
+            node=node.setdefault(token,{})
+        assert not node;node['leaf']=True
+    splits=0
+    def walk(node):
+        nonlocal splits
+        if 'leaf' in node:
+            assert len(node)==1;return
+        assert len(node)==2
+        left,right=sorted(node)
+        assert left[:3]==right[:3] and {left[3:],right[3:]}=={'+','-'}
+        splits+=1
+        for child in node.values():walk(child)
+    walk(tree);assert splits==58
+    sums=[block('n7-l2u-'+row[0]+'-sum') for row in rows if row[1]=='P']
+    assert sum(map(len,sums))==21373
+    traces=[block('n7-l2u-'+row[0]+'-trace') for row in rows]
+    assert sum(len(t) if t!=['none'] else 0 for t in traces)==1993
+    assert len(block('n7-l2u-squares'))==41
+    bounds=[sp.Rational(block('n7-l2u-'+row[0]+'-bound')[0]) for row in rows if row[1]=='P']
+    assert max(bounds)==sp.Rational(-95283035268326478889140529,57385526293000000000000000)<0
+    print('PASS: complete N7 ABH lower-ear child, exhaustive59-leaf trie, all printed sums and41 squares')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -2117,3 +2159,5 @@ if __name__ == "__main__":
     n6_projected_count_terminals()
     multiaffine_box_bounds()
     side_pair_top_bounds()
+    n7_one_lower_setup()
+    n7_one_lower_abh()

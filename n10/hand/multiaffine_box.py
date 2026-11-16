@@ -41,12 +41,11 @@ def _prepare(factors, n, max_vertices):
     return prepared, skipped
 
 
-def endpoint_lines(terms, support, target, low, high):
-    """Distinct exact (slope, intercept) pairs at all other endpoints."""
+def _endpoint_line_iter(terms, support, target, low, high):
+    """Exact endpoint lines, generated without building an unused full set."""
     others = tuple(i for i in support if i != target)
     choices = [(low[i],) if low[i] == high[i] else (low[i], high[i])
                for i in others]
-    result = set()
     for vertex in product(*choices):
         values = dict(zip(others, vertex))
         slope = intercept = F(0)
@@ -56,8 +55,12 @@ def endpoint_lines(terms, support, target, low, high):
                 slope += value
             else:
                 intercept += value
-        result.add((slope, intercept))
-    return sorted(result)
+        yield slope, intercept
+
+
+def endpoint_lines(terms, support, target, low, high):
+    """Distinct exact (slope, intercept) pairs at all other endpoints."""
+    return sorted(set(_endpoint_line_iter(terms, support, target, low, high)))
 
 
 def interval_hull(lines, lo, hi):
@@ -117,7 +120,20 @@ def refine_box(factors, low, high, *, rounds=6, max_steps=1000,
                     break
                 continue
             for target in support:
-                lines = endpoint_lines(terms, support, target, low, high)
+                lines = []
+                old_left_feasible = old_right_feasible = False
+                for slope, intercept in _endpoint_line_iter(terms, support, target, low, high):
+                    lines.append((slope, intercept))
+                    old_left_feasible |= slope * low[target] + intercept >= 0
+                    old_right_feasible |= slope * high[target] + intercept >= 0
+                    # If both old endpoints already belong to the union,
+                    # its hull is the entire old interval.  No inference
+                    # or recorded witness is needed for this no-op.
+                    if old_left_feasible and old_right_feasible:
+                        break
+                if old_left_feasible and old_right_feasible:
+                    continue
+                lines = sorted(set(lines))
                 hull = interval_hull(lines, low[target], high[target])
                 witness = {'factor': name, 'target': target,
                            'old': [str(low[target]), str(high[target])],

@@ -213,5 +213,40 @@ geometric assumption. Since \(a\kappa^2>s\), the function
 These bounds can be combined directly with the four affine
 inequalities (9) for the actual inner point.
 
+There is also a stronger N6 barycentric conclusion. In (8), put
+\(\phi(x)=(1-x)(a-s/x)\). For \(x\ge\kappa=4s\),
+
+\[
+ \phi'(x)=-a+s/x^2\le-a+s/\kappa^2<0,
+\]
+
+using the same exact comparison \(a\kappa^2>s\). Thus
+
+\[
+ U<\phi(c)\le\phi(\kappa)
+   =(.628)(.897-.25)=.406316
+   <\frac{35}{8}s=.406875.
+\]
+
+The final gap is exactly \(559/10^6\). Every barycentric weight
+of \(Q\) in \(CDP\) therefore exceeds \(8/35\). Subtracting
+these three lower weights leaves nonnegative remainders summing to
+\(11/35\). The same coordinate extrema used in Section 4 now give
+the four sharper affine inequalities
+
+\[
+\begin{aligned}
+ 35l&\ge19c+8+8p,&
+ 35l&\le8c+8p+19,\\
+ 35m&\ge8d+8q,&
+ 35m&\le19d+8q.
+\end{aligned}
+\tag{10}
+\]
+
+These strengthened factors use the N6 fact \(hc\ge4s\).
+The more general inequalities (9) remain valid without that added
+hypothesis.
+
 The companion [check_c1_side_pair_top_bounds.py](check_c1_side_pair_top_bounds.py)
 checks the displayed identities and rational comparisons exactly.

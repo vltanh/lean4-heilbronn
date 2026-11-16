@@ -702,6 +702,23 @@ with no hidden lower-point premise. Independent geometry and exact
 rational checks pass. The global algebra checker has 79 passing groups; the
 remaining global and count totals are unchanged.
 
+The complete ABH lower-ear child of the last all-interior N7 count
+is now excluded by N7_ONE_LOWER_ABH.md. Its 58 binary splits give
+59 leaves: 55 cubic contradictions with 21,373 printed terms and
+four actual ABEF capacity contradictions. Independent geometry
+replays every split, all 1,993 deductions, 53,443 factor occurrences,
+177 fixed-cap, 145 shifted-box and twenty fan-cap witnesses, and
+33 capacity-ray steps. Separate Fraction/SymPy readers agree on
+all sums and 41 explicit rational squares; the largest bound is
+-95283035268326478889140529/57385526293000000000000000.
+
+N7_ONE_LOWER_SETUP.md proves all four refined root boxes and the
+common factor rules. Three lower cells, ABC, CA and CB, remain in
+count (1,2,0); the N7 parent stays unchecked. The side-pair/top
+N6 transfer now also proves U<.406316<(35/8)s, giving four stronger
+affine inequalities from inner barycentric weights above 8/35.
+The exact global algebra checker has 81 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

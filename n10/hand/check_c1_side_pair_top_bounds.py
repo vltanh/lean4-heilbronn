@@ -27,5 +27,22 @@ kappa=4*s
 assert a*kappa*kappa-s==R(1945653,62500000)>0
 assert kappa+2*s/a+s/(a*kappa)==R(192421,224250)>R(858,1000)
 assert a-3*s/(1-kappa)==R(71079,157000)<R(453,1000)
+phi=(1-c)*(a-s/c)
+assert q.simplify(q.diff(phi,c)-(-a+s/c**2))==0
+assert phi.subs(c,kappa)==R(101579,250000)==R('.406316')
+assert R(35,8)*s==R('.406875')
+assert R(35,8)*s-phi.subs(c,kappa)==R(559,1000000)>0
+eta_c,eta_d=q.symbols('eta_c eta_d')
+eta_p=R(11,35)-eta_c-eta_d
+ll=(R(8,35)+eta_c)*c+(R(8,35)+eta_d)+(R(8,35)+eta_p)*p
+mm=(R(8,35)+eta_d)*d+(R(8,35)+eta_p)*y
+identities=[
+    (35*ll-19*c-8-8*p,35*((1-c)*eta_d+(p-c)*eta_p)),
+    (8*c+8*p+19-35*ll,35*((1-c)*eta_c+(1-p)*eta_p)),
+    (35*mm-8*d-8*y,35*(d*eta_d+y*eta_p)),
+    (19*d+8*y-35*mm,35*(d*eta_c+(d-y)*eta_p)),
+]
+for left,right in identities:assert q.expand(left-right)==0
 print('PASS: top-contact ceiling, side-pair interval, outer-point bounds,')
-print('inner 2/9 barycentric comparison, and exact threshold constants.')
+print('inner 2/9 and N6 8/35 barycentric bounds, four remainder identities,')
+print('and exact threshold constants.')

@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 58.
+Checkpoint 59.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -447,7 +447,8 @@ four-corner alternative and all zero-area faces.
         bottom-contact interval and three inner-point barycentric
         weights greater than 2/9, hence four affine bounds. The
         virtual-corner transfer to N6 uses two explicit actual-area
-        comparisons and gives outer coordinates p>.858, q<.453.
+        comparisons and gives outer coordinates p>.858, q<.453,
+        with the stronger inner barycentric weights greater than 8/35.
         Proof: C1_SIDE_PAIR_TOP_BOUNDS.md. This is a shared local
         reduction, not a new C1 or N6 count closure.
   - [x] OCCUPIED-QUADRILATERAL-SUPPORT. Universal polynomial support
@@ -586,8 +587,21 @@ four-corner alternative and all zero-area faces.
         exactly the five inequalities used by the bottom-span theorem,
         and proves [DEF]<(149/20)s without assuming any free-point sign.
         Proof: N7_RIGHT_SPAN_CAP.md.
-  - [ ] N7-INTERIOR-REMAINDER. Exclude the sole remaining all-interior
-        heptagon count (k,j,q)=(1,2,0).
+  - [x] N7-ONE-LOWER-SETUP. Four exhaustive lower cells, all four
+        refined rational boxes, the capacity-one ray rule, and the
+        complete factor catalogue for the remaining (1,2,0) count.
+        Proof: N7_ONE_LOWER_SETUP.md. A completed child is asserted
+        only in its separate exhaustive manuscript.
+  - [x] N7-ONE-LOWER-ABH. The entire lower-ear ABH child. Fifty-eight
+        binary splits give 59 leaves: 55 cubics with 21,373 printed
+        terms and four actual ABEF capacity contradictions. Independent
+        geometry checks all 1,993 deductions, 53,443 factor occurrences,
+        342 cap witnesses and 33 capacity-ray steps. Separate Fraction
+        and SymPy readers reproduce every negative bound and all
+        41 explicit rational squares. Proof: N7_ONE_LOWER_ABH.md.
+  - [ ] N7-INTERIOR-REMAINDER. Exclude the other three lower cells
+        ABC, CA and CB in the sole remaining all-interior heptagon
+        count (k,j,q)=(1,2,0). Its ABH child is complete above.
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -760,6 +774,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_PROJECTED_COUNT_TERMINALS.md | Full-domain mappings of both candidate-containing count chambers to the sharp projection theorems, with all twelve determinants and positive increments checked |
 | MULTIAFFINE_BOX_BOUNDS.md | Exact endpoint-line interpolation, finite feasible-interval hulls, sequential rational bounds and outward rounding, with an optional exact trace replay module |
 | C1_SIDE_PAIR_TOP_BOUNDS.md | Uniform .897 contact ceiling, narrow side-pair box, inner 2/9 barycentric bounds and an explicit actual-area transfer to N6 |
+| N7_ONE_LOWER_SETUP.md | Exhaustive four-cell reduction for the remaining all-interior (1,2,0) count, four proved rational boxes, capacity-ray rule and complete factor definitions |
+| N7_ONE_LOWER_ABH.md | Entire lower-ear ABH child: 58 splits, 55 cubics / 21,373 terms, four geometric terminals, 1,993 deductions and 41 explicit rational squares |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
