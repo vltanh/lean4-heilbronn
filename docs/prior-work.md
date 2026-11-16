@@ -33,9 +33,7 @@ Searched on 15 November 2026.
   bounds. The paper states that proofs of optimality are known for `n ≤ 8` but
   not for `n = 9` and `n = 10`. Its first version (11 March 2026) claimed a
   proof for `n = 9`, and later versions withdrew it; MathWorld's entry (updated
-  14 November 2026) still lists `H₉` as proved by it. Its boundary structure
-  (Section 2.2) is the starting point of the hand proof's
-  `docs/proof/nine/BOUNDARY_REDUCTION.md`.
+  14 November 2026) still lists `H₉` as proved by it.
 
 None of these gives the exact value, and none claims that the optimal
 configuration is unique.
@@ -66,20 +64,16 @@ problem (D. Trela,
 [*KKT Stresses, Affine Moments, and Separator Flux in the Heilbronn Triangle Problem*](https://arxiv.org/abs/2609.25035),
 2026), which makes no claim about `n = 9`.
 
-## The proof formalized here
+## The proof here
 
-The proof in [`docs/proof/nine/`](proof/nine/README.md) is an exact argument
-with fixed rational certificates: an exhaustive normalization of a maximizer
-into five families, geometric case analysis, sharp continuous inequalities,
-and polynomial certificates checked in exact arithmetic. It uses no optimizer
-and no floating-point bound. Its one external input was the planar affine
-isoperimetric inequality (Chen, Howard, Lutwak, Yang and Zhang,
-[J. Geom. Anal. 14 (2004)](https://doi.org/10.1007/BF02922171),
-[arXiv:math/0402083](https://arxiv.org/abs/math/0402083)), for nine points in
-convex position; the formalization avoids it (see
-[results](results.md#nine-points)). Zeng, Lu, Dehbi, Chen and Wang
-([2020](https://doi.org/10.1007/978-3-030-41258-6_23)) treat that case
-through an inequality for convex nonagons.
+The Lean proof is an exact argument with fixed rational certificates: an
+exhaustive normalization of a maximizer into five families, geometric case
+analysis, sharp continuous inequalities, and polynomial certificates checked by
+Lean's kernel. It uses no optimizer, no floating-point bound and no theorem
+from outside mathlib. For nine points in convex position, Zeng, Lu, Dehbi, Chen
+and Wang ([2020](https://doi.org/10.1007/978-3-030-41258-6_23)) give a
+computer-assisted inequality for convex nonagons; the proof here does not use
+it.
 
 ## Formalizations
 

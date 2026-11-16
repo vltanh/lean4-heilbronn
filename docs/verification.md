@@ -80,7 +80,7 @@ separate Palomar entry, with its `comparator.json` and `formalization.yaml` in
 Most exclusions end with a certificate: affine factors and area costs that are
 nonnegative in the case at hand, and positive integer weights on products of
 them whose sum is negative on the unit cube, so the case is impossible. The
-weighted products are rows `w i₁ … iₘ` in `data/nine/`, a weight and the factors
+weighted products are rows `w i₁ … iₘ` in `Heilbronn/Nine/Data/`, a weight and the factors
 it multiplies, read by the `term_rows%` elaborators of `Heilbronn/Common/DataReader.lean` as raw literals.
 `Cert.check` (`Heilbronn/Common/Certificate.lean`) expands the sum with integer
 arithmetic and bounds it on the cube by its constant coefficient plus its
@@ -91,22 +91,8 @@ and `Cover.checkTree` glues the certificates of a case split. `tree_decide`
 proves `checkTree σ fs T = true` by one auxiliary theorem `of_decide_eq_true rfl`
 for each subtree of at most 400 certificate terms, which only the kernel checks,
 one after another, and glues them with the branch counts of the splits. No
-proof uses `native_decide`. The data files hold 434,402 rows in all.
-
-The exporters in `scripts/nine/` produced the data and the chunk modules, from
-the certificate packages of the hand proof or from linear-programming searches.
-They are not trusted: the kernel rechecks every row. `scripts/certlib.py`
-mirrors the Lean expansion exactly, so an exporter can check a certificate
-before it is written.
-
-## The hand proof
-
-The hand proof's own checkers, in exact rational arithmetic, run from the
-repository root, for example `python docs/proof/nine/check_g6_itemized_cases.py`;
-some need SymPy. They and the research archive's audits
-(`docs/research/nine/research/run_hand_checks.py`) are a record of how the hand
-proof was checked before the formalization, and the Lean proof does not depend
-on them.
+proof uses `native_decide`. The data files hold 434,402 rows in all. They were
+computed outside Lean and are not trusted: the kernel rechecks every row.
 
 ## Building
 

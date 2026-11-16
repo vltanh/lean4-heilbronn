@@ -15,7 +15,7 @@ open Cover Model
 
 /-- The sign tree of the case [3, 3, 4, 10]. -/
 noncomputable def tree11_0 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c231.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c231.txt")
 
 /-- The cases of chunk 11 with their trees. -/
 noncomputable def chunk11 : List (List ℕ × Cover.Tree Split) :=

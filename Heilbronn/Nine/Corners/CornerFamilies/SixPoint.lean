@@ -211,32 +211,6 @@ theorem claim_nondistributed_bound (A B C X Y Z : Point) (hX : InsideTriangle X 
           (by intro i; fin_cases i <;> simp))
       rw [← r2]; exact this
 
-/-- **Upper-triple restriction** (`CORNER_FAMILIES:UpperTripleRestriction`): in a Type-III
-configuration of minimum area at least `A₀`, three upper free points (here `U, V, W`) are
-distributed in `ABC`, `A = (0,0)`, `B = (0,1)`, `C = (1,1)`; otherwise
-`1/2 ≥ (6 + 2√3)t`, `t ≤ 1/(12 + 4√3) < 7/132 < 17/320 < A₀`. The manuscript assumes exactly
-three upper points; the argument uses only the three. `docs/proof/nine/CORNER_FAMILIES.md`, lines 474–492.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem upperTripleRestriction (U V W X Y Z : Point) (hU : U ∈ unitSquare)
-    (hV : V ∈ unitSquare) (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare)
-    (hZ : Z ∈ unitSquare) (hmin : A₀ ≤ minTriangleArea (typeIIIConfig U V W X Y Z))
-    (hUu : U.1 < U.2) (hVu : V.1 < V.2) (hWu : W.1 < W.2) :
-    Distributed (0, 0) (0, 1) (1, 1) U V W := by
-  by_contra hnd
-  have hpos : 0 < minTriangleArea (typeIIIConfig U V W X Y Z) := lt_of_lt_of_le A₀_pos hmin
-  have h := claim_nondistributed_bound (0, 0) (0, 1) (1, 1) U V W
-    (Or.inr (upper_inside hU hV hW hX hY hZ hpos 0 hUu))
-    (Or.inr (upper_inside hU hV hW hX hY hZ hpos 1 hVu))
-    (Or.inr (upper_inside hU hV hW hX hY hZ hpos 2 hWu)) A₀ A₀_pos
-    (min_sub hmin _ ![0, 1, 2, 3, 4, 5] (by norm_num) (by decide)
-      (by intro i; fin_cases i <;> simp [typeIIIConfig])) hnd
-  have harea : triangleArea ((0 : ℝ), (0 : ℝ)) (0, 1) (1, 1) = 1 / 2 := by
-    simp only [triangleArea_eq, sarea]; norm_num
-  rw [harea] at h
-  have := A₀_bounds
-  nlinarith [sqrt3_gt]
-
 /-! ### §8. The mesh -/
 
 /-- The thirteen signs of a labelled mesh in a counterclockwise triangle (16)–(17): the seven
@@ -400,82 +374,6 @@ theorem eq19 (A B C X Y Z : Point) :
       sarea B C X * sarea Z X Y = sarea B X Z * sarea C Y X - sarea B X Y * sarea C Z X ∧
       sarea C A Y * sarea Z X Y = sarea C Y X * sarea A Z Y - sarea C Y Z * sarea A X Y := by
   unfold sarea; refine ⟨by ring, by ring, by ring⟩
-
-/-- **Claim** (`CORNER_FAMILIES:SixPointTriangularHullTheorem`), inequality (20) at a general
-doubled threshold `s` (used by `TYPE_II.md` lines 570–618 and `ONE_CORNER.md`): in a labelled
-mesh whose six points have all doubled areas at least `s`, with doubled connectors `a, b, c`,
-central `k` and cross areas `u_i, v_i`, multiplying (20) by `s²`:
-`Σ (a - s)(b - s) + s(a + b + c - 3s) ≥ 3s² + 6s(k - s) + Σ (u_A - s)(v_B - s) ≥ 3s²`.
-Restated for a counterclockwise `ABC` (`0 < sarea A B C`; the clockwise case is the reversed
-labelling, `meshLabelled_reverse`). `docs/proof/nine/CORNER_FAMILIES.md`, lines 624–654.
-
-Uses: CORNER_FAMILIES:SixPointTriangularHullTheorem (18), (19) -/
-theorem eq20 (A B C X Y Z : Point) (s : ℝ) (hs : 0 < s) (hp : 0 < sarea A B C)
-    (hm : MeshLabelled A B C X Y Z)
-    (hmin : s / 2 ≤ minTriangleArea ![A, B, C, X, Y, Z]) :
-    let a := |sarea A Z Y|
-    let b := |sarea B X Z|
-    let c := |sarea C Y X|
-    let k := |sarea Z X Y|
-    let uA := |sarea A Z X|
-    let uB := |sarea B X Y|
-    let uC := |sarea C Y Z|
-    let vA := |sarea A X Y|
-    let vB := |sarea B Y Z|
-    let vC := |sarea C Z X|
-    3 * s ^ 2 + 6 * s * (k - s) +
-        ((uA - s) * (vB - s) + (uB - s) * (vC - s) + (uC - s) * (vA - s)) ≤
-      (a - s) * (b - s) + (b - s) * (c - s) + (c - s) * (a - s) + s * (a + b + c - 3 * s) ∧
-    3 * s ^ 2 ≤ 3 * s ^ 2 + 6 * s * (k - s) +
-        ((uA - s) * (vB - s) + (uB - s) * (vC - s) + (uC - s) * (vA - s)) := by
-  obtain ⟨g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13⟩ := mesh_ccw hp hm
-  have ht : 0 < s / 2 := by linarith
-  have e : ∀ {p q r : Point}, 0 < sarea p q r → s / 2 ≤ triangleArea p q r → s ≤ sarea p q r :=
-    fun h h' => by have := ge_of_pos ht h' h; linarith
-  have ex := e g1 (area_of_le_min hmin 0 1 5)
-  have ey := e g2 (area_of_le_min hmin 1 2 3)
-  have ez := e g3 (area_of_le_min hmin 2 0 4)
-  have ek := e g7 (area_of_le_min hmin 5 3 4)
-  have euA := e g8 (area_of_le_min hmin 0 5 3)
-  have euB := e g9 (area_of_le_min hmin 1 3 4)
-  have euC := e g10 (area_of_le_min hmin 2 4 5)
-  have evA := e g11 (area_of_le_min hmin 0 3 4)
-  have evB := e g12 (area_of_le_min hmin 1 4 5)
-  have evC := e g13 (area_of_le_min hmin 2 5 3)
-  obtain ⟨h18a, h18b, h18c⟩ := eq18 A B C X Y Z
-  obtain ⟨h19a, h19b, h19c⟩ := eq19 A B C X Y Z
-  simp only
-  rw [abs_of_pos g4, abs_of_pos g5, abs_of_pos g6, abs_of_pos g7, abs_of_pos g8, abs_of_pos g9,
-    abs_of_pos g10, abs_of_pos g11, abs_of_pos g12, abs_of_pos g13]
-  constructor
-  · nlinarith
-  · nlinarith [mul_nonneg (sub_nonneg.2 euA) (sub_nonneg.2 evB),
-      mul_nonneg (sub_nonneg.2 euB) (sub_nonneg.2 evC),
-      mul_nonneg (sub_nonneg.2 euC) (sub_nonneg.2 evA)]
-
-/-- **Claim** (`CORNER_FAMILIES:SixPointTriangularHullTheorem`), the by-product used in §10
-(lines 903–904): in a labelled mesh with all doubled areas at least `s > 0`, the doubled
-connectors satisfy `a + b + c ≥ 3φs`, `φ = (1 + √5)/2` (from `Z₀ ≥ 3(√5 - 1)/2`). Restated for
-a counterclockwise `ABC`. `docs/proof/nine/CORNER_FAMILIES.md`, lines 656–661, 903–904.
-
-Uses: CORNER_FAMILIES:SixPointTriangularHullTheorem (20) -/
-theorem claim_connector_sum (A B C X Y Z : Point) (s : ℝ) (hs : 0 < s) (hp : 0 < sarea A B C)
-    (hm : MeshLabelled A B C X Y Z) (hmin : s / 2 ≤ minTriangleArea ![A, B, C, X, Y, Z]) :
-    3 * ((1 + Real.sqrt 5) / 2) * s ≤ |sarea A Z Y| + |sarea B X Z| + |sarea C Y X| := by
-  obtain ⟨g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13⟩ := mesh_ccw hp hm
-  have ht : 0 < s / 2 := by linarith
-  have e : ∀ {p q r : Point}, 0 < sarea p q r → s / 2 ≤ triangleArea p q r → s ≤ sarea p q r :=
-    fun h h' => by have := ge_of_pos ht h' h; linarith
-  obtain ⟨h18a, h18b, h18c⟩ := eq18 A B C X Y Z
-  obtain ⟨h19a, h19b, h19c⟩ := eq19 A B C X Y Z
-  rw [abs_of_pos g4, abs_of_pos g5, abs_of_pos g6]
-  exact mesh_ineq hs (e g1 (area_of_le_min hmin 0 1 5)) (e g2 (area_of_le_min hmin 1 2 3))
-    (e g3 (area_of_le_min hmin 2 0 4)) (e g4 (area_of_le_min hmin 0 5 4))
-    (e g5 (area_of_le_min hmin 1 3 5)) (e g6 (area_of_le_min hmin 2 4 3))
-    (e g7 (area_of_le_min hmin 5 3 4)) (e g8 (area_of_le_min hmin 0 5 3))
-    (e g9 (area_of_le_min hmin 1 3 4)) (e g10 (area_of_le_min hmin 2 4 5))
-    (e g11 (area_of_le_min hmin 0 3 4)) (e g12 (area_of_le_min hmin 1 4 5))
-    (e g13 (area_of_le_min hmin 2 5 3)) h18a h18b h18c h19a h19b h19c
 
 /-! ### Symmetries of distributed triples -/
 

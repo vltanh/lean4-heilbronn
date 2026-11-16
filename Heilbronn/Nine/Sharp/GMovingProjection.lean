@@ -225,30 +225,6 @@ theorem Data.facts (H : Data a b c d e f g h t x y) (hu : u * (h - a) = 7 / 64)
     ⟨haA, h1, by linarith, by linarith⟩, ⟨by linarith, hxb, hye, by linarith⟩, k3, k4, k5,
     ⟨hu0, hv0, by linarith⟩⟩
 
-/-- (2)–(5) in the form of `claim_heights`, for a general name `s` of `7/64`. -/
-theorem Data.heights {s : ℝ} (H : Data a b c d e f g h t x y) (hs : s = 7 / 64)
-    (hu : u * (h - a) = s) (hv : v * (f - g) = s) (hα : α = 1 - v - (h - a))
-    (hβ : β = 1 - u - (f - g)) :
-    (u ≤ b ∧ u ≤ g ∧ u + (f - g) ≤ f ∧ 0 < β) ∧
-      (h ≤ 1 - v - f * t / (f - g) ∧ e ≤ 1 - v + β * v * t / s) ∧
-      (a ≤ α - (1 + u * v / s) * t ∧ s / (c - b) ≤ a ∧ s / (1 - u) < s / (c - b) ∧
-        0 < s / (1 - u)) ∧
-      (x ≤ 1 - 2 * u ∧ b < x ∧ y < e ∧ y < 1 - t) ∧
-      y ≤ ((1 - v + β * v * t / s) * (x - u) - s) / (1 - u) ∧
-      (1 - t) + (α - (1 + u * v / s) * t) - (α - (1 + u * v / s) * t) * (1 - t) * (x - u) / s ≤
-        y ∧
-      (1 - t) + v - v * (1 - t) * (x - u) / s ≤ y := by
-  subst hs
-  obtain ⟨h1, ⟨hft, hE⟩, ⟨haA, hac, hcb, hcb0⟩, h4, k3, k4, k5, ⟨hu0, hv0, hu3⟩⟩ :=
-    H.facts hu hv hα hβ
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  refine ⟨h1, ⟨?_, hE⟩, ⟨haA, ?_, div_lt_div_of_pos_left (by norm_num) hcb0 hcb,
-    div_pos (by norm_num) (by linarith)⟩, h4, ?_, by linarith, by linarith⟩
-  · have : f * t / (f - g) ≤ 1 - v - h := by rw [div_le_iff₀ hM0]; linarith
-    linarith
-  · rw [div_le_iff₀ hcb0]; linarith
-  · rw [le_div_iff₀ (by linarith)]; exact k3
-
 /-- (6) from the heights (3) and (5) and the relaxation `x ≤ 1-2u`. -/
 theorem gJ_poly_nonneg {u v t x y M : ℝ} (hv : v * M = 7 / 64)
     (k3 : y * (1 - u) ≤ (1 - v + (1 - u - M) * v * t / (7 / 64)) * (x - u) - 7 / 64)
@@ -417,37 +393,6 @@ theorem weight_core {u v t : ℝ} (hu1 : 1 / 8 < u) (hu2 : u < 15 / 64) (hv0 : 0
   nlinarith [hKt, e3, e4, e5]
 
 /-! ### The claims of the manuscript -/
-
-/-- **Claim** (`SHARP_G_MOVING_PROJECTION:claim-heights`). If all eleven doubled areas are at
-least `s = 7/64`, then (with the notation of the module docstring): `b, g ≥ u`, `f ≥ u + M`,
-`β > 0`, `h ≤ 1-v-ft/M`, `e ≤ E`; (2) `a ≤ A` and `a ≥ s/(c-b) > s/(1-u) > 0`; `x ≤ 1-2u`,
-`x > b`, `y < e`, `y < 1-t`; (3) `y ≤ (E(x-u)-s)/(1-u)`;
-(4) `y ≥ (1-t) + A - A(1-t)(x-u)/s`; (5) `y ≥ (1-t) + v - v(1-t)(x-u)/s`.
-`docs/proof/nine/SHARP_G_MOVING_PROJECTION.md`, lines 43-106. -/
-theorem claim_heights {a b c d e f g h t x y : ℝ} (hyp : GMovingHyp a b c d e f g h t x y)
-    (hs : ∀ i, sG ≤ chamberSarea (gMovingConfig a b c d e f g h t x y) i) :
-    let s := sG
-    let u := s / (h - a)
-    let v := s / (f - g)
-    let β := sharpBeta s u v
-    let A := sharpAlpha s u v - (1 + u * v / s) * t
-    let E := 1 - v + β * v * t / s
-    (u ≤ b ∧ u ≤ g ∧ u + (f - g) ≤ f ∧ 0 < β) ∧
-      (h ≤ 1 - v - f * t / (f - g) ∧ e ≤ E) ∧
-      (a ≤ A ∧ s / (c - b) ≤ a ∧ s / (1 - u) < s / (c - b) ∧ 0 < s / (1 - u)) ∧
-      (x ≤ 1 - 2 * u ∧ b < x ∧ y < e ∧ y < 1 - t) ∧
-      y ≤ (E * (x - u) - s) / (1 - u) ∧
-      (1 - t) + A - A * (1 - t) * (x - u) / s ≤ y ∧
-      (1 - t) + v - v * (1 - t) * (x - u) / s ≤ y := by
-  intro s u v β A E
-  have H := Data.of_hs hyp hs
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  have hu : u * (h - a) = s := div_mul_cancel₀ _ hL0.ne'
-  have hv : v * (f - g) = s := div_mul_cancel₀ _ hM0.ne'
-  have hu0 : 0 < u := div_pos (by norm_num [s, sG]) hL0
-  have hv0 : 0 < v := div_pos (by norm_num [s, sG]) hM0
-  exact H.heights rfl hu hv (sharpAlpha_of_mul hu0.ne' hu v) (sharpBeta_of_mul hv0.ne' hv u)
 
 /-- **Claim** (`SHARP_G_MOVING_PROJECTION:claim-scalars`). Under the assumption of
 `claim_heights`: (6) `J_t ≥ 0`, (7) `C_t ≥ 0`, and (8) `1/8 < u < 15/64`, `v + t < 9/16`.

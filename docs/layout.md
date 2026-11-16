@@ -13,12 +13,9 @@ Heilbronn/
 │                         H_n, the symmetries of the square, congruence, the optimal
 │                         configurations of each case
 ├── Common/               tools shared by every case
-└── Nine/                 nine points
-data/nine/                certificate weights, one directory per package
-scripts/                  certlib.py, the Comparator check and the build tools
-scripts/nine/             the exporters and searches that produced data/nine/
-docs/proof/nine/          the hand proof of nine points: manuscripts, checkers, certificate packages
-docs/research/nine/       the research archive of nine points: audits, searches, the earlier route
+└── Nine/                 nine points; Nine/Data/ holds its certificate weights
+scripts/                  the Comparator check and the build tools
+archive/nine/             the first draft of the proof, by ChatGPT 6 Pro, archived
 ```
 
 Every case has just `Construction.lean` and `Uniqueness.lean` at its root:
@@ -42,12 +39,9 @@ only `Common/` and its own folder.
 
 ## `Nine/`
 
-The modules follow the manuscripts of [`docs/proof/nine/`](proof/nine/README.md):
-each manuscript `FILE.md` has a module of the same name (`SIX_BOUNDARY_SINGLE_TOP.md`
-is `SixBoundary/SingleTop.lean`), and every numbered result carries its manuscript
-label in its docstring (``**Theorem 2** (`C1_ONE_LOWER_MIXED_CAPS:Theorem2`)``).
-Where the formalization replaces a hand argument by a certificate or a shorter
-route, the docstring says so.
+The folders follow the structure of the proof: normalize a maximizer into one
+of five families, exclude the families that cannot reach `A₀`, and show that
+the remaining ones force the construction.
 
 | folder or file | content |
 | --- | --- |
@@ -69,11 +63,8 @@ route, the docstring says so.
 ## Certificates
 
 A certificate package has a model (its atoms, affine factors and oriented area
-costs, and its case cover) in a `*Model.lean` file, its weights in `data/nine/`,
-and kernel checks in `*Trees/Chunk*.lean` (or `Part*.lean`), about 2,500 terms per
-module so that the build checks them in parallel. The exporters in
-`scripts/nine/<package>/` rebuild the data from the hand proof's JSON packages
-(or, where the formalization uses its own certificates, from a linear-programming
-search), cross-check every factor and cost against the hand checkers, and mirror
-Lean's arithmetic exactly (`scripts/certlib.py`). Lean trusts none of them: the
-kernel rechecks every certificate.
+costs, and its case cover) in a `*Model.lean` file, its weights in
+`Nine/Data/<package>/`, and kernel checks in `*Trees*` modules, a few thousand
+terms per module so that the build checks them in parallel, each tree by
+`tree_decide`. The weights were computed outside Lean; Lean trusts none of them:
+the kernel rechecks every certificate.

@@ -98,42 +98,12 @@ theorem InTriangle.affine {X A B C : Point} {α β γ δ ε ζ : ℝ} (hdet : 0 
   simp only [InTriangle, sarea_affineMap]
   exact ⟨mul_pos hdet h1, mul_pos hdet h2, mul_pos hdet h3⟩
 
-theorem InTriangle.of_affine {X A B C : Point} {α β γ δ ε ζ : ℝ} (hdet : 0 < α * δ - β * γ)
-    (h : InTriangle (affineMap α β γ δ ε ζ X) (affineMap α β γ δ ε ζ A) (affineMap α β γ δ ε ζ B)
-      (affineMap α β γ δ ε ζ C)) : InTriangle X A B C := by
-  obtain ⟨h1, h2, h3⟩ := h
-  simp only [sarea_affineMap] at h1 h2 h3
-  exact ⟨pos_of_mul_pos_right h1 hdet.le, pos_of_mul_pos_right h2 hdet.le,
-    pos_of_mul_pos_right h3 hdet.le⟩
-
-/-- Under an affine map of negative determinant a triangle reverses its orientation. -/
-theorem InTriangle.of_affine_neg {X A B C : Point} {α β γ δ ε ζ : ℝ} (hdet : α * δ - β * γ < 0)
-    (h : InTriangle (affineMap α β γ δ ε ζ X) (affineMap α β γ δ ε ζ A) (affineMap α β γ δ ε ζ C)
-      (affineMap α β γ δ ε ζ B)) : InTriangle X A B C := by
-  obtain ⟨h1, h2, h3⟩ := h
-  simp only [sarea_affineMap] at h1 h2 h3
-  refine ⟨?_, ?_, ?_⟩
-  · have := neg_of_mul_pos_right h3 hdet.le; rw [sarea_swap₁₂] at this; linarith
-  · have := neg_of_mul_pos_right h2 hdet.le; rw [sarea_swap₁₂] at this; linarith
-  · have := neg_of_mul_pos_right h1 hdet.le; rw [sarea_swap₁₂] at this; linarith
-
 /-- Triangle capacity two passes to sub-configurations. -/
 theorem TriangleCapacityTwo.comp {n m : ℕ} {P : Fin n → Point} (hcap : TriangleCapacityTwo P)
     {f : Fin m → Fin n} (hf : Function.Injective f) : TriangleCapacityTwo (P ∘ f) := by
   intro i j k hpos
   refine le_trans ?_ (hcap (f i) (f j) (f k) hpos)
   exact Set.ncard_le_ncard_of_injOn f (fun a ha => ha) hf.injOn
-
-/-- Triangle capacity two passes to images under affine maps of positive determinant. -/
-theorem TriangleCapacityTwo.affine {n : ℕ} {P : Fin n → Point} (hcap : TriangleCapacityTwo P)
-    {α β γ δ ε ζ : ℝ} (hdet : 0 < α * δ - β * γ) :
-    TriangleCapacityTwo (affineMap α β γ δ ε ζ ∘ P) := by
-  intro i j k hpos
-  simp only [Function.comp, sarea_affineMap] at hpos
-  refine le_trans (le_of_eq ?_) (hcap i j k (pos_of_mul_pos_right hpos hdet.le))
-  congr 1
-  ext m
-  exact ⟨fun h => InTriangle.of_affine hdet h, fun h => InTriangle.affine hdet h⟩
 
 /-- Triangle capacity two of an affine image (any nonzero determinant) gives it for the
 configuration. -/

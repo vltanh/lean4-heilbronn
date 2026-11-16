@@ -36,14 +36,14 @@ theorem sub_5_3_ok : checkTree spec (([] ++ branchFacts 4 5) ++ branchFacts 5 3)
 
 /-- The subtree below `r_4 = 5 ∧ r_5 = 4` (210 terms). -/
 noncomputable def sub_5_4 : Cover.Tree Split :=
-  .node (.vertex 0) [.node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) []]], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) [], .node (.vertex 3) [], .node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) [], .node (.vertex 3) [], .node (.vertex 3) []]], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) [], .node (.vertex 3) [], .node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) [.node (.vertex 6) [.node (.vertex 7) [.cert (term_rows% "../../../../data/nine/six_opposite_cap/w32325454_whole.txt")]]], .node (.vertex 3) [.node (.vertex 6) []], .node (.vertex 3) [.node (.vertex 6) []]]]]
+  .node (.vertex 0) [.node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) []]], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) [], .node (.vertex 3) [], .node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) [], .node (.vertex 3) [], .node (.vertex 3) []]], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) [], .node (.vertex 3) [], .node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) [.node (.vertex 6) [.node (.vertex 7) [.cert (term_rows% "../../Data/six_opposite_cap/w32325454_whole.txt")]]], .node (.vertex 3) [.node (.vertex 6) []], .node (.vertex 3) [.node (.vertex 6) []]]]]
 
 theorem sub_5_4_ok : checkTree spec (([] ++ branchFacts 4 5) ++ branchFacts 5 4) sub_5_4 = true := by
   tree_decide
 
 /-- The subtree below `r_4 = 5 ∧ r_5 = 5` (226 terms). -/
 noncomputable def sub_5_5 : Cover.Tree Split :=
-  .node (.vertex 0) [.node (.vertex 1) [.node (.vertex 2) [], .node (.vertex 2) []], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) []]], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) [.node (.vertex 6) [.node (.vertex 7) [.cert (term_rows% "../../../../data/nine/six_opposite_cap/w32225554_whole.txt")]]]]]]
+  .node (.vertex 0) [.node (.vertex 1) [.node (.vertex 2) [], .node (.vertex 2) []], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) []]], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) [.node (.vertex 6) [.node (.vertex 7) [.cert (term_rows% "../../Data/six_opposite_cap/w32225554_whole.txt")]]]]]]
 
 theorem sub_5_5_ok : checkTree spec (([] ++ branchFacts 4 5) ++ branchFacts 5 5) sub_5_5 = true := by
   tree_decide
@@ -61,7 +61,7 @@ theorem sub_5_ok : checkTree spec ([] ++ branchFacts 4 5) sub_5 = true := by
 
 /-- The subtree below `r_4 = 6` (161 terms). -/
 noncomputable def sub_6 : Cover.Tree Split :=
-  .node (.vertex 5) [.node (.vertex 0) [], .node (.vertex 0) [], .node (.vertex 0) [.node (.vertex 1) [], .node (.vertex 1) [], .node (.vertex 1) []], .node (.vertex 0) [.node (.vertex 1) [.node (.vertex 2) [], .node (.vertex 2) []], .node (.vertex 1) [.node (.vertex 2) [], .node (.vertex 2) []], .node (.vertex 1) [.node (.vertex 2) [], .node (.vertex 2) []]], .node (.vertex 0) [.node (.vertex 1) [.node (.vertex 2) [], .node (.vertex 2) []], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) []]], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) [.node (.vertex 6) [.node (.vertex 7) [.cert (term_rows% "../../../../data/nine/six_opposite_cap/w32126554_whole.txt")]]]]]]]
+  .node (.vertex 5) [.node (.vertex 0) [], .node (.vertex 0) [], .node (.vertex 0) [.node (.vertex 1) [], .node (.vertex 1) [], .node (.vertex 1) []], .node (.vertex 0) [.node (.vertex 1) [.node (.vertex 2) [], .node (.vertex 2) []], .node (.vertex 1) [.node (.vertex 2) [], .node (.vertex 2) []], .node (.vertex 1) [.node (.vertex 2) [], .node (.vertex 2) []]], .node (.vertex 0) [.node (.vertex 1) [.node (.vertex 2) [], .node (.vertex 2) []], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) []]], .node (.vertex 1) [.node (.vertex 2) [.node (.vertex 3) []], .node (.vertex 2) [.node (.vertex 3) [.node (.vertex 6) [.node (.vertex 7) [.cert (term_rows% "../../Data/six_opposite_cap/w32126554_whole.txt")]]]]]]]
 
 theorem sub_6_ok : checkTree spec ([] ++ branchFacts 4 6) sub_6 = true := by
   tree_decide

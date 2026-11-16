@@ -68,13 +68,13 @@ def cell0 : List Expr := commonAtoms ++ [k (1 / 2) - v 1] ++ costAtoms
 def cell1 : List Expr := commonAtoms ++ [v 1 - k (1 / 2), k (1 / 2) - v 3] ++ costAtoms
 def cell2 : List Expr := commonAtoms ++ [v 1 - k (1 / 2), v 3 - k (1 / 2)] ++ costAtoms
 
-theorem cell0_check : check cell0 (term_rows% "../../../data/nine/n605/B_cell0_terms.txt") = true := by
+theorem cell0_check : check cell0 (term_rows% "../Data/n605/B_cell0_terms.txt") = true := by
   decide +kernel
 
-theorem cell1_check : check cell1 (term_rows% "../../../data/nine/n605/B_cell1_terms.txt") = true := by
+theorem cell1_check : check cell1 (term_rows% "../Data/n605/B_cell1_terms.txt") = true := by
   decide +kernel
 
-theorem cell2_check : check cell2 (term_rows% "../../../data/nine/n605/B_cell2_terms.txt") = true := by
+theorem cell2_check : check cell2 (term_rows% "../Data/n605/B_cell2_terms.txt") = true := by
   decide +kernel
 
 /-! ### The geometric facts behind the atoms -/

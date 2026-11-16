@@ -92,15 +92,6 @@ theorem cost_neg {n : ℕ} {P : Fin n → Point} (hmin : 7 / 128 ≤ minTriangle
     (area_of_le_min hmin i j k hij hjk hik)
   rw [hv] at this; linarith
 
-/-- Either orientation: `|v| ≥ s`. -/
-theorem cost_abs {n : ℕ} {P : Fin n → Point} (hmin : 7 / 128 ≤ minTriangleArea P) (i j k : Fin n)
-    {v : ℝ} (hv : sarea (P i) (P j) (P k) = v)
-    (hij : i ≠ j := by decide) (hjk : j ≠ k := by decide) (hik : i ≠ k := by decide) :
-    7 / 64 ≤ v ∨ v ≤ -(7 / 64) := by
-  rcases le_total 0 v with h | h
-  · exact Or.inl (cost hmin i j k hv h hij hjk hik)
-  · exact Or.inr (cost_neg hmin i j k hv h hij hjk hik)
-
 theorem sevenAnchorConfig_eq₁ (a h b c d e f : ℝ) (X : Point) :
     sevenAnchorConfig a h b c d e f = sevenConfig₁ a h b c d e f X ∘ Fin.castSucc := by
   funext i; fin_cases i <;> rfl
@@ -160,33 +151,6 @@ theorem AnchorCosts.basic {a h b c d e f : ℝ} (hN : SevenAnchors a h b c d e f
   obtain ⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩ := hN
   have := H.ABH; have := H.ABC; have := H.BCD; have := H.CDE
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> nlinarith
-
-/-- The placement of §4: both free points strictly inside the anchor heptagon and strictly on the
-side of `CF` containing `A, B, H`. -/
-def LeftPlacement (a h b c d e f : ℝ) (P Q : Point) : Prop :=
-  InHeptagon a h b c d e f P ∧ InHeptagon a h b c d e f Q ∧
-    0 < sarea (c, 0) (f, 1) P ∧ 0 < sarea (c, 0) (f, 1) Q
-
-/-- `X` is in the sector of the quadrilateral `HBCF` at its side `HB`: inside `HBCF`, on the `H`
-side of the diagonal `BF` and on the `B` side of the diagonal `HC`. -/
-def InSectorHB (h b c f : ℝ) (X : Point) : Prop :=
-  InPolygon ![(0, h), (b, 0), (c, 0), (f, 1)] X ∧ 0 < sarea (b, 0) (f, 1) X ∧
-    sarea (0, h) (c, 0) X < 0
-
-/-- The sector of `HBCF` at its side `CF`: the `C` side of `BF` and the `F` side of `HC`. -/
-def InSectorCF (h b c f : ℝ) (X : Point) : Prop :=
-  InPolygon ![(0, h), (b, 0), (c, 0), (f, 1)] X ∧ sarea (b, 0) (f, 1) X < 0 ∧
-    0 < sarea (0, h) (c, 0) X
-
-/-- The sector of `HBCF` at its side `BC`: the `C` side of `BF` and the `B` side of `HC`. -/
-def InSectorBC (h b c f : ℝ) (X : Point) : Prop :=
-  InPolygon ![(0, h), (b, 0), (c, 0), (f, 1)] X ∧ sarea (b, 0) (f, 1) X < 0 ∧
-    sarea (0, h) (c, 0) X < 0
-
-/-- The sector of `HBCF` at its side `FH`: the `H` side of `BF` and the `F` side of `HC`. -/
-def InSectorFH (h b c f : ℝ) (X : Point) : Prop :=
-  InPolygon ![(0, h), (b, 0), (c, 0), (f, 1)] X ∧ 0 < sarea (b, 0) (f, 1) X ∧
-    0 < sarea (0, h) (c, 0) X
 
 /-! ### Capacity one -/
 
@@ -432,80 +396,6 @@ theorem theorem3 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : P
   linarith
 
 /-! ### §4. The left-hand pair -/
-
-/-- Opposite signs from the exclusion of both equal signs. -/
-theorem opp_sign {p q : ℝ} (hp : p ≠ 0) (hq : q ≠ 0) (h1 : 0 < p → 0 < q → False)
-    (h2 : p < 0 → q < 0 → False) : p * q < 0 := by
-  rcases lt_or_gt_of_ne hp with hp' | hp' <;> rcases lt_or_gt_of_ne hq with hq' | hq'
-  · exact (h2 hp' hq').elim
-  · exact mul_neg_of_neg_of_pos hp' hq'
-  · exact mul_neg_of_pos_of_neg hp' hq'
-  · exact (h1 hp' hq').elim
-
-/-- A free point of the §4 placement is on the `F` side of `HB` (Theorem 1 excludes `ABH`) and
-off the diagonals `BF`, `HC`. -/
-theorem left_point {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
-    (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f X))
-    (hX : InHeptagon a h b c d e f X) :
-    0 < sarea (0, h) (b, 0) X ∧ sarea (b, 0) (f, 1) X ≠ 0 ∧ sarea (0, h) (c, 0) X ≠ 0 := by
-  obtain ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩ := hX
-  have hpos : 0 < minTriangleArea (sevenConfig₁ a h b c d e f X) :=
-    lt_of_lt_of_le (by norm_num) hmin
-  refine ⟨?_, sarea_ne_zero_of_min_pos hpos 2 6 7, sarea_ne_zero_of_min_pos hpos 1 3 7⟩
-  by_contra hc; push Not at hc
-  have := theorem1 hN (X := X) ⟨hAB.le, by rw [sarea_swap₁₂]; linarith, hHA.le⟩
-  linarith
-
-/-- **Claim** (`SEVEN_BOUNDARY_CAPS:claim-left-pair-separation`). Under (1)–(2) and minimum area
-at least `7/128`, if both free points are inside the heptagon on the side of `CF` containing
-`A, B, H`, then both lie inside the quadrilateral `HBCF`, on opposite sides of its diagonal `BF`,
-and on opposite sides of its diagonal `HC`.
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 238–259.
-Uses: SEVEN_BOUNDARY_CAPS:Theorem1, SEVEN_BOUNDARY_CAPS:Theorem2, QUADRILATERAL_HULL:Theorem4. -/
-theorem claim_left_pair_separation {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f)
-    {P Q : Point} (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f P Q))
-    (hpl : LeftPlacement a h b c d e f P Q) :
-    InPolygon ![(0, h), (b, 0), (c, 0), (f, 1)] P ∧ InPolygon ![(0, h), (b, 0), (c, 0), (f, 1)] Q ∧
-      sarea (b, 0) (f, 1) P * sarea (b, 0) (f, 1) Q < 0 ∧
-      sarea (0, h) (c, 0) P * sarea (0, h) (c, 0) Q < 0 := by
-  obtain ⟨hPh, hQh, hPc, hQc⟩ := hpl
-  obtain ⟨p1, p2, p3⟩ := left_point hN (hmin.trans min₁_left) hPh
-  obtain ⟨q1, q2, q3⟩ := left_point hN (hmin.trans min₁_right) hQh
-  have hT := theorem2 hN (P := P) (Q := Q)
-  have hN' := hN
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN'
-  obtain ⟨x, y⟩ := P
-  obtain ⟨z, w⟩ := Q
-  obtain ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩ := hPh
-  obtain ⟨gAB, gBC, gCD, gDE, gEF, gFH, gHA⟩ := hQh
-  refine ⟨?_, ?_, ?_, ?_⟩
-  · intro i; fin_cases i <;> simp [finRotate_apply] <;> assumption
-  · intro i; fin_cases i <;> simp [finRotate_apply] <;> assumption
-  · apply opp_sign p2 q2
-    · intro h1 h2
-      exact absurd hmin (not_le.2 (hT.2.2 ⟨p1.le, h1.le, hFH.le⟩ ⟨q1.le, h2.le, gFH.le⟩))
-    · intro h1 h2
-      exact absurd hmin (not_le.2 (hT.1 ⟨hBC.le, hPc.le, by rw [sarea_swap₁₂]; linarith⟩
-        ⟨gBC.le, hQc.le, by rw [sarea_swap₁₂]; linarith⟩))
-  · apply opp_sign p3 q3
-    · intro h1 h2
-      exact absurd hmin (not_le.2 (hT.2.1 ⟨h1.le, hPc.le, hFH.le⟩ ⟨h2.le, hQc.le, gFH.le⟩))
-    · -- both in the virtual-corner triangle `conv{(0,0), H, C}` (`QUADRILATERAL_HULL` Theorem 4)
-      intro h1 h2
-      simp only [sarea] at h1 h2 hHA gHA hBC gBC
-      have hP0 : QuadrilateralHull.InT0 h c (x, y) :=
-        ⟨by simp only; nlinarith, by simp only; nlinarith, by simp only; linarith⟩
-      have hQ0 : QuadrilateralHull.InT0 h c (z, w) :=
-        ⟨by simp only; nlinarith, by simp only; nlinarith, by simp only; linarith⟩
-      have k := QuadrilateralHull.min_T0_le ha hah hb hbc hP0 hQ0
-      have hsub : minTriangleArea (sevenConfig a h b c d e f (x, y) (z, w)) ≤
-          minTriangleArea ![(0, h), (c, 0), (0, a), (b, 0), (x, y), (z, w)] := by
-        have e : (![(0, h), (c, 0), (0, a), (b, 0), (x, y), (z, w)] : Fin 6 → Point) =
-            sevenConfig a h b c d e f (x, y) (z, w) ∘ ![1, 3, 0, 2, 7, 8] := by
-          funext j; fin_cases j <;> rfl
-        rw [e]; exact le_min_comp (by norm_num) _ (by decide)
-      have : h * c < 1 := by nlinarith
-      linarith
 
 /-! ### §5. The adjacent bottom ear -/
 
@@ -766,97 +656,6 @@ theorem theorem5 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
     (by show sarea (0, a) (c, 0) (f, 1) < _; linarith)
   linarith
 
-/-- The lines `AF`, `BF` and the top side meet at `F`:
-`(1-a)[BFX] = [AFX] + (fa + b(1-a))(1-y)`. -/
-theorem af_bf (a b f : ℝ) (X : Point) :
-    (1 - a) * sarea (b, 0) (f, 1) X = sarea (0, a) (f, 1) X + (f * a + b * (1 - a)) * (1 - X.2) := by
-  simp only [sarea]; ring
-
-/-- A point strictly inside the anchor heptagon is below the top side. -/
-theorem heptagon_y_lt {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
-    (hX : InHeptagon a h b c d e f X) : X.2 < 1 := by
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
-  obtain ⟨x, y⟩ := X
-  obtain ⟨-, -, -, -, hEF, hFH, -⟩ := hX
-  simp only [sarea] at hEF hFH ⊢
-  by_contra hy; push Not at hy
-  have h1 : x < f := by
-    nlinarith [mul_nonneg (show (0 : ℝ) ≤ 1 - f by linarith) (show (0 : ℝ) ≤ y - 1 by linarith),
-      mul_pos (show (0 : ℝ) < 1 - e by linarith) (show (0 : ℝ) < 1 - f by linarith)]
-  nlinarith [mul_nonneg (show (0 : ℝ) ≤ f by linarith) (show (0 : ℝ) ≤ y - 1 by linarith),
-    mul_pos (show (0 : ℝ) < 1 - h by linarith) (show (0 : ℝ) < f - x by linarith)]
-
-/-- Below `BF` implies below `AF` (for points under the top side). -/
-theorem af_neg_of_bf_neg {a b f : ℝ} (ha1 : a < 1) (ha : 0 < a) (hb : 0 < b) (hf : 0 ≤ f)
-    {X : Point} (hy : X.2 < 1) (hX : sarea (b, 0) (f, 1) X < 0) : sarea (0, a) (f, 1) X < 0 := by
-  have e := af_bf a b f X
-  nlinarith [mul_neg_of_pos_of_neg (show (0 : ℝ) < 1 - a by linarith) hX,
-    mul_nonneg (show (0 : ℝ) ≤ f * a + b * (1 - a) by positivity) (show (0 : ℝ) ≤ 1 - X.2 by linarith)]
-
-/-- Above `AF` implies above `BF` (for points under the top side). -/
-theorem bf_pos_of_af_pos {a b f : ℝ} (ha1 : a < 1) (ha : 0 < a) (hb : 0 < b) (hf : 0 ≤ f)
-    {X : Point} (hy : X.2 < 1) (hX : 0 < sarea (0, a) (f, 1) X) : 0 < sarea (b, 0) (f, 1) X := by
-  by_contra hc; push Not at hc
-  rcases lt_or_eq_of_le hc with hc | hc
-  · have := af_neg_of_bf_neg ha1 ha hb hf hy hc; linarith
-  · have e := af_bf a b f X
-    rw [hc] at e
-    nlinarith [mul_nonneg (show (0 : ℝ) ≤ f * a + b * (1 - a) by positivity)
-      (show (0 : ℝ) ≤ 1 - X.2 by linarith)]
-
-/-- **Claim** (`SEVEN_BOUNDARY_CAPS:claim-AF-separation`). Under (1)–(2), minimum area at least
-`7/128` and the placement of §4, both free points lie inside the quadrilateral `ACFH`, and each of
-the lines `AF`, `HC`, `BF` separates them.
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 546–554.
-Uses: SEVEN_BOUNDARY_CAPS:Theorem4, SEVEN_BOUNDARY_CAPS:Theorem5, SEVEN_BOUNDARY_CAPS:Theorem2,
-SEVEN_BOUNDARY_CAPS:claim-left-pair-separation. -/
-theorem claim_AF_separation {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : Point}
-    (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f P Q))
-    (hpl : LeftPlacement a h b c d e f P Q) :
-    InPolygon ![(0, a), (c, 0), (f, 1), (0, h)] P ∧ InPolygon ![(0, a), (c, 0), (f, 1), (0, h)] Q ∧
-      sarea (0, a) (f, 1) P * sarea (0, a) (f, 1) Q < 0 ∧
-      sarea (0, h) (c, 0) P * sarea (0, h) (c, 0) Q < 0 ∧
-      sarea (b, 0) (f, 1) P * sarea (b, 0) (f, 1) Q < 0 := by
-  obtain ⟨-, -, hBF, hHC⟩ := claim_left_pair_separation hN hmin hpl
-  have hpl' := hpl
-  obtain ⟨hPh, hQh, hPc, hQc⟩ := hpl'
-  have hyP := heptagon_y_lt hN hPh
-  have hyQ := heptagon_y_lt hN hQh
-  have hT := theorem2 hN (P := P) (Q := Q)
-  have hT5 := (theorem5 hN).2.2 P Q
-  have hpos : 0 < minTriangleArea (sevenConfig a h b c d e f P Q) :=
-    lt_of_lt_of_le (by norm_num) hmin
-  -- `A C` is an edge: Theorem 4 excludes `ABC`
-  have hAC : ∀ X : Point, 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f X) →
-      InHeptagon a h b c d e f X → 0 < sarea (0, a) (c, 0) X := by
-    intro X hm hX
-    obtain ⟨hAB, hBC, -, -, -, -, -⟩ := hX
-    by_contra hc; push Not at hc
-    have := theorem4 hN (X := X) ⟨hAB.le, hBC.le, by rw [sarea_swap₁₂]; linarith⟩
-    linarith
-  have hP1 := hAC P (hmin.trans min₁_left) hPh
-  have hQ1 := hAC Q (hmin.trans min₁_right) hQh
-  have hN' := hN
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN'
-  obtain ⟨-, -, -, -, -, hPFH, hPHA⟩ := hPh
-  obtain ⟨-, -, -, -, -, hQFH, hQHA⟩ := hQh
-  refine ⟨?_, ?_, ?_, hHC, hBF⟩
-  · intro i; fin_cases i <;> simp [finRotate_apply] <;> assumption
-  · intro i; fin_cases i <;> simp [finRotate_apply] <;> assumption
-  · apply opp_sign (show sarea (0, a) (f, 1) P ≠ 0 from sarea_ne_zero_of_min_pos hpos 0 6 7)
-      (show sarea (0, a) (f, 1) Q ≠ 0 from sarea_ne_zero_of_min_pos hpos 0 6 8)
-    · -- both above `AF`: both in `HBF`
-      intro h1 h2
-      have hb1 := bf_pos_of_af_pos (by linarith) ha hb (by linarith) hyP h1
-      have hb2 := bf_pos_of_af_pos (by linarith) ha hb (by linarith) hyQ h2
-      have hP0 := (left_point hN (hmin.trans min₁_left) hpl.1).1
-      have hQ0 := (left_point hN (hmin.trans min₁_right) hpl.2.1).1
-      exact absurd hmin (not_le.2 (hT.2.2 ⟨hP0.le, hb1.le, hPFH.le⟩ ⟨hQ0.le, hb2.le, hQFH.le⟩))
-    · -- both below `AF`: both in `ACF`
-      intro h1 h2
-      exact absurd hmin (not_le.2 (hT5 ⟨hP1.le, hPc.le, by rw [sarea_swap₁₂]; linarith⟩
-        ⟨hQ1.le, hQc.le, by rw [sarea_swap₁₂]; linarith⟩))
-
 /-! ### §7. The upper left overlap -/
 
 /-- (29) of Theorem 6: `D(a,L) = (a - 7/32)L² + (a/8 + 49/1024)L + 49a/512 > 0` for `a > 1/7`,
@@ -994,61 +793,6 @@ theorem theorem6 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Poi
   simp only [sevenConfig₁, Matrix.cons_val, sarea] at c1 c2 c3 c4
   exact theorem6_core (x := x) (y := y) ha hah hh hb hbc hc1 hbf hf H.ABH H.ABC (by linarith)
     (by linarith) (by linarith) (by linarith)
-
-/-- The two sign patterns of a negative product. -/
-theorem mul_neg_cases {p q : ℝ} (h : p * q < 0) : (0 < p ∧ q < 0) ∨ (p < 0 ∧ 0 < q) := by
-  rcases lt_trichotomy p 0 with hp | hp | hp
-  · right; exact ⟨hp, by by_contra hq; push Not at hq; nlinarith [mul_nonneg_of_nonpos_of_nonpos hp.le hq]⟩
-  · rw [hp, zero_mul] at h; exact (lt_irrefl _ h).elim
-  · left; exact ⟨hp, by by_contra hq; push Not at hq; nlinarith [mul_nonneg hp.le hq]⟩
-
-/-- A point of the §4 placement above `HC` and above `AF` lies in `AHF ∩ HCF` (Theorem 6). -/
-theorem fh_excl {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
-    (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f X))
-    (hX : InHeptagon a h b c d e f X) (hCF : 0 < sarea (c, 0) (f, 1) X)
-    (hHC : 0 < sarea (0, h) (c, 0) X) (hAF : 0 < sarea (0, a) (f, 1) X) : False := by
-  obtain ⟨-, -, -, -, -, hFH, hHA⟩ := hX
-  have := theorem6 hN (X := X) ⟨hAF.le, hFH.le, hHA.le⟩ ⟨hHC.le, hCF.le, hFH.le⟩
-  linarith
-
-/-- **Corollary 7** (`SEVEN_BOUNDARY_CAPS:Corollary7`). Under (1)–(2), minimum area at least
-`7/128` and the placement of §4, the free points do not occupy the sectors of `HBCF` at `BC` and
-at `FH`; the only remaining assignment has one point in the `HB` sector, strictly above `AF`, and
-the other in the `CF` sector. (That assignment is excluded in `SEVEN_BOUNDARY_LEFT_PAIR.md`.)
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 693–715.
-Uses: SEVEN_BOUNDARY_CAPS:claim-left-pair-separation, SEVEN_BOUNDARY_CAPS:Theorem5,
-SEVEN_BOUNDARY_CAPS:claim-AF-separation, SEVEN_BOUNDARY_CAPS:Theorem6. -/
-theorem corollary7 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : Point}
-    (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f P Q))
-    (hpl : LeftPlacement a h b c d e f P Q) :
-    (InSectorHB h b c f P ∧ 0 < sarea (0, a) (f, 1) P ∧ InSectorCF h b c f Q) ∨
-      (InSectorHB h b c f Q ∧ 0 < sarea (0, a) (f, 1) Q ∧ InSectorCF h b c f P) := by
-  obtain ⟨hPq, hQq, hBF, hHC⟩ := claim_left_pair_separation hN hmin hpl
-  obtain ⟨-, -, hAF, -, -⟩ := claim_AF_separation hN hmin hpl
-  obtain ⟨hPh, hQh, hPc, hQc⟩ := hpl
-  have hyP := heptagon_y_lt hN hPh
-  have hyQ := heptagon_y_lt hN hQh
-  have hmP := hmin.trans min₁_left
-  have hmQ := hmin.trans min₁_right
-  have hN' := hN
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN'
-  rcases mul_neg_cases hBF with ⟨bP, bQ⟩ | ⟨bP, bQ⟩
-  · have aQ := af_neg_of_bf_neg (by linarith) ha hb (by linarith) hyQ bQ
-    have aP : 0 < sarea (0, a) (f, 1) P := by
-      rcases mul_neg_cases hAF with ⟨h1, -⟩ | ⟨-, h2⟩
-      · exact h1
-      · linarith
-    rcases mul_neg_cases hHC with ⟨cP, cQ⟩ | ⟨cP, cQ⟩
-    · exact (fh_excl hN hmP hPh hPc cP aP).elim
-    · exact Or.inl ⟨⟨hPq, bP, cP⟩, aP, ⟨hQq, bQ, cQ⟩⟩
-  · have aP := af_neg_of_bf_neg (by linarith) ha hb (by linarith) hyP bP
-    have aQ : 0 < sarea (0, a) (f, 1) Q := by
-      rcases mul_neg_cases hAF with ⟨h1, -⟩ | ⟨-, h2⟩
-      · linarith
-      · exact h2
-    rcases mul_neg_cases hHC with ⟨cP, cQ⟩ | ⟨cP, cQ⟩
-    · exact Or.inr ⟨⟨hQq, bQ, cQ⟩, aQ, ⟨hPq, bP, cP⟩⟩
-    · exact (fh_excl hN hmQ hQh hQc cQ aQ).elim
 
 /-! ### §8. The bottom-right ear -/
 
@@ -1319,60 +1063,6 @@ theorem theorem9 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
     have := capacity_one (P := sevenConfig a h b c d e f P Q) 4 5 6 7 8 (by decide) hP hQ
       (by show sarea (1, d) (1, e) (f, 1) < _; linarith)
     linarith
-
-/-- A free point in the closed quadrilateral `CDEF` at least-area `7/128`: strictly inside
-`CEF` (Theorem 8 excludes `CDE`), strictly left of the edges `CD`, `DE`, and off the diagonal
-`DF`. -/
-theorem right_point {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
-    (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f X))
-    (hX : InClosedPolygon ![(c, 0), (1, d), (1, e), (f, 1)] X) :
-    0 < sarea (c, 0) (1, d) X ∧ 0 < sarea (1, d) (1, e) X ∧ 0 < sarea (1, e) (f, 1) X ∧
-      0 < sarea (f, 1) (c, 0) X ∧ 0 < sarea (c, 0) (1, e) X ∧ sarea (1, d) (f, 1) X ≠ 0 := by
-  have h0 := hX 0; have h1 := hX 1; have h2 := hX 2; have h3 := hX 3
-  simp [finRotate_apply] at h0 h1 h2 h3
-  have c0 := cost hmin 3 4 7 rfl h0
-  have c1 := cost hmin 4 5 7 rfl h1
-  have c2 := cost hmin 5 6 7 rfl h2
-  have c3 := cost hmin 6 3 7 rfl h3
-  change 7 / 64 ≤ sarea (c, 0) (1, d) X at c0
-  change 7 / 64 ≤ sarea (1, d) (1, e) X at c1
-  change 7 / 64 ≤ sarea (1, e) (f, 1) X at c2
-  change 7 / 64 ≤ sarea (f, 1) (c, 0) X at c3
-  refine ⟨by linarith, by linarith, by linarith, by linarith, ?_,
-    sarea_ne_zero_of_min_pos (lt_of_lt_of_le (by norm_num) hmin) 4 6 7⟩
-  by_contra hc; push Not at hc
-  have := (theorem8 hN).2 X ⟨h0, h1, by rw [sarea_swap₁₂]; linarith⟩
-  linarith
-
-/-- **Claim** (`SEVEN_BOUNDARY_CAPS:claim-right-pair-DF`). Under (1)–(2) and minimum area at
-least `7/128`, if both free points lie in the closed right quadrilateral `CDEF`, then both are
-strictly inside `CEF` and `DF` separates them: one is in `CEF ∩ DEF`, the other in `CEF ∩ CDF`.
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 846–848 and 932–938.
-Uses: SEVEN_BOUNDARY_CAPS:Theorem8, SEVEN_BOUNDARY_CAPS:Theorem9. -/
-theorem claim_right_pair_DF {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : Point}
-    (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f P Q))
-    (hP : InClosedPolygon ![(c, 0), (1, d), (1, e), (f, 1)] P)
-    (hQ : InClosedPolygon ![(c, 0), (1, d), (1, e), (f, 1)] Q) :
-    (InTriangle P (c, 0) (1, e) (f, 1) ∧ InTriangle P (1, d) (1, e) (f, 1) ∧
-        InTriangle Q (c, 0) (1, e) (f, 1) ∧ InTriangle Q (c, 0) (1, d) (f, 1)) ∨
-      (InTriangle Q (c, 0) (1, e) (f, 1) ∧ InTriangle Q (1, d) (1, e) (f, 1) ∧
-        InTriangle P (c, 0) (1, e) (f, 1) ∧ InTriangle P (c, 0) (1, d) (f, 1)) := by
-  obtain ⟨p0, p1, p2, p3, p4, p5⟩ := right_point hN (hmin.trans min₁_left) hP
-  obtain ⟨q0, q1, q2, q3, q4, q5⟩ := right_point hN (hmin.trans min₁_right) hQ
-  have hT := (theorem9 hN).2 P Q
-  have sw : ∀ X : Point, sarea (f, 1) (1, d) X = -sarea (1, d) (f, 1) X := fun X => sarea_swap₁₂ _ _ _
-  have hCEF : ∀ X : Point, 0 < sarea (c, 0) (1, e) X → 0 < sarea (1, e) (f, 1) X →
-      0 < sarea (f, 1) (c, 0) X → InTriangle X (c, 0) (1, e) (f, 1) := fun X a b c => ⟨a, b, c⟩
-  rcases lt_or_gt_of_ne p5 with hp | hp <;> rcases lt_or_gt_of_ne q5 with hq | hq
-  · -- both in `DEF`
-    exact absurd hmin (not_le.2 (hT.2 ⟨p1.le, p2.le, by rw [sw]; linarith⟩
-      ⟨q1.le, q2.le, by rw [sw]; linarith⟩))
-  · left
-    exact ⟨hCEF P p4 p2 p3, ⟨p1, p2, by rw [sw]; linarith⟩, hCEF Q q4 q2 q3, ⟨q0, hq, q3⟩⟩
-  · right
-    exact ⟨hCEF Q q4 q2 q3, ⟨q1, q2, by rw [sw]; linarith⟩, hCEF P p4 p2 p3, ⟨p0, hp, p3⟩⟩
-  · -- both in `CDF`
-    exact absurd hmin (not_le.2 (hT.1 ⟨p0.le, hp.le, p3.le⟩ ⟨q0.le, hq.le, q3.le⟩))
 
 /-! ### §10–11. The two upper exterior caps -/
 

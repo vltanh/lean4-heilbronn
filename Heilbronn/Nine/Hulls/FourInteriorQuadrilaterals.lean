@@ -340,32 +340,6 @@ theorem InSector.affine {X A B C D : Point} {α β γ δ ε ζ : ℝ} (hdet : 0 
       (affineMap α β γ δ ε ζ C) (affineMap α β γ δ ε ζ D) :=
   ⟨InTriangle.affine hdet h.1, InTriangle.affine hdet h.2⟩
 
-/-- The normalized quadrilateral of `(1)`. -/
-theorem normal_quad {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 1) :
-    ConvexQuad (0, 0) (1, 0) ((1 - b) / a, b) (0, a) ∧
-      2 * quadArea (0, 0) (1, 0) ((1 - b) / a, b) (0, a) = 1 ∧
-      sarea (0, 0) (1, 0) (0, a) = a ∧ sarea (0, 0) (1, 0) ((1 - b) / a, b) = b ∧
-      2 * quadArea ((1 - b) / a, b) (0, a) (0, 0) (1, 0) = 1 ∧
-      sarea ((1 - b) / a, b) (0, a) (1, 0) = 1 - a ∧
-      sarea ((1 - b) / a, b) (0, a) (0, 0) = 1 - b := by
-  have hb' : 0 < 1 - b := by linarith
-  have ha' : 0 < 1 - a := by linarith
-  refine ⟨⟨?_, ?_, ?_, ?_⟩, ?_, ?_, ?_, ?_, ?_, ?_⟩
-  · unfold sarea; simp; exact hb
-  · have e : sarea ((1 : ℝ), (0 : ℝ)) ((1 - b) / a, b) (0, a) = 1 - a := by
-      unfold sarea; field_simp; ring
-    rw [e]; exact ha'
-  · have e : sarea ((1 - b) / a, b) ((0 : ℝ), a) (0, 0) = 1 - b := by
-      unfold sarea; field_simp; ring
-    rw [e]; exact hb'
-  · unfold sarea; simp; exact ha
-  · unfold quadArea sarea; field_simp; ring
-  · unfold sarea; ring
-  · unfold sarea; ring
-  · unfold quadArea sarea; field_simp; ring
-  · unfold sarea; field_simp; ring
-  · unfold sarea; field_simp; ring
-
 /-- The normal frame `(1)` of a convex quadrilateral, as an affine map of positive determinant. -/
 theorem normal_frame {A B C D : Point} (hq : ConvexQuad A B C D) :
     ∃ α β γ δ ε ζ : ℝ, 0 < α * δ - β * γ ∧ α * δ - β * γ = 1 / (2 * quadArea A B C D) ∧
@@ -683,71 +657,6 @@ theorem eq7 {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 1) {P
 
 /-! ### §§4-5. Excluding two points in each of two opposite sectors -/
 
-/-- **Claim** (`FOUR_INTERIOR_QUADRILATERALS:claim-no-separation`). In the normalized alternative
-`(2,0,2,0)` at doubled threshold `s = 7/128`, with `a, b < 3/5` and triangle capacity two, the line
-`PQ` does not separate `A` from `B`, and likewise `RT` does not separate `C` from `D`. The middle
-sign case `(-,+)` puts three points in the triangle on `C, D` and the nearer point. The other two
-cases contradict (5) at `a = b = 3/5` (9).
-`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`, lines 202-258.
-Uses: FOUR_INTERIOR_QUADRILATERALS:claim-(5), THREE_INTERIOR_TRIANGLES:Corollary5 -/
-theorem claim_no_separation {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 1)
-    {P Q R T : Point} (hP : InSector P (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
-    (hQ : InSector Q (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
-    (hR : InSector R ((1 - b) / a, b) (0, a) (0, 0) (1, 0))
-    (hT : InSector T ((1 - b) / a, b) (0, a) (0, 0) (1, 0))
-    (hmin : 7 / 256 ≤ minTriangleArea ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), P, Q, R, T])
-    (hcap : TriangleCapacityTwo ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), P, Q, R, T])
-    (ha35 : a < 3 / 5) (hb35 : b < 3 / 5) :
-    0 < sarea P Q (0, 0) * sarea P Q (1, 0) ∧
-      0 < sarea R T ((1 - b) / a, b) * sarea R T (0, a) := by
-  obtain ⟨hq, hW, hABD, hABC, hW', hCDB, hCDA⟩ := normal_quad ha ha1 hb hb1
-  have h7 := eq7_full ha ha1 hb hb1 hP hQ hR hT hmin
-  refine ⟨no_sep_general hq (by rw [hABD, hW, div_one]) (by rw [hABC, hW, div_one]) ha35 hb35
-    hP hQ hR hT (by rw [hW]; linarith) hcap, ?_⟩
-  have hmin' : 7 / 256 ≤ minTriangleArea
-      ![((1 - b) / a, b), (0, a), (0, 0), (1, 0), R, T, P, Q] :=
-    le_min_sub (by norm_num) ![2, 3, 0, 1, 6, 7, 4, 5] (by decide)
-      (fun i => by fin_cases i <;> rfl) hmin
-  have hcap' : TriangleCapacityTwo ![((1 - b) / a, b), (0, a), (0, 0), (1, 0), R, T, P, Q] := by
-    have := TriangleCapacityTwo.comp hcap (f := ![2, 3, 0, 1, 6, 7, 4, 5]) (by decide)
-    have e : ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), P, Q, R, T] ∘ ![2, 3, 0, 1, 6, 7, 4, 5] =
-        ![((1 - b) / a, b), (0, a), (0, 0), (1, 0), R, T, P, Q] := by
-      funext i; fin_cases i <;> rfl
-    rwa [e] at this
-  exact no_sep_general (a := 1 - a) (b := 1 - b) hq.rotate.rotate
-    (by rw [hCDB, hW', div_one]) (by rw [hCDA, hW', div_one]) (by linarith [h7.2.2.1])
-    (by linarith [h7.2.2.2]) hR hT hP hQ (by rw [hW']; linarith) hcap'
-
-/-- **Claim** (`FOUR_INTERIOR_QUADRILATERALS:claim-final`). The two same-side inequalities
-contradict one another. In the normalized alternative `(2,0,2,0)` at doubled threshold
-`s = 7/128`, if `PQ` leaves `A, B` on one side and `RT` leaves `C, D` on one side, then (4) for
-both pairs gives `√(ab), √((1-a)(1-b)) ≥ 2√s + 2s`. This contradicts Cauchy-Schwarz, since
-`4√s + 4s > 35/32 > 1` (10).
-`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`, lines 260-289.
-Uses: FOUR_INTERIOR_QUADRILATERALS:claim-(4) -/
-theorem claim_final {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 1)
-    {P Q R T : Point} (hP : InSector P (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
-    (hQ : InSector Q (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
-    (hR : InSector R ((1 - b) / a, b) (0, a) (0, 0) (1, 0))
-    (hT : InSector T ((1 - b) / a, b) (0, a) (0, 0) (1, 0))
-    (hmin : 7 / 256 ≤ minTriangleArea ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), P, Q, R, T])
-    (hPQ : 0 < sarea P Q (0, 0) * sarea P Q (1, 0))
-    (hRT : 0 < sarea R T ((1 - b) / a, b) * sarea R T (0, a)) : False := by
-  obtain ⟨hq, -, -, -, hW', hCDB, hCDA⟩ := normal_quad ha ha1 hb hb1
-  have k1 := claim_4 (s := 7 / 128) ha ha1 hb hb1 (by norm_num) hP hQ
-    (by
-      have h := le_min_sub (Q := ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), P, Q]) (by norm_num)
-        ![0, 1, 2, 3, 4, 5] (by decide) (fun i => by fin_cases i <;> rfl) hmin
-      linarith) hPQ
-  have k2 := claim4_general (a := 1 - a) (b := 1 - b) (s := 7 / 128) (σ := 7 / 128)
-    hq.rotate.rotate (by rw [hCDB, hW', div_one]) (by rw [hCDA, hW', div_one])
-    (by rw [hW', div_one]) (by norm_num) hR hT
-    (by
-      have h := le_min_sub (Q := ![((1 - b) / a, b), (0, a), (0, 0), (1, 0), R, T]) (by norm_num)
-        ![2, 3, 0, 1, 6, 7] (by decide) (fun i => by fin_cases i <;> rfl) hmin
-      linarith) hRT
-  exact final_arith ha ha1 hb hb1 rfl k1.2 k2.2
-
 /-! ### §3 and Theorem 1: counting the four sectors -/
 
 theorem ncard_split {n : ℕ} (p r : Fin n → Prop) :
@@ -1010,25 +919,6 @@ theorem two_two_impossible {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare
       funext a; fin_cases a <;> rfl
     rwa [e] at this
   exact two_two_core (quadArea_le_one (hP i) (hP j) (hP k) (hP l) hq) hq hp hq' hr ht hmin8 hcap8
-
-/-- **Claim** (`FOUR_INTERIOR_QUADRILATERALS:claim-sectors`). If a convex quadrilateral of actual
-points contains exactly four further points, then global triangle capacity two makes each diagonal
-split them two and two. So the sector counts in cyclic order `ABO, BCO, CDO, DAO` are
-`(k, 2-k, k, 2-k)` with `k ∈ {0, 1, 2}`.
-`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`, lines 162-178.
-Uses: THREE_INTERIOR_TRIANGLES:Corollary5 -/
-theorem claim_sectors {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
-    (hA : A₀ ≤ minTriangleArea P) {i j k l : Fin 9}
-    (hq : ConvexQuad (P i) (P j) (P k) (P l))
-    (h4 : Set.ncard {m | InQuad (P m) (P i) (P j) (P k) (P l)} = 4) :
-    ∃ n : ℕ, n ≤ 2 ∧
-      Set.ncard {m | InSector (P m) (P i) (P j) (P k) (P l)} = n ∧
-      Set.ncard {m | InSector (P m) (P j) (P k) (P l) (P i)} = 2 - n ∧
-      Set.ncard {m | InSector (P m) (P k) (P l) (P i) (P j)} = n ∧
-      Set.ncard {m | InSector (P m) (P l) (P i) (P j) (P k)} = 2 - n := by
-  obtain ⟨n₁, n₂, n₃, n₄, e1, e2, e3, e4, e, c1, c2, c3, c4⟩ :=
-    sector_counts hA (corollary5 hP hA) hq
-  refine ⟨n₁, by omega, e1, by rw [e2]; omega, by rw [e3]; omega, by rw [e4]; omega⟩
 
 /-- **Theorem 1** (`FOUR_INTERIOR_QUADRILATERALS:Theorem1`). For nine points in the unit square
 with least area at least `A₀`, a convex quadrilateral spanned by four of them contains at most four

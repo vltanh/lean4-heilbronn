@@ -145,36 +145,6 @@ theorem tc_neg_of_inTri {X A B C Y Z : Point} (h : InTriangle X A B C)
   rw [sarea_swap₁₂] at this
   linarith
 
-/-- `[YZ·]` is affine: its value at a convex combination. -/
-theorem tc_sarea_comb (Y Z A B C : Point) {a b c : ℝ} (habc : a + b + c = 1) :
-    sarea Y Z ((a * A.1 + b * B.1 + c * C.1, a * A.2 + b * B.2 + c * C.2) : Point) =
-      a * sarea Y Z A + b * sarea Y Z B + c * sarea Y Z C := by
-  obtain rfl : c = 1 - a - b := by linarith
-  unfold sarea; ring
-
-/-- An affine function `[YZ·]` positive at the three vertices is positive on the closed
-triangle. -/
-theorem tc_pos_of_mem_hull {p A B C Y Z : Point}
-    (hp : p ∈ convexHull ℝ ({A, B, C} : Set Point))
-    (hA : 0 < sarea Y Z A) (hB : 0 < sarea Y Z B) (hC : 0 < sarea Y Z C) : 0 < sarea Y Z p := by
-  obtain ⟨a, b, c, ha, hb, hc, habc, rfl⟩ := tc_exists_bary hp
-  rw [tc_sarea_comb Y Z A B C habc]
-  rcases eq_or_lt_of_le ha with ha0 | ha0
-  · rcases eq_or_lt_of_le hb with hb0 | hb0
-    · have : c = 1 := by linarith
-      subst this; rw [← ha0, ← hb0]; linarith
-    · nlinarith [mul_pos hb0 hB, mul_nonneg ha hA.le, mul_nonneg hc hC.le]
-  · nlinarith [mul_pos ha0 hA, mul_nonneg hb hB.le, mul_nonneg hc hC.le]
-
-/-- An affine function `[YZ·]` nonnegative at the three vertices is nonnegative on the closed
-triangle. -/
-theorem tc_nonneg_of_mem_hull {p A B C Y Z : Point}
-    (hp : p ∈ convexHull ℝ ({A, B, C} : Set Point))
-    (hA : 0 ≤ sarea Y Z A) (hB : 0 ≤ sarea Y Z B) (hC : 0 ≤ sarea Y Z C) : 0 ≤ sarea Y Z p := by
-  obtain ⟨a, b, c, ha, hb, hc, habc, rfl⟩ := tc_exists_bary hp
-  rw [tc_sarea_comb Y Z A B C habc]
-  nlinarith [mul_nonneg ha hA, mul_nonneg hb hB, mul_nonneg hc hC]
-
 /-- A sub-configuration given by an index map with a left inverse keeps a least-area bound. -/
 theorem tc_min_sub {n m : ℕ} {P : Fin n → Point} {t : ℝ} (h : t ≤ minTriangleArea P)
     (Q : Fin m → Point) (f : Fin m → Fin n) (g : Fin n → Fin m) (hm : 3 ≤ m)
@@ -199,8 +169,6 @@ theorem tc_sqrt3_gt : (1732 / 1000 : ℝ) < Real.sqrt 3 := by
 
 theorem tc_sqrt3_lt : Real.sqrt 3 < 17321 / 10000 := by
   rw [Real.sqrt_lt' (by norm_num)]; norm_num
-
-theorem tc_Ktwo_eq : Ktwo = 4 + 2 * Real.sqrt 3 := rfl
 
 /-- `K = 4 + 2√3 ∈ (7.464, 7.4642)`. -/
 theorem tc_Ktwo_bounds : (7464 / 1000 : ℝ) < Ktwo ∧ Ktwo < 74642 / 10000 := by

@@ -120,30 +120,6 @@ def h1Fn (s q b r u : ℝ) : ℝ := (1 - r) * b ^ 2 * k1Fn s q b r u + 3 / 1024 
 /-- `H₂ = Lb²K₂`, (18). -/
 def h2Fn (s q b r u : ℝ) : ℝ := (1 - r) * b ^ 2 * k2Fn s q b r u
 
-/-- Branch `-` of (19): `b = 1/5 + (1/3 - 1/5)x`. -/
-def bMinus (x : ℝ) : ℝ := 1 / 5 + (1 / 3 - 1 / 5) * x
-
-/-- Branch `+` of (19): `b = 1/3 + (4/11 - 1/3)x`. -/
-def bPlus (x : ℝ) : ℝ := 1 / 3 + (4 / 11 - 1 / 3) * x
-
-/-- The substitution (19) for `r`: `r = 7/10 + y/5`. -/
-def rOf (y : ℝ) : ℝ := 7 / 10 + y / 5
-
-/-- The substitution (19) for `u`: `u = (3/16)z`. -/
-def uOf (z : ℝ) : ℝ := 3 / 16 * z
-
-/-- `H₁` on branch `-` (`q = s/b`, `s = 8/73`) in the unit coordinates of (19). -/
-def h1Minus (x y z : ℝ) : ℝ := h1Fn (8 / 73) (8 / 73 / bMinus x) (bMinus x) (rOf y) (uOf z)
-
-/-- `H₂` on branch `-` (`q = s/b`, `s = 8/73`) in the unit coordinates of (19). -/
-def h2Minus (x y z : ℝ) : ℝ := h2Fn (8 / 73) (8 / 73 / bMinus x) (bMinus x) (rOf y) (uOf z)
-
-/-- `H₁` on branch `+` (`q = 3s`, `s = 8/73`) in the unit coordinates of (19). -/
-def h1Plus (x y z : ℝ) : ℝ := h1Fn (8 / 73) (3 * (8 / 73)) (bPlus x) (rOf y) (uOf z)
-
-/-- `H₂` on branch `+` (`q = 3s`, `s = 8/73`) in the unit coordinates of (19). -/
-def h2Plus (x y z : ℝ) : ℝ := h2Fn (8 / 73) (3 * (8 / 73)) (bPlus x) (rOf y) (uOf z)
-
 /-! ### The eliminations -/
 
 /-- The coordinate facts of the placement. -/
@@ -158,7 +134,6 @@ theorem occ_facts (h : OccSetting l b P Q R S T) :
     right_facts h.row.b_pos (by linarith [h.row.b_le]) h.row.T_mem h.row.T_right
   exact ⟨hm, h.row.b_pos, h.row.b_le, h.row.l_pos, h.row.l_lt, o1, o2, o3, o4, o5, o6, o7, t1, t3,
     t4, t5⟩
-
 
 /-- **Claim** (`UNBALANCED_OCCUPIED_LOWER_EAR:claim-stress`), equation (2). If `Q ∈ int EBR`
 (counterclockwise `E, B, R`), then `δ ≥ 3s`, `Z = [BRT] ≥ s`, `[BTQ] ≥ s`,

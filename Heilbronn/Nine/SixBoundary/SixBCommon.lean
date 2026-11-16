@@ -25,12 +25,6 @@ theorem pos_of_nonneg_of_le_abs {x t : ℝ} (ht : 0 < t) (h0 : 0 ≤ x) (h : t �
   · rw [← h', abs_zero] at h; linarith
   · exact h'
 
-theorem le_of_pos_of_le_abs {x t : ℝ} (h0 : 0 < x) (h : t ≤ |x|) : t ≤ x := by
-  rwa [abs_of_pos h0] at h
-
-theorem le_neg_of_neg_of_le_abs {x t : ℝ} (h0 : x < 0) (h : t ≤ |x|) : t ≤ -x := by
-  rwa [abs_of_neg h0] at h
-
 /-- A least area `≥ 4/73` gives every actual doubled area `≥ 8/73`. -/
 theorem nConfig_area {a h b c d f : ℝ} {X Y Z : Point}
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) (i j k : Fin 9)

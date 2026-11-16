@@ -56,64 +56,6 @@ def BadSigns (a b : ℝ) (X Y Q : Point) : Prop :=
 
 /-! ### The points of the configuration by index (`rfl` rewrites at type `Point`) -/
 
-theorem nC_mk0 (a h b c d f : ℝ) (X Y Z : Point) (hk : 0 < 9) :
-    nConfig a h b c d f X Y Z ⟨0, hk⟩ = (0, a) := rfl
-
-theorem nC_mk1 (a h b c d f : ℝ) (X Y Z : Point) (hk : 1 < 9) :
-    nConfig a h b c d f X Y Z ⟨1, hk⟩ = (0, h) := rfl
-
-theorem nC_mk2 (a h b c d f : ℝ) (X Y Z : Point) (hk : 2 < 9) :
-    nConfig a h b c d f X Y Z ⟨2, hk⟩ = (b, 0) := rfl
-
-theorem nC_mk3 (a h b c d f : ℝ) (X Y Z : Point) (hk : 3 < 9) :
-    nConfig a h b c d f X Y Z ⟨3, hk⟩ = (c, 0) := rfl
-
-theorem nC_mk4 (a h b c d f : ℝ) (X Y Z : Point) (hk : 4 < 9) :
-    nConfig a h b c d f X Y Z ⟨4, hk⟩ = (1, d) := rfl
-
-theorem nC_mk5 (a h b c d f : ℝ) (X Y Z : Point) (hk : 5 < 9) :
-    nConfig a h b c d f X Y Z ⟨5, hk⟩ = (f, 1) := rfl
-
-theorem nC_mk6 (a h b c d f : ℝ) (X Y Z : Point) (hk : 6 < 9) :
-    nConfig a h b c d f X Y Z ⟨6, hk⟩ = X := rfl
-
-theorem nC_mk7 (a h b c d f : ℝ) (X Y Z : Point) (hk : 7 < 9) :
-    nConfig a h b c d f X Y Z ⟨7, hk⟩ = Y := rfl
-
-theorem nC_mk8 (a h b c d f : ℝ) (X Y Z : Point) (hk : 8 < 9) :
-    nConfig a h b c d f X Y Z ⟨8, hk⟩ = Z := rfl
-
-theorem nC_0 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 0 = (0, a) := rfl
-
-theorem nC_1 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 1 = (0, h) := rfl
-
-theorem nC_2 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 2 = (b, 0) := rfl
-
-theorem nC_3 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 3 = (c, 0) := rfl
-
-theorem nC_4 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 4 = (1, d) := rfl
-
-theorem nC_5 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 5 = (f, 1) := rfl
-
-theorem nC_6 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 6 = X := rfl
-
-theorem nC_7 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 7 = Y := rfl
-
-theorem nC_8 (a h b c d f : ℝ) (X Y Z : Point) : nConfig a h b c d f X Y Z 8 = Z := rfl
-
-theorem aP_0 (a h b c d f : ℝ) : anchorPts a h b c d f 0 = (0, a) := rfl
-
-theorem aP_1 (a h b c d f : ℝ) : anchorPts a h b c d f 1 = (0, h) := rfl
-
-theorem aP_2 (a h b c d f : ℝ) : anchorPts a h b c d f 2 = (b, 0) := rfl
-
-theorem aP_3 (a h b c d f : ℝ) : anchorPts a h b c d f 3 = (c, 0) := rfl
-
-theorem aP_4 (a h b c d f : ℝ) : anchorPts a h b c d f 4 = (1, d) := rfl
-
-theorem aP_5 (a h b c d f : ℝ) : anchorPts a h b c d f 5 = (f, 1) := rfl
-
-
 /-! ### Replacing one point -/
 
 /-- If a configuration differs from `P` only at the index `k`, and every triangle through `k`
@@ -142,18 +84,6 @@ theorem abs_sarea_swap₂₃ (p q r : Point) : |sarea p r q| = |sarea p q r| := 
 
 theorem abs_sarea_swap₁₂ (p q r : Point) : |sarea q p r| = |sarea p q r| := by
   rw [sarea_swap₁₂, abs_neg]
-
-/-- The pair bound of the replaced point, from the ordered pairs. -/
-theorem pair_bound_symm {P : Fin 9 → Point} {k : Fin 9} {μ : ℝ}
-    (h : ∀ i j : Fin 9, i < j → i ≠ k → j ≠ k → μ ≤ |sarea (P i) (P j) (P k)|) :
-    ∀ i j, i ≠ k → j ≠ k → i ≠ j → μ / 2 ≤ triangleArea (P i) (P j) (P k) := by
-  intro i j hi hj hij
-  rw [triangleArea_eq]
-  rcases lt_or_gt_of_ne hij with h1 | h1
-  · linarith [h i j h1 hi hj]
-  · have := h j i h1 hj hi
-    rw [abs_sarea_swap₁₂] at this
-    linarith
 
 /-- The indices other than `6`: an anchor, `Y` (`7`) or `Q` (`8`). -/
 theorem idx6 (a h b c d f : ℝ) (X Y Q : Point) (i : Fin 9) (hi : i ≠ 6) :

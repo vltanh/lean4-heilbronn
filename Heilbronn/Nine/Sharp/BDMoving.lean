@@ -49,14 +49,6 @@ def BDMovingHyp (a b c d e f g h t r x y : ℝ) : Prop :=
   SharpOrders a b c d e f g h ∧ 0 ≤ t ∧ t ≤ d ∧ 0 ≤ r ∧ r ≤ 1 - f ∧
     ((x, y) : Point) ∈ unitSquare
 
-/-- `K_B = 1 - s - 2u(1+v+λ)`. -/
-def bdKB (u v : ℝ) : ℝ := 1 - sharpS - 2 * u * (1 + v + sharpLambda)
-
-/-- `T_v = β(1-3v) + α - s - v(1-2u) + λ(1-v)`. -/
-def bdTv (u v : ℝ) : ℝ :=
-  sharpBeta sharpS u v * (1 - 3 * v) + sharpAlpha sharpS u v - sharpS - v * (1 - 2 * u) +
-    sharpLambda * (1 - v)
-
 /-- **Claim** (`SHARP_BD_MOVING:claim-chamber-formulas`). The eleven oriented doubled areas:
 `ABH = b(h-a)`, `ABC = a(c-b)-ct`, `AGH = g(h-a)`, `DEF = (1-f)(e-d)+r(1-e)`, `GHF = (f-g)(1-h)`,
 `GEF = (f-g)(1-e)`, `ADO = (1-r)(y-a)-(d-a)x`, `DHO = (1-r)(h-y)-(h-d)x`,
@@ -318,107 +310,6 @@ theorem Data.rigid {l : ℝ} (H : Data s a b c d e f g h t r x y) (hl1 : 1 / 4 <
 end Plain
 
 /-! ### The claims of the manuscript -/
-
-/-- **Claim** (`SHARP_BD_MOVING:claim-bounds`). If all eleven doubled areas are at least
-`s = 2A₀`, then with `u = s/(h-a)`, `v = s/(f-g)`, `α = 1-v-s/u`, `β = 1-u-s/v`:
-(2) `b, g ≥ u`, `e, h ≤ 1-v`, `a ≤ α`, `1-f ≤ β`; (3) `a > t`, `α - t > s`, `β > s`, `r ≤ β`;
-(4) `X = 1-x ≥ 2u + r`, `Y = y ≥ 2v`; `y > t`, `x > b`, `e > y`;
-(5) `(1-v-t)X + (1-u)Y ≤ (1-v)(1-u) - s`; (6) `s ≤ g₀ + 2ut - r(1-v-t)`;
-(7) `t ≤ α(1-u) - s`; (8) `u, v < 1/4`, `t < 1/2`; (9) `u, v > s`, `v > 7/50`.
-`docs/proof/nine/SHARP_BD_MOVING.md`, lines 48-122.
-Uses: SHARP_BC_MOVING:eq17 -/
-theorem claim_bounds {a b c d e f g h t r x y : ℝ} (hyp : BDMovingHyp a b c d e f g h t r x y)
-    (hs : ∀ i, sharpS ≤ chamberSarea (bdMovingConfig a b c d e f g h t r x y) i) :
-    let s := sharpS
-    let u := s / (h - a)
-    let v := s / (f - g)
-    let α := sharpAlpha s u v
-    let β := sharpBeta s u v
-    (u ≤ b ∧ u ≤ g ∧ e ≤ 1 - v ∧ h ≤ 1 - v ∧ a ≤ α ∧ 1 - f ≤ β) ∧
-      (t < a ∧ s < α - t ∧ s < β ∧ r ≤ β) ∧
-      (2 * u + r ≤ 1 - x ∧ 2 * v ≤ y) ∧ (t < y ∧ b < x ∧ y < e) ∧
-      ((1 - v - t) * (1 - x) + (1 - u) * y ≤ (1 - v) * (1 - u) - s) ∧
-      s ≤ sharpG u v + 2 * u * t - r * (1 - v - t) ∧
-      t ≤ α * (1 - u) - s ∧
-      (u < 1 / 4 ∧ v < 1 / 4 ∧ t < 1 / 2) ∧
-      (s < u ∧ s < v ∧ 7 / 50 < v) := by
-  intro s u v α β
-  have H := Data.of_hs hyp hs
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  have hu : u * (h - a) = s := div_mul_cancel₀ _ hL0.ne'
-  have hv : v * (f - g) = s := div_mul_cancel₀ _ hM0.ne'
-  have hu0 : 0 < u := div_pos (by linarith [H.hs1]) hL0
-  have hv0 : 0 < v := div_pos (by linarith [H.hs1]) hM0
-  have hα : α = 1 - v - (h - a) := sharpAlpha_of_mul hu0.ne' hu v
-  have hβ : β = 1 - u - (f - g) := sharpBeta_of_mul hv0.ne' hv u
-  rw [hα, hβ]
-  unfold sharpG
-  exact H.bounds hu hv
-
-/-- **Claim** (`SHARP_BD_MOVING:claim-combined`). Under the assumption of `claim_bounds`:
-(10) `(s+ut)(1-y) ≤ (α-t)(x-u-s)` (the ABC/GCO elimination of `SHARP_BC_MOVING` §3);
-(11) `(s-vr)x ≤ β{(1-r)(1-v-y)-s}` (the DHO/DEF elimination of `SHARP_CD_MOVING` §3);
-the coefficients `C₁ = α-t-s+vr+λ(1-v-t)` and `C₂ = β(1-r)-s-ut+λ(1-u)` satisfy `C₁ > 0` and
-(12) `C₂ > 1/16 - s² > 0`; (13) `H₀ + λ(g₀ - s) ≥ tK_B + rT_v + vr² - (1+λ)tr`;
-(14) `K_B > 59/600`. `docs/proof/nine/SHARP_BD_MOVING.md`, lines 124-179.
-Uses: SHARP_BC_MOVING:eq18, SHARP_CD_MOVING:claim-eliminations -/
-theorem claim_combined {a b c d e f g h t r x y : ℝ} (hyp : BDMovingHyp a b c d e f g h t r x y)
-    (hs : ∀ i, sharpS ≤ chamberSarea (bdMovingConfig a b c d e f g h t r x y) i) :
-    let s := sharpS
-    let u := s / (h - a)
-    let v := s / (f - g)
-    let α := sharpAlpha s u v
-    let β := sharpBeta s u v
-    (s + u * t) * (1 - y) ≤ (α - t) * (x - u - s) ∧
-      (s - v * r) * x ≤ β * ((1 - r) * (1 - v - y) - s) ∧
-      0 < α - t - s + v * r + sharpLambda * (1 - v - t) ∧
-      1 / 16 - s ^ 2 < β * (1 - r) - s - u * t + sharpLambda * (1 - u) ∧
-      0 < 1 / 16 - s ^ 2 ∧
-      t * bdKB u v + r * bdTv u v + v * r ^ 2 - (1 + sharpLambda) * t * r ≤
-        sharpH s u v + sharpLambda * (sharpG u v - s) ∧
-      59 / 600 < bdKB u v := by
-  intro s u v α β
-  have H := Data.of_hs hyp hs
-  obtain ⟨-, -, hl1, hl2⟩ := sharp_bounds
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  have hu : u * (h - a) = s := div_mul_cancel₀ _ hL0.ne'
-  have hv : v * (f - g) = s := div_mul_cancel₀ _ hM0.ne'
-  have hu0 : 0 < u := div_pos (by linarith [H.hs1]) hL0
-  have hv0 : 0 < v := div_pos (by linarith [H.hs1]) hM0
-  have hα : α = 1 - v - (h - a) := sharpAlpha_of_mul hu0.ne' hu v
-  have hβ : β = 1 - u - (f - g) := sharpBeta_of_mul hv0.ne' hv u
-  have hα' : sharpAlpha sharpS u v = 1 - v - (h - a) := sharpAlpha_of_mul hu0.ne' hu v
-  have hβ' : sharpBeta sharpS u v = 1 - u - (f - g) := sharpBeta_of_mul hv0.ne' hv u
-  rw [hα, hβ]
-  unfold bdKB bdTv sharpH sharpG
-  rw [hα', hβ']
-  exact H.combined hl1 (by linarith) hu hv
-
-/-- **Claim** (`SHARP_BD_MOVING:claim-mixed-loss`). Under the assumption of `claim_bounds`,
-`T_v - (1+λ)t > 311/256 - 11v/4 - 11/(100v) > 0` (via (15) `T_v - (1+λ)t > T_v - (1+λ)(α-s)`,
-the lower bound `E₀(u,v)` (16), and the concave quadratic `Q(v)` with `Q(7/50), Q(1/4) > 0`
-(17)). `docs/proof/nine/SHARP_BD_MOVING.md`, lines 181-221. -/
-theorem claim_mixed_loss {a b c d e f g h t r x y : ℝ}
-    (hyp : BDMovingHyp a b c d e f g h t r x y)
-    (hs : ∀ i, sharpS ≤ chamberSarea (bdMovingConfig a b c d e f g h t r x y) i) :
-    let u := sharpS / (h - a)
-    let v := sharpS / (f - g)
-    311 / 256 - 11 * v / 4 - 11 / (100 * v) < bdTv u v - (1 + sharpLambda) * t ∧
-      0 < 311 / 256 - 11 * v / 4 - 11 / (100 * v) := by
-  intro u v
-  have H := Data.of_hs hyp hs
-  obtain ⟨-, -, hl1, -⟩ := sharp_bounds
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  have hu : u * (h - a) = sharpS := div_mul_cancel₀ _ hL0.ne'
-  have hv : v * (f - g) = sharpS := div_mul_cancel₀ _ hM0.ne'
-  have hu0 : 0 < u := div_pos (by linarith [H.hs1]) hL0
-  have hv0 : 0 < v := div_pos (by linarith [H.hs1]) hM0
-  unfold bdTv
-  rw [sharpAlpha_of_mul hu0.ne' hu v, sharpBeta_of_mul hv0.ne' hv u]
-  exact H.mixed hl1 hu hv
 
 /-- **Theorem 1** (`SHARP_BD_MOVING:Theorem1`). Under (1) and positivity of the eleven oriented
 doubled areas, the minimum of the eleven ordinary triangle areas is at most `A₀`. If all eleven

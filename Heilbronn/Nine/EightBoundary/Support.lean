@@ -73,7 +73,6 @@ theorem inClosedPolygon_rot {n : ℕ} {W W' : Fin n → Point} {O : Point} (r : 
 theorem sqrt_six_bounds : (71 / 29 : ℝ) < Real.sqrt 6 := by
   rw [Real.lt_sqrt (by norm_num)]; norm_num
 
-
 /-- The proof of Lemma 3 (`EightBoundary.lemma3`). -/
 theorem lemma3_core {V₁ V₂ V₃ V₄ O : Point} {s : ℝ} (hs : 0 < s)
     (hO : InClosedPolygon ![V₁, V₂, V₃, V₄] O)

@@ -164,7 +164,6 @@ def filtersB (ks : List ℕ) : Bool :=
     decide (F6 ks) && decide (F7 ks) && decide (F8 ks) && decide (F9 ks) && decide (F11 ks) &&
     decide (F12 ks) && decide (F13 ks)
 
-
 /-- **The 112 retained cases**: a nondecreasing word tuple passing the filters is one of the
 cases of the certificate package. -/
 theorem filters_keys : ∀ a b e g : Fin 11, a ≤ b → b ≤ e → e ≤ g →
@@ -173,6 +172,5 @@ theorem filters_keys : ∀ a b e g : Fin 11, a ≤ b → b ≤ e → e ≤ g →
   -- one kernel check per pair `a, b`, to bound the memory of each
   intro a b
   fin_cases a <;> fin_cases b <;> tree_decide
-
 
 end Heilbronn.Nine.C1ZeroLower

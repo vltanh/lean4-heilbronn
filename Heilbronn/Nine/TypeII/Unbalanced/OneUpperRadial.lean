@@ -254,20 +254,6 @@ theorem claim_DEZ (h : Row123 l b P Q R S T)
   · exact cap_one (by norm_num) hm 0 2 5 (show sarea ptD (ptE l) Q < Kc * (7 / 64) by linarith)
   · exact cap_one (by norm_num) hm 0 2 8 (show sarea ptD (ptE l) T < Kc * (7 / 64) by linarith)
 
-/-- **Claim** (`UNBALANCED_ONE_UPPER_RADIAL:claim-one-point-sector`), equation (6). Let
-`A, B, C, D` be a strictly convex counterclockwise quadrilateral and `X` a point in the common
-sector at the edge `AB` (strictly inside `ABC` and `ABD`), all doubled triangles on these five
-points at least `s > 0`. With `a = [ABC]`, `a' = [ABD]` and `H = 2·area(ABCD) = [ABC] + [ACD]`:
-`aa' ≥ s(a + a' + H)`. `docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`, lines 133-154.
-Uses: FOUR_INTERIOR_QUADRILATERALS:claim-(1)-(3). -/
-theorem claim_one_point_sector {s : ℝ} {A B C D X : Point} (hs : 0 < s)
-    (hquad : ConvexQuad A B C D) (hX₁ : InTriangle X A B C) (hX₂ : InTriangle X A B D)
-    (hmin : s / 2 ≤ minTriangleArea ![A, B, C, D, X]) :
-    s * (sarea A B C + sarea A B D + (sarea A B C + sarea A C D)) ≤
-      sarea A B C * sarea A B D := by
-  have := sector_one hs hquad hX₁ hX₂ hmin
-  linarith
-
 /-- **Claim** (`UNBALANCED_ONE_UPPER_RADIAL:claim-DRS`), equations (7)-(10). In cell II (either
 cut), with `S = (k, 1 - z)`, `w = 1 - b`, `s = 7/64`:
 `J = [DRS] ≤ 1 - bz - 2swz²/((w + s)z - 2s) < 4/5 < Ks`; so `DRS` contains at most one further
@@ -716,7 +702,6 @@ theorem P_sec4 (h : OneUpperSetting l b P Q R S T) :
   have hPm := central_mem hb hb1 h.row.P_central
   exact P_scalar hDEB hq177 (by linarith) (by linarith [h.row.R_mem.2.1]) (by linarith) hPx.le
     hPm.2.1 (by linarith) a1 a2 a3
-
 
 /-- **Claim** (`UNBALANCED_ONE_UPPER_RADIAL:claim-P-not-below`). `P` is not below `DR`.
 `docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`, lines 224-326.

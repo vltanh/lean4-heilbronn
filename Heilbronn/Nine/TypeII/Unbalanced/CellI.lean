@@ -126,8 +126,6 @@ theorem ERS_alg {b l r u k t s : ℝ} (hb : 0 < b) (hl : 0 < l) (hr1 : r < 1)
   rw [e, le_div_iff₀ (mul_pos hb hz)]
   linarith
 
-
-
 /-- The scalar core of (11)-(13) in the support frame of cell I (`UNBALANCED_CELL_I.md` §6.1):
 `x₁ = [EFX], x₂ = [FHX], x₃ = [HEX]` are the subareas of `X` in `E, F, H`, all at least `σ ≥ 1/8`,
 `hf ≥ σ`, and `g = [FAX]` satisfies `(1-h)(1-f) g = (1-f)x₂ - fhx₁`. Then `g < 1/4`. -/

@@ -217,34 +217,4 @@ theorem mainTheorem {l b : ℝ} {L Q R S : Point} (h : BottomSetting l b L Q R S
   obtain ⟨h1, -⟩ := bottom_core h (s := 7 / 64) (by norm_num) (by linarith)
   norm_num at h1
 
-/-- **Claim** (`BALANCED_BOTTOM_INNER_SECTOR:claim-variable-threshold`, made up; remark). The
-same argument at a variable doubled threshold gives least area at most `(1/2)(1 - 2/√5)`, which
-is less than `7/128`. Not used later. `docs/proof/nine/BALANCED_BOTTOM_INNER_SECTOR.md`, lines 191–200. -/
-theorem claim_variable_threshold {l b : ℝ} {L Q R S : Point} (h : BottomSetting l b L Q R S) :
-    minTriangleArea ![ptD, ptC, ptE l, ptB b, L, Q, R, S] ≤ (1 - 2 / Real.sqrt 5) / 2 ∧
-      (1 - 2 / Real.sqrt 5) / 2 < (7 / 128 : ℝ) := by
-  have h5 : Real.sqrt 5 ^ 2 = 5 := Real.sq_sqrt (by norm_num)
-  have h5g : 2 < Real.sqrt 5 := by rw [Real.lt_sqrt (by norm_num)]; norm_num
-  have h5l : Real.sqrt 5 < 128 / 57 := by rw [Real.sqrt_lt' (by norm_num)]; norm_num
-  have hpos5 : 0 < Real.sqrt 5 := by linarith
-  refine ⟨?_, ?_⟩
-  · set m := minTriangleArea ![ptD, ptC, ptE l, ptB b, L, Q, R, S]
-    rcases (minTriangleArea_nonneg _ : 0 ≤ m).eq_or_lt with h0 | h0
-    · have hm0 : m = 0 := h0.symm
-      rw [hm0]
-      have : 2 / Real.sqrt 5 ≤ 1 := by rw [div_le_one hpos5]; linarith
-      linarith
-    obtain ⟨h1, hs1⟩ := bottom_core h (s := 2 * m) (by linarith) (by linarith)
-    rw [le_sub_iff_add_le, ← le_sub_iff_add_le', div_le_iff₀ (by linarith)] at h1
-    -- `5s² - 10s + 1 ≥ 0` with `s < 1` gives `s ≤ 1 - 2/√5`
-    have key : 2 * m ≤ 1 - 2 / Real.sqrt 5 := by
-      rw [le_sub_iff_add_le, ← le_sub_iff_add_le', div_le_iff₀ hpos5]
-      by_contra hc
-      push Not at hc
-      nlinarith [mul_pos (by linarith : (0:ℝ) < 1 - 2 * m) (by nlinarith :
-        (0:ℝ) < (1 - 2 * m) * Real.sqrt 5 + 2)]
-    linarith
-  · rw [div_lt_iff₀ (by norm_num), sub_lt_iff_lt_add, ← sub_lt_iff_lt_add', lt_div_iff₀ hpos5]
-    nlinarith
-
 end Heilbronn.Nine.BalancedBottomInnerSector

@@ -186,16 +186,16 @@ def qIIIAtoms : List Expr :=
   (v 10 - v 2) * (v 9 - 0) - (v 11 - 0) * (v 8 - v 2) - k (7 / 64),
   (v 2 - 0) * (v 11 - v 0) - (0 - v 0) * (v 10 - 0) - k (7 / 64)]
 
-theorem qI_check : check qIAtoms (term_rows% "../../../data/nine/six_two_side_completion/qI.txt") = true := by
+theorem qI_check : check qIAtoms (term_rows% "../Data/six_two_side_completion/qI.txt") = true := by
   decide +kernel
 
-theorem qM1_check : check qM1Atoms (term_rows% "../../../data/nine/six_two_side_completion/qM1.txt") = true := by
+theorem qM1_check : check qM1Atoms (term_rows% "../Data/six_two_side_completion/qM1.txt") = true := by
   decide +kernel
 
-theorem qM2_check : check qM2Atoms (term_rows% "../../../data/nine/six_two_side_completion/qM2.txt") = true := by
+theorem qM2_check : check qM2Atoms (term_rows% "../Data/six_two_side_completion/qM2.txt") = true := by
   decide +kernel
 
-theorem qIII_check : check qIIIAtoms (term_rows% "../../../data/nine/six_two_side_completion/qIII.txt") = true := by
+theorem qIII_check : check qIIIAtoms (term_rows% "../Data/six_two_side_completion/qIII.txt") = true := by
   decide +kernel
 
 end Heilbronn.Nine.SixBoundaryTwoSideCompletion.QuadCert

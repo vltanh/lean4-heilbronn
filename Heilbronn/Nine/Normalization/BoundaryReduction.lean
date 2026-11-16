@@ -105,7 +105,6 @@ def Normalizes : (Fin 9 → Point) → (Fin 9 → Point) → Prop := Relation.Re
 /-- The point `c` (in practice a corner of the square) is a point of the configuration. -/
 def Occupied (P : Fin 9 → Point) (c : Point) : Prop := ∃ i, P i = c
 
-
 /-! ### Auxiliary facts: shears, symmetries, relabellings -/
 
 theorem shearX_apply (t ℓ : ℝ) (p : Point) : shearX t ℓ p = (p.1 + t * (p.2 - ℓ), p.2) := rfl
@@ -425,26 +424,6 @@ theorem claim_side_contact_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
   obtain ⟨h2, h4⟩ := exists_snd_eq_zero_one_of_noExpand hP hpos
   exact ⟨h1, h2, h3, h4⟩
 
-/-- Some point has `x = 0` and some point has `x = 1`. -/
-theorem exists_fst_eq_zero_one {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) : (∃ i, (P i).1 = 0) ∧ (∃ i, (P i).1 = 1) :=
-  exists_fst_eq_zero_one_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
-
-/-- Some point has `y = 0` and some point has `y = 1`. -/
-theorem exists_snd_eq_zero_one {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) : (∃ i, (P i).2 = 0) ∧ (∃ i, (P i).2 = 1) :=
-  exists_snd_eq_zero_one_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
-
-/-- **Claim** (`BOUNDARY_REDUCTION:claim-side-contact`). Every side of the square meets the
-configuration: some point has `x = 0`, some `y = 0`, some `x = 1` and some `y = 1`. A side
-without contact could be moved inward.
-`docs/proof/nine/BOUNDARY_REDUCTION.md`, lines 19-20.
-Uses: BOUNDARY_REDUCTION:claim-min-parallelogram -/
-theorem claim_side_contact {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) :
-    (∃ i, (P i).1 = 0) ∧ (∃ i, (P i).2 = 0) ∧ (∃ i, (P i).1 = 1) ∧ (∃ i, (P i).2 = 1) :=
-  claim_side_contact_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
-
 /-- One half of the overlap property: some bottom point is weakly left of some top point.
 Otherwise every bottom point is strictly right of every top point, `b₋ > t₊`, and the affine map
 `(x, y) ↦ (x, (y + β(x - b₋))/(1 - β(b₋ - t₊)))`, for small `β > 0`, keeps the points in the
@@ -534,10 +513,6 @@ theorem claim_overlap_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
       exists_bottom_le_top_of_noExpand (hP.symm ⟨true, true, false⟩) (hpos' _)
     simp only [Function.comp, SquareSymmetry.apply, Bool.false_eq_true, ↓reduceIte] at h1 h2 h3
     exact ⟨i, j, h1, h2, by linarith⟩
-
-theorem exists_bottom_le_top {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) : ∃ i j, (P i).2 = 0 ∧ (P j).2 = 1 ∧ (P i).1 ≤ (P j).1 :=
-  exists_bottom_le_top_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
 
 /-- **Claim** (`BOUNDARY_REDUCTION:claim-overlap`), for a maximizer (see `claim_overlap_of_noExpand`).
 `docs/proof/nine/BOUNDARY_REDUCTION.md`, lines 44-52.
@@ -657,26 +632,5 @@ theorem claim_adjacent_shear_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
       field_simp
       ring, hk₀m⟩
   exact ⟨Q, Relation.ReflTransGen.head (NormStep.xShear s 1 hP.1 hfeas) hPQ, hfam⟩
-
-/-- Adjacent occupied corners with a left contact below `(0,1)`, for a maximizer (see
-`adjacent_of_left_of_noExpand`). -/
-theorem adjacent_of_left {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) (hD : Occupied P (0, 1)) (hC : Occupied P (1, 1))
-    (hL : ∃ k, (P k).1 = 0 ∧ (P k).2 < 1) :
-    ∃ Q : Fin 9 → Point, Normalizes P Q ∧ IsMaximizer Q ∧
-      minTriangleArea Q = minTriangleArea P ∧ (IsTypeII Q ∨ IsTypeIII Q) := by
-  obtain ⟨Q, hPQ, hQ⟩ := adjacent_of_left_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos hD hC hL
-  exact ⟨Q, hPQ, isMaximizer_of_normalizes hP hPQ, minTriangleArea_of_normalizes hPQ, hQ⟩
-
-/-- **Claim** (`BOUNDARY_REDUCTION:claim-adjacent-shear`), for a maximizer (see
-`claim_adjacent_shear_of_noExpand`).
-`docs/proof/nine/BOUNDARY_REDUCTION.md`, lines 81-98.
-Uses: BOUNDARY_REDUCTION:claim-side-contact -/
-theorem claim_adjacent_shear {P : Fin 9 → Point} (hP : IsMaximizer P)
-    (hpos : 0 < minTriangleArea P) (hD : Occupied P (0, 1)) (hC : Occupied P (1, 1)) :
-    ∃ Q : Fin 9 → Point, Normalizes P Q ∧ IsMaximizer Q ∧
-      minTriangleArea Q = minTriangleArea P ∧ (IsTypeII Q ∨ IsTypeIII Q) := by
-  obtain ⟨Q, hPQ, hQ⟩ := claim_adjacent_shear_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos hD hC
-  exact ⟨Q, hPQ, isMaximizer_of_normalizes hP hPQ, minTriangleArea_of_normalizes hPQ, hQ⟩
 
 end Heilbronn.Nine.BoundaryReduction

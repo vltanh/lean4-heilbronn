@@ -21,7 +21,6 @@ namespace Heilbronn.Nine.C1OneLowerTopCap
 
 open Heilbronn.Nine.C1
 
-
 /-- A radial word `r = (r₀, …, r_{n-1})` of a point with respect to a polygon `V₀, …, V_{n-1}`. -/
 abbrev HullWord (n : ℕ) := Fin n → ℕ
 

@@ -79,14 +79,6 @@ structure ThreeTop (h c d f : ℝ) (X Y L Q : Point) : Prop where
   topQ : InTopCap d f Q
   topQSq : Q ∈ unitSquare
 
-/-- Mode `cap`: placement 2 with the names of Section 1: `D, X, Y, F` is the convex top hull
-(`[DXY] > 0`, `[XYF] > 0`) and `Q ∈ DFX ∩ DFY` (2). -/
-structure Cap (h c d f : ℝ) (X Y L Q : Point) : Prop extends ThreeTop h c d f X Y L Q where
-  convexDXY : 0 < sarea (ptD d) X Y
-  convexXYF : 0 < sarea X Y (ptF f)
-  innerX : InTriangle Q (ptD d) X (ptF f)
-  innerY : InTriangle Q (ptD d) Y (ptF f)
-
 /-- The hull heptagon (1), `V₀, …, V₆ = O, C, D, X, Y, F, H`. -/
 def heptagon (h c d f : ℝ) (X Y : Point) : Fin 7 → Point :=
   ![ptO, ptC c, ptD d, X, Y, ptF f, ptH h]

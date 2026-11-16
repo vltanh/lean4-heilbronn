@@ -268,7 +268,6 @@ theorem upper_inTriangle {h c d f : ℝ} {X : Point} (hU : InUpperQuad h c d f X
     have := sarea_swap₁₂ (ptH h) (ptD d) X; linarith
   · right; exact ⟨u3, u4, hp⟩
 
-
 /-! ### Points beyond `DF` -/
 
 /-- **Claim** (`C1_ONE_LOWER_CONVEX_TOP:(4)`). A point `Z = (z, w)` beyond `DF` with

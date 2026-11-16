@@ -189,12 +189,6 @@ theorem sarea_bary (A B C Q U V : Point) :
       sarea B C Q * sarea U V A + sarea C A Q * sarea U V B + sarea A B Q * sarea U V C := by
   unfold sarea; ring
 
-theorem le_of_abs_le_pos {s x : ℝ} (h : s ≤ |x|) (hx : 0 < x) : s ≤ x := by
-  rwa [abs_of_pos hx] at h
-
-theorem le_neg_of_abs_le_neg {s x : ℝ} (h : s ≤ |x|) (hx : x < 0) : s ≤ -x := by
-  rwa [abs_of_neg hx] at h
-
 section Inside
 
 variable {n : ℕ} {X : Fin n → Point} {s : ℝ}
@@ -333,7 +327,6 @@ theorem right_support_cells {Ω h f : ℝ} {Y : Point} (hΩ : 0 < Ω) (hΩ1 : Ω
     · exact absurd h1 hIV
     · exact absurd h1 hV
 
-
 /-- The core of Theorem 1: `H` extreme at `C`, `F` extreme at `B`, `X` the remaining point. -/
 theorem quad_of_extremes {b : ℝ} {H F X : Point} (hb : 0 < b) (hb1 : b < 1) (hH1 : H.1 ≤ 1) (hF2 : 0 ≤ F.2)
     (hH : 0 < sarea ptC (ptB b) H) (hF : 0 < sarea ptC (ptB b) F)
@@ -408,7 +401,6 @@ theorem sqrt_U_add_sqrt_V {b : ℝ} {R S T : Point} (hb1 : b < 1) (hR : R ∈ un
   have hsq : Real.sqrt Ω ≤ Real.sqrt (1 - b) := Real.sqrt_le_sqrt hΩ1
   nlinarith [Real.sqrt_nonneg Ω, Real.sqrt_nonneg ((1 - h) * (1 - f)),
     Real.sqrt_nonneg (h * f)]
-
 
 /-- `13/16 < K · 7/64`, from `√3 > 12/7`. -/
 theorem Kc_s0_gt : 13 / 16 < Kc * (7 / 64) := by
@@ -609,7 +601,6 @@ theorem qC_bound {b q : ℝ} (hb : 0 < b) (hb27 : b ≤ 2 / 7)
     (by norm_num) hb.le (by nlinarith) (by rw [e]; exact hA) (by rw [e]; exact hF)
     (by nlinarith) hGr
 
-
 /-- By the chamber lemma in both orientations (`TYPE_II.md` §6), two central points above `CE`
 leave `B` and `E` on the same side of their line. -/
 theorem BE_same_side {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hl : 0 < l)
@@ -778,16 +769,6 @@ theorem claim_outer_cell_scale (h : Row123 l b P Q R S T)
   refine ⟨?_, by linarith, hK13, by linarith⟩
   rw [div_le_div_iff₀ (by linarith) hKpos]; linarith
 
-/-- **Claim** (`UNBALANCED_RIGHT_HULL:claim-lower-vertex`), equation (2). In the normalized right
-container (`B₀ = (0,0)`, `C₀ = (1,1)`, `R₀ = (x, y)`, `S₀ = (z, t)`), if
-`U = xt - yz ≥ ma` and `V = U + z - t - x + y ≥ na`, with `x > y ≥ 0`, `x < 1`, `z ≤ 1`, then
-`(x - y)(1 - x) ≥ a{nx + m(1 - x)}`. `docs/proof/nine/UNBALANCED_RIGHT_HULL.md`, lines 86-116. -/
-theorem claim_lower_vertex {x y z t a m n : ℝ} (hxy : y < x) (hy : 0 ≤ y) (hx : x < 1)
-    (hz : z ≤ 1) (hU : m * a ≤ x * t - y * z)
-    (hV : n * a ≤ x * t - y * z + z - t - x + y) :
-    a * (n * x + m * (1 - x)) ≤ (x - y) * (1 - x) := by
-  exact lower_vertex_core hxy hy hx hz hU hV
-
 /-- The ear data of a quadrilateral right hull in the normalized right container: with
 `x = (r-b)/w`, `a = s/w`, `s = 7/64`, the order `0 < u < x < 1` and the lower-vertex inequality (2)
 with `(m, n) = (1, 1)`, `(3, 1)` in cell I and `(1, 3)` in cell III. -/
@@ -831,32 +812,6 @@ theorem quad_ears (h : Row123 l b P Q R S T)
   · have := three_le_of_inside (X := ![ptD, ptC, ptE l, ptB b, P, Q, R, S, T]) (i := 8) (a := 6)
       (b := 7) (c := 1) hm hc.1
     exact ear_phys hb1 hu hru' (by linarith) hk1 hU1 (by rw [cV]; exact this)
-
-/-- **Claim** (`UNBALANCED_RIGHT_HULL:claim-cell-ear`), equation (3). With `x = (r-b)/w`,
-`a = s/w` (`s = 7/64`): in cell I, `u ≤ x - 2a - a/(1-x)`; in cell III,
-`u ≤ x + 2a - 3a/(1-x)`. `docs/proof/nine/UNBALANCED_RIGHT_HULL.md`, lines 118-127.
-Uses: UNBALANCED_RIGHT_HULL:claim-lower-vertex. -/
-theorem claim_cell_ear (h : Row123 l b P Q R S T)
-    (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
-    (hq : QuadHull (ptB b) R S ptC T) :
-    let x := (R.1 - b) / (1 - b)
-    let a := 7 / 64 / (1 - b)
-    (CellI (ptB b) R S ptC T → R.2 ≤ x - 2 * a - a / (1 - x)) ∧
-      (CellIII (ptB b) R S ptC T → R.2 ≤ x + 2 * a - 3 * a / (1 - x)) := by
-  intro x a
-  obtain ⟨hx0, hx1, hu, hux, ha, -, hI, hIII⟩ := quad_ears h hmin hq
-  have hy : 0 < 1 - x := by linarith
-  refine ⟨fun hc => ?_, fun hc => ?_⟩
-  · have e := hI hc
-    have : x - 2 * a - a / (1 - x) = ((x - 2 * a) * (1 - x) - a) / (1 - x) := by
-      field_simp
-    rw [this, le_div_iff₀ hy]
-    nlinarith
-  · have e := hIII hc
-    have : x + 2 * a - 3 * a / (1 - x) = ((x + 2 * a) * (1 - x) - 3 * a) / (1 - x) := by
-      field_simp
-    rw [this, le_div_iff₀ hy]
-    nlinarith
 
 /-- **Claim** (`UNBALANCED_RIGHT_HULL:claim-ear-root`), equations (4)-(5). With
 `c = b + λw = 1 - wq` and `d = bs/w` (`s = 7/64`): `s ≤ [EBR]`; in cell I
@@ -1248,7 +1203,6 @@ theorem weighted_D_core {l b s : ℝ} {P Q : Point} (hs : 0 < s) (hb : 0 < b) (h
     have := mul_nonpos_of_nonneg_of_nonpos hq0.le hcon; linarith
   have hqp := mul_pos hq0 hp0
   exact weighted_D_alg hs hb hq0 (by linarith) p3 (by linarith) p2 hid hEBP hv hσE hσC
-
 
 /-- **Claim** (`UNBALANCED_RIGHT_HULL:claim-weighted-D`), equation (13). If `P, Q` are both
 above `CE` and `PQ` isolates `D` from `C, E, B`, then with `c = 1 - (1-b)q`, `s = 7/64`:

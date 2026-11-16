@@ -112,11 +112,6 @@ def chamberArea (P : Fin 9 → Point) (i : Fin 11) : ℝ :=
 def InChamber (P : Fin 9 → Point) : Prop :=
   ∀ i, 0 < chamberSarea P i
 
-/-- The left side of (8): `Φ(u, v) = 6uv + (3s-4)(u+v) + 2s + 2 - s(1-s)(u+v)/(uv)`
-(`S = u + v`, `P = uv`). -/
-def phi (s u v : ℝ) : ℝ :=
-  6 * u * v + (3 * s - 4) * (u + v) + 2 * s + 2 - s * (1 - s) * (u + v) / (u * v)
-
 /-- `g(p) = 1 - 6p + 5p²`, (9). -/
 def scalarG (p : ℝ) : ℝ := 1 - 6 * p + 5 * p ^ 2
 
@@ -200,9 +195,6 @@ theorem Hyps.of_all {s a b c d e f g h x y : ℝ} (hord : SharpOrders a b c d e 
 /-- `u·v` times the left side of (8): `6u²v² + (3s-4)(u+v)uv + (2s+2)uv - s(1-s)(u+v)`. -/
 def phiNum (s u v : ℝ) : ℝ :=
   6 * u ^ 2 * v ^ 2 + (3 * s - 4) * (u + v) * u * v + (2 * s + 2) * u * v - s * (1 - s) * (u + v)
-
-theorem phi_eq (s u v : ℝ) (hu : u ≠ 0) (hv : v ≠ 0) : phi s u v = phiNum s u v / (u * v) := by
-  unfold phi phiNum; field_simp; ring
 
 section Steps
 
@@ -417,62 +409,6 @@ theorem claim_4 {s a b c d e f g h x y u v : ℝ} (hord : SharpOrders a b c d e 
   have hv' : v * (f - g) = s := by rw [hv]; exact div_mul_cancel₀ _ (sub_pos.2 H.hgf).ne'
   obtain ⟨-, -, h1, h2, h3, h4, h5, h6, -⟩ := H.step3 hu' hv'
   exact ⟨h1, h2, h3, h4, h5, h6, H.step4 hu' hv'⟩
-
-/-- **Claim** (`HAND_PROOF:claim-(8)`). If all eleven doubled areas are at least `s > 0`, then with
-`u = s/L`, `v = s/M`, the eliminations ABC+GCO (5) and DHO+DEF (6), added and combined with (3),
-give (7), which is exactly (8): `6uv + (3s-4)(u+v) + 2s + 2 - s(1-s)(u+v)/(uv) ≥ 0`.
-`docs/proof/nine/HAND_PROOF.md`, lines 145-214.
-Uses: HAND_PROOF:claim-(4) -/
-theorem claim_8 {s a b c d e f g h x y u v : ℝ} (hord : SharpOrders a b c d e f g h)
-    (hO : ((x, y) : Point) ∈ unitSquare) (hs : 0 < s)
-    (hall : ∀ i, s ≤ chamberSarea (baseConfig a b c d e f g h x y) i)
-    (hu : u = s / (h - a)) (hv : v = s / (f - g)) :
-    0 ≤ phi s u v := by
-  have H := Hyps.of_all hord hO hs hall
-  have hu' : u * (h - a) = s := by rw [hu]; exact div_mul_cancel₀ _ (sub_pos.2 H.hah).ne'
-  have hv' : v * (f - g) = s := by rw [hv]; exact div_mul_cancel₀ _ (sub_pos.2 H.hgf).ne'
-  obtain ⟨hu0, hv0, -⟩ := H.step3 hu' hv'
-  rw [phi_eq s u v hu0.ne' hv0.ne']
-  exact div_nonneg (H.step8 hu' hv') (by positivity)
-
-/-- **Claim** (`HAND_PROOF:claim-(11)`). If all eleven doubled areas are at least `s > 0`, then
-`0 < u, v < 1/2` and, for `p = (u+v)/2`: `0 < s ≤ p < 1/5`, `s ≤ g(p)` and `R(p, s) ≥ 0` (11)
-(AM-GM in (4), and monotonicity of (8) in `uv`).
-`docs/proof/nine/HAND_PROOF.md`, lines 216-251.
-Uses: HAND_PROOF:claim-(4), HAND_PROOF:claim-(8) -/
-theorem claim_11 {s a b c d e f g h x y u v : ℝ} (hord : SharpOrders a b c d e f g h)
-    (hO : ((x, y) : Point) ∈ unitSquare) (hs : 0 < s)
-    (hall : ∀ i, s ≤ chamberSarea (baseConfig a b c d e f g h x y) i)
-    (hu : u = s / (h - a)) (hv : v = s / (f - g)) :
-    0 < u ∧ u < 1 / 2 ∧ 0 < v ∧ v < 1 / 2 ∧
-      s ≤ (u + v) / 2 ∧ (u + v) / 2 < 1 / 5 ∧ s ≤ scalarG ((u + v) / 2) ∧
-      0 ≤ scalarR ((u + v) / 2) s := by
-  have H := Hyps.of_all hord hO hs hall
-  have hu' : u * (h - a) = s := by rw [hu]; exact div_mul_cancel₀ _ (sub_pos.2 H.hah).ne'
-  have hv' : v * (f - g) = s := by rw [hv]; exact div_mul_cancel₀ _ (sub_pos.2 H.hgf).ne'
-  obtain ⟨hu0, hv0, -⟩ := H.step3 hu' hv'
-  obtain ⟨hu1, hv1, hsu, hsv, hs1⟩ := H.scalar_bounds hu' hv'
-  have h4 := H.step4 hu' hv'
-  have h8 := H.step8 hu' hv'
-  have hg : s ≤ scalarG ((u + v) / 2) := by
-    unfold scalarG; nlinarith [sq_nonneg (u - v)]
-  refine ⟨hu0, hu1, hv0, hv1, by linarith, ?_, hg, ?_⟩
-  · unfold scalarG at hg
-    by_contra hc; push Not at hc
-    nlinarith [mul_nonneg (by linarith : (0 : ℝ) ≤ (u + v) / 2 - 1 / 5)
-      (by linarith : (0 : ℝ) ≤ 1 - (u + v) / 2)]
-  · have hid := symm_identity s u v
-    have hp0 : 0 < (u + v) / 2 := by positivity
-    have h2 : 0 ≤ (((u + v) / 2) ^ 2 - u * v) *
-        (6 * (u * v) * ((u + v) / 2) ^ 2 + 2 * s * (1 - s) * ((u + v) / 2)) :=
-      mul_nonneg (by nlinarith [sq_nonneg (u - v)])
-        (by have : 0 < 1 - s := by linarith
-            positivity)
-    have h1 : 0 ≤ 2 * (u * v) * ((u + v) / 2) * scalarR ((u + v) / 2) s := by
-      rw [hid]; exact add_nonneg (mul_nonneg (by positivity) h8) h2
-    by_contra hc; push Not at hc
-    have : 0 < 2 * (u * v) * ((u + v) / 2) := by positivity
-    nlinarith [mul_pos this (neg_pos.2 hc)]
 
 /-- **Claim** (`HAND_PROOF:claim-scalar`). The scalar system (11), `0 < s ≤ p < 1/5`,
 `s ≤ g(p)`, `R(p, s) ≥ 0`, implies `s ≤ s₀ = 2A₀`; and `s = s₀` forces `p = p₀`.

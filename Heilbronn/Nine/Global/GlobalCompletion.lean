@@ -239,12 +239,6 @@ def MovingFHyp (a b c d e f g h k x y : ℝ) : Prop :=
 /-- `X₀ = (u(1-3v) + s + 2v)/(1-v)`, the lower bound (21) for `x`. -/
 def X0 (s u v : ℝ) : ℝ := (u * (1 - 3 * v) + s + 2 * v) / (1 - v)
 
-/-- `C_* = g(a_u + B_*) - B_* X₀` with `a_u = 1 - 3u - s`, (24). -/
-def cStar (s u v g Bs : ℝ) : ℝ := g * ((1 - 3 * u - s) + Bs) - Bs * X0 s u v
-
-/-- `N = B_*(1-v) - s`, (24). -/
-def nStar (s v Bs : ℝ) : ℝ := Bs * (1 - v) - s
-
 /-- **Claim** (`GLOBAL_COMPLETION:eq15`). The eleven oriented doubled areas of the F-moving
 chamber: `ABH = bL`, `ABC = a(c-b)`, `AGH = gL`, `DEF = (1-f)(e-d)`, `GHF = M(1-h) + gδ`,
 `GEF = M(1-e) - (1-g)δ`, `U₁, …, U₄` as in Part I and `OCF = U₅ = k(c-x) + (f-c)y` (with
@@ -692,19 +686,6 @@ theorem uvw_of_div {s a f g h k u v : ℝ} (hah : a < h) (hgf : g < f) (hu : u =
   ⟨by rw [hu]; exact div_mul_cancel₀ _ (sub_pos.2 hah).ne',
     by rw [hv]; exact div_mul_cancel₀ _ (sub_pos.2 hgf).ne', div_mul_cancel₀ _ (sub_pos.2 hgf).ne'⟩
 
-/-- **Claim** (`GLOBAL_COMPLETION:claim-5.1`). If all eleven doubled areas of the F-moving chamber
-are at least `s ≥ 7/64`, then `x < c`, and then `U₄ > 0` forces `g < c` and `x > g`.
-`docs/proof/nine/GLOBAL_COMPLETION.md`, lines 391-443. -/
-theorem claim_5_1 {s a b c d e f g h k x y : ℝ} (hyp : MovingFHyp a b c d e f g h k x y)
-    (hs : 7 / 64 ≤ s) (hall : ∀ i, s ≤ chamberSarea (movingFConfig a b c d e f g h k x y) i) :
-    x < c ∧ g < c ∧ g < x := by
-  have H := Hyps3.of_all hyp (by linarith) hall
-  have hxc := H.x_lt_c hs
-  have hgc : g < c := by
-    by_contra hc; push Not at hc
-    nlinarith [H.t10, H.hs, mul_nonneg (sub_nonneg.2 hc) H.hy0]
-  exact ⟨hxc, hgc, by nlinarith [H.t10, H.hs, mul_nonneg (sub_pos.2 hgc).le (sub_nonneg.2 H.hy1)]⟩
-
 /-- **Claim** (`GLOBAL_COMPLETION:eq19`). If all eleven doubled areas are at least `s = s₀`, then
 with `u = s/L`, `v = s/M`: `s < p ≤ p₀` for `p = (u+v)/2`, and `u + v < 347/1000` (19).
 `docs/proof/nine/GLOBAL_COMPLETION.md`, lines 476-492.
@@ -728,120 +709,6 @@ theorem eq19 {s a b c d e f g h k x y u v : ℝ} (hyp : MovingFHyp a b c d e f g
     rw [← two_A₀]; unfold scalarG; nlinarith [sq_nonneg (u - v)]
   have hpp : (u + v) / 2 ≤ p₀ := le_p₀_of_scalarG (by linarith [H.hb, H.he]) h4
   exact ⟨by linarith, hpp, by linarith [p₀_lt]⟩
-
-/-- **Claim** (`GLOBAL_COMPLETION:eq20`). Under the same hypotheses: `u ≥ 1/8`, `v < 111/500` and
-`a_v = 1 - 3v - s > 28/125` (20).
-`docs/proof/nine/GLOBAL_COMPLETION.md`, lines 493-506.
-Uses: GLOBAL_COMPLETION:eq19 -/
-theorem eq20 {s a b c d e f g h k x y u v : ℝ} (hyp : MovingFHyp a b c d e f g h k x y)
-    (hs : s = 2 * A₀) (hall : ∀ i, s ≤ chamberSarea (movingFConfig a b c d e f g h k x y) i)
-    (hu : u = s / (h - a)) (hv : v = s / (f - g)) :
-    1 / 8 ≤ u ∧ v < 111 / 500 ∧ 28 / 125 < 1 - 3 * v - s := by
-  obtain ⟨-, -, h19⟩ := eq19 hyp hs hall hu hv
-  have H := Hyps3.of_all hyp (by rw [hs]; linarith [A₀_pos]) hall
-  obtain ⟨hu', hv', hw'⟩ := uvw_of_div (k := k) H.hah H.hgf hu hv
-  subst hs
-  have hxc := H.x_lt_c (by linarith [A₀_bounds.1])
-  obtain ⟨hu8, -⟩ := H.region hxc hu' hv' hw'
-  have := A₀_bounds.2.2.2
-  exact ⟨hu8, by linarith, by linarith⟩
-
-/-- **Claim** (`GLOBAL_COMPLETION:claim-(25)`). The central necessary inequality. If all eleven
-doubled areas are at least `s = s₀`, then with `u = s/L`, `v = s/M`, `w = δ/M`, `z = g - u`,
-`B_* = 1 - f`, `a_v = 1 - 3v - s`: `0 ≤ Φ(u, v) - z a_v + w C_*`, where `Φ` is the left side of
-`HAND_PROOF.md` (8) and `C_* = g(a_u + B_*) - B_* X₀`. It follows by adding (22) and (23) and
-using (17) and (21).
-`docs/proof/nine/GLOBAL_COMPLETION.md`, lines 445-558.
-Uses: GLOBAL_COMPLETION:claim-5.1, GLOBAL_COMPLETION:eq19, HAND_PROOF:claim-(8) -/
-theorem claim_25 {s a b c d e f g h k x y u v w z : ℝ} (hyp : MovingFHyp a b c d e f g h k x y)
-    (hs : s = 2 * A₀) (hall : ∀ i, s ≤ chamberSarea (movingFConfig a b c d e f g h k x y) i)
-    (hu : u = s / (h - a)) (hv : v = s / (f - g)) (hw : w = (1 - k) / (f - g))
-    (hz : z = g - u) :
-    0 ≤ phi s u v - z * (1 - 3 * v - s) + w * cStar s u v g (1 - f) := by
-  have H := Hyps3.of_all hyp (by rw [hs]; linarith [A₀_pos]) hall
-  obtain ⟨hu', hv', hw'⟩ := uvw_of_div (k := k) H.hah H.hgf hu hv
-  rw [← hw] at hw'
-  have hxc := H.x_lt_c (by rw [hs]; linarith [A₀_bounds.1])
-  obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu' hv' hw'
-  have h25 := H.step25 hxc hu' hv' hw'
-  have hv1 : 0 < 1 - v := by
-    nlinarith [mul_nonneg (by linarith [H.hgf, H.hf] : (0 : ℝ) ≤ 1 - g) hw0, H.hd, H.hde]
-  subst hz
-  have key : phi s u v - (g - u) * (1 - 3 * v - s) + w * cStar s u v g (1 - f) =
-      ((1 - v) * phiNum s u v - (1 - v) * (u * v) * ((g - u) * (1 - 3 * v - s)) +
-        u * v * (w * (g * ((1 - 3 * u - s) + (1 - f)) * (1 - v) -
-          (1 - f) * (u * (1 - 3 * v) + s + 2 * v)))) / ((1 - v) * (u * v)) := by
-    rw [phi_eq s u v hu0.ne' hv0.ne']
-    unfold cStar X0
-    field_simp
-  rw [key]
-  exact div_nonneg h25 (by positivity)
-
-/-- **Claim** (`GLOBAL_COMPLETION:claim-(26)`). At `s = s₀`: `Φ(u, v) ≤ 0`, with equality only if
-`u = v = p₀`. Stated for the scalar data its proof uses (`HAND_PROOF.md` §§4-5): `0 < u, v < 1/2`
-and (18), `s₀ ≤ 1 - 3u - 3v + 5uv`. This is `HandProof.scalar_key`.
-`docs/proof/nine/GLOBAL_COMPLETION.md`, lines 560-573.
-Uses: HAND_PROOF:claim-(11), HAND_PROOF:claim-scalar -/
-theorem claim_26 {u v : ℝ} (hu : 0 < u) (hv : 0 < v) (hu1 : u < 1 / 2) (hv1 : v < 1 / 2)
-    (h18 : 2 * A₀ ≤ 1 - 3 * u - 3 * v + 5 * u * v) :
-    phi (2 * A₀) u v ≤ 0 ∧ (phi (2 * A₀) u v = 0 → u = p₀ ∧ v = p₀) := by
-  obtain ⟨hQ, heq⟩ := scalar_key hu hv hu1 hv1 h18
-  rw [phi_eq _ u v hu.ne' hv.ne']
-  refine ⟨div_nonpos_of_nonpos_of_nonneg hQ (by positivity), fun h => heq ?_⟩
-  rcases div_eq_zero_iff.1 h with h | h
-  · exact h
-  · exact absurd h (by positivity)
-
-/-- **Claim** (`GLOBAL_COMPLETION:claim-(27)`). If all eleven doubled areas are at least
-`s = s₀`, then `DEF` and `GEF` give `0 ≤ w ≤ N/(B_*(1-g))` with `N = B_*(1-v) - s > 0`, and
-`g ≤ g_max = 1 - s/(v(1-v))`.
-`docs/proof/nine/GLOBAL_COMPLETION.md`, lines 575-583. -/
-theorem claim_27 {s a b c d e f g h k x y v w : ℝ} (hyp : MovingFHyp a b c d e f g h k x y)
-    (hs : s = 2 * A₀) (hall : ∀ i, s ≤ chamberSarea (movingFConfig a b c d e f g h k x y) i)
-    (hv : v = s / (f - g)) (hw : w = (1 - k) / (f - g)) :
-    0 ≤ w ∧ 0 < nStar s v (1 - f) ∧ w ≤ nStar s v (1 - f) / ((1 - f) * (1 - g)) ∧
-      g ≤ 1 - s / (v * (1 - v)) := by
-  have H := Hyps3.of_all hyp (by rw [hs]; linarith [A₀_pos]) hall
-  obtain ⟨hu', hv', hw'⟩ := uvw_of_div (k := k) (u := s / (h - a)) H.hah H.hgf rfl hv
-  rw [← hw] at hw'
-  obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu' hv' hw'
-  have h27 := H.step27 hu' hv' hw'
-  have hg1 : 0 < 1 - g := by linarith [H.hgf, H.hf]
-  have hf1 : 0 < 1 - f := sub_pos.2 H.hf
-  have hv1 : 0 < 1 - v := by nlinarith [mul_nonneg hg1.le hw0, H.hd, H.hde]
-  have hwB := mul_nonneg (mul_nonneg hw0 hf1.le) hg1.le
-  unfold nStar
-  refine ⟨hw0, by linarith, (le_div_iff₀ (mul_pos hf1 hg1)).2 (by linarith), ?_⟩
-  have hN : s < (1 - f) * (1 - v) := by linarith
-  have e2 : v * (1 - f) * (1 - v) = (v * (1 - g) - s) * (1 - v) := by
-    rw [show v * (1 - f) = v * (1 - g) - s by linear_combination -hv']
-  have hvg : s < v * (1 - v) * (1 - g) := by linarith [mul_lt_mul_of_pos_left hN hv0]
-  have : s / (v * (1 - v)) ≤ 1 - g :=
-    (div_le_iff₀ (mul_pos hv0 hv1)).2 (by linarith)
-  linarith
-
-/-- **Claim** (`GLOBAL_COMPLETION:claim-cstar`, new; replaces §§5.3-5.5, `claim-5.3`,
-`claim-5.4`, `claim-5.5`). If all eleven doubled areas are at least `s = s₀`, then
-`C_* = g(a_u + B_*) - B_* X₀ ≤ 0`. This is the polynomial certificate `MovingFCert.T_pos`:
-`T = u v² (1-v)(Δ - Φ B_*(1-g)) > 0` on the whole region of the proof, with `Δ` the hand proof's
-(33); if `C_* > 0`, then (25) times `B_*(1-g)` and (27) would give `T ≤ 0`. -/
-theorem claim_cstar {s a b c d e f g h k x y u v : ℝ} (hyp : MovingFHyp a b c d e f g h k x y)
-    (hs : s = 2 * A₀) (hall : ∀ i, s ≤ chamberSarea (movingFConfig a b c d e f g h k x y) i)
-    (hu : u = s / (h - a)) (hv : v = s / (f - g)) :
-    cStar s u v g (1 - f) ≤ 0 := by
-  have H := Hyps3.of_all hyp (by rw [hs]; linarith [A₀_pos]) hall
-  obtain ⟨hu', hv', hw'⟩ := uvw_of_div (k := k) H.hah H.hgf hu hv
-  subst hs
-  have hxc := H.x_lt_c (by linarith [A₀_bounds.1])
-  obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu' hv' hw'
-  have hC := H.cstar_nonpos hxc hu' hv' hw'
-  have hv1 : 0 < 1 - v := by
-    nlinarith [mul_nonneg (by linarith [H.hgf, H.hf] : (0 : ℝ) ≤ 1 - g) hw0, H.hd, H.hde]
-  have key : cStar (2 * A₀) u v g (1 - f) = (g * ((1 - 3 * u - 2 * A₀) + (1 - f)) * (1 - v) -
-      (1 - f) * (u * (1 - 3 * v) + 2 * A₀ + 2 * v)) / (1 - v) := by
-    unfold cStar X0; field_simp
-  rw [key]
-  exact div_nonpos_of_nonpos_of_nonneg hC hv1.le
 
 /-- **Theorem 3** (`GLOBAL_COMPLETION:Theorem3`). Throughout the F-moving chamber (15) (strict
 orders, `0 ≤ k ≤ 1`, `O` in the square, all eleven oriented doubled areas positive), the least of

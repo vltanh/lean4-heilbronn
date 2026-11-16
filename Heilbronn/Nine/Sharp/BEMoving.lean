@@ -58,15 +58,6 @@ def BEMovingHyp (a b c d e f g h ε η x y : ℝ) : Prop :=
 /-- `q₀ = (16257+1889√65)/36104`, the third root in the factorization (4). -/
 def q₀ : ℝ := (16257 + 1889 * Real.sqrt 65) / 36104
 
-/-- **Claim** (`SHARP_B_E_MOVING:claim-lambda`). Equation (2) and the line after it: the weight
-`λ = (77√65-615)/20` equals `(8-39p₀)/(6-10p₀)`, `s = 2A₀ = (9√65-55)/160`, `s > 7/64` and
-`0 < λ < 3/10`. `docs/proof/nine/SHARP_B_E_MOVING.md`, lines 57-68. -/
-theorem claim_lambda :
-    sharpLambda = (77 * Real.sqrt 65 - 615) / 20 ∧ sharpS = (9 * Real.sqrt 65 - 55) / 160 ∧
-      7 / 64 < sharpS ∧ 0 < sharpLambda ∧ sharpLambda < 3 / 10 := by
-  obtain ⟨h1, -, h3, h4⟩ := sharp_bounds
-  exact ⟨sharpLambda_eq, sharpS_eq, h1, by linarith, h4⟩
-
 /-- **Claim** (`SHARP_B_E_MOVING:eq4`). For `p ≠ 0`,
 `p{Φ(p,p) + λ(F₀(p,p) - s)} = (6+5λ)(p-p₀)²(p-q₀)` with `q₀ = (16257+1889√65)/36104 > 1/2`.
 `docs/proof/nine/SHARP_B_E_MOVING.md`, lines 94-107. -/
@@ -361,48 +352,6 @@ theorem Data.rigid {l : ℝ} (H : Data s a b c d e f g h ε η x y) (hl1 : 1 / 4
 end Plain
 
 /-! ### The claims of the manuscript -/
-
-/-- **Claim** (`SHARP_B_E_MOVING:claim-losses`). If all eleven doubled areas are at least
-`s = 2A₀`, then with `u = s/(h-a)`, `v = s/(f-g)`: `0 < u, v < 1/2`, `x ≤ 1-2u`, `y ≥ 2v` (6),
-`x > b`, `e > y`, (7) `s ≤ F₀(u,v) + 2uε + 2vη - εη`, and (10) `Φ(u,v) ≥ εc(1-y) + ηx(1-d)`.
-`docs/proof/nine/SHARP_B_E_MOVING.md`, lines 109-208. -/
-theorem claim_losses {a b c d e f g h ε η x y : ℝ} (hyp : BEMovingHyp a b c d e f g h ε η x y)
-    (hs : ∀ i, sharpS ≤ chamberSarea (beMovingConfig a b c d e f g h ε η x y) i) :
-    let s := sharpS
-    let u := s / (h - a)
-    let v := s / (f - g)
-    (0 < u ∧ u < 1 / 2 ∧ 0 < v ∧ v < 1 / 2) ∧ (x ≤ 1 - 2 * u ∧ 2 * v ≤ y) ∧
-      (b < x ∧ y < e) ∧
-      s ≤ sharpG u v + 2 * u * ε + 2 * v * η - ε * η ∧
-      ε * c * (1 - y) + η * x * (1 - d) ≤ sharpPhi s u v := by
-  intro s u v
-  have H := Data.of_hs hyp hs
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  have hu : u * (h - a) = s := div_mul_cancel₀ _ hL0.ne'
-  have hv : v * (f - g) = s := div_mul_cancel₀ _ hM0.ne'
-  have hu0 : 0 < u := div_pos (by linarith [H.hs1]) hL0
-  have hv0 : 0 < v := div_pos (by linarith [H.hs1]) hM0
-  rw [← eq_expansion s hu0 hv0]
-  unfold sharpH sharpG
-  rw [sharpAlpha_of_mul hu0.ne' hu v, sharpBeta_of_mul hv0.ne' hv u]
-  obtain ⟨h1, h2, h3, h4, h5, -⟩ := H.losses hu hv
-  exact ⟨h1, h2, h3, h4, h5⟩
-
-/-- **Claim** (`SHARP_B_E_MOVING:claim-coefficients`). Equation (11): under the assumption of
-`claim_losses`, `c(1-y) > (3/5)u` and `x(1-d) > (3/5)v`.
-`docs/proof/nine/SHARP_B_E_MOVING.md`, lines 210-299. -/
-theorem claim_coefficients {a b c d e f g h ε η x y : ℝ}
-    (hyp : BEMovingHyp a b c d e f g h ε η x y)
-    (hs : ∀ i, sharpS ≤ chamberSarea (beMovingConfig a b c d e f g h ε η x y) i) :
-    let u := sharpS / (h - a)
-    let v := sharpS / (f - g)
-    3 / 5 * u < c * (1 - y) ∧ 3 / 5 * v < x * (1 - d) := by
-  intro u v
-  have H := Data.of_hs hyp hs
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  exact (H.losses (div_mul_cancel₀ _ hL0.ne') (div_mul_cancel₀ _ hM0.ne')).2.2.2.2.2
 
 /-- **Theorem 1** (`SHARP_B_E_MOVING:Theorem1`). Throughout (1) and the chamber (positivity of the
 eleven oriented doubled areas), the minimum of the eleven ordinary areas is at most `A₀`. If all

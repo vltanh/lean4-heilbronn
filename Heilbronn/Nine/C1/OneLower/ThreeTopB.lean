@@ -20,7 +20,6 @@ open Heilbronn.Nine.C1 Heilbronn.Nine.C1ZeroLower Cover Model
 
 variable {h c d f : ℝ} {Q : Fin 4 → Point}
 
-
 /-- **Lemma 3** (`C1_ZERO_LOWER:Lemma3`, three top-cap points): if `Q 0, Q 1, Q 2` are in the top
 cap, then for some ordering `σ` the outer points `X = Q (σ 1)`, `Y = Q (σ 0)` have `[DXY] > 0`,
 `[XYF] > 0`, and the inner point `Q (σ 2)` lies in `DXF` and in `DYF`. -/

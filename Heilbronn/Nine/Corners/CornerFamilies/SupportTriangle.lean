@@ -256,29 +256,6 @@ theorem support_core {n : ℕ} (hn : 6 ≤ n) (P : Fin n → Point) (hP : ∀ i,
     have h0 := minTriangleArea_nonneg ![P a, P c, P p, P q, P u, P v]
     nlinarith
 
-/-- **Nontriangular-hull lemma** (`CORNER_FAMILIES:NontriangularHullLemma`): at least six points
-of the triangle `T`, including `A = (0,0)` and `C = (1,1)`, whose convex hull is not a triangle,
-have minimum triangle area at most `7/128`. `docs/proof/nine/CORNER_FAMILIES.md`, lines 306–379.
-
-Uses: OPPOSITE_CORNERS:Theorem1 -/
-theorem nontriangularHullLemma {n : ℕ} (hn : 6 ≤ n) (P : Fin n → Point)
-    (hP : ∀ i, P i ∈ lowerTriangle) (hA : ∃ i, P i = (0, 0)) (hC : ∃ i, P i = (1, 1))
-    (hnt : ∀ a b c : Fin n,
-      convexHull ℝ (Set.range P) ≠ convexHull ℝ ({P a, P b, P c} : Set Point)) :
-    minTriangleArea P ≤ 7 / 128 := by
-  rcases (minTriangleArea_nonneg P).eq_or_lt with h0 | hpos
-  · rw [← h0]; norm_num
-  obtain ⟨a, ha⟩ := hA
-  obtain ⟨c, hc⟩ := hC
-  rcases support_core hn P hP a c ha hc hpos with h | ⟨r, hra, hrc, hr⟩
-  · exact h
-  · exfalso
-    have hac : a ≠ c := by intro h; rw [h, hc] at ha; simp [Prod.ext_iff] at ha
-    apply hnt a r c
-    have hne := sarea_ne_zero_of_min_pos hpos a r c (Ne.symm hra) hrc hac
-    rw [← ha, ← hc] at hr
-    exact hull_eq_of_closed P a r c hne hr
-
 /-- **Nontriangular-hull lemma** (`CORNER_FAMILIES:NontriangularHullLemma`), affine form (the
 "support-triangle lemma" of `TYPE_II_COMPLETION.md` lines 28–33, and of §12 here): at least six
 points in the closed triangle `UVW` of area `S > 0`, including two of its vertices `U, V`, whose

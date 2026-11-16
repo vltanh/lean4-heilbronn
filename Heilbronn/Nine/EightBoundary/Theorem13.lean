@@ -94,7 +94,6 @@ theorem transfer_to {a b c d e f g h : ℝ} {O : Point} {k w : Word} {cl : RClas
   rw [hwr] at hk'
   exact ⟨refl, r, a', b', c', d', e', f', g', h', hA', hO', hk', hcfg, hmin⟩
 
-
 /-- **Claim** (`EIGHT_BOUNDARY:claim-class-hypotheses`, named here). The table of the proof of
 Theorem 13: in the normal form, if the radial word of `O` (no degenerate rays) is
 * the R1 representative, `O` is in both closed corner caps `BCDE`, `DEFG` (Theorem 8);

@@ -85,115 +85,115 @@ theorem atoms_false {w : Word} {ts : List (ℤ × List ℕ)} (hc : check (atoms 
 /-! ### The 28 kernel checks -/
 
 theorem check_1_2 :
-    check (atoms (ofBlocks 1 2)) (term_rows% "../../../data/nine/seven_exterior/cert_1_2.txt") = true := by
+    check (atoms (ofBlocks 1 2)) (term_rows% "../Data/seven_exterior/cert_1_2.txt") = true := by
   decide +kernel
 
 theorem check_1_4 :
-    check (atoms (ofBlocks 1 4)) (term_rows% "../../../data/nine/seven_exterior/cert_1_4.txt") = true := by
+    check (atoms (ofBlocks 1 4)) (term_rows% "../Data/seven_exterior/cert_1_4.txt") = true := by
   decide +kernel
 
 theorem check_1_5 :
-    check (atoms (ofBlocks 1 5)) (term_rows% "../../../data/nine/seven_exterior/cert_1_5.txt") = true := by
+    check (atoms (ofBlocks 1 5)) (term_rows% "../Data/seven_exterior/cert_1_5.txt") = true := by
   decide +kernel
 
 theorem check_2_1 :
-    check (atoms (ofBlocks 2 1)) (term_rows% "../../../data/nine/seven_exterior/cert_2_1.txt") = true := by
+    check (atoms (ofBlocks 2 1)) (term_rows% "../Data/seven_exterior/cert_2_1.txt") = true := by
   decide +kernel
 
 theorem check_2_2 :
-    check (atoms (ofBlocks 2 2)) (term_rows% "../../../data/nine/seven_exterior/cert_2_2.txt") = true := by
+    check (atoms (ofBlocks 2 2)) (term_rows% "../Data/seven_exterior/cert_2_2.txt") = true := by
   decide +kernel
 
 theorem check_2_3 :
-    check (atoms (ofBlocks 2 3)) (term_rows% "../../../data/nine/seven_exterior/cert_2_3.txt") = true := by
+    check (atoms (ofBlocks 2 3)) (term_rows% "../Data/seven_exterior/cert_2_3.txt") = true := by
   decide +kernel
 
 theorem check_2_4 :
-    check (atoms (ofBlocks 2 4)) (term_rows% "../../../data/nine/seven_exterior/cert_2_4.txt") = true := by
+    check (atoms (ofBlocks 2 4)) (term_rows% "../Data/seven_exterior/cert_2_4.txt") = true := by
   decide +kernel
 
 theorem check_2_5 :
-    check (atoms (ofBlocks 2 5)) (term_rows% "../../../data/nine/seven_exterior/cert_2_5.txt") = true := by
+    check (atoms (ofBlocks 2 5)) (term_rows% "../Data/seven_exterior/cert_2_5.txt") = true := by
   decide +kernel
 
 theorem check_2_6 :
-    check (atoms (ofBlocks 2 6)) (term_rows% "../../../data/nine/seven_exterior/cert_2_6.txt") = true := by
+    check (atoms (ofBlocks 2 6)) (term_rows% "../Data/seven_exterior/cert_2_6.txt") = true := by
   decide +kernel
 
 theorem check_3_1 :
-    check (atoms (ofBlocks 3 1)) (term_rows% "../../../data/nine/seven_exterior/cert_3_1.txt") = true := by
+    check (atoms (ofBlocks 3 1)) (term_rows% "../Data/seven_exterior/cert_3_1.txt") = true := by
   decide +kernel
 
 theorem check_3_2 :
-    check (atoms (ofBlocks 3 2)) (term_rows% "../../../data/nine/seven_exterior/cert_3_2.txt") = true := by
+    check (atoms (ofBlocks 3 2)) (term_rows% "../Data/seven_exterior/cert_3_2.txt") = true := by
   decide +kernel
 
 theorem check_3_3 :
-    check (atoms (ofBlocks 3 3)) (term_rows% "../../../data/nine/seven_exterior/cert_3_3.txt") = true := by
+    check (atoms (ofBlocks 3 3)) (term_rows% "../Data/seven_exterior/cert_3_3.txt") = true := by
   decide +kernel
 
 theorem check_3_4 :
-    check (atoms (ofBlocks 3 4)) (term_rows% "../../../data/nine/seven_exterior/cert_3_4.txt") = true := by
+    check (atoms (ofBlocks 3 4)) (term_rows% "../Data/seven_exterior/cert_3_4.txt") = true := by
   decide +kernel
 
 theorem check_3_5 :
-    check (atoms (ofBlocks 3 5)) (term_rows% "../../../data/nine/seven_exterior/cert_3_5.txt") = true := by
+    check (atoms (ofBlocks 3 5)) (term_rows% "../Data/seven_exterior/cert_3_5.txt") = true := by
   decide +kernel
 
 theorem check_4_2 :
-    check (atoms (ofBlocks 4 2)) (term_rows% "../../../data/nine/seven_exterior/cert_4_2.txt") = true := by
+    check (atoms (ofBlocks 4 2)) (term_rows% "../Data/seven_exterior/cert_4_2.txt") = true := by
   decide +kernel
 
 theorem check_4_3 :
-    check (atoms (ofBlocks 4 3)) (term_rows% "../../../data/nine/seven_exterior/cert_4_3.txt") = true := by
+    check (atoms (ofBlocks 4 3)) (term_rows% "../Data/seven_exterior/cert_4_3.txt") = true := by
   decide +kernel
 
 theorem check_4_4 :
-    check (atoms (ofBlocks 4 4)) (term_rows% "../../../data/nine/seven_exterior/cert_4_4.txt") = true := by
+    check (atoms (ofBlocks 4 4)) (term_rows% "../Data/seven_exterior/cert_4_4.txt") = true := by
   decide +kernel
 
 theorem check_4_5 :
-    check (atoms (ofBlocks 4 5)) (term_rows% "../../../data/nine/seven_exterior/cert_4_5.txt") = true := by
+    check (atoms (ofBlocks 4 5)) (term_rows% "../Data/seven_exterior/cert_4_5.txt") = true := by
   decide +kernel
 
 theorem check_4_6 :
-    check (atoms (ofBlocks 4 6)) (term_rows% "../../../data/nine/seven_exterior/cert_4_6.txt") = true := by
+    check (atoms (ofBlocks 4 6)) (term_rows% "../Data/seven_exterior/cert_4_6.txt") = true := by
   decide +kernel
 
 theorem check_5_1 :
-    check (atoms (ofBlocks 5 1)) (term_rows% "../../../data/nine/seven_exterior/cert_5_1.txt") = true := by
+    check (atoms (ofBlocks 5 1)) (term_rows% "../Data/seven_exterior/cert_5_1.txt") = true := by
   decide +kernel
 
 theorem check_5_2 :
-    check (atoms (ofBlocks 5 2)) (term_rows% "../../../data/nine/seven_exterior/cert_5_2.txt") = true := by
+    check (atoms (ofBlocks 5 2)) (term_rows% "../Data/seven_exterior/cert_5_2.txt") = true := by
   decide +kernel
 
 theorem check_5_3 :
-    check (atoms (ofBlocks 5 3)) (term_rows% "../../../data/nine/seven_exterior/cert_5_3.txt") = true := by
+    check (atoms (ofBlocks 5 3)) (term_rows% "../Data/seven_exterior/cert_5_3.txt") = true := by
   decide +kernel
 
 theorem check_5_4 :
-    check (atoms (ofBlocks 5 4)) (term_rows% "../../../data/nine/seven_exterior/cert_5_4.txt") = true := by
+    check (atoms (ofBlocks 5 4)) (term_rows% "../Data/seven_exterior/cert_5_4.txt") = true := by
   decide +kernel
 
 theorem check_5_5 :
-    check (atoms (ofBlocks 5 5)) (term_rows% "../../../data/nine/seven_exterior/cert_5_5.txt") = true := by
+    check (atoms (ofBlocks 5 5)) (term_rows% "../Data/seven_exterior/cert_5_5.txt") = true := by
   decide +kernel
 
 theorem check_5_6 :
-    check (atoms (ofBlocks 5 6)) (term_rows% "../../../data/nine/seven_exterior/cert_5_6.txt") = true := by
+    check (atoms (ofBlocks 5 6)) (term_rows% "../Data/seven_exterior/cert_5_6.txt") = true := by
   decide +kernel
 
 theorem check_6_2 :
-    check (atoms (ofBlocks 6 2)) (term_rows% "../../../data/nine/seven_exterior/cert_6_2.txt") = true := by
+    check (atoms (ofBlocks 6 2)) (term_rows% "../Data/seven_exterior/cert_6_2.txt") = true := by
   decide +kernel
 
 theorem check_6_3 :
-    check (atoms (ofBlocks 6 3)) (term_rows% "../../../data/nine/seven_exterior/cert_6_3.txt") = true := by
+    check (atoms (ofBlocks 6 3)) (term_rows% "../Data/seven_exterior/cert_6_3.txt") = true := by
   decide +kernel
 
 theorem check_6_5 :
-    check (atoms (ofBlocks 6 5)) (term_rows% "../../../data/nine/seven_exterior/cert_6_5.txt") = true := by
+    check (atoms (ofBlocks 6 5)) (term_rows% "../Data/seven_exterior/cert_6_5.txt") = true := by
   decide +kernel
 
 end Heilbronn.Nine.SevenBoundaryExteriorCerts

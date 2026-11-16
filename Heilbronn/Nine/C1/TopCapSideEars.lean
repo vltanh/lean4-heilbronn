@@ -138,7 +138,6 @@ theorem eq3 {h c d f : ℝ} (hA : C1AnchorsWeak h c d f) (hhc : 49 / 60 ≤ h * 
   have := mul_nonneg h'0.le hJ'
   linarith
 
-
 /-- **Theorem** (`C1_TOP_CAP_SIDE_EARS:Theorem`). In a competitive nine-point C1 configuration
 `c1Config h c d f L M X P` (weak anchor conditions, least area at least `A₀`) with `L, M`
 strictly inside `OHC` and `X` in the top cap beyond `DF`: both side ears have doubled area less

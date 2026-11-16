@@ -74,7 +74,6 @@ def quadArea (A B C D : Point) : ℝ := (sarea A B C + sarea A C D) / 2
 def sixQuadExtremal : Fin 6 → Point :=
   ![(0, 0), (1, 0), (1, 1), (0, 1), (1 / 4, 1 / 2), (3 / 4, 1 / 2)]
 
-
 /-! ### Helpers -/
 
 /-- A sub-configuration given by an injective reindexing has least area at least that of the
@@ -97,10 +96,6 @@ theorem sqrt5_gt : (2 : ℝ) < Real.sqrt 5 := by
 theorem triangleArea_of_pos {p q r : Point} (h : 0 < sarea p q r) :
     triangleArea p q r = sarea p q r / 2 := by
   rw [triangleArea_eq, abs_of_pos h]
-
-theorem quadArea_eq (A B C D : Point) :
-    quadArea A B C D = (sarea A B D + sarea B C D) / 2 := by
-  unfold quadArea sarea; ring
 
 theorem ConvexQuad.rotate {A B C D : Point} (h : ConvexQuad A B C D) : ConvexQuad B C D A :=
   ⟨h.2.1, h.2.2.1, h.2.2.2, h.1⟩
@@ -277,7 +272,6 @@ theorem sector_case {A B C D P Q : Point} {s : ℝ} (hq : ConvexQuad A B C D)
     have hx' : sarea D B Q = W / 8 := by linarith
     have hy' : sarea C A Q = W / 8 := by linarith
     exact isExtremalImage_of_eq hW ea eb ed hx hy hx' hy'
-
 
 /-- The relabellings used in the equality case of Theorem 1. -/
 def permRot : Equiv.Perm (Fin 6) :=
@@ -473,23 +467,6 @@ theorem theorem1 {A B C D P Q : Point} (hq : ConvexQuad A B C D) (hP : InClosedQ
   | exact strict (cACD a1 a2) | exact strict (cABC a1 a2) | exact strict (cBDA b1 b2)
   | exact strict (cDBC b1 b2) | exact sODA a1 b1 a2 b2 | exact sOBC a1 b1 a2 b2
   | exact sOAB a1 b1 a2 b2 | exact sOCD a1 b1 a2 b2
-
-/-- **Claim** (`QUADRILATERAL_HULL:claim-attainment`, made up). Attainment in Theorem 1. The square
-configuration of the equality case has least area `1/8` and hull area `1`: every doubled area is at
-least `1/4`.
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 100-106. -/
-theorem claim_attainment :
-    minTriangleArea sixQuadExtremal = 1 / 8 ∧ quadArea (0, 0) (1, 0) (1, 1) (0, 1) = 1 := by
-  refine ⟨le_antisymm ?_ ?_, by unfold quadArea sarea; norm_num⟩
-  · have := minTriangleArea_le sixQuadExtremal (i := 0) (j := 3) (k := 4) (by decide) (by decide)
-      (by decide)
-    have e : triangleArea (sixQuadExtremal 0) (sixQuadExtremal 3) (sixQuadExtremal 4) = 1 / 8 := by
-      simp [sixQuadExtremal, triangleArea]; norm_num [abs_of_neg]
-    linarith
-  · apply le_minTriangleArea (by norm_num)
-    intro i j k hij hjk
-    fin_cases i <;> fin_cases j <;> fin_cases k <;> simp_all [triangleArea, sixQuadExtremal] <;>
-      norm_num [abs_of_neg, abs_of_pos]
 
 /-! ### §2. Seven points with a quadrilateral hull -/
 
@@ -776,10 +753,6 @@ theorem convexQuad_Q0 {h c d f : ℝ} (hC : C1Anchors h c d f) :
   · nlinarith [mul_nonneg (sub_nonneg.2 hh1.le) (sub_nonneg.2 hfc)]
 
 open Classical in
-theorem ncard_fin4 (p : Fin 4 → Prop) :
-    Set.ncard {m | p m} = (if p 0 then 1 else 0) + (if p 1 then 1 else 0) +
-      (if p 2 then 1 else 0) + (if p 3 then 1 else 0) := by
-  rw [Set.ncard_eq_toFinset_card', Set.toFinset_ofPred, Finset.card_filter, Fin.sum_univ_four]
 
 /-- `X` lies strictly inside the anchor hexagon `A B C D F H` of family N
 (`A=(0,a), B=(b,0), C=(c,0), D=(1,d), F=(f,1), H=(0,h)`, counterclockwise). -/
@@ -849,154 +822,6 @@ theorem claim_14_15 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d
   · exact (no_three_in_quad (P := nConfig a h b c d f X Y Z) (i := 1) (j := 3) (k := 4) (l := 5)
       (m₁ := 6) (m₂ := 7) (m₃ := 8) hA hq harea (upQ hX xs) (upQ hY ys) (upQ hZ zs) (by decide)
       (by decide) (by decide)).elim
-
-/-- `X` lies strictly inside the anchor pentagon `O C D F H` of family C1
-(`O=(0,0), C=(c,0), D=(1,d), F=(f,1), H=(0,h)`, counterclockwise). -/
-def InC1Pentagon (h c d f : ℝ) (X : Point) : Prop :=
-  0 < sarea (0, 0) (c, 0) X ∧ 0 < sarea (c, 0) (1, d) X ∧ 0 < sarea (1, d) (f, 1) X ∧
-    0 < sarea (f, 1) (0, h) X ∧ 0 < sarea (0, h) (0, 0) X
-
-/-- **Claim** (`QUADRILATERAL_HULL:claim-(16)-(18)`). C1 with exactly the five prescribed hull
-vertices. If the four free points are strictly inside the pentagon `OCDFH` and the least area is at
-least `A₀`, the lower/upper split by the line `HC` is `(2,2)` or `(3,1)` (16). For `(2,2)`:
-`hc ≥ 2KA₀` and `1 - (h-d)(c-f) ≥ 16A₀` (17). For `(3,1)`: `hc ≥ 2ΓA₀ = (11+3√5)A₀` (18).
-`docs/proof/nine/QUADRILATERAL_HULL.md`, lines 241-278.
-Uses: CORNER_FAMILIES:GlobalOccupancyCorollary, QUADRILATERAL_HULL:Corollary3,
-QUADRILATERAL_HULL:claim-(13), CORNER_FAMILIES:TwoInteriorPointLemma, QUADRILATERAL_HULL:Theorem1,
-CORNER_FAMILIES:SixPointTriangularHullTheorem -/
-theorem claim_16_18 {h c d f : ℝ} {W X Y Z : Point} (hC : C1Anchors h c d f)
-    (hW : InC1Pentagon h c d f W) (hX : InC1Pentagon h c d f X) (hY : InC1Pentagon h c d f Y)
-    (hZ : InC1Pentagon h c d f Z) (hA : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) :
-    (Set.ncard {m : Fin 4 | sarea (0, h) (c, 0) (![W, X, Y, Z] m) < 0} = 2 ∧
-        2 * (4 + 2 * Real.sqrt 3) * A₀ ≤ h * c ∧ 16 * A₀ ≤ 1 - (h - d) * (c - f)) ∨
-      (Set.ncard {m : Fin 4 | sarea (0, h) (c, 0) (![W, X, Y, Z] m) < 0} = 3 ∧
-        (11 + 3 * Real.sqrt 5) * A₀ ≤ h * c) := by
-  have hC' := hC
-  obtain ⟨hd, hdh, hh1, hf, hfc, hc1⟩ := hC'
-  have hh : 0 < h := by linarith
-  have hc : 0 < c := by linarith
-  have hpos : 0 < minTriangleArea (c1Config h c d f W X Y Z) := lt_of_lt_of_le A₀_pos hA
-  have hq := convexQuad_Q0 hC
-  have harea := (claim_13 h c d f).2 hdh hfc
-  have hOCH : 0 < sarea ((0 : ℝ), (0 : ℝ)) (c, 0) (0, h) := by
-    have : sarea ((0 : ℝ), (0 : ℝ)) (c, 0) (0, h) = c * h := by unfold sarea; ring
-    rw [this]; positivity
-  have earea : triangleArea ((0 : ℝ), (0 : ℝ)) (c, 0) (0, h) = h * c / 2 := by
-    rw [triangleArea_of_pos hOCH]; unfold sarea; ring
-  have lowT {V : Point} (hV : InC1Pentagon h c d f V) (hl : sarea (0, h) (c, 0) V < 0) :
-      CornerFamilies.InsideTriangle V (0, 0) (c, 0) (0, h) :=
-    Or.inl ⟨hV.1, by rw [sarea_swap₁₂]; linarith, hV.2.2.2.2⟩
-  have upQ {V : Point} (hV : InC1Pentagon h c d f V) (hu : 0 < sarea (0, h) (c, 0) V) :
-      InQuad V (0, h) (c, 0) (1, d) (f, 1) := ⟨hu, hV.2.1, hV.2.2.1, hV.2.2.2.1⟩
-  have lowPair {U V : Point} (hU : CornerFamilies.InsideTriangle U (0, 0) (c, 0) (0, h))
-      (hV : CornerFamilies.InsideTriangle V (0, 0) (c, 0) (0, h))
-      (hmin : A₀ ≤ minTriangleArea ![(0, 0), (c, 0), (0, h), U, V]) :
-      2 * (4 + 2 * Real.sqrt 3) * A₀ ≤ h * c := by
-    have k := CornerFamilies.twoInteriorPointLemma _ _ _ U V hU hV A₀ A₀_pos hmin
-    rw [earea] at k
-    linarith
-  have lowTriple {U V T : Point} (hU : CornerFamilies.InsideTriangle U (0, 0) (c, 0) (0, h))
-      (hV : CornerFamilies.InsideTriangle V (0, 0) (c, 0) (0, h))
-      (hT : CornerFamilies.InsideTriangle T (0, 0) (c, 0) (0, h))
-      (hmin : A₀ ≤ minTriangleArea ![(0, 0), (c, 0), (0, h), U, V, T]) :
-      (11 + 3 * Real.sqrt 5) * A₀ ≤ h * c := by
-    have k := CornerFamilies.sixPointTriangularHullTheorem _ _ _ U V T hU hV hT A₀ hmin
-    rw [earea] at k
-    linarith
-  have upPair {U V : Point} (hU : InQuad U (0, h) (c, 0) (1, d) (f, 1))
-      (hV : InQuad V (0, h) (c, 0) (1, d) (f, 1))
-      (hmin : A₀ ≤ minTriangleArea ![(0, h), (c, 0), (1, d), (f, 1), U, V]) :
-      16 * A₀ ≤ 1 - (h - d) * (c - f) := by
-    have k := (theorem1 hq hU.closed hV.closed).1
-    rw [(claim_13 h c d f).1] at k
-    linarith
-  have four (hW' : CornerFamilies.InsideTriangle W (0, 0) (c, 0) (0, h))
-      (hX' : CornerFamilies.InsideTriangle X (0, 0) (c, 0) (0, h))
-      (hY' : CornerFamilies.InsideTriangle Y (0, 0) (c, 0) (0, h))
-      (hZ' : CornerFamilies.InsideTriangle Z (0, 0) (c, 0) (0, h)) : False := by
-    have k := CornerFamilies.triangularHullLemma (0, 0) (c, 0) (0, h) ![W, X, Y, Z]
-      (fun i => by fin_cases i <;> assumption) A₀
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 6, 7, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)
-    rw [earea] at k
-    have hs2 : (7 / 5 : ℝ) < Real.sqrt 2 := by rw [Real.lt_sqrt (by norm_num)]; norm_num
-    have : h * c ≤ 1 := by nlinarith
-    have := A₀_bounds.2.2.1
-    nlinarith
-  have nW : sarea (0, h) (c, 0) W ≠ 0 := sarea_ne_zero_of_min_pos hpos 4 1 5
-  have nX : sarea (0, h) (c, 0) X ≠ 0 := sarea_ne_zero_of_min_pos hpos 4 1 6
-  have nY : sarea (0, h) (c, 0) Y ≠ 0 := sarea_ne_zero_of_min_pos hpos 4 1 7
-  have nZ : sarea (0, h) (c, 0) Z ≠ 0 := sarea_ne_zero_of_min_pos hpos 4 1 8
-  rcases lt_or_gt_of_ne nW with ws | ws <;> rcases lt_or_gt_of_ne nX with xs | xs <;>
-  rcases lt_or_gt_of_ne nY with ys | ys <;> rcases lt_or_gt_of_ne nZ with zs | zs
-  · exact (four (lowT hW ws) (lowT hX xs) (lowT hY ys) (lowT hZ zs)).elim
-  · refine Or.inr ⟨by rw [ncard_fin4]; simp [ws, xs, ys, not_lt.2 zs.le], lowTriple (lowT hW ws) (lowT hX xs)
-      (lowT hY ys)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 6, 7] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inr ⟨by rw [ncard_fin4]; simp [ws, xs, not_lt.2 ys.le, zs], lowTriple (lowT hW ws) (lowT hX xs)
-      (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 6, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [ws, xs, not_lt.2 ys.le, not_lt.2 zs.le], lowPair (lowT hW ws) (lowT hX xs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 6] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hY ys) (upQ hZ zs)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 7, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inr ⟨by rw [ncard_fin4]; simp [ws, not_lt.2 xs.le, ys, zs], lowTriple (lowT hW ws) (lowT hY ys)
-      (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 7, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [ws, not_lt.2 xs.le, ys, not_lt.2 zs.le], lowPair (lowT hW ws) (lowT hY ys)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 7] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hX xs) (upQ hZ zs)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 6, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [ws, not_lt.2 xs.le, not_lt.2 ys.le, zs], lowPair (lowT hW ws) (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 5, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hX xs) (upQ hY ys)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 6, 7] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · exact (no_three_in_quad (P := c1Config h c d f W X Y Z) (i := 4) (j := 1) (k := 2) (l := 3)
-      (m₁ := 6) (m₂ := 7) (m₃ := 8) hA hq harea (upQ hX xs) (upQ hY ys)
-      (upQ hZ zs) (by decide) (by decide) (by decide)).elim
-  · refine Or.inr ⟨by rw [ncard_fin4]; simp [not_lt.2 ws.le, xs, ys, zs], lowTriple (lowT hX xs) (lowT hY ys)
-      (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 6, 7, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [not_lt.2 ws.le, xs, ys, not_lt.2 zs.le], lowPair (lowT hX xs) (lowT hY ys)
-      (le_min_sub (by norm_num) ![0, 1, 4, 6, 7] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hW ws) (upQ hZ zs)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 5, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [not_lt.2 ws.le, xs, not_lt.2 ys.le, zs], lowPair (lowT hX xs) (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 6, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hW ws) (upQ hY ys)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 5, 7] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · exact (no_three_in_quad (P := c1Config h c d f W X Y Z) (i := 4) (j := 1) (k := 2) (l := 3)
-      (m₁ := 5) (m₂ := 7) (m₃ := 8) hA hq harea (upQ hW ws) (upQ hY ys)
-      (upQ hZ zs) (by decide) (by decide) (by decide)).elim
-  · refine Or.inl ⟨by rw [ncard_fin4]; simp [not_lt.2 ws.le, not_lt.2 xs.le, ys, zs], lowPair (lowT hY ys) (lowT hZ zs)
-      (le_min_sub (by norm_num) ![0, 1, 4, 7, 8] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA),
-      upPair (upQ hW ws) (upQ hX xs)
-      (le_min_sub (by norm_num) ![4, 1, 2, 3, 5, 6] (by decide)
-        (fun i => by fin_cases i <;> rfl) hA)⟩
-  · exact (no_three_in_quad (P := c1Config h c d f W X Y Z) (i := 4) (j := 1) (k := 2) (l := 3)
-      (m₁ := 5) (m₂ := 6) (m₃ := 8) hA hq harea (upQ hW ws) (upQ hX xs)
-      (upQ hZ zs) (by decide) (by decide) (by decide)).elim
-  · exact (no_three_in_quad (P := c1Config h c d f W X Y Z) (i := 4) (j := 1) (k := 2) (l := 3)
-      (m₁ := 5) (m₂ := 6) (m₃ := 7) hA hq harea (upQ hW ws) (upQ hX xs)
-      (upQ hY ys) (by decide) (by decide) (by decide)).elim
-  · exact (no_three_in_quad (P := c1Config h c d f W X Y Z) (i := 4) (j := 1) (k := 2) (l := 3)
-      (m₁ := 5) (m₂ := 6) (m₃ := 7) hA hq harea (upQ hW ws) (upQ hX xs)
-      (upQ hY ys) (by decide) (by decide) (by decide)).elim
 
 /-! ### §5. One of the two lower N ears is always empty -/
 

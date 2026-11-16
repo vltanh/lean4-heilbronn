@@ -50,16 +50,6 @@ def CDMovingHyp (a b c d e f g h t r x y : ℝ) : Prop :=
   SharpOrders a b c d e f g h ∧ 0 ≤ t ∧ t ≤ a ∧ 0 ≤ r ∧ r ≤ 1 - f ∧
     ((x, y) : Point) ∈ unitSquare
 
-/-- `T_u = α(1-3u) + β - s - u(1-2v) + λ(1-u)`. -/
-def cdTu (u v : ℝ) : ℝ :=
-  sharpAlpha sharpS u v * (1 - 3 * u) + sharpBeta sharpS u v - sharpS - u * (1 - 2 * v) +
-    sharpLambda * (1 - u)
-
-/-- `T_v = β(1-3v) + α - s - v(1-2u) + λ(1-v)`. -/
-def cdTv (u v : ℝ) : ℝ :=
-  sharpBeta sharpS u v * (1 - 3 * v) + sharpAlpha sharpS u v - sharpS - v * (1 - 2 * u) +
-    sharpLambda * (1 - v)
-
 /-- **Claim** (`SHARP_CD_MOVING:claim-chamber-formulas`). The eleven oriented doubled areas:
 `ABH = b(h-a)`, `ABC = a(c-b)+bt`, `AGH = g(h-a)`, `DEF = (1-f)(e-d)+r(1-e)`, `GHF = (f-g)(1-h)`,
 `GEF = (f-g)(1-e)`, `ADO = (1-r)(y-a)-(d-a)x`, `DHO = (1-r)(h-y)-(h-d)x`, `BOE = e(x-b)-(1-b)y`,
@@ -295,110 +285,6 @@ theorem Data.rigid {l : ℝ} (H : Data s a b c d e f g h t r x y) (hl1 : 1 / 4 <
 end Plain
 
 /-! ### The claims of the manuscript -/
-
-/-- **Claim** (`SHARP_CD_MOVING:claim-bounds`). If every displayed doubled area is at least
-`s = 2A₀`, then with `u = s/(h-a)`, `v = s/(f-g)`, `α = 1-v-s/u`, `β = 1-u-s/v`:
-(3) `b, g ≥ u`, `e, h ≤ 1-v`, `a ≤ α`, `1-f ≤ β`; (4) `s < α`, `s < β`, `t ≤ α`, `r ≤ β`;
-(5) `X = 1-x ≥ 2u + r`, `Y = y ≥ 2v + t`; `x > b`, `e > y`;
-(6) `s ≤ g₀ - (1-v)r - (1-u)t`; `u, v < 1/3`; (7) `(u+v)/2 ≤ p₀`; (8) `u, v < 1/5`, `2uv < s`.
-`docs/proof/nine/SHARP_CD_MOVING.md`, lines 55-128. -/
-theorem claim_bounds {a b c d e f g h t r x y : ℝ} (hyp : CDMovingHyp a b c d e f g h t r x y)
-    (hs : ∀ i, sharpS ≤ chamberSarea (cdMovingConfig a b c d e f g h t r x y) i) :
-    let s := sharpS
-    let u := s / (h - a)
-    let v := s / (f - g)
-    let α := sharpAlpha s u v
-    let β := sharpBeta s u v
-    (u ≤ b ∧ u ≤ g ∧ e ≤ 1 - v ∧ h ≤ 1 - v ∧ a ≤ α ∧ 1 - f ≤ β) ∧
-      (s < α ∧ s < β ∧ t ≤ α ∧ r ≤ β) ∧
-      (2 * u + r ≤ 1 - x ∧ 2 * v + t ≤ y) ∧ (b < x ∧ y < e) ∧
-      s ≤ sharpG u v - (1 - v) * r - (1 - u) * t ∧
-      (u < 1 / 3 ∧ v < 1 / 3) ∧ (u + v) / 2 ≤ p₀ ∧
-      (u < 1 / 5 ∧ v < 1 / 5) ∧ 2 * u * v < s := by
-  intro s u v α β
-  have H := Data.of_hs hyp hs
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  have hu : u * (h - a) = s := div_mul_cancel₀ _ hL0.ne'
-  have hv : v * (f - g) = s := div_mul_cancel₀ _ hM0.ne'
-  have hu0 : 0 < u := div_pos (by linarith [H.hs1]) hL0
-  have hv0 : 0 < v := div_pos (by linarith [H.hs1]) hM0
-  have hα : α = 1 - v - (h - a) := sharpAlpha_of_mul hu0.ne' hu v
-  have hβ : β = 1 - u - (f - g) := sharpBeta_of_mul hv0.ne' hv u
-  rw [hα, hβ]
-  unfold sharpG
-  obtain ⟨h3, h4, h5, h5', h6, h6', h8, h8', -, -, -⟩ := H.bounds hu hv
-  refine ⟨h3, h4, h5, h5', h6, h6', ?_, h8, h8'⟩
-  -- (7): `g(p) = 1 - 6p + 5p² ≥ g₀ ≥ s = g(p₀)` and `g` decreases on `p < 3/5`
-  have hp₀ : 1 - 6 * p₀ + 5 * p₀ ^ 2 = s := by
-    show _ = sharpS
-    rw [sharpS_eq, p₀_eq_sqrt]
-    linear_combination (1 / 320 : ℝ) * sqrt65_sq'
-  have hp₀b : p₀ < 7 / 40 := (claim_constants).2.2.1
-  have hg : s ≤ 1 - 6 * ((u + v) / 2) + 5 * ((u + v) / 2) ^ 2 := by
-    linarith [sq_nonneg (u - v), mul_nonneg (by linarith [h8.2] : (0:ℝ) ≤ 1 - v) H.hr0,
-      mul_nonneg (by linarith [h8.1] : (0:ℝ) ≤ 1 - u) H.ht0]
-  by_contra hcon
-  push Not at hcon
-  nlinarith [mul_pos (sub_pos.2 hcon) (by linarith : (0:ℝ) < 6 - 5 * ((u + v) / 2 + p₀))]
-
-/-- **Claim** (`SHARP_CD_MOVING:claim-eliminations`). Under the assumption of `claim_bounds`:
-(9) `(s - ut)(1-y) ≤ α{(1-t)(x-u) - s}` (the ABC/GCO elimination of `SHARP_BC_MOVING` §2, valid
-with D moving) and (10) `(s - vr)x ≤ β{(1-r)(1-v-y) - s}` (its reflection; the DHO/DEF
-elimination). No sign of `s - ut`, `s - vr` is needed. `docs/proof/nine/SHARP_CD_MOVING.md`, lines 130-155.
-Uses: SHARP_BC_MOVING:eq8, SHARP_BC_MOVING:claim-symmetry -/
-theorem claim_eliminations {a b c d e f g h t r x y : ℝ}
-    (hyp : CDMovingHyp a b c d e f g h t r x y)
-    (hs : ∀ i, sharpS ≤ chamberSarea (cdMovingConfig a b c d e f g h t r x y) i) :
-    let s := sharpS
-    let u := s / (h - a)
-    let v := s / (f - g)
-    (s - u * t) * (1 - y) ≤ sharpAlpha s u v * ((1 - t) * (x - u) - s) ∧
-      (s - v * r) * x ≤ sharpBeta s u v * ((1 - r) * (1 - v - y) - s) := by
-  intro s u v
-  have H := Data.of_hs hyp hs
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  have hu : u * (h - a) = s := div_mul_cancel₀ _ hL0.ne'
-  have hv : v * (f - g) = s := div_mul_cancel₀ _ hM0.ne'
-  have hu0 : 0 < u := div_pos (by linarith [H.hs1]) hL0
-  have hv0 : 0 < v := div_pos (by linarith [H.hs1]) hM0
-  rw [sharpAlpha_of_mul hu0.ne' hu v, sharpBeta_of_mul hv0.ne' hv u]
-  exact H.eliminations hu hv
-
-/-- **Claim** (`SHARP_CD_MOVING:claim-identity`). Under the assumption of `claim_bounds`, the
-combined coefficients `α(1-t)-s+vr+λ(1-v)` and `β(1-r)-s+ut+λ(1-u)` are positive,
-(11) `H₀ + λ(g₀ - s) ≥ tT_u + rT_v + ut² + vr² - (α+β)tr`, and (12) `T_u - αβ > 0`,
-`T_v - αβ > 0`. `docs/proof/nine/SHARP_CD_MOVING.md`, lines 157-196. -/
-theorem claim_identity {a b c d e f g h t r x y : ℝ} (hyp : CDMovingHyp a b c d e f g h t r x y)
-    (hs : ∀ i, sharpS ≤ chamberSarea (cdMovingConfig a b c d e f g h t r x y) i) :
-    let s := sharpS
-    let u := s / (h - a)
-    let v := s / (f - g)
-    let α := sharpAlpha s u v
-    let β := sharpBeta s u v
-    0 < α * (1 - t) - s + v * r + sharpLambda * (1 - v) ∧
-      0 < β * (1 - r) - s + u * t + sharpLambda * (1 - u) ∧
-      t * cdTu u v + r * cdTv u v + u * t ^ 2 + v * r ^ 2 - (α + β) * t * r ≤
-        sharpH s u v + sharpLambda * (sharpG u v - s) ∧
-      0 < cdTu u v - α * β ∧ 0 < cdTv u v - α * β := by
-  intro s u v α β
-  have H := Data.of_hs hyp hs
-  obtain ⟨-, -, hl1, -⟩ := sharp_bounds
-  have hL0 : 0 < h - a := by linarith [H.hah]
-  have hM0 : 0 < f - g := by linarith [H.hgf]
-  have hu : u * (h - a) = s := div_mul_cancel₀ _ hL0.ne'
-  have hv : v * (f - g) = s := div_mul_cancel₀ _ hM0.ne'
-  have hu0 : 0 < u := div_pos (by linarith [H.hs1]) hL0
-  have hv0 : 0 < v := div_pos (by linarith [H.hs1]) hM0
-  have hα : α = 1 - v - (h - a) := sharpAlpha_of_mul hu0.ne' hu v
-  have hβ : β = 1 - u - (f - g) := sharpBeta_of_mul hv0.ne' hv u
-  have hα' : sharpAlpha sharpS u v = 1 - v - (h - a) := sharpAlpha_of_mul hu0.ne' hu v
-  have hβ' : sharpBeta sharpS u v = 1 - u - (f - g) := sharpBeta_of_mul hv0.ne' hv u
-  rw [hα, hβ]
-  unfold cdTu cdTv sharpH sharpG
-  rw [hα', hβ']
-  exact H.identity hl1 hu hv
 
 /-- **Theorem 1** (`SHARP_CD_MOVING:Theorem1`). Under (1) and positivity of the eleven oriented
 doubled areas, the minimum of the eleven ordinary triangle areas is at most `A₀`. If all eleven

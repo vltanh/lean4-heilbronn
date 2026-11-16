@@ -48,7 +48,6 @@ coordinates `(α, β, γ)` in the triangle `ABC`. -/
 def bary (A B C : Point) (α β γ : ℝ) : Point :=
   (α * A.1 + β * B.1 + γ * C.1, α * A.2 + β * B.2 + γ * C.2)
 
-
 /-- The scalar core of `claim_mesh_kstar`: from the seven-face sum, the identities (18), the
 summed Plücker identities (19) and all thirteen areas at least `s ≥ 7/64`. With
 `σ = a + b + c`, (22) reads `σ²/3 - sσ + 3s² ≥ 6sk` and `1 ≥ 3s + σ + k`. -/

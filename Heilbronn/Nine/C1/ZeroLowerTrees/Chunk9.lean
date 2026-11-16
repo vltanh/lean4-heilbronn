@@ -15,19 +15,19 @@ open Cover Model
 
 /-- The sign tree of the case [3, 3, 3, 7]. -/
 noncomputable def tree9_0 : Cover.Tree Split :=
-  .node .three [.node (.tri 1 5 7) [.cert (term_rows% "../../../../data/nine/c1_zero_lower/c172.txt"), .cert (term_rows% "../../../../data/nine/c1_zero_lower/c173.txt")], .node (.tri 4 5 6) [.node (.tri 1 6 7) [.node (.tri 0 6 8) [.cert (term_rows% "../../../../data/nine/c1_zero_lower/c174.txt"), .cert (term_rows% "../../../../data/nine/c1_zero_lower/c175.txt")], .cert (term_rows% "../../../../data/nine/c1_zero_lower/c176.txt")], .cert (term_rows% "../../../../data/nine/c1_zero_lower/c177.txt")], .node (.tri 4 5 7) [.cert (term_rows% "../../../../data/nine/c1_zero_lower/c178.txt"), .cert (term_rows% "../../../../data/nine/c1_zero_lower/c179.txt")]]
+  .node .three [.node (.tri 1 5 7) [.cert (term_rows% "../../Data/c1_zero_lower/c172.txt"), .cert (term_rows% "../../Data/c1_zero_lower/c173.txt")], .node (.tri 4 5 6) [.node (.tri 1 6 7) [.node (.tri 0 6 8) [.cert (term_rows% "../../Data/c1_zero_lower/c174.txt"), .cert (term_rows% "../../Data/c1_zero_lower/c175.txt")], .cert (term_rows% "../../Data/c1_zero_lower/c176.txt")], .cert (term_rows% "../../Data/c1_zero_lower/c177.txt")], .node (.tri 4 5 7) [.cert (term_rows% "../../Data/c1_zero_lower/c178.txt"), .cert (term_rows% "../../Data/c1_zero_lower/c179.txt")]]
 
 /-- The sign tree of the case [3, 3, 3, 9]. -/
 noncomputable def tree9_1 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c180.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c180.txt")
 
 /-- The sign tree of the case [3, 3, 3, 10]. -/
 noncomputable def tree9_2 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c181.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c181.txt")
 
 /-- The sign tree of the case [3, 3, 4, 5]. -/
 noncomputable def tree9_3 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c182.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c182.txt")
 
 /-- The cases of chunk 9 with their trees. -/
 noncomputable def chunk9 : List (List ℕ × Cover.Tree Split) :=

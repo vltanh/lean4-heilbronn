@@ -15,85 +15,85 @@ open Cover Model
 
 /-- The cell tree of the base case 520, words [42, 19] (192 terms). -/
 noncomputable def tree520 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c520_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c520_0.txt")
 
 theorem tree520_ok : checkTree (spec 42 19) [] tree520 = true := by
   tree_decide
 
 /-- The cell tree of the base case 521, words [42, 20] (215 terms). -/
 noncomputable def tree521 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c521_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c521_0.txt")
 
 theorem tree521_ok : checkTree (spec 42 20) [] tree521 = true := by
   tree_decide
 
 /-- The cell tree of the base case 522, words [42, 21] (192 terms). -/
 noncomputable def tree522 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c522_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c522_0.txt")
 
 theorem tree522_ok : checkTree (spec 42 21) [] tree522 = true := by
   tree_decide
 
 /-- The cell tree of the base case 523, words [42, 23] (169 terms). -/
 noncomputable def tree523 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c523_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c523_0.txt")
 
 theorem tree523_ok : checkTree (spec 42 23) [] tree523 = true := by
   tree_decide
 
 /-- The cell tree of the base case 524, words [42, 24] (110 terms). -/
 noncomputable def tree524 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c524_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c524_0.txt")
 
 theorem tree524_ok : checkTree (spec 42 24) [] tree524 = true := by
   tree_decide
 
 /-- The cell tree of the base case 525, words [42, 26] (72 terms). -/
 noncomputable def tree525 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c525_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c525_0.txt")
 
 theorem tree525_ok : checkTree (spec 42 26) [] tree525 = true := by
   tree_decide
 
 /-- The cell tree of the base case 526, words [42, 27] (201 terms). -/
 noncomputable def tree526 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c526_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c526_0.txt")
 
 theorem tree526_ok : checkTree (spec 42 27) [] tree526 = true := by
   tree_decide
 
 /-- The cell tree of the base case 527, words [42, 28] (47 terms). -/
 noncomputable def tree527 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c527_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c527_0.txt")
 
 theorem tree527_ok : checkTree (spec 42 28) [] tree527 = true := by
   tree_decide
 
 /-- The cell tree of the base case 528, words [42, 29] (176 terms). -/
 noncomputable def tree528 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c528_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c528_0.txt")
 
 theorem tree528_ok : checkTree (spec 42 29) [] tree528 = true := by
   tree_decide
 
 /-- The cell tree of the base case 529, words [42, 30] (117 terms). -/
 noncomputable def tree529 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c529_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c529_0.txt")
 
 theorem tree529_ok : checkTree (spec 42 30) [] tree529 = true := by
   tree_decide
 
 /-- The cell tree of the base case 530, words [42, 31] (118 terms). -/
 noncomputable def tree530 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c530_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c530_0.txt")
 
 theorem tree530_ok : checkTree (spec 42 31) [] tree530 = true := by
   tree_decide
 
 /-- The cell tree of the base case 531, words [42, 32] (386 terms). -/
 noncomputable def tree531 : Cover.Tree Split :=
-  .node (.tri 4 7 8) [.cert (term_rows% "../../../../../data/nine/six_single_side/c531_1.txt"),
-    .cert (term_rows% "../../../../../data/nine/six_single_side/c531_2.txt")]
+  .node (.tri 4 7 8) [.cert (term_rows% "../../../Data/six_single_side/c531_1.txt"),
+    .cert (term_rows% "../../../Data/six_single_side/c531_2.txt")]
 
 theorem tree531_ok : checkTree (spec 42 32) [] tree531 = true := by
   tree_decide

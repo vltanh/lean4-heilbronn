@@ -70,7 +70,6 @@ def case230P : Fin 7 → Fin 7 := ![4, 3, 2, 1, 2, 5, 4]
 /-- The words of case 230: `r(Q) = (3,2,2,3,4,4,3)` (index 24). -/
 def case230Q : Fin 7 → Fin 7 := ![3, 2, 2, 3, 4, 4, 3]
 
-
 local notation "HEPT" => SixBoundarySingleTop.heptagon
 local notation "HEXW" => SixBoundarySingleTop.hexagonWords
 
@@ -392,40 +391,6 @@ theorem anchor_areas' (hfam : TriangularFamily a h b c d f X P Q)
     area_ge hmin (i := 0) (j := 1) (k := 6) (by norm_num) (by norm_num) (by norm_num)
     (by norm_num) (by norm_num) (by norm_num) (by simp only [cfg, sarea]; ring) (by nlinarith)⟩
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-anchor`). Equations (4)–(5), with
-`σ = 8/73`, `L = h-a`, `M = c-b`: `aM ≥ σ`, `bL ≥ σ`, `h ≥ σ/M + σ/b`, `c ≥ σ/L + σ/a`;
-`a, b, d, f > 1/8`; `hc ≥ σc²/(bM) ≥ 4σ`; `h, c ≥ 4σ`; `L, M ≥ σ`.
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 57-72. -/
-theorem claim_anchor (hfam : TriangularFamily a h b c d f X P Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    let σ : ℝ := 8 / 73
-    σ ≤ a * (c - b) ∧ σ ≤ b * (h - a) ∧ σ / (c - b) + σ / b ≤ h ∧ σ / (h - a) + σ / a ≤ c ∧
-      1 / 8 < a ∧ 1 / 8 < b ∧ 1 / 8 < d ∧ 1 / 8 < f ∧
-      σ * c ^ 2 / (b * (c - b)) ≤ h * c ∧ 4 * σ ≤ σ * c ^ 2 / (b * (c - b)) ∧
-      4 * σ ≤ h ∧ 4 * σ ≤ c ∧ σ ≤ h - a ∧ σ ≤ c - b := by
-  dsimp only
-  obtain ⟨hABC, hABH⟩ := anchor_areas' hfam hmin
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩, -⟩ := hfam
-  obtain ⟨ha8, hb8, hhc, hL, hM, h4, c4⟩ := anchor_bounds ha hah hh hb hbc hc hABC hABH
-  have hM0 : 0 < c - b := by linarith
-  have hL0 : 0 < h - a := by linarith
-  have e1 : 8 / 73 / (c - b) ≤ a := by rw [div_le_iff₀ hM0]; linarith
-  have e2 : 8 / 73 / b ≤ h - a := by rw [div_le_iff₀ hb]; linarith
-  have e3 : 8 / 73 / (h - a) ≤ b := by rw [div_le_iff₀ hL0]; linarith
-  have e4 : 8 / 73 / a ≤ c - b := by rw [div_le_iff₀ ha]; linarith
-  have hbM : 0 < b * (c - b) := mul_pos hb hM0
-  have e5 : 8 / 73 * c ^ 2 / (b * (c - b)) ≤ h * c := by
-    rw [div_le_iff₀ hbM]
-    -- `h ≥ σ/M + σ/b`, i.e. `h b M ≥ σ c`
-    have k1 := mul_le_mul_of_nonneg_left hABC hb.le
-    have k2 := mul_le_mul_of_nonneg_left hABH hM0.le
-    have : 8 / 73 * c ≤ h * (b * (c - b)) := by nlinarith
-    nlinarith [mul_le_mul_of_nonneg_left this (by linarith : (0 : ℝ) ≤ c)]
-  have e6 : 4 * (8 / 73) ≤ 8 / 73 * c ^ 2 / (b * (c - b)) := by
-    rw [le_div_iff₀ hbM]; nlinarith [sq_nonneg (c - 2 * b)]
-  exact ⟨hABC, hABH, by linarith, by linarith, ha8, hb8, by linarith, by linarith, e5, e6, h4, c4,
-    hL.le, hM.le⟩
-
 /-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:eq6`). The cap identities (6), for every point
 `X`: `[DXF] = (1-d)(x_x-f) - (1-f)(1-x_y) = (1-f)(x_y-d) - (1-d)(1-x_x)` and
 `δ - [DXF] = (1-d)(1-x_x) + (1-f)(1-x_y)`. `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 74-81.
@@ -435,22 +400,6 @@ theorem eq6 (d f : ℝ) (X : Point) :
       sarea (ptD d) X (ptF f) = (1 - f) * (X.2 - d) - (1 - d) * (1 - X.1) ∧
       (1 - d) * (1 - f) - sarea (ptD d) X (ptF f) = (1 - d) * (1 - X.1) + (1 - f) * (1 - X.2) := by
   refine ⟨?_, ?_, ?_⟩ <;> simp only [sarea] <;> ring
-
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-cap`). Equations (6)–(8) and the lines
-after them, with `σ = 8/73` and the normalization `f ≤ d`: `[DXF] ≥ 3σ`, `δ ≥ 3σ`,
-`d < 1 - 24σ/7 = 319/511`, `f < 3/7` (`3σ > 16/49`), `x_x - f > 192/511`, `x_y - d > 192/511`,
-`p_x - f > 64/511`, `p_y - d > 64/511`, `p_x, p_y ≤ 1-σ`.
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 74-109. -/
-theorem claim_cap (hfam : TriangularFamily a h b c d f X P Q)
-    (hfd : f ≤ d) (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    let σ : ℝ := 8 / 73
-    3 * σ ≤ sarea (ptD d) X (ptF f) ∧ 3 * σ ≤ (1 - d) * (1 - f) ∧ d < 319 / 511 ∧
-      (16 / 49 : ℝ) < 3 * σ ∧ f < 3 / 7 ∧ 192 / 511 < X.1 - f ∧ 192 / 511 < X.2 - d ∧
-      64 / 511 < P.1 - f ∧ 64 / 511 < P.2 - d ∧ P.1 ≤ 1 - σ ∧ P.2 ≤ 1 - σ := by
-  dsimp only
-  obtain ⟨-, C, I, -, -, -, hDXF, -⟩ := fam_bounds hfam hfd hmin
-  exact ⟨by rw [(eq6 d f X).1]; exact hDXF, C.1, C.2.1, by norm_num, C.2.2.1, C.2.2.2.1,
-    C.2.2.2.2, I.1, I.2.1, I.2.2.1, I.2.2.2⟩
 
 /-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-Q-box`). With `σ = 8/73`:
 `σ ≤ q_x, q_y ≤ 1-σ` (bases `AH`, `BC` and the identities (9)).
@@ -479,22 +428,6 @@ theorem claim_Q_box (hfam : TriangularFamily a h b c d f X P Q)
     (g (i := 5) (j := 6) (k := 8) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num) (by norm_num) (by simp only [cfg, sarea]; ring)
       (by simp only [sarea] at q5; linarith))
-
-set_option linter.unusedVariables false in
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-splits`). No actual triangle is degenerate:
-every triangle of three distinct points of the configuration has nonzero signed area. Hence the
-260 word pairs together with the two additional sign splits (case 230, `(P,Q)` words (39,24), on
-`[CPQ]`; case 238, words (39,33), on `[BPQ]`) give 262 terminal cells covering every
-configuration. `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 167-190. -/
-theorem claim_splits (hfam : TriangularFamily a h b c d f X P Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    ∀ i j k : Fin 9, i ≠ j → j ≠ k → i ≠ k →
-      sarea (nConfig a h b c d f X P Q i) (nConfig a h b c d f X P Q j)
-        (nConfig a h b c d f X P Q k) ≠ 0 := by
-  intro i j k hij hjk hik h0
-  have := nConfig_area hmin i j k hij hjk hik
-  rw [h0, abs_zero] at this
-  norm_num at this
 
 /-! ### Section 3: the additional bounds for lower Q and for case 230 -/
 

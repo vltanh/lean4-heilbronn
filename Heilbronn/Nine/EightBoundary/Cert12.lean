@@ -28,7 +28,7 @@ def case12 : List Expr :=
    esarea pD pE pO - s, esarea pH pA pO - s, v 2 - v 6, v 5 - v 1, v 4 - v 0, v 7 - v 3]
 
 theorem check12 :
-    check (orders ++ budgets ++ gaps ++ case12) (term_rows% "../../../data/nine/eight/thm12_terms.txt") =
+    check (orders ++ budgets ++ gaps ++ case12) (term_rows% "../Data/eight/thm12_terms.txt") =
       true := by
   decide +kernel
 

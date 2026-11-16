@@ -68,7 +68,6 @@ structure Placement (h c d f : ℝ) (L P Q X : Point) : Prop where
   left : InLeftCap f h X
   leftSq : X ∈ unitSquare
 
-
 /-- Helper: transposition maps the right cap beyond `CD` to the left cap of the transposed
 anchors (`[F'H'X'] = -[DCX] = [CDX]`). -/
 theorem right_swap {c d : ℝ} {X : Point} (hX : InRightCap c d X) : InLeftCap d c X.swap := by
@@ -86,7 +85,6 @@ theorem transpose_right {h c d f : ℝ} {L P Q X : Point} (hA : C1Anchors h c d 
   ⟨C1OneLowerTopCap.anchors_swap hA, C1OneLowerTopCap.min_swap hmin,
     C1OneLowerTopCap.lower_swap hL, C1OneLowerTopCap.upper_swap hP,
     C1OneLowerTopCap.upper_swap hQ, right_swap hX, C1OneLowerTopCap.sq_swap hXsq⟩
-
 
 /-! ### Sections 1–2: bounds -/
 
@@ -862,31 +860,6 @@ theorem theorem1 {h c d f : ℝ} {L P Q X : Point} (hA : C1Anchors h c d f)
   rcases hX with hl | hr
   · exact left ⟨hA, hmin, hL, hP, hQ, hl, hXsq⟩
   · exact left (transpose_right hA hmin hL hP hQ hXsq hr)
-
-/-- Helper: a point strictly inside `OHC` is strictly on the inner side of `CD`, `DF` and `FH`
-(barycentric identity `[OCH][ABL] = [CHL][ABO] + [HOL][ABC] + [OCL][ABH]`). -/
-theorem lower_not_cap {h c d f : ℝ} (hA : C1Anchors h c d f) {L : Point} (hL : InLower h c L) :
-    ¬ (InRightCap c d L ∨ InTopCap d f L ∨ InLeftCap f h L) := by
-  obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA
-  obtain ⟨l1, l2, l3⟩ := hL
-  simp only [ptO, ptC, ptH] at l1 l2 l3
-  have key : ∀ A B : Point, 0 < sarea A B (0, 0) → 0 ≤ sarea A B (c, 0) →
-      0 ≤ sarea A B (0, h) → 0 < sarea A B L := by
-    intro A B h1 h2 h3
-    have e : (c * h) * sarea A B L = sarea (c, 0) (0, h) L * sarea A B (0, 0) +
-        sarea (0, h) (0, 0) L * sarea A B (c, 0) + sarea (0, 0) (c, 0) L * sarea A B (0, h) := by
-      simp only [sarea]; ring
-    have : 0 < (c * h) * sarea A B L := by
-      rw [e]; nlinarith [mul_pos l2 h1, mul_nonneg l3.le h2, mul_nonneg l1.le h3]
-    exact pos_of_mul_pos_right this (by nlinarith)
-  have k1 := key (c, 0) (1, d) (by simp only [sarea]; nlinarith) (by simp only [sarea]; nlinarith)
-    (by simp only [sarea]; nlinarith)
-  have k2 := key (1, d) (f, 1) (by simp only [sarea]; nlinarith) (by simp only [sarea]; nlinarith)
-    (by simp only [sarea]; nlinarith)
-  have k3 := key (f, 1) (0, h) (by simp only [sarea]; nlinarith) (by simp only [sarea]; nlinarith)
-    (by simp only [sarea]; nlinarith)
-  unfold InRightCap InTopCap InLeftCap ptC ptD ptF ptH
-  rintro (h1 | h1 | h1) <;> linarith
 
 /-- Helper (the region partition): a free point of a competitive configuration not in `OHC` lies
 in `HCDF` or in one of the three caps. -/

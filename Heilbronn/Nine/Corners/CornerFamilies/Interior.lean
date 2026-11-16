@@ -63,10 +63,6 @@ theorem ge_of_pos {p q r : Point} {t : ℝ} (ht : 0 < t) (h : t ≤ triangleArea
     (hp : 0 < sarea p q r) : 2 * t ≤ sarea p q r :=
   two_mul_le_sarea_of_nonneg ht hp.le h
 
-theorem le_of_neg {p q r : Point} {t : ℝ} (ht : 0 < t) (h : t ≤ triangleArea p q r)
-    (hn : sarea p q r < 0) : sarea p q r ≤ -(2 * t) :=
-  sarea_le_of_nonpos ht hn.le h
-
 theorem pos_of_mul_pos_right' {a b : ℝ} (h : 0 < a * b) (hb : 0 < b) : 0 < a := by
   by_contra hc; push Not at hc; nlinarith [mul_nonpos_of_nonpos_of_nonneg hc hb.le]
 

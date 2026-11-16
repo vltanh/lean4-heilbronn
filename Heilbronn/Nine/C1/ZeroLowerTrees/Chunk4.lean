@@ -15,39 +15,39 @@ open Cover Model
 
 /-- The sign tree of the case [0, 3, 4, 7]. -/
 noncomputable def tree4_0 : Cover.Tree Split :=
-  .node (.tri 6 7 8) [.node (.tri 1 6 7) [.node (.tri 3 5 7) [.cert (term_rows% "../../../../data/nine/c1_zero_lower/c078.txt"), .cert (term_rows% "../../../../data/nine/c1_zero_lower/c079.txt")], .node (.tri 3 5 7) [.cert (term_rows% "../../../../data/nine/c1_zero_lower/c080.txt"), .cert (term_rows% "../../../../data/nine/c1_zero_lower/c081.txt")]], .node (.tri 4 6 7) [.node (.tri 3 5 7) [.cert (term_rows% "../../../../data/nine/c1_zero_lower/c082.txt"), .cert (term_rows% "../../../../data/nine/c1_zero_lower/c083.txt")], .cert (term_rows% "../../../../data/nine/c1_zero_lower/c084.txt")]]
+  .node (.tri 6 7 8) [.node (.tri 1 6 7) [.node (.tri 3 5 7) [.cert (term_rows% "../../Data/c1_zero_lower/c078.txt"), .cert (term_rows% "../../Data/c1_zero_lower/c079.txt")], .node (.tri 3 5 7) [.cert (term_rows% "../../Data/c1_zero_lower/c080.txt"), .cert (term_rows% "../../Data/c1_zero_lower/c081.txt")]], .node (.tri 4 6 7) [.node (.tri 3 5 7) [.cert (term_rows% "../../Data/c1_zero_lower/c082.txt"), .cert (term_rows% "../../Data/c1_zero_lower/c083.txt")], .cert (term_rows% "../../Data/c1_zero_lower/c084.txt")]]
 
 /-- The sign tree of the case [0, 3, 4, 8]. -/
 noncomputable def tree4_1 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c085.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c085.txt")
 
 /-- The sign tree of the case [0, 3, 4, 10]. -/
 noncomputable def tree4_2 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c086.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c086.txt")
 
 /-- The sign tree of the case [0, 3, 5, 6]. -/
 noncomputable def tree4_3 : Cover.Tree Split :=
-  .node (.tri 1 6 7) [.cert (term_rows% "../../../../data/nine/c1_zero_lower/c087.txt"), .node (.tri 4 6 8) [.cert (term_rows% "../../../../data/nine/c1_zero_lower/c088.txt"), .cert (term_rows% "../../../../data/nine/c1_zero_lower/c089.txt")]]
+  .node (.tri 1 6 7) [.cert (term_rows% "../../Data/c1_zero_lower/c087.txt"), .node (.tri 4 6 8) [.cert (term_rows% "../../Data/c1_zero_lower/c088.txt"), .cert (term_rows% "../../Data/c1_zero_lower/c089.txt")]]
 
 /-- The sign tree of the case [0, 3, 5, 7]. -/
 noncomputable def tree4_4 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c090.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c090.txt")
 
 /-- The sign tree of the case [0, 3, 5, 8]. -/
 noncomputable def tree4_5 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c091.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c091.txt")
 
 /-- The sign tree of the case [0, 3, 5, 9]. -/
 noncomputable def tree4_6 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c092.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c092.txt")
 
 /-- The sign tree of the case [0, 3, 5, 10]. -/
 noncomputable def tree4_7 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c093.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c093.txt")
 
 /-- The sign tree of the case [0, 3, 6, 7]. -/
 noncomputable def tree4_8 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../data/nine/c1_zero_lower/c094.txt")
+  .cert (term_rows% "../../Data/c1_zero_lower/c094.txt")
 
 /-- The cases of chunk 4 with their trees. -/
 noncomputable def chunk4 : List (List ℕ × Cover.Tree Split) :=

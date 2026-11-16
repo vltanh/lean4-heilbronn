@@ -191,16 +191,6 @@ theorem Conf.cap (H : Conf a h b c d f X P Q) (hfd : f ≤ d) :
   · nlinarith [mul_le_mul_of_nonneg_left (show 1 - d ≤ 1 - f by linarith)
       (show 0 ≤ 1 - f by linarith)]
 
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_TOP:claim-cap-bounds`). With `s = 8/73` and the normalization
-`f ≤ d`: `x_X - f ≥ s`, `y_X - d ≥ s`, `δ = (1-d)(1-f) ≥ s`, `d < 7/8` and `f < 67/100`.
-`docs/proof/nine/SIX_BOUNDARY_SINGLE_TOP.md`, lines 63-73. -/
-theorem claim_cap_bounds {a h b c d f : ℝ} {X P Q : Point}
-    (hfam : SingleTopFamily a h b c d f X P Q) (hfd : f ≤ d)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    let s : ℝ := 8 / 73
-    s ≤ X.1 - f ∧ s ≤ X.2 - d ∧ s ≤ (1 - d) * (1 - f) ∧ d < 7 / 8 ∧ f < 67 / 100 :=
-  (Conf.ofFam hfam hmin).cap hfd
-
 /-- **Claim** (`SIX_BOUNDARY_SINGLE_TOP:eq6`). The exact projection identities, for every point
 `R`: `(1-f)[CDR] + (1-c)[DFR] = [CDF](1-r_x)` and `(1-h)[DFR] + (1-d)[FHR] = [DFH](1-r_y)`.
 `docs/proof/nine/SIX_BOUNDARY_SINGLE_TOP.md`, lines 76-81. -/
@@ -246,20 +236,6 @@ theorem Conf.sqP (H : Conf a h b c d f X P Q) : P ∈ unitSquare := by
   exact ⟨by linarith, by linarith, by linarith, by linarith⟩
 
 theorem Conf.sqQ (H : Conf a h b c d f X P Q) : Q ∈ unitSquare := H.swap.sqP
-
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_TOP:claim-interior-box`). With `s = 8/73`, both interior points
-`R ∈ {P, Q}` satisfy `s ≤ r_x ≤ 1-s` and `s ≤ r_y ≤ 1-s` (bases `AH`, `BC` and (6)).
-`docs/proof/nine/SIX_BOUNDARY_SINGLE_TOP.md`, lines 75-86. -/
-theorem claim_interior_box {a h b c d f : ℝ} {X P Q : Point}
-    (hfam : SingleTopFamily a h b c d f X P Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    ∀ R ∈ ({P, Q} : Set Point),
-      8 / 73 ≤ R.1 ∧ R.1 ≤ 1 - 8 / 73 ∧ 8 / 73 ≤ R.2 ∧ R.2 ≤ 1 - 8 / 73 := by
-  intro R hR
-  rcases hR with rfl | hR
-  · exact (Conf.ofFam hfam hmin).boxP
-  · rw [Set.mem_singleton_iff] at hR; subst hR
-    exact (Conf.ofFam hfam hmin).boxQ
 
 /-- The ears (7). -/
 theorem Conf.ears (H : Conf a h b c d f X P Q) :
@@ -307,16 +283,6 @@ theorem Conf.one_below (H : Conf a h b c d f X P Q) :
   have k := QuadrilateralHull.theorem4 H.hN H.hX.1 H.sqP H.sqQ
     (Or.inr (Or.inr ⟨hT P hPl (by linarith) (by linarith), hT Q hQl (by linarith) (by linarith)⟩))
   linarith [k.1, k.2.1, H.hmin]
-
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_TOP:claim-one-below-HC`). At most one of `P, Q` lies below
-`HC` (otherwise the six actual points `H, C, A, B, P, Q` of the virtual triangle `(0,0)HC` give
-minimum area at most `7hc/128 < 7/128 < 4/73`). `docs/proof/nine/SIX_BOUNDARY_SINGLE_TOP.md`, lines 97-101.
-Uses: QUADRILATERAL_HULL:Theorem4 -/
-theorem claim_one_below_HC {a h b c d f : ℝ} {X P Q : Point}
-    (hfam : SingleTopFamily a h b c d f X P Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    ¬ (sarea (ptH h) (ptC c) P < 0 ∧ sarea (ptH h) (ptC c) Q < 0) :=
-  (Conf.ofFam hfam hmin).one_below
 
 /-- The fan subdivision of `HCDF` from an upper point. -/
 theorem Conf.fanP (H : Conf a h b c d f X P Q) (hu : 0 < sarea (ptH h) (ptC c) P) :
@@ -470,24 +436,6 @@ theorem Conf.mixedP (H : Conf a h b c d f X P Q) (hlow : sarea (ptH h) (ptC c) P
   · linarith [mul_nonneg (show 0 ≤ 1 - h by linarith) g1']
   · linarith [mul_nonneg (show 0 ≤ 1 - c by linarith) g2']
   · linarith [mul_nonneg (show 0 ≤ 1 - h * c by linarith) hu.le]
-
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_TOP:claim-mixed`). Equations (9)–(10): in the mixed class,
-the lower point `Z = (ℓ_x, ℓ_y) ∈ {P, Q}` (below `HC`) satisfies, with `s = 8/73`,
-`hc ≥ s/(3-2√2) > 7/11`, `h, c ≥ 7/11`, `c - ℓ_x ≥ 2s`, `h - ℓ_y ≥ 2s`, `ℓ_x + ℓ_y ≤ 1-s`
-(endpoint theorem of `TYPE_II.md` §1 for `H, C, A, B, Z` in `(0,0)HC`).
-`docs/proof/nine/SIX_BOUNDARY_SINGLE_TOP.md`, lines 109-125.
-Uses: TYPE_II:EndpointTriangleTheorem -/
-theorem claim_mixed {a h b c d f : ℝ} {X P Q Z : Point}
-    (hfam : SingleTopFamily a h b c d f X P Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q))
-    (hZ : Z = P ∨ Z = Q) (hlow : sarea (ptH h) (ptC c) Z < 0) :
-    let s : ℝ := 8 / 73
-    s / (3 - 2 * Real.sqrt 2) ≤ h * c ∧ 7 / 11 < s / (3 - 2 * Real.sqrt 2) ∧
-      7 / 11 ≤ h ∧ 7 / 11 ≤ c ∧ 2 * s ≤ c - Z.1 ∧ 2 * s ≤ h - Z.2 ∧ Z.1 + Z.2 ≤ 1 - s := by
-  intro s
-  rcases hZ with rfl | rfl
-  · exact (Conf.ofFam hfam hmin).mixedP hlow
-  · exact (Conf.ofFam hfam hmin).swap.mixedP hlow
 
 /-! ### Section 2: the complete radial-word and pair cover -/
 
@@ -1015,57 +963,6 @@ theorem Conf.pair_cover (H : Conf a h b c d f X P Q) (hPup : 0 < sarea (ptH h) (
   ⟨H.sectors hPup hQup, H.isoHCD hPup hQup, H.isoHDF hPup hQup, H.isoHCF hPup hQup,
     H.isoCDF hPup hQup⟩
 
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_TOP:claim-pair-cover`). The two configuration-specific
-exclusions of the upper class behind the 884 base pairs (lines 146-173): if both `P, Q` are above
-`HC`, (i) they do not lie in a common diagonal sector of `HCDF` (`ONE_CORNER_COMPLETION`
-Theorem 2), and (ii) if only one diagonal separates them, the line `PQ` isolates the vertex of
-their common containing triangle — `C` for `HCD`, `F` for `HDF`, `H` for `HCF`, `D` for `CDF` —
-from the other three vertices of `HCDF` (`ONE_CORNER_COMPLETION` Theorem 3). (The other
-filters of the cover are `claim_one_below_HC`, `claim_ears` and the sign rules
-`SixBoundary.claim_pair_line_sign`, `eq14`; the resulting list has 884 base pairs.)
-`docs/proof/nine/SIX_BOUNDARY_SINGLE_TOP.md`, lines 146-173.
-Uses: ONE_CORNER_COMPLETION:Theorem2, ONE_CORNER_COMPLETION:Theorem3 -/
-theorem claim_pair_cover {a h b c d f : ℝ} {X P Q : Point}
-    (hfam : SingleTopFamily a h b c d f X P Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q))
-    (hPup : 0 < sarea (ptH h) (ptC c) P) (hQup : 0 < sarea (ptH h) (ptC c) Q) :
-    (¬ (InSectorHCJ h c d f P ∧ InSectorHCJ h c d f Q) ∧
-      ¬ (InSectorCDJ h c d f P ∧ InSectorCDJ h c d f Q) ∧
-      ¬ (InSectorDFJ h c d f P ∧ InSectorDFJ h c d f Q) ∧
-      ¬ (InSectorFHJ h c d f P ∧ InSectorFHJ h c d f Q)) ∧
-    (InTriangle P (ptH h) (ptC c) (ptD d) → InTriangle Q (ptH h) (ptC c) (ptD d) →
-      sarea (ptC c) (ptF f) P * sarea (ptC c) (ptF f) Q < 0 →
-      sarea (ptC c) P Q * sarea (ptH h) P Q < 0 ∧ sarea (ptC c) P Q * sarea (ptD d) P Q < 0 ∧
-        sarea (ptC c) P Q * sarea (ptF f) P Q < 0) ∧
-    (InTriangle P (ptH h) (ptD d) (ptF f) → InTriangle Q (ptH h) (ptD d) (ptF f) →
-      sarea (ptC c) (ptF f) P * sarea (ptC c) (ptF f) Q < 0 →
-      sarea (ptF f) P Q * sarea (ptH h) P Q < 0 ∧ sarea (ptF f) P Q * sarea (ptD d) P Q < 0 ∧
-        sarea (ptF f) P Q * sarea (ptC c) P Q < 0) ∧
-    (InTriangle P (ptH h) (ptC c) (ptF f) → InTriangle Q (ptH h) (ptC c) (ptF f) →
-      sarea (ptH h) (ptD d) P * sarea (ptH h) (ptD d) Q < 0 →
-      sarea (ptH h) P Q * sarea (ptC c) P Q < 0 ∧ sarea (ptH h) P Q * sarea (ptF f) P Q < 0 ∧
-        sarea (ptH h) P Q * sarea (ptD d) P Q < 0) ∧
-    (InTriangle P (ptC c) (ptD d) (ptF f) → InTriangle Q (ptC c) (ptD d) (ptF f) →
-      sarea (ptH h) (ptD d) P * sarea (ptH h) (ptD d) Q < 0 →
-      sarea (ptD d) P Q * sarea (ptC c) P Q < 0 ∧ sarea (ptD d) P Q * sarea (ptF f) P Q < 0 ∧
-        sarea (ptD d) P Q * sarea (ptH h) P Q < 0) :=
-  (Conf.ofFam hfam hmin).pair_cover hPup hQup
-
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_TOP:claim-refinement`). No actual sign is zero: every triangle
-of three distinct points of the configuration has nonzero signed area (by (2)); hence the four
-actual-area splits (base pairs 196, 260, 262, 274) and the three closed scalar cuts
-(`d ≤ 1/2 ∨ d ≥ 1/2`, `c ≤ 7/8 ∨ c ≥ 7/8`, `q_x ≤ 1/2 ∨ q_x ≥ 1/2`) cover every configuration,
-giving the `884 + 6 + 3 = 893` terminal cells. `docs/proof/nine/SIX_BOUNDARY_SINGLE_TOP.md`, lines 175-200.
--/
-theorem claim_refinement {a h b c d f : ℝ} {X P Q : Point}
-    (_hfam : SingleTopFamily a h b c d f X P Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    ∀ i j k : Fin 9, i ≠ j → j ≠ k → i ≠ k →
-      sarea (nConfig a h b c d f X P Q i) (nConfig a h b c d f X P Q j)
-        (nConfig a h b c d f X P Q k) ≠ 0 := by
-  intro i j k hij hjk hik
-  exact sarea_ne_zero_of_min_pos (by linarith) i j k hij hjk hik
-
 /-! ### Sections 3–4: the certificate package -/
 
 /-- The variables `a, h, b, c, d, f, x_X, y_X, p_x, p_y, q_x, q_y` of the certificates. -/
@@ -1161,11 +1058,6 @@ theorem orient_of_ne {x : ℝ} (hx : x ≠ 0) : OrientHolds (decide (0 < x)) x :
   rcases hx.lt_or_gt with h | h
   · simp [OrientHolds, not_lt.2 h.le, h]
   · simp [OrientHolds, h]
-
-theorem orient_unique {s t : Bool} {x : ℝ} (hs : OrientHolds s x) (ht : OrientHolds t x) :
-    s = t := by
-  cases s <;> cases t <;> simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at hs ht
-    <;> first | rfl | (exfalso; linarith)
 
 theorem WordAt.orient (H : Conf a h b c d f X P Q) {m w : ℕ} (hm : m = 7 ∨ m = 8)
     (W : WordAt (cfg a h b c d f X P Q) m w) {i j : ℕ} (hi : i < 7) (hj : j < 7) (hij : i ≠ j) :
@@ -1806,15 +1698,6 @@ theorem Conf.main (H : Conf a h b c d f X P Q) (hfd : f ≤ d) (hp : p < 52) (hq
   have WQ : WordAt (cfg a h b c d f X P Q) 8 q := wordAt_of_radial rfl RQ
   exact (Cell.mk H hfd (mem_cases_iff.2 ⟨hp, hq, hpq, H.filterOK WP WQ RP RQ⟩) WP WQ
     (H.base_sound WP WQ RP RQ)).false
-
-/-- The base-pair count of lines 170-171: 615 mixed and 269 upper (884 in all). -/
-theorem cases_length : Model.cases.length = 884 := by decide +kernel
-
-theorem cases_mixed : (Model.cases.filter fun x => Model.mixed x.1 x.2).length = 615 := by
-  decide +kernel
-
-theorem cases_upper : (Model.cases.filter fun x => !Model.mixed x.1 x.2).length = 269 := by
-  decide +kernel
 
 /-- **Claim** (`SIX_BOUNDARY_SINGLE_TOP:claim-certificate`). The certificate package
 (`docs/proof/nine/six_boundary_single_top_certificates.json`, verified by

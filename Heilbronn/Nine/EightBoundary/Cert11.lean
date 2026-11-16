@@ -26,7 +26,7 @@ def case11 : List Expr :=
    esarea pG pB pO - s, esarea pB pC pO - s, esarea pF pG pO - s, v 2 - v 6, v 5 - v 1]
 
 theorem check11 :
-    check (orders ++ budgets ++ gaps ++ case11) (term_rows% "../../../data/nine/eight/thm11_terms.txt") =
+    check (orders ++ budgets ++ gaps ++ case11) (term_rows% "../Data/eight/thm11_terms.txt") =
       true := by
   decide +kernel
 

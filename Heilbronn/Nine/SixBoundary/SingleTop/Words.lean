@@ -100,43 +100,7 @@ theorem classify {r : Fin 7 → ℕ} (h : IsRadialWord r) :
     (rel_of h 0 6 (by decide)) (rel_of h 1 6 (by decide)) (rel_of h 2 6 (by decide))
     (rel_of h 3 6 (by decide)) (rel_of h 4 6 (by decide)) (rel_of h 5 6 (by decide))
 
-/-- A word as a function `Fin 7 → Fin 7`. -/
-def toF (l : List ℕ) : Fin 7 → Fin 7 := fun i => ⟨l.getD i 0 % 7, Nat.mod_lt _ (by norm_num)⟩
-
-theorem allWords_radial : ∀ l ∈ allWords, IsRadialWord fun i => ((toF l i : Fin 7) : ℕ) := by
-  decide +kernel
-
-theorem toF_eq (r : Fin 7 → Fin 7) :
-    toF [(r 0 : ℕ), r 1, r 2, r 3, r 4, r 5, r 6] = r := by
-  funext i
-  apply Fin.ext
-  fin_cases i <;> simp [toF, Nat.mod_eq_of_lt (r _).isLt]
-
-/-- `radialWords 7` is the image of the 57 words. -/
-theorem radialWords_eq : radialWords 7 = (allWords.map toF).toFinset := by
-  ext r
-  simp only [radialWords, Finset.mem_filter, Finset.mem_univ, true_and, List.mem_toFinset,
-    List.mem_map]
-  constructor
-  · intro h
-    exact ⟨_, classify h, toF_eq r⟩
-  · rintro ⟨l, hl, rfl⟩
-    exact allWords_radial l hl
-
 theorem words_eq : words = allWords.filter fun l => 2 ≤ l.getD 3 0 := by decide +kernel
-
-theorem card_radialWords : (allWords.map toF).toFinset.card = 57 := by decide +kernel
-
-theorem card_hexagon :
-    ((allWords.map toF).toFinset.filter fun r => 2 ≤ (r 3 : ℕ)).card = 52 := by decide +kernel
-
-theorem card_lower :
-    (((allWords.map toF).toFinset.filter fun r => 2 ≤ (r 3 : ℕ)).filter
-      fun r => (r 6 : ℕ) < 3).card = 19 := by decide +kernel
-
-theorem card_upper :
-    (((allWords.map toF).toFinset.filter fun r => 2 ≤ (r 3 : ℕ)).filter
-      fun r => 3 ≤ (r 6 : ℕ)).card = 33 := by decide +kernel
 
 /-- A word of `radialWords 7` with `r₃ ≥ 2` is one of the 52 words, with an index `w`. -/
 theorem exists_index {r : Fin 7 → Fin 7} (hr : r ∈ radialWords 7) (h3 : 2 ≤ (r 3 : ℕ)) :

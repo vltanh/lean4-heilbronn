@@ -60,7 +60,6 @@ inductive CapClass
   | RT
   | RL
   | TL
-  deriving DecidableEq
 
 /-- The cap of the first cap point `X`. -/
 def CapClass.first : CapClass → Region
@@ -74,13 +73,6 @@ def CapClass.second : CapClass → Region
   | .RL => .left
   | .TL => .left
 
-/-- The right, top and left cap words `(1,0,4,3,2)`, `(2,1,0,4,3)`, `(3,2,1,0,4)` (Section 3). -/
-def capWord : Region → Word
-  | .right => ![1, 0, 4, 3, 2]
-  | .top => ![2, 1, 0, 4, 3]
-  | .left => ![3, 2, 1, 0, 4]
-  | _ => ![0, 0, 0, 0, 0]
-
 /-- The three lower words `(1,3,3,2,1), (2,3,2,2,1), (3,3,2,1,1)` (Section 3), indexed from zero. -/
 def lowerWord : Fin 3 → Word := ![![1, 3, 3, 2, 1], ![2, 3, 2, 2, 1], ![3, 3, 2, 1, 1]]
 
@@ -88,14 +80,6 @@ def lowerWord : Fin 3 → Word := ![![1, 3, 3, 2, 1], ![2, 3, 2, 2, 1], ![3, 3, 
 def upperWord : Fin 8 → Word :=
   ![![1, 1, 3, 3, 2], ![1, 2, 3, 2, 2], ![2, 1, 1, 3, 3], ![2, 1, 2, 3, 2], ![2, 2, 1, 2, 3],
     ![2, 2, 2, 2, 2], ![3, 2, 1, 1, 3], ![3, 2, 2, 1, 2]]
-
-/-- The full hull orders of Section 3: `O, C, X, D, Y, F, H` (`RT`), `O, C, X, D, F, Y, H` (`RL`),
-`O, C, D, X, F, Y, H` (`TL`). -/
-def hullOf (k : CapClass) (h c d f : ℝ) (X Y : Point) : Fin 7 → Point :=
-  match k with
-  | .RT => ![ptO, ptC c, X, ptD d, Y, ptF f, ptH h]
-  | .RL => ![ptO, ptC c, X, ptD d, ptF f, Y, ptH h]
-  | .TL => ![ptO, ptC c, ptD d, X, ptF f, Y, ptH h]
 
 /-- The placement of Theorem 1 in class `k`: C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1`, `f ≤ d`;
 minimum triangle area at least `A₀` for `c1Config h c d f X Y L Q`; `L` strictly inside `OHC`;
@@ -111,17 +95,6 @@ structure Placement (k : CapClass) (h c d f : ℝ) (X Y L Q : Point) : Prop wher
   firstSq : X ∈ unitSquare
   second : InRegion h c d f k.second Y
   secondSq : Y ∈ unitSquare
-
-/-- The 62 word pairs (13) `(k, i, j)` (class, lower word `i`, upper word `j`): of the
-`3 · 8 = 24` pairs per class, remove those with three free points below `OD` (first word entry
-`1`; two per class with a right cap) and those with two free points in `OFH` (two per class),
-leaving 20 `RT`, 20 `RL`, 22 `TL`. -/
-def mixedCases : List (CapClass × Fin 3 × Fin 8) :=
-  [CapClass.RT, CapClass.RL, CapClass.TL].flatMap fun k => (List.finRange 3).flatMap fun i =>
-    ((List.finRange 8).filter fun j =>
-      let ws := [capWord k.first, capWord k.second, lowerWord i, upperWord j]
-      decide (ws.countP (fun w => decide (w 0 = 1)) ≤ 2) &&
-        decide (ws.countP (fun w => wordInside w 0 3 4) ≤ 1)).map fun j => (k, i, j)
 
 /-! ### Theorem 1 -/
 
@@ -467,7 +440,6 @@ theorem count_eight {P : Fin 9 → Point} (ι : Fin 8 → Fin 9) (hι : Function
 
 end Assembly
 
-
 /-- The octagon `O, C, R, D, X, F, Y, H` of mode `one_each` (indices of `c1Config h c d f R X Y L`). -/
 def octOne : Fin 8 → Fin 9 := ![0, 1, 5, 2, 6, 3, 7, 4]
 
@@ -616,17 +588,6 @@ theorem eight_twoTop {h c d f : ℝ} {R X Y L : Point}
     · exact gR
   exact count_eight' H octTwo (by decide +kernel) (by decide +kernel) (tb.append tb2) octTwo_table
     rfl rfl rfl hE.lower
-
-/-- **Claim** (`C1_ONE_LOWER_MIXED_CAPS:claim-eight-vertices`). With one point in each cap (row
-`(0,1,1,1)`), or a right-cap point and two top-cap points with quadrilateral top hull (row
-`(0,1,2,0)`), the full hull has eight vertices. `docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md`, lines
-384-392. -/
-theorem claim_eight_vertices {h c d f : ℝ} {R X Y L : Point} :
-    (C1OneLowerEightHull.OneEach h c d f R X Y L →
-        hullVertexCount (c1Config h c d f R X Y L) = 8) ∧
-      (C1OneLowerEightHull.TwoTop h c d f R X Y L →
-        hullVertexCount (c1Config h c d f R X Y L) = 8) :=
-  ⟨eight_oneEach, eight_twoTop⟩
 
 /-! ### The rows of the case tree -/
 

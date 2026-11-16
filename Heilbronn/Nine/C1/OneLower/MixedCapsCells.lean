@@ -509,7 +509,6 @@ theorem fixed_areas (hA : C1Anchors h c d f) :
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA
   refine ⟨?_, by unfold sarea; ring, ?_⟩ <;> unfold sarea <;> nlinarith
 
-
 theorem factors_rt (i j : ℕ) : Model.factors (0, i, j) =
     [v 0 - k (24 / 73),
     v 1 - k (24 / 73),
@@ -644,7 +643,6 @@ theorem factors_tl (i j : ℕ) : Model.factors (2, i, j) =
   rfl
 
 theorem cubics_tl (i j : ℕ) : Model.cubics (2, i, j) = [v 3 * v 0 * (1 - v 0) - k (8 / 73)] := rfl
-
 
 /-! ### The atoms of each class -/
 

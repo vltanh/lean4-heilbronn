@@ -73,7 +73,6 @@ def word66 : Fin 8 → Fin 8 := ![4, 4, 4, 4, 3, 3, 3, 3]
 def Neighbourhood20 (a h c f : ℝ) (G : Point) : Prop :=
   11 / 20 ≤ h - a ∧ h - a ≤ 2 / 3 ∧ 11 / 20 ≤ G.1 - f ∧ f ≤ 1 / 4 ∧ 2 / 3 ≤ c ∧ h ≤ G.2
 
-
 /-! ### The configuration as model points -/
 
 /-- The nine points `A, B, C, D, E, G, F, H, O`, indexed as in the model. -/
@@ -331,23 +330,6 @@ theorem claim_hull (hfam : ConvexFamily a h b c d f E G O)
     IsConvexCCW (octagon a h b c d f E G) ∧ InPolygon (octagon a h b c d f E G) O :=
   ⟨(fam_hull hfam hmin).1, (fam_hull hfam hmin).2.1⟩
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-anchor`). Equations (4)–(5), with `σ = 8/73`,
-`L = h-a`, `M = c-b`: `aM ≥ σ`, `bL ≥ σ`, `h ≥ σ/M + σ/b`, `hc ≥ 4σ`, `a, b, d, f > 1/8`,
-`h, c ≥ 4σ`. `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 73-89. -/
-theorem claim_anchor (hfam : ConvexFamily a h b c d f E G O)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
-    let σ : ℝ := 8 / 73
-    σ ≤ a * (c - b) ∧ σ ≤ b * (h - a) ∧ σ / (c - b) + σ / b ≤ h ∧ 4 * σ ≤ h * c ∧
-      1 / 8 < a ∧ 1 / 8 < b ∧ 1 / 8 < d ∧ 1 / 8 < f ∧ 4 * σ ≤ h ∧ 4 * σ ≤ c := by
-  dsimp only
-  obtain ⟨A, -, -, -, -, hABC, hABH, -⟩ := fam_bounds hfam hmin
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩, -⟩ := hfam
-  obtain ⟨ha8, hb8, hhc, -, -, h4, c4⟩ := A
-  refine ⟨hABC, hABH, ?_, hhc, ha8, hb8, by linarith, by linarith, h4, c4⟩
-  have e1 : 8 / 73 / (c - b) ≤ a := by rw [div_le_iff₀ (by linarith)]; linarith
-  have e2 : 8 / 73 / b ≤ h - a := by rw [div_le_iff₀ hb]; linarith
-  linarith
-
 /-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-delta`). Equation (6): `δ = (1-d)(1-f) ≥ 4σ`
 (convex four-point endpoint lemma for `D, F, E, G` in the virtual triangle `DF(1,1)`).
 `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 91-97.
@@ -406,26 +388,6 @@ theorem claim_box (hfam : ConvexFamily a h b c d f E G O)
   · have := prod_le (by norm_num) ha.le (by linarith : a ≤ 255 / 511)
       (by linarith : 8 / 73 ≤ a * (c - b))
     linarith
-
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-cap`). Equations (8)–(9): for either cap point
-`Z ∈ {E, G}`, `[DZF] = (1-d)(z_x-f)-(1-f)(1-z_y) = (1-f)(z_y-d)-(1-d)(1-z_x) ≥ σ`, hence
-`z_x - f ≥ 64/511` and `z_y - d ≥ 64/511`. `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_CONVEX.md`, lines 114-128. -/
-theorem claim_cap (hfam : ConvexFamily a h b c d f E G O)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f E G O)) :
-    ∀ Z ∈ ({E, G} : Set Point),
-      sarea (ptD d) Z (ptF f) = (1 - d) * (Z.1 - f) - (1 - f) * (1 - Z.2) ∧
-      sarea (ptD d) Z (ptF f) = (1 - f) * (Z.2 - d) - (1 - d) * (1 - Z.1) ∧
-      8 / 73 ≤ sarea (ptD d) Z (ptF f) ∧ 64 / 511 ≤ Z.1 - f ∧ 64 / 511 ≤ Z.2 - d := by
-  obtain ⟨-, CE, CG, -, -, -, -, hDEF, hDGF, -⟩ := fam_bounds hfam hmin
-  intro Z hZ
-  have e1 : sarea (ptD d) Z (ptF f) = (1 - d) * (Z.1 - f) - (1 - f) * (1 - Z.2) := by
-    simp only [sarea]; ring
-  have e2 : sarea (ptD d) Z (ptF f) = (1 - f) * (Z.2 - d) - (1 - d) * (1 - Z.1) := by
-    simp only [sarea]; ring
-  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hZ
-  rcases hZ with rfl | rfl
-  · exact ⟨e1, e2, by rw [e1]; exact hDEF, CE.1, CE.2⟩
-  · exact ⟨e1, e2, by rw [e1]; exact hDGF, CG.1, CG.2⟩
 
 /-- **Claim** (`SIX_BOUNDARY_TWO_TOP_CONVEX:claim-order`). Equations (10)–(11): with
 `u = e_x - g_x`, `v = g_y - e_y`, `[DEG] = u(e_y-d) - (1-e_x)v` and `[FEG] = v(g_x-f) - (1-g_y)u`;

@@ -345,8 +345,6 @@ theorem sarea_EFX : sarea hsE (hsF f) X = (1 - f) * (1 - X.2) := by
   simp only [sarea, hsE, hsF]; ring
 theorem sarea_HFX : sarea (hsH h) (hsF f) X = f * (X.2 - X.1) + (h - (1 - f)) * X.1 - f * h := by
   simp only [sarea, hsH, hsF]; ring
-theorem sarea_AEH : sarea hsA hsE (hsH h) = h := by simp only [sarea, hsA, hsE, hsH]; ring
-theorem sarea_AEF : sarea hsA hsE (hsF f) = 1 - f := by simp only [sarea, hsA, hsE, hsF]; ring
 theorem sarea_AHF : sarea hsA (hsH h) (hsF f) = -(h * f) := by
   simp only [sarea, hsA, hsH, hsF]; ring
 theorem sarea_EHF : sarea hsE (hsH h) (hsF f) = -((1 - h) * (1 - f)) := by
@@ -487,41 +485,6 @@ theorem claim_five_cells (hN : HSNormal h f X) (hs : 0 < s)
   · exfalso; nlinarith [mul_pos hf0 hK']
 
 end NormalForm2
-
-/-- **Claim** (`TYPE_II:claim-five-cells`, reflection). The reflection `(x,y) ↦ (1-y, 1-x)`
-fixes the half-square, exchanges `A` and `E`, sends `F = (f,1)` to `(0, 1-f)` and `H = (0,h)` to
-`(1-h, 1)` (so it exchanges `h` with `β = 1 - f`), keeps every unsigned area, exchanges cells I
-and III and preserves cell II. `docs/proof/nine/TYPE_II.md`, lines 111–113. -/
-theorem claim_five_cells_reflection (h f : ℝ) (X : Point) :
-    let ρ : Point → Point := affineMap 0 (-1) (-1) 0 1 1
-    ρ hsA = hsE ∧ ρ hsE = hsA ∧ ρ (hsF f) = hsH (1 - f) ∧ ρ (hsH h) = hsF (1 - h) ∧
-      (X ∈ halfSquare → ρ X ∈ halfSquare) ∧
-      (InCellI hsA hsE (hsH h) (hsF f) X ↔ InCellIII hsA hsE (hsH (1 - f)) (hsF (1 - h)) (ρ X)) ∧
-      (InCellII hsA hsE (hsH h) (hsF f) X ↔
-        InCellII hsA hsE (hsH (1 - f)) (hsF (1 - h)) (ρ X)) := by
-  intro ρ
-  have hρ : ∀ p : Point, ρ p = (1 - p.2, 1 - p.1) := fun p => by
-    simp only [ρ, affineMap]; ext <;> simp <;> ring
-  have eL : sarea hsA (hsF (1 - h)) (ρ X) = -sarea hsE (hsH h) X := by
-    rw [hρ]; simp only [sarea, hsA, hsE, hsH, hsF]; ring
-  have eK : sarea hsE (hsH (1 - f)) (ρ X) = -sarea hsA (hsF f) X := by
-    rw [hρ]; simp only [sarea, hsA, hsE, hsH, hsF]; ring
-  have eN : sarea (hsH (1 - f)) (hsF (1 - h)) (ρ X) = sarea (hsH h) (hsF f) X := by
-    rw [hρ]; simp only [sarea, hsH, hsF]; ring
-  refine ⟨by rw [hρ]; simp [hsA, hsE], by rw [hρ]; simp [hsA, hsE],
-    by rw [hρ]; simp [hsF, hsH], by rw [hρ]; simp [hsF, hsH], ?_, ?_, ?_⟩
-  · intro hX
-    obtain ⟨h1, h2, h3⟩ := hX
-    rw [hρ]
-    exact ⟨by simp; linarith, by simp; linarith, by simp; linarith⟩
-  · simp only [InCellI, InCellIII, eL, eK, eN]
-    constructor
-    · rintro ⟨a, b, c⟩; exact ⟨by linarith, by linarith, c⟩
-    · rintro ⟨a, b, c⟩; exact ⟨by linarith, by linarith, c⟩
-  · simp only [InCellII, eL, eK, eN]
-    constructor
-    · rintro ⟨a, b, c⟩; exact ⟨by linarith, by linarith, c⟩
-    · rintro ⟨a, b, c⟩; exact ⟨by linarith, by linarith, c⟩
 
 /-! ### Per-cell bounds on the normalized doubled minimum -/
 

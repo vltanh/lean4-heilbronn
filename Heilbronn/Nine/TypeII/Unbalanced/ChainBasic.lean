@@ -62,12 +62,6 @@ theorem abs_ge {n : ℕ} {X : Fin n → Point} {s : ℝ} (h : s / 2 ≤ minTrian
 theorem ge_of_pos {x s : ℝ} (h : s ≤ |x|) (hx : 0 < x) : s ≤ x := by
   rwa [abs_of_pos hx] at h
 
-theorem le_of_neg {x s : ℝ} (h : s ≤ |x|) (hx : x < 0) : x ≤ -s := by
-  rw [abs_of_neg hx] at h; linarith
-
-theorem ne_of_abs {x s : ℝ} (hs : 0 < s) (h : s ≤ |x|) : x ≠ 0 := by
-  rintro rfl; simp at h; linarith
-
 /-! ### Interior points and capacity -/
 
 /-- A triangle containing a point has doubled area at least `3s`. -/
@@ -137,12 +131,7 @@ theorem amgm {p q : ℝ} (hp : 0 ≤ p) (hq : 0 ≤ q) : 2 * Real.sqrt (p * q) �
 theorem sqrt3_gt : (12 / 7 : ℝ) < Real.sqrt 3 := by
   rw [Real.lt_sqrt (by norm_num)]; norm_num
 
-theorem sqrt3_lt : Real.sqrt 3 < 7 / 4 := by
-  rw [Real.sqrt_lt' (by norm_num)]; norm_num
-
 theorem Kc_gt : (52 / 7 : ℝ) < Kc := by unfold Kc; linarith [sqrt3_gt]
-
-theorem Kc_lt : Kc < 15 / 2 := by unfold Kc; linarith [sqrt3_lt]
 
 theorem Kc_s_gt : (13 / 16 : ℝ) < Kc * (8 / 73) := by nlinarith [Kc_gt]
 
@@ -157,9 +146,6 @@ theorem s7_le_A₀ : (7 / 128 : ℝ) ≤ A₀ := A₀_bounds.1.le
 
 theorem sarea_ECX (l : ℝ) (X : Point) : sarea (ptE l) ptC X = X.2 - l - (1 - l) * X.1 := by
   simp only [sarea, ptE, ptC]; ring
-
-theorem sarea_DRX (R X : Point) : sarea ptD R X = R.1 * (X.2 - 1) - (R.2 - 1) * X.1 := by
-  simp only [sarea, ptD]; ring
 
 theorem sarea_BXC (b : ℝ) (X : Point) : sarea (ptB b) X ptC = X.1 - b - X.2 * (1 - b) := by
   simp only [sarea, ptB, ptC]; ring

@@ -15,154 +15,154 @@ open Cover Model
 
 /-- The cell tree of the base pair 275, words [8, 42]. -/
 noncomputable def tree16_0 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c284.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c284.txt")
 
 theorem tree16_0_ok : checkTree (spec 8 42) [] tree16_0 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 276, words [8, 43]. -/
 noncomputable def tree16_1 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c285.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c285.txt")
 
 theorem tree16_1_ok : checkTree (spec 8 43) [] tree16_1 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 277, words [8, 44]. -/
 noncomputable def tree16_2 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c286.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c286.txt")
 
 theorem tree16_2_ok : checkTree (spec 8 44) [] tree16_2 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 278, words [8, 47]. -/
 noncomputable def tree16_3 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c287.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c287.txt")
 
 theorem tree16_3_ok : checkTree (spec 8 47) [] tree16_3 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 279, words [8, 48]. -/
 noncomputable def tree16_4 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c288.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c288.txt")
 
 theorem tree16_4_ok : checkTree (spec 8 48) [] tree16_4 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 280, words [8, 49]. -/
 noncomputable def tree16_5 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c289.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c289.txt")
 
 theorem tree16_5_ok : checkTree (spec 8 49) [] tree16_5 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 281, words [9, 11]. -/
 noncomputable def tree16_6 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c290.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c290.txt")
 
 theorem tree16_6_ok : checkTree (spec 9 11) [] tree16_6 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 282, words [9, 12]. -/
 noncomputable def tree16_7 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c291.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c291.txt")
 
 theorem tree16_7_ok : checkTree (spec 9 12) [] tree16_7 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 283, words [9, 14]. -/
 noncomputable def tree16_8 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c292.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c292.txt")
 
 theorem tree16_8_ok : checkTree (spec 9 14) [] tree16_8 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 284, words [9, 15]. -/
 noncomputable def tree16_9 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c293.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c293.txt")
 
 theorem tree16_9_ok : checkTree (spec 9 15) [] tree16_9 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 285, words [9, 16]. -/
 noncomputable def tree16_10 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c294.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c294.txt")
 
 theorem tree16_10_ok : checkTree (spec 9 16) [] tree16_10 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 286, words [9, 17]. -/
 noncomputable def tree16_11 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c295.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c295.txt")
 
 theorem tree16_11_ok : checkTree (spec 9 17) [] tree16_11 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 287, words [9, 18]. -/
 noncomputable def tree16_12 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c296.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c296.txt")
 
 theorem tree16_12_ok : checkTree (spec 9 18) [] tree16_12 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 288, words [9, 23]. -/
 noncomputable def tree16_13 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c297.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c297.txt")
 
 theorem tree16_13_ok : checkTree (spec 9 23) [] tree16_13 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 289, words [9, 24]. -/
 noncomputable def tree16_14 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c298.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c298.txt")
 
 theorem tree16_14_ok : checkTree (spec 9 24) [] tree16_14 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 290, words [9, 25]. -/
 noncomputable def tree16_15 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c299.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c299.txt")
 
 theorem tree16_15_ok : checkTree (spec 9 25) [] tree16_15 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 291, words [9, 28]. -/
 noncomputable def tree16_16 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c300.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c300.txt")
 
 theorem tree16_16_ok : checkTree (spec 9 28) [] tree16_16 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 292, words [9, 29]. -/
 noncomputable def tree16_17 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c301.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c301.txt")
 
 theorem tree16_17_ok : checkTree (spec 9 29) [] tree16_17 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 293, words [9, 30]. -/
 noncomputable def tree16_18 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c302.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c302.txt")
 
 theorem tree16_18_ok : checkTree (spec 9 30) [] tree16_18 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 294, words [9, 31]. -/
 noncomputable def tree16_19 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c303.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c303.txt")
 
 theorem tree16_19_ok : checkTree (spec 9 31) [] tree16_19 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 295, words [9, 32]. -/
 noncomputable def tree16_20 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c304.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c304.txt")
 
 theorem tree16_20_ok : checkTree (spec 9 32) [] tree16_20 = true := by
   tree_decide
 
 /-- The cell tree of the base pair 296, words [9, 33]. -/
 noncomputable def tree16_21 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_top/c305.txt")
+  .cert (term_rows% "../../../Data/six_single_top/c305.txt")
 
 theorem tree16_21_ok : checkTree (spec 9 33) [] tree16_21 = true := by
   tree_decide

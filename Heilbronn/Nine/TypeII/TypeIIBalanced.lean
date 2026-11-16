@@ -71,9 +71,6 @@ def BalancedPlacement (l b : ℝ) (L P Q R S : Point) : Prop :=
 theorem ge_of_abs_pos {s t : ℝ} (hp : 0 < t) (h : s ≤ |t|) : s ≤ t := by
   rwa [abs_of_pos hp] at h
 
-theorem le_of_abs_neg {s t : ℝ} (hn : t < 0) (h : s ≤ |t|) : t ≤ -s := by
-  rw [abs_of_neg hn] at h; linarith
-
 theorem ne_of_le_abs {s t : ℝ} (hs : 0 < s) (h : s ≤ |t|) : t ≠ 0 := fun h0 => by
   rw [h0, abs_zero] at h; linarith
 
@@ -324,24 +321,6 @@ theorem claim_both_quad_excluded {l b : ℝ} {L P Q R S : Point}
     exact both_quad_core hb hb1 hb2 hb9 hp0 hpb Ly0 hv15 hRs hSs hR (ge_of_abs_pos h1 eBRS)
       (ge_of_abs_pos (by rw [c5]; linarith) eRSC) eLBR
   · exact Or.inl ⟨h1, h2, by rw [c1]; exact pBSC⟩
-
-/-- The triangular alternative gives a triangular hull. -/
-theorem triangularHull_of_inner {A B C X : Point} (hX : InTriangle X A B C) :
-    TriangularHull ![A, C, B, X] := by
-  obtain ⟨h1, h2, h3⟩ := hX
-  have hpos : 0 < sarea A B C := by have := sarea_add_sarea_add_sarea A B C X; linarith
-  refine ⟨0, 2, 1, fun m => ?_⟩
-  have hX' : X ∈ convexHull ℝ ({A, B, C} : Set Point) :=
-    mem_convexHull_of_sarea hpos h2.le h3.le h1.le
-  have hs : ({A, B, C} : Set Point) = {![A, C, B, X] 0, ![A, C, B, X] 2, ![A, C, B, X] 1} := by
-    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
-      Matrix.tail_cons]
-  rw [← hs]
-  fin_cases m
-  · exact subset_convexHull ℝ _ (by simp)
-  · exact subset_convexHull ℝ _ (by simp)
-  · exact subset_convexHull ℝ _ (by simp)
-  · exact hX'
 
 /-! ### §4. A left quadrilateral with a triangular right hull -/
 

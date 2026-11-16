@@ -3,7 +3,6 @@ module
 public import Heilbronn.Nine.Setup.Families
 public import Heilbronn.Nine.SevenBoundary.Setting
 public import Heilbronn.Nine.SevenBoundary.Interior.Main
-public import Heilbronn.Nine.SevenBoundary.MixedPair
 public import Heilbronn.Nine.SevenBoundary.ExteriorCompletion
 
 /-! # The seven-boundary theorem (`docs/proof/nine/SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md` Theorem 2)

@@ -640,11 +640,6 @@ theorem claim_16_certificates (hS : CapSetting a h b c d f E G O) (r : Fin 8 →
     · exact hat e he
     · simp only [eval_minus, eval_v, hzdef, zeta]; linarith
 
-/-- The rotation `(u, v) ↦ (v, 1 - u)` keeps every signed area. -/
-theorem sarea_rot (p q r : Point) :
-    sarea (p.2, 1 - p.1) (q.2, 1 - q.1) (r.2, 1 - r.1) = sarea p q r := by
-  simp only [sarea]; ring
-
 /-- The relabelling of the rotated configuration: the point `i` of the C/D chamber
 `(A', …, H', O') = (C, D, E, G, F, H, A, B, O)` is the point `capPerm i` of `nConfig`. -/
 def capPerm : Equiv.Perm (Fin 9) :=

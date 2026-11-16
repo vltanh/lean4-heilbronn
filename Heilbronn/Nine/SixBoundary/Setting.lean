@@ -238,12 +238,6 @@ theorem isOptimal_nConfig_perm (a h b c d f : ℝ) (W : Fin 3 → Point)
 /-- The transposition `(x, y) ↦ (y, x)`. -/
 def transpose (p : Point) : Point := (p.2, p.1)
 
-/-- The transposition as a symmetry of the square. -/
-def transposeSym : SquareSymmetry := ⟨true, false, false⟩
-
-theorem transposeSym_apply (p : Point) : transposeSym.apply p = transpose p := by
-  simp [transposeSym, SquareSymmetry.apply, transpose]
-
 theorem transpose_transpose (p : Point) : transpose (transpose p) = p := rfl
 
 theorem sarea_transpose (p q r : Point) :

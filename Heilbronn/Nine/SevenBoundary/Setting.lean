@@ -56,12 +56,6 @@ normalization `f ≤ 1/2` (2) of `SEVEN_BOUNDARY_CAPS.md`; this is the hypothesi
 def SevenNormal (a h b c d e f : ℝ) : Prop :=
   SevenAnchors a h b c d e f ∧ f ≤ 1 / 2
 
-/-- The endpoint variant of the anchor conditions used by several notes: `0 < a < h ≤ 1`,
-`0 < b < c < 1`, `0 < d < e ≤ 1`, `b ≤ f ≤ c` (the corners `H = (0,1)` and `E = (1,1)` are
-allowed). Notes that allow only `e = 1` add `h < 1` separately. -/
-def SevenAnchorsClosed (a h b c d e f : ℝ) : Prop :=
-  0 < a ∧ a < h ∧ h ≤ 1 ∧ 0 < b ∧ b < c ∧ c < 1 ∧ 0 < d ∧ d < e ∧ e ≤ 1 ∧ b ≤ f ∧ f ≤ c
-
 /-! ### Configurations -/
 
 /-- The nine points of the seven-boundary form, in the order `A, H, B, C, D, E, F, P, Q`
@@ -78,12 +72,6 @@ def sevenConfig₁ (a h b c d e f : ℝ) (X : Point) : Fin 8 → Point :=
 bounds that involve only anchor triangles. -/
 def sevenAnchorConfig (a h b c d e f : ℝ) : Fin 7 → Point :=
   ![(0, a), (0, h), (b, 0), (c, 0), (1, d), (1, e), (f, 1)]
-
-/-- `R` is a configuration of the normalized seven-boundary form (anchors `SevenNormal`, free
-points in the square). -/
-def IsSeven (R : Fin 9 → Point) : Prop :=
-  ∃ (a h b c d e f : ℝ) (P Q : Point), SevenNormal a h b c d e f ∧
-    P ∈ unitSquare ∧ Q ∈ unitSquare ∧ R = sevenConfig a h b c d e f P Q
 
 /-! ### Regions -/
 

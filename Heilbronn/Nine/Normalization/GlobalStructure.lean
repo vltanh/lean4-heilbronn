@@ -105,16 +105,6 @@ def incidences (P : Fin 9 → Point) : Set (Fin 9 × Side) := {x | x.2.Contains 
 def TwoContacts (P : Fin 9 → Point) (S : Side) : Prop :=
   ∃ i j, i ≠ j ∧ S.Contains (P i) ∧ S.Contains (P j)
 
-/-- **Claim** (`GLOBAL_STRUCTURE:claim-two-per-side`, made up). Positive least area implies that
-no three points lie on one side: three such points would be collinear.
-`docs/proof/nine/GLOBAL_STRUCTURE.md`, line 27; `docs/proof/nine/UNRESTRICTED.md`, line 53. -/
-theorem claim_two_per_side {P : Fin 9 → Point} (hpos : 0 < minTriangleArea P) (S : Side)
-    {i j k : Fin 9} (hij : i ≠ j) (hjk : j ≠ k) (hik : i ≠ k) :
-    ¬ (S.Contains (P i) ∧ S.Contains (P j) ∧ S.Contains (P k)) := by
-  rintro ⟨h1, h2, h3⟩
-  apply sarea_ne_zero_of_min_pos hpos i j k hij hjk hik
-  cases S <;> simp only [Side.Contains] at h1 h2 h3 <;> simp only [sarea, h1, h2, h3] <;> ring
-
 /-- Two indices with the same point give a degenerate triangle: positive least area makes the
 configuration injective. -/
 theorem injective_of_min_pos {P : Fin 9 → Point} (hpos : 0 < minTriangleArea P) :
@@ -612,16 +602,6 @@ theorem isOptimal_of_symm {P : Fin 9 → Point} (g : SquareSymmetry)
   rw [symComp_apply, ← hτ i]
   exact (symInv_apply_apply g _).symm
 
-theorem isOptimal_perm {P : Fin 9 → Point} (σ : Equiv.Perm (Fin 9)) (h : IsOptimal P) :
-    IsOptimal (P ∘ σ) := by
-  obtain ⟨g, τ, hτ⟩ := h
-  exact ⟨g, σ⁻¹ * τ, fun i => by simp [hτ i]⟩
-
-theorem isOptimal_symm {P : Fin 9 → Point} (g : SquareSymmetry) (h : IsOptimal P) :
-    IsOptimal (g.apply ∘ P) := by
-  obtain ⟨k, τ, hτ⟩ := h
-  exact ⟨symComp g k, τ, fun i => by rw [symComp_apply, ← hτ i]; rfl⟩
-
 /-- An optimal configuration has least area `A₀`. -/
 theorem minTriangleArea_of_isOptimal {P : Fin 9 → Point} (h : IsOptimal P) :
     minTriangleArea P = A₀ := by
@@ -763,16 +743,6 @@ def InFamily (Q : Fin 9 → Point) : Prop :=
 /-- `P` normalizes to the maximizer `Q`, of the same least area, in one of the five families. -/
 def Reaches (P Q : Fin 9 → Point) : Prop :=
   Normalizes P Q ∧ IsMaximizer Q ∧ minTriangleArea Q = minTriangleArea P ∧ InFamily Q
-
-theorem reaches_of_symm {M : Fin 9 → Point} (g : SquareSymmetry)
-    (h : ∃ Q, Reaches (g.apply ∘ M) Q) : ∃ Q, Reaches M Q := by
-  obtain ⟨Q, h1, h2, h3, h4⟩ := h
-  exact ⟨Q, Relation.ReflTransGen.head (NormStep.symmetry M g) h1, h2,
-    by rw [h3, SquareSymmetry.minTriangleArea_comp], h4⟩
-
-theorem reaches_of_perm {M : Fin 9 → Point} (hM : IsMaximizer M) (σ : Equiv.Perm (Fin 9))
-    (h : InFamily (M ∘ σ)) : ∃ Q, Reaches M Q :=
-  ⟨M ∘ σ, .single (.relabel M σ), isMaximizer_perm hM σ, minTriangleArea_comp_perm M σ, h⟩
 
 theorem occupied_symm {M : Fin 9 → Point} (g : SquareSymmetry) {c c' : Point}
     (hc : g.apply c = c') (h : Occupied M c) : Occupied (g.apply ∘ M) c' := by

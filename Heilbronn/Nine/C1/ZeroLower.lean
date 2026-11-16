@@ -354,15 +354,6 @@ theorem four_le_card {p : Fin 9 → Prop} [DecidablePred p] {a b e g : Fin 9} (h
 theorem fin9_ne {a : ℕ} (ha : a < 9) {b : Fin 9} (h : a ≠ b.val) : (⟨a, ha⟩ : Fin 9) ≠ b :=
   fun e => h (by rw [← e])
 
-/-- The values of the configuration at numerals. -/
-theorem c1Config_apply (h c d f : ℝ) (Q : Fin 4 → Point) :
-    c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 0 = (0, 0) ∧
-    c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 1 = (c, 0) ∧
-    c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 2 = (1, d) ∧
-    c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 3 = (f, 1) ∧
-    c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 4 = (0, h) :=
-  ⟨rfl, rfl, rfl, rfl, rfl⟩
-
 theorem c1Config_free (h c d f : ℝ) (Q : Fin 4 → Point) (i : Fin 4) :
     c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) (⟨i.val + 5, by omega⟩ : Fin 9) = Q i := by
   fin_cases i <;> rfl

@@ -57,7 +57,6 @@ def capWords : Finset (Fin 8 → Fin 8) :=
   {![4, 3, 2, 1, 1, 6, 6, 5], ![4, 3, 2, 2, 1, 5, 6, 5], ![4, 3, 3, 2, 1, 4, 6, 5],
     ![4, 4, 3, 2, 1, 3, 6, 5], ![5, 4, 3, 2, 1, 1, 6, 6], ![5, 4, 3, 2, 1, 2, 6, 5]}
 
-
 /-! ### Scalar bounds -/
 
 section Scalar
@@ -388,60 +387,6 @@ section Claims
 variable {a h b c d f : ℝ} {X Y Z : Point}
 
 set_option linter.unusedVariables false in
-/-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-anchor`). Equation (2) and the lines after it:
-with `s = 8/73`, `L = h-a`, `M = c-b`: `aM ≥ s`, `bL ≥ s`, `h ≥ s/M + s/b`, `hc ≥ 4s`,
-`a, b > 1/8`. `docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 42-52. -/
-theorem claim_anchor (hN : NAnchors a h b c d f)
-    (hX : InCapR c d X) (hY : InCapT d f Y) (hZ : InCapT d f Z)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
-    let s : ℝ := 8 / 73
-    s ≤ a * (c - b) ∧ s ≤ b * (h - a) ∧ s / (c - b) + s / b ≤ h ∧ 4 * s ≤ h * c ∧
-      1 / 8 < b ∧ 1 / 8 < a := by
-  dsimp only
-  obtain ⟨hABC, hABH, -, -⟩ := side_areas hN hX hmin
-  have hN' := hN
-  obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN'
-  obtain ⟨ha8, hb8, hhc, -⟩ := anchor_bounds ha hah hh hb hbc hc hABC hABH
-  refine ⟨hABC, hABH, ?_, hhc, hb8, ha8⟩
-  have e1 : 8 / 73 / (c - b) ≤ a := by rw [div_le_iff₀ (by linarith)]; linarith
-  have e2 : 8 / 73 / b ≤ h - a := by rw [div_le_iff₀ hb]; linarith
-  linarith
-
-set_option linter.unusedVariables false in
-/-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-side`). Equations (3)–(4), for the side point
-`X = (x, y)`, with `s = 8/73`, `M = c-b`: `[BCX] = My ≥ s`, `[CXD] = d(x-c)-(1-c)y ≥ s`;
-`x - c ≥ s`, `c ≤ 1-s`, `d - y ≥ s/(1-c)`, `M < 447/584`, `a, y > 64/447 > 1/7`,
-`d ≥ s/M + s/(1-c) ≥ 4s/(1-b) > 256/511 > 1/2`, `h ≥ d`.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 54-80. -/
-theorem claim_side (hN : NAnchors a h b c d f)
-    (hX : InCapR c d X) (hY : InCapT d f Y) (hZ : InCapT d f Z)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
-    let s : ℝ := 8 / 73
-    s ≤ (c - b) * X.2 ∧ s ≤ d * (X.1 - c) - (1 - c) * X.2 ∧
-      s ≤ X.1 - c ∧ c ≤ 1 - s ∧ s / (1 - c) ≤ d - X.2 ∧ c - b < 447 / 584 ∧
-      64 / 447 < a ∧ 64 / 447 < X.2 ∧ (1 / 7 : ℝ) < 64 / 447 ∧
-      s / (c - b) + s / (1 - c) ≤ d ∧ 4 * s / (1 - b) ≤ s / (c - b) + s / (1 - c) ∧
-      256 / 511 < 4 * s / (1 - b) ∧ (1 / 2 : ℝ) < 256 / 511 ∧ d ≤ h := by
-  dsimp only
-  obtain ⟨hABC, hABH, hBCX, hCXD⟩ := side_areas hN hX hmin
-  have hN' := hN
-  obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN'
-  obtain ⟨⟨x0, x1, y0, y1⟩, -⟩ := hX
-  obtain ⟨ha', hb8, hc4, hc1, hd2, hL, hM, hxc, hy', hdy, hMlt, hW, hd4, -⟩ :=
-    side_bounds hN x1 y0 hABC hABH hBCX hCXD
-  have hM0 : 0 < c - b := by linarith
-  have hW0 : 0 < 1 - c := by linarith
-  have e1 : 8 / 73 / (c - b) ≤ X.2 := by rw [div_le_iff₀ hM0]; linarith
-  have e2 : 8 / 73 / (1 - c) ≤ d - X.2 := by rw [div_le_iff₀ hW0]; linarith
-  have e3 : 4 * (8 / 73) / (1 - b) ≤ 8 / 73 / (c - b) + 8 / 73 / (1 - c) := by
-    rw [show 1 - b = (c - b) + (1 - c) by ring, div_add_div _ _ hM0.ne' hW0.ne',
-      div_le_div_iff₀ (by positivity) (by positivity)]
-    linarith [mul_nonneg (by norm_num : (0 : ℝ) ≤ 8 / 73) (sq_nonneg ((c - b) - (1 - c)))]
-  have e4 : 256 / 511 < 4 * (8 / 73) / (1 - b) := by
-    rw [lt_div_iff₀ (by linarith)]; linarith
-  exact ⟨hBCX, hCXD, hxc, hc1, e2, hMlt, ha', hy', by norm_num, by linarith, e3, e4, by norm_num, hdh⟩
-
-set_option linter.unusedVariables false in
 /-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-delta`). Equation (5): `δ = (1-d)(1-f) < 7/16 < 4s`
 (`f ≥ b > 1/8`, `d > 1/2`). `docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 83-87. -/
 theorem claim_delta (hN : NAnchors a h b c d f)
@@ -556,7 +501,6 @@ theorem claim_triangular_cap (hN : NAnchors a h b c d f)
       funext m; fin_cases m <;> rfl
     exact TypeII.triangularHull_comp_perm _ _ (by rw [e]; exact ht)
 
-
 /-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-hull`). The full hull is the strictly convex
 octagon `(A, B, C, X, D, E, F, H)` (7), and `O` is its sole interior point.
 `docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 101-112. -/
@@ -564,29 +508,6 @@ theorem claim_hull {X E O : Point} (hfam : SideTwoTopFamily a h b c d f X E O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X E O)) :
     IsConvexCCW (octagon a h b c d f X E) ∧ InPolygon (octagon a h b c d f X E) O :=
   ⟨(fam_hull hfam hmin).1, (fam_hull hfam hmin).2.1⟩
-
-/-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-bounds`). Equations (8)–(12), with `s = 8/73`,
-`X = (x, y)`, `E = (e_x, e_y)`, `O = (o_x, o_y)`: `d < 1 - 24s/7 = 319/511 < 5/8`, `f < 1-6s`,
-`c ≥ 4s`, `d - y ≥ s/(1-c) ≥ 8/41 > 7/36`, `e_x - f > 6s`, `e_y - d ≥ 3s`, `o_x - f > 2s`,
-`o_y - d > 8s/7 > 1/8`, `o_x, o_y ≤ 1-s` (the latter from `[DEO], [EFO] ≥ s`).
-`docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 114-162. -/
-theorem claim_bounds {X E O : Point} (hfam : SideTwoTopFamily a h b c d f X E O)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X E O)) :
-    let s : ℝ := 8 / 73
-    d < 1 - 24 * s / 7 ∧ 1 - 24 * s / 7 = 319 / 511 ∧ (319 / 511 : ℝ) < 5 / 8 ∧ f < 1 - 6 * s ∧
-      4 * s ≤ c ∧ s / (1 - c) ≤ d - X.2 ∧ 8 / 41 ≤ s / (1 - c) ∧ (7 / 36 : ℝ) < 8 / 41 ∧
-      6 * s < E.1 - f ∧ 3 * s ≤ E.2 - d ∧ 2 * s < O.1 - f ∧ 8 * s / 7 < O.2 - d ∧
-      (1 / 8 : ℝ) < 8 * s / 7 ∧ O.1 ≤ 1 - s ∧ O.2 ≤ 1 - s := by
-  dsimp only
-  obtain ⟨S, C, I, -⟩ := fam_bounds hfam hmin
-  obtain ⟨-, -, hc4, hc1, -, -, -, -, -, -, -, hW, -⟩ := S
-  obtain ⟨-, hd5, hf6, hef, hed⟩ := C
-  obtain ⟨hof, hod, hox, hoy⟩ := I
-  have hW0 : 0 < 1 - c := by linarith
-  refine ⟨by linarith, by norm_num, by norm_num, hf6, hc4, ?_, ?_, by norm_num, hef, hed, hof,
-    by linarith, by norm_num, hox, hoy⟩
-  · rw [div_le_iff₀ hW0]; linarith
-  · rw [le_div_iff₀ hW0]; linarith
 
 /-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-words`), restated. The radial word of `O` on the
 octagon (14)–(15), with `r₄ = 1` (`O` inside `DEF`), is one of the six words (16). (The manuscript

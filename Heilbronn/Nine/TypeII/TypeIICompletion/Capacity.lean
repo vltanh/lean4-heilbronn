@@ -29,7 +29,6 @@ used by the C1 notes (Theorem 1) and are consequences of the global capacity the
 noncomputable section
 namespace Heilbronn.Nine.TypeIICompletion
 
-
 /-! ### The six-point step of Theorem 1 -/
 
 /-- Four distinct indices of `Fin 6`: three distinct ones leave exactly three others. -/

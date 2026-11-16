@@ -96,7 +96,6 @@ def octagonOneEach (h c d f : ℝ) (R X Y : Point) : Fin 8 → Point :=
 def octagonTwoTop (h c d f : ℝ) (R X Y : Point) : Fin 8 → Point :=
   ![ptO, ptC c, R, ptD d, X, Y, ptF f, ptH h]
 
-
 /-- Helper: the transposition `(x, y) ↦ (y, x)` of the plane is linear. -/
 theorem isLinearMap_swap : IsLinearMap ℝ (Prod.swap : Point → Point) :=
   ⟨fun _ _ => rfl, fun _ _ => rfl⟩
@@ -1824,26 +1823,6 @@ theorem eq19_20_two {h c d f : ℝ} {R X Y L : Point} (hfd : f ≤ d) (hM : TwoT
   push_cast
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> linarith
-
-/-- **Claim** (`C1_ONE_LOWER_EIGHT_HULL:(19)-(20)`). The certificate package: under `f ≤ d`, for
-each mode and each of the six words, no configuration exists. One fixed positive combination of the
-terms (19) (products of one to three affine factors of the ordered lists (8) for `one_each`, (16)
-for `two_top`, and the 84 costs: hull triangles minus `3s` or `s` according to whether the word
-puts `L` inside, triangles `(i, j, L)` with the word sign minus `s`) has unit-cube bound (20) at
-most `-3/4` (largest `-24902965599574904570203/25151865159450302873600`).
-`docs/proof/nine/C1_ONE_LOWER_EIGHT_HULL.md`, lines 150-162, 254-266, 303-351 (data
-`c1_one_lower_eight_hull_certificates.json`, checker `check_c1_one_lower_eight_hull.py`).
-Uses: C1_ONE_LOWER_EIGHT_HULL:(1), C1_ONE_LOWER_EIGHT_HULL:(2), C1_ONE_LOWER_EIGHT_HULL:(3),
-C1_ONE_LOWER_EIGHT_HULL:(4), C1_ONE_LOWER_EIGHT_HULL:(5), C1_ONE_LOWER_EIGHT_HULL:(6),
-C1_ONE_LOWER_EIGHT_HULL:(7), C1_ONE_LOWER_EIGHT_HULL:(9), C1_ONE_LOWER_EIGHT_HULL:(10),
-C1_ONE_LOWER_EIGHT_HULL:(11), C1_ONE_LOWER_EIGHT_HULL:(12), C1_ONE_LOWER_EIGHT_HULL:(13)-(14),
-C1_ONE_LOWER_EIGHT_HULL:(15). -/
-theorem eq19_20 {h c d f : ℝ} {R X Y L : Point} (hfd : f ≤ d) :
-    (OneEach h c d f R X Y L →
-        ∀ i, HasHullWord (octagonOneEach h c d f R X Y) L (octWord i) → False) ∧
-      (TwoTop h c d f R X Y L →
-        ∀ i, HasHullWord (octagonTwoTop h c d f R X Y) L (octWord i) → False) := by
-  exact ⟨eq19_20_one hfd, eq19_20_two hfd⟩
 
 /-- **Theorem** (`C1_ONE_LOWER_EIGHT_HULL:Theorem`). The full convex hull of a competitive C1
 configuration with exactly one free point in `OHC` cannot have eight vertices. (No order `f ≤ d`

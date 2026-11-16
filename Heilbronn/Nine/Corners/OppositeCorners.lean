@@ -263,46 +263,6 @@ theorem eq13 (h f s : ℝ) (hh1 : h < 1) (hf : 0 < f) (hs : s ≤ (1 - h) * (1 -
     h < 1 - s := by
   nlinarith
 
-/-- **Claim** (`OPPOSITE_CORNERS:claim-CS`), equation (6): `√(hf) + √(αβ) ≤ 1`
-(Cauchy–Schwarz for `(√h, √α)` and `(√f, √β)`). `docs/proof/nine/OPPOSITE_CORNERS.md`, lines 112–120. -/
-theorem claim_CS (h f : ℝ) (hh : 0 ≤ h) (hh1 : h ≤ 1) (hf : 0 ≤ f) (hf1 : f ≤ 1) :
-    Real.sqrt (h * f) + Real.sqrt ((1 - h) * (1 - f)) ≤ 1 := by
-  set a := Real.sqrt (h * f)
-  set b := Real.sqrt ((1 - h) * (1 - f))
-  have ha : 0 ≤ a := Real.sqrt_nonneg _
-  have hb : 0 ≤ b := Real.sqrt_nonneg _
-  have ha2 : a ^ 2 = h * f := Real.sq_sqrt (by positivity)
-  have hb2 : b ^ 2 = (1 - h) * (1 - f) := Real.sq_sqrt (mul_nonneg (by linarith) (by linarith))
-  have hc : 0 ≤ h * (1 - f) + f * (1 - h) := by
-    have := mul_nonneg hh (sub_nonneg.2 hf1); have := mul_nonneg hf (sub_nonneg.2 hh1); linarith
-  have key : (2 * (a * b)) ^ 2 ≤ (h * (1 - f) + f * (1 - h)) ^ 2 := by
-    have : (2 * (a * b)) ^ 2 = 4 * (a ^ 2 * b ^ 2) := by ring
-    rw [this, ha2, hb2]; nlinarith [sq_nonneg (h - f)]
-  have hab : 2 * (a * b) ≤ h * (1 - f) + f * (1 - h) :=
-    (pow_le_pow_iff_left₀ (by positivity) hc (by norm_num)).1 key
-  have hsq : (a + b) ^ 2 ≤ 1 := by nlinarith
-  nlinarith
-
-/-- **Claim** (`OPPOSITE_CORNERS:claim-CS`), the form in which (6) is used throughout: if
-`hf ≥ m₁ s` and `αβ ≥ m₂ s` then `(√m₁ + √m₂)² s ≤ 1` (e.g. `m₁ = m₂ = 3` gives `s ≤ 1/12`).
-`docs/proof/nine/OPPOSITE_CORNERS.md`, lines 112–120, 156–163, 192–207. -/
-theorem claim_CS_consequence (h f s m₁ m₂ : ℝ) (hh : 0 ≤ h) (hh1 : h ≤ 1) (hf : 0 ≤ f)
-    (hf1 : f ≤ 1) (hs : 0 ≤ s) (hm₁ : 0 ≤ m₁) (hm₂ : 0 ≤ m₂) (h₁ : m₁ * s ≤ h * f)
-    (h₂ : m₂ * s ≤ (1 - h) * (1 - f)) :
-    (Real.sqrt m₁ + Real.sqrt m₂) ^ 2 * s ≤ 1 := by
-  have h1 : Real.sqrt m₁ * Real.sqrt s ≤ Real.sqrt (h * f) := by
-    rw [← Real.sqrt_mul hm₁]; exact Real.sqrt_le_sqrt h₁
-  have h2 : Real.sqrt m₂ * Real.sqrt s ≤ Real.sqrt ((1 - h) * (1 - f)) := by
-    rw [← Real.sqrt_mul hm₂]; exact Real.sqrt_le_sqrt h₂
-  have := claim_CS h f hh hh1 hf hf1
-  have h3 : (Real.sqrt m₁ + Real.sqrt m₂) * Real.sqrt s ≤ 1 := by nlinarith
-  have h4 : 0 ≤ (Real.sqrt m₁ + Real.sqrt m₂) * Real.sqrt s := by positivity
-  calc (Real.sqrt m₁ + Real.sqrt m₂) ^ 2 * s
-      = ((Real.sqrt m₁ + Real.sqrt m₂) * Real.sqrt s) ^ 2 := by
-        rw [mul_pow, Real.sq_sqrt hs]
-    _ ≤ 1 ^ 2 := pow_le_pow_left₀ h4 h3 2
-    _ = 1 := one_pow 2
-
 /-! ### §2. Five possible point cells reduce to three -/
 
 /-- **Claim** (`OPPOSITE_CORNERS:claim-cells`), identities (7): `N = -fK - αβx` and
@@ -312,42 +272,6 @@ theorem eq7 (h f : ℝ) (X : Point) :
     lineN h f X = (1 - h) * lineL f X - h * f * (1 - X.2) := by
   simp only [lineN, lineK, lineL, sarea]
   exact ⟨by ring, by ring⟩
-
-/-- **Claim** (`OPPOSITE_CORNERS:claim-cells`), the containment column of the table: for `X`
-strictly inside `T`, the cells are the stated intersections of open triangles (written with
-counterclockwise vertex orders: `AFH`, `AEH`, `AEF`, `EFH`), and cell V is `N > 0`.
-`docs/proof/nine/OPPOSITE_CORNERS.md`, lines 143–154. -/
-theorem claim_cell_containments (h f : ℝ) (hh : 0 < h) (hh1 : h < 1) (hf : 0 < f)
-    (hf1 : f < 1) (X : Point) (hx : 0 < X.1) (hxy : X.1 < X.2) (hy : X.2 < 1) :
-    (CellI h f X ↔ InTriangle X (0, 0) (f, 1) (0, h) ∧ InTriangle X (0, 0) (1, 1) (0, h)) ∧
-    (CellII h f X ↔ InTriangle X (0, 0) (1, 1) (f, 1) ∧ InTriangle X (0, 0) (1, 1) (0, h)) ∧
-    (CellIII h f X ↔ InTriangle X (1, 1) (f, 1) (0, h) ∧ InTriangle X (0, 0) (1, 1) (f, 1)) ∧
-    (CellIV h f X ↔ InTriangle X (0, 0) (f, 1) (0, h) ∧ InTriangle X (1, 1) (f, 1) (0, h)) ∧
-    (CellV h f X ↔ 0 < lineN h f X) := by
-  have e1 : sarea (0, 0) (1, 1) X = X.2 - X.1 := by simp only [sarea]; ring
-  have e2 : sarea (0, h) (0, 0) X = h * X.1 := by simp only [sarea]; ring
-  have e3 : sarea (1, 1) (f, 1) X = (1 - f) * (1 - X.2) := by simp only [sarea]; ring
-  have e4 : sarea (f, 1) (0, h) X = -lineN h f X := by simp only [lineN, sarea]; ring
-  have e5 : sarea (f, 1) (0, 0) X = -lineL f X := by simp only [lineL, sarea]; ring
-  have e6 : sarea (0, h) (1, 1) X = -lineK h X := by simp only [lineK, sarea]; ring
-  have e7 : sarea (0, 0) (f, 1) X = lineL f X := rfl
-  have e8 : sarea (1, 1) (0, h) X = lineK h X := rfl
-  have p1 : 0 < X.2 - X.1 := by linarith
-  have p2 : 0 < h * X.1 := by positivity
-  have p3 : 0 < (1 - f) * (1 - X.2) := mul_pos (by linarith) (by linarith)
-  obtain ⟨n1, n2⟩ := eq7 h f X
-  have q1 : 0 < (1 - h) * (1 - f) * X.1 := mul_pos (mul_pos (by linarith) (by linarith)) hx
-  have q2 : 0 < h * f * (1 - X.2) := mul_pos (mul_pos hh hf) (by linarith)
-  simp only [CellI, CellII, CellIII, CellIV, CellV, InTriangle, e1, e2, e3, e4, e5, e6, e7, e8]
-  refine ⟨⟨fun ⟨a, b, c⟩ => ⟨⟨a, by linarith, p2⟩, ⟨p1, b, p2⟩⟩,
-      fun ⟨⟨a, b, _⟩, ⟨_, d, _⟩⟩ => ⟨a, d, by linarith⟩⟩,
-    ⟨fun ⟨a, b, _⟩ => ⟨⟨p1, p3, by linarith⟩, ⟨p1, b, p2⟩⟩,
-      fun ⟨⟨_, _, c⟩, ⟨_, d, _⟩⟩ => ⟨by linarith, d, by nlinarith⟩⟩,
-    ⟨fun ⟨a, b, c⟩ => ⟨⟨p3, by linarith, by linarith⟩, ⟨p1, p3, by linarith⟩⟩,
-      fun ⟨⟨_, b, c⟩, ⟨_, _, f⟩⟩ => ⟨by linarith, by linarith, by linarith⟩⟩,
-    ⟨fun ⟨a, b, c⟩ => ⟨⟨a, by linarith, p2⟩, ⟨p3, by linarith, by linarith⟩⟩,
-      fun ⟨⟨a, b, _⟩, ⟨_, _, f⟩⟩ => ⟨a, by linarith, by linarith⟩⟩,
-    ⟨fun ⟨_, _, c⟩ => c, fun c => ⟨by nlinarith, by nlinarith, c⟩⟩⟩
 
 /-- **Claim** (`OPPOSITE_CORNERS:claim-cells`), the five-cell classification at a general
 threshold: by (7), `N > 0` forces `L > 0` and `K < 0`, so a point of `T` all of whose doubled
@@ -640,22 +564,6 @@ theorem claim_pair_exclusions (h f : ℝ) (hh : 0 < h) (hh1 : h < 1) (hf : 0 < f
     have := (cs_poly hh.le hh1.le hf.le hf1.le (by norm_num) hfs b).2
     norm_num at this
 
-/-- **Claim** (`OPPOSITE_CORNERS:claim-one-var`), equation (9): on `0 < b < 1`,
-`b(1 - b)/(3 - b) ≤ 5 - 2√6` and `b(1 - b)/(2 + b) ≤ 5 - 2√6`, and `5 - 2√6 < 6/55`.
-`docs/proof/nine/OPPOSITE_CORNERS.md`, lines 211–221. -/
-theorem claim_one_var (b : ℝ) (hb : 0 < b) (hb1 : b < 1) :
-    b * (1 - b) / (3 - b) ≤ 5 - 2 * Real.sqrt 6 ∧ b * (1 - b) / (2 + b) ≤ 5 - 2 * Real.sqrt 6 ∧
-      5 - 2 * Real.sqrt 6 < 6 / 55 := by
-  set t := Real.sqrt 6 with ht
-  have ht2 : t ^ 2 = 6 := Real.sq_sqrt (by norm_num)
-  have ht0 : 0 ≤ t := Real.sqrt_nonneg 6
-  have h3b : 0 < 3 - b := by linarith
-  have h2b : 0 < 2 + b := by linarith
-  refine ⟨?_, ?_, ?_⟩
-  · rw [div_le_iff₀ h3b]; nlinarith [sq_nonneg (b - (3 - t))]
-  · rw [div_le_iff₀ h2b]; nlinarith [sq_nonneg (b - (t - 2))]
-  · nlinarith
-
 /-! ### §4. A weighted area identity -/
 
 /-- **Claim** (`OPPOSITE_CORNERS:claim-weighted-identity`), identities (10): with
@@ -837,7 +745,6 @@ theorem eq15_16 (h f σ : ℝ) (hh : 0 < h) (hh1 : h < 1) (hf : 0 < f) (hf1 : f 
   linarith
 
 theorem rho_A : rho (0, 0) = (1, 1) := by simp [rho]
-theorem rho_E : rho (1, 1) = (0, 0) := by simp [rho]
 theorem rho_H (h : ℝ) : rho (0, h) = (1 - h, 1) := by simp [rho]
 theorem rho_F (f : ℝ) : rho (f, 1) = (0, 1 - f) := by simp [rho]
 
@@ -1180,42 +1087,6 @@ theorem claim_II_II_same_sign (h f : ℝ) (hh : 0 < h) (hh1 : h < 1) (hf : 0 < f
     (by rw [show (1 : ℝ) - (1 - f) = f by ring]; exact s1) s2 hU2 h22
 
 /-! ### §7. Pair II–II with `d_A, d_E` of opposite signs -/
-
-/-- **Claim** (`OPPOSITE_CORNERS:claim-II-II-opposite-sign`), identities (23): with
-`w = y_P - x_P`, `u = -d_A`, `e = d_E`, `k = K(P)`, `l = -L(P)` and `b = β(1 - p - w)`,
-`w d_H = ku - hpe`, `w d_F = bu - le` and `hpb - kl = -wN(P)`. They hold for all points.
-`docs/proof/nine/OPPOSITE_CORNERS.md`, lines 476–491. -/
-theorem eq23 (h f : ℝ) (P Q : Point) :
-    let w := P.2 - P.1
-    let u := -sarea P Q (0, 0)
-    let e := sarea P Q (1, 1)
-    let k := lineK h P
-    let l := -lineL f P
-    let b := (1 - f) * (1 - P.2)
-    w * sarea P Q (0, h) = k * u - h * P.1 * e ∧ w * sarea P Q (f, 1) = b * u - l * e ∧
-      h * P.1 * b - k * l = -w * lineN h f P := by
-  simp only [lineK, lineL, lineN, sarea]
-  refine ⟨by ring, by ring, by ring⟩
-
-set_option linter.unusedVariables false in
-/-- **Claim** (`OPPOSITE_CORNERS:claim-II-II-opposite-sign`), the sign consequence of (23) (used
-by `ONE_CORNER_COMPLETION.md` (5) at a general threshold): if `P` is in cell II with
-`0 < w`, `y_P < 1`, and `d_A < 0 < d_E`, then `d_H > 0` forces `d_F > 0`. Hence the only sign
-pairs `(d_H, d_F)` are `(+,+)`, `(-,+)`, `(-,-)`. `docs/proof/nine/OPPOSITE_CORNERS.md`, lines 492–495.
-
-Uses: OPPOSITE_CORNERS:claim-II-II-opposite-sign (23) -/
-theorem claim_sign_implication (h f : ℝ) (hh : 0 < h) (hh1 : h < 1) (hf : 0 < f) (hf1 : f < 1)
-    (P Q : Point) (hw : 0 < P.2 - P.1) (hy : P.2 < 1) (hPII : CellII h f P)
-    (hdA : sarea P Q (0, 0) < 0) (hdE : 0 < sarea P Q (1, 1)) (hdH : 0 < sarea P Q (0, h)) :
-    0 < sarea P Q (f, 1) := by
-  have id : lineK h P * sarea P Q (f, 1) =
-      (1 - f) * (1 - P.2) * sarea P Q (0, h) - sarea P Q (1, 1) * lineN h f P := by
-    simp only [lineK, lineN, sarea]; ring
-  have k1 := mul_pos (mul_pos (by linarith : (0 : ℝ) < 1 - f) (by linarith : (0 : ℝ) < 1 - P.2)) hdH
-  have k2 := mul_pos hdE (neg_pos.2 hPII.2.2)
-  have hk := hPII.2.1
-  by_contra hc; push Not at hc
-  nlinarith [mul_le_mul_of_nonneg_left hc hk.le]
 
 /-- The right side of (24) increases with `β`. -/
 theorem mono24 {h b b₀ σ w : ℝ} (hb : 0 < b) (hbb : b ≤ b₀) (hσw : 0 ≤ σ + w) :

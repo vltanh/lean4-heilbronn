@@ -82,7 +82,6 @@ def word84 : Fin 8 → Fin 8 := ![5, 4, 4, 3, 3, 2, 3, 4]
 /-- The rotation `R(u,v) = (v, 1-u)` of the square (swap, then flip the second coordinate). -/
 def rotation : SquareSymmetry := ⟨true, false, true⟩
 
-
 /-! ### Scalar bounds -/
 
 section Scalar
@@ -610,70 +609,6 @@ end Cover
 section Claims
 
 variable {a h b c d f : ℝ} {X Y Q : Point}
-
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-anchor`). Equation (5) and the line after it:
-with `σ = 8/73`, `L = h-a`, `M = c-b`: `aM ≥ σ`, `bL ≥ σ`, `h ≥ σ/M + σ/b`, `hc ≥ 4σ`, `b > 1/8`.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 76-83. -/
-theorem claim_anchor (hfam : SideOppositeFamily a h b c d f X Y Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
-    let σ : ℝ := 8 / 73
-    σ ≤ a * (c - b) ∧ σ ≤ b * (h - a) ∧ σ / (c - b) + σ / b ≤ h ∧ 4 * σ ≤ h * c ∧ 1 / 8 < b := by
-  dsimp only
-  obtain ⟨S, -, -, hABC, hABH, -⟩ := fam_bounds hfam hmin
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, -⟩, -⟩ := hfam
-  refine ⟨hABC, hABH, ?_, S.2.2.2.2.2.2.2.2.2.2.2.2.2.2, S.2.1⟩
-  have e1 : 8 / 73 / (c - b) ≤ a := by rw [div_le_iff₀ (by linarith)]; linarith
-  have e2 : 8 / 73 / b ≤ h - a := by rw [div_le_iff₀ hb]; linarith
-  linarith
-
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-side-point`). Equations (6)–(7), for the side
-point `X = (x, y)`, with `σ = 8/73`, `M = c-b`: `[BCX] = My ≥ σ`, `[CXD] = d(x-c)-(1-c)y ≥ σ`;
-`x - c ≥ σ`, `c ≤ 1-σ`, `d - y ≥ σ/(1-c)`, `d ≥ σ/M + σ/(1-c) ≥ 4σ/(1-b) > 1/2`; `h ≥ d`,
-`c ≥ 4σ`, `M < 49/64`, `a, y > 1/7`, `d - y > 7/36`.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 85-102. -/
-theorem claim_side_point (hfam : SideOppositeFamily a h b c d f X Y Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
-    let σ : ℝ := 8 / 73
-    sarea (ptB b) (ptC c) X = (c - b) * X.2 ∧ σ ≤ (c - b) * X.2 ∧
-      sarea (ptC c) X (ptD d) = d * (X.1 - c) - (1 - c) * X.2 ∧
-      σ ≤ d * (X.1 - c) - (1 - c) * X.2 ∧
-      σ ≤ X.1 - c ∧ c ≤ 1 - σ ∧ σ / (1 - c) ≤ d - X.2 ∧
-      σ / (c - b) + σ / (1 - c) ≤ d ∧ 4 * σ / (1 - b) ≤ σ / (c - b) + σ / (1 - c) ∧
-      1 / 2 < 4 * σ / (1 - b) ∧
-      d ≤ h ∧ 4 * σ ≤ c ∧ c - b < 49 / 64 ∧ 1 / 7 < a ∧ 1 / 7 < X.2 ∧ 7 / 36 < d - X.2 := by
-  dsimp only
-  obtain ⟨S, -, -, -, -, hBCX, hCXD, -⟩ := fam_bounds hfam hmin
-  obtain ⟨ha', hb8, hc4, hc1, hd2, hL, hM, hxc, hy', hdy, hMlt, hW, hd4, -⟩ := S
-  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩, -⟩ := hfam
-  have hM0 : 0 < c - b := by linarith
-  have hW0 : 0 < 1 - c := by linarith
-  have e1 : 8 / 73 / (c - b) ≤ X.2 := by rw [div_le_iff₀ hM0]; linarith
-  have e2 : 8 / 73 / (1 - c) ≤ d - X.2 := by rw [div_le_iff₀ hW0]; linarith
-  have e3 : 4 * (8 / 73) / (1 - b) ≤ 8 / 73 / (c - b) + 8 / 73 / (1 - c) := by
-    rw [show 1 - b = (c - b) + (1 - c) by ring, div_add_div _ _ hM0.ne' hW0.ne',
-      div_le_div_iff₀ (by positivity) (by positivity)]
-    linarith [mul_nonneg (by norm_num : (0 : ℝ) ≤ 8 / 73) (sq_nonneg ((c - b) - (1 - c)))]
-  have e4 : 1 / 2 < 4 * (8 / 73) / (1 - b) := by
-    rw [lt_div_iff₀ (by linarith)]; linarith
-  exact ⟨by simp only [sarea]; ring, hBCX, by simp only [sarea]; ring, hCXD, hxc, hc1, e2,
-    by linarith, e3, e4, hdh, hc4, by linarith, by linarith, by linarith, by linarith⟩
-
-/-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:claim-cap`). Equations (8)–(9), for the opposite-cap
-point `Y = (z, w)`, with `σ = 8/73`: `[DYF] = (1-d)(z-f)-(1-f)(1-w) = (1-f)(w-d)-(1-d)(1-z) ≥ σ`;
-`d, f ≤ 1-σ`, `z - f ≥ σ`, `w - d ≥ σ`, `z - f > 2σ`, `w - d > 1/8`; `b ≤ 1-5σ < 29/64`.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_OPPOSITE.md`, lines 104-120. -/
-theorem claim_cap (hfam : SideOppositeFamily a h b c d f X Y Q)
-    (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
-    let σ : ℝ := 8 / 73
-    σ ≤ sarea (ptD d) Y (ptF f) ∧ d ≤ 1 - σ ∧ f ≤ 1 - σ ∧ σ ≤ Y.1 - f ∧ σ ≤ Y.2 - d ∧
-      2 * σ < Y.1 - f ∧ 1 / 8 < Y.2 - d ∧ b ≤ 1 - 5 * σ ∧ 1 - 5 * σ < 29 / 64 := by
-  dsimp only
-  obtain ⟨-, C, -, -, -, -, -, hDYF, -⟩ := fam_bounds hfam hmin
-  obtain ⟨c1, c2, c3, c4, c5, c6, c7⟩ := C
-  refine ⟨?_, c1, c2, c3, c4, c5, c6, c7, by norm_num⟩
-  have : sarea (ptD d) Y (ptF f) = (1 - d) * (Y.1 - f) - (1 - f) * (1 - Y.2) := by
-    simp only [sarea]; ring
-  rw [this]; exact hDYF
 
 /-- **Claim** (`SIX_BOUNDARY_SIDE_OPPOSITE:eq11`). The projection identities (11), for every
 point `Q = (r, t)`: `(1-f)[CDQ] + (1-c)[DFQ] = {d(1-f)+(1-d)(1-c)}(1-r)` and

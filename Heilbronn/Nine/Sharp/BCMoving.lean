@@ -115,28 +115,7 @@ theorem sharp_bounds :
   rw [sharpS_eq, sharpLambda_eq]
   refine ⟨?_, ?_, ?_, ?_⟩ <;> linarith [h.1, h.2]
 
-/-- Finer brackets: `0.1097 < s₀ < 0.1098` and `0.2894 < λ < 0.2899`. -/
-theorem sharp_bounds_fine :
-    (1097 / 10000 : ℝ) < sharpS ∧ sharpS < 1098 / 10000 ∧ (2894 / 10000 : ℝ) < sharpLambda ∧
-      sharpLambda < 2899 / 10000 := by
-  have h := sqrt65_bounds
-  rw [sharpS_eq, sharpLambda_eq]
-  refine ⟨?_, ?_, ?_, ?_⟩ <;> linarith [h.1, h.2]
-
 /-! ### Section 0: constants -/
-
-/-- **Claim** (`SHARP_BC_MOVING:claim-constants`). Equation (1): `s₀ = (2-9p₀)/4`,
-`173/1000 < p₀ < 7/40`, `7/64 < s₀ < 11/100` and `1/4 < λ < 1/3`.
-`docs/proof/nine/SHARP_BC_MOVING.md`, lines 9-22. -/
-theorem claim_constants :
-    sharpS = (2 - 9 * p₀) / 4 ∧ 173 / 1000 < p₀ ∧ p₀ < 7 / 40 ∧
-      7 / 64 < sharpS ∧ sharpS < 11 / 100 ∧ 1 / 4 < sharpLambda ∧ sharpLambda < 1 / 3 := by
-  have h := sqrt65_bounds
-  obtain ⟨h1, h2, h3, h4⟩ := sharp_bounds
-  refine ⟨?_, ?_, ?_, h1, h2, h3, by linarith⟩
-  · rw [sharpS_eq, p₀_eq_sqrt]; ring
-  · rw [p₀_eq_sqrt]; linarith [h.2]
-  · rw [p₀_eq_sqrt]; linarith [h.1]
 
 /-! ### Section 1: the common sharp scalar inequality -/
 
@@ -643,22 +622,6 @@ theorem eq17_core {s u v L M t : ℝ} (hs1 : 7 / 64 < s) (hs2 : s < 11 / 100) (h
   have hL4 : 4 * s < L := by nlinarith
   linarith
 
-/-- **Claim** (`SHARP_BC_MOVING:eq17`). The scalar step of Section 3 ("both effective parameters
-are below 1/4"): with `s = s₀`, if `0 < u, v < 1/2`, `0 ≤ t`, `α - t > s`, `β > s` (13),
-`s ≤ g(u,v) + 2ut` (14) and `t ≤ α(1-u) - s` (15), then `u, v < 1/4` and `t < 1/2`.
-`docs/proof/nine/SHARP_BC_MOVING.md`, lines 250-282 (reused as (8) of `SHARP_BD_MOVING.md`). -/
-theorem eq17 {u v t : ℝ} (hu : 0 < u) (hu2 : u < 1 / 2) (hv : 0 < v) (hv2 : v < 1 / 2)
-    (ht : 0 ≤ t) (hα : sharpS < sharpAlpha sharpS u v - t) (hβ : sharpS < sharpBeta sharpS u v)
-    (h14 : sharpS ≤ sharpG u v + 2 * u * t)
-    (h15 : t ≤ sharpAlpha sharpS u v * (1 - u) - sharpS) :
-    u < 1 / 4 ∧ v < 1 / 4 ∧ t < 1 / 2 := by
-  obtain ⟨hs1, hs2, -, -⟩ := sharp_bounds
-  unfold sharpAlpha at hα h15
-  unfold sharpBeta at hβ
-  unfold sharpG at h14
-  refine eq17_core hs1 hs2 hu hu2 hv hv2 ht (L := sharpS / u) (M := sharpS / v)
-    (by field_simp) (by field_simp) (by linarith) hβ h14 h15
-
 /-- **Claim** (`SHARP_BC_MOVING:eq18`). In the B-moving chamber, if every chamber doubled area is
 at least `s = s₀`, then with `u = s/(h-a)`, `v = s/(f-g)`, `α = 1-v-s/u`,
 `(s + ut)(1-y) ≤ (α - t)(x - u - s)` (the ABC/GCO elimination).
@@ -802,31 +765,5 @@ theorem theorem3 {a b c d e f g h t x y : ℝ} (hyp : BMovingHyp a b c d e f g h
   exact ⟨rfl, rfl⟩
 
 /-! ### Symmetry -/
-
-/-- The reflection `(x,y) ↦ (1-y,1-x)` of the square in its anti-diagonal, as a square symmetry
-(swap the coordinates, then flip both). -/
-def antiDiagonal : SquareSymmetry := ⟨true, true, true⟩
-
-/-- The relabelling `A↔F, B↔E, C↔D, G↔H`, `O` fixed, on the indices of `sharpConfig`. -/
-def antiDiagonalLabels : Fin 9 → Fin 9 := ![5, 4, 3, 2, 1, 0, 7, 6, 8]
-
-/-- The induced involution of the eleven chamber triangles:
-`ABH↔GEF, ABC↔DEF, AGH↔GHF, ADO↔OCF, DHO↔GCO`, `BOE` fixed. -/
-def antiDiagonalTriangles : Equiv.Perm (Fin 11) :=
-  ⟨![5, 3, 4, 1, 2, 0, 10, 9, 8, 7, 6], ![5, 3, 4, 1, 2, 0, 10, 9, 8, 7, 6], by decide,
-    by decide⟩
-
-/-- **Claim** (`SHARP_BC_MOVING:claim-symmetry`). The reflection `(x,y) ↦ (1-y,1-x)` together
-with the relabelling `A↔F, B↔E, C↔D, G↔H` preserves the sharp chamber: it permutes the eleven
-oriented chamber doubled areas. (Hence Theorems 2–3 also cover the reflected D- and E-moving
-chambers.) `docs/proof/nine/SHARP_BC_MOVING.md`, lines 327-334. -/
-theorem claim_symmetry (P : Fin 9 → Point) :
-    ∃ τ : Equiv.Perm (Fin 11), ∀ i,
-      chamberSarea (antiDiagonal.apply ∘ P ∘ antiDiagonalLabels) i = chamberSarea P (τ i) := by
-  refine ⟨antiDiagonalTriangles, fun i => ?_⟩
-  fin_cases i <;>
-    simp only [chamberSarea, chamberTriangles, antiDiagonalTriangles, antiDiagonalLabels,
-      antiDiagonal, SquareSymmetry.apply, Function.comp_apply, sarea, Equiv.coe_fn_mk,
-      Fin.zero_eta, Fin.mk_one, Fin.reduceFinMk, Matrix.cons_val, ite_true] <;> ring
 
 end Heilbronn.Nine.SharpBCMoving

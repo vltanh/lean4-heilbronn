@@ -63,10 +63,6 @@ def ptF (f : ℝ) : Point := (f, 1)
 /-- The left anchor `H = (0, h)`. -/
 def ptH (h : ℝ) : Point := (0, h)
 
-/-- The C1 configuration with its anchors named. -/
-theorem c1Config_eq (h c d f : ℝ) (W X Y Z : Point) :
-    c1Config h c d f W X Y Z = ![ptO, ptC c, ptD d, ptF f, ptH h, W, X, Y, Z] := rfl
-
 /-- The weak C1 anchor conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1` (stated by every C1 note
 except `C1_ZERO_LOWER.md`, which has `h, c < 1` as in `C1Anchors`). -/
 def C1AnchorsWeak (h c d f : ℝ) : Prop :=
@@ -117,11 +113,6 @@ def InUpperQuad (h c d f : ℝ) (X : Point) : Prop :=
   0 < sarea (ptH h) (ptC c) X ∧ 0 < sarea (ptC c) (ptD d) X ∧
     0 < sarea (ptD d) (ptF f) X ∧ 0 < sarea (ptF f) (ptH h) X
 
-/-- `X` lies in the open anchor pentagon `OCDFH`: all five edge signs positive. -/
-def InPentagon (h c d f : ℝ) (X : Point) : Prop :=
-  0 < sarea ptO (ptC c) X ∧ 0 < sarea (ptC c) (ptD d) X ∧ 0 < sarea (ptD d) (ptF f) X ∧
-    0 < sarea (ptF f) (ptH h) X ∧ 0 < sarea (ptH h) ptO X
-
 /-- The right cap `𝓡 = conv{C, D, (1,0)} \ CD` (`C1_ZERO_LOWER.md` §1): for a point of the
 square, `[CDX] < 0`. -/
 def InRightCap (c d : ℝ) (X : Point) : Prop := sarea (ptC c) (ptD d) X < 0
@@ -147,7 +138,6 @@ inductive Region
   | right
   | top
   | left
-  deriving DecidableEq
 
 /-- Membership in a region, as sign conditions. -/
 def InRegion (h c d f : ℝ) : Region → Point → Prop
@@ -177,13 +167,6 @@ abbrev Word := Fin 5 → Fin 5
 `i ≠ j` this is the truth value of `[VᵢVⱼX] > 0` (`HasWord`). -/
 def wordSign (w : Word) (i j : Fin 5) : Bool := decide ((j - i : Fin 5) ≤ w i)
 
-/-- The antisymmetry conditions (12): `(j ≤ rᵢ) ↔ (5 - j > r_{i+j})` for `j = 1, …, 4`. -/
-def WordAntisymm (w : Word) : Prop :=
-  ∀ i j : Fin 5, j ≠ 0 → ((j : ℕ) ≤ (w i : ℕ) ↔ (w (i + j) : ℕ) < 5 - (j : ℕ))
-
-instance (w : Word) : Decidable (WordAntisymm w) := by
-  unfold WordAntisymm; infer_instance
-
 /-- `ALL_WORDS`: the 16 solutions of (12), in lexicographic order. The eleven with all entries
 at least `1` are the cells of the pentagon cut by its five diagonals; the five with an entry `0`
 have exactly one negative pentagon-edge sign. -/
@@ -193,32 +176,6 @@ def allWords : List Word :=
     ![2, 3, 2, 2, 1], ![3, 2, 1, 0, 4], ![3, 2, 1, 1, 3], ![3, 2, 2, 1, 2], ![3, 3, 2, 1, 1],
     ![4, 3, 2, 1, 0]]
 
-/-- `WORDS`: the eleven zero-lower words of `C1_ZERO_LOWER.md` §5 (the words with `[HCX] > 0` and
-at most one negative pentagon-edge sign, not on `OC` or `HO`), indexed `0, …, 10` as in its
-table; the region of each is `zeroLowerWordRegion`. -/
-def zeroLowerWords : Fin 11 → Word :=
-  ![![1, 0, 4, 3, 2], ![1, 1, 3, 3, 2], ![1, 2, 3, 2, 2], ![2, 1, 0, 4, 3], ![2, 1, 1, 3, 3],
-    ![2, 1, 2, 3, 2], ![2, 2, 1, 2, 3], ![2, 2, 2, 2, 2], ![3, 2, 1, 0, 4], ![3, 2, 1, 1, 3],
-    ![3, 2, 2, 1, 2]]
-
-/-- `CATS`: the region of each zero-lower word (`𝓡` for index 0, `𝓣` for 3, `𝓛` for 8, `HCDF`
-otherwise). -/
-def zeroLowerWordRegion : Fin 11 → Region :=
-  ![.right, .upper, .upper, .top, .upper, .upper, .upper, .upper, .left, .upper, .upper]
-
-/-- The three words of points strictly inside the lower triangle `OCH` (`inside(w, (0, 1, 4))`,
-reused by the one-lower checkers). -/
-def lowerWords : List Word := [![1, 3, 3, 2, 1], ![2, 3, 2, 2, 1], ![3, 3, 2, 1, 1]]
-
-/-- The checker's `inside(word, (a, b, c))`: a point with word `w` is strictly inside the anchor
-triangle `V_a V_b V_c`, given in counterclockwise (increasing) order. -/
-def wordInside (w : Word) (a b c : Fin 5) : Bool :=
-  wordSign w a b && wordSign w b c && wordSign w c a
-
-/-- The checker's `upper_sector(w) = (sign(4, 2), sign(1, 3))`: the signs of `[HDX] > 0` and
-`[CFX] > 0`, i.e. the sector of the diagonals `HD`, `CF` of `HCDF`. -/
-def upperSector (w : Word) : Bool × Bool := (wordSign w 4 2, wordSign w 1 3)
-
 /-- `X` has the anchor-ray word `w` (`C1_ZERO_LOWER.md` (11)): for all anchors `i ≠ j`,
 `[VᵢVⱼX] > 0` exactly when `(j - i) mod 5 ≤ wᵢ`. -/
 def HasWord (h c d f : ℝ) (X : Point) (w : Word) : Prop :=
@@ -226,9 +183,6 @@ def HasWord (h c d f : ℝ) (X : Point) (w : Word) : Prop :=
     (0 < sarea (anchor h c d f i) (anchor h c d f j) X ↔ wordSign w i j = true)
 
 /-! ### Sign tables (`signs`, `oriented_sign` of the checkers) -/
-
-/-- The anchor index `0, …, 4` of an index `i < 5` of the nine-point C1 configuration. -/
-def anchorIdx (i : Fin 9) : Fin 5 := ⟨i.val % 5, Nat.mod_lt _ (by norm_num)⟩
 
 /-- The free index `0, …, 3` of an index `i ≥ 5` of the nine-point C1 configuration. -/
 def freeIdx (i : Fin 9) : Fin 4 := ⟨(i.val - 5) % 4, Nat.mod_lt _ (by norm_num)⟩
@@ -242,23 +196,6 @@ area of its increasing triple. -/
 def SignTable.Holds (σ : SignTable) (P : Fin 9 → Point) : Prop :=
   ∀ a b c : Fin 9, a < b → b < c → ∀ s : SignType, σ (a, b, c) = some s →
     SignType.sign (sarea (P a) (P b) (P c)) = s
-
-/-- The checker's `oriented_sign(signs, t)`: the recorded sign of the sorted triple, flipped by
-the parity of the sorting permutation; `none` if unknown or if two indices coincide. -/
-def orientedSign (σ : SignTable) (a b c : Fin 9) : Option SignType :=
-  if a < b ∧ b < c then σ (a, b, c)
-  else if b < c ∧ c < a then σ (b, c, a)
-  else if c < a ∧ a < b then σ (c, a, b)
-  else if b < a ∧ a < c then (σ (b, a, c)).map (-·)
-  else if a < c ∧ c < b then (σ (a, c, b)).map (-·)
-  else if c < b ∧ b < a then (σ (c, b, a)).map (-·)
-  else none
-
-/-- Certified containment (the strengthened occupancy rule, `C1_ZERO_LOWER.md` (18)): the point
-`j` is counted inside the triangle `abc` of recorded orientation `s` when all three oriented
-edge signs `[a b j], [b c j], [c a j]` are known and equal to `s`. -/
-def certifiedInside (σ : SignTable) (a b c j : Fin 9) (s : SignType) : Prop :=
-  orientedSign σ a b j = some s ∧ orientedSign σ b c j = some s ∧ orientedSign σ c a j = some s
 
 /-- The occupancy lower bounds `b_T` of `C1_ZERO_LOWER.md` (18) for the doubled area of an actual
 triangle certified to contain `k` further free points: `s = 8/73`, `3s`, `ρ = 49/60`. -/

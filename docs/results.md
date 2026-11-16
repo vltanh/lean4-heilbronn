@@ -59,8 +59,7 @@ def optimum : Optimum 9
 
 `IsOptimal P` is `Congruent P optimalConfiguration`.
 
-`maximizer_congruent` is the whole proof
-([`UNRESTRICTED.md`](proof/nine/UNRESTRICTED.md), Theorem 1). It normalizes
+`maximizer_congruent` is the whole proof. It normalizes
 the maximizer (`GlobalStructure.theorem3`) into one of five families and calls
 one theorem per family or case:
 
@@ -91,30 +90,3 @@ the eleven-triangle chamber `HandProof.theorem1`; the transfer of equality back
 through the normalizing shears uses strict local optimality,
 `HandProof.theorem2`.
 
-### Where the formalization departs from the hand proof
-
-The formalization follows the hand proof, and simplifies it where that was
-easier. Each departure is described in the docstrings of the modules:
-
-- **Three occupied caps (N6-05).** The hand proof reduces this case to a convex
-  nonagon and applies the planar affine isoperimetric inequality. Here nine
-  triangles and a three-cell cubic certificate give least area below `7/128`
-  directly (`SixBoundary/ThreeCaps.lean`), so the proof uses no external theorem.
-- **Certificate covers found by linear programming** replace long hand case
-  analyses: the two interior points of the seven-boundary form
-  (`SevenBoundary/Interior/`, 403 certificates), the exact anchor hexagon
-  (`SixBoundary/HullTrees/`, 1,209 leaves), Theorems 11 and 12 and class R6 of the
-  eight-boundary form, the quadrants of `SIX_BOUNDARY_TWO_SIDE_COMPLETION`, and the
-  chamber in which F moves inward (one Bernstein certificate for 918 coefficients
-  and a case split).
-- **Gaps repaired**, among them: the empty convex quadrilateral of
-  `CORNER_FAMILIES.md` (lines 161-165), proved without triangulations; the factor
-  `3/8` of `SEVEN_BOUNDARY_MIXED_PAIR.md`, Theorem 2 (now off the route); the
-  bound `W ≥ 10s`, misquoted in four manuscripts, replaced by
-  `QUADRILATERAL_HULL.md`'s `(Γ+1)s`; convexity and sign facts left implicit in the
-  Type II, six-boundary and C1 notes; and a few citations. Nothing in the hand
-  proof turned out false.
-- **Normalization without enclosing parallelograms.** Each use of the
-  minimum-area enclosing parallelogram is an explicit affine map of determinant
-  above one; capacity two for non-maximizers uses a compactness argument over
-  the affine maps that keep the points in the square.

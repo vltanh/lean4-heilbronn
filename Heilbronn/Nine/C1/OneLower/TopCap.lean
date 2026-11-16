@@ -81,7 +81,6 @@ structure Placement (h c d f : ℝ) (L P Q X : Point) : Prop where
   top : InTopCap d f X
   topSq : X ∈ unitSquare
 
-
 /-! ### Section 1: common bounds and four small anchor triangles -/
 
 section

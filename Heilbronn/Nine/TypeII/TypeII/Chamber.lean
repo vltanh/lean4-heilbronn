@@ -81,7 +81,6 @@ theorem pq_point_facts {l b s : ℝ} {P : Point} (hb : 0 < b) (hs : 0 < s)
   refine ⟨by linarith, by linarith, by linarith, by linarith, ?_⟩
   nlinarith
 
-
 /-- Row "D, C on the same side" of the line table, in coordinates (`u = 1 - y`, `q = 1 - λ`), in
 the orientation `σ_D, σ_C < 0`. -/
 theorem pq_row1 {s b q : ℝ} (hs : 0 < s) (hq : 0 < q) (x₁ u₁ x₂ u₂ : ℝ) (hu₁ : s ≤ u₁)
@@ -509,7 +508,6 @@ theorem F1_of_row2 {b q : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hq1 : q ≤ 1)
   have hmA : 0 < (1 - 7 / 64 * (1 + b)) * (q - 7 / 64 * (1 + (1 + b) * q)) :=
     mul_pos (by nlinarith) hA
   exact nonneg_of_mul_nonneg_right (by linarith) hmA
-
 
 /-- **Equation (36)** (`TYPE_II:claim-b-le-2/7`). At doubled threshold `7/64`, with
 `0 < b ≤ 1/2` and `P, Q` strictly inside both `DCB` and `DCE`: if `D, C` lie on opposite sides

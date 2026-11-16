@@ -15,154 +15,154 @@ open Cover Model
 
 /-- The cell tree of the base case 0, words [0, 6] (30 terms). -/
 noncomputable def tree0 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c000_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c000_0.txt")
 
 theorem tree0_ok : checkTree (spec 0 6) [] tree0 = true := by
   tree_decide
 
 /-- The cell tree of the base case 1, words [0, 7] (3 terms). -/
 noncomputable def tree1 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c001_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c001_0.txt")
 
 theorem tree1_ok : checkTree (spec 0 7) [] tree1 = true := by
   tree_decide
 
 /-- The cell tree of the base case 2, words [0, 9] (55 terms). -/
 noncomputable def tree2 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c002_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c002_0.txt")
 
 theorem tree2_ok : checkTree (spec 0 9) [] tree2 = true := by
   tree_decide
 
 /-- The cell tree of the base case 3, words [0, 17] (202 terms). -/
 noncomputable def tree3 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c003_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c003_0.txt")
 
 theorem tree3_ok : checkTree (spec 0 17) [] tree3 = true := by
   tree_decide
 
 /-- The cell tree of the base case 4, words [0, 18] (224 terms). -/
 noncomputable def tree4 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c004_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c004_0.txt")
 
 theorem tree4_ok : checkTree (spec 0 18) [] tree4 = true := by
   tree_decide
 
 /-- The cell tree of the base case 5, words [0, 19] (193 terms). -/
 noncomputable def tree5 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c005_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c005_0.txt")
 
 theorem tree5_ok : checkTree (spec 0 19) [] tree5 = true := by
   tree_decide
 
 /-- The cell tree of the base case 6, words [0, 20] (3 terms). -/
 noncomputable def tree6 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c006_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c006_0.txt")
 
 theorem tree6_ok : checkTree (spec 0 20) [] tree6 = true := by
   tree_decide
 
 /-- The cell tree of the base case 7, words [0, 21] (3 terms). -/
 noncomputable def tree7 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c007_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c007_0.txt")
 
 theorem tree7_ok : checkTree (spec 0 21) [] tree7 = true := by
   tree_decide
 
 /-- The cell tree of the base case 8, words [0, 23] (187 terms). -/
 noncomputable def tree8 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c008_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c008_0.txt")
 
 theorem tree8_ok : checkTree (spec 0 23) [] tree8 = true := by
   tree_decide
 
 /-- The cell tree of the base case 9, words [0, 24] (189 terms). -/
 noncomputable def tree9 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c009_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c009_0.txt")
 
 theorem tree9_ok : checkTree (spec 0 24) [] tree9 = true := by
   tree_decide
 
 /-- The cell tree of the base case 10, words [0, 26] (111 terms). -/
 noncomputable def tree10 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c010_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c010_0.txt")
 
 theorem tree10_ok : checkTree (spec 0 26) [] tree10 = true := by
   tree_decide
 
 /-- The cell tree of the base case 11, words [0, 27] (213 terms). -/
 noncomputable def tree11 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c011_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c011_0.txt")
 
 theorem tree11_ok : checkTree (spec 0 27) [] tree11 = true := by
   tree_decide
 
 /-- The cell tree of the base case 12, words [0, 28] (146 terms). -/
 noncomputable def tree12 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c012_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c012_0.txt")
 
 theorem tree12_ok : checkTree (spec 0 28) [] tree12 = true := by
   tree_decide
 
 /-- The cell tree of the base case 13, words [0, 29] (146 terms). -/
 noncomputable def tree13 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c013_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c013_0.txt")
 
 theorem tree13_ok : checkTree (spec 0 29) [] tree13 = true := by
   tree_decide
 
 /-- The cell tree of the base case 14, words [0, 30] (193 terms). -/
 noncomputable def tree14 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c014_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c014_0.txt")
 
 theorem tree14_ok : checkTree (spec 0 30) [] tree14 = true := by
   tree_decide
 
 /-- The cell tree of the base case 15, words [0, 31] (3 terms). -/
 noncomputable def tree15 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c015_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c015_0.txt")
 
 theorem tree15_ok : checkTree (spec 0 31) [] tree15 = true := by
   tree_decide
 
 /-- The cell tree of the base case 16, words [0, 32] (3 terms). -/
 noncomputable def tree16 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c016_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c016_0.txt")
 
 theorem tree16_ok : checkTree (spec 0 32) [] tree16 = true := by
   tree_decide
 
 /-- The cell tree of the base case 17, words [0, 33] (3 terms). -/
 noncomputable def tree17 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c017_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c017_0.txt")
 
 theorem tree17_ok : checkTree (spec 0 33) [] tree17 = true := by
   tree_decide
 
 /-- The cell tree of the base case 18, words [0, 35] (94 terms). -/
 noncomputable def tree18 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c018_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c018_0.txt")
 
 theorem tree18_ok : checkTree (spec 0 35) [] tree18 = true := by
   tree_decide
 
 /-- The cell tree of the base case 19, words [0, 36] (166 terms). -/
 noncomputable def tree19 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c019_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c019_0.txt")
 
 theorem tree19_ok : checkTree (spec 0 36) [] tree19 = true := by
   tree_decide
 
 /-- The cell tree of the base case 20, words [0, 37] (184 terms). -/
 noncomputable def tree20 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c020_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c020_0.txt")
 
 theorem tree20_ok : checkTree (spec 0 37) [] tree20 = true := by
   tree_decide
 
 /-- The cell tree of the base case 21, words [0, 39] (108 terms). -/
 noncomputable def tree21 : Cover.Tree Split :=
-  .cert (term_rows% "../../../../../data/nine/six_single_side/c021_0.txt")
+  .cert (term_rows% "../../../Data/six_single_side/c021_0.txt")
 
 theorem tree21_ok : checkTree (spec 0 39) [] tree21 = true := by
   tree_decide

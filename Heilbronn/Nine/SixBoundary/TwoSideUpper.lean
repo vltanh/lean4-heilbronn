@@ -53,12 +53,6 @@ def octagonXY (a h b c d f : ℝ) (X Y : Point) : Fin 8 → Point :=
 /-- The sharp word (14) `q* = (4, 3, 3, 2, 3, 4, 5, 4)`. -/
 def qStar : Fin 8 → Fin 8 := ![4, 3, 3, 2, 3, 4, 5, 4]
 
-/-- The 82 words of Section 2: radial words on the octagon (complement relation (12)) with the
-three `HCDF` tests (13) `q₇ ≥ 3` (`[HCQ] > 0`), `q₂ ≥ 2` (`[CDQ] > 0`), `q₅ ≥ 2`
-(`[FHQ] > 0`). -/
-def upperWords : Finset (Fin 8 → Fin 8) :=
-  (radialWords 8).filter fun q => 3 ≤ (q 7 : ℕ) ∧ 2 ≤ (q 2 : ℕ) ∧ 2 ≤ (q 5 : ℕ)
-
 /-! ### The hull octagon -/
 
 /-- The sign data of the octagon `A, B, C, X, D, F, Y, H`: the N orders and the two caps. -/
@@ -1230,36 +1224,6 @@ theorem oct_gen (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q))
     show cfg a h b c d f X Y Q 8 = Q from rfl, h0, abs_zero] at this
   norm_num at this
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_UPPER:claim-82-words`). The sharp word `q*` is one of the
-words of Section 2, and in the occupancy (1) with every doubled area at least `7/64` the radial
-word (11) of `Q` on the octagon (3) exists and is one of them (the complement relation (12) and
-the three `HCDF` tests (13)). (The count `82` is checked by the word cover `Trees.tree`, whose
-leaves are exactly these words; it is not restated here.)
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_UPPER.md`, lines 161-208.
-Uses: SIX_BOUNDARY_SINGLE_SIDE:claim-radial-word, SIX_BOUNDARY_TWO_SIDE_UPPER:claim-octagon -/
-theorem claim_82_words :
-    qStar ∈ upperWords ∧
-    ∀ {a h b c d f : ℝ} {X Y Q : Point}, NAnchors a h b c d f → InCapR c d X → InCapL f h Y →
-      Q ∈ unitSquare → InUpperQuad h c d f Q →
-      7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q) →
-      ∃ q ∈ upperWords, HasRadialWord (octagonXY a h b c d f X Y) Q fun i => (q i : ℕ) := by
-  refine ⟨by simp only [upperWords, radialWords, Finset.mem_filter, Finset.mem_univ, true_and]; decide,
-    fun {a h b c d f X Y Q} hN hX hY hQ hQu hmin => ?_⟩
-  obtain ⟨hconv, hpoly⟩ := claim_octagon hN hX hY hQ hQu hmin
-  obtain ⟨r, hr, hrw⟩ := claim_radial_word _ Q (by norm_num) hconv hpoly (oct_gen hmin)
-  have hrange : ∀ i, r i < 8 := fun i => by have := hrw.1 i; omega
-  refine ⟨fun i => ⟨r i, hrange i⟩, ?_, hr⟩
-  have hHC : 3 ≤ r 7 := (hr 7 3 (by norm_num) (by norm_num)).1 hQu.1
-  have hCD : 2 ≤ r 2 := (hr 2 2 (by norm_num) (by norm_num)).1 hQu.2.1
-  have hFH : 2 ≤ r 5 := (hr 5 2 (by norm_num) (by norm_num)).1 hQu.2.2.2
-  simp only [upperWords, radialWords, Finset.mem_filter, Finset.mem_univ, true_and]
-  exact ⟨hrw, hHC, hCD, hFH⟩
-
-/-- The rotation `R(u, v) = (v, 1 - u)` keeps every signed area. -/
-theorem sarea_rot (p q r : Point) :
-    sarea (p.2, 1 - p.1) (q.2, 1 - q.1) (r.2, 1 - r.1) = sarea p q r := by
-  simp only [sarea]; ring
-
 /-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_UPPER:claim-sharp-word`). In the occupancy (1), if `Q` has
 the word `q*`, then the eleven oriented areas of the simultaneous B/E chamber are positive —
 `[CXB], [CXD], [CAB], [FYH], [ABH], [AYH]` (hull order) and `[CFQ], [FBQ], [XQY], [ADQ], [DHQ]`
@@ -1426,22 +1390,5 @@ theorem n6_02 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
   · have hT : InT0 h c Z := ⟨hZsq.1, hZsq.2.2.1, by
       have := sarea_swap₁₂ (ptH h) (ptC c) Z; push Not at hup; linarith⟩
     exact absurd (SixBoundaryTwoSideCompletion.theorem1 hN hX hY hZsq hT hsix) (not_lt.2 hmin)
-
-/-- **Case N6-05** (`(n_L, n_T, n_R; n_I) = (1,1,1;0)`, `docs/proof/nine/UNRESTRICTED.md`, Section 4),
-assembly form: an N configuration with one free point in each of the caps `R`, `T`, `L` has least
-area below `7/128 < A₀` (`SixBoundaryThreeCaps.three_caps`, nine triangles; the convex-nonagon
-route of the manuscript is not used).
-Uses: SIX_BOUNDARY_THREE_CAPS:three-caps -/
-theorem n6_05 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
-    (hX : InCapR c d X) (hY : InCapL f h Y) (hZ : InCapT d f Z)
-    (_hsix : ExactlySixContacts X Y Z)
-    (hmin : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
-    False := by
-  have hXc : 0 ≤ sarea (c, 0) X (1, d) := by rw [sarea_swap₂₃]; linarith [hX.2]
-  have hYc : 0 ≤ sarea (f, 1) Y (0, h) := by rw [sarea_swap₂₃]; linarith [hY.2]
-  have hZc : 0 ≤ sarea (1, d) Z (f, 1) := by rw [sarea_swap₂₃]; linarith [hZ.2]
-  have := SixBoundaryThreeCaps.three_caps hN hX.1 hY.1 hZ.1 hXc hYc hZc
-  linarith [A₀_bounds.1]
-
 
 end Heilbronn.Nine.SixBoundaryTwoSideUpper

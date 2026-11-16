@@ -49,9 +49,6 @@ def ConvexQuad (A B C D : Point) : Prop :=
 def InQuad (X A B C D : Point) : Prop :=
   0 < sarea A B X ∧ 0 < sarea B C X ∧ 0 < sarea C D X ∧ 0 < sarea D A X
 
-/-- Twice the signed area of the quadrilateral `ABCD`. -/
-def quadArea2 (A B C D : Point) : ℝ := sarea A B C + sarea A C D
-
 /-- The seven points `A, B, C, X 0, X 1, X 2, X 3`. -/
 def sevenConfig (A B C : Point) (X : Fin 4 → Point) : Fin 7 → Point :=
   ![A, B, C, X 0, X 1, X 2, X 3]
@@ -63,12 +60,6 @@ def freeSix (U V W X Y Z : Point) : Fin 6 → Point := ![U, V, W, X, Y, Z]
 ("upper" points, lines 18–20). -/
 def upperCount (U V W X Y Z : Point) : ℕ :=
   {i : Fin 6 | (freeSix U V W X Y Z i).1 < (freeSix U V W X Y Z i).2}.ncard
-
-/-- `U_s = conv{(s, 2s), (s, 1 - s), (1 - 2s, 1 - s)} = {x ≥ s, y ≤ 1 - s, y - x ≥ s}` (8). -/
-def upperRegion (s : ℝ) : Set Point := {p | s ≤ p.1 ∧ p.2 ≤ 1 - s ∧ p.1 + s ≤ p.2}
-
-/-- `L_s = conv{(s, 0), (1, 0), (1, 1 - s)} = {y ≥ 0, x ≤ 1, x - y ≥ s}` (8). -/
-def lowerRegion (s : ℝ) : Set Point := {p | 0 ≤ p.2 ∧ p.1 ≤ 1 ∧ p.2 + s ≤ p.1}
 
 /-! ### §1. Stars of degree four and five -/
 
@@ -116,33 +107,6 @@ theorem star4_core {a₀ a₁ a₂ a₃ b c s : ℝ} (hs : 0 < s) (h₀ : s ≤ 
     have := sum_ge_of_prod (by linarith : 0 ≤ a₁) (by linarith : 0 ≤ a₃) hs.le (by nlinarith)
     linarith
 
-/-- **Star lemma** (`CORNER_FAMILIES:StarLemma`), degree four, equation (2) with `d = 4`: if the
-faces `O V_i V_{i+1}` are positively oriented and every triangle `O V_i V_j` has area at least
-`t > 0`, the faces have total area at least `(2 + 2√2)t`. (Only the triangles at `O` are used.)
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 70–104.
-
-Uses: CORNER_FAMILIES:StarLemma (3) -/
-theorem starLemma_four (O : Point) (V : Fin 4 → Point) (t : ℝ) (ht : 0 < t)
-    (hface : ∀ i, 0 < sarea O (V i) (V (i + 1)))
-    (harea : ∀ i j, i ≠ j → t ≤ triangleArea O (V i) (V j)) :
-    (2 + 2 * Real.sqrt 2) * t ≤ ∑ i, triangleArea O (V i) (V (i + 1)) := by
-  have f0 := ge_of_pos ht (harea 0 1 (by decide)) (hface 0)
-  have f1 := ge_of_pos ht (harea 1 2 (by decide)) (hface 1)
-  have f2 := ge_of_pos ht (harea 2 3 (by decide)) (hface 2)
-  have f3 := ge_of_pos ht (harea 3 0 (by decide)) (hface 3)
-  have hb := two_le_abs (harea 0 2 (by decide))
-  have hc := two_le_abs (harea 1 3 (by decide))
-  have := star4_core (by linarith) f0 f1 f2 f3 hb hc (eq3 O V)
-  have hs : ∑ i, triangleArea O (V i) (V (i + 1)) = triangleArea O (V 0) (V 1) +
-      triangleArea O (V 1) (V 2) + triangleArea O (V 2) (V 3) + triangleArea O (V 3) (V 0) := by
-    rw [Fin.sum_univ_four]; rfl
-  rw [hs, triangleArea_eq, triangleArea_eq, triangleArea_eq, triangleArea_eq,
-    abs_of_pos (by linarith : (0 : ℝ) < sarea O (V 0) (V 1)),
-    abs_of_pos (by linarith : (0 : ℝ) < sarea O (V 1) (V 2)),
-    abs_of_pos (by linarith : (0 : ℝ) < sarea O (V 2) (V 3)),
-    abs_of_pos (by linarith : (0 : ℝ) < sarea O (V 3) (V 0))]
-  linarith
-
 /-! ### §2. Seven points with a triangular convex hull
 
 The manuscript proves (5) with planar triangulations (lines 139–228), which Mathlib lacks, and
@@ -157,48 +121,6 @@ fan triangles `ABY, BCY, CAY`:
   flippable, `[YZ₁Z₂] > 0` (`flip_exists`: the three angles at `Y` add up to `2π`); after the
   flip `Z₁` has degree four with faces `Z₁AB, Z₁BZ₂, Z₁Z₂Y, Z₁YA`, and the degree-four star
   bound plus five more faces give `(2 + 2√2) + 5` (`flip0`). -/
-
-/-- **Claim** (`CORNER_FAMILIES:claim-empty-convex-quad`): among points in general position, a
-convex quadrilateral of minimum area spanned by them contains none of the points in its
-interior (none lies on its edges, by general position). The manuscript states this for its seven
-points; the printed proof has a gap (lines 161–165), repaired here: a point `X` inside `abcd`
-lies on one side of the diagonal `ac`, and then `aXcd` or `abcX` is a smaller convex
-quadrilateral. (Not needed by the triangulation-free proof of (5).)
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 161–165. -/
-theorem claim_empty_convex_quad {n : ℕ} (P : Fin n → Point) (hgp : 0 < minTriangleArea P)
-    (i j k l : Fin n) (hq : ConvexQuad (P i) (P j) (P k) (P l))
-    (hmin : ∀ i' j' k' l' : Fin n, ConvexQuad (P i') (P j') (P k') (P l') →
-      quadArea2 (P i) (P j) (P k) (P l) ≤ quadArea2 (P i') (P j') (P k') (P l'))
-    (m : Fin n) : ¬ InQuad (P m) (P i) (P j) (P k) (P l) := by
-  rintro ⟨x1, x2, x3, x4⟩
-  obtain ⟨q1, q2, q3, q4⟩ := hq
-  have hik : i ≠ k := by
-    rintro rfl; have : sarea (P i) (P j) (P i) = 0 := by unfold sarea; ring
-    linarith
-  have hkm : k ≠ m := by
-    rintro rfl; have : sarea (P k) (P l) (P k) = 0 := by unfold sarea; ring
-    linarith
-  have him : i ≠ m := by
-    rintro rfl; have : sarea (P l) (P i) (P i) = 0 := by unfold sarea; ring
-    linarith
-  have hne := sarea_ne_zero_of_min_pos hgp i k m hik hkm him
-  set a := P i; set b := P j; set c := P k; set d := P l; set X := P m
-  have e1 : sarea a b c = sarea a b X + sarea b c X + sarea c a X := by unfold sarea; ring
-  have e2 : sarea a c d = sarea a c X + sarea c d X + sarea d a X := by unfold sarea; ring
-  have s1 : sarea a X c = -sarea a c X := sarea_swap₂₃ _ _ _
-  have s2 : sarea c a X = -sarea a c X := by unfold sarea; ring
-  rcases hne.lt_or_gt with h | h
-  · -- `X` on the side of `b`: the quadrilateral `aXcd`
-    have hc : ConvexQuad a X c d := ⟨by linarith, by linarith [sarea_cycle X c d], q3, x4⟩
-    have := hmin i m k l hc
-    unfold quadArea2 at this
-    linarith
-  · -- `X` on the side of `d`: the quadrilateral `abcX`
-    have hc : ConvexQuad a b c X := ⟨q1, x2, by linarith [sarea_cycle a c X],
-      by linarith [sarea_cycle X a b]⟩
-    have := hmin i j k m hc
-    unfold quadArea2 at this
-    linarith
 
 /-- One interior point in each fan triangle: some edge `YA, YB, YC` is flippable, that is, one of
 the three consecutive angles at `Y` is below `π` (in signs: `[YZ₁Z₂] > 0`, `[YZ₂Z₃] > 0` or
@@ -763,55 +685,5 @@ theorem globalOccupancyCorollary (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unit
   nlinarith [sqrt2_gt]
 
 /-! ### §5. Exact residual Type-III geometry -/
-
-/-- **Claim** (`CORNER_FAMILIES:claim-residual-regions`), (7)–(8): in a Type-III configuration of
-minimum area `t > 0`, with `s = 2t`, every free point satisfies `x ≥ s`, `y ≤ 1 - s`,
-`|y - x| ≥ s`, hence lies in `U_s` or in `L_s`. `docs/proof/nine/CORNER_FAMILIES.md`, lines 271–289. -/
-theorem claim_residual_regions (U V W X Y Z : Point) (hU : U ∈ unitSquare)
-    (hV : V ∈ unitSquare) (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare)
-    (hZ : Z ∈ unitSquare) (t : ℝ) (_ht : 0 < t)
-    (hmin : t ≤ minTriangleArea (typeIIIConfig U V W X Y Z)) (i : Fin 6) :
-    2 * t ≤ (freeSix U V W X Y Z i).1 ∧ (freeSix U V W X Y Z i).2 ≤ 1 - 2 * t ∧
-      2 * t ≤ |(freeSix U V W X Y Z i).2 - (freeSix U V W X Y Z i).1| ∧
-      (freeSix U V W X Y Z i ∈ upperRegion (2 * t) ∨
-        freeSix U V W X Y Z i ∈ lowerRegion (2 * t)) := by
-  have hm := freeSix_mem hU hV hW hX hY hZ i
-  have e1 := two_le_abs (area_of_le_min hmin 0 1 (fr i) (by decide) (fr_ne_small i).2.1.symm
-    (fr_ne_small i).1.symm)
-  have e2 := two_le_abs (area_of_le_min hmin 1 2 (fr i) (by decide) (fr_ne_small i).2.2.symm
-    (fr_ne_small i).2.1.symm)
-  have e3 := two_le_abs (area_of_le_min hmin 0 2 (fr i) (by decide) (fr_ne_small i).2.2.symm
-    (fr_ne_small i).1.symm)
-  rw [typeIII_fr] at e1 e2 e3
-  set Q := freeSix U V W X Y Z i
-  change 2 * t ≤ |sarea (0, 0) (0, 1) Q| at e1
-  change 2 * t ≤ |sarea (0, 1) (1, 1) Q| at e2
-  change 2 * t ≤ |sarea (0, 0) (1, 1) Q| at e3
-  have s1 : sarea (0, 0) (0, 1) Q = -Q.1 := by unfold sarea; ring
-  have s2 : sarea (0, 1) (1, 1) Q = Q.2 - 1 := by unfold sarea; ring
-  have s3 : sarea (0, 0) (1, 1) Q = Q.2 - Q.1 := by unfold sarea; ring
-  rw [s1, abs_neg, abs_of_nonneg hm.1] at e1
-  rw [s2, abs_of_nonpos (by linarith [hm.2.2.2])] at e2
-  rw [s3] at e3
-  refine ⟨e1, by linarith, e3, ?_⟩
-  rcases le_total 0 (Q.2 - Q.1) with h | h
-  · rw [abs_of_nonneg h] at e3
-    exact Or.inl ⟨e1, by linarith, by linarith⟩
-  · rw [abs_of_nonpos h] at e3
-    exact Or.inr ⟨hm.2.2.1, hm.2.1, by linarith⟩
-
-/-- **Claim** (`CORNER_FAMILIES:claim-residual-regions`), the count: at minimum area `≥ A₀`, at
-most three free points lie in `U_s` (are upper), by (1). `docs/proof/nine/CORNER_FAMILIES.md`,
-lines 289–302.
-
-Uses: CORNER_FAMILIES:TypeIII-ge4upper -/
-theorem claim_residual_regions_count (U V W X Y Z : Point) (hU : U ∈ unitSquare)
-    (hV : V ∈ unitSquare) (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare)
-    (hZ : Z ∈ unitSquare) (hmin : A₀ ≤ minTriangleArea (typeIIIConfig U V W X Y Z)) :
-    upperCount U V W X Y Z ≤ 3 := by
-  by_contra h
-  push Not at h
-  obtain ⟨h1, h2, h3⟩ := typeIII_ge4upper U V W X Y Z hU hV hW hX hY hZ h
-  linarith
 
 end Heilbronn.Nine.CornerFamilies

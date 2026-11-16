@@ -688,20 +688,6 @@ theorem claim_final_triangle (P Q X Y : Point) (hP : P ∈ leftRegion (2 / 19))
 
 /-! ### Assembly: the nine-point configuration -/
 
-/-- Distinct indices carry distinct points when the least area is positive. -/
-theorem ne_of_min {P : Fin 9 → Point} (hmin : 1 / 19 ≤ minTriangleArea P) {i j : Fin 9}
-    (hij : i ≠ j) : P i ≠ P j := by
-  intro heq
-  obtain ⟨k, -, hk⟩ := Finset.exists_mem_notMem_of_card_lt_card
-    (s := ({i, j} : Finset (Fin 9))) (t := Finset.univ)
-    (lt_of_le_of_lt Finset.card_le_two (by simp))
-  simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at hk
-  have := area_of_le_min hmin i j k hij (Ne.symm hk.2) (Ne.symm hk.1)
-  rw [triangleArea_eq, heq] at this
-  have e : sarea (P j) (P j) (P k) = 0 := by simp only [sarea]; ring
-  rw [e] at this
-  norm_num at this
-
 theorem sub_vec {m : ℕ} (hm : 3 ≤ m) (P : Fin 9 → Point) (f : Fin m → Fin 9)
     (hf : Function.Injective f) (V : Fin m → Point) (hV : ∀ x, V x = P (f x)) :
     minTriangleArea P ≤ minTriangleArea V := by

@@ -37,7 +37,6 @@ local notation "s" => (8 / 73 : ℝ)
 /-- `ρ = 49/60 < (4 + 2√3)s`. -/
 local notation "ρ" => (49 / 60 : ℝ)
 
-
 /-! ### Section 1: only two geometric rows remain -/
 
 /-- Two free points `X, Y` in the right cap (in the square), the lower point `L ∈ OHC`, and a
@@ -60,7 +59,6 @@ structure TwoRight (h c d f : ℝ) (X Y L Q : Point) : Prop where
 structure Row (h c d f : ℝ) (X Y L Q : Point) : Prop extends TwoRight h c d f X Y L Q where
   innerCDX : InTriangle Y (ptC c) X (ptD d)
   innerODX : InTriangle Y ptO X (ptD d)
-
 
 open C1ZeroLower (Comp cfg cfg_free WordAt)
 
@@ -1038,6 +1036,5 @@ theorem theorem1 {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f) (hfd
   rcases (eq2 tw).1 with ⟨i1, i2⟩ | ⟨i1, i2⟩
   · exact Row.false ⟨tw, i1, i2⟩
   · exact Row.false ⟨twoRight_of H hfd hab.symm hbl hal hqb hqa hql hb ha hlL hq, i1, i2⟩
-
 
 end Heilbronn.Nine.C1OneLowerRightPair

@@ -253,56 +253,6 @@ theorem quant_ccw {A B C X Y Z : Point} {s : ℝ} (hs : 7 / 64 ≤ s) (hABC : sa
     h18a h18b h18c h19a h19b h19c tiling
   exact ⟨k1, k2, k3, k4, k5, k6, k7, k8⟩
 
-/-- **Quantitative mesh lemma** (`CORNER_FAMILIES:QuantitativeMeshLemma`), (26)–(27): for a
-triangle `ABC` of doubled area one with a labelled distributed triple `X, Y, Z` and all doubled
-areas of the six points at least `s`, `s ≥ 7/64`: the doubled central area is `K ≤ (109/98)s`,
-each connector exceeds `(6/5)s`, and each ear is at most `1 - (3φ + 3)s < 55/384`.
-The manuscript states it at `s = 7/64`; `ONE_CORNER:claim-mesh-all-s` observes that it holds for
-all `s ≥ 7/64`, the generality stated here. `docs/proof/nine/CORNER_FAMILIES.md`, lines 862–1035.
-
-Uses: CORNER_FAMILIES:SixPointTriangularHullTheorem (16)–(20) -/
-theorem quantitativeMeshLemma (A B C X Y Z : Point) (s : ℝ) (hs : 7 / 64 ≤ s)
-    (hABC : |sarea A B C| = 1) (hm : MeshLabelled A B C X Y Z)
-    (hmin : s / 2 ≤ minTriangleArea ![A, B, C, X, Y, Z]) :
-    |sarea Z X Y| ≤ 109 / 98 * s ∧
-      6 / 5 * s < |sarea A Z Y| ∧ 6 / 5 * s < |sarea B X Z| ∧ 6 / 5 * s < |sarea C Y X| ∧
-      |sarea A B Z| ≤ 1 - (3 * ((1 + Real.sqrt 5) / 2) + 3) * s ∧
-      |sarea B C X| ≤ 1 - (3 * ((1 + Real.sqrt 5) / 2) + 3) * s ∧
-      |sarea C A Y| ≤ 1 - (3 * ((1 + Real.sqrt 5) / 2) + 3) * s ∧
-      1 - (3 * ((1 + Real.sqrt 5) / 2) + 3) * s < 55 / 384 := by
-  rcases le_or_gt 0 (sarea A B C) with hp | hn
-  · have h1 : sarea A B C = 1 := by rw [abs_of_nonneg hp] at hABC; exact hABC
-    obtain ⟨g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13⟩ :=
-      mesh_ccw (by rw [h1]; norm_num) hm
-    obtain ⟨k1, k2, k3, k4, k5, k6, k7, k8⟩ := quant_ccw hs h1 hm hmin
-    rw [abs_of_pos g7, abs_of_pos g4, abs_of_pos g5, abs_of_pos g6, abs_of_pos g1, abs_of_pos g2,
-      abs_of_pos g3]
-    exact ⟨k1, k2, k3, k4, k5, k6, k7, k8⟩
-  · have h1 : sarea C B A = 1 := by
-      rw [abs_of_neg hn] at hABC; linarith [sarea_swap₁₃ A B C]
-    have hm' := meshLabelled_reverse hm
-    obtain ⟨g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13⟩ :=
-      mesh_ccw (by rw [h1]; norm_num) hm'
-    obtain ⟨k1, k2, k3, k4, k5, k6, k7, k8⟩ := quant_ccw hs h1 hm'
-      (min_sub hmin _ ![2, 1, 0, 5, 4, 3] (by norm_num) (by decide)
-        (by intro i; fin_cases i <;> simp))
-    have r1 : |sarea Z X Y| = sarea X Z Y := by
-      rw [sarea_swap₁₂ X Z Y, abs_neg, abs_of_pos g7]
-    have r2 : |sarea A Z Y| = sarea A Y Z := by
-      rw [sarea_swap₂₃ A Y Z, abs_neg, abs_of_pos g6]
-    have r3 : |sarea B X Z| = sarea B Z X := by
-      rw [sarea_swap₂₃ B Z X, abs_neg, abs_of_pos g5]
-    have r4 : |sarea C Y X| = sarea C X Y := by
-      rw [sarea_swap₂₃ C X Y, abs_neg, abs_of_pos g4]
-    have r5 : |sarea A B Z| = sarea B A Z := by
-      rw [sarea_swap₁₂ B A Z, abs_neg, abs_of_pos g2]
-    have r6 : |sarea B C X| = sarea C B X := by
-      rw [sarea_swap₁₂ C B X, abs_neg, abs_of_pos g1]
-    have r7 : |sarea C A Y| = sarea A C Y := by
-      rw [sarea_swap₁₂ A C Y, abs_neg, abs_of_pos g3]
-    rw [r1, r2, r3, r4, r5, r6, r7]
-    exact ⟨k1, k4, k3, k2, k6, k5, k7, k8⟩
-
 /-! ### The labelled upper triple in the physical frame
 
 `A = (0,0)`, `B = (0,1)`, `C = (1,1)` (clockwise), `Y = (u, v)`, `Z = (p, q)`, `X = (c, 1 - a)`.
@@ -370,52 +320,6 @@ theorem meshHyps_of {X Y Z : Point} {s : ℝ} (hs : 7 / 64 ≤ s)
     by linarith, by linarith, by linarith, by linarith⟩
 
 /-! ### §11. Uniform signs for an additional lower point -/
-
-
-/-- **Claim** (`CORNER_FAMILIES:UniformSigns`), the bounds (33) in the physical frame, for every
-`s ≥ 7/64` (also `ONE_CORNER.md` (4)): with `E = 55/384`,
-`s ≤ p, a, f ≤ E`, `u, h, c, z, 1 - c - a, 1 - p - z ≥ 3s`, `k ≥ 3s - E`, and `Q ≥ s`.
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 1041–1071.
-
-Uses: CORNER_FAMILIES:QuantitativeMeshLemma -/
-theorem eq33 (X Y Z : Point) (s : ℝ) (hs : 7 / 64 ≤ s)
-    (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z)
-    (hmin : s / 2 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z]) :
-    let u := Y.1
-    let v := Y.2
-    let p := Z.1
-    let q := Z.2
-    let c := X.1
-    let a := 1 - X.2
-    let h := 1 - v
-    let z := 1 - q
-    let f := v - u
-    let k := h - a
-    let Q := h * c - a * u
-    s ≤ p ∧ p ≤ 55 / 384 ∧ s ≤ a ∧ a ≤ 55 / 384 ∧ s ≤ f ∧ f ≤ 55 / 384 ∧
-      3 * s ≤ u ∧ 3 * s ≤ h ∧ 3 * s ≤ c ∧ 3 * s ≤ z ∧ 3 * s ≤ 1 - c - a ∧
-      3 * s ≤ 1 - p - z ∧ 3 * s - 55 / 384 ≤ k ∧ s ≤ Q := by
-  have H := meshHyps_of hs hm hmin
-  intro u v p q c a h z f k Q
-  obtain ⟨-, hp, ha, hf, hpE, haE, hfE, hQ, he, hP, hW, hV, hCZY, hAXZ, -, -, hJ, hAZY⟩ := H
-  refine ⟨hp, hpE, ha, haE, hf, hfE, by linarith, by linarith, by linarith, by linarith,
-    by linarith, by linarith, by linarith, hQ⟩
-
-/-- **Claim** (`CORNER_FAMILIES:UniformSigns`), identities (36) in the physical frame: for
-`R = (x, 1 - b)`, `D(X, Y, R) = (c - u)b + kx - Q`, and the doubled central area
-`K = -D(X, Y, Z)` equals `Q + z(u - c) - pk` (all points). `docs/proof/nine/CORNER_FAMILIES.md`,
-lines 1112–1116. -/
-theorem eq36 (X Y Z R : Point) :
-    let u := Y.1
-    let c := X.1
-    let a := 1 - X.2
-    let h := 1 - Y.2
-    let k := h - a
-    let Q := h * c - a * u
-    sarea X Y R = (c - u) * (1 - R.2) + k * R.1 - Q ∧
-      -sarea X Y Z = Q + (1 - Z.2) * (u - c) - Z.1 * k := by
-  intro u c a h k Q
-  constructor <;> simp only [sarea, u, c, a, h, k, Q] <;> ring
 
 /-- The first sign of (34) (lines 1080–1096, `ONE_CORNER.md` lines 113–140): `D(B, Z, R) ≥ s`,
 since `D(A, Z, R) < 0` gives `x ≥ (s - pδ)/q` and the opposite sign `x ≤ (pM - s)/z`, which

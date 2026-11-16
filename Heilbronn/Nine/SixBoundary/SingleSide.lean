@@ -184,19 +184,6 @@ theorem Conf.polyP (H : Conf a h b c d f X P Q) : InPolygon (heptagonX a h b c d
   fin_cases i
   exacts [p1, p2, e1, e2, p4, p5, p6]
 
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_SIDE:claim-heptagon`). With every doubled area at least
-`7/64`, `X` in the cap `CD(1,0)` and `P, Q` strictly inside the anchor hexagon, the full hull is
-the strictly convex heptagon (2) `A, B, C, X, D, F, H` (counterclockwise) with `P, Q` interior.
-`docs/proof/nine/SIX_BOUNDARY_SINGLE_SIDE.md`, lines 44-51. -/
-theorem claim_heptagon {a h b c d f : ℝ} {X P Q : Point} (hN : NAnchors a h b c d f)
-    (hX : InCapR c d X) (hP : P ∈ unitSquare) (hQ : Q ∈ unitSquare)
-    (hPI : InHexagon a h b c d f P) (hQI : InHexagon a h b c d f Q)
-    (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    IsConvexCCW (heptagonX a h b c d f X) ∧ InPolygon (heptagonX a h b c d f X) P ∧
-      InPolygon (heptagonX a h b c d f X) Q := by
-  have H := Conf.of hN hX hP hQ hPI hQI hmin
-  exact ⟨H.convex, H.polyP, H.swap.polyP⟩
-
 /-! ### Section 1: common affine bounds -/
 
 /-- The projection identities (9), for every point `R`. -/
@@ -449,19 +436,6 @@ theorem Conf.one_below (H : Conf a h b c d f X P Q) :
     linarith
   linarith [k.1, H.hmin]
 
-/-- Each interior point lies in `HCDF` (above `HC`) or in `HABC` (below `HC`). -/
-theorem Conf.upper_or_lower (H : Conf a h b c d f X P Q) :
-    (0 < sarea (ptH h) (ptC c) P ∧ InUpperQuad h c d f P) ∨
-      (sarea (ptH h) (ptC c) P < 0 ∧ InLowerQuad a h b c P) := by
-  obtain ⟨p1, p2, p3, p4, p5, p6⟩ := H.hP
-  have hne : sarea (ptH h) (ptC c) P ≠ 0 := H.ne 6 2 7
-  rcases hne.lt_or_gt with hl | hu
-  · right
-    refine ⟨hl, p6, p1, p2, ?_⟩
-    have := sarea_swap₁₂ (ptH h) (ptC c) P
-    linarith
-  · left; exact ⟨hu, hu, p3, p4, p5⟩
-
 theorem lowerQuad_neg {R : Point} (hR : InLowerQuad a h b c R) : sarea (ptH h) (ptC c) R < 0 := by
   have := sarea_swap₁₂ (ptH h) (ptC c) R
   linarith [hR.2.2.2]
@@ -566,57 +540,6 @@ theorem Conf.mixed_costs (H : Conf a h b c d f X P Q) (hPl : sarea (ptH h) (ptC 
     · exact hu
   exact ⟨H.swap.fanP hQu, lt_of_lt_of_le seven_eleven_lt (H.hc_endpoint hPl)⟩
 
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_SIDE:claim-empties-and-classes`). In the setting with every
-doubled area at least `s = 7/64` (`ρ = 13/16`, `W = 1 - (h - d)(c - f)`):
-(11) `[ABH] < 3s` and `[BCX] < 3s`, and neither triangle contains `P` or `Q`;
-(12) the six ears have doubled area `< ρ` and none contains both `P` and `Q`;
-at most one of `P, Q` is below `HC` (else least area `≤ 7hc/128 < 7/128`), so the pair is
-*mixed* (one in `HABC`, one in `HCDF`) or *upper* (both in `HCDF`); the mixed class has
-`W ≥ 4s` and `hc > 7/11` (13), the upper class `W ≥ 8s` and `hc ≥ 4s`.
-`docs/proof/nine/SIX_BOUNDARY_SINGLE_SIDE.md`, lines 137-203.
-Uses: SIX_BOUNDARY_EXTERIOR:Theorem5, SIX_BOUNDARY_TWO_SIDE_PROJECTION:Lemma2,
-SIX_BOUNDARY_HULL:Theorem1, QUADRILATERAL_HULL:Theorem4, QUADRILATERAL_HULL:Theorem1,
-TYPE_II:EndpointTriangleTheorem, CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem claim_empties_and_classes {a h b c d f : ℝ} {X P Q : Point} (hN : NAnchors a h b c d f)
-    (hX : InCapR c d X) (hP : P ∈ unitSquare) (hQ : Q ∈ unitSquare)
-    (hPI : InHexagon a h b c d f P) (hQI : InHexagon a h b c d f Q)
-    (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    (sarea (ptA a) (ptB b) (ptH h) < 3 * (7 / 64) ∧ sarea (ptB b) (ptC c) X < 3 * (7 / 64) ∧
-      ¬ InTriangle P (ptA a) (ptB b) (ptH h) ∧ ¬ InTriangle Q (ptA a) (ptB b) (ptH h) ∧
-      ¬ InTriangle P (ptB b) (ptC c) X ∧ ¬ InTriangle Q (ptB b) (ptC c) X) ∧
-    (sarea (ptA a) (ptB b) (ptH h) < 13 / 16 ∧ sarea (ptA a) (ptB b) (ptC c) < 13 / 16 ∧
-      sarea (ptB b) (ptC c) (ptD d) < 13 / 16 ∧ sarea (ptC c) (ptD d) (ptF f) < 13 / 16 ∧
-      sarea (ptD d) (ptF f) (ptH h) < 13 / 16 ∧ sarea (ptF f) (ptH h) (ptA a) < 13 / 16) ∧
-    (¬ (InTriangle P (ptA a) (ptB b) (ptH h) ∧ InTriangle Q (ptA a) (ptB b) (ptH h)) ∧
-      ¬ (InTriangle P (ptA a) (ptB b) (ptC c) ∧ InTriangle Q (ptA a) (ptB b) (ptC c)) ∧
-      ¬ (InTriangle P (ptB b) (ptC c) (ptD d) ∧ InTriangle Q (ptB b) (ptC c) (ptD d)) ∧
-      ¬ (InTriangle P (ptC c) (ptD d) (ptF f) ∧ InTriangle Q (ptC c) (ptD d) (ptF f)) ∧
-      ¬ (InTriangle P (ptD d) (ptF f) (ptH h) ∧ InTriangle Q (ptD d) (ptF f) (ptH h)) ∧
-      ¬ (InTriangle P (ptF f) (ptH h) (ptA a) ∧ InTriangle Q (ptF f) (ptH h) (ptA a))) ∧
-    ((InLowerQuad a h b c P ∧ InUpperQuad h c d f Q) ∨
-      (InUpperQuad h c d f P ∧ InLowerQuad a h b c Q) ∨
-      (InUpperQuad h c d f P ∧ InUpperQuad h c d f Q)) ∧
-    ((InLowerQuad a h b c P ∨ InLowerQuad a h b c Q) →
-      4 * (7 / 64) ≤ 1 - (h - d) * (c - f) ∧ 7 / 11 < h * c) ∧
-    ((InUpperQuad h c d f P ∧ InUpperQuad h c d f Q) →
-      8 * (7 / 64) ≤ 1 - (h - d) * (c - f) ∧ 4 * (7 / 64) ≤ h * c) := by
-  have H := Conf.of hN hX hP hQ hPI hQI hmin
-  obtain ⟨⟨t1, t2, t3⟩, ⟨u1, u2, u3⟩⟩ := H.empties
-  obtain ⟨e, m⟩ := H.ears
-  refine ⟨⟨t1, u1, t2, t3, u2, u3⟩, e, m, ?_, ?_, ?_⟩
-  · rcases H.upper_or_lower with ⟨hPu, uP⟩ | ⟨hPl, lP⟩ <;>
-      rcases H.swap.upper_or_lower with ⟨hQu, uQ⟩ | ⟨hQl, lQ⟩
-    · exact Or.inr (Or.inr ⟨uP, uQ⟩)
-    · exact Or.inr (Or.inl ⟨uP, lQ⟩)
-    · exact Or.inl ⟨lP, uQ⟩
-    · exact absurd ⟨hPl, hQl⟩ H.one_below
-  · rintro (lP | lQ)
-    · exact H.mixed_costs (lowerQuad_neg lP)
-    · obtain ⟨k1, k2⟩ := H.swap.mixed_costs (lowerQuad_neg lQ)
-      exact ⟨k1, k2⟩
-  · rintro ⟨uP, uQ⟩
-    exact ⟨H.W_upper uP.1 uQ.1, H.anchor.2.2.2.1.2.1⟩
-
 /-! ### Section 3: the words -/
 
 /-- The word of `P`: one of the 43 words, with `r₆ < 3` exactly below `HC`. -/
@@ -666,38 +589,6 @@ theorem Conf.wordP (H : Conf a h b c d f X P Q) :
       by_contra hn; push Not at hn
       have h' : 0 < sarea (ptH h) (ptC c) P := h6.2 hn
       linarith
-
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_SIDE:claim-543-cell-cover`). The finite word cover of
-Section 3: exactly 57 words satisfy (15) on the heptagon, 43 of them satisfy `r₂ ≥ 2` and (16),
-12 of these are below `HC` (`r₆ < 3`) and 31 above. In the setting with every doubled area at
-least `7/64`, the radial words (14) of `P` and `Q` on the heptagon are among the 43 words, and a
-word has `r₆ < 3` exactly when its point is below `HC`. (The ear, common-sector and sign-conflict
-exclusions and the five sign splits refine the `12·31 + 31·32/2` word pairs into the 543 cells
-of the certificate checker.) `docs/proof/nine/SIX_BOUNDARY_SINGLE_SIDE.md`, lines 205-318.
-Uses: SIX_BOUNDARY_SINGLE_SIDE:claim-radial-word, SIX_BOUNDARY_SINGLE_SIDE:claim-heptagon,
-SIX_BOUNDARY_SINGLE_SIDE:claim-empties-and-classes, ONE_CORNER_COMPLETION:Theorem2,
-ONE_CORNER_COMPLETION:Theorem3, SIX_BOUNDARY_SINGLE_SIDE:claim-pair-line-sign -/
-theorem claim_543_cell_cover :
-    (radialWords 7).card = 57 ∧ singleSideWords.card = 43 ∧
-    (singleSideWords.filter fun r => (r 6 : ℕ) < 3).card = 12 ∧
-    (singleSideWords.filter fun r => 3 ≤ (r 6 : ℕ)).card = 31 ∧
-    ∀ {a h b c d f : ℝ} {X P Q : Point}, NAnchors a h b c d f → InCapR c d X →
-      P ∈ unitSquare → Q ∈ unitSquare → InHexagon a h b c d f P → InHexagon a h b c d f Q →
-      7 / 128 ≤ minTriangleArea (nConfig a h b c d f X P Q) →
-      ∀ R ∈ ({P, Q} : Set Point), ∃ r ∈ singleSideWords,
-        HasRadialWord (heptagonX a h b c d f X) R (fun i => (r i : ℕ)) ∧
-          ((r 6 : ℕ) < 3 ↔ InLowerQuad a h b c R) := by
-  refine ⟨?_, ?_, ?_, ?_, ?_⟩
-  · rw [Words.radialWords_eq]; exact Words.card_radialWords
-  · rw [singleSideWords, Words.radialWords_eq]; exact Words.card_side
-  · rw [singleSideWords, Words.radialWords_eq]; exact Words.card_lower
-  · rw [singleSideWords, Words.radialWords_eq]; exact Words.card_upper
-  · intro a h b c d f X P Q hN hX hP hQ hPI hQI hmin R hR
-    have H := Conf.of hN hX hP hQ hPI hQI hmin
-    rcases hR with rfl | hR
-    · exact H.wordP
-    · rw [Set.mem_singleton_iff] at hR; subst hR
-      exact H.swap.wordP
 
 /-! ### The pair-line signs (17), (18) and the upper-pair exclusions -/
 
@@ -1669,12 +1560,6 @@ theorem Conf.main (H : Conf a h b c d f X P Q) (hp : p < 43) (hq : q < 43)
   exact (Cell.mk H (mem_cases_iff.2 ⟨hp, hq, H.filterOK WP WQ RP RQ hqu hord⟩) WP WQ
     (H.base_sound WP WQ RP RQ)).false
 
-/-- The base-case counts of Section 3: 536 base cases, 348 mixed and 188 upper. -/
-theorem cases_length : Model.cases.length = 536 := by decide +kernel
-
-theorem cases_mixed : (Model.cases.filter fun x => Model.mixed x.1 x.2).length = 348 := by
-  decide +kernel
-
 /-- The words of `P, Q` as model indices. -/
 theorem Conf.index (H : Conf a h b c d f X P Q) :
     ∃ w, w < 43 ∧ HasRadialWord (heptagonX a h b c d f X) P (fun i => Model.wordAt w i) := by
@@ -1707,42 +1592,6 @@ theorem Conf.false (H : Conf a h b c d f X P Q) : False := by
   · rcases le_total wp wq with hle | hle
     · exact H.main hwp hwq huq (Or.inr hle) RP RQ
     · exact H.swap.main hwq hwp hup (Or.inr hle) RQ RP
-
-/-- The 27 affine factors `l₀, …, l₂₆` of Section 4, in coefficient-file order, at the
-coordinates `(a, h, b, c, d, f, x, y, p_x, p_y, q_x, q_y)` (`s = 7/64`). -/
-def singleSideFactors (a h b c d f : ℝ) (X P Q : Point) : Fin 27 → ℝ :=
-  ![a - 1 / 7, b - 1 / 8, h - 1 / 2, c - 4 * (7 / 64), d - 1 / 2, 1 - h, 1 - 7 / 64 - c,
-    1 - 7 / 64 - d, 1 - 7 / 64 - f, d - a, h - d, f - b, c - f, h - a - 7 / 64,
-    c - b - 7 / 64, 1 - X.1, X.1 - c - 7 / 64, X.2 - 1 / 7, d - X.2 - 7 / 36,
-    P.1 - 7 / 64, 1 - 7 / 64 - P.1, P.2 - 7 / 64, 1 - 7 / 64 - P.2,
-    Q.1 - 7 / 64, 1 - 7 / 64 - Q.1, Q.2 - 7 / 64, 1 - 7 / 64 - Q.2]
-
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_SIDE:claim-factors-costs`). In the setting with every doubled
-area at least `7/64`, the 27 affine factors of Section 4 are nonnegative (by (3)-(10), the N
-normalization and the square). (The quadratic costs `ε[V_iV_jV_k] - T`, `T = s, 3s, ρ` for zero,
-one or two certified interior points, and the appended costs `W - 4s` or `W - 8s`,
-`hc - 7/11` or `hc - 4s`, `3s - [ABH]`, `3s - [BCX]`, `ρ - [T]` are nonnegative by the threshold,
-subdivision, the two-interior-point theorem and `claim_empties_and_classes`.)
-`docs/proof/nine/SIX_BOUNDARY_SINGLE_SIDE.md`, lines 320-396.
-Uses: SIX_BOUNDARY_SINGLE_SIDE:claim-common-bounds -/
-theorem claim_factors_costs {a h b c d f : ℝ} {X P Q : Point} (hN : NAnchors a h b c d f)
-    (hX : InCapR c d X) (hP : P ∈ unitSquare) (hQ : Q ∈ unitSquare)
-    (hPI : InHexagon a h b c d f P) (hQI : InHexagon a h b c d f Q)
-    (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    ∀ i : Fin 27, 0 ≤ singleSideFactors a h b c d f X P Q i := by
-  have H := Conf.of hN hX hP hQ hPI hQI hmin
-  obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN
-  obtain ⟨⟨x0, x1, y0, y1⟩, -⟩ := hX
-  obtain ⟨⟨e1, e2, -, -⟩, ⟨k1, -, k3⟩, ⟨-, -, a3, a4, a5⟩, ⟨-, -, c4⟩, ⟨d1, d2, d3, d4⟩, dy⟩ :=
-    H.anchor
-  obtain ⟨p1, p2, p3, p4⟩ := H.boxP
-  obtain ⟨q1, q2, q3, q4⟩ := H.swap.boxP
-  have hL : 7 / 64 ≤ h - a := by
-    nlinarith [mul_le_mul_of_nonneg_right (show b ≤ 1 by linarith) (show 0 ≤ h - a by linarith)]
-  have hM : 7 / 64 ≤ c - b := by
-    nlinarith [mul_le_mul_of_nonneg_left (show a ≤ 1 by linarith) (show 0 ≤ c - b by linarith)]
-  intro i
-  fin_cases i <;> simp [singleSideFactors] <;> linarith
 
 /-- **Claim** (`SIX_BOUNDARY_SINGLE_SIDE:claim-certificates`). Geometric conclusion of the
 certificate package: in the setting with every doubled area at least `7/64`, no pair of radial

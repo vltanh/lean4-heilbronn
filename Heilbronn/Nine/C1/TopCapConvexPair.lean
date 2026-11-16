@@ -550,7 +550,6 @@ theorem endpoint_box {h c d f h' c' : ℝ} (hA : C1AnchorsWeak h c d f) (hhf : 8
       rw [e1, e2, e3]
       exact ⟨by linarith, by linarith⟩
 
-
 /-- **Claim** (`C1_TOP_CAP_CONVEX_PAIR:claim-reduction`, made-up id). Scalar reduction of §3:
 if the weak anchor conditions hold with `hf, cd ≥ s`, `hc ≥ ρ`, and (6) `B > 0`, `G ≥ 0`, then
 `A + U > 4s` (7) and `s²/ρ < df < ρ` (8); decreasing `h, c` at fixed `d, f` to `hc = ρ`

@@ -19,12 +19,12 @@ def sharpFacts : List SFact :=
 
 /-- The `left` certificate (264 terms): the atoms of the sharp word and the branch factor `c - e_x`. -/
 theorem left_ok : Cert.check (atoms sharpFacts ++ [v 3 - v 6])
-    (term_rows% "../../../../data/nine/six_opposite_cap/w43323454_left.txt") = true := by
+    (term_rows% "../../Data/six_opposite_cap/w43323454_left.txt") = true := by
   decide +kernel
 
 /-- The `low` certificate (265 terms): the atoms of the sharp word and the branch factor `h - g_y`. -/
 theorem low_ok : Cert.check (atoms sharpFacts ++ [v 1 - v 9])
-    (term_rows% "../../../../data/nine/six_opposite_cap/w43323454_low.txt") = true := by
+    (term_rows% "../../Data/six_opposite_cap/w43323454_low.txt") = true := by
   decide +kernel
 
 end Heilbronn.Nine.SixBoundaryOppositeCapCompletion.Trees

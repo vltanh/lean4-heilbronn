@@ -135,9 +135,6 @@ def SideQuadBounds (k : Word) : Prop :=
 def Admissible (k : Word) : Prop :=
   Complementary k ∧ EarBounds k ∧ SideQuadBounds k
 
-instance (k : Word) : Decidable (Admissible k) := by
-  unfold Admissible Complementary EarBounds SideQuadBounds; infer_instance
-
 /-! ### Blocks and the 36-word catalogue -/
 
 /-- The block `(a, b, c, d) = (k_{2i}, k_{2i+1}, k_{2i+4}, k_{2i+5})`, `i = 0, 1`: the first block
@@ -704,30 +701,6 @@ theorem relabel_spec (refl : Bool) (r : Fin 4) {a b c d e f g h : ℝ}
       unfold EightBoundary.EightAnchors; refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
         linarith, fun i => ?_⟩
     fin_cases i <;> simp [EightBoundary.octagon, labelPerm, symOf, SquareSymmetry.apply]
-
-/-- **Claim** (`RADIAL_CATALOGUE:claim-symmetry-relabel`, named here). Each of the eight
-symmetries `φ` of the square maps the eight-boundary normal form (`EightBoundary.EightAnchors`)
-to a normal form whose labels are permuted by (6): there are new anchors and `(refl, r)` with
-`V'_i = φ (V (labelPerm refl r i))`, where `refl` records whether `φ` reverses orientation.
-"The odd index in the reflection formula keeps the paired vertices on their corresponding square
-sides." Together with `claim_symmetry_action` this is the action of the square symmetries on the
-words of the normal form.
-`docs/proof/nine/RADIAL_CATALOGUE.md`, lines 110–121.
-Uses: standard fact (the symmetries of the square permute its sides). -/
-theorem claim_symmetry_relabel (φ : SquareSymmetry) {a b c d e f g h : ℝ}
-    (hA : EightBoundary.EightAnchors a b c d e f g h) :
-    ∃ (a' b' c' d' e' f' g' h' : ℝ) (refl : Bool) (r : Fin 4),
-      EightBoundary.EightAnchors a' b' c' d' e' f' g' h' ∧
-      (∀ p q t, sarea (φ.apply p) (φ.apply q) (φ.apply t) =
-        (if refl then -1 else 1) * sarea p q t) ∧
-      ∀ i, EightBoundary.octagon a' b' c' d' e' f' g' h' i =
-        φ.apply (EightBoundary.octagon a b c d e f g h (labelPerm refl r i)) := by
-  obtain ⟨refl, r, rfl⟩ : ∃ refl r, symOf refl r = φ := by
-    rcases φ with ⟨_ | _, _ | _, _ | _⟩
-    exacts [⟨false, 0, rfl⟩, ⟨true, 3, rfl⟩, ⟨true, 1, rfl⟩, ⟨false, 2, rfl⟩, ⟨true, 0, rfl⟩,
-      ⟨false, 1, rfl⟩, ⟨false, 3, rfl⟩, ⟨true, 2, rfl⟩]
-  obtain ⟨a', b', c', d', e', f', g', h', hA', hoct⟩ := relabel_spec refl r hA
-  exact ⟨a', b', c', d', e', f', g', h', refl, r, hA', symOf_sarea refl r, hoct⟩
 
 /-! ### Transfer of a normal-form configuration under a square symmetry -/
 

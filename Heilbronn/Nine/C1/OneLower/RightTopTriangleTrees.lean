@@ -15,103 +15,103 @@ open Cover
 
 /-- The certificate of the cell (0, 0). -/
 noncomputable def tree00 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c00.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c00.txt")
 
 /-- The certificate of the cell (0, 1). -/
 noncomputable def tree01 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c01.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c01.txt")
 
 /-- The certificate of the cell (0, 2). -/
 noncomputable def tree02 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c02.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c02.txt")
 
 /-- The certificate of the cell (0, 3). -/
 noncomputable def tree03 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c03.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c03.txt")
 
 /-- The certificate of the cell (0, 4). -/
 noncomputable def tree04 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c04.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c04.txt")
 
 /-- The certificate of the cell (1, 0). -/
 noncomputable def tree10 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c10.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c10.txt")
 
 /-- The certificate of the cell (1, 1). -/
 noncomputable def tree11 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c11.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c11.txt")
 
 /-- The certificate of the cell (1, 2). -/
 noncomputable def tree12 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c12.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c12.txt")
 
 /-- The certificate of the cell (1, 3). -/
 noncomputable def tree13 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c13.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c13.txt")
 
 /-- The certificate of the cell (1, 4). -/
 noncomputable def tree14 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c14.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c14.txt")
 
 /-- The certificate of the cell (2, 0). -/
 noncomputable def tree20 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c20.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c20.txt")
 
 /-- The certificate of the cell (2, 1). -/
 noncomputable def tree21 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c21.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c21.txt")
 
 /-- The certificate of the cell (2, 2). -/
 noncomputable def tree22 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c22.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c22.txt")
 
 /-- The certificate of the cell (2, 3). -/
 noncomputable def tree23 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c23.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c23.txt")
 
 /-- The certificate of the cell (2, 4). -/
 noncomputable def tree24 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c24.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c24.txt")
 
 /-- The certificate of the cell (3, 0). -/
 noncomputable def tree30 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c30.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c30.txt")
 
 /-- The certificate of the cell (3, 1). -/
 noncomputable def tree31 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c31.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c31.txt")
 
 /-- The certificate of the cell (3, 2). -/
 noncomputable def tree32 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c32.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c32.txt")
 
 /-- The certificate of the cell (3, 3). -/
 noncomputable def tree33 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c33.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c33.txt")
 
 /-- The certificate of the cell (3, 4). -/
 noncomputable def tree34 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c34.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c34.txt")
 
 /-- The certificate of the cell (4, 0). -/
 noncomputable def tree40 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c40.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c40.txt")
 
 /-- The certificate of the cell (4, 1). -/
 noncomputable def tree41 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c41.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c41.txt")
 
 /-- The certificate of the cell (4, 2). -/
 noncomputable def tree42 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c42.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c42.txt")
 
 /-- The certificate of the cell (4, 3). -/
 noncomputable def tree43 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c43.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c43.txt")
 
 /-- The certificate of the cell (4, 4). -/
 noncomputable def tree44 : Cover.Tree C1ZeroLower.Model.Split :=
-  .cert (term_rows% "../../../../data/nine/c1_one_lower_rtt/c44.txt")
+  .cert (term_rows% "../../Data/c1_one_lower_rtt/c44.txt")
 
 /-- All the cells with their trees. -/
 noncomputable def allCases : List ((ℕ × ℕ) × Cover.Tree C1ZeroLower.Model.Split) :=

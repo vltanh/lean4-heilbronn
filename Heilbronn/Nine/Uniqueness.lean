@@ -46,10 +46,6 @@ theorem maximizer_congruent (P : Fin 9 → Point) (hP : IsMaximizer P)
   · exact (Assembly.typeII_exclusion hII hA').elim
   · exact (Assembly.typeIII_exclusion hIII hA').elim
 
-/-- `IsOptimal` is congruence to the optimal configuration. -/
-theorem isOptimal_iff_congruent (P : Fin 9 → Point) :
-    IsOptimal P ↔ Congruent P optimalConfiguration := Iff.rfl
-
 /-- **The optimum of nine points** (`docs/proof/nine/UNRESTRICTED.md`, Theorem 1): the value
 `(9√65 - 55)/320`, attained by the construction (`docs/proof/nine/HAND_PROOF.md`, appendix),
 and every maximizer congruent to the construction (`maximizer_congruent`). -/

@@ -55,7 +55,6 @@ structure Placement (h c d f : ℝ) (L P Q X : Point) : Prop where
   topSq : X ∈ unitSquare
   inner : InTriangle P (ptD d) X (ptF f)
 
-
 /-! ### Section 1: bounds forced by the occupied cap triangle -/
 
 /-- **Claims** (`C1_ONE_LOWER_TOP_TRIANGLE:(1)-(4)`), with an actual-area bound `t > s`:

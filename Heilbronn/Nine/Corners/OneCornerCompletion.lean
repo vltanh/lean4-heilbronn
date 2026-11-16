@@ -164,29 +164,6 @@ theorem frameMap_C {A B C D : Point} (ha : sarea A B D ≠ 0) (hb : sarea A B C 
     field_simp
     ring
 
-/-- The canonical frame as an explicit affine map, with determinant `h / 2[ABD]`. -/
-theorem frameMap_eq_affineMap (A B C D : Point) (ha : sarea A B D ≠ 0) :
-    ∃ m₁₁ m₁₂ m₂₁ m₂₂ e₁ e₂ : ℝ, m₁₁ * m₂₂ - m₁₂ * m₂₁ = frameH A B C D / sarea A B D ∧
-      ∀ X, affineMap m₁₁ m₁₂ m₂₁ m₂₂ e₁ e₂ X = frameMap A B C D X := by
-  set a := sarea A B D with hadef
-  set h := frameH A B C D
-  refine ⟨(D.2 - A.2) / a, -(D.1 - A.1) / a,
-    (D.2 - A.2) / a - h * (B.2 - A.2) / a, -(D.1 - A.1) / a + h * (B.1 - A.1) / a,
-    (-A.1 * (D.2 - A.2) + A.2 * (D.1 - A.1)) / a,
-    (-A.1 * (D.2 - A.2) + A.2 * (D.1 - A.1)) / a + h * (-(B.1 - A.1) * A.2 + (B.2 - A.2) * A.1) / a,
-    ?_, ?_⟩
-  · have ha' : (D.2 - A.2) * (B.1 - A.1) - (D.1 - A.1) * (B.2 - A.2) = a := by
-      rw [hadef]; simp only [sarea]; ring
-    calc (D.2 - A.2) / a * (-(D.1 - A.1) / a + h * (B.1 - A.1) / a) -
-          -(D.1 - A.1) / a * ((D.2 - A.2) / a - h * (B.2 - A.2) / a)
-        = h * ((D.2 - A.2) * (B.1 - A.1) - (D.1 - A.1) * (B.2 - A.2)) / a ^ 2 := by ring
-      _ = h * a / a ^ 2 := by rw [ha']
-      _ = h / a := by field_simp
-  · intro X
-    simp only [affineMap, frameMap]
-    rw [← hadef]
-    ext <;> simp only [sarea] <;> ring
-
 theorem frame_min (A B C D P Q : Point) (ha : sarea A B D ≠ 0) (hb : sarea A B C ≠ 0) :
     minTriangleArea (halfSquareConfig (frameH A B C D) (frameF A B C D) (frameMap A B C D P)
       (frameMap A B C D Q)) =
@@ -337,40 +314,6 @@ theorem cw_signs {A B C D : Point} (hq : ConvexQuad D C B A) :
   have e3 := sarea_swap₁₃ A C D
   have e4 := sarea_swap₁₃ B C D
   refine ⟨by linarith, by linarith, by linarith, by linarith⟩
-
-/-- The canonical frame of a convex quadrilateral (either orientation) with `J > 0`. -/
-theorem frame_general {A B C D : Point} (hq : IsConvexQuad A B C D) (hJ : 0 < overlapJ A B C D) :
-    sarea A B D ≠ 0 ∧ sarea A B C ≠ 0 ∧ 0 < areaA A B C D ∧ 0 < areaB A B C D ∧
-      overlapJ A B C D < areaA A B C D ∧ overlapJ A B C D < areaB A B C D ∧
-      frameH A B C D = overlapJ A B C D / areaB A B C D ∧
-      frameF A B C D = 1 - overlapJ A B C D / areaA A B C D ∧
-      |frameH A B C D / sarea A B D| = overlapJ A B C D / (areaA A B C D * areaB A B C D) := by
-  have hqi := quad_identity A B C D
-  rcases hq with hq | hq
-  · obtain ⟨ha, hb, hc, he⟩ := ccw_signs hq
-    obtain ⟨eA, eB, eW, -, eJ⟩ := ccw_areas hq
-    rw [eJ] at hJ ⊢
-    rw [eA, eB]
-    refine ⟨ha.ne', hb.ne', ha, hb, by linarith, by linarith, rfl, ?_, ?_⟩
-    · simp only [frameF]; field_simp; ring
-    · simp only [frameH]; rw [abs_of_pos (div_pos (div_pos (by linarith) hb) ha)]
-      field_simp
-  · obtain ⟨ha, hb, hc, he⟩ := cw_signs hq
-    have eA : areaA A B C D = -sarea A B D := abs_of_neg ha
-    have eB : areaB A B C D = -sarea A B C := abs_of_neg hb
-    have eW : areaW A B C D = -(sarea A B C + sarea A C D) := abs_of_neg (by linarith)
-    have eJ : overlapJ A B C D = sarea A C D - sarea A B D := by
-      simp only [overlapJ]; rw [eA, eB, eW]; ring
-    rw [eJ] at hJ ⊢
-    rw [eA, eB]
-    have ha' := ha.ne
-    have hb' := hb.ne
-    refine ⟨ha.ne, hb.ne, by linarith, by linarith, by linarith, by linarith, ?_, ?_, ?_⟩
-    · simp only [frameH]; field_simp; ring
-    · simp only [frameF]; field_simp; ring
-    · simp only [frameH]
-      rw [abs_of_neg (div_neg_of_pos_of_neg (div_pos_of_neg_of_neg (by linarith) hb) ha)]
-      field_simp; ring
 
 /-! ### Orientation and relabelling -/
 
@@ -655,28 +598,6 @@ theorem eq6_ccw {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ) (hq : ConvexQuad
     exact le_of_mul_le_mul_left this ht4
 
 /-! ### The general identities of §§1–2 -/
-
-/-- **Claim** (`ONE_CORNER_COMPLETION:claim-general-identities`), the canonical normalization (4):
-if `J = a + b - W > 0`, an affine map with `|det| = J/(ab)` sends `A, B, D, C` to `(0,0)`,
-`(1,1)`, `(0,h)`, `(1 - β, 1)` with `h = J/b`, `β = J/a`, both in `(0, 1)` (the manuscript's
-`h = a/T`, `β = b/T` after normalizing `W = 1`). `docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 67–92. -/
-theorem claim_canonical_frame (A B C D : Point) (hq : IsConvexQuad A B C D)
-    (hJ : 0 < overlapJ A B C D) :
-    0 < overlapJ A B C D / areaB A B C D ∧ overlapJ A B C D / areaB A B C D < 1 ∧
-      0 < overlapJ A B C D / areaA A B C D ∧ overlapJ A B C D / areaA A B C D < 1 ∧
-      ∃ m₁₁ m₁₂ m₂₁ m₂₂ e₁ e₂ : ℝ,
-        |m₁₁ * m₂₂ - m₁₂ * m₂₁| = overlapJ A B C D / (areaA A B C D * areaB A B C D) ∧
-        affineMap m₁₁ m₁₂ m₂₁ m₂₂ e₁ e₂ A = (0, 0) ∧ affineMap m₁₁ m₁₂ m₂₁ m₂₂ e₁ e₂ B = (1, 1) ∧
-        affineMap m₁₁ m₁₂ m₂₁ m₂₂ e₁ e₂ D = (0, overlapJ A B C D / areaB A B C D) ∧
-        affineMap m₁₁ m₁₂ m₂₁ m₂₂ e₁ e₂ C = (1 - overlapJ A B C D / areaA A B C D, 1) := by
-  obtain ⟨ha, hb, pa, pb, ja, jb, eh, ef, edet⟩ := frame_general hq hJ
-  obtain ⟨m₁₁, m₁₂, m₂₁, m₂₂, e₁, e₂, hdet, hM⟩ := frameMap_eq_affineMap A B C D ha
-  refine ⟨div_pos hJ pb, (div_lt_one pb).2 jb, div_pos hJ pa, (div_lt_one pa).2 ja,
-    m₁₁, m₁₂, m₂₁, m₂₂, e₁, e₂, by rw [hdet, edet], ?_, ?_, ?_, ?_⟩
-  · rw [hM, frameMap_A]
-  · rw [hM, frameMap_B ha]
-  · rw [hM, frameMap_D ha, eh]
-  · rw [hM, frameMap_C ha hb, ef]
 
 set_option linter.unusedVariables false in
 /-- **Claim** (`ONE_CORNER_COMPLETION:claim-general-identities`), the sign list (5) at any
@@ -1059,17 +980,6 @@ theorem theorem1 (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
   · refine core Q P (centralPair_swap.2 hc) (by rw [min_quadConfig_swap]; exact hmin) ?_ ?_
     · rw [sarea_swap₁₂]; linarith
     · rw [sarea_swap₁₂]; nlinarith
-
-/-- **Theorem 1** (`ONE_CORNER_COMPLETION:Theorem1`), last sentence: when `S ≤ 1/2` the minimum
-area is below `7/128` (`< A₀`). `docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 36–37.
-
-Uses: ONE_CORNER_COMPLETION:Theorem1 -/
-theorem theorem1_of_le_half (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
-    (hc : CentralPair A B C D P Q) (hsep : sarea P Q A * sarea P Q B < 0)
-    (hS : quadArea A B C D ≤ 1 / 2) :
-    minTriangleArea (quadConfig A B C D P Q) < 7 / 128 := by
-  have := theorem1 A B C D P Q hq hc hsep
-  linarith
 
 /-! ### §2. Theorem 2 -/
 

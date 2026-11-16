@@ -29,23 +29,6 @@ def polyN (γ ρ : ℝ) : ℝ :=
   49 * γ ^ 3 + 448 * γ ^ 2 * ρ + 749 * γ ^ 2 + 350 * γ * ρ ^ 2 - 2248 * γ * ρ + 252 * γ -
     49 * ρ ^ 3 + 252 * ρ ^ 2 + 252 * ρ - 49
 
-/-- **Claim** (`CORNER_FAMILIES:claim-A-side-capacity-one`), equation (41): for `ρ = Q/s > 0`,
-`(17/8)(64/7 - 21/5 - ρ - 17/(5ρ))/(ρ + 6/5) < 1`, equivalently
-`875ρ² - 2605ρ + 2023 > 0` (discriminant `-294475`). `docs/proof/nine/CORNER_FAMILIES.md`,
-lines 1306–1323. -/
-theorem eq41 (ρ : ℝ) (hρ : 0 < ρ) :
-    17 / 8 * (64 / 7 - 21 / 5 - ρ - 17 / (5 * ρ)) / (ρ + 6 / 5) < 1 ∧
-      0 < 875 * ρ ^ 2 - 2605 * ρ + 2023 := by
-  have hq : 0 < 875 * ρ ^ 2 - 2605 * ρ + 2023 := by nlinarith [sq_nonneg (ρ - 2605 / 1750)]
-  refine ⟨?_, hq⟩
-  rw [div_lt_one (by linarith)]
-  have e : 17 / 8 * (64 / 7 - 21 / 5 - ρ - 17 / (5 * ρ)) =
-      17 / 8 * (64 / 7 - 21 / 5 - ρ) - 289 / 40 / ρ := by field_simp; ring
-  rw [e, sub_lt_iff_lt_add]
-  have : 17 / 8 * (64 / 7 - 21 / 5 - ρ) - (ρ + 6 / 5) < 289 / 40 / ρ := by
-    rw [lt_div_iff₀ hρ]; nlinarith
-  linarith
-
 /-- **Claim** (`CORNER_FAMILIES:claim-A-side-capacity-one`), equation (45): the polynomial
 `N(γ, ρ)` is positive for `γ ≥ 6/5` and `1 ≤ ρ ≤ 96/35`. Proof: with `t = γ - 6/5 ≥ 0`, `N` is a
 cubic in `t` with leading coefficient `49` whose lower coefficients `N(6/5, ρ)`, `N_γ(6/5, ρ)`,
@@ -151,8 +134,6 @@ theorem G0_scalar {Q J a s M N₀ qd : ℝ} (hs : 7 / 64 ≤ s) (hQ : s ≤ Q) (
     exact mul_le_mul_of_nonneg_left (by linarith) hs0.le
   have : J * (qd * N₀) < J * (s * (Q + J + a) * (Q + J)) := by nlinarith
   exact lt_of_mul_lt_mul_left this hJ0.le
-
-
 
 /-- The three vertex-pair bounds of the feasible triangle (39)–(45), scaled by `hkQ`:
 `cᵢⱼ N₀ < s·hkQ` for `c₁₂ = (q + δ)Q`, `c₁₃ = (s + K)h`, `c₂₃ = (P - s)k` (`δ = M - 1`,
@@ -474,23 +455,6 @@ theorem C_side_general (X Y Z R₁ R₂ : Point) (s L M : ℝ) (hL : 1 ≤ L) (h
     simp only [sarea]; ring
   rw [e, abs_neg] at hX
   linarith
-
-/-- **Claim** (`CORNER_FAMILIES:claim-C-side-capacity-one`): with every area greater than `7/128`
-(doubled threshold `s = 7/64`), after the reflection making `u ≥ h` (`u + v ≥ 1`), two lower
-points of the square cannot both be C-side points (`D(B,Y,R) ≥ s`): the six points
-`B, C, Y, X, R, S` lie in the container `BCD`; a nontriangular hull contradicts the
-nontriangular-hull lemma, a triangular hull `BCT` gives `(Γ + 1)s ≤ 1`, false.
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 1178–1232.
-
-Uses: CORNER_FAMILIES:NontriangularHullLemma, CORNER_FAMILIES:SixPointTriangularHullTheorem -/
-theorem claim_C_side_capacity_one (X Y Z R₁ R₂ : Point)
-    (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z) (_huh : 1 ≤ Y.1 + Y.2)
-    (hR₁ : R₁ ∈ unitSquare) (hR₂ : R₂ ∈ unitSquare) (hl₁ : R₁.2 < R₁.1) (hl₂ : R₂.2 < R₂.1)
-    (hmin : 7 / 128 < minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z, R₁, R₂]) :
-    ¬ (7 / 64 ≤ sarea (0, 1) Y R₁ ∧ 7 / 64 ≤ sarea (0, 1) Y R₂) :=
-  C_side_general X Y Z R₁ R₂ (7 / 64) 1 1 le_rfl le_rfl (by norm_num) (by norm_num) hm
-    ⟨hR₁.1, hR₁.2.1, by linarith [hR₁.2.2.1], hR₁.2.2.2⟩
-    ⟨hR₂.1, hR₂.2.1, by linarith [hR₂.2.2.1], hR₂.2.2.2⟩ hl₁ hl₂ (by linarith)
 
 /-- The containments (15) in the physical (clockwise) frame, from the reversed counterclockwise
 mesh. -/

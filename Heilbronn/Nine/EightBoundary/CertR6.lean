@@ -26,7 +26,7 @@ def caseR6 : List Expr :=
    v 4 - v 0, v 7 - v 3]
 
 theorem checkR6 :
-    check (orders ++ budgets ++ gaps ++ caseR6) (term_rows% "../../../data/nine/eight/r6_terms.txt") =
+    check (orders ++ budgets ++ gaps ++ caseR6) (term_rows% "../Data/eight/r6_terms.txt") =
       true := by
   decide +kernel
 

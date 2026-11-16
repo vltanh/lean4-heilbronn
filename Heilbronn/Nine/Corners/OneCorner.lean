@@ -237,58 +237,6 @@ theorem claim_normalization (P : Fin 9 → Point) (_hP : ∀ i, P i ∈ unitSqua
     rw [harea] at this
     nlinarith [CornerFamilies.sqrt3_gt]
 
-/-- **Claim** (`ONE_CORNER:claim-mesh-all-s`) (1b), equation (4): the quantitative mesh lemma and
-(33) of `CORNER_FAMILIES.md` hold for every `s ≥ σ = 7/64`: in the physical frame, with
-`Y = (u,v)`, `Z = (p,q)`, `X = (c, 1 - a)`: `K ≤ (109/98)s`, each connector `> 6s/5`,
-`p, a, f ≤ E = 55/384`, and `u, h, c, z, 1 - c - a, 1 - p - z ≥ 3s`.
-`docs/proof/nine/ONE_CORNER.md`, lines 89–109.
-
-Uses: CORNER_FAMILIES:QuantitativeMeshLemma, CORNER_FAMILIES:UniformSigns (33) -/
-theorem claim_mesh_all_s (X Y Z : Point) (s : ℝ) (hs : 7 / 64 ≤ s)
-    (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z)
-    (hmin : s / 2 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z]) :
-    |sarea X Y Z| ≤ 109 / 98 * s ∧ 6 / 5 * s < |sarea (0, 0) Z Y| ∧
-      6 / 5 * s < |sarea (0, 1) X Z| ∧ 6 / 5 * s < |sarea (1, 1) Y X| ∧
-      Z.1 ≤ 55 / 384 ∧ 1 - X.2 ≤ 55 / 384 ∧ Y.2 - Y.1 ≤ 55 / 384 ∧
-      3 * s ≤ Y.1 ∧ 3 * s ≤ 1 - Y.2 ∧ 3 * s ≤ X.1 ∧ 3 * s ≤ 1 - Z.2 ∧
-      3 * s ≤ 1 - X.1 - (1 - X.2) ∧ 3 * s ≤ 1 - Z.1 - (1 - Z.2) := by
-  obtain ⟨k1, k2, k3, k4, -, -, -, -⟩ := quantitativeMeshLemma (0, 0) (0, 1) (1, 1) X Y Z s hs
-    (by simp only [sarea]; norm_num) hm hmin
-  obtain ⟨e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14⟩ := eq33 X Y Z s hs hm hmin
-  rw [sarea_cycle Z X Y]
-  refine ⟨k1, k2, k3, k4, e2, e4, e6, e7, e8, e9, e10, e11, e12⟩
-
-/-- **Claim** (`ONE_CORNER:claim-uniform-signs-rectangle`) (1c), equations (5)–(6): with
-`s = σLM`, `L, M ≥ 1`, a lower point `R` of the rectangle `[0, L] × [1 - M, 1]` with all doubled
-areas at least `s` satisfies `D(B,Z,R) ≥ s`, `D(B,X,R) ≤ -s`, `D(X,Y,R) ≥ s`.
-`docs/proof/nine/ONE_CORNER.md`, lines 111–181.
-
-Uses: CORNER_FAMILIES:UniformSigns -/
-theorem claim_uniform_signs_rectangle (X Y Z R : Point) (L M : ℝ) (hL : 1 ≤ L) (hM : 1 ≤ M)
-    (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z) (hR : R ∈ rectangle L M) (hRl : R.2 < R.1)
-    (hmin : 7 / 64 * L * M / 2 ≤ minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z, R]) :
-    7 / 64 * L * M ≤ sarea (0, 1) Z R ∧ sarea (0, 1) X R ≤ -(7 / 64 * L * M) ∧
-      7 / 64 * L * M ≤ sarea X Y R :=
-  uniformSigns X Y Z R (7 / 64 * L * M) L M hL hM (by nlinarith) (by nlinarith) hm hR hRl hmin
-
-/-- **Claim** (`ONE_CORNER:claim-one-per-side`) (1d), (7)–(10): with `s = σLM`, two lower points
-of the rectangle, all doubled areas of the eight points at least `s`, are not both on the side
-`D(B,Y,R) ≤ -s` (feasible triangle with displaced base `y ≥ -δ`), nor, by the reflection across
-`x + y = 1` (exchanging `L, M` and `X, Z`), both on the side `D(B,Y,R) ≥ s`.
-`docs/proof/nine/ONE_CORNER.md`, lines 183–295.
-
-Uses: CORNER_FAMILIES:claim-A-side-capacity-one ((37)–(45)), ONE_CORNER:claim-uniform-signs-rectangle -/
-theorem claim_one_per_side (X Y Z R₁ R₂ : Point) (L M : ℝ) (hL : 1 ≤ L) (hM : 1 ≤ M)
-    (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z) (hR₁ : R₁ ∈ rectangle L M)
-    (hR₂ : R₂ ∈ rectangle L M) (hl₁ : R₁.2 < R₁.1) (hl₂ : R₂.2 < R₂.1)
-    (hmin : 7 / 64 * L * M / 2 ≤
-      minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z, R₁, R₂]) :
-    ¬ (sarea (0, 1) Y R₁ ≤ -(7 / 64 * L * M) ∧ sarea (0, 1) Y R₂ ≤ -(7 / 64 * L * M)) ∧
-      ¬ (7 / 64 * L * M ≤ sarea (0, 1) Y R₁ ∧ 7 / 64 * L * M ≤ sarea (0, 1) Y R₂) :=
-  ⟨claim_A_side_capacity_one X Y Z R₁ R₂ _ L M hL hM (by nlinarith) (by nlinarith) hm hR₁ hR₂
-      hl₁ hl₂ hmin,
-    C_side_general X Y Z R₁ R₂ _ L M hL hM (by nlinarith) (by nlinarith) hm hR₁ hR₂ hl₁ hl₂ hmin⟩
-
 /-- **Corner-triangle occupancy theorem** (`ONE_CORNER:CornerTriangleOccupancyTheorem`),
 equation (1): nine points of the unit square that include `O = (0,0)`, `H = (0,η)`,
 `C₀ = (ξ,0)` (`0 < ξ, η ≤ 1`), with at least three of them strictly inside `OHC₀`, have minimum

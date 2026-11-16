@@ -60,10 +60,6 @@ theorem σ_lt : (8 / 73 : ℝ) < 2 * A₀ := by have := A₀_bounds; linarith
 theorem kσ_gt : (49 / 60 : ℝ) < (4 + 2 * Real.sqrt 3) * (8 / 73) := by
   have := sqrt3_bounds; nlinarith
 
-/-- `(4 + 2√3)σ < 9/10`. -/
-theorem kσ_lt : (4 + 2 * Real.sqrt 3) * (8 / 73) < 9 / 10 := by
-  have := sqrt3_bounds; nlinarith
-
 /-- **The area oracle**: three distinct points of a configuration of least area at least `A₀`
 span a doubled area at least `σ = 8/73` in absolute value. -/
 theorem ar {n : ℕ} {P : Fin n → Point} (hP : A₀ ≤ minTriangleArea P) (i j k : Fin n)
@@ -264,8 +260,6 @@ theorem sarea_tp (p q r : Point) : sarea (tp p) (tp q) (tp r) = -sarea p q r := 
 
 theorem tp_mem {p : Point} (hp : p ∈ unitSquare) : tp p ∈ unitSquare := by
   obtain ⟨a, b, c, d⟩ := hp; exact ⟨c, d, a, b⟩
-
-theorem tp_tp (p : Point) : tp (tp p) = p := rfl
 
 /-- Transposition preserves the least area. -/
 theorem min_tp {n : ℕ} (P : Fin n → Point) :
