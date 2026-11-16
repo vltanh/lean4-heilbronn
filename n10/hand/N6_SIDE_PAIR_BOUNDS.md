@@ -380,6 +380,13 @@ least \(s\). Thus all three fan triangles satisfy
 These bounds use actual triangles throughout. Reflection in the
 square diagonal gives the corresponding left-side statement.
 
+The affine-test theorem in
+[N6_TOP_WEIGHTED_BARYCENTRICS.md](N6_TOP_WEIGHTED_BARYCENTRICS.md),
+Section 4, applies with weight parameters N=11 and b_i=3.
+It gives bounds on every actual point-pair line, including a line
+through the inner point. Its signed interval formula uses the common
+remainder R=2. The three weight numerators are not fan occupancy costs.
+
 The companion [check_n6_side_pair_bounds.py](check_n6_side_pair_bounds.py)
 contains exact rational checks of (7), (10), (12), (13), (15),
 the derivative of \(g\), all eight barycentric remainder identities,

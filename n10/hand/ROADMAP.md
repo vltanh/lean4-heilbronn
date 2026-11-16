@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 69.
+Checkpoint 70.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -529,6 +529,11 @@ four-corner alternative and all zero-area faces.
         (17/3)s. The complete remainder identities and exact constants
         have independent checks. Proof: N6_TOP_WEIGHTED_BARYCENTRICS.md.
         Every fan cost retains its own actual containment witnesses.
+        The general affine-test extension applies to every actual
+        point-pair line, including zero repeated-label tests. Signed
+        interval bounds retain the common barycentric remainder.
+        The actual-line identity, all 27 vertex-sign patterns and both
+        remainder-extrema identities have independent exact checks.
   - [x] N6-SIDE-PAIR-BOUNDS. Without an occupied top cap, a side pair
         has outer coordinates p>.915, c<.616 and q>930/5123.
         Retaining both actual lower-contact clearances proves its
@@ -759,6 +764,17 @@ four-corner alternative and all zero-area faces.
         arithmetic checks pass. Proof: N7_CENTRAL_AREA_ORIENTATION.md.
         This closes the stated orientation chamber in both CA and CB;
         the other orientations and both central parents remain open.
+  - [x] N7-CENTRAL-PAIR-CUT. After HOP<0 orders the two upper
+        points, DGO<0 in both central lower cells. A contrary sign
+        forces two actual points into each of HAO and CDH; four exact
+        scalar comparisons end with ABC<s. Independent geometry and
+        physical-polynomial checks verify all seven Pluecker instances,
+        the containments, all four strict rational gaps and the
+        qualified inward-contact scalar variant.
+        The same note proves capacity one for actual ADG, BDG and CDG,
+        with orientation-independent caps for the first two.
+        Proof: N7_CENTRAL_PAIR_CUT.md. Six coarse ordered upper-pair
+        sign words remain; both central parents stay unchecked.
   - [ ] N7-INTERIOR-REMAINDER. Exclude the two central lower cells
         CA and CB in the sole remaining all-interior heptagon count
         (k,j,q)=(1,2,0). Both lower-ear children are complete above.
@@ -936,10 +952,11 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_SIDE_PAIR_TOP_BOUNDS.md | Uniform .897 contact ceiling, narrow side-pair box, inner 2/9 barycentric bounds and an explicit actual-area transfer to N6 |
 | N7_ONE_LOWER_SETUP.md | Exhaustive four-cell reduction for the remaining all-interior (1,2,0) count, four proved rational boxes, capacity-ray rule and complete factor definitions |
 | N7_ONE_LOWER_ABH.md | Entire lower-ear ABH child: 58 splits, 55 cubics / 21,373 terms, four geometric terminals, 1,993 deductions and 41 explicit rational squares |
+| N7_CENTRAL_PAIR_CUT.md | After HOP<0, the full DGO>0 child is impossible in both central roots; three actual capacity-one triangles and a short occupied-triangle contradiction leave six pair words |
 | N7_CENTRAL_AREA_ORIENTATION.md | In both central lower cells, every upper point T satisfies AGT<0 or DGT<0; four fans, five signed products and 72 exact rational steps give gap 1941/1000000 |
 | N7_ONE_LOWER_ABC.md | Entire lower-ear ABC child: 93 splits, 84 cubics / 37,612 terms, ten geometric terminals, 3,411 deductions and 41 explicit rational squares |
 | N6_TOP_AFFINE_CAPS.md | Actual top-cap contact/apex affine upper bounds and inherited actual-container caps, with all determinant identities |
-| N6_TOP_WEIGHTED_BARYCENTRICS.md | General weighted actual top-fan affine bounds with separately witnessed costs and the exact uniform rational outer cap |
+| N6_TOP_WEIGHTED_BARYCENTRICS.md | Weighted actual top-fan bounds, every actual-line affine test, signed remainder-extrema interval bounds and explicit immutable weight witnesses |
 | N6_SIDE_PAIR_BOUNDS.md | Side-pair bounds without a top point: outer area below (11/3)s, inner weights above 3/11 and fan caps below (5/3)s; twelve positive Bernstein coefficients |
 | SCALAR_AREA_INTERVALS.md | Exact finite fan, signed-Pluecker, support and linear area rules, immutable rational dependency packets and an optional geometry-aware replay interface |
 | N6_TOP_PAIR_BARYCENTRIC_BOUNDS.md | Triangular top-pair weights above 1/9, strengthened to 3/17 by any side-cap point, and eight affine inequalities |

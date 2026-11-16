@@ -112,3 +112,101 @@ independent of the coordinate endpoints being refined.
 
 The companion [check_n6_top_weighted_barycentrics.py](check_n6_top_weighted_barycentrics.py)
 checks all four symbolic identities and the rational constants.
+
+## 4. Affine tests on every actual line
+
+The following consequence applies to any actual triangle, including a
+side-pair triangle from N6_SIDE_PAIR_BOUNDS.md. Let W be an actual
+interior point of an actual triangle with vertices V_1,V_2,V_3.
+Suppose a proved weight bound gives
+
+    lambda_i >= b_i/N,    N>0, b_i>0,
+    R=N-b_1-b_2-b_3 >= 0.                           (6)
+
+Here b_i and N are weight parameters. For the top fan one may take
+N=M and b_i=c_i from Section 1. For the side pair one may take
+N=11 and b_1=b_2=b_3=3, using its proved weights above 3/11.
+Those three numerators are not assertions that the actual fan
+triangles have area at least 3s.
+
+Another valid source uses any already proved positive upper bound N
+on the outer actual area, and already proved positive lower bounds b_i
+on its three opposite actual fan areas. Then lambda_i>=b_i/N.
+All four bounds must already be proved. If sum(b_i)>N, the fan
+identity already gives a contradiction; no formula below is used
+with a negative R.
+
+For any fixed affine functional D on the plane, put D_i=D(V_i) and
+D_W=D(W). In particular D(X)=[IJX] for any two distinct actual
+points I,J. The affine identity is
+
+    N D_W = sum_i (b_i+t_i) D_i,
+    t_i=N lambda_i-b_i >= 0,    sum_i t_i=R.         (7)
+
+It remains true if I or J is W: the left side is then zero.
+If V_i equals I or J, its term D_i is exactly zero. Otherwise
+its nonzero actual determinant sign must be established before use.
+The line may depend on the fixed actual configuration; affinity is
+applied after that configuration has been fixed.
+
+Since every t_i is between zero and R, (7) gives
+
+    N D_W >= sum_(D_i>0) b_i D_i
+                  + sum_(D_i<0) (b_i+R) D_i,
+
+    N D_W <= sum_(D_i>0) (b_i+R) D_i
+                  + sum_(D_i<0) b_i D_i.             (8)
+
+For the first inequality, its difference is
+
+    sum_(D_i>0) t_i D_i
+       + sum_(D_i<0) (t_i-R) D_i >= 0.
+
+For the second, its difference is
+
+    sum_(D_i>0) (R-t_i) D_i
+       + sum_(D_i<0) (-t_i) D_i >= 0.
+
+Zero terms are omitted. Thus (8) supplies nonnegative quadratic
+polynomials expressed as linear combinations of signed actual triangle
+areas. Every use retains the actual inner-point containment, the source
+of its three weight bounds, and the signs of its nonzero vertex tests.
+
+There is a stronger interval consequence which uses the common
+remainder sum. Suppose immutable earlier bounds give
+
+    l_i <= D_i <= u_i.
+
+These endpoints are signed and may be negative or zero. Set
+L=min_i l_i and U=max_i u_i. Then
+
+    N D_W >= sum_i b_i l_i + R L,
+    N D_W <= sum_i b_i u_i + R U.                    (9)
+
+Indeed the two differences are exactly
+
+    sum_i b_i(D_i-l_i) + sum_i t_i(D_i-L),
+    sum_i b_i(u_i-D_i) + sum_i t_i(U-D_i),
+
+respectively. All their terms are nonnegative. No endpoint in (9)
+is required to be attained; ties in the minimum or maximum are allowed.
+
+Known orientations convert (9) to bounds on positive unsigned actual
+areas. For a positive vertex sign, use its unsigned lower and upper
+bounds in that order. For a negative vertex sign, use minus its
+unsigned upper and minus its unsigned lower bound. The target sign
+determines whether the signed lower or signed upper expression gives
+an unsigned lower bound. A zero target is checked directly against
+the two signed bounds instead.
+
+All bounds used to obtain N, b_i, l_i and u_i are immutable earlier
+references in a finite proof. They may be strengthened later without
+altering an earlier update. An area cap obtained from a coordinate
+box can be used to refine a later box only after its source box has
+already been justified. These requirements prevent circular use of
+the proposed refinement.
+
+The independent [check_n6_auxiliary_bounds.js](check_n6_auxiliary_bounds.js)
+checks the affine identity, both differences in (8) for all 27
+positive/negative/zero vertex patterns, and both identities in (9),
+in addition to the earlier weighted and side-pair identities.

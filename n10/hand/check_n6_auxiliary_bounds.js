@@ -139,8 +139,46 @@ function verifyN6AuxiliaryBounds() {
   assert(s.mul(q("11/3")).toString()==="341/1000");
   assert(s.mul(q("11/3")).sub(s.mul(2)).toString()==="31/200");
   assert(q("3/11").cmp(q("13/50"))>0);
+  // Affine tests with weight parameters N,b_i, distinct from occupancy costs.
+  const NN=V("N"),bs=["b1","b2","b3"].map(V);
+  const RR=S(NN,A(...bs)),t1=V("t1"),t2=V("t2");
+  const ts=[t1,t2,S(RR,A(t1,t2))],ds=["D1","D2","D3"].map(V);
+  const weightedD=A(...ds.map((d,i)=>P(A(bs[i],ts[i]),d)));
+  const ix=V("ix"),iy=V("iy"),jx=V("jx"),jy=V("jy");
+  const vx=["vx1","vx2","vx3"].map(V),vy=["vy1","vy2","vy3"].map(V);
+  const WX=A(...vx.map((x,i)=>P(A(bs[i],ts[i]),x)));
+  const WY=A(...vy.map((y,i)=>P(A(bs[i],ts[i]),y)));
+  const physicalND=S(P(S(jx,ix),S(WY,P(NN,iy))),
+    P(S(jy,iy),S(WX,P(NN,ix))));
+  const physicalSum=A(...vx.map((x,i)=>P(A(bs[i],ts[i]),
+    S(P(S(jx,ix),S(vy[i],iy)),P(S(jy,iy),S(x,ix))))));
+  assert(eq(physicalND,physicalSum),"affine actual-line identity");
+  let signedPatterns=0;
+  for(const s1 of [-1,0,1])for(const s2 of [-1,0,1])for(const s3 of [-1,0,1]) {
+    const signs=[s1,s2,s3],signed=ds.map((d,i)=>scale(d,signs[i]));
+    const ND=A(...signed.map((d,i)=>P(A(bs[i],ts[i]),d)));
+    const lower=A(...signed.map((d,i)=>P(signs[i]<0?A(bs[i],RR):bs[i],d)));
+    const upper=A(...signed.map((d,i)=>P(signs[i]>0?A(bs[i],RR):bs[i],d)));
+    const lowerDiff=A(...ds.map((d,i)=>signs[i]===0?C(0):
+      P(signs[i]>0?ts[i]:S(RR,ts[i]),d)));
+    const upperDiff=A(...ds.map((d,i)=>signs[i]===0?C(0):
+      P(signs[i]>0?S(RR,ts[i]):ts[i],d)));
+    assert(eq(S(ND,lower),lowerDiff),"lower signed pattern");
+    assert(eq(S(upper,ND),upperDiff),"upper signed pattern");
+    signedPatterns++;
+  }
+  const ls=["l1","l2","l3"].map(V),us=["u1","u2","u3"].map(V);
+  const LL=V("L"),UU=V("U");
+  const lowerScalar=A(...bs.map((b,i)=>P(b,ls[i])),P(RR,LL));
+  const upperScalar=A(...bs.map((b,i)=>P(b,us[i])),P(RR,UU));
+  const lowerExpansion=A(...ds.map((d,i)=>A(P(bs[i],S(d,ls[i])),P(ts[i],S(d,LL)))));
+  const upperExpansion=A(...ds.map((d,i)=>A(P(bs[i],S(us[i],d)),P(ts[i],S(UU,d)))));
+  assert(eq(S(weightedD,lowerScalar),lowerExpansion),"lower remainder-extrema identity");
+  assert(eq(S(upperScalar,weightedD),upperExpansion),"upper remainder-extrema identity");
   return {status:"PASS",weightedIdentities:4,sideBarycentricIdentities:8,
     positiveBernsteinCoefficients:12,bernsteinIntervals:3,
+    actualLineAffinityIdentities:1,signedBarycentricPatterns:signedPatterns,
+    signedBarycentricIdentities:2*signedPatterns,remainderExtremaIdentities:2,
     sharedContactIdentity:true,fullSidePairIdentity:true,
     exactTopCap:String(m0),outerSideCap:"341/1000",fanCap:"31/200"};
 }
