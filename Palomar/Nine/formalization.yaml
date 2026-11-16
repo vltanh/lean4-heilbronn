@@ -181,7 +181,10 @@ automation:
         documentation. Wall-clock time 7.1 hours, from 14:53 to the last
         proof at 21:56 (US Central time); 51.8 agent-hours; 5,954 tool calls;
         30.09 million input, 2,026 million cache-read and 14.58 million output
-        tokens. Spend not tracked.
+        tokens. Spend not tracked. On 16 November 2026 it made the build fit
+        Palomar's memory, consolidated the library and renamed the
+        declarations named after the draft's numbering, with up to six
+        sub-agents at once.
   notes: >-
     ChatGPT 6 Pro, in the ChatGPT chat, wrote the first draft of the
     nine-point proof;
@@ -210,7 +213,7 @@ review:
     has not yet had a human review, and neither has the mathematics. Lean's
     kernel checks every proof, and lake comparator also replays the compared
     theorems through the NanoDa kernel; locally, con-ron with two workers
-    accepted the same export too (45,152 declarations, 1 h 50 min). That
+    accepted an earlier export of it too (1 h 50 min). That
     establishes the proofs, not that the statement says what the prose
     claims.
 

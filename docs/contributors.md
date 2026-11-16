@@ -53,3 +53,22 @@ From the start of the session at 14:53 to the last proof at 21:56, the work took
 7.1 hours of wall-clock time. 52 sub-agents ran 51.8 agent-hours in all, with
 at most twelve at once, and made 5,954 tool calls. Claude used 30.09 million
 input tokens, 2,026 million cache-read tokens and 14.58 million output tokens.
+
+## Nine points: memory, consolidation and names, 16 November 2026
+
+Claude Opus 5.5, in Claude Code, with the repository owner directing the work,
+in one session with up to six sub-agents at once.
+
+* **The build fits Palomar's memory.** Palomar's preflight ran out of memory:
+  Lake builds one module per core, and a single kernel check of a certificate
+  tree needed 5 to 8 GB. `tree_decide` checks a tree one subtree at a time.
+* **The draft is archived.** The first draft moved to `archive/nine/` with its
+  research notes and exporters; the Lean docstrings no longer cite it, and the
+  685 declarations and four modules named after its numbering were renamed.
+* **The library is consolidated.** Unreachable declarations removed; the
+  hand-split certificate trees made whole again, in part modules glued by
+  `tree_decide using`; shared layers for the geometry helpers, the sign-table
+  certificate packages and the two single-cap families. 9,169 theorems became
+  6,262.
+* **`Cert.check` is faster.** A factored expansion written with the recursor of
+  `List` checks the largest certificate three times as fast.

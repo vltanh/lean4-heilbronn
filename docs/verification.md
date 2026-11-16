@@ -16,18 +16,16 @@ which the Palomar registry uses. Every proof is complete and rests on
 `propext`, `Classical.choice` and `Quot.sound` alone.
 
 - `lake build` must succeed without warnings; an unfinished proof would show as
-  `declaration uses 'sorry'`. Most of the library's 411 modules are kernel checks
-  of certificate chunks. A full build of the library, with mathlib from the
-  cache, takes about 35 minutes with twelve threads (about 5 hours of
-  single-core time; the slowest modules take two to three minutes each).
-  Lake builds as many modules at once as there are cores, and Palomar's build
-  does not limit it, so every module must fit its share of the memory. The
-  kernel keeps every intermediate value of a check until the check ends, so
-  `tree_decide` (`Heilbronn/Common/Cover.lean`) checks a certificate tree one
-  subtree of at most 400 terms at a time: the tree modules need at most
-  2.6 GB, most under 1 GB, and the largest module, the single 676-term
-  certificate of `Nine/EightBoundary/CertR6.lean`, 3.6 GB. A full build
-  running twelve modules at a time peaked at 10 GB in all.
+  `declaration uses 'sorry'`. Most of the library's 398 modules are kernel checks
+  of certificate trees. A full build of the library, with mathlib from the
+  cache, takes about 21 minutes with twelve threads. Lake builds as many
+  modules at once as there are cores, and Palomar's build does not limit it,
+  so every module must fit its share of the memory. The kernel keeps every
+  intermediate value of a check until the check ends, so `tree_decide`
+  (`Heilbronn/Common/Cover.lean`) checks a certificate tree one subtree at a
+  time (at most 400 terms by default; the exact-hull cover, whose leaves are
+  costly, at most 150 terms and 4 leaves): no module needs more than 2.4 GB,
+  and a full build running twelve modules at a time peaked at 9 GB in all.
 - Every `#print axioms` line in the audit must read
   `[propext, Classical.choice, Quot.sound]`: an unproved lemma would add
   `sorryAx`, and `native_decide`, which trusts the compiler,
@@ -58,11 +56,11 @@ which the Palomar registry uses. Every proof is complete and rests on
   con-ron kernel replays the same export with two workers for at most 30
   minutes. That replay is advisory: Palomar records a capacity limit (memory or
   time) as a warning and only a rejection as a failure, and so does the script.
-  The certificates make the replays long. For nine points the export holds
-  45,152 declarations (1.2 GB); Lean's kernel replays it in about 2 h 10 min on
-  one core and 1.6 GB, NanoDa in about 30 minutes and 2 GB, and con-ron with
-  two workers accepts it in 1 h 50 min and 23 GB, so its 30-minute replay
-  declines with a warning, in Palomar and here.
+  The certificates make the replays long. Before the faster `Cert.check`,
+  Lean's kernel replayed the nine-point export in about 2 h 10 min on one
+  core, NanoDa in about 30 minutes, and con-ron with two workers in 1 h 50 min
+  and 23 GB, so its 30-minute replay declines with a warning, in Palomar and
+  here.
 
 [`.github/workflows/lean.yml`](../.github/workflows/lean.yml) runs the build,
 the axiom audit (of every declaration under `Heilbronn`) and the sanity checks
@@ -85,12 +83,17 @@ it multiplies, read by the `term_rows%` elaborators of `Heilbronn/Common/DataRea
 `Cert.check` (`Heilbronn/Common/Certificate.lean`) expands the sum with integer
 arithmetic and bounds it on the cube by its constant coefficient plus its
 positive nonconstant coefficients; `decide +kernel` evaluates the check in the
-kernel, and `check_sound` turns it into the real inequality.
+kernel, and `check_sound` turns it into the real inequality. Since the kernel
+does the work, the expansion is written for it: factored (the terms with the
+same first factor share one multiplication by it) and with the recursor of
+`List` rather than structural recursion, which the kernel unfolds at every step.
 `bernsteinBoxCheck` bounds a polynomial on a box by its Bernstein coefficients,
 and `Cover.checkTree` glues the certificates of a case split. `tree_decide`
 proves `checkTree σ fs T = true` by one auxiliary theorem `of_decide_eq_true rfl`
-for each subtree of at most 400 certificate terms, which only the kernel checks,
-one after another, and glues them with the branch counts of the splits. No
+per subtree, which only the kernel checks, one after another; at each split it
+computes the branches once, as a literal, so that no subtree recomputes the
+facts above it, and a tree too large for one module is split into part modules
+that `tree_decide using` glues. No
 proof uses `native_decide`. The data files hold 434,402 rows in all. They were
 computed outside Lean and are not trusted: the kernel rechecks every row.
 
