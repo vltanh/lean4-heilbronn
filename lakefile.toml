@@ -17,7 +17,9 @@ rev = "v4.36.0-rc2"
 name = "Heilbronn"
 globs = ["Heilbronn", "Heilbronn.+"]
 
-# The statement a reader audits. `lake comparator` compares it with the root
-# module `Heilbronn` (comparator.json); build it alone with `lake build Challenge`.
+# The statements a reader audits, one Palomar entry per case: `Palomar/<Case>/Challenge.lean`,
+# with its `comparator.json` and `formalization.yaml` beside it. `lake comparator` compares each
+# with the root module `Heilbronn`; build them alone with `lake build Palomar`.
 [[lean_lib]]
-name = "Challenge"
+name = "Palomar"
+globs = ["Palomar.+"]

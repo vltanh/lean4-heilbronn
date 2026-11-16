@@ -99,7 +99,7 @@ doc_moves = {Path(p): Path('docs/proof/nine') / p for p in
 doc_moves[Path('README.md')] = Path('docs/proof/nine/README.md')
 
 # 3. Rewrite the contents of every Lean file, at its old path, then move.
-imp = re.compile(r'^((?:public )?(?:meta )?import(?: all)? )(Heilbronn(?:\.[\w₀-₉]+)*)\s*$', re.M)
+imp = re.compile(r'^((?:public )?(?:meta )?import(?: all)? )(Heilbronn(?:\.[\w₀-₉]+)*)[ \t]*$', re.M)
 root_re = re.compile(r'\bHeilbronn\.(' + '|'.join(sorted(roots, key=len, reverse=True)) + r')\b')
 plain_re = re.compile(r'\bHeilbronn\.(' + '|'.join(re.escape(n) for n in
                       sorted(plain_names, key=len, reverse=True)) + r')(?![\w₀-₉\'])')
@@ -161,7 +161,7 @@ def rewrite(path, s, moved):
     s = rewrite_docpaths(s)
     # A file that imported Common.Config for A₀ now imports Nine.Basic.
     if moved:
-        s = re.sub(r'^(public )?import Heilbronn\.Common\.Config\s*$', r'\1import Heilbronn.Nine.Basic',
+        s = re.sub(r'^(public )?import Heilbronn\.Common\.Config[ \t]*$', r'\1import Heilbronn.Nine.Basic',
                    s, flags=re.M)
     return s
 
