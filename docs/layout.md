@@ -14,7 +14,7 @@ Heilbronn/
 │                         configurations of each case
 ├── Common/               tools shared by every case
 └── Nine/                 nine points; Nine/Data/ holds its certificate weights
-scripts/                  the Comparator check and the build tools
+scripts/                  the Comparator check, and file checks against a build snapshot
 archive/nine/             the first draft of the proof, by ChatGPT 6 Pro, archived
 ```
 
