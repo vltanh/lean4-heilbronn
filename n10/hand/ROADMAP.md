@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 42.
+Checkpoint 43.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -378,9 +378,22 @@ four-corner alternative and all zero-area faces.
         deductions and 349 integer terms are printed and independently
         audited. Proof: N7_HEPTAGON_ONE_EAR.md. Together with
         N7-INTERIOR-TWO-LOWER, only (1,2,0) and (0,2,1) remain.
-  - [ ] Complete the two surviving placement rows outside the proved
-        sign chambers: the two stated subcounts of (0,0,3) and the remaining literal
-        AH/DE side-edge 4/4 pair of (1,0,2).
+  - [x] N7-SINGLE-EXTERIOR-4/4-AH/DE. The entire literal AH/DE
+        side-line class, at every height. Fifty-six exhaustive leaves
+        have 19,348 printed integer terms, no squares, and two proved
+        rational boxes. Independent geometry verifies all signs,
+        107 five-chain substitutions, 187 one-interior quadrilateral
+        witnesses and 132 other conditional witnesses. Separate
+        Fraction/SymPy readers reproduce every bound.
+        Proof: N7_SIDE_AH_DE.md.
+  - [x] N7-SINGLE-EXTERIOR. Every placement with exactly one point
+        outside the contact heptagon has m<A*. All eight literal
+        short-arc positions and all four literal 4/4 edge pairs are
+        covered. The AB/EF good word uses the strict sharp projection
+        theorem; the other cases have the rational sigma gap.
+        Proof: N7_SINGLE_EXTERIOR.md assembles the complete catalogue.
+  - [ ] N7-INTERIOR-REMAINDER. Exclude the two remaining all-interior
+        heptagon counts (k,j,q)=(1,2,0) and (0,2,1).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -521,6 +534,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_CDGH_LINE.md | Complete literal CD/GH 4/4 line class: sixteen oblique words, two refinements, eighteen cubics, 5,926 terms and 23 used explicit squares |
 | N7_SIDE_BC_FG.md | Entire literal BC/FG side-line class at every height: 49 exhaustive leaves, 15,159 printed integer terms and 26 explicit rational squares |
 | N7_HEPTAGON_ONE_EAR.md | Five exhaustive all-interior heptagon counts; complete (2,0,1) and (1,1,1) exclusions by an analytic budget and two cubics, 52 explicit deductions and 349 printed terms |
+| N7_SIDE_AH_DE.md | Entire literal AH/DE side-line class at every height: 56 exhaustive leaves, 19,348 printed terms and two explicit rational boxes |
+| N7_SINGLE_EXTERIOR.md | Complete single-exterior N7 sharp exclusion m<A*, assembling all literal arc positions and four 4/4 edge pairs, including the projected good-word terminal |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

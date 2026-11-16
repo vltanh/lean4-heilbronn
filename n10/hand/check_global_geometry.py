@@ -1440,6 +1440,35 @@ def n6_two_lower_two_exterior():
     print("PASS: complete N6 two-lower/two-exterior cap identities, TT catalogue, exterior line rule, and full printed inventory")
 
 
+def n7_ah_de_and_single_exterior():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);eta=q(93,790);ell=q(7347,69700)
+    a,d,e,h,x,y,u,v=sp.symbols('a d e h x y u v')
+    P={name:sp.Matrix(pair) for name,pair in zip('ADEHOP',[(0,a),(1,d),(1,e),(0,h),(x,y),(u,v)])}
+    D=lambda word:2*area(*(P[ch] for ch in word))
+    zero(D('EOP')-D('AOP')-(e-a)*(u-x)+(v-y))
+    zero(D('HOP')-D('DOP')-(h-d)*(u-x)-(v-y))
+    z=sp.symbols('z');Q=(1-ell)*(z-eta)*(1-z)-3*s*(1-z)-s*(z-eta)
+    assert sp.diff(Q,z,2)<0
+    assert Q.subs(z,q(257,500))<0<sp.diff(Q,z).subs(z,q(257,500))
+    assert Q.subs(z,q(203,250))<0 and sp.diff(Q,z).subs(z,q(203,250))<0
+    note=Path(__file__).with_name('N7_SIDE_AH_DE.md').read_text()
+    rows=re.findall(r'^\| (R\d+) \| (\d+) \| (-[0-9/]+) \|$',note,re.M)
+    assert len(rows)==56 and sum(int(n) for _,n,_ in rows)==19348
+    assert all(q(bound)<0 for _,_,bound in rows)
+    paths=[path.split(', ') for _,path in re.findall(r'^\| (R\d+) \| ([A-Z+\-, ]+) \|$',note,re.M)]
+    def complete(paths):
+        if paths==[[]]:return 1
+        assert paths and all(paths) and len({pp[0][:3] for pp in paths})==1
+        return sum(complete([pp[1:] for pp in paths if pp[0][-1]==sg]) for sg in '-+')
+    assert complete(paths)==56
+    edges=[('ABCDEFGH'[i],'ABCDEFGH'[(i+1)%8]) for i in range(8)]
+    pairs={frozenset((''.join(edges[i]),''.join(edges[i+4]))) for i in range(4)}
+    assert pairs=={frozenset(p) for p in [('AB','EF'),('BC','FG'),('CD','GH'),('DE','HA')]}
+    print("PASS: complete N7 AH/DE identity/box/tree audit and exhaustive single-exterior line assembly")
+
+
 def n7_heptagon_occupied_ear():
     from pathlib import Path
     from itertools import product
@@ -1574,3 +1603,4 @@ if __name__ == "__main__":
     n6_two_lower_upper_side()
     n7_bc_fg_complete()
     n7_heptagon_occupied_ear()
+    n7_ah_de_and_single_exterior()

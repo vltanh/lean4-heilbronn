@@ -459,6 +459,21 @@ theorem excludes (2,1,0). Only (1,2,0) and (0,2,1) remain in this
 all-interior catalogue. The global algebra checker now has 52 passing
 groups.
 
+The entire single-exterior N7 placement is now proved to satisfy
+m<A*. The final literal AH/DE side-line class has 56 exhaustive cubic
+leaves, 19,348 printed positive integer terms, no squares and two
+explicit rational boxes. Independent geometry reconstructs every
+sign and all 107 five-chain bounds, 187 one-interior quadrilateral
+witnesses and 132 other conditional witnesses; separate Fraction and
+SymPy readers reproduce every exact bound. N7_SINGLE_EXTERIOR.md
+assembles all 1/7, 2/6 and 3/5 arc positions and all four literal 4/4
+edge pairs. Its conclusion is the strict sharp bound: the AB/EF good
+word uses projection to prove m<A*, while the other branches have
+the stronger rational sigma gap. No uniform sigma gap is claimed
+for the entire single-exterior family. Only all-interior counts
+(1,2,0) and (0,2,1) remain in N7. The global algebra checker now has
+53 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
