@@ -122,3 +122,63 @@ The optional standard-JavaScript checker
 verifies the four identities (1). Each concrete proof must additionally
 reconstruct its own factor witnesses, weighted expansion and exact
 endpoint calculation.
+
+
+## 5. A product inequality from two nested occupied fans
+
+Let \(ABC\) be positively oriented, let \(X\) be strictly inside \(ABC\),
+and let \(Y\) be strictly inside \(ABX\). All five points are actual.
+Write the positive doubled areas
+\[
+\begin{gathered}
+ S=[ABC],\quad T=[ABX],\quad b=[BCX],\quad c=[CAX],\\
+ \alpha=[BXY],\quad\beta=[XAY],\quad\gamma=[ABY].
+\end{gathered}
+\]
+Thus \(S=T+b+c\) and \(T=\alpha+\beta+\gamma\). The signed
+determinant identity
+\[
+ T[CXY]=-c\alpha+b\beta                              \tag{4}
+\]
+follows by expanding the two sides, or by using the barycentric
+coordinates of \(Y\) in \(ABX\).
+
+First suppose \([CXY]<0\), and set \(d=-[CXY]>0\). Then (4) gives
+\[
+ Tc=Td+\beta(b+c)+\gamma c.                         \tag{5}
+\]
+For any already proved nonnegative lower bounds
+\(d\ge d_0,\ \beta\ge\beta_0,\ \gamma\ge\gamma_0\), the exact remainder is
+\[
+\begin{aligned}
+ Tc-\bigl((d_0-\beta_0)T+\beta_0S+\gamma_0c\bigr)
+ &=T(d-d_0)+(\beta-\beta_0)(b+c)
+       +(\gamma-\gamma_0)c\\
+ &\ge0.                                           \tag{6}
+\end{aligned}
+\]
+If instead \([CXY]>0\), put \(d=[CXY]\). The parallel identity is
+\[
+ Tb=Td+\alpha(b+c)+\gamma b,
+\]
+so (6) applies after replacing the face \(c\) by \(b\) and the lower
+bound for \(\beta\) by the lower bound for \(\alpha\).
+
+In particular, when all actual doubled triangle areas are at least \(s\),
+the negative-sign case yields
+\[
+ c(T-s)\ge sS,
+\]
+and the positive-sign case yields \(b(T-s)\ge sS\).
+
+To obtain a nonnegative *affine* factor from (6), replace its product
+\(Tc\), or \(Tb\), by either upper envelope \(U_0,U_1\) from Section 1.
+Every such factor records the outer triangle, the two strict fan
+placements, the sign of \(CXY\), all named areas, the three immutable
+lower-bound records, and the two endpoint records for its product
+envelope. These premises are geometric and exact; finding the factor
+numerically adds no assumption.
+
+The optional checker also expands (5), its positive-sign counterpart,
+and both remainders (6) after the affine normalization
+\(A=(0,0),B=(1,0),C=(0,1)\).

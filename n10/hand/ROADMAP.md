@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 77.
+Checkpoint 78.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -632,6 +632,9 @@ four-corner alternative and all zero-area faces.
         both signs of the analogous area-bound rule are proved.
         Immutable source records and outward rounding are mandatory.
         Independent polynomial expansion verifies all four remainders.
+        The same note proves both oriented nested-fan product inequalities,
+        with explicit actual containments and immutable lower-bound records;
+        five fresh general-coordinate identity expansions also pass.
         Proof: LINEAR_AREA_CERTIFICATES.md. A numerical LP output
         alone does not satisfy this rule or close any placement count.
   - [x] THREE-CAP-CONTACT-BOUNDS. Occupancy of all three exterior
@@ -823,6 +826,14 @@ four-corner alternative and all zero-area faces.
         scalar and endpoint cap, all six chord and ten mesh deductions.
         Separate Fraction/SymPy readers reproduce every exact bound
         and all 41 explicit rational squares. Proof: N7_ONE_LOWER_ABC.md.
+  - [x] N7-CENTRAL-ACD-CAP. In both central lower roots, the
+        actual ACD area is below 27/40. Elimination of a and d using
+        the shared lower strip and two actual anchor clearances leaves
+        one cubic with a positive quadratic lower bound. The exact
+        discriminant gap is 199202807/10^12. Thus ACD has capacity
+        one; ADG<0 forces ADO,ADP>0. Independent geometry, source-box
+        review and all exact polynomial/gap checks pass.
+        Proof: N7_CENTRAL_ACD_CAP.md. The two central parents stay open.
   - [x] N7-CENTRAL-AREA-ORIENTATION. In either central lower cell,
         neither upper point T can have both AGT>0 and DGT>0.
         Three Pluecker deductions and an actual-contact comparison
@@ -1032,6 +1043,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_ONE_LOWER_SETUP.md | Exhaustive four-cell reduction for the remaining all-interior (1,2,0) count, four proved rational boxes, capacity-ray rule and complete factor definitions |
 | N7_ONE_LOWER_ABH.md | Entire lower-ear ABH child: 58 splits, 55 cubics / 21,373 terms, four geometric terminals, 1,993 deductions and 41 explicit rational squares |
 | UPPER_EAR_SEPARATION.md | One lower point and two CEF occupants force HEF empty; two exact height cases exclude every negative-EH child of the E-only upper-pair cut |
+| N7_CENTRAL_ACD_CAP.md | Both central roots satisfy actual ACD<27/40; one positive cubic proves capacity one and ADG<0 forces ADO,ADP>0 |
 | N7_CENTRAL_PAIR_CUT.md | After HOP<0, the full DGO>0 child is impossible in both central roots; three actual capacity-one triangles and a short occupied-triangle contradiction leave six pair words |
 | N7_CENTRAL_AREA_ORIENTATION.md | In both central lower cells, every upper point T satisfies AGT<0 or DGT<0; four fans, five signed products and 72 exact rational steps give gap 1941/1000000 |
 | N7_ONE_LOWER_ABC.md | Entire lower-ear ABC child: 93 splits, 84 cubics / 37,612 terms, ten geometric terminals, 3,411 deductions and 41 explicit rational squares |
@@ -1040,7 +1052,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_SIDE_PAIR_BOUNDS.md | Side-pair bounds without a top point: outer area below (11/3)s, inner weights above 3/11 and fan caps below (5/3)s; twelve positive Bernstein coefficients |
 | SIDE_PAIR_AREA_REFINEMENTS.md | Actual outer-side bottom caps (3/2)s in N6 and 2s in C1, four physical area comparisons and the retained four-area equality |
 | THREE_CAP_CONTACT_BOUNDS.md | Three occupied caps force d,f<.79 and h,c<.864 in C1 and N6, with actual capacity-one triangles and a complete closed coordinate box |
-| LINEAR_AREA_CERTIFICATES.md | Four affine product envelopes, exact positive weighted-sum contradictions, new area-bound certificates and immutable source requirements |
+| LINEAR_AREA_CERTIFICATES.md | Four affine product envelopes, exact positive weighted-sum contradictions, new area-bound certificates, both nested-fan product inequalities and immutable source requirements |
 | AREA_RELATIONS.md | Unconditional four-point linear and six-label four-product identities, exact positive-product interval rules and the stronger one-interior quadrilateral cost |
 | SCALAR_AREA_INTERVALS.md | Exact finite fan, signed-Pluecker, support and linear area rules, immutable rational dependency packets and an optional geometry-aware replay interface |
 | N6_TOP_PAIR_BARYCENTRIC_BOUNDS.md | Triangular top-pair weights above 1/9, strengthened to 3/17 by any side-cap point, and eight affine inequalities |
