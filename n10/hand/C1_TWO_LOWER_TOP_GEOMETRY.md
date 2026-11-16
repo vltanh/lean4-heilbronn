@@ -13,8 +13,8 @@ three points are either all in the top cap \(DF(1,1)\), or one is in
 \(HCDF\) and two are in that top cap. This common note supplies the continuous geometry, every factor, and
 every finite inference rule for the separate fixed-table proofs. The
 all-top exclusion is assembled in C1_TWO_LOWER_THREE_TOP.md. The
-one-central alternative retains its own separate proof obligation until
-its complete three-root table has been provided.
+one-central alternative is assembled, with its complete three-root
+table, in C1_TWO_LOWER_CENTRAL_TWO_TOP.md.
 
 ## 1. The complete initial boxes
 

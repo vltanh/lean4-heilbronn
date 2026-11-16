@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 56.
+Checkpoint 57.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -333,7 +333,16 @@ four-corner alternative and all zero-area faces.
         readers reproduce every exact negative bound.
         Proof: C1_TWO_LOWER_THREE_TOP.md, using the complete common
         model in C1_TWO_LOWER_TOP_GEOMETRY.md.
-  - [ ] C1-EXTERIOR. Exclude the remaining 16 exterior count rows
+  - [x] C1-TWO-LOWER-CENTRAL-TWO-TOP. The entire (2,1,0,2,0)
+        count. Three angular roots and 372 binary refinements give
+        375 leaves: 343 cubics with 88,384 printed terms and 32
+        geometric exclusions. Independent geometry verifies all
+        9,416 deductions, 2,504 interval refinements, nineteen
+        monotonicity certificates and 220,099 factor occurrences.
+        Separate Fraction/SymPy readers reproduce every exact bound.
+        Proof: C1_TWO_LOWER_CENTRAL_TWO_TOP.md, using the same
+        complete common two-lower/top geometry.
+  - [ ] C1-EXTERIOR. Exclude the remaining 15 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -420,6 +429,13 @@ four-corner alternative and all zero-area faces.
         theorem. The inner top point is used only through its actual
         three-fan cost; no arbitrary virtual-point clearance is assumed.
         Proof: N6_TWO_TOP_BOTH_SIDES.md.
+  - [x] N6-ENDPOINT-CONTAINERS. At most two free points lie in each
+        of the BE and AF endpoint containers. Three would require
+        area J*s, exceeding the proved maximum by 773/1000000.
+        The top-pair hull also has its exhaustive 3s/4s cost
+        dichotomy. Both deductions have independent geometry and
+        exact identity audits; neither is a whole-count closure.
+        Proof: N6_CORNER_CONTAINERS.md.
   - [x] OCCUPIED-QUADRILATERAL-SUPPORT. Universal polynomial support
         inequalities for one or two actual occupants, including all
         overlapping opposite-ear counts and the central-pair cost.
@@ -718,6 +734,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_TWO_TOP_BOTH_SIDES.md | Entire (0,0,1,2,1) count by four actual-area comparisons transferring both C1 top-hull arguments and the unchanged exact sum |
 | C1_TWO_LOWER_TOP_GEOMETRY.md | Complete common model for two lower and at least two top-cap points: barycentric normalization, all factors, exact sign and interval rules, and top-hull support costs |
 | C1_TWO_LOWER_THREE_TOP.md | Entire (2,0,0,3,0) count: one root, 202 refinements, 183 cubics / 45,644 terms, twenty geometric terminals, 3,644 deductions and 1,636 box refinements |
+| C1_TWO_LOWER_CENTRAL_TWO_TOP.md | Entire (2,1,0,2,0) count: three roots, 372 refinements, 343 cubics / 88,384 terms, 32 geometric terminals, 9,416 deductions and 2,504 box refinements |
+| N6_CORNER_CONTAINERS.md | Two uniform endpoint-container capacities with exact gap 773/1000000, and the exhaustive top-pair 3s/4s hull dichotomy |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

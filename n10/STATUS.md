@@ -662,6 +662,23 @@ reproduce every exact negative bound; the largest is
 -6314102933/1000000000000. Sixteen C1 exterior count rows remain.
 The global algebra checker now has 74 passing groups.
 
+The entire C1 count (2,1,0,2,0) is now excluded by
+C1_TWO_LOWER_CENTRAL_TWO_TOP.md. Its three angular roots and 372
+binary refinements have 375 leaves: 343 fixed cubics with 88,384
+printed terms and 32 geometric contradictions. Independent geometry
+checks all 9,416 deductions, 2,504 interval refinements, 343 outward
+boxes, nineteen monotonicity certificates and 220,099 factor
+occurrences. Separate Fraction/SymPy readers reproduce every strict
+bound; the largest is -3941929/500000000. Fifteen C1 exterior rows
+remain. The shared common note now records both completed counts.
+
+N6_CORNER_CONTAINERS.md proves two additional endpoint-container
+capacities, with the exact six-point gap 773/1000000, and the
+exhaustive top-pair 3s/4s hull dichotomy. These independently audited
+local reductions do not close another N6 count. Seventeen N6
+exterior count rows remain. C1, N6 and N7 are still the open global
+families. The global algebra checker now has 76 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

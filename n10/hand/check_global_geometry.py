@@ -1972,6 +1972,39 @@ def c1_two_lower_three_top():
     print('PASS: complete C1 two-lower/three-top catalogue, exact coarse-box identities and 203-leaf inventory')
 
 
+def c1_two_lower_central_two_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational
+    text=Path(__file__).with_name('C1_TWO_LOWER_CENTRAL_TWO_TOP.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==372 and len(re.findall(r'^### Leaf ',text,re.M))==375
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==9416
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==2504
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==343 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==88384
+    assert len(re.findall(r'^Exclusion:',text,re.M))==32
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==343 and max(bounds)==q(-3941929,500000000)<0
+    print('PASS: complete C1 two-lower/central/two-top count, three exhaustive roots and 375-leaf inventory')
+
+
+def n6_corner_containers():
+    q=sp.Rational;s=q(93,1000);J=q(4427,500)
+    a,b,c,e,f,h,x,y=sp.symbols('a b c e f h x y')
+    pts={'A':sp.Matrix([0,a]),'B':sp.Matrix([b,0]),'C':sp.Matrix([c,0]),
+         'E':sp.Matrix([1,e]),'F':sp.Matrix([f,1]),'H':sp.Matrix([0,h]),'T':sp.Matrix([x,y])}
+    D=lambda word:2*area(*(pts[ch] for ch in word))
+    zero(D('BET')-(1-b)*y+e*(x-b))
+    zero(D('AFT')-f*(y-a)+(1-a)*x)
+    zero(1-f-D('CEF')-(1-e)*(c-f))
+    zero(1-e-D('EFH')-(1-f)*(h-e))
+    assert J*s-(1-s)**2==q(773,1000000)>0
+    print('PASS: both N6 endpoint-container capacities, exact six-point gap and top-pair hull dichotomy')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -2047,3 +2080,5 @@ if __name__ == "__main__":
     c1_two_top_both_sides()
     n6_two_top_both_sides()
     c1_two_lower_three_top()
+    c1_two_lower_central_two_top()
+    n6_corner_containers()
