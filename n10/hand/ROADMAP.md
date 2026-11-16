@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 19.
+Checkpoint 20.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -185,6 +185,9 @@ four-corner alternative and all zero-area faces.
         omission-pair orbits, with all twelve final area gains proved.
         These include every normalized N6 candidate neighborhood.
         Proof: N6_PROJECTED_CHAMBERS.md.
+  - [x] N6-EXTERIOR-CUTS. Neither side cap contains three free points;
+        the two side caps cannot each contain two; three top-cap points
+        forbid any side-cap point. Proof: N6_EXTERIOR_CUTS.md.
   - [ ] Complete the exact-hull 2/2 case and all exterior-cap placements
         outside the two stated projection chambers.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
@@ -192,6 +195,10 @@ four-corner alternative and all zero-area faces.
   - [x] N7-PLACEMENTS. Both lower caps are empty, each upper cap has
         capacity two, and five remaining count rows are exhaustive.
         Proof: N7_PLACEMENTS.md.
+  - [x] N7-THREE-EXTERIOR. The entire (2,1,0) count is impossible by
+        the shared endpoint-triangle area budget. The larger endpoint
+        triangles also force chord placements in the two-exterior rows.
+        Proof: N7_UPPER_OCCUPANCY.md.
   - [x] N7-PROJECTED. Strict sharp bounds for each single inward-secondary
         chamber; every normalized N7 candidate neighborhood is included.
         Proof: N7_PROJECTED_CHAMBER.md.
@@ -200,7 +207,8 @@ four-corner alternative and all zero-area faces.
         every inward depth. Two exhaustive geometric rows have printed
         cubic contradictions with 642 positive integer entries.
         Proof: N7_PROJECTED_SIGNS.md.
-  - [ ] Complete all five placement rows outside the proved sign chambers.
+  - [ ] Complete the four surviving placement rows outside the proved
+        sign chambers: (0,0,3), (1,0,2), (2,0,1), and (1,1,1).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -300,7 +308,9 @@ strictly interior points in N6 and N7 requires a separate argument.
 | QUADRILATERAL_THREE.md | Any actual quadrilateral of doubled area at most one has capacity two at sigma; nine exhaustive rows, 139 printed integer entries |
 | N6_PLACEMENTS.md | Exhaustive first placement reduction; exact six-anchor hull has a 2/2 free-point split |
 | N6_PROJECTED_CHAMBERS.md | Strict sharp bounds for both two-secondary omission-pair orbits; complete normalized N6 candidate neighborhoods |
+| N6_EXTERIOR_CUTS.md | Complete exclusions of side-cap triples, two points in each side cap, and a top triple plus a side-cap point |
 | N7_PLACEMENTS.md | Lower-cap exclusions, upper-cap capacity two, five exhaustive remaining counts and a uniform rational box |
+| N7_UPPER_OCCUPANCY.md | Complete (2,1,0) exclusion, at least one free point in the heptagon, and two-exterior chord placements |
 | N7_PROJECTED_CHAMBER.md | Strict sharp bound in each single inward-secondary chamber; complete normalized N7 candidate neighborhoods |
 | N7_PROJECTED_SIGNS.md | Complete normalized inward-secondary good-sign chamber without an extra coordinate condition; two cubic rows, 642 printed integer entries |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |

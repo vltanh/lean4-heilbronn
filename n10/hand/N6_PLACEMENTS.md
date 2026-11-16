@@ -93,6 +93,10 @@ domain, so r>=l may be chosen if useful in a later case catalogue.
 
 ## 4. Scope of the remaining N6 task
 
+N6_EXTERIOR_CUTS.md strengthens this first catalogue: r,l<=2,
+(r,l)!=(2,2), and t=3 forces r=l=0 with exactly one free point in K.
+Those complete count exclusions use only endpoint bounds and overlap.
+
 Every surviving normalized N6 configuration satisfies (1), with all
 five counts at their stated locations, and r,t,l<=3. The exact-hull
 case is (2); all other cases have at least one exterior-cap point.

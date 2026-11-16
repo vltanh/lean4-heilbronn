@@ -160,6 +160,15 @@ quadrilateral spread bounds have been independently checked; separate
 Fraction and SymPy expansions reproduce both exact negative bounds.
 Global coverage outside those sign chambers remains open.
 
+Further short endpoint arguments now close entire exterior counts.
+N7_UPPER_OCCUPANCY.md excludes (2,1,0), so every competitive N7
+configuration has a free point inside the boundary heptagon. Its four
+remaining counts have explicit additional chord placements.
+N6_EXTERIOR_CUTS.md excludes three points in either side cap, two in
+each side cap, and three in the top cap together with a side-cap point.
+Both notes have independently audited geometry and exact rational gaps;
+their surviving global parents remain unchecked.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

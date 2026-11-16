@@ -104,6 +104,11 @@ strict projected chamber in N7_PROJECTED_CHAMBER.md applies when an upper
 cap point can be assigned the missing secondary label and the two other
 points have its stated signs.
 
+The subsequent N7_UPPER_OCCUPANCY.md excludes the entire (2,1,0)
+row. Thus at least one free point is inside K, and only the first four
+rows remain for global coverage. That note also proves strict chord
+placements for the unique interior point in the two-exterior rows.
+
 ## 4. A rational box available in every remaining row
 
 The same boundary inequalities give a useful uniform box without a
