@@ -864,6 +864,43 @@ def exterior_count_budgets():
     print("PASS: N6 exterior-count budgets and the complete N7 opposite-upper-cap inequality")
 
 
+def central_support_pair():
+    q=sp.Rational;t=q(31,299);m,z=sp.symbols("m z")
+    S0=1/m+m/(m-t);W=m-t/(1-m)
+    G=lambda x:x*(1-t*S0-(S0-1)*x)
+    P=2*m**4-2*m**3+(t-1)*m*m+(t+1)*m-t
+    Q=117208*m**3-117208*m*m+19499*m-961
+    zero(sp.diff(G(z),z).subs(z,W)-Q/(299*m*(299*m-31)*(1-m)))
+    zero(G(W)-t+t*P/((m-t)*(1-m)**2))
+    printed=2*z**4+q(564,125)*z**3+q(40567403,18687500)*z*z-q(9508796,583984375)*z+q(1659390599,9343750000000)
+    zero(P.subs(m,z+q(407,500))-printed)
+    assert Q.subs(m,q(407,500))==q(7283395843,15625000)>0
+    assert sp.diff(Q,m).subs(m,q(4,5))==q(1425139,25)>0
+    assert q(40567403,18687500)-2==q(3192403,18687500)>0
+    assert -q(9508796,583984375)+q(17,1000)==q(3351507,4671875000)>0
+    assert q(1659390599,9343750000000)-q(17,100000)==q(70953099,9343750000000)>0
+    zero(2*z*z-q(17,1000)*z+q(17,100000)-2*(z-q(17,4000))**2-q(1071,8000000))
+    assert q(93,1000)/t==q(897,1000)
+    print("PASS: complete central-support pair exclusion, height cap, positive quartic, and N6 area consequence")
+
+
+def n7_same_upper_cap():
+    q=sp.Rational;s=q(93,1000);K=q(149,20)
+    a,f,g,h,z=sp.symbols("a f g h z")
+    z0=(f*z-g)/(f-g);SS=f*(z0-a);u=(h-a)/(z0-a);v=g/f
+    AGH=g*(h-a);FGH=f*(z-h)-g*(1-h)
+    zero(AGH-SS*u*v)
+    zero(FGH-SS*(1-u)*(1-v))
+    zero((SS-K*s)*(f-g)-(f*f*(z-a)-f*g*(1-a)-K*s*(f-g)))
+    assert s-q(100,1089)==q(1277,1089000)>0
+    assert 12*s-1==q(29,250)>0
+    ell=q(7347,69700);eta=q(93,790)
+    f0=K*s/(1-eta);h0=4*s/(1-ell);h1=1-3*s
+    assert 0<eta<h1<1 and 0<h0<1 and 0<f0<1
+    assert q(7,5)**2<2 and q(12,5)**2<6
+    print("PASS: same-upper-cap support identities, weighted-ear contradiction, and rational-box denominators")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -892,3 +929,5 @@ if __name__ == "__main__":
     adjacent_lower_p()
     adjacent_nontriangular_right()
     exterior_count_budgets()
+    central_support_pair()
+    n7_same_upper_cap()

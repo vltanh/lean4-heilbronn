@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 21.
+Checkpoint 22.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -172,7 +172,12 @@ four-corner alternative and all zero-area faces.
       - [x] Actual quadrilateral hull and exhaustive support-cell pairs
             I+II, II+II, II+III. In II+II the actual fans DHF and EHF
             are empty, leaving only D-fan counts (1,0,3) and (2,0,2).
-            Proof: TYPE_II_R4_NONTRIANGULAR.md. The counts remain open.
+            Proof: TYPE_II_R4_NONTRIANGULAR.md; the next item closes both.
+      - [x] The entire II+II support-cell pair is excluded. A sharpened
+            height cap and reciprocal bound reduce the six-point problem
+            to a printed positive quartic. The proof is independent of
+            the two central DCB points. Proof: TYPE_II_R4_CENTRAL.md.
+      - [ ] The two mixed support-cell pairs I+II and II+III.
   - [ ] II-(1,3,3). Its central triple must be distributed.
   - [ ] II-(2,2,3). Triangular left hull; nontriangular right hull whose
         support-normalized additional point is in cell II.
@@ -207,6 +212,10 @@ four-corner alternative and all zero-area faces.
         occupied. A seven-point scalar inequality gives a doubled
         triangle area below 1/11; this closes the whole (1,1,1) row.
         Proof: N7_OPPOSITE_UPPER_CAPS.md.
+  - [x] N7-SAME-CAP. One upper exterior cap cannot contain two free
+        points. The convex hull and one height order have short analytic
+        exclusions; five exhaustive ray cuts have printed cubic sums
+        with 523 positive integer entries. Proof: N7_SAME_UPPER_CAP.md.
   - [x] N7-PROJECTED. Strict sharp bounds for each single inward-secondary
         chamber; every normalized N7 candidate neighborhood is included.
         Proof: N7_PROJECTED_CHAMBER.md.
@@ -215,8 +224,8 @@ four-corner alternative and all zero-area faces.
         every inward depth. Two exhaustive geometric rows have printed
         cubic contradictions with 642 positive integer entries.
         Proof: N7_PROJECTED_SIGNS.md.
-  - [ ] Complete the three surviving placement rows outside the proved
-        sign chambers: (0,0,3), (1,0,2), and (2,0,1).
+  - [ ] Complete the two surviving placement rows outside the proved
+        sign chambers: (0,0,3) and (1,0,2).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -304,6 +313,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | TYPE_II_R4_LOWER_P.md | Complete lower-P triangular-right exclusion, allowing either CE side of Q |
 | TYPE_II_R4_TRIANGLE_COMPLETE.md | Full triangular-right child of Type-II (1,2,4), including all central CE cuts |
 | TYPE_II_R4_NONTRIANGULAR.md | Exact quadrilateral right-hull catalogue, stronger bottom-contact bound, and two empty middle fans in the II+II pair |
+| TYPE_II_R4_CENTRAL.md | Complete II+II right-support exclusion; reusable central six-point threshold strictly below 31/299 |
 | TYPE_II_UPPER_PAIR.md | Complete opposite-B/E sign exclusion for the two upper central points, with every right hull allowed |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |
@@ -321,6 +331,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_PLACEMENTS.md | Lower-cap exclusions, upper-cap capacity two, five exhaustive remaining counts and a uniform rational box |
 | N7_UPPER_OCCUPANCY.md | Complete (2,1,0) exclusion, at least one free point in the heptagon, and two-exterior chord placements |
 | N7_OPPOSITE_UPPER_CAPS.md | Complete exclusion of simultaneous occupancy of the two upper caps, including the entire (1,1,1) row |
+| N7_SAME_UPPER_CAP.md | Complete exclusion of two points in one upper cap, including both hull types, both height orders, and five ray cuts |
 | N7_PROJECTED_CHAMBER.md | Strict sharp bound in each single inward-secondary chamber; complete normalized N7 candidate neighborhoods |
 | N7_PROJECTED_SIGNS.md | Complete normalized inward-secondary good-sign chamber without an extra coordinate condition; two cubic rows, 642 printed integer entries |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |

@@ -178,6 +178,17 @@ in its central support-cell pair, both middle fans DHF and EHF are
 empty. Those remaining Type-II fan counts are still open. The exact
 global algebra checker now has 27 passing groups.
 
+N7_SAME_UPPER_CAP.md now excludes two free points in the same upper
+cap as well. Both cap-hull types and both upper-contact height orders
+are covered; the remaining five ray exits have 523 printed integer
+entries, independently expanded by Fraction and SymPy. Only N7
+counts (0,0,3) and (1,0,2) remain. In Type-II (1,2,4), the entire
+nontriangular central support-cell pair II+II is excluded by the
+positive-quartic argument in TYPE_II_R4_CENTRAL.md. Its stronger
+six-point threshold is reusable elsewhere. Only the two mixed support
+pairs remain in that nontriangular child. The global algebra checker
+has 29 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

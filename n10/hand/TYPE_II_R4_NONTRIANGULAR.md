@@ -6,6 +6,10 @@ of central support cells it proves that both middle fans DHF and EHF
 are empty, leaving only two outer fan counts. It does not exclude the
 whole nontriangular branch or mark the parent count closed.
 
+The subsequent TYPE_II_R4_CENTRAL.md excludes the entire II+II pair,
+including both fan counts left here. Only the mixed pairs remain in
+the nontriangular right-hull child.
+
 All areas are DOUBLED. Put
 
     s=93/1000, K=4+2sqrt(3), G=(11+3sqrt(5))/2,
@@ -265,5 +269,6 @@ only remaining counts are therefore
 | 2 | 0 | 2 |
 
 These two rows remain open, as do the mixed right-cell pairs I+II
-and II+III. The note makes no claim that any of those full remaining
-families has been excluded.
+and II+III after this reduction alone. TYPE_II_R4_CENTRAL.md now
+excludes both II+II fan rows simultaneously; the two mixed pairs
+remain open.

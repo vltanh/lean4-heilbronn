@@ -110,6 +110,8 @@ rows remain for global coverage. That note also proves strict chord
 placements for the unique interior point in the two-exterior rows.
 N7_OPPOSITE_UPPER_CAPS.md then excludes (1,1,1) as well, so only
 (0,0,3), (1,0,2), and (2,0,1) remain.
+N7_SAME_UPPER_CAP.md subsequently excludes (2,0,1), leaving just
+(0,0,3) and (1,0,2).
 
 ## 4. A rational box available in every remaining row
 

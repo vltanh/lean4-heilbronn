@@ -120,6 +120,9 @@ cap is the left cap, by N7_UPPER_OCCUPANCY.md. The three displayed rows
 are not yet excluded by this note. No assumptions on their pair lines
 or on the hull type of their same-cap points have been imposed.
 
+The subsequent N7_SAME_UPPER_CAP.md excludes the last row completely.
+The remaining global counts are therefore (0,0,3) and (1,0,2).
+
 The optional checker `check_n7_opposite_upper_caps.py` verifies the
 cleared polynomial identity in (5), the derivative and maximum-value
 identities, and the exact rational threshold comparisons.
