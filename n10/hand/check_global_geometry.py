@@ -966,6 +966,31 @@ def n7_small_arcs():
     print("PASS: N7 small-arc catalogue metrics, moving cap, actual endpoint triangle, and all five convex-chain factors")
 
 
+def adjacent_mixed_iii():
+    q=sp.Rational;s=q(93,1000);t0=q(31,299);eta0=q(167,200)
+    Om,rho,x,z,b,r=sp.symbols("Om rho x z b r")
+    assert eta0*(eta0-4*s)*q(897,1000)-s*(eta0+3)==-q(1974063,200000000)<0
+    assert q(628,1000)-(1-3*t0/eta0)==q(6231,12483250)>0
+    assert q(685,1000)-(q(152,1000)+q(628,1000)*q(848,1000))==q(57,125000)>0
+    assert q(35,1000)-q(628,1000)*q(49,897)==q(623,897000)>0
+    assert q(296,1000)-(q(1,4)+eta0*q(49,897))==q(347,897000)>0
+    assert s-q(152,1000)*q(35,1000)-q(15,100)*q(582,1000)==q(19,50000)>0
+    assert q(103,1000)+q(82,100)*q(848,1000)-q(798,1000)==q(9,25000)>0
+    assert q(889,1000)-q(742,835)==q(63,167000)>0
+    assert q(666,1000)-q(556,835)==q(11,83500)>0
+    assert t0/q(628,1000)-q(165,1000)==q(881,9388600)>0
+    assert q(103,1000)+q(848,1000)*q(165,1000)+s-q(33,100)==q(37,6250)>0
+    assert q(555,1000)-(q(666,1000)-q(103,1000)-s)/q(848,1000)==q(1,1325)>0
+    assert 2*s-q(49,1000)*q(435,1000)-q(835,1000)*q(19,100)==q(1207,200000)>0
+    zero(r-(r-b)*x+(1-r)*(1-x-z)-(1-(1-b)*x-(1-r)*z))
+    eta,k0,d1,u,v,t=sp.symbols("eta k0 d1 u v t")
+    D,F,Q=(sp.Matrix(pt) for pt in [(d1,-k0),(0,eta),(u,u+v)])
+    zero(2*area(D,F,Q)-(d1*(eta-u-v)-(eta+k0)*u))
+    reduced=d1*eta*eta-t*(d1+4)*eta-3*t/Om
+    zero(reduced.subs({d1:1/Om,eta:eta0,t:s/Om})-(eta0*(eta0-4*s)*Om-s*(eta0+3))/Om**2)
+    print("PASS: final mixed-III support branch, forced DF straddle, physical map, and all box gaps")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -998,3 +1023,4 @@ if __name__ == "__main__":
     n7_same_upper_cap()
     adjacent_mixed_i()
     n7_small_arcs()
+    adjacent_mixed_iii()

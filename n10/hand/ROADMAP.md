@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 25.
+Checkpoint 26.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -153,7 +153,9 @@ four-corner alternative and all zero-area faces.
         quadrilateral hull and the right triangular/noncentral hull
         alternatives in (2,2,3), and the two-quadrilateral-side alternative
         in (2,3,2). Proof: TYPE_II.md. No whole row is claimed closed.
-  - [ ] II-(1,2,4). The endpoint-six theorem gives b<=1-Gamma3*sigma.
+  - [x] II-(1,2,4). Complete count exclusion, including both right-hull
+        types and all central placements. TYPE_II_R4_COMPLETE.md
+        assembles the exhaustive triangular and nontriangular proofs.
     - [x] Both central points below CE: excluded by the two-interior-point
           capacity. If both are above CE, the bottom support fan EBH is
           empty for every right hull. Proof: TYPE_II_R4.md.
@@ -170,9 +172,9 @@ four-corner alternative and all zero-area faces.
       - [x] Both above CE: the forced nested chamber has one printed cubic
             contradiction with 76 positive integer entries, maximum 46.
             Proof: TYPE_II_R4_UPPER_P.md and TYPE_II_R4_TWO_UPPER.md.
-    - [ ] Nontriangular right hull, with one or both central points above
-          CE. TYPE_II_UPPER_PAIR.md fixes E negative in the both-upper cut
-          for every right hull, but this child remains open.
+    - [x] The entire nontriangular right hull, with every central CE cut.
+          All three support-cell pairs below are excluded independently
+          of the two central DCB points.
       - [x] Actual quadrilateral hull and exhaustive support-cell pairs
             I+II, II+II, II+III. In II+II the actual fans DHF and EHF
             are empty, leaving only D-fan counts (1,0,3) and (2,0,2).
@@ -186,7 +188,10 @@ four-corner alternative and all zero-area faces.
             point into DEH and reduces to six physical variables. The
             printed quartic has 86 positive integer entries, maximum 6437.
             Proof: TYPE_II_R4_MIXED_I.md.
-      - [ ] The II+III mixed support-cell pair.
+      - [x] The II+III mixed support-cell pair. A forced DF straddle
+            fixes the last D signs; both possible EPQ signs have printed
+            cubic contradictions with 28 and 33 integer terms, maximum 21.
+            Proof: TYPE_II_R4_MIXED_III.md.
   - [ ] II-(1,3,3). Its central triple must be distributed.
   - [ ] II-(2,2,3). Triangular left hull; nontriangular right hull whose
         support-normalized additional point is in cell II.
@@ -330,6 +335,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | TYPE_II_R4_NONTRIANGULAR.md | Exact quadrilateral right-hull catalogue, stronger bottom-contact bound, and two empty middle fans in the II+II pair |
 | TYPE_II_R4_CENTRAL.md | Complete II+II right-support exclusion; reusable central six-point threshold strictly below 31/299 |
 | TYPE_II_R4_MIXED_I.md | Complete I+II support pair, all line orientations, and one fixed physical-contact quartic with 86 integer entries |
+| TYPE_II_R4_MIXED_III.md | Complete II+III support pair, forced DF straddle, and two printed cubics with 61 integer entries |
+| TYPE_II_R4_COMPLETE.md | Complete Type-II count (1,2,4), assembling both hull types and every central placement |
 | TYPE_II_UPPER_PAIR.md | Complete opposite-B/E sign exclusion for the two upper central points, with every right hull allowed |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |

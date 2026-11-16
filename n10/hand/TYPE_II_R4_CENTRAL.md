@@ -4,7 +4,8 @@ This note closes the entire II+II right-support alternative of the
 nontriangular Type-II count (1,2,4). In fact the final contradiction
 is a stronger six-point statement in the normalized supporting
 triangle. It does not use the locations of the two central DCB points.
-The mixed right-support pairs I+II and II+III remain open.
+The mixed right-support pairs have separate proofs in
+TYPE_II_R4_MIXED_I.md and TYPE_II_R4_MIXED_III.md.
 
 All areas are DOUBLED. Write
 
@@ -180,6 +181,7 @@ points in central cell II cannot have every doubled triangle area
 at least 31/299. The only geometric input beyond the explicit
 determinants is the two-interior-point triangle bound, used in (2).
 
-For the nontriangular right hull of Type II, the exact surviving
-support-cell catalogue is now I+II or II+III. No claim is made here
-that either mixed pair, or the whole parent row, has been excluded.
+This note alone leaves support-cell pairs I+II and II+III. Their
+separate proofs, together with this one and the triangular-right
+proof, are assembled in TYPE_II_R4_COMPLETE.md to close the whole
+count (1,2,4).

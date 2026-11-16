@@ -223,6 +223,17 @@ expansions pass. The 3/5 and 4/4 line classes and the all-interior
 placement (0,0,3) remain open. The global algebra checker now has
 31 passing groups.
 
+The whole Type-II count (1,2,4) is now closed. The last nontriangular
+support pair II+III has a forced DF straddle and just two remaining
+actual EPQ signs. TYPE_II_R4_MIXED_III.md excludes both by printed
+cubics with 28 and 33 terms, all weights at most 21. Their independently
+expanded exact upper bounds are -2041503/10^9 and -200391/200000000.
+TYPE_II_R4_COMPLETE.md assembles every triangular and nontriangular
+right-hull alternative, all three support-cell pairs, and all central
+placements. Only Type-II rows (1,3,3), (2,2,3), and (2,3,2) remain;
+the global II parent remains unchecked. The global algebra checker
+now has 32 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

@@ -1,14 +1,15 @@
 # Type II: the remaining nontriangular right hull
 
-This note gives the exact right-hull catalogue for the still-open
+This note gives the exact right-hull catalogue for the
 nontriangular alternative of the Type-II count (1,2,4). In the pair
 of central support cells it proves that both middle fans DHF and EHF
 are empty, leaving only two outer fan counts. It does not exclude the
 whole nontriangular branch or mark the parent count closed.
 
 The subsequent TYPE_II_R4_CENTRAL.md excludes the entire II+II pair,
-including both fan counts left here. Only the mixed pairs remain in
-the nontriangular right-hull child.
+including both fan counts left here. The later TYPE_II_R4_MIXED_I.md
+and TYPE_II_R4_MIXED_III.md close the two mixed pairs, and
+TYPE_II_R4_COMPLETE.md assembles the complete count (1,2,4).
 
 All areas are DOUBLED. Put
 
@@ -270,5 +271,6 @@ only remaining counts are therefore
 
 These two rows remain open, as do the mixed right-cell pairs I+II
 and II+III after this reduction alone. TYPE_II_R4_CENTRAL.md now
-excludes both II+II fan rows simultaneously; the two mixed pairs
-remain open.
+excludes both II+II fan rows simultaneously. The mixed-pair proofs
+listed at the start of this note subsequently exclude both remaining
+pairs, independently of the central-point fan counts.

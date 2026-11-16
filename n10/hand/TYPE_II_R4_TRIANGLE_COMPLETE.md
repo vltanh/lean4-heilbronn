@@ -55,6 +55,7 @@ external coefficient file is a premise.
 
 Every triangular-right configuration is therefore excluded. Equality
 cannot occur in this child, and all dividing lines are actual chords,
-so no positive-minimum boundary face was omitted. The nontriangular
-right-hull alternative and the other three Type-II count rows remain
-separate obligations in ROADMAP.md.
+so no positive-minimum boundary face was omitted. The subsequent
+TYPE_II_R4_COMPLETE.md combines this child with the completed
+nontriangular right-hull proof to close the entire count (1,2,4).
+The other three Type-II count rows remain separate obligations.

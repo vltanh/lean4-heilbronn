@@ -421,7 +421,6 @@ No complete exclusion of Type II is claimed. After the determinant-one
 normalization or the separate Type-III alternative, the residual cases
 are
 
-* (ell,c0,r)=(1,2,4);
 * (ell,c0,r)=(1,3,3);
 * (ell,c0,r)=(2,2,3), with triangular left hull DBE containing P and
   nontriangular right five-point hull whose support-normalized fifth
@@ -432,3 +431,8 @@ For either central-triple row, CLUSTERED_TRIANGLE.md excludes the
 clustered pattern. Its distributed pattern remains part of the displayed
 obligation. None of the count reductions or hull exclusions above checks
 the full HP11-II entry.
+
+The later TYPE_II_R4_COMPLETE.md excludes the entire fourth row
+(1,2,4), including both actual right-hull types and all three
+nontriangular support-cell pairs. Its assembly covers every central
+placement and all positive-minimum boundary cases.
