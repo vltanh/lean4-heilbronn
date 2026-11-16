@@ -901,6 +901,42 @@ def n7_same_upper_cap():
     print("PASS: same-upper-cap support identities, weighted-ear contradiction, and rational-box denominators")
 
 
+def adjacent_mixed_i():
+    q=sp.Rational;s=q(93,1000);t0=q(31,299)
+    h,f,beta,t,x,z,u,v=sp.symbols("h f beta t x z u v")
+    zero(2/f+3/(1-f)-q(49,5)-(49*(f-q(22,49))**2+q(6,49))/(5*f*(1-f)))
+    assert q(49,5)*t0-1==q(24,1495)>0
+    F=beta**3-beta**2+(3*t0+t0*t0)*beta-2*t0*t0
+    assert F.subs(beta,q(2,5))==q(125338,11175125)>0
+    assert sp.diff(F,beta).subs(beta,q(2,5))==q(3992,2235025)>0
+    A,H,J,P,Q=(sp.Matrix(pt) for pt in [(0,0),(0,h),(1,1),(x,x+z),(u,u+v)])
+    zero(z*2*area(P,Q,H)+(h-z)*2*area(P,Q,J)-(h*(1-x)-z)*(z-v))
+    assert (h*h-(1+2*t0)*h+3*t0).subs(h,q(167,200))==q(1411,11960000)>0
+    assert (q(149,20)-3)/(q(149,20)**2-2*q(149,20))==q(1780,16241)
+    assert s/q(1780,16241)==q(1510413,1780000)
+    assert q(152,1000)-(1-q(1510413,1780000))==q(973,1780000)>0
+    assert q(167,200)*q(49,897)==q(8183,179400)<q(46,1000)
+    assert q(167,200)+(1-q(167,200))*q(152,1000)==q(10751,12500)<q(861,1000)
+    assert t0/q(21,25)==q(775,6279)>q(49,400)>q(3,25)
+    b,lam,a,k,p,y,c,d=sp.symbols("b lam a k p y c d")
+    D0=1-s*(1-b)/b-q(848,1000)*b/(1-b)
+    assert q(167,200)*D0.subs(b,q(152,1000))==q(522209,1900000)
+    assert 3*s-q(522209,1900000)==q(7891,1900000)>0
+    assert q(6,5)*q(184,625)==q(1104,3125)<q(2,5)<4*t0
+    B,C,D,E,H,P=(sp.Matrix(pt) for pt in [(b,0),(1,1),(0,1),(0,lam),(a,k),(p,y)])
+    zero(2*area(E,H,P)-(a*y-k*p-lam*(a-p)))
+    zero(-2*area(D,H,P)-(a*(1-y)-(1-k)*p))
+    zero(2*area(E,H,P)-2*area(D,H,P)-(1-lam)*(a-p))
+    T=p-b-(1-b)*y;U=a-p+(1-a)*y;W=a-b
+    ratio=(U-(1-p)*k)/(W-(1-b)*k)
+    zero(sp.diff(ratio,k)+(1-a)*T/(W-(1-b)*k)**2)
+    E1=lam*(p-b)+b*y;E2=a*y-lam*(a-p)
+    zero((a-p)*E1+(p-b)*E2-p*y*(a-b))
+    assert (s-q(152,1000)*q(46,1000))-q(11,100)*q(758,1000)==q(657,250000)>0
+    assert q(103,1000)+q(848,1000)*q(12,100)+3*s==q(48376,100000)>q(48,100)
+    print("PASS: complete mixed-I support branch, contact eliminations, scalar gaps, and rational box")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -931,3 +967,4 @@ if __name__ == "__main__":
     exterior_count_budgets()
     central_support_pair()
     n7_same_upper_cap()
+    adjacent_mixed_i()

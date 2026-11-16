@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 23.
+Checkpoint 24.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -181,7 +181,12 @@ four-corner alternative and all zero-area faces.
             height cap and reciprocal bound reduce the six-point problem
             to a printed positive quartic. The proof is independent of
             the two central DCB points. Proof: TYPE_II_R4_CENTRAL.md.
-      - [ ] The two mixed support-cell pairs I+II and II+III.
+      - [x] The entire I+II mixed support-cell pair. Two line orientations
+            have scalar contradictions; the third forces the noncentral
+            point into DEH and reduces to six physical variables. The
+            printed quartic has 86 positive integer entries, maximum 6437.
+            Proof: TYPE_II_R4_MIXED_I.md.
+      - [ ] The II+III mixed support-cell pair.
   - [ ] II-(1,3,3). Its central triple must be distributed.
   - [ ] II-(2,2,3). Triangular left hull; nontriangular right hull whose
         support-normalized additional point is in cell II.

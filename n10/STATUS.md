@@ -199,6 +199,18 @@ then justified. The stronger mesh ear bounds and the subquadrilateral
 spread use have independent geometry audits, and separate Fraction and
 SymPy expansions reproduce all ten negative rational bounds.
 
+The entire I+II mixed support-cell branch of the nontriangular
+Type-II (1,2,4) hull is now excluded. TYPE_II_R4_MIXED_I.md covers
+all three pair-line orientations. In the last orientation, actual
+D/E clearances force the noncentral point inside DEH; two monotone
+contact eliminations leave six variables in a proved rational box.
+The final quartic has 86 printed positive integer entries, maximum
+6437, and exact upper bound -1330931547/10^13. Independent geometry
+review and separate Fraction/SymPy expansions pass. Only II+III
+remains in this nontriangular child. The other three Type-II counts
+and the global II parent remain unchecked. The global algebra
+checker now has 30 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
