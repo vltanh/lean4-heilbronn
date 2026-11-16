@@ -2,6 +2,7 @@ module
 
 public import Heilbronn.Six.Hull
 public import Heilbronn.Hulls.QuadrilateralHull
+public import Heilbronn.TypeII.TypeII.EndpointTriangle
 
 /-! # Exterior restrictions for larger hulls in family N (`hand/SIX_BOUNDARY_EXTERIOR.md`)
 
@@ -29,8 +30,10 @@ Results:
   exactly six contacts some free point lies in `R ∪ T ∪ L`;
 * `theorem3`: each side cap contains at most one free point;
 * `theorem4`: three free points in the opposite cap form, with `D, F`, a convex quadrilateral
-  `D, E, G, F` with the third point `O ∈ DEF ∩ DGF`, and the full hull is the octagon
-  `A, B, C, D, E, G, F, H`;
+  `D, E, G, F` with the third point `O ∈ DEF ∩ DGF`, the direction `E → G` points strictly left
+  and up, and the full hull is the octagon `A, B, C, D, E, G, F, H` (proved through the support
+  triangle of `TYPE_II.md` §1, `support_apex`, and its five cells: `support_cell_II`,
+  `support_direction`; the octagon signs by `cap_triples`, `chord_triples`, `octagon_convex`);
 * `theorem5`: an occupied side cap `R` gives `[ABH] < 3s` (transposed: `L` gives `[ABC] < 3s`);
 * `lemma6`: projecting a side-cap point onto its square side keeps every anchor-pair cost.
 -/
@@ -554,13 +557,480 @@ theorem theorem3 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
 def octagonDEGF (a h b c d f : ℝ) (E G : Point) : Fin 8 → Point :=
   ![ptA a, ptB b, ptC c, ptD d, E, G, ptF f, ptH h]
 
+/-- A chord `P₁P₂` with the cap vertices `D, F` weakly and the corner `(1,1)` strictly on its left
+has every point of the square strictly beyond `DF` strictly on its left (barycentric coordinates
+in the cap triangle `D, F, (1,1)`). -/
+theorem cap_left {d f : ℝ} (hd : d < 1) (hf : f < 1) {P₁ P₂ Z : Point} (hZ : Z ∈ unitSquare)
+    (hZc : sarea (ptD d) (ptF f) Z < 0) (gD : 0 ≤ sarea P₁ P₂ (ptD d))
+    (gF : 0 ≤ sarea P₁ P₂ (ptF f)) (gW : 0 < sarea P₁ P₂ (1, 1)) : 0 < sarea P₁ P₂ Z := by
+  obtain ⟨z0, z1, w0, w1⟩ := hZ
+  have e : sarea P₁ P₂ Z * ((1 - d) * (1 - f)) =
+      sarea P₁ P₂ (ptD d) * ((1 - f) * (1 - Z.2)) + sarea P₁ P₂ (ptF f) * ((1 - d) * (1 - Z.1)) +
+        sarea P₁ P₂ (1, 1) * (-sarea (ptD d) (ptF f) Z) := by
+    simp only [ptD, ptF, sarea]; ring
+  have p1 := mul_nonneg gD (mul_nonneg (by linarith : (0:ℝ) ≤ 1 - f) (by linarith : (0:ℝ) ≤ 1 - Z.2))
+  have p2 := mul_nonneg gF (mul_nonneg (by linarith : (0:ℝ) ≤ 1 - d) (by linarith : (0:ℝ) ≤ 1 - Z.1))
+  have p3 := mul_pos gW (by linarith : (0:ℝ) < -sarea (ptD d) (ptF f) Z)
+  have hδ : 0 < (1 - d) * (1 - f) := mul_pos (by linarith) (by linarith)
+  have : 0 < sarea P₁ P₂ Z * ((1 - d) * (1 - f)) := by rw [e]; linarith
+  exact pos_of_mul_pos_left this hδ.le
+
+/-- The fifteen anchor triangles over a point `Z` of the square strictly beyond `DF`, written
+with the anchor pair in the cyclic order `F, H, A, B, C, D`, are positively oriented. -/
+theorem cap_triples {a h b c d f : ℝ} (hN : NAnchors a h b c d f) {Z : Point}
+    (hZ : Z ∈ unitSquare) (hZc : sarea (ptD d) (ptF f) Z < 0) :
+    0 < sarea (ptF f) (ptH h) Z ∧ 0 < sarea (ptF f) (ptA a) Z ∧ 0 < sarea (ptF f) (ptB b) Z ∧
+    0 < sarea (ptF f) (ptC c) Z ∧ 0 < sarea (ptF f) (ptD d) Z ∧ 0 < sarea (ptH h) (ptA a) Z ∧
+    0 < sarea (ptH h) (ptB b) Z ∧ 0 < sarea (ptH h) (ptC c) Z ∧ 0 < sarea (ptH h) (ptD d) Z ∧
+    0 < sarea (ptA a) (ptB b) Z ∧ 0 < sarea (ptA a) (ptC c) Z ∧ 0 < sarea (ptA a) (ptD d) Z ∧
+    0 < sarea (ptB b) (ptC c) Z ∧ 0 < sarea (ptB b) (ptD d) Z ∧ 0 < sarea (ptC c) (ptD d) Z := by
+  obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN
+  have hd1 : d < 1 := by linarith
+  have hf1 : f < 1 := by linarith
+  have hd : 0 < d := by linarith
+  have hf : 0 < f := by linarith
+  have hda := sub_nonneg.2 had
+  have hhd := sub_nonneg.2 hdh
+  have hfb := sub_nonneg.2 hbf
+  have hcf := sub_nonneg.2 hfc
+  have L : ∀ {P₁ P₂ : Point}, 0 ≤ sarea P₁ P₂ (ptD d) → 0 ≤ sarea P₁ P₂ (ptF f) →
+      0 < sarea P₁ P₂ (1, 1) → 0 < sarea P₁ P₂ Z := fun gD gF gW => cap_left hd1 hf1 hZ hZc gD gF gW
+  have k1 : 0 < 1 - d := by linarith
+  have k2 : 0 < 1 - f := by linarith
+  have k3 : 0 < 1 - h := by linarith
+  have k4 : 0 < 1 - a := by linarith
+  have k5 : 0 < 1 - b := by linarith
+  have k6 : 0 < 1 - c := by linarith
+  have hh0 : 0 < h := by linarith
+  have hc0 : 0 < c := by linarith
+  refine ⟨L ?_ ?_ ?_, L ?_ ?_ ?_, L ?_ ?_ ?_, L ?_ ?_ ?_, L ?_ ?_ ?_, L ?_ ?_ ?_, L ?_ ?_ ?_,
+    L ?_ ?_ ?_, L ?_ ?_ ?_, L ?_ ?_ ?_, L ?_ ?_ ?_, L ?_ ?_ ?_, L ?_ ?_ ?_, L ?_ ?_ ?_,
+    L ?_ ?_ ?_⟩ <;> simp only [sarea]
+  -- (F, H)
+  · linarith [mul_nonneg hf.le k1.le, mul_pos k3 k2]
+  · linarith
+  · linarith [mul_pos k3 k2]
+  -- (F, A)
+  · linarith [mul_nonneg hf.le k1.le, mul_pos k4 k2]
+  · linarith
+  · linarith [mul_pos k4 k2]
+  -- (F, B)
+  · linarith [mul_nonneg hfb k1.le]
+  · linarith
+  · linarith
+  -- (F, C)
+  · linarith [mul_nonneg hd.le hcf]
+  · linarith
+  · linarith
+  -- (F, D)
+  · linarith
+  · linarith
+  · linarith [mul_pos k1 k2]
+  -- (H, A)
+  · linarith
+  · linarith [mul_nonneg (by linarith : (0:ℝ) ≤ h - a) hf.le]
+  · linarith
+  -- (H, B)
+  · linarith [mul_le_mul_of_nonneg_right (by linarith : b ≤ 1) hhd]
+  · linarith [mul_pos hb k3, mul_pos hh0 hf]
+  · linarith [mul_pos hb k3]
+  -- (H, C)
+  · linarith [mul_le_mul_of_nonneg_right (by linarith : c ≤ 1) hhd]
+  · linarith [mul_pos hc0 k3, mul_pos hh0 hf]
+  · linarith [mul_pos hc0 k3]
+  -- (H, D)
+  · linarith
+  · linarith [mul_nonneg hf.le hhd]
+  · linarith
+  -- (A, B)
+  · linarith [mul_nonneg hb.le hda]
+  · linarith [mul_pos hb k4, mul_pos ha hf]
+  · linarith [mul_pos hb k4]
+  -- (A, C)
+  · linarith [mul_nonneg hc0.le hda]
+  · linarith [mul_pos hc0 k4, mul_pos ha hf]
+  · linarith [mul_pos hc0 k4]
+  -- (A, D)
+  · linarith
+  · linarith [mul_le_mul_of_nonneg_right hf1.le hda]
+  · linarith
+  -- (B, C)
+  · linarith [mul_pos (by linarith : (0:ℝ) < c - b) hd]
+  · linarith
+  · linarith
+  -- (B, D)
+  · linarith
+  · linarith [mul_le_mul_of_nonneg_right hd1.le hfb]
+  · linarith [mul_pos k5 k1]
+  -- (C, D)
+  · linarith
+  · linarith [mul_nonneg hd.le hcf]
+  · linarith [mul_pos k6 k1]
+
+/-- The four triangles of `A, B, C, H` over the cap chord `EG`, when the direction `E → G`
+points strictly left and strictly up and `D, F` are on its left. -/
+theorem chord_triples {a h b c d f : ℝ} (hN : NAnchors a h b c d f) {E G : Point}
+    (hEf : f < E.1) (hEd : d < E.2) (hm : G.1 < E.1) (hn : E.2 < G.2)
+    (hEGD : 0 < sarea E G (ptD d)) (hEGF : 0 < sarea E G (ptF f)) :
+    0 < sarea E G (ptA a) ∧ 0 < sarea E G (ptB b) ∧ 0 < sarea E G (ptC c) ∧
+      0 < sarea E G (ptH h) := by
+  obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN
+  have m := sub_pos.2 hm
+  have n := sub_pos.2 hn
+  simp only [ptA, ptB, ptC, ptD, ptF, ptH, sarea] at hEGD hEGF ⊢
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · nlinarith [mul_pos m (by linarith : (0:ℝ) < E.2 - a), mul_pos n (by linarith : (0:ℝ) < E.1)]
+  · nlinarith [mul_pos m (by linarith : (0:ℝ) < E.2), mul_pos n (by linarith : (0:ℝ) < E.1 - b)]
+  · nlinarith [mul_pos m (by linarith : (0:ℝ) < d), mul_pos n (by linarith : (0:ℝ) < 1 - c)]
+  · nlinarith [mul_pos m (by linarith : (0:ℝ) < 1 - h), mul_pos n (by linarith : (0:ℝ) < f)]
+
+/-- A point of the square strictly beyond `DF` is strictly right of `f` and strictly above `d`
+(SIX_BOUNDARY_OPPOSITE_CAP (6) with threshold `0`). -/
+theorem cap_coords {d f : ℝ} (hd : d < 1) (hf : f < 1) {Z : Point} (hZ : Z ∈ unitSquare)
+    (hZc : sarea (ptD d) (ptF f) Z < 0) : f < Z.1 ∧ d < Z.2 := by
+  obtain ⟨z0, z1, w0, w1⟩ := hZ
+  simp only [ptD, ptF, sarea] at hZc
+  constructor
+  · nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ 1 - f) (by linarith : (0:ℝ) ≤ 1 - Z.2)]
+  · nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ 1 - d) (by linarith : (0:ℝ) ≤ 1 - Z.1)]
+
+/-- The octagon `A, B, C, D, E, G, F, H` is strictly convex when `E, G` lie strictly beyond `DF`,
+`D, E, G, F` is convex and the direction `E → G` points strictly left and up. -/
+theorem octagon_convex {a h b c d f : ℝ} (hN : NAnchors a h b c d f) {E G : Point}
+    (hE : E ∈ unitSquare) (hG : G ∈ unitSquare) (hEc : sarea (ptD d) (ptF f) E < 0)
+    (hGc : sarea (ptD d) (ptF f) G < 0) (hDEG : 0 < sarea (ptD d) E G)
+    (hEGF : 0 < sarea E G (ptF f)) (hm : G.1 < E.1) (hn : E.2 < G.2) :
+    IsConvexCCW (octagonDEGF a h b c d f E G) := by
+  have hN' := hN
+  obtain ⟨-, -, hh1, -, -, hc1, -, hdh, -, hfc⟩ := hN'
+  have hd1 : d < 1 := by linarith
+  have hf1 : f < 1 := by linarith
+  obtain ⟨t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18,
+    t19⟩ := SixBoundaryHull.anchor_triples hN
+  obtain ⟨e67, e60, e61, e62, e63, e70, e71, e72, e73, e01, e02, e03, e12, e13, e23⟩ :=
+    cap_triples hN hE hEc
+  obtain ⟨g67, g60, g61, g62, g63, g70, g71, g72, g73, g01, g02, g03, g12, g13, g23⟩ :=
+    cap_triples hN hG hGc
+  obtain ⟨hEf, hEd⟩ := cap_coords hd1 hf1 hE hEc
+  have hEGD : 0 < sarea E G (ptD d) := by rw [sarea_cycle]; exact hDEG
+  obtain ⟨m0, m1, m2, m7⟩ := chord_triples hN hEf hEd hm hn hEGD hEGF
+  have cyc3 : ∀ {p q r : Point}, 0 < sarea r p q → 0 < sarea p q r := fun {p q r} h => by
+    rw [sarea_cycle r p q]; exact h
+  have cyc3' : ∀ {p q r : Point}, 0 < sarea q r p → 0 < sarea p q r := fun {p q r} h => by
+    rw [← sarea_cycle p q r]; exact h
+  intro i j k hij hjk
+  fin_cases i <;> fin_cases j <;> simp only [Fin.reduceFinMk, Fin.reduceLT, Fin.isValue] at hij ⊢ <;>
+    fin_cases k <;> simp only [Fin.reduceFinMk, Fin.reduceLT, Fin.isValue] at hjk ⊢
+  · exact t0
+  · exact t1
+  · exact e01
+  · exact g01
+  · exact t2
+  · exact t3
+  · exact t4
+  · exact e02
+  · exact g02
+  · exact t5
+  · exact t6
+  · exact e03
+  · exact g03
+  · exact t7
+  · exact t8
+  · exact cyc3' m0
+  · exact cyc3 e60
+  · exact cyc3 e70
+  · exact cyc3 g60
+  · exact cyc3 g70
+  · exact t9
+  · exact t10
+  · exact e12
+  · exact g12
+  · exact t11
+  · exact t12
+  · exact e13
+  · exact g13
+  · exact t13
+  · exact t14
+  · exact cyc3' m1
+  · exact cyc3 e61
+  · exact cyc3 e71
+  · exact cyc3 g61
+  · exact cyc3 g71
+  · exact t15
+  · exact e23
+  · exact g23
+  · exact t16
+  · exact t17
+  · exact cyc3' m2
+  · exact cyc3 e62
+  · exact cyc3 e72
+  · exact cyc3 g62
+  · exact cyc3 g72
+  · exact t18
+  · exact hDEG
+  · exact cyc3 e63
+  · exact cyc3 e73
+  · exact cyc3 g63
+  · exact cyc3 g73
+  · exact t19
+  · exact hEGF
+  · exact m7
+  · exact cyc3' e67
+  · exact cyc3' g67
+
+/-- The point `O ∈ DEF ∩ DGF` lies strictly inside the octagon `A, B, C, D, E, G, F, H`. -/
+theorem octagon_inPolygon {a h b c d f : ℝ} (hN : NAnchors a h b c d f) {E G O : Point}
+    (hO : O ∈ unitSquare) (hOc : sarea (ptD d) (ptF f) O < 0) (hDEG : 0 < sarea (ptD d) E G)
+    (hEGF : 0 < sarea E G (ptF f)) (hDEF : 0 < sarea (ptD d) E (ptF f))
+    (h1 : InTriangle O (ptD d) E (ptF f)) (h2 : InTriangle O (ptD d) G (ptF f)) :
+    InPolygon (octagonDEGF a h b c d f E G) O := by
+  obtain ⟨-, -, -, -, -, o70, -, -, -, o01, -, -, o12, -, o23⟩ := cap_triples hN hO hOc
+  obtain ⟨o67, -⟩ := cap_triples hN hO hOc
+  have hEG : 0 < sarea E G O := by
+    have e : sarea E G O * sarea (ptD d) E (ptF f) = sarea E G (ptD d) * sarea E (ptF f) O +
+        sarea E G (ptF f) * sarea (ptD d) E O := by simp only [sarea]; ring
+    have hEGD : 0 < sarea E G (ptD d) := by rw [sarea_cycle]; exact hDEG
+    have : 0 < sarea E G O * sarea (ptD d) E (ptF f) := by
+      rw [e]; nlinarith [mul_pos hEGD h1.2.1, mul_pos hEGF h1.1]
+    exact pos_of_mul_pos_left this hDEF.le
+  intro i
+  fin_cases i
+  · show 0 < sarea (ptA a) (ptB b) O; exact o01
+  · show 0 < sarea (ptB b) (ptC c) O; exact o12
+  · show 0 < sarea (ptC c) (ptD d) O; exact o23
+  · show 0 < sarea (ptD d) E O; exact h1.1
+  · show 0 < sarea E G O; exact hEG
+  · show 0 < sarea G (ptF f) O; exact h2.2.1
+  · show 0 < sarea (ptF f) (ptH h) O; exact o67
+  · show 0 < sarea (ptH h) (ptA a) O; exact o70
+
+/-- The triangular-hull alternative of Theorem 4: if one cap point `O` is extreme as seen from
+both `F` and `D`, the other two are strictly inside `FDO`, whose doubled area is at most
+`(1-d)(1-f) < 13/16`, against the two-interior-point lemma. -/
+theorem theorem4_tri {a h b c d f : ℝ} {E G O : Point} (hN : NAnchors a h b c d f)
+    (hE : InCapT d f E) (hG : InCapT d f G) (hO : InCapT d f O)
+    (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O))
+    (hFE : sarea (ptF f) O E < 0) (hFG : sarea (ptF f) O G < 0)
+    (hDE : 0 < sarea (ptD d) O E) (hDG : 0 < sarea (ptD d) O G) : False := by
+  have hpos : 0 < minTriangleArea (nConfig a h b c d f E G O) := by linarith
+  obtain ⟨hABC, hABH, -, -⟩ := SixBoundaryHull.anchor_areas hN hmin
+  have hN' := hN
+  obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN'
+  have has : 7 / 64 < a := by nlinarith
+  have hbs : 7 / 64 < b := by nlinarith
+  have nE := sarea_ne_zero_of_min_pos hpos 4 5 6
+  have nO := sarea_ne_zero_of_min_pos hpos 4 5 8
+  change sarea (ptD d) (ptF f) E ≠ 0 at nE
+  change sarea (ptD d) (ptF f) O ≠ 0 at nO
+  have pE : 0 < sarea (ptF f) (ptD d) E := by
+    have := sarea_swap₁₂ (ptD d) (ptF f) E; have := lt_of_le_of_ne hE.2 nE; linarith
+  have nG := sarea_ne_zero_of_min_pos hpos 4 5 7
+  change sarea (ptD d) (ptF f) G ≠ 0 at nG
+  have pG : 0 < sarea (ptF f) (ptD d) G := by
+    have := sarea_swap₁₂ (ptD d) (ptF f) G; have := lt_of_le_of_ne hG.2 nG; linarith
+  have iE := TypeII.inTriangle_of_extreme pE hFE hDE
+  have iG := TypeII.inTriangle_of_extreme pG hFG hDG
+  have k := SixBoundaryHull.two_inside_sarea (P := nConfig a h b c d f E G O) (by norm_num) hmin
+    (a := 5) (b := 4) (e := 8) (j₁ := 6) (j₂ := 7) (by decide) iE iG
+  have hbound : sarea (ptF f) (ptD d) O ≤ (1 - d) * (1 - f) := by
+    obtain ⟨⟨x0, x1, y0, y1⟩, -⟩ := hO
+    simp only [ptF, ptD, sarea]
+    nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ 1 - d) (by linarith : (0:ℝ) ≤ 1 - O.1),
+      mul_nonneg (by linarith : (0:ℝ) ≤ 1 - f) (by linarith : (0:ℝ) ≤ 1 - O.2)]
+  have hδ : (1 - d) * (1 - f) < 13 / 16 := by
+    nlinarith [mul_le_mul (by linarith : 1 - d ≤ 57 / 64) (by linarith : 1 - f ≤ 57 / 64)
+      (by linarith) (by norm_num)]
+  have := SixBoundaryHull.rho_lt_Ks
+  change 2 * ((4 + 2 * Real.sqrt 3) * (7 / 128)) ≤ sarea (ptF f) (ptD d) O at k
+  linarith
+
+/-- An affine map of positive determinant keeps strict containment in a triangle. -/
+theorem inTriangle_of_affine {a b c d e g : ℝ} (hdet : 0 < a * d - b * c) {X A B C : Point}
+    (h : InTriangle (affineMap a b c d e g X) (affineMap a b c d e g A) (affineMap a b c d e g B)
+      (affineMap a b c d e g C)) : InTriangle X A B C := by
+  obtain ⟨h1, h2, h3⟩ := h
+  rw [sarea_affineMap] at h1 h2 h3
+  exact ⟨pos_of_mul_pos_right h1 hdet.le, pos_of_mul_pos_right h2 hdet.le,
+    pos_of_mul_pos_right h3 hdet.le⟩
+
+/-- The cell analysis of a support triangle `UVW'` of doubled area below `13/16` (contacts `H` on
+the leg `UW'`, `F` on the leg `VW'`, fifth point `X`), at least area `7/128`: cells I, III, IV and
+V of `TYPE_II.md` §1 need doubled area at least `Ks`, `12s`, `10s` (`s = 7/64`), so `X` is in
+cell II, `X ∈ UVF ∩ UVH`. -/
+theorem support_cell_II {U V W' H F X : Point} (hS : TypeII.IsSupportTriangle U V W' H F X)
+    (hsmall : sarea U V W' < 13 / 16) (hmin5 : 7 / 128 ≤ minTriangleArea ![U, V, H, F, X]) :
+    InTriangle X U V F ∧ InTriangle X U V H := by
+  have hW'pos := hS.1
+  obtain ⟨α, β, γ, δ, ε, ζ, h₀, f₀, hdet, hU, hV, -, hH', hF', hNrm⟩ :=
+    TypeII.claim_support_affine hS
+  have hcomp : affineMap α β γ δ ε ζ ∘ ![U, V, H, F, X] =
+      TypeII.hsConfig h₀ f₀ (affineMap α β γ δ ε ζ X) := by
+    funext i; fin_cases i <;> simp [TypeII.hsConfig, hU, hV, hH', hF']
+  have hm := minTriangleArea_affineMap α β γ δ ε ζ ![U, V, H, F, X]
+  rw [hcomp, hdet, abs_of_pos (by positivity)] at hm
+  set S := sarea U V W' with hSdef
+  set sn := 7 / 64 / S with hsn
+  have hsn0 : 0 < sn := by positivity
+  have hsmin : sn / 2 ≤ minTriangleArea (TypeII.hsConfig h₀ f₀ (affineMap α β γ δ ε ζ X)) := by
+    rw [hm, show sn / 2 = 1 / S * (7 / 128) by rw [hsn]; ring]
+    exact mul_le_mul_of_nonneg_left hmin5 (by positivity)
+  have hKs : 13 / 16 < TypeII.Ktwo * (7 / 64) := by
+    have := SixBoundaryHull.rho_lt_Ks; unfold TypeII.Ktwo; linarith
+  have cells := TypeII.claim_five_cells hNrm hsn0 hsmin
+  have hII : TypeII.InCellII TypeII.hsA TypeII.hsE (TypeII.hsH h₀) (TypeII.hsF f₀)
+      (affineMap α β γ δ ε ζ X) := by
+    rcases cells.1 with hc | hc | hc | hc | hc
+    · exfalso
+      have k := (TypeII.claim_cell_I_bound hNrm hsn0 hsmin hc).2
+      rw [hsn, div_le_div_iff₀ hW'pos TypeII.Ktwo_pos] at k
+      linarith only [k, hsmall, hKs]
+    · exact hc
+    · exfalso
+      have k := (TypeII.claim_cell_III_bound hNrm hsn0 hsmin hc).2
+      rw [hsn, div_le_div_iff₀ hW'pos TypeII.Ktwo_pos] at k
+      linarith only [k, hsmall, hKs]
+    · exfalso
+      have k := TypeII.claim_cell_IV_bound hNrm hsn0 hsmin hc
+      rw [hsn, div_le_div_iff₀ hW'pos (by norm_num)] at k
+      linarith only [k, hsmall]
+    · exfalso
+      obtain ⟨-, k1, k2⟩ := TypeII.eq3 hNrm hsn0 hsmin hc
+      have k := k1.trans k2.le
+      rw [hsn, div_le_div_iff₀ hW'pos (by norm_num)] at k
+      linarith only [k, hsmall]
+  obtain ⟨i1, i2⟩ := cells.2.2.1 hII
+  have hdetpos : 0 < α * δ - β * γ := by rw [hdet]; positivity
+  rw [← hU, ← hV, ← hF'] at i1
+  rw [← hU, ← hV, ← hH'] at i2
+  exact ⟨inTriangle_of_affine hdetpos i1, inTriangle_of_affine hdetpos i2⟩
+
+/-- The direction `E → G` of the two leg contacts of a support triangle `F D W'` with apex in the
+cap `D, F, (1,1)` points strictly left and strictly up. -/
+theorem support_direction {d f : ℝ} (hd1 : d < 1) (hf1 : f < 1) {E G W' : Point}
+    (hGseg : G ∈ openSegment ℝ (ptF f) W') (hEseg : E ∈ openSegment ℝ (ptD d) W')
+    (hW'mem : W' ∈ convexHull ℝ ({ptF f, ptD d, (1, 1)} : Set Point)) :
+    G.1 < E.1 ∧ E.2 < G.2 := by
+  obtain ⟨p, q, r, hp, hq, hr, hpqr, hW'eq⟩ := TypeII.exists_bary_of_mem_convexHull hW'mem
+  obtain ⟨μ₁, ν₁, hμ₁, hν₁, hμν₁, hG'⟩ := hGseg
+  obtain ⟨μ₂, ν₂, hμ₂, hν₂, hμν₂, hE'⟩ := hEseg
+  have gx : G.1 = μ₁ * f + ν₁ * W'.1 := by rw [← hG']; simp [ptF]
+  have gy : G.2 = μ₁ * 1 + ν₁ * W'.2 := by rw [← hG']; simp [ptF]
+  have ex : E.1 = μ₂ * 1 + ν₂ * W'.1 := by rw [← hE']; simp [ptD]
+  have ey : E.2 = μ₂ * d + ν₂ * W'.2 := by rw [← hE']; simp [ptD]
+  have wx : W'.1 = p * f + q * 1 + r * 1 := by rw [hW'eq]
+  have wy : W'.2 = p * 1 + q * d + r * 1 := by rw [hW'eq]
+  have ex1 : 1 - W'.1 = p * (1 - f) := by rw [wx]; linear_combination (-1 : ℝ) * hpqr
+  have ex2 : W'.1 - f = (1 - p) * (1 - f) := by rw [wx]; linear_combination hpqr
+  have ey1 : 1 - W'.2 = q * (1 - d) := by rw [wy]; linear_combination (-1 : ℝ) * hpqr
+  have ey2 : W'.2 - d = (1 - q) * (1 - d) := by rw [wy]; linear_combination hpqr
+  have hp1 : p ≤ 1 := by linarith
+  have hq1 : q ≤ 1 := by linarith
+  have hν₁' : 0 ≤ 1 - μ₁ := by linarith
+  have hν₂' : 0 ≤ 1 - μ₂ := by linarith
+  have key1 : 0 < μ₂ * p + μ₁ * (1 - p) := by
+    nlinarith [mul_pos hμ₁ hμ₂, mul_nonneg (mul_nonneg hμ₂.le hp) hν₁',
+      mul_nonneg (mul_nonneg hμ₁.le (by linarith : (0:ℝ) ≤ 1 - p)) hν₂']
+  have key2 : 0 < μ₁ * q + μ₂ * (1 - q) := by
+    nlinarith [mul_pos hμ₁ hμ₂, mul_nonneg (mul_nonneg hμ₁.le hq) hν₂',
+      mul_nonneg (mul_nonneg hμ₂.le (by linarith : (0:ℝ) ≤ 1 - q)) hν₁']
+  constructor
+  · have e : E.1 - G.1 = μ₂ * (1 - W'.1) + μ₁ * (W'.1 - f) := by
+      rw [ex, gx]; linear_combination W'.1 * hμν₂ - W'.1 * hμν₁
+    rw [ex1, ex2] at e
+    nlinarith [mul_pos (by linarith : (0:ℝ) < 1 - f) key1]
+  · have e : G.2 - E.2 = μ₁ * (1 - W'.2) + μ₂ * (W'.2 - d) := by
+      rw [ey, gy]; linear_combination W'.2 * hμν₁ - W'.2 * hμν₂
+    rw [ey1, ey2] at e
+    nlinarith [mul_pos (by linarith : (0:ℝ) < 1 - d) key2]
+
+/-- The quadrilateral `D, E, G, F` is convex when its four triangles are positive. -/
+theorem quad_convex {D E G F : Point} (h1 : 0 < sarea D E G) (h2 : 0 < sarea D E F)
+    (h3 : 0 < sarea D G F) (h4 : 0 < sarea E G F) : IsConvexCCW ![D, E, G, F] := by
+  intro i j k hij hjk
+  fin_cases i <;> fin_cases j <;> simp only [Fin.reduceFinMk, Fin.reduceLT, Fin.isValue] at hij ⊢ <;>
+    fin_cases k <;> simp only [Fin.reduceFinMk, Fin.reduceLT, Fin.isValue] at hjk ⊢
+  · exact h1
+  · exact h2
+  · exact h3
+  · exact h4
+
+/-- The support alternative of Theorem 4: with `G` extreme as seen from `F` and `E` extreme as
+seen from `D`, the support triangle `F D W'` (apex `W'` in the cap) carries `G, E` on its legs and
+the five cells of `TYPE_II.md` §1 leave only cell II: `O ∈ FDE ∩ FDG`. -/
+theorem theorem4_core {a h b c d f : ℝ} {E G O : Point} (hN : NAnchors a h b c d f)
+    (hE : InCapT d f E) (hG : InCapT d f G) (hO : InCapT d f O)
+    (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f E G O))
+    (hFGE : sarea (ptF f) G E < 0) (hFGO : sarea (ptF f) G O < 0)
+    (hDEG : 0 < sarea (ptD d) E G) (hDEO : 0 < sarea (ptD d) E O) :
+    IsConvexCCW ![ptD d, E, G, ptF f] ∧ InTriangle O (ptD d) E (ptF f) ∧
+      InTriangle O (ptD d) G (ptF f) ∧ G.1 < E.1 ∧ E.2 < G.2 ∧
+      IsConvexCCW (octagonDEGF a h b c d f E G) ∧ InPolygon (octagonDEGF a h b c d f E G) O := by
+  have hpos : 0 < minTriangleArea (nConfig a h b c d f E G O) := by linarith
+  obtain ⟨hABC, hABH, -, -⟩ := SixBoundaryHull.anchor_areas hN hmin
+  have hN' := hN
+  obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN'
+  have has : 7 / 64 < a := by nlinarith
+  have hbs : 7 / 64 < b := by nlinarith
+  have hd1 : d < 1 := by linarith
+  have hf1 : f < 1 := by linarith
+  -- the three cap points are strictly beyond `DF`
+  have cE : sarea (ptD d) (ptF f) E < 0 :=
+    lt_of_le_of_ne hE.2 (sarea_ne_zero_of_min_pos hpos 4 5 6)
+  have cG : sarea (ptD d) (ptF f) G < 0 :=
+    lt_of_le_of_ne hG.2 (sarea_ne_zero_of_min_pos hpos 4 5 7)
+  have cO : sarea (ptD d) (ptF f) O < 0 :=
+    lt_of_le_of_ne hO.2 (sarea_ne_zero_of_min_pos hpos 4 5 8)
+  have pE : 0 < sarea (ptF f) (ptD d) E := by have := sarea_swap₁₂ (ptD d) (ptF f) E; linarith
+  have pG : 0 < sarea (ptF f) (ptD d) G := by have := sarea_swap₁₂ (ptD d) (ptF f) G; linarith
+  have pO : 0 < sarea (ptF f) (ptD d) O := by have := sarea_swap₁₂ (ptD d) (ptF f) O; linarith
+  have hΔ : 0 < sarea (ptF f) (ptD d) (1, 1) := by
+    simp only [ptF, ptD, sarea]; nlinarith [mul_pos (by linarith : (0:ℝ) < 1 - d)
+      (by linarith : (0:ℝ) < 1 - f)]
+  have hΔeq : sarea (ptF f) (ptD d) (1, 1) = (1 - d) * (1 - f) := by
+    simp only [ptF, ptD, sarea]; ring
+  have hWG : 0 ≤ sarea (1, 1) (ptF f) G := by
+    obtain ⟨⟨x0, x1, y0, y1⟩, -⟩ := hG
+    simp only [ptF, sarea]; nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ 1 - f)
+      (by linarith : (0:ℝ) ≤ 1 - G.2)]
+  have hWE : 0 ≤ sarea (ptD d) (1, 1) E := by
+    obtain ⟨⟨x0, x1, y0, y1⟩, -⟩ := hE
+    simp only [ptD, sarea]; nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ 1 - d)
+      (by linarith : (0:ℝ) ≤ 1 - E.1)]
+  -- the support apex
+  obtain ⟨W', hW'pos, hW'le, hGseg, hEseg, hcont, hW'mem⟩ :=
+    TypeII.support_apex hΔ pG hWG pE hWE hFGE hDEG
+  have hS : TypeII.IsSupportTriangle (ptF f) (ptD d) W' G E O :=
+    ⟨hW'pos, hGseg, hEseg, hcont O pO.le hFGO.le hDEO.le⟩
+  have hδ : (1 - d) * (1 - f) < 13 / 16 := by
+    nlinarith [mul_le_mul (by linarith : 1 - d ≤ 57 / 64) (by linarith : 1 - f ≤ 57 / 64)
+      (by linarith) (by norm_num)]
+  have hmin5 : 7 / 128 ≤ minTriangleArea ![ptF f, ptD d, G, E, O] := by
+    have := le_min_comp (by norm_num) (nConfig a h b c d f E G O)
+      (f := ![5, 4, 7, 6, 8]) (by decide)
+    have e : nConfig a h b c d f E G O ∘ ![5, 4, 7, 6, 8] = ![ptF f, ptD d, G, E, O] := by
+      funext i; fin_cases i <;> rfl
+    rw [e] at this; linarith
+  obtain ⟨j1, j2⟩ := support_cell_II hS (by linarith) hmin5
+  have k1 : InTriangle O (ptD d) E (ptF f) := ⟨j1.2.1, j1.2.2, j1.1⟩
+  have k2 : InTriangle O (ptD d) G (ptF f) := ⟨j2.2.1, j2.2.2, j2.1⟩
+  have hdir := support_direction hd1 hf1 hGseg hEseg hW'mem
+  have hEGF : 0 < sarea E G (ptF f) := by
+    have e2 : sarea E G (ptF f) = -sarea (ptF f) G E := by simp only [sarea]; ring
+    rw [e2]; linarith
+  have hDEF : 0 < sarea (ptD d) E (ptF f) := by rw [sarea_cycle]; exact pE
+  have hDGF : 0 < sarea (ptD d) G (ptF f) := by rw [sarea_cycle]; exact pG
+  exact ⟨quad_convex hDEG hDEF hDGF hEGF, k1, k2, hdir.1, hdir.2,
+    octagon_convex hN hE.1 hG.1 cE cG hDEG hEGF hdir.1 hdir.2,
+    octagon_inPolygon hN hO.1 cO hDEG hEGF hDEF k1 k2⟩
+
 /-- **Theorem 4** (`SIX_BOUNDARY_EXTERIOR:Theorem4`). Suppose all three free points are in the
 closed opposite cap `conv{D, F, (1,1)}` and every doubled area is at least `s = 7/64`. Then
 they can be named `E, G, O` (a permutation of `X, Y, Z`) so that `D, E, G, F` is a strictly
 convex quadrilateral in this counterclockwise order and `O ∈ DFE ∩ DFG` (written with the
-counterclockwise triangles `DEF`, `DGF`). Consequently the full hull is the strictly convex
-octagon `A, B, C, D, E, G, F, H` with `O` its sole interior point; every triangular cap hull and
-every other support-cell placement is impossible.
+counterclockwise triangles `DEF`, `DGF`); moreover the direction `E → G` points strictly left and
+strictly up (`g_x < e_x`, `e_y < g_y`, from the support apex). Consequently the full hull is the
+strictly convex octagon `A, B, C, D, E, G, F, H` with `O` its sole interior point; every
+triangular cap hull and every other support-cell placement is impossible.
 `hand/SIX_BOUNDARY_EXTERIOR.md`, lines 298-362.
 Uses: TYPE_II:EndpointTriangleTheorem, CORNER_FAMILIES:TwoInteriorPointLemma,
 CORNER_FAMILIES:NontriangularHullLemma -/
@@ -571,10 +1041,86 @@ theorem theorem4 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
       IsConvexCCW ![ptD d, ![X, Y, Z] (σ 0), ![X, Y, Z] (σ 1), ptF f] ∧
       InTriangle (![X, Y, Z] (σ 2)) (ptD d) (![X, Y, Z] (σ 0)) (ptF f) ∧
       InTriangle (![X, Y, Z] (σ 2)) (ptD d) (![X, Y, Z] (σ 1)) (ptF f) ∧
+      (![X, Y, Z] (σ 1)).1 < (![X, Y, Z] (σ 0)).1 ∧ (![X, Y, Z] (σ 0)).2 < (![X, Y, Z] (σ 1)).2 ∧
       IsConvexCCW (octagonDEGF a h b c d f (![X, Y, Z] (σ 0)) (![X, Y, Z] (σ 1))) ∧
       InPolygon (octagonDEGF a h b c d f (![X, Y, Z] (σ 0)) (![X, Y, Z] (σ 1)))
         (![X, Y, Z] (σ 2)) := by
-  sorry
+  set V : Fin 3 → Point := ![X, Y, Z] with hV
+  have hcap : ∀ i, InCapT d f (V i) := fun i => by
+    fin_cases i
+    · exact hX
+    · exact hY
+    · exact hZ
+  have hpos : 0 < minTriangleArea (nConfig a h b c d f X Y Z) := by linarith
+  have hperm : ∀ σ : Equiv.Perm (Fin 3), 7 / 128 ≤
+      minTriangleArea (nConfig a h b c d f (V (σ 0)) (V (σ 1)) (V (σ 2))) := fun σ => by
+    rw [minTriangleArea_nConfig_perm]; exact hmin
+  -- positions as seen from `F` and from `D`
+  have nU : ∀ i j : Fin 3, i ≠ j → sarea (ptF f) (V i) (V j) ≠ 0 := by
+    intro i j hij
+    fin_cases i <;> fin_cases j <;> first
+      | exact absurd rfl hij
+      | exact sarea_ne_zero_of_min_pos hpos 5 6 7 | exact sarea_ne_zero_of_min_pos hpos 5 6 8
+      | exact sarea_ne_zero_of_min_pos hpos 5 7 6 | exact sarea_ne_zero_of_min_pos hpos 5 7 8
+      | exact sarea_ne_zero_of_min_pos hpos 5 8 6 | exact sarea_ne_zero_of_min_pos hpos 5 8 7
+  have nV : ∀ i j : Fin 3, i ≠ j → sarea (ptD d) (V i) (V j) ≠ 0 := by
+    intro i j hij
+    fin_cases i <;> fin_cases j <;> first
+      | exact absurd rfl hij
+      | exact sarea_ne_zero_of_min_pos hpos 4 6 7 | exact sarea_ne_zero_of_min_pos hpos 4 6 8
+      | exact sarea_ne_zero_of_min_pos hpos 4 7 6 | exact sarea_ne_zero_of_min_pos hpos 4 7 8
+      | exact sarea_ne_zero_of_min_pos hpos 4 8 6 | exact sarea_ne_zero_of_min_pos hpos 4 8 7
+  have gpos : ∀ i, 0 < sarea (ptF f) (ptD d) (V i) := by
+    intro i
+    have h0 : sarea (ptD d) (ptF f) (V i) ≠ 0 := by
+      fin_cases i
+      · exact sarea_ne_zero_of_min_pos hpos 4 5 6
+      · exact sarea_ne_zero_of_min_pos hpos 4 5 7
+      · exact sarea_ne_zero_of_min_pos hpos 4 5 8
+    have := sarea_swap₁₂ (ptD d) (ptF f) (V i)
+    have := lt_of_le_of_ne (hcap i).2 h0
+    linarith
+  obtain ⟨i, hi⟩ := TypeII.exists_extreme_left (ptF f) (ptD d) V gpos nU
+  obtain ⟨j, hj⟩ := TypeII.exists_extreme_right (ptF f) (ptD d) V gpos nV
+  -- the generic support case, for `E = V (σ 0)`, `G = V (σ 1)`, `O = V (σ 2)`
+  have supp : ∀ σ : Equiv.Perm (Fin 3), σ 1 = i → σ 0 = j → ∃ τ : Equiv.Perm (Fin 3),
+      IsConvexCCW ![ptD d, V (τ 0), V (τ 1), ptF f] ∧
+      InTriangle (V (τ 2)) (ptD d) (V (τ 0)) (ptF f) ∧
+      InTriangle (V (τ 2)) (ptD d) (V (τ 1)) (ptF f) ∧
+      (V (τ 1)).1 < (V (τ 0)).1 ∧ (V (τ 0)).2 < (V (τ 1)).2 ∧
+      IsConvexCCW (octagonDEGF a h b c d f (V (τ 0)) (V (τ 1))) ∧
+      InPolygon (octagonDEGF a h b c d f (V (τ 0)) (V (τ 1))) (V (τ 2)) := by
+    intro σ h1 h0
+    have n01 : σ 0 ≠ σ 1 := fun e => absurd (σ.injective e) (by decide)
+    have n21 : σ 2 ≠ σ 1 := fun e => absurd (σ.injective e) (by decide)
+    have n10 : σ 1 ≠ σ 0 := fun e => absurd (σ.injective e) (by decide)
+    have n20 : σ 2 ≠ σ 0 := fun e => absurd (σ.injective e) (by decide)
+    refine ⟨σ, theorem4_core hN (hcap _) (hcap _) (hcap _) (hperm σ) ?_ ?_ ?_ ?_⟩
+    · rw [h1]; exact hi _ (by rw [← h1]; exact n01)
+    · rw [h1]; exact hi _ (by rw [← h1]; exact n21)
+    · rw [h0]; exact hj _ (by rw [← h0]; exact n10)
+    · rw [h0]; exact hj _ (by rw [← h0]; exact n20)
+  -- the triangular case `i = j`
+  have tri : ∀ σ : Equiv.Perm (Fin 3), σ 2 = i → i = j → False := by
+    intro σ h2 hij
+    subst hij
+    have n02 : σ 0 ≠ σ 2 := fun e => absurd (σ.injective e) (by decide)
+    have n12 : σ 1 ≠ σ 2 := fun e => absurd (σ.injective e) (by decide)
+    refine theorem4_tri hN (hcap _) (hcap _) (hcap _) (hperm σ) ?_ ?_ ?_ ?_
+    · rw [h2]; exact hi _ (by rw [← h2]; exact n02)
+    · rw [h2]; exact hi _ (by rw [← h2]; exact n12)
+    · rw [h2]; exact hj _ (by rw [← h2]; exact n02)
+    · rw [h2]; exact hj _ (by rw [← h2]; exact n12)
+  fin_cases i <;> fin_cases j
+  · exact (tri (Equiv.swap 0 2) (by decide) rfl).elim
+  · exact supp (Equiv.swap 0 1) (by decide) (by decide)
+  · exact supp (Equiv.swap 0 1 * Equiv.swap 0 2) (by decide) (by decide)
+  · exact supp 1 (by decide) (by decide)
+  · exact (tri (Equiv.swap 1 2) (by decide) rfl).elim
+  · exact supp (Equiv.swap 0 2) (by decide) (by decide)
+  · exact supp (Equiv.swap 1 2) (by decide) (by decide)
+  · exact supp (Equiv.swap 0 2 * Equiv.swap 0 1) (by decide) (by decide)
+  · exact (tri 1 (by decide) rfl).elim
 
 /-! ### Section 5: an occupied side cap empties the opposite lower ear -/
 
