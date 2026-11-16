@@ -1751,6 +1751,71 @@ def adjacent_133_nontriangular_cell_iii():
     print('PASS: Type-II133 third-support-cell identities and complete sixty-five-leaf inventory')
 
 
+def c1_two_lower_both_sides():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);B=q(22,25);rho=q(347,500);b0=rho/B;a0=s/B
+    assert B*B*(1-B)<s and b0>q(1,2) and B-s/(1-b0)==q(11,25)
+    assert (b0-a0)*q(11,25)+(B-2*a0)*(1-b0)==q(427687,968000)<rho
+    assert (1-a0)*(B-a0)==q(2681309,3872000)<rho
+    assert B-2*a0-a0*a0==q(509143,774400)<rho
+    text=Path(__file__).with_name('C1_TWO_LOWER_BOTH_SIDES.md').read_text()
+    assert len(re.findall(r'^### Leaf ',text,re.M))==22
+    trace=re.findall(r'^```c1bs-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) for t in trace)==379
+    terms=re.findall(r'^```c1bs-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(terms)==20 and sum(len(re.split(r';\s*|\n',t.strip())) for t in terms)==5473
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==20 and max(bounds)==q(-337185459,22000000000)<0
+    print('PASS: complete C1 two-lower/both-side base caps, twenty fixed cubics and exhaustive leaf inventory')
+
+
+def n6_side_pair_opposite():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);alpha=q(1037,10000);K=q(149,20)
+    assert alpha*(1-alpha)<s
+    assert K*s/(1-alpha)==q(13857,17926) and 4*s/(1-alpha)==q(3720,8963)
+    b,c,e,f,h,u,v,j,k=sp.symbols('b c e f h u v j k')
+    zero(2*area(sp.Matrix([b,0]),sp.Matrix([u,v]),sp.Matrix([1,e]))-e*(u-b)+(1-b)*v)
+    zero(2*area(sp.Matrix([b,0]),sp.Matrix([u,v]),sp.Matrix([j,k]))-(u-b)*(k-v)-v*(u-j))
+    zero(2*area(sp.Matrix([u,v]),sp.Matrix([1,e]),sp.Matrix([j,k]))-(1-u)*(k-v)-(e-v)*(u-j))
+    text=Path(__file__).with_name('N6_SIDE_PAIR_OPPOSITE.md').read_text()
+    rows=re.search(r'```n6-pair-opposite-sum\n(.*?)```',text,re.S)[1].strip().splitlines()
+    assert len(rows)==71 and max(int(row.split()[0]) for row in rows)==660
+    assert q(-15204842926825328247858740588434993,5372569601199369131210000000000000)<0
+    print('PASS: nine-point N6 side-pair/opposite-cap box, pentagon identities and complete fixed-sum inventory')
+
+
+def quadrilateral_support():
+    q=sp.Rational
+    cx,cy,dx,dy=sp.symbols('cx cy dx dy')
+    A=sp.Matrix([0,0]);B=sp.Matrix([1,0]);C=sp.Matrix([cx,cy]);D=sp.Matrix([dx,dy])
+    X=2*area(A,B,C);Y=2*area(A,B,D);Z=2*area(A,C,D);delta=Y-Z
+    zero(delta-X+2*area(B,C,D))
+    for expr in A+X/delta*(D-A)-B-Y/delta*(C-B):zero(expr)
+    zero(2*area(A,B,A+X/delta*(D-A))-X*Y/delta)
+    assert q(69,40)**2<3 and q(299,31)>9
+    assert q(139,10)==7+4*q(69,40) and q(199,10)==13+4*q(69,40) and q(149,5)==16+8*q(69,40)
+    print('PASS: universal occupied-quadrilateral support rays, exact area quotient and all rational occupancy costs')
+
+
+def n7_bottom_span_cap():
+    q=sp.Rational;s=q(93,1000);T0=q(13857,20000)
+    T,Q,M,z=sp.symbols('T Q M z');D=T/(1-s);M0=s*D/(T-s)
+    F=T*(Q*(1+M)-1)*(1-Q*(D+M))-s*Q*M*(1-Q*M)
+    zero(sp.diff(F,M)-Q*((2*T-s)-Q*(T*(1+D)+2*(T-s)*M)))
+    A=T*T*(T+s*s)/((T-s)*(1-s)**2);B=T*(T*T+T-s)/((T-s)*(1-s))
+    zero(F.subs(M,M0)+A*Q*Q-B*Q+T)
+    N=-T**4+2*T**3+(4*s*s-2*s-1)*T*T+(2*s-4*s**3)*T-s*s
+    zero(4*A*T-B*B-T*T*N/((1-s)**2*(T-s)**2))
+    p=sp.Poly(N.subs(T,T0+z),z)
+    assert p.coeff_monomial(1)>0 and p.coeff_monomial(z*z)>0
+    assert p.coeff_monomial(z)+p.coeff_monomial(z**3)/16+p.coeff_monomial(z**4)/64==q(146610634607,2000000000000)>0
+    assert 0<1-s-T0<q(1,4)
+    print('PASS: uniform N7 bottom-span capacity-one contact triangle and exact positive quartic discriminant')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1815,3 +1880,7 @@ if __name__ == "__main__":
     one_lower_point()
     c1_side_pair_opposite_top()
     adjacent_133_nontriangular_cell_iii()
+    c1_two_lower_both_sides()
+    n6_side_pair_opposite()
+    quadrilateral_support()
+    n7_bottom_span_cap()

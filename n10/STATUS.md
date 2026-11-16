@@ -566,6 +566,30 @@ Separate Fraction and SymPy expansions pass; the largest bound is
 -693228701/25000000000. Only support cell II remains for the entire
 Type-II parent. The global algebra checker now has 63 passing groups.
 
+The entire C1 count (2,1,1,0,1) is now closed in
+C1_TWO_LOWER_BOTH_SIDES.md. Its three roots and 19 refinements give
+20 fixed cubics with 5,473 printed terms and two mesh contradictions.
+Independent geometry checks all 379 deductions, 46 conditional box
+steps and 14,605 factor occurrences; separate Fraction and SymPy
+expansions pass. C1 now has 21 remaining exterior rows.
+
+N6_SIDE_PAIR_OPPOSITE.md gives a nine-point theorem excluding a side
+pair with an opposite-side point, irrespective of the tenth point.
+Its one 71-term cubic has maximum weight 660. Independent geometry
+checks the complete box, both actual convex pentagons and all factor
+premises; separate exact readers agree on the strict negative bound.
+This closes three more N6 count rows, leaving nineteen with k=0 or
+k=1 up to transposition.
+
+Two further reusable geometric reductions are proved and independently
+checked. QUADRILATERAL_SUPPORT.md supplies support-ray inequalities
+for one or two actual occupants, including stronger overlapping-ear
+and central-pair costs, with both signs of the support denominator
+handled. N7_BOTTOM_SPAN_CAP.md proves the contact-only capacity-one
+bound [BCE]<(149/20)s by a positive quartic discriminant argument.
+Neither local reduction is counted as closure of the remaining N7
+family. The global algebra checker now has 67 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

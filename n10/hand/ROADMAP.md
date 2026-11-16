@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 50.
+Checkpoint 51.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -290,7 +290,13 @@ four-corner alternative and all zero-area faces.
         an explicit cubic contact-box bound and three determinant
         inequalities. The final area is below .04709<s.
         Proof: C1_SIDE_PAIR_OPPOSITE_TOP.md.
-  - [ ] C1-EXTERIOR. Exclude the remaining 22 exterior count rows
+  - [x] C1-TWO-LOWER-BOTH-SIDES. The entire count (2,1,1,0,1):
+        three angular roots, 19 binary refinements, 20 cubics with
+        5,473 terms and two geometric exclusions. All 379 deductions,
+        46 conditional box steps and every factor have an independent
+        geometry audit; separate Fraction/SymPy expansions pass.
+        Proof: C1_TWO_LOWER_BOTH_SIDES.md.
+  - [ ] C1-EXTERIOR. Exclude the remaining 21 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -358,6 +364,19 @@ four-corner alternative and all zero-area faces.
         have exact cubic contact inequalities. This is a local
         reduction, not a closure of the one-lower family.
         Proof: ONE_LOWER_POINT.md, also applicable in N7.
+  - [x] N6-SIDE-PAIR-OPPOSITE. A side pair excludes the opposite cap.
+        A nine-point theorem, with a single fixed cubic of 71 terms,
+        closes (0,0,2,1,1), (0,1,2,0,1), (1,0,2,0,1) and reflections.
+        All boxes, actual convex pentagons and conditional factors
+        have independent geometry and Fraction/SymPy audits.
+        Proof: N6_SIDE_PAIR_OPPOSITE.md.
+  - [x] OCCUPIED-QUADRILATERAL-SUPPORT. Universal polynomial support
+        inequalities for one or two actual occupants, including all
+        overlapping opposite-ear counts and the central-pair cost.
+        Both signs of the support denominator and all sixteen contact
+        cubics are proved. This reusable local lemma is a reduction,
+        not a closure of a remaining placement family.
+        Proof: QUADRILATERAL_SUPPORT.md, also applicable in N7 and C1.
   - [ ] Complete all surviving exterior-cap placements with k=0 or k=1
         outside the two stated projection chambers.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
@@ -470,6 +489,11 @@ four-corner alternative and all zero-area faces.
         357 quadrilateral, eleven spread and 250 convex-five factor
         occurrences have independent geometry and Fraction/SymPy audits.
         Proof: N7_HEPTAGON_TWO_UPPER_EAR.md.
+  - [x] N7-BOTTOM-SPAN-CAP. The actual triangle BCE has capacity one
+        for every permitted seven-contact configuration. Five actual
+        clearances reduce to a concave quadratic and an explicitly
+        positive quartic, proving [BCE]<(149/20)s.
+        Proof: N7_BOTTOM_SPAN_CAP.md.
   - [ ] N7-INTERIOR-REMAINDER. Exclude the sole remaining all-interior
         heptagon count (k,j,q)=(1,2,0).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
@@ -625,6 +649,10 @@ strictly interior points in N6 and N7 requires a separate argument.
 | ONE_LOWER_POINT.md | Four exhaustive local alternatives for one point in HABC, including both central contact-order cubics and the impossible double-ear cell |
 | C1_SIDE_PAIR_OPPOSITE_TOP.md | A side pair, opposite side point and top point are incompatible; two complete count rows close by a cubic box and direct determinant inequalities |
 | TYPE_II_133_CELL_III.md | Complete third nontriangular support cell: sixty roots, five refinements, 65 leaves, 2,012 deductions, 38 cubics / 1,117 terms and 27 geometric exclusions; only cell II remains |
+| C1_TWO_LOWER_BOTH_SIDES.md | Entire (2,1,1,0,1) count: three roots, 19 refinements, 20 cubics / 5,473 terms, two mesh contradictions and 379 deductions |
+| N6_SIDE_PAIR_OPPOSITE.md | A nine-point, 71-term contradiction excludes every side pair with an opposite-side point, closing three complete exterior count rows |
+| QUADRILATERAL_SUPPORT.md | Universal actual-quadrilateral support inequalities with one/two occupants, overlapping opposite-ear costs, central-pair cost and sixteen contact cubics |
+| N7_BOTTOM_SPAN_CAP.md | Uniform actual BCE capacity one, from five contact clearances and a strict positive quartic discriminant bound |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

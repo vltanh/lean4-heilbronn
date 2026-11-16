@@ -115,6 +115,9 @@ collinear triple, so these exclusions omit no positive-minimum face.
 N6_SIDE_PAIR_REDUCTION.md further proves that every side pair has a
 triangular actual cap hull and the stronger Gamma2 endpoint cost.
 In particular (r,t,l)=(2,2,0) and its reflection are impossible.
+N6_SIDE_PAIR_OPPOSITE.md then excludes every side pair together
+with any opposite-side point, independently of the tenth point.
+Thus r=2 forces l=0, and l=2 forces r=0.
 The entire k=2 family is now closed in N6_TWO_LOWER_COMPLETE.md.
 Surviving exterior placements with k=0 or k=1 remain separate
 obligations in ROADMAP.md.
