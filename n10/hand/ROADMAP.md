@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 62.
+Checkpoint 63.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -473,6 +473,10 @@ four-corner alternative and all zero-area faces.
         label maps preserve the residual top-word groups and permit
         e<=f. Exact square gaps give a,e<.168 in the triangular or
         single-ear cases and a,e<.264 in the central quadrilateral.
+        Four actual anchor triangles are empty in every normalized
+        row, and four more in the stronger rows; their capacity-zero
+        deductions give three or six forced signs for the fourth
+        free point. Both counts and all six label maps are checked.
         Proof: N6_TOP_TRIPLE_TRANSPOSE.md. This is a normalization,
         not an additional count closure.
   - [x] SIDE-PAIR-TOP-BOUNDS. An occupied top cap gives the uniform
@@ -482,6 +486,11 @@ four-corner alternative and all zero-area faces.
         virtual-corner transfer to N6 uses two explicit actual-area
         comparisons and gives outer coordinates p>.858, q<.453,
         with the stronger inner barycentric weights greater than 8/35.
+        Retaining the actual bottom-contact clearance strengthens this
+        to p>.920, c<.609, q>930/5053 and inner weights greater than
+        5/19. Two exact square comparisons and a concave quadratic
+        prove these bounds, with four explicit affine remainder
+        identities and an independent geometry audit.
         Proof: C1_SIDE_PAIR_TOP_BOUNDS.md. This is a shared local
         reduction, not a new C1 or N6 count closure.
   - [x] OCCUPIED-QUADRILATERAL-SUPPORT. Universal polynomial support

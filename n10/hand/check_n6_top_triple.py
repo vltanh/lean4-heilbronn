@@ -38,6 +38,8 @@ def verify(path):
  source_path=Path(path)
  blocks=parse_blocks(source_path.read_text())
  def block(name):return blocks['n6-top-'+name]
+ normalized_word=blocks.get('n6-top-normalized','0');assert normalized_word in('0','1')
+ normalized=normalized_word=='1'
  roots=[tuple(line.split()) for line in block('roots').splitlines()]
  assert len(set(roots))==len(roots) and all(loc in('BTTT','ITTT') and len(word)==4 and set(word)<={'+','-'} for loc,word in roots)
  rows=[];byroot={root:[] for root in roots}
@@ -48,7 +50,7 @@ def verify(path):
  assert len({row[0] for row in rows})==len(rows)
  totals=Counter(roots=len(roots),splits=sum(check_paths(paths) for paths in byroot.values()))
  for ident,loc,word,kind,path0 in rows:
-  g.set_locations(loc);known=g.initial('below' if loc=='BTTT' else 'above');order=None
+  g.set_locations(loc,normalized=normalized);known=g.initial('below' if loc=='BTTT' else 'above');order=None
   for triangle,sign in zip(('FQR','FQS','FRS','QRS'),word):g.put(known,triangle,1 if sign=='+' else -1)
   for token in path0:
    if token.startswith('ORDER'):assert order is None;order=token[-1]
@@ -68,9 +70,10 @@ def verify(path):
   for line in block(ident+'-box').splitlines():
    key,*values=line.split();assert key not in metadata;metadata[key]=values
   version=int(metadata['version'][0]);floor=F(metadata['floor'][0]);top=F(metadata['top_cost'][0]);central=metadata['central']==['1']
-  assert metadata['central'] in (['0'],['1']) and version in(1,2,3)
+  assert metadata['central'] in (['0'],['1']) and version in(1,2,3,4,5)
+  assert version<4 or normalized
   lo=list(map(F,metadata['low']));hi=list(map(F,metadata['high']));startlo=list(map(F,metadata['initial_low']));starthi=list(map(F,metadata['initial_high']))
-  assert a.box(min(version,2),loc,known,floor,top,central)==(startlo,starthi)
+  assert a.box(4 if version>=4 else min(version,2),loc,known,floor,top,central)==(startlo,starthi)
   assert len(lo)==len(hi)==a.N and all(0<ll<=hh<=1 for ll,hh in zip(lo,hi))
   witnesses={};rates={};squares={}
   for mode,target in [('witnesses',witnesses),('rates',rates),('squares',squares)]:
@@ -81,10 +84,10 @@ def verify(path):
     if mode=='witnesses':assert len(values)==1;target[name]='' if values==['-'] else values[0]
     elif mode=='rates':assert len(values)==1;target[name]=F(values[0])
     else:assert len(values)==a.N+1;target[name]=list(map(int,values))
-  ctx=a.Context(loc,known,lo,hi,floor,top,order,squares,witnesses,rates)
+  ctx=a.Context(loc,known,lo,hi,floor,top,order,squares,witnesses,rates,normalized=normalized)
   used=set();tracebody=block(ident+'-intervals');intervals=[] if tracebody=='none' else [json.loads(line) for line in tracebody.splitlines()]
   contradiction=None if kind=='P' else json.loads(block(ident+'-terminal'))
-  if version<3:assert intervals==[] and contradiction is None and (lo,hi)==(startlo,starthi)
+  if version in(1,2,4):assert intervals==[] and contradiction is None and (lo,hi)==(startlo,starthi)
   else:
    factor_names={step['factor'] for step in intervals}
    if contradiction:factor_names.add(contradiction['factor'])

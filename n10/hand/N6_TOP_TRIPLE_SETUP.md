@@ -218,6 +218,28 @@ use a printed box containing the exact refined interval. A zero-width
 coordinate may be enlarged within the initial box; this weakening is
 also checked explicitly.
 
+For the residual normalization e<=f proved in
+N6_TOP_TRIPLE_TRANSPOSE.md, version 4 means the version-2 box with
+the additional a,e ceiling .168 in a strong top row or .264 in the
+central top row, followed by c>=alpha+s/a_hi and
+h>=alpha+s/b_hi. Version 5 applies the same exact interval procedure
+to that version-4 initial box. A manuscript using either version must
+explicitly declare the residual normalization. Earlier unconditional
+versions may still be used within that normalized proof.
+
+The additional affine factor Sym_fe is f-e and requires that declared
+normalization. For any printed positive coordinate ceilings a_hi,b_hi,
+the actual ABC and ABH clearances also give the nonnegative affine
+factors Span_cb=c-b-s/a_hi and Span_ha=h-a-s/b_hi. The ceiling in
+each such factor is its leaf's printed final coordinate ceiling.
+
+The optional `empty ABC X IJ` trace rule uses only the uniform static
+empty-anchor list of N6_TOP_TRIPLE_TRANSPOSE.md, Section 3. The
+actual triangle ABC is positive, and X has both inward edge tests
+other than IJ; emptiness forces IJX<0. A fully occupied triangle on
+that static list is a direct geometric contradiction. These caps do
+not depend on any later interval refinement.
+
 ## 3. Exact geometric inference rules
 
 The anchor order ABCEFH is strictly convex. The initial signs are all

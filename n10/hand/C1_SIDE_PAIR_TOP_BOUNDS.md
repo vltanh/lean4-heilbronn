@@ -248,5 +248,122 @@ These strengthened factors use the N6 fact \(hc\ge4s\).
 The more general inequalities (9) remain valid without that added
 hypothesis.
 
+## 6. Sharper N6 bounds from the actual bottom contact
+
+The N6 transfer retains the stronger actual clearance
+\((c-\beta)q\ge s\), which gives a further improvement over (10).
+Put \(\epsilon=1037/10000\). Both lower contact coordinates
+\(\alpha,\beta\) exceed \(\epsilon\): the actual anchor areas are
+\(\alpha(c-\beta),\beta(h-\alpha)\ge s\). If
+\(z=\min(\alpha,\beta)\), one of these is at most \(z(1-z)\).
+For \(0\le z\le\epsilon<1/2\), this is at most
+\(\epsilon(1-\epsilon)=9294631/10^8<s\), a contradiction.
+
+Write \(L=1-\beta\), \(x=c-\beta>0\). The endpoint cost in
+Section 5 gives \(dL\ge(4+2\sqrt3)s\), so
+\(aL>s\). The actual side-pair area satisfies
+
+\[
+\begin{aligned}
+ U&=d(p-c)-(1-c)q\ge3s,\\
+ p&>c+\frac{3s}{a}+\frac{s(1-c)}{a(c-\beta)}
+   =\beta+\frac{2s}{a}+x+\frac{sL}{ax}\\
+  &\ge\beta+\frac{2s}{a}+2\sqrt{\frac{s(1-\beta)}a}.
+\end{aligned}
+\tag{11}
+\]
+
+The last expression increases with \(\beta\) wherever
+\(a(1-\beta)>s\), since its derivative is
+\(1-\sqrt{s/[a(1-\beta)]}>0\). Substituting
+\(\beta\ge\epsilon\) therefore proves \(p>23/25=.920\).
+The exact square comparison is
+
+\[
+ \frac{4s(1-\epsilon)}a
+ -\left(\frac{23}{25}-\epsilon-\frac{2s}a\right)^2
+ =\frac{8038656831}{8940100000000}>0,
+\]
+
+and the expression being squared is positive.
+
+The same clearance, with \(p\le1\), gives
+
+\[
+\begin{aligned}
+ U&<(1-c)\left(a-\frac{s}{c-\beta}\right)\\
+   &=(L-x)(a-s/x)
+     =aL+s-ax-sL/x\\
+   &\le aL+s-2\sqrt{asL}\\
+   &\le a(1-\epsilon)+s-2\sqrt{as(1-\epsilon)}
+     <\frac{19}{5}s.
+\end{aligned}
+\tag{12}
+\]
+
+For the penultimate inequality, the function of \(L\) has derivative
+\(a-\sqrt{as/L}>0\) on \(aL>s\), and
+\(L\le1-\epsilon\). For the last, both sides of the required
+square-root comparison are positive and
+
+\[
+ 4as(1-\epsilon)
+ -\left(a(1-\epsilon)+s-\frac{19}{5}s\right)^2
+ =\frac{360055692279}{10^{14}}>0.
+\]
+
+Consequently all three barycentric weights of the actual inner point
+\(Q\) in \(CDP\) exceed \(5/19\). Their remainders sum to
+\(4/19\), so the following four affine inequalities hold:
+
+\[
+\begin{aligned}
+ 19l&\ge9c+5+5p,&19l&\le5c+5p+9,\\
+ 19m&\ge5d+5q,&19m&\le9d+5q.
+\end{aligned}
+\tag{13}
+\]
+
+There is also a tighter bottom-contact ceiling. Multiplying the
+side-pair inequality and the actual bottom clearance gives
+
+\[
+ d(c-\beta)(1-c)-s\{3(c-\beta)+1-c\}\ge0.
+\tag{14}
+\]
+
+Indeed before replacing \(p\) by 1, the left side is the sum
+\((c-\beta)(U-3s)+(1-c)((c-\beta)q-s)\).
+Moreover \(d(1-c)>3s\). Reducing \(\beta\) to \(\epsilon\)
+and increasing \(d\) to \(a\) only increases the expression in
+(14). Hence
+
+\[
+ g(c):=a(c-\epsilon)(1-c)
+       -s\{3(c-\epsilon)+1-c\}\ge0.
+\]
+
+At \(c_0=609/1000\), the exact values are
+
+\[
+ g(c_0)=-\frac{1193469}{10^{10}}<0,\qquad
+ g'(c_0)=-\frac{2885271}{10^7}<0.
+\]
+
+Since \(g''=-2a<0\), these exclude every \(c\ge c_0\).
+It follows that
+
+\[
+ c<\frac{609}{1000},\qquad
+ q>\frac{s}{609/1000-\epsilon}=\frac{930}{5053}.
+\tag{15}
+\]
+
+Equations (11)--(15) use actual N6 anchor clearances and the actual
+side-pair triangle. They require an occupied top cap, but do not
+require any placement for the fourth free point. Their reflected
+versions follow by interchanging the two coordinates. The previously
+proved weaker bounds remain available for older printed sums.
+
 The companion [check_c1_side_pair_top_bounds.py](check_c1_side_pair_top_bounds.py)
 checks the displayed identities and rational comparisons exactly.

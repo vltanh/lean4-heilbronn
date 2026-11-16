@@ -2172,6 +2172,12 @@ def n6_bttt_top_ears():
     print('PASS: complete N6 BTTT single-ear top words, both exhaustive trees and exact transposition ceilings')
 
 
+def n6_top_transpose():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_n6_top_triple_transpose.py')))
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -2257,3 +2263,4 @@ if __name__ == "__main__":
     c1_one_lower_side_pair_top()
     c1_two_lower_central_side_top()
     n6_bttt_top_ears()
+    n6_top_transpose()

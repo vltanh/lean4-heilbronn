@@ -7,8 +7,10 @@ ANCHORS='ABCEFH'
 HALVES={}
 BASE_HULLS={}
 LOCATIONS='BIRL'
-def set_locations(locations):
- global LOCATIONS
+NORMALIZED=False
+def set_locations(locations,normalized=False):
+ global LOCATIONS,NORMALIZED
+ NORMALIZED=normalized
  assert len(locations)==4 and set(locations)<=set('BIRTL')
  assert locations.count('B')<=1 and locations.count('I')<=2
  LOCATIONS=locations
@@ -80,9 +82,25 @@ def mesh_patterns(known,outer,points):
   if all(not known.get(tr) or known[tr]==sg for tr,sg in signs.items()):patterns.append(signs)
  return patterns
 
+def empty_anchor_triangles(known):
+ if not NORMALIZED:return ()
+ # N6_TOP_TRIPLE_TRANSPOSE: a,e<=.264<3s in every remaining top word.
+ answer=('ABC','ABE','ACE','BCE')
+ word=''.join('+' if get(known,tr)>0 else '-' for tr in ['FQR','FQS','FRS','QRS'])
+ if word in ('----','---+','--+-','-++-','++-+'):
+  # Here f,b<=1-(K*s)/(1-alpha)<3s; AFH and BFH are also <=f.
+  answer+=('ABF','ABH','AFH','BFH')
+ return answer
+
 def replay(known,step):
  kind,*args=step
- if kind=='mesh':
+ if kind=='empty':
+  hull,point,edge=args
+  assert hull in empty_anchor_triangles(known) and get(known,hull)==1
+  assert point not in hull and edge in [a+b for a,b in zip(hull,hull[1:]+hull[:1])]
+  assert all(get(known,a+b+point)==1 for a,b in zip(hull,hull[1:]+hull[:1]) if a+b!=edge)
+  put(known,edge+point,-1)
+ elif kind=='mesh':
   outer,points,word,sg=args;sg=int(sg);patterns=mesh_patterns(known,outer,points)
   key,e=canonical(word,sg)
   assert patterns and all(row.get(key)==e for row in patterns)
@@ -126,7 +144,9 @@ def replay(known,step):
 
 def check_exclusion(known,witness):
  kind,*args=witness
- if kind=='given':
+ if kind=='emptycap':
+  hull,point=args;assert hull in empty_anchor_triangles(known) and point not in hull and inside(known,hull,point)
+ elif kind=='given':
   word,sg=args;assert get(known,word)==-int(sg)
  elif kind=='plubad':
   _,values=pluecker_products(known,args[0]);assert all(values) and len(set(values))==1

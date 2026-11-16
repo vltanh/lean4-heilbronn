@@ -46,3 +46,27 @@ for left,right in identities:assert q.expand(left-right)==0
 print('PASS: top-contact ceiling, side-pair interval, outer-point bounds,')
 print('inner 2/9 and N6 8/35 barycentric bounds, four remainder identities,')
 print('and exact threshold constants.')
+
+epsilon=R(1037,10000)
+assert epsilon*(1-epsilon)==R(9294631,100000000)<s
+beta,x,L=q.symbols('beta x L',positive=True)
+assert q.simplify(c+3*s/a+s*(1-c)/(a*(c-beta))-(beta+2*s/a+(c-beta)+s*(1-beta)/(a*(c-beta))))==0
+assert R(23,25)-epsilon-2*s/a>0
+assert 4*s*(1-epsilon)/a-(R(23,25)-epsilon-2*s/a)**2==R(8038656831,8940100000000)>0
+assert q.expand((L-x)*(a-s/x)-(a*L+s-a*x-s*L/x))==0
+assert a*(1-epsilon)+s-R(19,5)*s>0
+assert 4*a*s*(1-epsilon)-(a*(1-epsilon)+s-R(19,5)*s)**2==R(360055692279,10**14)>0
+assert q.expand((c-beta)*(U-3*s)+(1-c)*((c-beta)*y-s)-(d*(c-beta)*(p-c)-s*(3*(c-beta)+1-c)))==0
+g1=a*(c-epsilon)*(1-c)-s*(3*(c-epsilon)+1-c)
+assert g1.subs(c,R(609,1000))==R(-1193469,10**10)<0
+assert q.diff(g1,c).subs(c,R(609,1000))==R(-2885271,10**7)<0
+assert s/(R(609,1000)-epsilon)==R(930,5053)
+eta_p=R(4,19)-eta_c-eta_d
+ll=(R(5,19)+eta_c)*c+(R(5,19)+eta_d)+(R(5,19)+eta_p)*p
+mm=(R(5,19)+eta_d)*d+(R(5,19)+eta_p)*y
+for left,right in [
+    (19*ll-9*c-5-5*p,19*((1-c)*eta_d+(p-c)*eta_p)),
+    (5*c+5*p+9-19*ll,19*((1-c)*eta_c+(1-p)*eta_p)),
+    (19*mm-5*d-5*y,19*(d*eta_d+y*eta_p)),
+    (9*d+5*y-19*mm,19*(d*eta_c+(d-y)*eta_p))]:assert q.expand(left-right)==0
+print('PASS: actual N6 bottom clearance gives outer p>.920, c<.609, and inner weights>5/19')

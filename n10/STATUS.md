@@ -765,6 +765,21 @@ audited. The remaining top words and the N6 parent stay unchecked;
 the seventeen remaining count rows are unchanged. The exact global
 algebra checker has 84 passing groups.
 
+The actual bottom contact sharpens the N6 side-pair/top bounds:
+C1_SIDE_PAIR_TOP_BOUNDS.md, Section 6 now proves outer p>.920,
+bottom contact c<.609, outer ordinate q>930/5053, and all three
+inner barycentric weights greater than 5/19. Two AM-GM estimates,
+their stated monotonicity domains, exact rational square comparisons
+and one concave quadratic supply the complete proof. The four new
+affine remainder inequalities are explicit and independently audited.
+The residual top-triple normalization also gives four empty actual
+anchor triangles in every row and eight in each stronger row, forcing
+three or six signs before any metric refinement. All six transposition
+maps in both counts, the exact capacity gaps, and the normalized
+trace/box guards have independent checks. These are local reductions;
+the remaining count totals are unchanged. The exact global algebra
+checker has 86 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

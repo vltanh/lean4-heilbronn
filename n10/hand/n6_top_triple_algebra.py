@@ -63,7 +63,7 @@ def top_model(known):
     return model
 
 def box(version,loc,known,floor,top_cost,central_box=False):
-    floor=F(floor);top_cost=F(top_cost);assert version in(1,2) and loc in('BTTT','ITTT')
+    floor=F(floor);top_cost=F(top_cost);assert version in(1,2,4) and loc in('BTTT','ITTT')
     model=top_model(known);proved_top=(G5 if model[-1]=='II' else K)*S
     assert top_cost in(F(29,5)*S,K*S) and top_cost<=proved_top
     lower_max=4*S if loc=='ITTT' else (K if get(known,'ACP')<0 or get(known,'HBP')<0 else G5)*S
@@ -71,7 +71,7 @@ def box(version,loc,known,floor,top_cost,central_box=False):
     delta=S/(1-ALPHA);cap=1-top_cost/(1-S)
     low=[ALPHA,ALPHA,floor,ALPHA,ALPHA,floor]+[delta]*2+[ALPHA+S]*6
     high=[cap,cap,F(1),cap,cap,F(1)]+[1-S]*2+[F(1)]*6
-    if version==2:
+    if version in(2,4):
         top_strong=max(top_cost,G5*S);contact=1-top_strong/(1-ALPHA)
         lower_strong=max(floor,G5*S) if loc=='BTTT' else floor
         for i in[0,1,3,4]:high[i]=contact
@@ -89,12 +89,17 @@ def box(version,loc,known,floor,top_cost,central_box=False):
             for tt in others:
                 jj=6+2*'PQRS'.index(tt)
                 high[jj]=min(high[jj],1-delta);high[jj+1]=min(high[jj+1],1-delta)
+    if version==4:
+        ceiling=F(33,125) if model[-1]=='II' else F(21,125)
+        high[0]=min(high[0],ceiling);high[3]=min(high[3],ceiling)
+        low[2]=max(low[2],ALPHA+S/high[0]);low[5]=max(low[5],ALPHA+S/high[1])
     assert all(0<ll<hh<=1 for ll,hh in zip(low,high))
     return low,high
 
 class Context:
-    def __init__(self,loc,known,low,high,floor,top_cost,order=None,squares=None,witnesses=None,rates=None):
+    def __init__(self,loc,known,low,high,floor,top_cost,order=None,squares=None,witnesses=None,rates=None,normalized=False):
         self.loc=loc;self.known=known;self.low=list(map(F,low));self.high=list(map(F,high))
+        self.normalized=normalized
         self.floor=F(floor);self.top_cost=F(top_cost);self.order=order
         self.squares=squares or {};self.witnesses=witnesses;self.rates=rates if rates is not None else {};self.cache={}
     def witnesses_for(self,name,hull,count=None):
@@ -131,6 +136,10 @@ class Context:
         if re.fullmatch(r'L\d+',name):
             ii=int(name[1:]);assert 0<=ii<2*N
             return sub(VS[ii//2],C(low[ii//2])) if ii%2==0 else sub(C(high[ii//2]),VS[ii//2])
+        if name=='Span_cb':return add(sub(c,b),C(-S/high[0]))
+        if name=='Span_ha':return add(sub(h,a),C(-S/high[1]))
+        if name=='Sym_fe':
+            assert self.normalized;return sub(f,e)
         if name in('ha','ea','he','fb','cf'):
             return {'ha':sub(h,a),'ea':sub(e,a),'he':sub(h,e),'fb':sub(f,b),'cf':sub(c,f)}[name]
         if name.startswith('T_'):

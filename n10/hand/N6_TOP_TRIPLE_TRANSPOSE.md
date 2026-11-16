@@ -105,3 +105,46 @@ These replacements may be combined with the version-2 bounds of
 the setup before exact multiaffine interval refinement. They are
 continuous inequalities on the whole normalized group; no coordinate
 subdivision or unprinted sign choice is involved.
+
+## 3. Empty actual anchor triangles and forced signs
+
+The normalized bounds also give exact geometric information before
+any polynomial case analysis. The anchor-cap identities in
+N6_TOP_TRIPLE_SETUP.md show that ABC,ABE,ACE,BCE have area at most
+a,e,e,e respectively. By Section 2 these areas are all at most
+33/125<3s. Therefore none of these four actual triangles contains
+another actual point: an actual interior point would split it into
+three actual triangles, each of area at least s.
+
+In a triangular or single-ear top row, the stronger top cost and
+e>=alpha give
+
+    b<=f<=1-[(149/20)s]/(1-alpha)=4069/17926<3s,
+    3s-4069/17926=466177/8963000>0.
+
+ABF,ABH,AFH,BFH have area at most f,b,f,f, respectively, so all
+four are empty as well. Thus the complete static empty-cap lists are
+
+| Top type | Empty actual anchor triangles |
+|---|---|
+| Every normalized remaining type | ABC, ABE, ACE, BCE |
+| Triangular or single-ear type, additionally | ABF, ABH, AFH, BFH |
+
+The actual point P is inside the anchor hexagon in both BTTT and
+ITTT. Its hexagon edge tests and these empty triangles force
+
+    ACP>0, AEP>0, BEP>0                           (all top types),
+    HBP>0, AFP<0, BFP<0                          (strong top types).
+
+For example, P has the positive AB and BC tests of ABC, so emptiness
+forces CAP<0, which is ACP>0. Its positive AC and CE tests then force
+EAP<0 in ACE, giving AEP>0. Similarly BCE gives BEP>0. For a strong
+row, ABH gives HBP>0, AFH gives AFP<0, and the positive FH and HB
+tests then force BFP<0 in BFH.
+
+These deductions can be replayed as the following finite rule. For
+an actual positive triangle ABC in the applicable static list, a point
+X with two known positive edge tests must have a negative third edge
+test. If all three tests are already positive, the case is impossible.
+The cap list is proved uniformly before the sign trace or any interval
+refinement, so no later coordinate bound is used circularly.
