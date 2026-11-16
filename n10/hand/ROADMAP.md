@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 22.
+Checkpoint 23.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -123,6 +123,10 @@ four-corner alternative and all zero-area faces.
 
 ### Other corner and corner-free families
 
+- [x] GLOBAL-Q3. In the original unit square at doubled minimum sigma,
+      every actual quadrilateral containing three further points has
+      doubled area greater than 93/91. Ten exhaustive geometric rows
+      have 153 printed integer entries. Proof: SQUARE_QUADRILATERAL_THREE.md.
 - [x] HP11-C2. Exclude the complete normalized two-opposite-corner family.
       The exhaustive half-cell catalogue has all four subfamilies closed;
       OPPOSITE_CORNERS.md, Section 10 assembles them and covers boundary faces.
@@ -325,6 +329,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N8_BOUNDARY_RANGES.md | Stronger uniform coordinate ranges and four definite contact-overlap bounds from the eight ears alone |
 | QUADRILATERAL_SPREAD.md | Two-diagonal spread bound 1-6t for t>=1/11, threshold-free bound 1-(3+2sqrt(2))t, and explicit N8 applications |
 | QUADRILATERAL_THREE.md | Any actual quadrilateral of doubled area at most one has capacity two at sigma; nine exhaustive rows, 139 printed integer entries |
+| SQUARE_QUADRILATERAL_THREE.md | Stronger unit-square capacity two up to doubled area 93/91; ten geometric rows, 153 printed integer entries |
 | N6_PLACEMENTS.md | Exhaustive first placement reduction; exact six-anchor hull has a 2/2 free-point split |
 | N6_PROJECTED_CHAMBERS.md | Strict sharp bounds for both two-secondary omission-pair orbits; complete normalized N6 candidate neighborhoods |
 | N6_EXTERIOR_CUTS.md | Complete exclusions of side-cap triples, two points in each side cap, and a top triple plus a side-cap point |

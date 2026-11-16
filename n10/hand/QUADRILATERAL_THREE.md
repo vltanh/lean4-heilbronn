@@ -11,6 +11,11 @@ doubled area at most one cannot contain three further points in a
 configuration whose doubled minimum is at least sigma=93/1000.
 This is an affine theorem; the quadrilateral need not be a square.
 
+For actual points in the original unit square, the subsequent
+SQUARE_QUADRILATERAL_THREE.md strengthens the capacity-two area cutoff
+from one to 93/91 at the same minimum threshold sigma. That additional
+result uses the square hypothesis before affine normalization.
+
 The proof has nine exhaustive rows with 139 positive integer entries,
 all printed below. It uses the established triangle capacities, the
 clustered-triple exclusion, the one-interior-point quadrilateral bound,

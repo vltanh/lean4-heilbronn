@@ -189,6 +189,16 @@ six-point threshold is reusable elsewhere. Only the two mixed support
 pairs remain in that nontriangular child. The global algebra checker
 has 29 passing groups.
 
+The quadrilateral capacity now has a stronger form for actual points
+in the original square: at doubled minimum sigma=93/1000, every
+quadrilateral containing three further points has doubled area greater
+than 93/91. SQUARE_QUADRILATERAL_THREE.md supplies all ten geometric
+rows and 153 integer entries. Its clustered-triple premise is applied
+before affine rescaling; the smaller normalized threshold 91/1000 is
+then justified. The stronger mesh ear bounds and the subquadrilateral
+spread use have independent geometry audits, and separate Fraction and
+SymPy expansions reproduce all ten negative rational bounds.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
