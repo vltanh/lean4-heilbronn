@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 70.
+Checkpoint 71.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -596,6 +596,22 @@ four-corner alternative and all zero-area faces.
         requires geometry callbacks unless arithmetic-only mode is
         explicitly selected; actual geometry and complete branch coverage
         remain separate obligations.
+  - [x] SIDE-PAIR-AREA-REFINEMENTS. The actual outer side-pair point
+        satisfies [BCR]<(3/2)s in N6 and [OCR]<2s in C1. Four
+        explicit nonnegative determinant remainders retain the outer
+        area U in EFR, EHR, AER and BER; the signed four-area equality
+        gives |BER|=[BCE]+U-[BCR]. Independent geometry and exact
+        polynomial/square-gap checks pass.
+        Proof: SIDE_PAIR_AREA_REFINEMENTS.md. These bounds strengthen
+        the open side-pair counts without closing a whole count alone.
+  - [x] SIGNED-AREA-RELATIONS. The unconditional four-point linear
+        identity and six-label four-product identity give exact scalar
+        bounds with all signs, numerator cases and positive denominators
+        explicit. A convex actual quadrilateral with one actual interior
+        point has area at least (2+2sqrt(2))s>.449. Independent geometry,
+        fourteen polynomial identities, all 256 six-label sign conversions
+        and three positive square gaps are checked.
+        Proof: AREA_RELATIONS.md and check_area_relations.js.
   - [ ] Complete the remaining sixteen exterior-cap counts with k=0
         or k=1, outside the stated projection chambers. Counts below
         are (k,j,r,t,l), up to exchange of the two side caps:
@@ -958,6 +974,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_TOP_AFFINE_CAPS.md | Actual top-cap contact/apex affine upper bounds and inherited actual-container caps, with all determinant identities |
 | N6_TOP_WEIGHTED_BARYCENTRICS.md | Weighted actual top-fan bounds, every actual-line affine test, signed remainder-extrema interval bounds and explicit immutable weight witnesses |
 | N6_SIDE_PAIR_BOUNDS.md | Side-pair bounds without a top point: outer area below (11/3)s, inner weights above 3/11 and fan caps below (5/3)s; twelve positive Bernstein coefficients |
+| SIDE_PAIR_AREA_REFINEMENTS.md | Actual outer-side bottom caps (3/2)s in N6 and 2s in C1, four physical area comparisons and the retained four-area equality |
+| AREA_RELATIONS.md | Unconditional four-point linear and six-label four-product identities, exact positive-product interval rules and the stronger one-interior quadrilateral cost |
 | SCALAR_AREA_INTERVALS.md | Exact finite fan, signed-Pluecker, support and linear area rules, immutable rational dependency packets and an optional geometry-aware replay interface |
 | N6_TOP_PAIR_BARYCENTRIC_BOUNDS.md | Triangular top-pair weights above 1/9, strengthened to 3/17 by any side-cap point, and eight affine inequalities |
 | SIX_POINT_ENDPOINT_REFINED.md | Strict nontriangular six-point endpoint bound m<(125/1142)S, from the exhaustive support-cell catalogue |
