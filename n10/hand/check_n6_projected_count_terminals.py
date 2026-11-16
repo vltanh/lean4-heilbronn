@@ -11,6 +11,14 @@ def zero(expr):
 D=lambda word:det(points,word)
 zero(D('APQ')-D('EPQ')-((v-q)-(e-a)*(u-p)))
 zero(D('FPQ')-D('BPQ')-((u-p)-(f-b)*(v-q)))
+zero(-D('APQ')+D('EPQ')-((q-v)-(e-a)*(p-u)))
+zero(-D('FPQ')+D('BPQ')-((p-u)-(f-b)*(q-v)))
+swapped={new:points[old] for new,old in zip('ABCDEFGHOP','ABCREFSHQP')}
+for left,right,sg in [('AGH','ASH',1),('BCD','BCR',1),('CDE','CRE',1),
+                     ('FGH','FSH',1),('ADO','ARQ',1),('BGO','BSQ',1),
+                     ('CFP','CFP',1),('EHP','EHP',1),('AOP','APQ',-1),
+                     ('BOP','BPQ',-1),('EOP','EPQ',-1),('FOP','FPQ',-1)]:
+    zero(det(swapped,left)-sg*D(right))
 # Explicit mapping avoids an implicit cyclic shift in the twelve expressions.
 rotated={new:(points[old][1],1-points[old][0])
          for new,old in zip('ABCDEFGHOP','CERSFHABQP')}
@@ -24,4 +32,4 @@ zero(-D('HPQ')+D('EPQ')-((q-v)-(h-e)*(u-p)))
 U,V,alpha,beta=sp.symbols('U V alpha beta')
 zero(beta*(V-alpha*U)+(U-beta*V)-(1-alpha*beta)*U)
 zero((V-alpha*U)+alpha*(U-beta*V)-(1-alpha*beta)*V)
-print('PASS: both N6 count-terminal relabelings, all twelve rotated determinants and positive increments')
+print('PASS: all three N6 count-terminal mappings, twelve signed expressions and positive increments')

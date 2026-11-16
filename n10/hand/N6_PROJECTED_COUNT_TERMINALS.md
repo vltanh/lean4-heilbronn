@@ -1,4 +1,4 @@
-# The two sharp terminals in the six-contact count catalogue
+# Sharp projection terminals in the six-contact count catalogue
 
 Use the actual six contacts and five regions of N6_PLACEMENTS.md:
 
@@ -56,6 +56,35 @@ Hence U,V>0. Conditions (2) are precisely the two remaining coordinate
 hypotheses of that projection theorem. It projects R and S outward,
 preserves all twelve required lower bounds, and strictly increases
 two cap areas. Its equality argument proves m<A*.
+
+### The same terminal with two upper points
+
+The proof of Section 1 does not use the separate lower and upper
+locations of P,Q. It uses only that these two actual points are inside
+the square, the eight signs (1), and the two coordinate cuts (2).
+Consequently it also applies after interchanging two upper points.
+For the count with P,Q in HCEF and R,S in the right and left caps,
+respectively, the corresponding explicit terminal is
+
+    ARQ>0, BSQ<0, CFP>0, EHP>0,
+    APQ<0, BPQ>0, EPQ>0, FPQ<0,
+    u>=b, v>=a.                                      (3a)
+
+Use octagon labels A,B,C,R,E,F,S,H as before, but interior labels
+O,P equal to the actual Q,P. The four cap expressions are unchanged;
+the remaining eight expressions are ARQ,-BSQ,CFP,EHP and
+-APQ,BPQ,EPQ,-FPQ. Their positive increments are now
+U=p-u,V=q-v. Direct subtraction gives
+
+    -APQ+EPQ=V-(e-a)U>=2t,
+    -FPQ+BPQ=U-(f-b)V>=2t.
+
+The same two positive linear combinations prove U,V>0. The weak
+coordinate cuts in (3a) are exactly those for the actual Q, and the
+two strict inward depths still belong to R,S. Thus this entire
+two-upper/both-side sign chamber also has m<A*. No assumption about
+which side of HC contains the two interior labels enters the sharp
+twelve-expression projection theorem.
 
 ## 2. Two upper points and two top-cap points
 
@@ -125,7 +154,7 @@ two strictly increased cap areas exclude equality and prove m<A*.
 
 ## 3. Use in exhaustive trees
 
-A determinant split in either chamber is exhaustive because every
+A determinant split in any of the three chambers is exhaustive because every
 actual determinant is nonzero. A weak coordinate cut and its opposite
 weak cut cover their common equality face. A leaf may invoke this
 note only when every sign and both coordinate conditions in its

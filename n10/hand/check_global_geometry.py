@@ -2010,6 +2010,30 @@ def c1_one_lower_side_pair_top():
     print('PASS: complete C1 one-lower/central/side-pair/top count and 35-leaf inventory')
 
 
+def c1_two_lower_central_side_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000)
+    d,f,h=sp.symbols('d f h')
+    hdf=(1-h)-d*f+h*f
+    zero(f-d*f*f-s-f*(hdf-s)-(1-f)*(h*f-s))
+    assert q(299,31)*s==q(897,1000)
+    assert q(10,103)-q(897,1000)*q(10,103)**2-s==q(-46337,10609000)<0
+    text=Path(__file__).with_name('C1_TWO_LOWER_CENTRAL_SIDE_TOP.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==205 and len(re.findall(r'^### Leaf ',text,re.M))==211
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==5961
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==905
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==193 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==51388
+    assert len(re.findall(r'^Exclusion:',text,re.M))==18
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==193 and max(bounds)==q(-36973318349,18200000000000)<0
+    print('PASS: complete C1 two-lower/central/side/top count, six roots and shared-central endpoint terminal')
+
+
 def n6_corner_containers():
     q=sp.Rational;s=q(93,1000);J=q(4427,500)
     a,b,c,e,f,h,x,y=sp.symbols('a b c e f h x y')
@@ -2190,3 +2214,4 @@ if __name__ == "__main__":
     n7_one_lower_setup()
     n7_one_lower_abh()
     c1_one_lower_side_pair_top()
+    c1_two_lower_central_side_top()

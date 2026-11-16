@@ -731,6 +731,25 @@ Fourteen C1 exterior count rows remain. The N6 corner-container note
 now also proves all six cross-cap orientations by explicit determinant
 identities. The exact global algebra checker has 82 passing groups.
 
+C1_TWO_LOWER_CENTRAL_SIDE_TOP.md now excludes the entire count
+(2,1,1,1,0) and its transpose. All six angular orders after the one
+lower-fan reflection are covered by 205 splits and 211 leaves:
+193 cubics with 51,388 printed terms, ten clustered-triangle
+contradictions, seven shared-central endpoint contradictions and one
+five-point identity contradiction. The shared-central terminal uses
+the exact support-area threshold (299/31)s=.897 and the strict top
+contact ceiling. Independent geometry checks 5,961 deductions, 905
+interval updates and 131,221 factor occurrences. Independent Fraction
+and SymPy readers reproduce every bound, with largest value
+-36973318349/18200000000000. Thirteen C1 exterior count rows remain.
+The exact global algebra checker has 83 passing groups.
+The sharp N6 count-terminal note now also gives the explicit
+two-upper/both-side mapping. Its twelve required expressions and
+positive increments follow by interchanging the two interior labels;
+no lower-region hypothesis is needed. Independent geometry and exact
+symbolic identities check this third mapping. This is a sharp sign
+chamber terminal, not a closure of the entire count.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
