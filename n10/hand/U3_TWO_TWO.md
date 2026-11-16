@@ -12,8 +12,8 @@ or certificate generated at runtime is a premise. The optional checker
 rational arithmetic.
 
 The 4/0 and 0/4 splits are independently excluded in
-[U3_FOUR_ONE_SIDE.md](U3_FOUR_ONE_SIDE.md). The 3/1 split remains a separate
-obligation; the U3-DISTRIBUTED parent is not closed by this note alone.
+[U3_FOUR_ONE_SIDE.md](U3_FOUR_ONE_SIDE.md). U3_THREE_ONE.md excludes the 3/1 and 1/3 splits. Their complete
+assembly is in THREE_CORNERS_COMPLETE.md.
 
 Put
 

@@ -110,7 +110,7 @@ orientations. One violates a reciprocal-product bound; the other forces two
 opposed scalar inequalities whose minimum is strictly negative. Thus the
 entire C2 family is now closed, with boundary degeneracies covered explicitly.
 
-Five global obligations remain: III-3C-U3, II, C1, N6 and N7. HP14
+Four global obligations remain: II, C1, N6 and N7. HP14
 (assembly) and HP15 (final manuscript audit) depend on those obligations and remain unchecked. The
 computer-assisted completion above is not a substitute for these hand proofs.
 
@@ -119,8 +119,10 @@ excluded in full by seventeen printed cubic inequalities, and the entire
 N8 3/5 line class is excluded by ten. Both complete manuscripts include
 every positive integer coefficient and exact negative bound. The
 manuscript-reading Fraction checkers pass, as do independent SymPy
-expansions of all printed rows. U3 retains only 3/1 and its reflection;
-the complete asymmetric N8 theorem is now assembled in N8_COMPLETE.md.
+expansions of all printed rows. The final U3 3/1 split and its reflection
+are now excluded by twenty further printed cubic rows, with 1,392 integer
+entries. THREE_CORNERS_COMPLETE.md assembles the full III exclusion.
+The complete asymmetric N8 theorem is assembled in N8_COMPLETE.md.
 Its same-side 4/4 class is excluded by four contained-placement rows and
 thirteen outside-placement rows. Seven further rows exclude every
 oblique sign failure in the corner-edge 4/4 class. Together with the ten

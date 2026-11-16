@@ -202,7 +202,9 @@ three occupied corners. Hence the residual exact-three-corner classes are
 The four-corner alternative is fully excluded in FOUR_CORNERS.md. The stronger
 occupancy theorem excludes (4,3). THREE_CORNERS.md excludes (0,7), (1,6)
 and (2,5) by a complete seven-point endpoint theorem. Thus the only remaining
-exact-three-corner count is (3,4); its exclusion is still open.
+exact-three-corner count after those reductions is (3,4). Its clustered
+case and all distributed fan splits are now excluded in the proofs
+assembled by THREE_CORNERS_COMPLETE.md.
 
 ## 8. Conditional reversal of normalization: HP13
 
@@ -224,5 +226,5 @@ original maximizer was itself a square-symmetry image and relabeling of the
 candidate.
 
 This proves the reversal lemma conditionally. The global equality theorem
-still requires the unproved U3, II, C1, N6 and N7 exclusions. The complete
+still requires the unproved II, C1, N6 and N7 exclusions. The complete
 N8 argument is now supplied by N8_COMPLETE.md.

@@ -2,9 +2,9 @@
 
 This note excludes the complete distributed-upper family in which all
 four lower points lie on the same side of the line BY defined below.
-Both reflected alternatives, 4/0 and 0/4, are included. The other fan
-splits, 3/1 and 2/2, retain their own proof obligations; the parent
-U3-DISTRIBUTED family is not closed here.
+Both reflected alternatives, 4/0 and 0/4, are included. U3_TWO_TWO.md
+and U3_THREE_ONE.md supply the separate proofs of the other fan splits.
+THREE_CORNERS_COMPLETE.md assembles the complete III exclusion.
 
 The proof first reduces the lower five-point subset to six explicit
 convex-pentagon orders. Section 5 supplies one fixed cubic contradiction

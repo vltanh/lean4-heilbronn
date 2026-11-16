@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 15.
+Checkpoint 16.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -69,7 +69,8 @@ orientation restriction is now discharged by a complete two-case inequality.
 
 ### HP11-III: at least three occupied corners
 
-- [ ] HP11-III. Complete the entire at-least-three-corner family.
+- [x] HP11-III. Complete the entire at-least-three-corner family.
+      THREE_CORNERS_COMPLETE.md assembles every corner count and fan split.
   - [x] III-4C. Four occupied corners, all six other points unrestricted:
         m(P)<A*, since m(P)<=(sqrt(33)-5)/16<A*.
         Proof: FOUR_CORNERS.md. This is a complete global subfamily.
@@ -82,11 +83,11 @@ orientation restriction is now discharged by a complete two-case inequality.
         Proof: THREE_CORNERS.md, the same complete endpoint lemma.
   - [x] III-3C-U2. Exactly three corners: 2 upper and 5 lower free points.
         Proof: THREE_CORNERS.md, Sections 5–9, seven-point endpoint theorem.
-  - [ ] III-3C-U3. Exactly three corners: 3 upper and 4 lower free points.
+  - [x] III-3C-U3. Exactly three corners: 3 upper and 4 lower free points.
     - [x] U3-CLUSTERED. Some upper point has the other two in one fan
           triangle. The universal six-point theorem gives m<93/2000<A*,
           with all four lower points unrestricted. Proof: CLUSTERED_TRIANGLE.md.
-    - [ ] U3-DISTRIBUTED. At every upper point, the other two occupy
+    - [x] U3-DISTRIBUTED. At every upper point, the other two occupy
           different fan triangles. Choose Y with least B-barycentric
           coordinate, as specified in U3_FOUR_ONE_SIDE.md, and split the
           four lower points by BY. This is the remaining U3 alternative.
@@ -95,7 +96,11 @@ orientation restriction is now discharged by a complete two-case inequality.
             excluded by a fully printed cubic inequality. The six tables
             have 269 small-integer entries in total.
             Proof: U3_FOUR_ONE_SIDE.md.
-      - [ ] U3-DISTRIBUTED-3/1 and 1/3. The unbalanced mixed fan splits.
+      - [x] U3-DISTRIBUTED-3/1 and 1/3. The lower quadrilateral and
+            a discarded-point argument reduce both splits to a nine-point
+            model. Twelve geometric rows yield twenty printed cubic
+            contradictions with 1,392 positive integer entries, maximum
+            382. Proof: U3_THREE_ONE.md.
       - [x] U3-DISTRIBUTED-2/2. The entire balanced mixed fan split.
             A nine-point geometric reduction leaves sixteen actual sign
             choices, one split once more by CPS. The seventeen printed
@@ -112,8 +117,9 @@ For the exactly-three-corner split use corners (0,0),(0,1),(1,1), s=2A*, and
 
 The quoted counts are in these two explicit triangles. A competitive point
 cannot lie on the separating diagonal. The count split is proved exhaustive.
-Only the distributed 3/1 split and its reflected 1/3 split remain unresolved
-in this family.
+The clustered and all five distributed fan splits are now excluded.
+THREE_CORNERS_COMPLETE.md assembles the full III family, including its
+four-corner alternative and all zero-area faces.
 
 ### Other corner and corner-free families
 
@@ -197,9 +203,8 @@ in this family.
         are reduced by explicit symmetries to seven exhaustive rows, with
         all 1,442 integer entries printed. Proof: N8_CORNER_OBLIQUE.md.
 
-There are now FIVE named unresolved global obligations: the remaining
-exact-three-corner class U3, II, C1, N6 and N7. These are continuous-domain
-obligations, not five small arithmetic checks. Each must
+There are now FOUR named unresolved global obligations: II, C1, N6 and N7.
+These are continuous-domain obligations, not four small arithmetic checks. Each must
 admit a uniform argument or an explicitly exhaustive further subdivision.
 New subdivisions must retain their parent until all children close. No bound
 on the eventual number of smaller subcases is claimed.
@@ -239,6 +244,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | CLUSTERED_TRIANGLE.md | Universal exclusion of three clustered interior points; full U3-CLUSTERED exclusion |
 | U3_FOUR_ONE_SIDE.md | Both 4/0 and 0/4 distributed fan splits; exhaustive hull reduction and six printed cubic contradictions |
 | U3_TWO_TWO.md | Complete balanced 2/2 split; exhaustive seventeen-row cubic proof with all 1,463 integer entries printed |
+| U3_THREE_ONE.md | Complete 3/1 and 1/3 splits; twelve geometric cases and twenty printed cubic rows, 1,392 integer entries |
+| THREE_CORNERS_COMPLETE.md | Complete at-least-three-corner exclusion, assembling all counts and fan splits |
 | TYPE_II.md | Four-row adjacent-corner reduction and complete stated side-hull exclusions; full II remains open |
 | TYPE_II_R4.md | Complete both-below-CE exclusion in (1,2,4), and uniform empty bottom fan in its both-above cut |
 | TYPE_II_R4_TRIANGLE.md | Unique middle fan placement for every triangular-right hull in (1,2,4), with fixed central-pair D/B signs |
@@ -264,8 +271,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 
 ## Next attack and stopping rules
 
-The next targets are the distributed U3 alternative and the adjacent-corner
-and one-corner families II and C1, together with the N6 and N7 boundary counts.
+The next targets are the adjacent-corner and one-corner families II and C1,
+together with the N6 and N7 boundary counts.
 The stronger occupancy,
 clustered-triangle and complete opposite-corner theorems also apply
 in the other families. The exact diagnostic in

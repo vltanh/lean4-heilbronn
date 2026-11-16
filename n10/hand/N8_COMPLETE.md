@@ -116,5 +116,5 @@ The optional Fraction checkers read those manuscripts directly. Separate
 SymPy implementations independently expanded every printed row and
 reproduced every rational bound. These checks audit the displayed
 arithmetic; the geometric lemmas and explicit case trees supply coverage.
-The complete unrestricted hand proof still needs the separate U3, II,
-C1, N6 and N7 obligations listed in ROADMAP.md.
+The complete unrestricted hand proof still needs the separate II, C1,
+N6 and N7 obligations listed in ROADMAP.md.
