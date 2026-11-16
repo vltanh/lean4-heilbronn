@@ -1,0 +1,261 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+# Metadata for the Palomar registry, in the formalization.yaml v0.4 format
+# (https://github.com/mathlib-initiative/formalization.yaml), for the entry of
+# nine points. Every case of the repository is a separate entry, in its own
+# directory of Palomar/. The statement is Palomar/Nine/Challenge.lean; the
+# Comparator configuration is Palomar/Nine/comparator.json.
+version: "v0.4"
+
+project:
+  name: "Heilbronn's triangle problem in the unit square: nine points"
+  description: >-
+    The Heilbronn number H_n of the unit square is the largest possible least
+    area of a triangle with vertices at three of n points in the closed unit
+    square. This entry proves H₉ = (9√65 − 55)/320 ≈ 0.0548760, and that it is
+    attained only by the configuration of Comellas and Yebra (2002), with two
+    points on each side of the square and one inside, up to the eight
+    symmetries of the square and relabelling.
+
+
+    The proof normalizes a maximizing configuration by affine maps into five
+    families, by the corners of the square it occupies, and excludes or
+    classifies each family by geometric case analysis, sharp inequalities in
+    the chamber of eleven tight triangles, strict local optimality, and
+    polynomial certificates checked by Lean's kernel, about 434,000 weighted
+    terms in all. We found no exact proof of H₉ before this one: a branch and
+    bound had bounded it in an interval, and mixed-integer optimization had
+    found it within solver tolerances (a preprint that claimed a proof in
+    March 2026 withdrew the claim). The repository treats each number
+    of points as a separate entry; nine points is the first.
+  # People only; AI contributions are recorded under automation.
+  authors:
+    - "The-Anh Vu-Le"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "The-Anh Vu-Le"
+
+classification:
+  arxiv: ["math.MG", "math.CO"]
+  msc2020: ["52C10", "52A40"]
+
+sources:
+  - title: "The hand proof of H₉ = (9√65 − 55)/320"
+    type: "original-proof"
+    location: >-
+      docs/proof/nine/ of this repository, assembled in
+      docs/proof/nine/UNRESTRICTED.md, Theorem 1; written by ChatGPT 6 Pro
+      from 14 to 15 November 2026 and committed to this repository
+    relationship: "other"
+    note: >-
+      The proof formalized here, with its research notes in
+      docs/research/nine/. The formalization follows its route and replaces
+      some of its arguments by shorter ones (fidelity.divergences). We found
+      no earlier exact proof of H₉ or of the uniqueness of its optimal
+      configuration.
+  - title: "New lower bounds for Heilbronn numbers"
+    authors: ["F. Comellas", "J. L. A. Yebra"]
+    id: "doi:10.37236/1623"
+    type: "paper"
+    location: "Electron. J. Combin. 9 (2002), R6, Section 3 (nine points) and Table 1"
+    relationship: "background"
+    note: >-
+      Found the nine-point configuration proved optimal here, with least area
+      (9√65 − 55)/320, by simulated annealing and an analytic refinement to a
+      local maximum. The authors state that they have no proof of optimality.
+  - title: >-
+      Searching approximate global optimal Heilbronn configurations of nine
+      points in the unit square via GPGPU computing
+    authors: ["L. Chen", "Y. Xu", "Z. Zeng"]
+    id: "doi:10.1007/s10898-016-0453-1"
+    type: "paper"
+    location: "J. Global Optim. 68 (2017), no. 1, 147–167"
+    relationship: "background"
+    note: >-
+      A branch and bound on GPUs bounds H₉ in the interval
+      [(9√65 − 55)/320, 0.054878314) and localizes the optimal configurations
+      numerically: not the exact value, and no uniqueness. Not used here.
+  - title: "Solving the Heilbronn Triangle Problem using Global Optimization Methods"
+    authors: ["A. Monji", "A. Modir", "B. Kocuk"]
+    id: "arXiv:2512.14505"
+    type: "preprint"
+    relationship: "background"
+    note: >-
+      Mixed-integer models in Gurobi give H₉ ≈ 0.0548767 within solver
+      tolerances, relying on a numerically established boundary property; the
+      authors note that no analytical proof is known. Not used here.
+  - title: >-
+      From Global Optimization to Exact Coordinates: Heilbronn's Triangle
+      Problem on the Unit Square Using Mixed-Integer Nonlinear Optimization
+    authors: ["N. Sudermann-Merx"]
+    id: "arXiv:2603.11107v3"
+    type: "preprint"
+    location: "Section 2.2 (boundary structure, Theorem 1); Sections 4.2 and 6 (n = 9)"
+    relationship: "background"
+    note: >-
+      The hand proof's boundary reduction starts from the boundary structure
+      of Section 2.2. For n = 9 the paper solves the problem to optimality
+      within floating-point solver tolerances and verifies the Comellas–Yebra
+      coordinates exactly; it states that no proof of optimality is known for
+      n = 9 or n = 10. Version 1 (11 March 2026) claimed a proof for n = 9;
+      versions 2 and 3 withdraw that claim.
+  - title: "A Generalized Affine Isoperimetric Inequality"
+    authors: ["W. Chen", "R. Howard", "E. Lutwak", "D. Yang", "G. Zhang"]
+    id: "doi:10.1007/BF02922171"
+    type: "paper"
+    location: "J. Geom. Anal. 14 (2004), 597–612; arXiv:math/0402083"
+    relationship: "background"
+    note: >-
+      The hand proof uses it for nine points in convex position (N6-05); the
+      formalization replaces that step by nine triangles and a cubic
+      certificate, so it is not used.
+  - title: "A Heilbronn Type Inequality for Plane Nonagons"
+    authors: ["Z. Zeng", "J. Lu", "L. Dehbi", "L. Chen", "J. Wang"]
+    id: "doi:10.1007/978-3-030-41258-6_23"
+    type: "paper"
+    location: "Maple in Mathematics Education and Research (MC 2019), CCIS 1125, Springer (2020), 307–323"
+    relationship: "background"
+    note: >-
+      A computer-assisted bound for convex nonagons, which bears on the case
+      of nine points in convex position. Not used here.
+
+related_formalizations:
+  - id: "https://palomar-registry.org/entry.html?id=PALOMAR-2026-09-02-000012&version=1"
+    relationship: "independent"
+    note: >-
+      T. Stead, heilbronn-convex-3-8 (Lean 4, 2 September 2026;
+      github.com/tejstead/heilbronn-site, proofs/palomar/heilbronn-convex).
+      Exact Heilbronn values and optimizers for n = 3, …, 8 of the problem
+      normalized by the points' own convex hull of area one: a different
+      problem, with no fixed container, no unit square and no nine-point case.
+  - id: "https://github.com/openai/math/blob/main/lean/docs/191.md"
+    relationship: "independent"
+    note: >-
+      OpenAI, "A power improvement in the Heilbronn triangle lower bound"
+      (October 2026): Lean proof that some unbounded sequence of n admits n
+      points in the unit square with every triangle of area at least
+      n^(−2+η). Asymptotic; no specific Heilbronn number.
+  - id: "https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/ErdosProblems/507.lean"
+    relationship: "other"
+    note: >-
+      Statement only (sorry) of Erdős Problem 507, the asymptotics of the
+      Heilbronn function of the unit disk; Green's Problem 77
+      (FormalConjectures/GreensOpenProblems/77.lean) is stated with it.
+      Nothing about a specific number of points.
+
+status:
+  scope: >-
+    The Heilbronn number of nine points in the unit square and all the
+    configurations that attain it, stated by the three theorems of
+    Palomar/Nine/Challenge.lean, Nine.optimal_value, Nine.heilbronn_number
+    and Nine.optimal_configurations. Other numbers of points are other
+    entries of the same repository.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "Heilbronn.Nine.optimal_value"
+      file: "Heilbronn/Nine/Uniqueness.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Palomar/Nine/comparator.json"
+    - declaration: "Heilbronn.Nine.heilbronn_number"
+      file: "Heilbronn/Nine/Uniqueness.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Palomar/Nine/comparator.json"
+    - declaration: "Heilbronn.Nine.optimal_configurations"
+      file: "Heilbronn/Nine/Uniqueness.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Palomar/Nine/comparator.json"
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["ChatGPT 6 Pro"]
+      framework: "ChatGPT"
+      tool_setup: >-
+        The ChatGPT chat, prompted by the repository owner. It wrote the hand
+        proof of nine points (docs/proof/nine/): the manuscripts, the
+        certificate packages and their exact checkers, and the research
+        notes archived in docs/research/nine/, from 14 to 15 November 2026.
+    - method: "agent"
+      models: ["Claude Opus 5.5"]
+      framework: "Claude Code"
+      tool_setup: >-
+        Claude Code in the VS Code extension, with a local Lean toolchain,
+        using the formalize-math-paper skill, version 3.4.0, prompted by the
+        repository owner. On 15 November 2026 it wrote the whole Lean library:
+        the statement, the kernel-checked certificate checkers, the exporters
+        of the certificate data, and the proofs of every manuscript on the
+        route of the hand proof, with up to twelve sub-agents at once (52 in
+        all), each against a private build snapshot of the library. It found
+        the certificates that replace some hand arguments by linear
+        programming, reorganized the library by case, and wrote the
+        documentation. Wall-clock time 7.1 hours, from 14:53 to the last
+        proof at 21:56 (US Central time); 51.8 agent-hours; 5,954 tool calls;
+        30.09 million input, 2,026 million cache-read and 14.58 million output
+        tokens. Spend not tracked.
+  notes: >-
+    ChatGPT 6 Pro, in the ChatGPT chat, wrote the hand proof of nine points;
+    Claude Opus 5.5, in Claude Code, wrote the Lean code. The repository
+    owner directed the work and decided its scope and naming.
+    docs/contributors.md gives a dated account, and the commits name the
+    model that co-authored them.
+
+fidelity:
+  divergences: >-
+    Statement: none known. H₉ is the supremum of the least triangle area over
+    nine points in the closed unit square, with the ordinary area (half the
+    absolute determinant); repeated points count separately, so they give
+    least area 0. Congruence allows the eight symmetries of the square and a
+    relabelling, as in the hand proof. Proofs: the formalization follows the
+    route of the hand proof and departs from it in these places. The case of
+    three occupied caps (N6-05), which the hand proof reduces to a convex
+    nonagon and the affine isoperimetric inequality, is closed by nine
+    triangles and a three-cell cubic certificate, so no external theorem is
+    used. Certificate covers found by linear programming replace hand case
+    analyses: the two interior points of seven boundary points, the exact
+    anchor hexagon of six boundary points, Theorems 11 and 12 and class R6 of
+    eight boundary points, the quadrants of SIX_BOUNDARY_TWO_SIDE_COMPLETION
+    and the chamber in which F moves inward. Every use of a minimum-area
+    enclosing parallelogram is replaced by an explicit affine map of
+    determinant above one. Gaps of the hand proof were repaired along its
+    own lines, among them the empty convex quadrilateral of CORNER_FAMILIES,
+    the bound W ≥ (Γ+1)s misquoted as W ≥ 10s, and convexity and sign facts
+    left implicit in the Type II, six-boundary and C1 notes; nothing in it
+    was found false. docs/results.md lists the departures.
+
+review:
+  status: "agent-reviewed"
+  reviewers: []
+  notes: >-
+    The statement (Heilbronn/Geometry.lean, restated in
+    Palomar/Nine/Challenge.lean) was
+    written by Claude and checked by the sanity checks and Comparator; it
+    has not yet had a human review, and neither has the mathematics. Lean's
+    kernel checks every proof, and lake comparator also replays the compared
+    theorems through the NanoDa kernel; locally, con-ron with two workers
+    accepted the same export too (45,152 declarations, 1 h 50 min). That
+    establishes the proofs, not that the statement says what the prose
+    claims.
+
+alignment:
+  namespace: "Heilbronn.Nine"
+  statements:
+    - source: "H₉ = (9√65 − 55)/320 is the largest least triangle area of nine points in the unit square, and it is attained"
+      lean: "Heilbronn.Nine.optimal_value"
+      module: "Heilbronn.Nine.Uniqueness"
+      status: "proved"
+    - source: "The Heilbronn number H₉ equals (9√65 − 55)/320"
+      lean: "Heilbronn.Nine.heilbronn_number"
+      module: "Heilbronn.Nine.Uniqueness"
+      status: "proved"
+    - source: "The configurations attaining H₉ are exactly the images of the Comellas–Yebra configuration under the symmetries of the square, relabelled"
+      lean: "Heilbronn.Nine.optimal_configurations"
+      module: "Heilbronn.Nine.Uniqueness"
+      status: "proved"
+
+acknowledgements: >-
+  Mathlib, and the Lean toolchain with its lake comparator. F. Comellas and
+  J. L. A. Yebra, who found the optimal configuration.

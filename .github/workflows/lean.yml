@@ -1,0 +1,36 @@
+name: Lean build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build, audit axioms, run checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      # The certificate modules peak at about 4 GB each; three at a time fit the
+      # runner's 16 GB.
+      LEAN_NUM_THREADS: 3
+    steps:
+      - uses: actions/checkout@v5
+      # Installs the pinned toolchain, fetches the mathlib cache, runs
+      # `lake build`, and fails if any declaration under `Heilbronn`
+      # depends on an axiom other than propext, Classical.choice, Quot.sound.
+      - uses: leanprover/lean-action@v1
+        with:
+          axiom-audit: true
+      - name: Axiom audit and sanity checks
+        run: |
+          lake env lean AxiomAudit.lean
+          lake env lean SanityChecks.lean
+      # The kernel replays of Comparator take hours (docs/verification.md); the
+      # Palomar preflight workflow runs them. Here, check that every Challenge
+      # restates Heilbronn/Geometry.lean, and that the Challenges elaborate.
+      - name: Check the Challenges
+        run: |
+          scripts/verify-comparator.sh --definitions-only
+          lake build Palomar
