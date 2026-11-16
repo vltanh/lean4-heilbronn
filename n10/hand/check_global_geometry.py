@@ -937,6 +937,35 @@ def adjacent_mixed_i():
     print("PASS: complete mixed-I support branch, contact eliminations, scalar gaps, and rational box")
 
 
+def n7_small_arcs():
+    q=sp.Rational;s=q(93,1000)
+    a,b,c,d,e,f,g,h,z=sp.symbols("a b c d e f g h z")
+    A,B,C,D,E,F,G,H=(sp.Matrix(pt) for pt in
+        [(0,a),(b,0),(c,0),(1,d),(1,e),(f,1),(g,z),(0,h)])
+    det=lambda X,Y,Z:2*area(X,Y,Z)
+    zero(det(E,F,H)-det(E,F,G)-g*(1-e)-(1-f)*(z-h))
+    zero(det(E,G,H)-(z-(1-g)*h-g*e))
+    zero(sp.diff(det(E,F,G)+det(E,G,H),z)-f)
+    zero(det(G,H,A)+det(G,A,B)-g*h-b*(z-a))
+    apex=sp.Matrix([1,1+(1-z)*(1-f)/(f-g)])
+    zero(det(D,apex,G)-(1-g)*(1-d+(1-z)*(1-f)/(f-g)))
+    zero(det(G,F,apex))
+    chains=[
+        (A,E,sp.Matrix([0,1+f*(1-e)/(1-f)]),1-a+f*(1-e)/(1-f)),
+        (B,sp.Matrix([1+e*(1-f)/(1-e),0]),F,1-b+e*(1-f)/(1-e)),
+        (D,sp.Matrix([1,h+(z-h)/g]),H,h-d+(z-h)/g),
+        (H,sp.Matrix([0,-d*c/(1-c)]),D,h+d*c/(1-c)),
+        (A,sp.Matrix([1,-a*(1-b)/b]),E,e+a*(1-b)/b)]
+    for X,Y,Z,S in chains:zero(det(X,Y,Z)-S)
+    assert q(177,20)*s-(1-s)**2==q(401,1000000)>0
+    assert s<q(4,25) and 1-4*s<7*s and 1-3*s<8*s
+    eta=q(93,790);ell=q(7347,69700);h0=4*s/(1-ell);h1=1-s
+    f0=4*s/(1-eta);x0=s/(h1-eta);g1=1-ell-s/(1-h0)
+    assert 0<eta<h0<h1<1 and 0<x0<g1<1-ell and h0+s<1
+    assert 0<f0<1-ell and 0<1-4*s
+    print("PASS: N7 small-arc catalogue metrics, moving cap, actual endpoint triangle, and all five convex-chain factors")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -968,3 +997,4 @@ if __name__ == "__main__":
     central_support_pair()
     n7_same_upper_cap()
     adjacent_mixed_i()
+    n7_small_arcs()

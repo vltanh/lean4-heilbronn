@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 24.
+Checkpoint 25.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -233,8 +233,14 @@ four-corner alternative and all zero-area faces.
         every inward depth. Two exhaustive geometric rows have printed
         cubic contradictions with 642 positive integer entries.
         Proof: N7_PROJECTED_SIGNS.md.
+  - [x] N7-SINGLE-EXTERIOR-SMALL-ARCS. In the (1,0,2) placement,
+        every 1/7 and 2/6 split of the actual octagon by the two interior
+        points' line is excluded. All eight short-arc locations are
+        covered; five printed sums have 2,254 integer entries.
+        Proof: N7_OP_LINE_CAPS.md.
   - [ ] Complete the two surviving placement rows outside the proved
-        sign chambers: (0,0,3) and (1,0,2).
+        sign chambers: all of (0,0,3), and the 3/5 and 4/4 line splits
+        of (1,0,2).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -323,6 +329,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | TYPE_II_R4_TRIANGLE_COMPLETE.md | Full triangular-right child of Type-II (1,2,4), including all central CE cuts |
 | TYPE_II_R4_NONTRIANGULAR.md | Exact quadrilateral right-hull catalogue, stronger bottom-contact bound, and two empty middle fans in the II+II pair |
 | TYPE_II_R4_CENTRAL.md | Complete II+II right-support exclusion; reusable central six-point threshold strictly below 31/299 |
+| TYPE_II_R4_MIXED_I.md | Complete I+II support pair, all line orientations, and one fixed physical-contact quartic with 86 integer entries |
 | TYPE_II_UPPER_PAIR.md | Complete opposite-B/E sign exclusion for the two upper central points, with every right hull allowed |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |
@@ -344,6 +351,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_SAME_UPPER_CAP.md | Complete exclusion of two points in one upper cap, including both hull types, both height orders, and five ray cuts |
 | N7_PROJECTED_CHAMBER.md | Strict sharp bound in each single inward-secondary chamber; complete normalized N7 candidate neighborhoods |
 | N7_PROJECTED_SIGNS.md | Complete normalized inward-secondary good-sign chamber without an extra coordinate condition; two cubic rows, 642 printed integer entries |
+| N7_OP_LINE_CAPS.md | Every 1/7 and 2/6 line split in single-exterior N7; exhaustive eight-cap catalogue and five printed sums, 2,254 entries |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

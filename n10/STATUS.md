@@ -211,6 +211,18 @@ remains in this nontriangular child. The other three Type-II counts
 and the global II parent remain unchecked. The global algebra
 checker now has 30 passing groups.
 
+N7_OP_LINE_CAPS.md now excludes every 1/7 and 2/6 hull-vertex split
+by the line through the two interior points in the single-exterior
+N7 placement (1,0,2). Its exhaustive eight-cap catalogue combines
+endpoint triangle bounds, a monotone top-vertex argument, and five
+printed polynomial sums with 2,254 positive integer terms. All
+supporting triangle endpoints are actual points; the convex-five
+endpoint factors are proved without restricting the virtual apex to
+the square. Independent geometry review and separate Fraction/SymPy
+expansions pass. The 3/5 and 4/4 line classes and the all-interior
+placement (0,0,3) remain open. The global algebra checker now has
+31 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
