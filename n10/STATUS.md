@@ -542,6 +542,20 @@ and SymPy expansions pass; the largest upper bound is
 nontriangular support cells II and III. The global algebra checker
 now has 59 passing groups.
 
+Three additional analytic reductions are now complete. In C1,
+C1_SIDE_PAIR_OPPOSITE_TOP.md excludes a side pair together with an
+opposite-side point and a top point, independently of the fifth free
+point. A scalar cubic forces .71<d<=h<.79 and .45<f<=c<.56;
+two side-point clearances then bound the top triangle by .04709<s.
+This closes (0,1,2,1,1) and (1,0,2,1,1), leaving 22 C1 exterior rows.
+In N6, N6_SIDE_PAIR_REDUCTION.md proves the triangular cap hull and
+Gamma2 endpoint cost for every side pair; a side pair and top pair
+are impossible with budget gap 1297/20000. ONE_LOWER_POINT.md gives
+four exhaustive local lower alternatives, with the double-ear cell
+excluded and both central contact-order cubics derived directly.
+Independent geometric and exact symbolic checks pass for all three
+notes. The global algebra checker now has 62 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

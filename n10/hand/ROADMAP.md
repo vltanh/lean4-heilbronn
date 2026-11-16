@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 48.
+Checkpoint 49.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -277,7 +277,13 @@ four-corner alternative and all zero-area faces.
         Two endpoint containers and exact determinant comparisons give
         gaps 26/1000000 and 137572/1000000.
         Proof: C1_THREE_TOP_NO_SIDE.md.
-  - [ ] C1-EXTERIOR. Exclude the remaining 24 exterior count rows
+  - [x] C1-SIDE-PAIR-OPPOSITE-TOP. A side-cap pair cannot coexist
+        with an opposite-side point and a top point. This closes
+        (0,1,2,1,1) and (1,0,2,1,1), and their reflections, by
+        an explicit cubic contact-box bound and three determinant
+        inequalities. The final area is below .04709<s.
+        Proof: C1_SIDE_PAIR_OPPOSITE_TOP.md.
+  - [ ] C1-EXTERIOR. Exclude the remaining 22 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -334,6 +340,17 @@ four-corner alternative and all zero-area faces.
         The exhaustive j=2, j=1 side/top and j=0 alternatives are
         assembled in N6_TWO_LOWER_COMPLETE.md, with both side caps
         retained after the single lower transposition.
+  - [x] N6-SIDE-PAIR-REDUCTION. Every side-cap pair has triangular
+        actual cap hull and the stronger endpoint support cost
+        Gamma2*s. A side pair and top pair are incompatible, closing
+        the complete count (0,0,2,2,0) and its reflection with exact
+        budget gap 1297/20000. Proof: N6_SIDE_PAIR_REDUCTION.md.
+  - [x] N6-ONE-LOWER-CATALOGUE. One lower point has two possible
+        single-ear cells or a central cell with two weak contact
+        orders. The double-ear cell is impossible; the central orders
+        have exact cubic contact inequalities. This is a local
+        reduction, not a closure of the one-lower family.
+        Proof: ONE_LOWER_POINT.md, also applicable in N7.
   - [ ] Complete all surviving exterior-cap placements with k=0 or k=1
         outside the two stated projection chambers.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
@@ -597,6 +614,9 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_TWO_LOWER_TOP.md and N6_TWO_LOWER_TOP_TABLES.md | Entire two-lower/upper/top-cap placement: eight roots, 267 nodes, 821 deductions, 113 cubics, 65 geometric exclusions, 27,514 printed terms and 572 explicit shifted affine squares |
 | N6_TWO_LOWER_COMPLETE.md | Exhaustive assembly of every k=2 placement from the exact hull, upper/side, upper/top and two-exterior theorems |
 | TYPE_II_133_NONTRIANGULAR.md and TYPE_II_133_CELL_I.md | Exhaustive three-cell right-hull reduction and complete cell-I exclusion: sixty roots, 1,899 deductions, 24 cubics / 932 terms and 36 geometric exclusions; cells II/III remain open |
+| N6_SIDE_PAIR_REDUCTION.md | Every side pair has a triangular cap hull and Gamma2 endpoint cost; a side pair and top pair are incompatible, closing (0,0,2,2,0) and reflection |
+| ONE_LOWER_POINT.md | Four exhaustive local alternatives for one point in HABC, including both central contact-order cubics and the impossible double-ear cell |
+| C1_SIDE_PAIR_OPPOSITE_TOP.md | A side pair, opposite side point and top point are incompatible; two complete count rows close by a cubic box and direct determinant inequalities |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

@@ -1688,6 +1688,44 @@ def adjacent_133_nontriangular_cell_i():
     print('PASS: Type-II133 nontriangular support identities and complete sixty-root cell-I inventory')
 
 
+def n6_side_pair_reduction():
+    q=sp.Rational;s=q(93,1000);K=q(149,20)
+    b,c,e,f,x,y=sp.symbols('b c e f x y')
+    v=(e*x-y)/(e-y)
+    zero(v-c-(e*(x-c)-(1-c)*y)/(e-y))
+    zero(1-v-e*(1-x)/(e-y))
+    zero((c-b)*(e*(x-c)-(1-c)*y)+(1-c)*(c-b)*y-e*(c-b)*(x-c))
+    zero(e*(1-b)+(1-e)*(1-f)-(1-b-(1-e)*(f-b)))
+    assert (K+4)*s-1==q(1297,20000)>0
+    print('PASS: N6 side-pair support identities and complete side-pair/top-pair exclusion')
+
+
+def one_lower_point():
+    q=sp.Rational;s=q(93,1000)
+    a,b,c,h,g,w=sp.symbols('a b c h g w')
+    G=sp.Matrix([g,h*(1-g/c-w)])
+    zero(2*area(sp.Matrix([0,h]),sp.Matrix([b,0]),G)-h*g*(c-b)/c+b*h*w)
+    zero(2*area(sp.Matrix([0,a]),sp.Matrix([b,0]),G)-b*(h-a)+(b*h-a*c)*g/c+b*h*w)
+    zero(s+b*s/c+(b*h-a*c)*s*(c+b)/(c*h*(c-b))-s*(c+b)*(h-a)/(h*(c-b)))
+    assert 12*s>1
+    print('PASS: exhaustive one-lower ear catalogue and both central contact-order elimination identities')
+
+
+def c1_side_pair_opposite_top():
+    q=sp.Rational;s=q(93,1000);rho=q(347,500)
+    c,d=sp.symbols('c d');poly=1000*d**3-1000*d*d-186*d+279
+    g=d*c*(1-c)-s*(1+2*c)
+    zero(g.subs(c,s/(d*(1-d)))+93*poly/(1000000*d*(1-d)**2))
+    assert sp.diff(poly,d,2).subs(d,rho)>0
+    assert poly.subs(d,q(71,100))==q(751,1000)>0 and sp.diff(poly,d).subs(d,q(71,100))<0
+    assert poly.subs(d,q(79,100))==q(999,1000)>0 and sp.diff(poly,d).subs(d,q(79,100))>0
+    assert g.subs({d:q(79,100),c:q(56,100)})<0
+    assert q(53,1000)*q(29,100)+q(624,1000)*q(124,1000)==q(92746,1000000)<s
+    assert q(57,1000)*q(55,100)+q(443,1000)*q(139,1000)==q(92927,1000000)<s
+    assert q(29,100)*q(876,1000)+q(55,100)*q(861,1000)-1+q(71,100)*q(45,100)==q(4709,100000)<s
+    print('PASS: C1 side-pair/opposite/top cubic box and complete two-row determinant exclusion')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1748,3 +1786,6 @@ if __name__ == "__main__":
     c1_three_top_no_side()
     n6_two_lower_complete()
     adjacent_133_nontriangular_cell_i()
+    n6_side_pair_reduction()
+    one_lower_point()
+    c1_side_pair_opposite_top()
