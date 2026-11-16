@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 36.
+Checkpoint 37.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -206,8 +206,14 @@ four-corner alternative and all zero-area faces.
         rows yield fixed cubic contradictions. All 1,462 integer terms,
         nine rational boxes, and conditional containments are printed
         and independently audited. Proof: TYPE_II_223_COMPLETE.md.
-  - [ ] II-(2,3,2). At least one triangular side hull; distributed central
-        triple.
+  - [x] II-(2,3,2). The entire count, with both right points unrestricted.
+        For a triangular left hull, two distributed meshes reduce to an
+        analytic envelope and one 16-term cubic. For a quadrilateral left
+        hull, four roots and sixteen exhaustive leaves have five geometric
+        contradictions and eleven cubic sums with 410 terms. Every sign,
+        occupancy, rational box, derivative and sum has independent audits.
+        TYPE_II_232_COMPLETE.md assembles both hull alternatives without
+        a reflection that could violate the normalized b<=1/2 condition.
 - [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
   - [x] C1-EXACT-PENTAGON. The actual hull is exactly the five selected
         anchors O,C,D,F,H. The lower distributed triple and upper pair
@@ -426,6 +432,10 @@ strictly interior points in N6 and N7 requires a separate argument.
 | TYPE_II_R4_COMPLETE.md | Complete Type-II count (1,2,4), assembling both hull types and every central placement |
 | TYPE_II_223_CORE.md | Entire (2,2,3) eight-point side core: stronger box, three forced containing triangles, and vertical clearance; six rows, 424 terms |
 | TYPE_II_223_COMPLETE.md | Entire Type-II count (2,2,3), including both central points; eighteen exhaustive cubic rows, nine proved boxes, 1,462 integer terms |
+| TYPE_II_CENTRAL_CHAMBER.md | Complete analytic exclusion of the stated triangular-left/central-triple chamber; explicit monotonic envelope and strict rational gap |
+| TYPE_II_232_LEFT_TRIANGLE.md | Entire triangular-left child with three central points; two distributed meshes, the analytic chamber and one 16-term cubic |
+| TYPE_II_232_LEFT_QUADRILATERAL.md | Entire quadrilateral-left child with three central points: sixteen exhaustive leaves, five geometric contradictions and eleven cubics, 410 printed terms |
+| TYPE_II_232_COMPLETE.md | Entire adjacent-corner count (2,3,2), assembling both left hulls while keeping both right points unrestricted |
 | C1_PENTAGON_GEOMETRY.md | Exact-pentagon 3/2 reduction, distributed meshes, rational box, endpoint and fan-capacity inequalities |
 | C1_PENTAGON.md | Entire exact-pentagon C1 child; nine roots, 34 polynomial and eight geometric leaves, 3,317 printed integer entries |
 | C1_EXTERIOR_REDUCTION.md | Complete side-cap and stated top/lower count exclusions; exhaustive 32-row exterior catalogue |

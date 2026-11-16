@@ -1384,6 +1384,33 @@ def n7_cdgh_complete():
     print("PASS: N7 complete CD/GH diagonal and one-interior identities, exhaustive eighteen-row catalogue, and explicit square definitions")
 
 
+def adjacent_232_complete():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);K=q(933,125);J=q(4427,500)
+    b,lam,p,y=sp.symbols("b lam p y")
+    D,C,E,B,P=[sp.Matrix(t) for t in [(0,1),(1,1),(0,lam),(b,0),(p,y)]]
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(D,E,C)+2*det(E,B,C)-1-2*b-lam*(1-2*b))
+    zero(det(E,P,B)+det(E,B,C)-b-lam*(1-p)+b*y)
+    assert q(433,250)**2<3 and K==4+2*q(433,250)
+    assert q(559,250)**2<5 and J==(11+3*q(559,250))/2
+    assert J*s-(1-3*s)==q(51211,500000)>0 and 3*K*s-2==q(10307,125000)>0
+    z,d,A,B0,ss=sp.symbols("z d A B0 s0")
+    F=d*A*B0-ss*(A*z/(1-z)+B0*(1-z)/z)
+    A0=1-ss/z;B1=1-ss*(2-b-z)/((1-z)*(1-z-(1-b)*d))
+    T=sp.factor(F.subs({A:A0,B0:B1}));half=T.subs(b,q(1,2))
+    assert sp.cancel(sp.diff(half,z)-ss*(d+1)*(d+3*ss-2)*(d+4*z-2)/(z*z*(d+2*z-2)**2))==0
+    maximum=sp.factor(half.subs({d:(2-4*ss)/3,z:(1+ss)/3}))
+    assert sp.cancel(maximum-ss+(2*ss-1)*(31*ss*ss-46*ss+4)/(6*(ss+1)**2))==0
+    assert (maximum-ss).subs(ss,s)==-q(4021567,3583947000)<0
+    note=Path(__file__).with_name('TYPE_II_232_LEFT_QUADRILATERAL.md').read_text()
+    leaves=set(re.findall(r'^### (R[1-4][mp]{2})$',note,re.M))
+    removed={'R1mm','R1pm','R3mm','R3pm','R4pm'}
+    assert leaves.isdisjoint(removed) and leaves|removed=={f'R{i}{u}{v}' for i in range(1,5) for u in 'mp' for v in 'mp'}
+    print("PASS: entire Type-II (2,3,2) count identities, analytic envelope gap, and exhaustive left-hull sign catalogue")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1431,3 +1458,4 @@ if __name__ == "__main__":
     c1_convex_top_pair()
     c1_three_lower_exteriors()
     n7_cdgh_complete()
+    adjacent_232_complete()

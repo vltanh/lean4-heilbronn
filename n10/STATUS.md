@@ -373,6 +373,21 @@ obligations are its two side-edge 4/4 classes; the all-interior N7
 placement also remains open. The global algebra checker now has 46
 passing groups.
 
+The complete adjacent-corner count (2,3,2) is now excluded by
+TYPE_II_232_COMPLETE.md. The triangular-left alternative has two
+proved distributed meshes, a monotone analytic envelope with exact
+strict gap -4021567/3583947000, and one 16-term cubic. The
+quadrilateral-left alternative has four roots, sixteen exhaustive
+leaves, five direct geometric contradictions, and eleven printed
+cubic sums with 410 terms. Both theorems use only the five anchors
+and three central points; both right points are unrestricted.
+Independent review accepts every count cut, ray order, containment,
+box and analytic monotonicity premise. Separate Fraction and
+manuscript-reading SymPy checks reproduce all 426 products, every
+derivative, the quintic positivity estimate, and all exact negative
+bounds. Only (1,3,3) remains in Type II. The global algebra checker
+now has 47 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
