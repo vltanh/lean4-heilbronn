@@ -358,7 +358,7 @@ theorem two_four_core {U₁ U₂ R L₁ L₂ L₃ : Point} (hU₁ : U₁ ∈ uni
     · exact memL L₂ hc₂ (sqL L₂ hc₂)
     · exact memL L₃ hc₃ (sqL L₃ hc₃)
   have hns := nearSquareQuadrilateralLemma _ (1 - R.1) R.2 (by linarith) r3 hr hmem ⟨0, rfl⟩
-    ⟨1, rfl⟩ ⟨2, rfl⟩ ⟨5, by simp [hR']⟩
+    ⟨1, rfl⟩ ⟨2, rfl⟩ ⟨5, by simp⟩
   linarith [hns.1, hns.2]
 
 /-- **Type-III exclusion, `2+4` class** (`CORNER_FAMILIES:TypeIII-2+4`): a Type-III configuration
@@ -432,8 +432,8 @@ theorem typeIII_2plus4 (U V W X Y Z : Point) (hU : U ∈ unitSquare) (hV : V ∈
   have h6 : minTriangleArea P ≤ minTriangleArea ![(0, 0), (1, 1), F l₁, F l₂, F l₃, F l₄] :=
     min_sub (le_refl _) _ ![0, 2, fr l₁, fr l₂, fr l₃, fr l₄] (by norm_num) (by inj_tac)
       (by intro i; fin_cases i
-          · simp [hPdef, sevenConfig, typeIIIConfig]
-          · simp [hPdef, sevenConfig, typeIIIConfig]
+          · simp [hPdef, typeIIIConfig]
+          · simp [hPdef, typeIIIConfig]
           all_goals exact (typeIII_fr U V W X Y Z _).symm)
   rcases support_core (le_refl 6) ![(0, 0), (1, 1), F l₁, F l₂, F l₃, F l₄]
       (by intro i; fin_cases i
@@ -455,33 +455,33 @@ theorem typeIII_2plus4 (U V W X Y Z : Point) (hU : U ∈ unitSquare) (hV : V ∈
       (lt_of_lt_of_le hcon (min_sub (le_refl _) _
         ![0, 1, 2, fr u₁, fr u₂, fr l₁, fr l₂, fr l₃, fr l₄] (by norm_num) (by inj_tac)
         (by intro i; fin_cases i
-            · simp [hPdef, sevenConfig, typeIIIConfig]
-            · simp [hPdef, sevenConfig, typeIIIConfig]
-            · simp [hPdef, sevenConfig, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
             all_goals exact (typeIII_fr U V W X Y Z _).symm)))
   · exact two_four_core (hsq u₁) (hsq u₂) (hsq l₂) hu₁ hu₂ (hlow l₂ h2a h2b) (hr 2) (hr 4) (hr 5)
       (lt_of_lt_of_le hcon (min_sub (le_refl _) _
         ![0, 1, 2, fr u₁, fr u₂, fr l₂, fr l₁, fr l₃, fr l₄] (by norm_num) (by inj_tac)
         (by intro i; fin_cases i
-            · simp [hPdef, sevenConfig, typeIIIConfig]
-            · simp [hPdef, sevenConfig, typeIIIConfig]
-            · simp [hPdef, sevenConfig, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
             all_goals exact (typeIII_fr U V W X Y Z _).symm)))
   · exact two_four_core (hsq u₁) (hsq u₂) (hsq l₃) hu₁ hu₂ (hlow l₃ h3a h3b) (hr 2) (hr 3) (hr 5)
       (lt_of_lt_of_le hcon (min_sub (le_refl _) _
         ![0, 1, 2, fr u₁, fr u₂, fr l₃, fr l₁, fr l₂, fr l₄] (by norm_num) (by inj_tac)
         (by intro i; fin_cases i
-            · simp [hPdef, sevenConfig, typeIIIConfig]
-            · simp [hPdef, sevenConfig, typeIIIConfig]
-            · simp [hPdef, sevenConfig, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
             all_goals exact (typeIII_fr U V W X Y Z _).symm)))
   · exact two_four_core (hsq u₁) (hsq u₂) (hsq l₄) hu₁ hu₂ (hlow l₄ h4a h4b) (hr 2) (hr 3) (hr 4)
       (lt_of_lt_of_le hcon (min_sub (le_refl _) _
         ![0, 1, 2, fr u₁, fr u₂, fr l₄, fr l₁, fr l₂, fr l₃] (by norm_num) (by inj_tac)
         (by intro i; fin_cases i
-            · simp [hPdef, sevenConfig, typeIIIConfig]
-            · simp [hPdef, sevenConfig, typeIIIConfig]
-            · simp [hPdef, sevenConfig, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
+            · simp [hPdef, typeIIIConfig]
             all_goals exact (typeIII_fr U V W X Y Z _).symm)))
 
 end Heilbronn.CornerFamilies

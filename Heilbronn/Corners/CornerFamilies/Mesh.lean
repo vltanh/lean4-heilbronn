@@ -46,9 +46,9 @@ with the identities (18)–(19) and total at most `64/7`), then transported to a
 /-- Inequality (30), normalized (lines 948–975): from the three product inequalities of (19)
 with the outer ears at least one, `CAB + A(V - κ)(V + 1) + B(U - κ)(U + 1) ≥ (1 + κ)UV + κ(C + κ + 1)`
 for a connector `C ≤ 6/5` with cross areas `U + V = C + κ`. -/
-theorem conn_30 {A B C κ U V uA vA uB vB : ℝ} (hA : 1 ≤ A) (hB : 1 ≤ B) (hC1 : 1 ≤ C)
+theorem conn_30 {A B C κ U V uA vA uB vB : ℝ} (_hA : 1 ≤ A) (hB : 1 ≤ B) (_hC1 : 1 ≤ C)
     (hC : C ≤ 6 / 5) (hk1 : 1 ≤ κ) (hU : 1 ≤ U) (hV : 1 ≤ V)
-    (hUV : U + V = C + κ) (huA : 1 ≤ uA) (hvB : 1 ≤ vB) (hA' : A ≤ 22 / 7) (hB' : B ≤ 22 / 7)
+    (hUV : U + V = C + κ) (huA : 1 ≤ uA) (_hvB : 1 ≤ vB) (_hA' : A ≤ 22 / 7) (hB' : B ≤ 22 / 7)
     (hx : uA * vB ≤ A * B - κ) (hy : uB * V ≤ B * C - κ)
     (hz : U * vA ≤ C * A - κ) (h18A : A = uA + vA - κ) (h18B : B = uB + vB - κ) :
     (1 + κ) * (U * V) + κ * (C + κ + 1) ≤

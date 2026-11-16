@@ -484,7 +484,7 @@ nontriangular-hull lemma, a triangular hull `BCT` gives `(Γ + 1)s ≤ 1`, false
 
 Uses: CORNER_FAMILIES:NontriangularHullLemma, CORNER_FAMILIES:SixPointTriangularHullTheorem -/
 theorem claim_C_side_capacity_one (X Y Z R₁ R₂ : Point)
-    (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z) (huh : 1 ≤ Y.1 + Y.2)
+    (hm : MeshLabelled (0, 0) (0, 1) (1, 1) X Y Z) (_huh : 1 ≤ Y.1 + Y.2)
     (hR₁ : R₁ ∈ unitSquare) (hR₂ : R₂ ∈ unitSquare) (hl₁ : R₁.2 < R₁.1) (hl₂ : R₂.2 < R₂.1)
     (hmin : 7 / 128 < minTriangleArea ![(0, 0), (0, 1), (1, 1), X, Y, Z, R₁, R₂]) :
     ¬ (7 / 64 ≤ sarea (0, 1) Y R₁ ∧ 7 / 64 ≤ sarea (0, 1) Y R₂) :=
