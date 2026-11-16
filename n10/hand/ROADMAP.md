@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 74.
+Checkpoint 75.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -501,6 +501,17 @@ four-corner alternative and all zero-area faces.
         separate Fraction/SymPy readers reproduce every exact bound.
         Proof: N6_BTTT_TOP_EARS.md and N6_TOP_TRIPLE_SETUP.md.
         The remaining top words and the two top-triple counts stay open.
+  - [x] N6-BTTT-TOP-TRIANGLE-WORD. The normalized --+- top word
+        is impossible throughout its continuous domain: sixteen sign
+        splits and nine weak coordinate cuts cover twenty-six terminal
+        contradictions. The complete Markdown tables print all 1,799
+        geometric deductions, 6,294 coordinate steps and 13,039 scalar
+        updates. Two separate semantic readers verify every premise,
+        physical polynomial, source dependency and leaf; the independent
+        implementation expands 4,501 determinant identities and checks
+        60,725 endpoint lines.
+        Proof: N6_BTTT_TOP_TRIANGLE_WORD.md and its indexed tables.
+        This closes one word, not the remaining BTTT or ITTT parent.
   - [x] N6-TOP-TRANSPOSE. An explicit square transposition and six
         label maps preserve the residual top-word groups and permit
         e<=f. Exact square gaps give a,e<.168 in the triangular or
@@ -646,6 +657,10 @@ four-corner alternative and all zero-area faces.
     - [ ] N6-BIIT: (1,2,0,1,0).
     - [ ] N6-BIIR: (1,2,1,0,0).
     - [ ] N6-BTTT: (1,0,0,3,0), retaining only its unfinished top words.
+          The normalized --+- word is now complete in
+          N6_BTTT_TOP_TRIANGLE_WORD.md; the earlier single-ear
+          top-quadrilateral exclusions remain complete. The other
+          residual words are still open.
     - [ ] N6-ITTT: (0,1,0,3,0).
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
       points and three strictly interior points.
@@ -1010,6 +1025,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_ONE_LOWER_SIDE_PAIR_TOP.md | Entire (1,1,2,1,0) count and transpose: 34 splits, 31 cubics / 7,430 terms, four geometric terminals, 908 deductions and 114 interval updates |
 | C1_TWO_LOWER_CENTRAL_SIDE_TOP.md | Entire (2,1,1,1,0) count and transpose: six roots, 205 splits, 193 cubics / 51,388 terms, eighteen geometric terminals, 5,961 deductions and 905 interval updates |
 | N6_TOP_TRIPLE_SETUP.md | Exhaustive sixteen-word top catalogue, continuous boxes, geometry rules, scalar support bounds and complete factor definitions for the two top-triple counts |
+| N6_BTTT_TOP_TRIANGLE_WORD.md and indexed tables | Complete normalized BTTT --+- word: sixteen sign splits, nine coordinate cuts, twenty-six terminal contradictions and two independent semantic readers |
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_ONE_LOWER_THREE_CAPS.md | Entire (1,0,1,1,1) count: two reflected lower alternatives, 89 deductions, 158 interval steps, forty scalar caps and two cubics / 742 terms |
 | QUADRILATERAL_AREA_SUPPORT.md | Support inequalities retain the actual quadrilateral floor and the minimum of two witnessed triangle-floor products; both denominator signs are proved |
