@@ -388,6 +388,22 @@ derivative, the quintic positivity estimate, and all exact negative
 bounds. Only (1,3,3) remains in Type II. The global algebra checker
 now has 47 passing groups.
 
+N6_TWO_LOWER_CAPS.md now excludes the entire two-lower/two-exterior
+placement, including closed outer square faces. A direct endpoint
+comparison excludes two points in the same side cap. The other four
+cap models use the complete eight-row lower catalogue: 32 roots,
+65 nodes, 1,251 explicit geometric deductions, 54 cubic leaves and
+two geometric contradictions. The appendix prints all 5,434 positive
+integer terms, with maximum weight 4,896. Independent review accepts
+the lower-box transfer, all cap and support bounds, the scalar top-pair
+theorem, every trace step and all 376 conditional factor witnesses.
+The two-exterior convex-line rule explicitly allows zero or two hull
+crossings, and chord containment is applied only to a point actually
+inside the hull. Separate manuscript-reading Fraction and SymPy
+implementations reproduce every fixed sum and its strict bound. The
+other N6 exterior placements remain open. The global algebra checker
+now has 48 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 37.
+Checkpoint 38.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -266,6 +266,14 @@ four-corner alternative and all zero-area faces.
         boxes, and actual occupancy/spread witnesses are printed.
         Independent geometric replay and separate Fraction/SymPy
         expansions pass. Proof: N6_EXACT_HULL.md and its three appendices.
+  - [x] N6-TWO-LOWER-TWO-EXTERIOR. The entire k=2,j=0 placement,
+        including all cap pairs and closed outer square faces. Same-side
+        cap pairs are excluded analytically. The other four cap models
+        have 32 roots, 65 nodes, 1,251 explicit deductions, 54 cubic
+        leaves and two geometric contradictions. All 5,434 integer terms
+        and 376 conditional witnesses have independent geometry and
+        Fraction/SymPy audits. Proof: N6_TWO_LOWER_CAPS.md and its
+        complete printed table appendix.
   - [ ] Complete all surviving exterior-cap placements outside the two
         stated projection chambers.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
@@ -461,6 +469,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_EXTERIOR_CUTS.md | Complete exclusions of side-cap triples, two points in each side cap, and a top triple plus a side-cap point |
 | N6_EXACT_HULL_REDUCTION.md | Complete exact-hull lower catalogue and rational boxes; all nested mixed rows excluded, eight rows remain |
 | N6_EXACT_HULL.md | Entire exact-hull 2/2 child: complete 686-node geometric tree, 290 cubic and 229 geometric leaves; all 44,924 terms printed in the CS, CO and MIXED appendices |
+| N6_TWO_LOWER_CAPS.md | Entire two-lower/two-exterior placement, including outer faces: all six cap pairs, 32 roots, 54 cubics and two geometric leaves; all 5,434 terms in N6_TWO_LOWER_CAPS_TABLES.md |
 | N7_PLACEMENTS.md | Lower-cap exclusions, upper-cap capacity two, five exhaustive remaining counts and a uniform rational box |
 | N7_UPPER_OCCUPANCY.md | Complete (2,1,0) exclusion, at least one free point in the heptagon, and two-exterior chord placements |
 | N7_OPPOSITE_UPPER_CAPS.md | Complete exclusion of simultaneous occupancy of the two upper caps, including the entire (1,1,1) row |

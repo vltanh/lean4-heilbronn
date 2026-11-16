@@ -1411,6 +1411,35 @@ def adjacent_232_complete():
     print("PASS: entire Type-II (2,3,2) count identities, analytic envelope gap, and exhaustive left-hull sign catalogue")
 
 
+def n6_two_lower_two_exterior():
+    from pathlib import Path
+    from itertools import product
+    import re
+    import n6_exterior_geometry as geometry
+    q=sp.Rational;s=q(93,1000)
+    c,e,f,h,x,y=sp.symbols("c e f h x y")
+    C,E,F,H,U=[sp.Matrix(t) for t in [(c,0),(1,e),(f,1),(0,h),(x,y)]]
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(-det(C,E,U)-e*(x-c)+(1-c)*y)
+    zero(-det(C,E,U)-e*(x-1)-(1-c)*(e-y))
+    zero(-det(E,F,U)-(1-e)*(x-f)+(1-f)*(1-y))
+    zero(-det(E,F,U)-(1-f)*(y-e)+(1-e)*(1-x))
+    zero(-det(F,H,U)-(1-h)*(f-x)+f*(1-y))
+    zero(-det(F,H,U)-f*(y-h)+(1-h)*x)
+    assert 1-9*s<3*s and 9*s>q(823,1000)
+    words={''.join('+' if sg>0 else '-' for sg in ss) for ss in product((-1,1),repeat=6)
+        if ss[0]==-1 and ss[4]==-ss[5] and sum(a!=b for a,b in zip(ss,ss[1:]+ss[:1]))==2}
+    assert words=={'-++++-','--+++-','---++-','----+-','-----+'}
+    geometry.set_locations('TT');known=geometry.initial('central')
+    assert (-1,)*6 in geometry.line_patterns(known,'ABCEFH','RS')
+    assert (1,)*6 in geometry.line_patterns(known,'ABCEFH','RS')
+    assert (-1,)*6 not in geometry.line_patterns(known,'ABCEFH','PQ')
+    note=Path(__file__).with_name('N6_TWO_LOWER_CAPS.md').read_text()
+    records=re.findall(r'^\| ((?:TT|RT|LT|RL)/[^ |]+) \| X\d{4} \| (\d+) \| (\d+) \| (\d+) \| (\d+) \| (\d+) \|$',note,re.M)
+    assert len(records)==32 and [sum(int(row[i]) for row in records) for i in range(1,6)]==[65,54,2,5434,1251]
+    print("PASS: complete N6 two-lower/two-exterior cap identities, TT catalogue, exterior line rule, and full printed inventory")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1459,3 +1488,4 @@ if __name__ == "__main__":
     c1_three_lower_exteriors()
     n7_cdgh_complete()
     adjacent_232_complete()
+    n6_two_lower_two_exterior()
