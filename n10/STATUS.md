@@ -234,6 +234,24 @@ placements. Only Type-II rows (1,3,3), (2,2,3), and (2,3,2) remain;
 the global II parent remains unchecked. The global algebra checker
 now has 32 passing groups.
 
+The complete HGF short-arc position of the single-exterior N7 3/5
+line class is now excluded by N7_THREE_FIVE_TOP.md. The transferred
+triangle capacities force the point placements, and eleven exhaustive
+actual-sign rows have 3,183 printed cubic terms. Every conditional
+occupancy and diagonal-separation premise is listed; the AGO-positive
+row has its own proved rational box. Independent geometry review,
+manuscript-parsed SymPy expansion, and the Fraction checker pass.
+
+For N6, N6_EXACT_HULL_REDUCTION.md now proves the full exact-hull
+lower-pair catalogue, both rational boxes, and all lower/upper cross
+signs. The nested mixed pair is uniformly excluded by a positive
+cubic, removing three of the eleven initial line rows. The surviving
+mixed rows have stronger area floors; one also has a strict support
+ratio interval and narrower physical box. These deductions have an
+independent geometry and exact-identity audit. The exact-hull parent
+and the exterior placements remain open. The global algebra checker
+now has 34 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

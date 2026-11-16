@@ -991,6 +991,53 @@ def adjacent_mixed_iii():
     print("PASS: final mixed-III support branch, forced DF straddle, physical map, and all box gaps")
 
 
+def n6_exact_hull_reduction():
+    q=sp.Rational;s=q(93,1000);K=q(149,20)
+    a,b,c,e,f,h,x,y=sp.symbols("a b c e f h x y")
+    A,B,C,E,F,H,X=(sp.Matrix(pt) for pt in
+        [(0,a),(b,0),(c,0),(1,e),(f,1),(0,h),(x,y)])
+    det=lambda U,V,W:2*area(U,V,W)
+    zero((1-f)*det(C,E,X)+(1-c)*det(E,F,X)-det(C,E,F)*(1-x))
+    zero((1-h)*det(E,F,X)+(1-e)*det(F,H,X)-det(E,F,H)*(1-y))
+    zero(c*det(H,B,X)-b*det(H,C,X)-h*(c-b)*x)
+    zero(det(A,B,X)-det(H,B,X)-(h-a)*(b-x))
+    assert s-q(1037,10000)*(1-q(1037,10000))==q(5369,10**8)>0
+    t,r=sp.symbols("t r");poly=(1+4*t)*r*r-12*t*r+4*t*t
+    assert poly.subs({t:s,r:q(39,50)})==-q(1449,1250000)
+    assert (3-6*r+2*r*r).subs(r,q(69,100))==-q(939,5000)
+    assert (K-3)/(K*K-2*K)==q(1780,16241)
+    assert s/q(1780,16241)==q(1510413,1780000)>9*s
+    beta,z=sp.symbols("beta z")
+    FF=beta**3-beta**2+(3*s+s*s)*beta-2*s*s
+    zero(FF.subs(beta,z+q(9,20))-(z**3+q(7,20)*z*z-q(4851,10**6)*z+q(15381,20000000)))
+    assert q(4851,10**6)**2-4*q(1,5)*q(15381,20000000)==-q(591707799,10**12)<0
+    assert q(489,200)**2<6 and q(989,100)*s==q(91977,100000)
+    ratio=r*r-(1-s)*r+2*s
+    assert ratio.subs(r,q(313,1000))==ratio.subs(r,q(594,1000))==q(39,500000)>0
+    assert q(313,1000)*q(91977,100000)==q(28788801,10**8)>q(287,1000)
+    print("PASS: N6 exact-hull boxes, endpoint eliminations, mixed nested-row exclusion, and stronger remaining floors")
+
+
+def n7_top_three_five():
+    q=sp.Rational;s=q(93,1000);eta=q(93,790);ell=q(7347,69700)
+    a,b,e,f,g,h,z,x,y,u,v=sp.symbols("a b e f g h z x y u v")
+    A,B,E,F,G,H,O,P=(sp.Matrix(pt) for pt in
+        [(0,a),(b,0),(1,e),(f,1),(g,z),(0,h),(x,y),(u,v)])
+    det=lambda X,Y,Z:2*area(X,Y,Z)
+    zero(det(H,O,P)-det(A,O,P)-(u-x)*(h-a))
+    zero(f*det(A,G,P)-g*det(A,F,P)+u*det(A,F,G))
+    zero(z*det(B,H,P)-h*det(B,G,P)+v*(b*(z-h)+h*g))
+    zero((1-e)*det(F,H,O)+(1-h)*det(E,F,O)-det(E,F,H)*(1-y))
+    zero(det(A,G,O)+det(G,H,O)-(h-a)*(g-x))
+    bound=(1-ell)*(h-eta)*(1-h)-3*s*(1-h)-s*(h-eta)
+    zero(bound+(492588700*h*h-652994170*h+205585707)/550630000)
+    assert bound.subs(h,q(257,500))==-q(216669513,1376575000000)<0
+    assert bound.subs(h,q(203,250))==-q(87402983,344143750000)<0
+    assert sp.diff(bound,h).subs(h,q(257,500))>0
+    assert sp.diff(bound,h).subs(h,q(203,250))<0
+    print("PASS: complete N7 HGF 3/5 placement identities, ordinate bound, and the stronger AGO-positive box")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1024,3 +1071,5 @@ if __name__ == "__main__":
     adjacent_mixed_i()
     n7_small_arcs()
     adjacent_mixed_iii()
+    n6_exact_hull_reduction()
+    n7_top_three_five()

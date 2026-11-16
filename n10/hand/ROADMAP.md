@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 26.
+Checkpoint 27.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -211,6 +211,13 @@ four-corner alternative and all zero-area faces.
   - [x] N6-EXTERIOR-CUTS. Neither side cap contains three free points;
         the two side caps cannot each contain two; three top-cap points
         forbid any side-cap point. Proof: N6_EXTERIOR_CUTS.md.
+  - [x] N6-EXACT-CATALOGUE. The exact-hull 2/2 child reduces to two
+        lower support-cell pairs and eleven line patterns. A uniform
+        scalar cubic excludes all three nested mixed patterns, leaving
+        eight. Both rational boxes, every cross-pair sign, and the stronger
+        mixed area and ratio bounds are proved and independently audited.
+        Proof: N6_EXACT_HULL_REDUCTION.md. This is a reduction, not a
+        closure of the exact-hull child.
   - [ ] Complete the exact-hull 2/2 case and all exterior-cap placements
         outside the two stated projection chambers.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
@@ -243,9 +250,13 @@ four-corner alternative and all zero-area faces.
         points' line is excluded. All eight short-arc locations are
         covered; five printed sums have 2,254 integer entries.
         Proof: N7_OP_LINE_CAPS.md.
+  - [x] N7-SINGLE-EXTERIOR-3/5-TOP. The entire H,G,F short-arc position,
+        allowing every inward depth of G. Eleven exhaustive sign rows
+        have 3,183 printed cubic terms, with all occupancy and diagonal
+        witnesses supplied. Proof: N7_THREE_FIVE_TOP.md.
   - [ ] Complete the two surviving placement rows outside the proved
-        sign chambers: all of (0,0,3), and the 3/5 and 4/4 line splits
-        of (1,0,2).
+        sign chambers: all of (0,0,3), the other 3/5 short-arc positions,
+        and the 4/4 line splits of (1,0,2).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -352,6 +363,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_PLACEMENTS.md | Exhaustive first placement reduction; exact six-anchor hull has a 2/2 free-point split |
 | N6_PROJECTED_CHAMBERS.md | Strict sharp bounds for both two-secondary omission-pair orbits; complete normalized N6 candidate neighborhoods |
 | N6_EXTERIOR_CUTS.md | Complete exclusions of side-cap triples, two points in each side cap, and a top triple plus a side-cap point |
+| N6_EXACT_HULL_REDUCTION.md | Complete exact-hull lower catalogue and rational boxes; all nested mixed rows excluded, eight rows remain |
 | N7_PLACEMENTS.md | Lower-cap exclusions, upper-cap capacity two, five exhaustive remaining counts and a uniform rational box |
 | N7_UPPER_OCCUPANCY.md | Complete (2,1,0) exclusion, at least one free point in the heptagon, and two-exterior chord placements |
 | N7_OPPOSITE_UPPER_CAPS.md | Complete exclusion of simultaneous occupancy of the two upper caps, including the entire (1,1,1) row |
@@ -359,6 +371,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_PROJECTED_CHAMBER.md | Strict sharp bound in each single inward-secondary chamber; complete normalized N7 candidate neighborhoods |
 | N7_PROJECTED_SIGNS.md | Complete normalized inward-secondary good-sign chamber without an extra coordinate condition; two cubic rows, 642 printed integer entries |
 | N7_OP_LINE_CAPS.md | Every 1/7 and 2/6 line split in single-exterior N7; exhaustive eight-cap catalogue and five printed sums, 2,254 entries |
+| N7_THREE_FIVE_TOP.md | Entire HGF short-arc 3/5 class in single-exterior N7; eleven exhaustive cubic rows, 3,183 printed entries |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
