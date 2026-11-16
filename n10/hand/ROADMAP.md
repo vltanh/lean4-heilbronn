@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 83.
+Checkpoint 84.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -561,7 +561,19 @@ four-corner alternative and all zero-area faces.
         updates, ending with exact upper bound -18462201153/10^12.
         Both independent manuscript readers pass.
         Proof: N6_BTTT_REMAINING_CENTRAL_EAR.md and its indexed tables.
-        The lower central alternative HBP>0 remains open.
+        The lower central alternative HBP>0 is refined below.
+  - [x] N6-BTTT-CENTRAL-TOP-POSITIVE-AFP. In the normalized +--+
+        word with HBP>0, the entire AFP>0 alternative is impossible.
+        Five actual-sign splits cover six contradictory leaves, with
+        no coordinate cuts. Literal tables print 1,178 deductions,
+        1,262 coordinate updates, 275 physical factors, 3,154 scalar
+        updates and 480 scalar relations. Separate JavaScript and
+        Python/Fraction readers check all inherited boxes, immutable
+        area sources, the shared central identity and every terminal.
+        Twelve argument mutations and eight Markdown corruptions
+        are rejected. Proof: N6_BTTT_REMAINING_CENTRAL_POSITIVE.md
+        and its indexed tables. The exact remaining frontier is
+        +--+ with ACP>0, HBP>0 and AFP<0; the parent stays open.
   - [x] N6-ITTT-TOP-TRIANGLE-WORD. The normalized --+- top word
         with P strictly inside HCEF is impossible: nineteen sign
         splits cover twenty leaves, including two explicit clustered
@@ -741,7 +753,9 @@ four-corner alternative and all zero-area faces.
           N6_BTTT_TOP_TRIANGLE_WORD.md, N6_BTTT_TOP_WORD_MMMM.md and
           N6_BTTT_REMAINING_TRIANGULAR.md. The earlier single-ear
           exclusions remain complete. N6_BTTT_REMAINING_CENTRAL_EAR.md
-          also excludes HBP<0 in +--+. Its HBP>0 alternative stays open.
+          also excludes HBP<0 in +--+. The positive-AFP theorem
+          N6_BTTT_REMAINING_CENTRAL_POSITIVE.md leaves exactly
+          ACP>0, HBP>0, AFP<0 in that word. The parent stays open.
     - [ ] N6-ITTT: (0,1,0,3,0).
           The normalized --+- word is complete in
           N6_ITTT_TOP_TRIANGLE_WORD.md; the other residual words
@@ -932,6 +946,17 @@ four-corner alternative and all zero-area faces.
         nine identities and five positive comparison gaps pass.
         Proof: UPPER_EAR_SEPARATION.md. The actual-contact theorem
         also applies to N6; the surviving E-only cut remains open.
+  - [x] N7-CENTRAL-E-ONLY-CONTACT-LEMMAS. In both central lower
+        roots with two actual points in CEF, the three triangles
+        AFH, BFH and ABF are empty, e>57/100, and AEF has capacity
+        two. In the E-only upper-pair word, AGO,AGP>0 force AEG<0,
+        while AEG<0 forces AEO>0. Explicit affine containments,
+        Pluecker identities and rational monotonicity comparisons
+        prove these statements. An independent SymPy/Fraction pass
+        checks 33 identities and exact comparisons; the separate
+        author reader checks 39. Proof: N7_CENTRAL_COMPLETION.md,
+        Sections 1–6. These lemmas leave the E-only word and both
+        central parents open.
   - [ ] N7-INTERIOR-REMAINDER. Exclude the two central lower cells
         CA and CB in the sole remaining all-interior heptagon count
         (k,j,q)=(1,2,0). Both lower-ear children are complete above.
@@ -1115,6 +1140,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | UPPER_EAR_SEPARATION.md | One lower point and two CEF occupants force HEF empty; two exact height cases exclude every negative-EH child of the E-only upper-pair cut |
 | N7_CENTRAL_ACD_CAP.md | Both central roots satisfy actual ACD<27/40; one positive cubic proves capacity one and ADG<0 forces ADO,ADP>0 |
 | N7_CENTRAL_PAIR_CUT.md | After HOP<0, the full DGO>0 child is impossible in both central roots; three actual capacity-one triangles and a short occupied-triangle contradiction leave six pair words |
+| N7_CENTRAL_COMPLETION.md | Local lemmas for both central roots: three empty triangles, e>57/100, AEF capacity two and two E-only sign implications; independent geometric and exact arithmetic review |
 | N7_CENTRAL_AREA_ORIENTATION.md | In both central lower cells, every upper point T satisfies AGT<0 or DGT<0; four fans, five signed products and 72 exact rational steps give gap 1941/1000000 |
 | N7_ONE_LOWER_ABC.md | Entire lower-ear ABC child: 93 splits, 84 cubics / 37,612 terms, ten geometric terminals, 3,411 deductions and 41 explicit rational squares |
 | N6_TOP_AFFINE_CAPS.md | Actual top-cap contact/apex affine upper bounds and inherited actual-container caps, with all determinant identities |
@@ -1134,6 +1160,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_BTTT_TOP_WORD_MMMM.md and indexed tables | Complete normalized BTTT ---- word: fifteen sign splits, sixteen leaves, one 79-factor exact linear contradiction and two semantic readers |
 | N6_BTTT_REMAINING_TRIANGULAR.md and indexed tables | Complete normalized BTTT ---+ word: thirteen sign splits, fourteen leaves, 1,356 deductions, 1,493 coordinate updates, 664 scalar updates and two independent manuscript readers |
 | N6_BTTT_REMAINING_CENTRAL_EAR.md and indexed tables | Complete HBP<0 alternative of normalized +--+: no splits, 39 deductions, 28 factors, 152 coordinate updates and two independent manuscript readers |
+| N6_BTTT_REMAINING_CENTRAL_POSITIVE.md and indexed tables | Complete AFP>0 alternative of normalized +--+ with HBP>0: five splits, six leaves, 1,178 deductions, 1,262 coordinate updates and two independent manuscript readers |
 | N6_BTTT_TOP_TRIANGLE_WORD.md and indexed tables | Complete normalized BTTT --+- word: sixteen sign splits, nine coordinate cuts, twenty-six terminal contradictions and two independent semantic readers |
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_ONE_LOWER_THREE_CAPS.md | Entire (1,0,1,1,1) count: two reflected lower alternatives, 89 deductions, 158 interval steps, forty scalar caps and two cubics / 742 terms |

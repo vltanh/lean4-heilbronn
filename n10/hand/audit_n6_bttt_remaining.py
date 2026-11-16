@@ -4,17 +4,18 @@ Reads only Markdown, using a fresh parser and arithmetic implementation.
 No discovery implementation or companion JavaScript reader is imported.
 Run: python3 n10/hand/audit_n6_bttt_remaining.py
 The additional flag --central-ear audits the separate +--+ HBP<0 proof.
+The flag --central-positive audits the +--+, HBP>0, AFP>0 subcase.
 """
 from pathlib import Path
 from fractions import Fraction as F
 from itertools import combinations,permutations,product
 import re,json,sys
-assert sys.argv[1:] in ([], ['--central-ear']), 'Only --central-ear is supported'
-CENTRAL_EAR=bool(sys.argv[1:])
-ROOT=Path(__file__).resolve().parent/('N6_BTTT_REMAINING_CENTRAL_EAR_TABLES' if CENTRAL_EAR else 'N6_BTTT_REMAINING_TABLES');L='ABCEFHPQRS';V='a b c e f h p q u v r w j k'.split();s=F(93,1000);alpha=F(1037,10000);K=F(149,20);J=F(4427,500);G=F(1457,250)
-TOP_COST=G if CENTRAL_EAR else K
-CONTACT_CEILING=F(33,125) if CENTRAL_EAR else F(21,125)
-EMPTY=['ABC','ABE','ACE','BCE']+([] if CENTRAL_EAR else ['ABF','ABH','AFH','BFH'])
+assert sys.argv[1:] in ([], ['--central-ear'], ['--central-positive']), 'Unsupported audit mode'
+CENTRAL_EAR=sys.argv[1:]==['--central-ear'];CENTRAL_POSITIVE=sys.argv[1:]==['--central-positive'];CENTRAL=CENTRAL_EAR or CENTRAL_POSITIVE
+ROOT=Path(__file__).resolve().parent/('N6_BTTT_REMAINING_CENTRAL_EAR_TABLES' if CENTRAL_EAR else 'N6_BTTT_REMAINING_CENTRAL_POSITIVE_TABLES' if CENTRAL_POSITIVE else 'N6_BTTT_REMAINING_TABLES');L='ABCEFHPQRS';V='a b c e f h p q u v r w j k'.split();s=F(93,1000);alpha=F(1037,10000);K=F(149,20);J=F(4427,500);G=F(1457,250)
+TOP_COST=G if CENTRAL else K
+CONTACT_CEILING=F(33,125) if CENTRAL else F(21,125)
+EMPTY=['ABC','ABE','ACE','BCE']+([] if CENTRAL else ['ABF','ABH','AFH','BFH'])
 COST=[s,3*s,K*s,J*s]
 def rows(text,title):
  m=re.search(r'^#{2,3} '+re.escape(title)+r'\n',text,re.M)
@@ -69,7 +70,7 @@ def maxpoly(p,lo,hi):
   for i,b in zip(inds,bs):at[i]=hi[i] if b else lo[i]
   q=ev(p,at);best=q if best is None else max(q,best)
  return best
-ctx={};context_given={}
+ctx={};context_given={};geometry_n=0
 for ci,t in blocks((ROOT/'contexts.md').read_text(),'Context'):
  kn={}
  def put(w,sg):
@@ -81,7 +82,7 @@ for ci,t in blocks((ROOT/'contexts.md').read_text(),'Context'):
   put('HC'+p,-1 if p=='P' else 1)
   if p!='P':
    for edge,sg in [('HE',1),('CF',-1),('HP',1),('CP',-1)]:put(edge+p,sg)
- for w,sg in [('EQR',1),('EQS',1),('ERS',1),('FQR',1 if CENTRAL_EAR else -1),('FQS',-1),('FRS',-1),('QRS',1)]:put(w,sg)
+ for w,sg in [('EQR',1),('EQS',1),('ERS',1),('FQR',1 if CENTRAL else -1),('FQS',-1),('FRS',-1),('QRS',1)]:put(w,sg)
  for i,w,sg,rule,wit in rows(t,'Geometric deductions'):
   sg=1 if sg=='+' else -1;assert sign(kn,w)==0
   if rule=='branch':assert w+('+' if sg==1 else '-') in listv(props(t)['Given actual signs'])
@@ -107,9 +108,13 @@ for ci,t in blocks((ROOT/'contexts.md').read_text(),'Context'):
    assert opts and all(o[key(w)]==sg*sign({key(w):1},w) for o in opts)
   else:raise Exception(rule)
   put(w,sg)
+  geometry_n+=1
  assert kn=={w:1 if sg=='+' else -1 for w,sg in rows(t,'Final actual signs')};ctx[ci]=kn;context_given[ci]=set(listv(props(t)['Given actual signs']))
-print('independent geometry contexts',len(ctx),flush=True)
-stages={};allbounds={};bary_updates=0;updates=0;coordinate=0;relations_n=0;physical_n=0;stageboxes={}
+print('independent geometry contexts/deductions',len(ctx),geometry_n,flush=True)
+stages={};allbounds={};bary_updates=0;updates=0;coordinate=0;relations_n=0;physical_n=0;stageboxes={};terminal_stages=set()
+def mark_terminal(sid):
+ assert sid not in terminal_stages
+ terminal_stages.add(sid)
 for filename in (['stages_00.md'] if CENTRAL_EAR else ['stages_00.md','stages_01.md','stages_02.md']):
  for sid,t in blocks((ROOT/filename).read_text(),'Stage'):
   pp=props(t);kn=ctx[int(pp['Context'])];scope=pp['Scope'];assert sid not in stages;stages[sid]=(scope,t,kn)
@@ -124,7 +129,9 @@ for filename in (['stages_00.md'] if CENTRAL_EAR else ['stages_00.md','stages_01
    for pt in 'QRS':
     oo=[p for p in 'QRS' if p!=pt and inside(kn,'E'+pt+'F',p)];i=6+2*'PQRS'.index(pt);exlo[i]=exlo[i+1]=alpha+COST[len(oo)]/(1-alpha)
     for p in oo:j=6+2*'PQRS'.index(p);exhi[j]=min(exhi[j],1-delta);exhi[j+1]=min(exhi[j+1],1-delta)
-   assert lo==exlo and hi==exhi and pp['Parent box']=='none'
+   if pp['Parent box']!='none':
+    parent=int(pp['Parent box']);assert CENTRAL_POSITIVE and parent<sid and parent in stageboxes and (scope==stages[parent][0] or scope.startswith(stages[parent][0]+'/'));plo,phi=stageboxes[parent];exlo=[max(a,b) for a,b in zip(exlo,plo)];exhi=[min(a,b) for a,b in zip(exhi,phi)]
+   assert lo==exlo and hi==exhi
    polys={}
    for fi,name,prem,printed in rows(t,'Physical factors'):
     mm=re.fullmatch(r'actual ([A-Z]{3}); occupants (.*)',prem)
@@ -136,9 +143,12 @@ for filename in (['stages_00.md'] if CENTRAL_EAR else ['stages_00.md','stages_01
     elif prem.startswith('earlier '):
      ref,tr,d,v=prem[8:].split('; ');br=allbounds[ref];assert (tr,d,F(v))==br[:3];assert br[3]<sid and (scope==br[4] or scope.startswith(br[4]+'/'));expected=polyadd(scale(det(tr),sign(kn,tr)*(1 if d=='lo' else -1)),const(-F(v) if d=='lo' else F(v)))
     elif prem.startswith('top hull '):
-     if CENTRAL_EAR:assert convex(kn,'EQRF') and inside(kn,'EQRF','S')
+     if CENTRAL:assert convex(kn,'EQRF') and inside(kn,'EQRF','S')
      else:assert inside(kn,'EFQ','R') and inside(kn,'EFQ','S')
      expected=polyadd(mul(sub(one,vv[3]),sub(one,vv[4])),const(-TOP_COST*s))
+    elif prem=='central lower x':
+     assert CENTRAL_POSITIVE and sign(kn,'ACP')==1 and sign(kn,'HBP')==1 and sign(kn,'CHP')==1
+     base=mul(mul(vv[5],sub(vv[2],vv[1])),vv[6]);assert base==polyadd(mul(vv[2],det('HBP')),mul(vv[1],det('CHP')));expected=polyadd(base,scale(polyadd(vv[2],vv[1]),-s))
     elif prem.startswith('weighted '):
      mm=re.fullmatch(r'weighted ([QRS]) ([QRS]); costs (.*); M ([^;]+); axis ([0-3])',prem);outer,inner,cc,m0,axis=mm.groups();assert inside(kn,'EF'+outer,inner);costs=[F(a) for a in listv(cc)];assert costs==[COST[len(occ(kn,w))]/s for w in ['F'+outer+inner,'E'+outer+inner,'EF'+inner]]
      M=(1-alpha)**2/s;assert F(m0)==M and sum(costs)<=M;ce,cf,cu=costs;oi=6+2*'PQRS'.index(outer);ii=6+2*'PQRS'.index(inner)
@@ -170,9 +180,10 @@ for filename in (['stages_00.md'] if CENTRAL_EAR else ['stages_00.md','stages_01
     raw=(min(a for a,b in possible),max(b for a,b in possible));assert raw==(F(rl),F(rh));assert (F(nl),F(nh))==(max(lo[i],down(raw[0])),min(hi[i],up(raw[1])));lo[i],hi[i]=F(nl),F(nh);coordinate+=1
    assert lo==[F(r[3]) for r in box] and hi==[F(r[4]) for r in box];stageboxes[sid]=(lo,hi)
    for fi,target,ol,oh,ls in rows(t,'Interval contradiction'):
+    mark_terminal(sid)
     i=V.index(target);assert (F(ol),F(oh))==(lo[i],hi[i]);ll=lines(polys[fi],i);assert ll==p_lines(ls)
     terminal_max=max(max(a*lo[i]+b,a*hi[i]+b) for a,b in ll);assert terminal_max<0
-    if CENTRAL_EAR:print('fresh central-ear terminal maximum',terminal_max,flush=True)
+    if CENTRAL:print('fresh central terminal maximum',sid,terminal_max,flush=True)
   records={}
   for rid,tr,d,vs,source in rows(t,'Initial area bounds'):
    v=F(vs)
@@ -239,25 +250,32 @@ for filename in (['stages_00.md'] if CENTRAL_EAR else ['stages_00.md','stages_01
    else:raise Exception(kind)
    assert q==F(raw),(sid,rid);rounded=down(q) if d=='lo' else up(q);assert rounded==F(value);records[rid]=(tr,d,rounded);allbounds[rid]=(tr,d,rounded,sid,scope);updates+=1
   for ri,lr,ur,pl,pu in rows(t,'Zero barycentric contradiction'):
+   mark_terminal(sid)
    low,_,target=bary(relations[ri],[records[x] for x in listv(lr)],'lo');high,_,_=bary(relations[ri],[records[x] for x in listv(ur)],'hi');assert target=='none' and low==F(pl) and high==F(pu) and (low>0 or high<0);print('fresh zero determinant interval',low,high,flush=True)
   for tr,lr,ur,pl,pu in rows(t,'Area contradiction'):
+   mark_terminal(sid)
    assert records[lr]==(tr,'lo',F(pl)) and records[ur]==(tr,'hi',F(pu)) and F(pl)>F(pu)
   for h,ps in rows(t,'Distributed-mesh contradiction'):
+   mark_terminal(sid)
    ps=listv(ps);assert len(ps)==3 and len(set(ps))==3 and all(inside(kn,h,p) for p in ps)
    for perm in permutations(ps):
     mp=dict(zip('ABCXYZ',h+''.join(perm)));assert any(sign(kn,''.join(mp[a] for a in w))==-1 for w in 'ABZ BCX CAY AZY BXZ CYX ZXY AZX BXY CYZ AXY BYZ CZX'.split())
 print('independent exact physical/interval/scalar pass',{'physical_factors':physical_n,'coordinate':coordinate,'scalar':updates,'barycentric_updates':bary_updates,'relations':relations_n,'bounds':len(allbounds)},flush=True)
 # Independent tree reachability and exact binary coverage.
 idx=(ROOT/'INDEX.md').read_text();tree={r[0]:r for r in rows(idx,'Actual-sign case tree')};seen=set();leaves=[];assigned=set();forces=rows(idx,'Capacity-forced signs')
-def visit(node,allowed=frozenset(),depth=0):
+def visit(node,allowed=frozenset(),depth=0,parent=None):
  assert node not in seen;seen.add(node);r=tree[node];assert int(r[1])==depth and set(listv(r[2]))==set(allowed);sp=r[4];children=listv(r[5]);available=set(allowed)
  for st in map(int,listv(r[3])):
   assert st not in assigned;assigned.add(st);scope,text,kn=stages[st];assert scope==node and context_given[int(props(text)['Context'])]<=available
+  expected_parent=parent if CENTRAL_POSITIVE else None;assert props(text)['Parent box']==('none' if expected_parent is None else str(expected_parent));parent=st
   for n,stage,token,h,ii,p,ref,upper,nextcost in forces:
    if n!=node or int(stage)!=st:continue
    ii=listv(ii);br=allbounds[ref];assert br[:4]==(key(h),'hi',F(upper),st);assert len(set(ii))==len(ii) and all(inside(kn,h,x) for x in ii) and p not in h and p not in ii;assert F(nextcost)==COST[len(ii)+1]>F(upper);sg=sign(kn,h);tests=[h[i]+h[(i+1)%3]+p for i in range(3)];assert sum(sign(kn,tr)==sg for tr in tests)==2;missing=next(tr for tr in tests if sign(kn,tr)!=sg);assert sign(kn,missing)==0 and key(missing)==key(token[:3]);assert sign({key(token[:3]):(1 if token[-1]=='+' else -1)*sign({key(token[:3]):1},token[:3])},missing)==-sg;available.add(token)
  if sp=='none':assert not children and r[6]!='none';leaves.append(int(r[6]));return
  assert len(set(sp))==3 and set(sp)<=set(L) and children==[node+'/'+sp+'-',node+'/'+sp+'+']
- for c,sg in zip(children,['-','+']):visit(c,available|{sp+sg},depth+1)
-visit('root',frozenset({'BHP+'}) if CENTRAL_EAR else frozenset());assert len(seen)==len(tree)==(1 if CENTRAL_EAR else 27) and len(leaves)==(1 if CENTRAL_EAR else 14) and assigned==set(stages);metadata=dict(rows(idx,'Hypotheses and format'));assert sorted(leaves)==sorted(map(int,listv(metadata['Terminal stage order'])));assert metadata['Top word']==('+--+' if CENTRAL_EAR else '---+') and metadata['Normalized e <= f']=='yes' and F(metadata['Threshold'])==s
+ for c,sg in zip(children,['-','+']):visit(c,available|{sp+sg},depth+1,parent)
+root_given=frozenset({'BHP+'}) if CENTRAL_EAR else frozenset({'BHP-','AFP+'}) if CENTRAL_POSITIVE else frozenset()
+visit('root',root_given);assert len(seen)==len(tree)==(1 if CENTRAL_EAR else 11 if CENTRAL_POSITIVE else 27) and len(leaves)==(1 if CENTRAL_EAR else 6 if CENTRAL_POSITIVE else 14) and assigned==set(stages);metadata=dict(rows(idx,'Hypotheses and format'));assert sorted(leaves)==sorted(map(int,listv(metadata['Terminal stage order'])))==sorted(terminal_stages);assert metadata['Top word']==('+--+' if CENTRAL else '---+') and metadata['Normalized e <= f']=='yes' and F(metadata['Threshold'])==s
+totals=dict(rows(idx,'Exact totals'))
+for name,value in {'contexts':len(ctx),'signNodes':len(tree),'signSplits':len(tree)-len(leaves),'signLeaves':len(leaves),'coordinateSplits':0,'terminals':len(terminal_stages),'stages':len(stages),'boxStages':len(stageboxes),'intervalSteps':coordinate,'physicalFactors':physical_n,'areaBounds':len(allbounds),'areaUpdates':updates,'scalarRelations':relations_n,'linearFactors':0,'linearWeights':0,'linearTerminals':0}.items():assert int(totals[name])==value
 print('independent binary coverage',len(tree),len(leaves),sorted(leaves))

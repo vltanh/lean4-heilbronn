@@ -902,6 +902,27 @@ no unresolved branches in this count. Ten other C1 count rows, the remaining
 N6 rows and the two central N7 roots still require hand proofs; the unrestricted
 hand theorem is not complete.
 
+## Hand checkpoint 84: N6 positive-AFP half and N7 contact lemmas
+
+The normalized N6 BTTT central top word `+--+`, with `HBP>0`,
+cannot have `AFP>0`. The
+[positive-AFP theorem](hand/N6_BTTT_REMAINING_CENTRAL_POSITIVE.md)
+prints five exhaustive actual-sign splits and six contradictory leaves.
+Independent JavaScript and Python/Fraction readers reconstruct all 1,178
+geometric deductions, 275 physical factors, 1,262 coordinate updates,
+3,154 scalar updates, 480 relations and inherited immutable sources.
+Twelve argument mutations and eight Markdown corruptions are rejected.
+Combined with the lower-ear theorem, the remaining BTTT frontier is
+exactly `+--+`, `ACP>0`, `HBP>0`, `AFP<0`. The count remains open.
+
+The [central N7 contact note](hand/N7_CENTRAL_COMPLETION.md) proves
+`e>57/100`, capacity two for actual `AEF`, three empty triangles, and
+two new E-only sign implications in both CA and CB. Its explicit geometric
+and rational arguments pass independent review and a fresh 33-check
+SymPy/Fraction expansion; the separate author reader passes 39 checks.
+These are local consequences. The E-only word and both central N7 roots,
+ten C1 rows and the remaining N6 rows still require hand proofs.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
