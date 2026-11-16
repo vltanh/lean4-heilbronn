@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 16.
+Checkpoint 17.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -166,8 +166,25 @@ four-corner alternative and all zero-area faces.
 - [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
       points and four strictly interior points.
+  - [x] N6-PLACEMENTS. The lower-left cap is empty; both anchor regions
+        have capacity two; each exterior cap has at most three free points.
+        The exact six-anchor hull must split its free points 2/2.
+        Proof: N6_PLACEMENTS.md. No surviving count is excluded here.
+  - [x] N6-PROJECTED. Strict sharp bounds in both adjacent-secondary
+        omission-pair orbits, with all twelve final area gains proved.
+        These include every normalized N6 candidate neighborhood.
+        Proof: N6_PROJECTED_CHAMBERS.md.
+  - [ ] Complete the exact-hull 2/2 case and all exterior-cap placements
+        outside the two stated projection chambers.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
       points and three strictly interior points.
+  - [x] N7-PLACEMENTS. Both lower caps are empty, each upper cap has
+        capacity two, and five remaining count rows are exhaustive.
+        Proof: N7_PLACEMENTS.md.
+  - [x] N7-PROJECTED. Strict sharp bounds for each single inward-secondary
+        chamber; every normalized N7 candidate neighborhood is included.
+        Proof: N7_PROJECTED_CHAMBER.md.
+  - [ ] Complete all five placement rows outside the stated chambers.
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -259,6 +276,11 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N8_COMPLETE.md | Complete asymmetric eight-boundary bound and exact candidate equality classification |
 | N8_BOUNDARY_RANGES.md | Stronger uniform coordinate ranges and four definite contact-overlap bounds from the eight ears alone |
 | QUADRILATERAL_SPREAD.md | Two-diagonal spread bound 1-6t for t>=1/11, threshold-free bound 1-(3+2sqrt(2))t, and explicit N8 applications |
+| QUADRILATERAL_THREE.md | Any actual quadrilateral of doubled area at most one has capacity two at sigma; nine exhaustive rows, 139 printed integer entries |
+| N6_PLACEMENTS.md | Exhaustive first placement reduction; exact six-anchor hull has a 2/2 free-point split |
+| N6_PROJECTED_CHAMBERS.md | Strict sharp bounds for both two-secondary omission-pair orbits; complete normalized N6 candidate neighborhoods |
+| N7_PLACEMENTS.md | Lower-cap exclusions, upper-cap capacity two, five exhaustive remaining counts and a uniform rational box |
+| N7_PROJECTED_CHAMBER.md | Strict sharp bound in each single inward-secondary chamber; complete normalized N7 candidate neighborhoods |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

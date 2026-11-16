@@ -698,6 +698,37 @@ def adjacent_upper_pair():
     print("PASS: adjacent upper-pair weighted identity, derivative table, complete positive rectangle")
 
 
+
+def lower_contact_projection_and_caps():
+    q = sp.Rational
+    a,b,c,d,e,f,g,h,x,y,U,V,delta,eta = sp.symbols("a b c d e f g h x y U V delta eta")
+    A,B,C,D,E,F,G,H,O,P = (sp.Matrix(t) for t in
+        [(0,a),(b,0),(c,0),(1,d),(1,e),(f,1),(g,1),(0,h),(x,y),(x+U,y+V)])
+    area2 = lambda I,J,K: 2*area(I,J,K)
+    Din=sp.Matrix([1-delta,d]);Gin=sp.Matrix([g,1-eta])
+    zero(area2(C,D,E)-area2(C,Din,E)-delta*e)
+    zero(area2(F,G,H)-area2(F,Gin,H)-eta*f)
+    zero(area2(A,D,O)-area2(A,Din,O)-delta*(y-a))
+    zero(-area2(B,G,O)+area2(B,Gin,O)-eta*(x-b))
+    Cin=sp.Matrix([c,eta]);Hin=sp.Matrix([eta,h])
+    zero(area2(B,C,D)-area2(B,Cin,D)-eta*(1-b))
+    zero(area2(C,F,P)-area2(Cin,F,P)-eta*(f-x-U))
+    zero(area2(A,G,H)-area2(A,G,Hin)-eta*(1-a))
+    zero(area2(E,H,P)-area2(E,Hin,P)-eta*(e-y-V))
+    zero(area2(B,C,D)-area2(B,Cin,Din)-eta*(1-delta-b))
+    zero(area2(C,D,E)-area2(Cin,Din,E)-delta*(e-eta))
+    s=q(93,1000);M=sp.symbols("M")
+    assert (M*M-(1-s)*M+s).subs(M,q(79,100))==q(57,100000)
+    assert s/q(79,100)==q(93,790)
+    assert s/(1-q(93,790))==q(7347,69700)
+    assert (5+q(29,5))*s-1==q(11,2500)>0
+    assert q(4427,500)*s-(1-s)**2==q(773,1000000)>0
+    zz=sp.symbols("zz")
+    assert (1-q(7,2)*zz+2*zz**2).subs(zz,q(1,3))==q(1,18)
+    assert (-1+4*zz-2*zz**2).subs(zz,q(5,16))==q(7,128)
+    print("PASS: N6/N7 projection identities, candidate margins, and exterior-cap rational bounds")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -720,3 +751,4 @@ if __name__ == "__main__":
     n8_ranges_and_quad_spread()
     adjacent_triangular_right()
     adjacent_upper_pair()
+    lower_contact_projection_and_caps()

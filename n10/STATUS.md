@@ -130,6 +130,15 @@ oblique sign failure in the corner-edge 4/4 class. Together with the ten
 expanded. The surviving sign chamber has the sharp bound and unique
 candidate equality without a symmetry assumption.
 
+The new universal quadrilateral theorem proves capacity two whenever the
+actual quadrilateral has doubled area at most one. Its four sector-count
+patterns reduce to nine printed cubic rows with 139 integer entries;
+independent geometry and Fraction/SymPy arithmetic audits pass. This gives
+new exhaustive N6/N7 placement reductions. The single- and double-contact
+projection theorems also exclude attainment in every stated secondary
+chamber, including all normalized candidate neighborhoods. Their global
+placement parents remain open.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
