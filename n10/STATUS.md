@@ -604,6 +604,23 @@ configuration has m<A*. The common central-strip inequality in
 ONE_LOWER_POINT.md now supplies two further cubic contact bounds.
 The global algebra checker has 68 passing groups.
 
+Both remaining C1 side-pair/opposite-cap counts are now excluded by
+C1_SIDE_PAIR_OPPOSITE_CENTRAL.md. The complete three-row proof prints
+454 integer terms, 58 sign deductions and 27 short monotonicity
+certificates. Independent geometry checks every supporting inequality
+and all 1,228 factor occurrences; independent Fraction and SymPy
+readers reproduce all exact negative bounds. Together with the earlier
+top-point theorem, a C1 side pair now excludes the opposite cap in
+every placement. Nineteen C1 exterior count rows remain.
+
+N7_RIGHT_SPAN_CAP.md gives the additional uniform capacity-one bound
+[DEF]<(149/20)s. Its auxiliary contact scalar preserves exactly the
+five inequalities required by the bottom-span theorem; it makes no
+claim about preserving the other triangles. The identities and their
+inequality directions have independent geometric and symbolic checks.
+The global algebra checker now has 70 passing groups. C1, N6 and N7
+remain the three open global families.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

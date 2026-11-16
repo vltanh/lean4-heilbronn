@@ -1852,6 +1852,44 @@ def adjacent_complete():
     print('PASS: complete Type-II cell-II inventory, count assembly and area-preserving normalization identities')
 
 
+def c1_side_pair_opposite_central():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000)
+    c,d,f,h,x,y=sp.symbols('c d f h x y')
+    P={'C':sp.Matrix([c,0]),'D':sp.Matrix([1,d]),'F':sp.Matrix([f,1]),'H':sp.Matrix([0,h]),'T':sp.Matrix([x,y])}
+    D=lambda w:2*area(*(P[ch] for ch in w))
+    zero((1-f)*D('CDT')+(1-c)*D('DFT')-D('CDF')*(1-x))
+    zero((1-d)*(-D('HFT'))+(1-h)*D('DFT')-D('HDF')*(1-y))
+    assert q(55,100)*q(624,1000)<4*s
+    assert q(79,100)-3*s/q(55,100)<q(283,1000)
+    assert q(56,100)-s/q(29,100)<q(24,100)
+    text=Path(__file__).with_name('C1_SIDE_PAIR_OPPOSITE_CENTRAL.md').read_text()
+    assert re.findall(r'^### Row (\w+)$',text,re.M)==['C0','C1m','C1p']
+    traces=re.findall(r'^```c1pc-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) for t in traces)==58
+    upper=re.search(r'^```c1pc-upper\n(.*?)^```$',text,re.M|re.S)[1]
+    assert len(upper.strip().splitlines())==27
+    sums=re.findall(r'^```c1pc-sum\n(.*?)^```$',text,re.M|re.S)
+    assert [len(re.split(r';\s*|\n',t.strip())) for t in sums]==[224,143,87]
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==3 and max(bounds)==q(-460361485207,5000000000000)<0
+    print('PASS: complete C1 side-pair/opposite-cap central counts, three-row inventory and exact contact identities')
+
+
+def n7_right_span_cap():
+    b,c,d,e,f,a=sp.symbols('b c d e f a')
+    X=d*(c-b);Y=(1-c)*(e-d);cp=1-d*(1-b)/e
+    zero(e*(c-b)-(1-b)*(e-d)-X+Y)
+    zero(cp-c-(Y-X)/e)
+    zero(d*(cp-b)-(1-cp)*(e-d))
+    zero(e*(cp-b)-(1-b)*(e-d))
+    zero((1-b)*(e-d)-(1-f)*(e-d)-(f-b)*(e-d))
+    zero(a*(cp-b)-a*(c-b)-a*(cp-c))
+    zero(d*(cp-b)-d*(c-b)-d*(cp-c))
+    print('PASS: N7 right-span capacity-one triangle and scalar balancing with exactly five preserved premises')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1921,3 +1959,5 @@ if __name__ == "__main__":
     quadrilateral_support()
     n7_bottom_span_cap()
     adjacent_complete()
+    c1_side_pair_opposite_central()
+    n7_right_span_cap()

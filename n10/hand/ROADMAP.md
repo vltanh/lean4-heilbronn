@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 52.
+Checkpoint 53.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -308,7 +308,15 @@ four-corner alternative and all zero-area faces.
         46 conditional box steps and every factor have an independent
         geometry audit; separate Fraction/SymPy expansions pass.
         Proof: C1_TWO_LOWER_BOTH_SIDES.md.
-  - [ ] C1-EXTERIOR. Exclude the remaining 21 exterior count rows
+  - [x] C1-SIDE-PAIR-OPPOSITE-CENTRAL. The entire two counts
+        (0,2,2,0,1) and (1,1,2,0,1), and their transposes. Three
+        exhaustive cubics have 454 printed terms, 58 explicit sign
+        deductions and 27 short monotonicity certificates. Independent
+        geometry checks every box and support factor; separate
+        Fraction/SymPy expansions reproduce all negative bounds.
+        Together with the top case, every side pair excludes the
+        opposite cap. Proof: C1_SIDE_PAIR_OPPOSITE_CENTRAL.md.
+  - [ ] C1-EXTERIOR. Exclude the remaining 19 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -506,6 +514,11 @@ four-corner alternative and all zero-area faces.
         clearances reduce to a concave quadratic and an explicitly
         positive quartic, proving [BCE]<(149/20)s.
         Proof: N7_BOTTOM_SPAN_CAP.md.
+  - [x] N7-RIGHT-SPAN-CAP. The actual triangle DEF also has capacity
+        one. An auxiliary scalar balances BCD and CDE, preserving
+        exactly the five inequalities used by the bottom-span theorem,
+        and proves [DEF]<(149/20)s without assuming any free-point sign.
+        Proof: N7_RIGHT_SPAN_CAP.md.
   - [ ] N7-INTERIOR-REMAINDER. Exclude the sole remaining all-interior
         heptagon count (k,j,q)=(1,2,0).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
@@ -668,6 +681,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_SIDE_PAIR_OPPOSITE.md | A nine-point, 71-term contradiction excludes every side pair with an opposite-side point, closing three complete exterior count rows |
 | QUADRILATERAL_SUPPORT.md | Universal actual-quadrilateral support inequalities with one/two occupants, overlapping opposite-ear costs, central-pair cost and sixteen contact cubics |
 | N7_BOTTOM_SPAN_CAP.md | Uniform actual BCE capacity one, from five contact clearances and a strict positive quartic discriminant bound |
+| C1_SIDE_PAIR_OPPOSITE_CENTRAL.md | Both remaining side-pair/opposite-cap counts: three cubics / 454 terms, 58 deductions and 27 exact monotonicity certificates; completes exclusion of every opposite-cap point with a side pair |
+| N7_RIGHT_SPAN_CAP.md | Uniform actual DEF capacity one from a scalar balancing identity preserving the five premises of the bottom-span theorem |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
