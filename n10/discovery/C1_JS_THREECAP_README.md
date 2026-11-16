@@ -1,5 +1,11 @@
 # C1 two central points and three occupied caps: JS discovery checkpoint
 
+This historical checkpoint is superseded for its whole count by the complete
+hand argument in [C1_TWO_CENTRAL_THREE_CAPS.md](../hand/C1_TWO_CENTRAL_THREE_CAPS.md).
+The frozen search records below are retained for provenance, not the current
+count status. The final literal manuscript has 57 sign splits, 58 independently
+reviewed contradictions and no unresolved region.
+
 This is a partial discovery tree for C1 count (0,2,1,1,1), not a
 whole-count hand-proof closure. It reconstructs the lost scratch calculation
 from current published geometry. Do not presume any unavailable old branch

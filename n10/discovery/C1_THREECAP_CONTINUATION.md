@@ -1,5 +1,12 @@
 # C1 two-central / three-cap continuation: exact local checkpoint
 
+**Superseded for this count.** The complete independently reviewed hand
+argument is now [C1_TWO_CENTRAL_THREE_CAPS.md](../hand/C1_TWO_CENTRAL_THREE_CAPS.md):
+57 sign splits, 58 explicit contradictions, zero unresolved branches. The
+seven-node frontier below is the preserved earlier discovery checkpoint;
+its replay command intentionally continues to report that historical state.
+The other C1 counts and the global hand theorem remain open.
+
 This note is **discovery state, not a hand-proof closure**. It concerns exactly the
 one-corner count `(k,j,r,t,l)=(0,2,1,1,1)`: two actual free points in the
 central quadrilateral and one actual point in each exterior cap. The C1

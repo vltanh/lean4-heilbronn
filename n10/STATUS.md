@@ -883,6 +883,25 @@ pass this table too. The `HBP>0` alternative in `+--+` remains open, so no
 whole N6 count or global parent is marked complete. The global hand
 obligations are still C1, N6 and N7; the computer-assisted proof above is unchanged.
 
+## Hand checkpoint 83: complete C1 two-central / three-cap count
+
+[C1_TWO_CENTRAL_THREE_CAPS.md](hand/C1_TWO_CENTRAL_THREE_CAPS.md)
+excludes the entire count `(0,2,1,1,1)`. Fifty-seven actual-sign splits
+cover 58 printed contradictions: eight scalar, 24 positive area-linear,
+nineteen positive physical-polynomial and seven empty endpoint unions.
+This completes the count previously represented by the seven queued branches
+in the preserved C1 discovery continuation.
+
+The independent manuscript reader uses only the 60 literal Markdown tables,
+fixed actual-point geometry and exact arithmetic. It verifies 965 physical
+sources, 789 coordinate updates, all 23 universal coordinate bounds,
+8,483 positive products, 5,680 final scalar endpoints against their immutable
+proofs, and complete binary coverage. Eight corrupted arguments are rejected,
+including an omitted leaf whose reported totals were also changed. There are
+no unresolved branches in this count. Ten other C1 count rows, the remaining
+N6 rows and the two central N7 roots still require hand proofs; the unrestricted
+hand theorem is not complete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

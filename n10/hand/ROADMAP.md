@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 82.
+Checkpoint 83.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -381,9 +381,30 @@ four-corner alternative and all zero-area faces.
         actual anchor clearance, the cap clearance and an exact AM-GM
         comparison. Independent geometry and exact identities pass.
         Proof: SIDE_CAP_BASE_TRIANGLES.md. This is a local reduction.
-  - [ ] C1-EXTERIOR. Exclude the remaining 11 exterior count rows
-        with zero, one or two lower points, from the exhaustive
-        C1-EXTERIOR-CATALOGUE.
+  - [x] C1-TWO-CENTRAL-THREE-CAPS. The entire (0,2,1,1,1) count:
+        57 actual-sign splits cover 58 explicit contradictions,
+        comprising eight scalar, 24 positive area-linear, nineteen
+        positive physical-polynomial and seven endpoint-union leaves.
+        All 60 literal Markdown tables have independent geometric and
+        exact arithmetic acceptance: 965 physical sources, 789
+        coordinate updates, 23 common coordinate bounds, 8,483 positive
+        products and 5,680 immutable final endpoints. Eight corrupted
+        records are rejected, including an omitted leaf with altered
+        totals. Proof: C1_TWO_CENTRAL_THREE_CAPS.md and its tables.
+        The C1 parent stays open.
+  - [ ] C1-EXTERIOR. Exclude the remaining ten exterior count rows
+        from the exhaustive C1-EXTERIOR-CATALOGUE. Counts are
+        (k,j,r,t,l), up to exchange of the two side caps:
+    - [ ] C1-IITTT: (0,2,0,3,0).
+    - [ ] C1-IIRTT: (0,2,1,2,0).
+    - [ ] C1-BITTT: (1,1,0,3,0).
+    - [ ] C1-BIRTT: (1,1,1,2,0).
+    - [ ] C1-BIITT: (1,2,0,2,0).
+    - [ ] C1-BIIRL: (1,2,1,0,1).
+    - [ ] C1-BIIRT: (1,2,1,1,0).
+    - [ ] C1-BIIRR: (1,2,2,0,0).
+    - [ ] C1-BBIIT: (2,2,0,1,0).
+    - [ ] C1-BBIIR: (2,2,1,0,0).
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
       points and four strictly interior points.
   - [x] N6-PLACEMENTS. The lower-left cap is empty; both anchor regions
@@ -1120,6 +1141,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_TOP_TRIPLE_TRANSPOSE.md | Explicit transposition and six label maps preserve every residual top group; exact .168/.264 contact ceilings and anchor-span lower bounds |
 | C1_ONE_LOWER_THREE_CAPS.md | Entire (1,1,1,1,1) count: 37 splits, 37 cubics / 7,280 terms, one shared-central endpoint terminal, 1,053 deductions and 250 interval updates |
 | C1_TWO_CENTRAL_SIDE_PAIR_TOP.md | Entire (0,2,2,1,0) count and transpose: 76 splits, 61 cubics / 9,344 terms, sixteen geometric terminals, 2,528 deductions and 274 interval updates |
+| C1_TWO_CENTRAL_THREE_CAPS.md and indexed tables | Entire (0,2,1,1,1) count: 57 sign splits, 58 contradictions, 23 common coordinate bounds, 8,483 positive products and independent literal manuscript replay |
 | SIDE_CAP_BASE_TRIANGLES.md | Uniform cy<21/50 and hx<21/50 side-cap bounds, actual capacity-one consequences, and the N6 actual-contact transfer |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
