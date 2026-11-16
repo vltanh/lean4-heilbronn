@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 57.
+Checkpoint 58.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -355,6 +355,12 @@ four-corner alternative and all zero-area faces.
         omission-pair orbits, with all twelve final area gains proved.
         These include every normalized N6 candidate neighborhood.
         Proof: N6_PROJECTED_CHAMBERS.md.
+  - [x] N6-PROJECTED-COUNT-TERMINALS. Explicit full-domain mappings
+        from the one-lower/one-upper/both-side and two-upper/two-top
+        sign chambers to the two sharp projection theorems. All
+        twelve signs, coordinate cuts, strict inward depths and
+        positive increments are proved without a neighborhood
+        assumption. Proof: N6_PROJECTED_COUNT_TERMINALS.md.
   - [x] N6-EXTERIOR-CUTS. Neither side cap contains three free points;
         the two side caps cannot each contain two; three top-cap points
         forbid any side-cap point. Proof: N6_EXTERIOR_CUTS.md.
@@ -436,6 +442,14 @@ four-corner alternative and all zero-area faces.
         dichotomy. Both deductions have independent geometry and
         exact identity audits; neither is a whole-count closure.
         Proof: N6_CORNER_CONTAINERS.md.
+  - [x] SIDE-PAIR-TOP-BOUNDS. An occupied top cap gives the uniform
+        contact ceiling .897. A side pair then gives a narrow
+        bottom-contact interval and three inner-point barycentric
+        weights greater than 2/9, hence four affine bounds. The
+        virtual-corner transfer to N6 uses two explicit actual-area
+        comparisons and gives outer coordinates p>.858, q<.453.
+        Proof: C1_SIDE_PAIR_TOP_BOUNDS.md. This is a shared local
+        reduction, not a new C1 or N6 count closure.
   - [x] OCCUPIED-QUADRILATERAL-SUPPORT. Universal polynomial support
         inequalities for one or two actual occupants, including all
         overlapping opposite-ear counts and the central-pair cost.
@@ -443,6 +457,13 @@ four-corner alternative and all zero-area faces.
         cubics are proved. This reusable local lemma is a reduction,
         not a closure of a remaining placement family.
         Proof: QUADRILATERAL_SUPPORT.md, also applicable in N7 and C1.
+  - [x] EXACT-CONDITIONAL-BOXES. A proved multiaffine nonnegative
+        factor gives exact coordinate bounds by affine endpoint
+        interpolation and the hull of finitely many half-line
+        intervals. Sequential reuse, outward rounding and replay
+        requirements are proved in MULTIAFFINE_BOX_BOUNDS.md.
+        This supplies a rule for later printed tables, not a
+        closure of a remaining placement family.
   - [ ] Complete all surviving exterior-cap placements with k=0 or k=1
         outside the two stated projection chambers.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
@@ -602,8 +623,8 @@ four-corner alternative and all zero-area faces.
         are reduced by explicit symmetries to seven exhaustive rows, with
         all 1,442 integer entries printed. Proof: N8_CORNER_OBLIQUE.md.
 
-There are now FOUR named unresolved global obligations: II, C1, N6 and N7.
-These are continuous-domain obligations, not four small arithmetic checks. Each must
+There are now THREE named unresolved global obligations: C1, N6 and N7.
+These are continuous-domain obligations, not three small arithmetic checks. Each must
 admit a uniform argument or an explicitly exhaustive further subdivision.
 New subdivisions must retain their parent until all children close. No bound
 on the eventual number of smaller subcases is claimed.
@@ -736,6 +757,9 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_TWO_LOWER_THREE_TOP.md | Entire (2,0,0,3,0) count: one root, 202 refinements, 183 cubics / 45,644 terms, twenty geometric terminals, 3,644 deductions and 1,636 box refinements |
 | C1_TWO_LOWER_CENTRAL_TWO_TOP.md | Entire (2,1,0,2,0) count: three roots, 372 refinements, 343 cubics / 88,384 terms, 32 geometric terminals, 9,416 deductions and 2,504 box refinements |
 | N6_CORNER_CONTAINERS.md | Two uniform endpoint-container capacities with exact gap 773/1000000, and the exhaustive top-pair 3s/4s hull dichotomy |
+| N6_PROJECTED_COUNT_TERMINALS.md | Full-domain mappings of both candidate-containing count chambers to the sharp projection theorems, with all twelve determinants and positive increments checked |
+| MULTIAFFINE_BOX_BOUNDS.md | Exact endpoint-line interpolation, finite feasible-interval hulls, sequential rational bounds and outward rounding, with an optional exact trace replay module |
+| C1_SIDE_PAIR_TOP_BOUNDS.md | Uniform .897 contact ceiling, narrow side-pair box, inner 2/9 barycentric bounds and an explicit actual-area transfer to N6 |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

@@ -2005,6 +2005,38 @@ def n6_corner_containers():
     print('PASS: both N6 endpoint-container capacities, exact six-point gap and top-pair hull dichotomy')
 
 
+def n6_projected_count_terminals():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_n6_projected_count_terminals.py')))
+
+
+def multiaffine_box_bounds():
+    from fractions import Fraction as F
+    from multiaffine_box import refine_box,replay_trace
+    x,y,z=sp.symbols('x y z')
+    coefficients=sp.symbols('c0:8')
+    poly=sum(co*x**i*y**j*z**k for co,(i,j,k) in zip(coefficients,
+             [(i,j,k) for i in (0,1) for j in (0,1) for k in (0,1)]))
+    interpolated=sum((y if j else 1-y)*(z if k else 1-z)*poly.subs({y:j,z:k})
+                     for j in (0,1) for k in (0,1))
+    zero(poly-interpolated)
+    example=x*y+x/10-2*y/5-sp.Rational(1,5)
+    factors={'F':{ex:F(int(co.p),int(co.q)) for ex,co in sp.Poly(example,x,y).terms()}}
+    for scale in (None,1000):
+        result=refine_box(factors,[F(0),F(0)],[F(1),F(1)],scale=scale)
+        assert replay_trace(factors,[F(0),F(0)],[F(1),F(1)],result['trace'])==(result['low'],result['high'])
+        expected=[F(6,11),F(1,6)] if scale is None else [F(109,200),F(83,500)]
+        assert result['low']==expected and result['high']==[F(1),F(1)]
+    print('PASS: multiaffine interpolation identity, exact endpoint-line hulls and outward rational replay')
+
+
+def side_pair_top_bounds():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_c1_side_pair_top_bounds.py')))
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -2082,3 +2114,6 @@ if __name__ == "__main__":
     c1_two_lower_three_top()
     c1_two_lower_central_two_top()
     n6_corner_containers()
+    n6_projected_count_terminals()
+    multiaffine_box_bounds()
+    side_pair_top_bounds()

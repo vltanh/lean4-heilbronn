@@ -679,6 +679,29 @@ local reductions do not close another N6 count. Seventeen N6
 exterior count rows remain. C1, N6 and N7 are still the open global
 families. The global algebra checker now has 76 passing groups.
 
+N6_PROJECTED_COUNT_TERMINALS.md now gives explicit full-domain
+relabelings from the two relevant N6 count chambers to the sharp
+projection theorems. All twelve signed expressions, side orders,
+coordinate conditions and strict inward depths are checked, and
+the positive interior increments follow from two exact linear
+combinations. The conclusion is the strict sharp bound m<A*;
+no uniform sigma gap is asserted for these chambers.
+
+MULTIAFFINE_BOX_BOUNDS.md proves the exact conditional-box rule
+used in further placement proofs. A multiaffine factor is a convex
+combination of its endpoint affine lines, so its nonnegativity
+implies membership in a finite union of rational intervals. Their
+hull, outward rounding and sequential reuse give proved bounds.
+The optional replay module verifies every selected line and step.
+Both notes have independent mathematical review and exact algebra
+checks. C1_SIDE_PAIR_TOP_BOUNDS.md additionally gives a uniform
+.897 contact ceiling, a narrow side-pair box and four affine
+inequalities from inner barycentric weights above 2/9. Its explicit
+actual-area transfer gives the N6 outer bounds p>.858 and q<.453,
+with no hidden lower-point premise. Independent geometry and exact
+rational checks pass. The global algebra checker has 79 passing groups; the
+remaining global and count totals are unchanged.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
