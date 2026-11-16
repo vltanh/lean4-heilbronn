@@ -229,7 +229,7 @@ def main():
                       '  ' + body, '',
                       'theorem tree%d_ok : checkTree (spec %s %d %d %d) [] tree%d = true := by'
                       % (n, sideB, case[0], case[1], case[2], n),
-                      '  decide +kernel', '']
+                      '  tree_decide', '']
         lines += ['/-- The cases of chunk %d. -/' % m,
                   'noncomputable def chunk%d : List ((ℕ × ℕ × ℕ) × Cover.Tree C1ZeroLower.Model.Split) :='
                   % m,

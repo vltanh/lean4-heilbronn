@@ -18,10 +18,16 @@ which the Palomar registry uses. Every proof is complete and rests on
 - `lake build` must succeed without warnings; an unfinished proof would show as
   `declaration uses 'sorry'`. Most of the library's 411 modules are kernel checks
   of certificate chunks. A full build of the library, with mathlib from the
-  cache, takes about 50 minutes on eight cores (3.8 hours of single-core time;
-  the slowest modules take two to three minutes each). No module needed more
-  than 10 GB of memory in our builds; to bound the memory, cap the parallelism,
-  for example `LEAN_NUM_THREADS=8 lake build`.
+  cache, takes about 35 minutes with twelve threads (about 5 hours of
+  single-core time; the slowest modules take two to three minutes each).
+  Lake builds as many modules at once as there are cores, and Palomar's build
+  does not limit it, so every module must fit its share of the memory. The
+  kernel keeps every intermediate value of a check until the check ends, so
+  `tree_decide` (`Heilbronn/Common/Cover.lean`) checks a certificate tree one
+  subtree of at most 400 terms at a time: the tree modules need at most
+  2.6 GB, most under 1 GB, and the largest module, the single 676-term
+  certificate of `Nine/EightBoundary/CertR6.lean`, 3.6 GB. A full build
+  running twelve modules at a time peaked at 10 GB in all.
 - Every `#print axioms` line in the audit must read
   `[propext, Classical.choice, Quot.sound]`: an unproved lemma would add
   `sorryAx`, and `native_decide`, which trusts the compiler,
@@ -81,8 +87,11 @@ arithmetic and bounds it on the cube by its constant coefficient plus its
 positive nonconstant coefficients; `decide +kernel` evaluates the check in the
 kernel, and `check_sound` turns it into the real inequality.
 `bernsteinBoxCheck` bounds a polynomial on a box by its Bernstein coefficients,
-and `Cover.checkTree` glues the certificates of a case split. No proof uses
-`native_decide`. The data files hold 434,402 rows in all.
+and `Cover.checkTree` glues the certificates of a case split. `tree_decide`
+proves `checkTree σ fs T = true` by one auxiliary theorem `of_decide_eq_true rfl`
+for each subtree of at most 400 certificate terms, which only the kernel checks,
+one after another, and glues them with the branch counts of the splits. No
+proof uses `native_decide`. The data files hold 434,402 rows in all.
 
 The exporters in `scripts/nine/` produced the data and the chunk modules, from
 the certificate packages of the hand proof or from linear-programming searches.

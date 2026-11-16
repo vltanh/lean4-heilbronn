@@ -187,7 +187,7 @@ def write_chunks(lean_dir, module_prefix, namespace, model_import, key_type, cel
                   'noncomputable def chunk%d : List ((%s) × Cover.Tree %s) :=' % (n, key_type, split_type),
                   '  [' + ',\n    '.join('(%s, tree%d_%d)' % (c[0], n, j) for j, c in enumerate(chunk)) + ']',
                   '', 'theorem chunk%d_ok : chunk%d.all (fun p => checkTree (%s p.1) [] p.2) = true := by' % (n, n, spec_call),
-                  '  decide +kernel', '', 'end %s' % namespace, '']
+                  '  tree_decide', '', 'end %s' % namespace, '']
         (lean_dir / ('Chunk%d.lean' % n)).write_text('\n'.join(lines))
     imports = ['public import %s.Chunk%d' % (module_prefix, n) for n in range(len(chunks))]
     allc = ' ++\n    '.join(' ++ '.join('chunk%d' % n for n in range(i, min(i + 7, len(chunks))))

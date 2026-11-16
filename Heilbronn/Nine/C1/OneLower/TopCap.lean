@@ -24,7 +24,7 @@ claims that use this carry the hypothesis `f ≤ d`.
 same namespace).** Radial words of a point with respect to a
 convex polygon `V₀, …, V_{n-1}` (Section 3): `HullWord`, `hullSign` (the checkers' `sign`),
 `hullInside` (`inside`), `HasHullWord` (geometric meaning (12)), `HullAntisymm` (13),
-`ConvexPolygon`, `interiorWords`; `hullTriples`, `insideCount`; `AtMostInside` (capacity); the
+`ConvexPolygon`; `hullTriples`, `insideCount`; `AtMostInside` (capacity); the
 upper-pair rule `sameSector`, `upperPairSign`, `upperPairConflict` (15).
 
 **Results.**

@@ -185,7 +185,7 @@ def lean_enum_module(tree, index, n, p, pkg, words_name, ns, mod_doc, imports):
             fs = '[] ++ branchFacts %d %d %d %d ++ branchFacts %d %d %d %d' % (n, p, i0, v0, n, p, i1, v1)
             out.append('/-- The enumeration below `r_%d = %d`, `r_%d = %d`. -/\n'
                        'def %s : Cover.Tree ℕ :=\n  %s\n\n'
-                       'theorem %s_ok : checkTree %s (%s) %s = true := by\n  decide +kernel\n\n'
+                       'theorem %s_ok : checkTree %s (%s) %s = true := by\n  tree_decide\n\n'
                        % (i0, v0, i1, v1, nm, lean_enum_tree_nat(c1, index), nm, spec, fs, nm))
         out.append('theorem enumBr_%d : %s.enumBranches %d ([] ++ branchFacts %d %d %d %d) %d = [%s] := by\n'
                    '  decide +kernel\n\n' % (v0, pkg, p, n, p, i0, v0, i1,

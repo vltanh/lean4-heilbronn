@@ -142,7 +142,7 @@ noncomputable def allCases : List ((ℕ × ℕ) × Cover.Tree C1ZeroLower.Model.
     ((4, 4), tree44)]
 
 theorem allCases_ok : allCases.all (fun p => checkTree (spec p.1.1 p.1.2) [] p.2) = true := by
-  decide +kernel
+  tree_decide
 
 theorem allCases_keys : allCases.map Prod.fst = (List.range 5).flatMap fun i => (List.range 5).map fun j => (i, j) := by
   decide +kernel

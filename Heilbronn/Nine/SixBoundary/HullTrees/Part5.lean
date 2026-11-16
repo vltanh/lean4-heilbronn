@@ -17,25 +17,25 @@ noncomputable def root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_1 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0437.txt")]]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0438.txt")]]]]]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_1_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 1) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 4) ++ branchFacts 8 5 4) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_0 : Cover.Tree Split :=
   .node (.vertex 8 3) []
 
 theorem root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_0_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 1) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 4) ++ branchFacts 8 5 4) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) ++ branchFacts 8 1 1) root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_1 : Cover.Tree Split :=
   .node (.vertex 8 3) [.node (.vertex 8 4) []]
 
 theorem root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_1_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 1) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 4) ++ branchFacts 8 5 4) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) ++ branchFacts 8 1 2) root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0 : Cover.Tree Split :=
   .cert (term_rows% "../../../../data/nine/six_hull/d0439.txt")
 
 theorem root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_ok : checkTree spec (((((((((((((((((((((((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 1) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 4) ++ branchFacts 8 5 4) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) ++ branchFacts 8 1 3) ++ branchFacts 8 3 1) ++ branchFacts 8 4 1) ++ [orient 0 6 7 true]) ++ [orient 1 6 7 true]) ++ [orient 2 6 7 false]) ++ [orient 3 6 7 false]) ++ [orient 4 6 7 true]) ++ [orient 5 6 7 true]) ++ [orient 0 6 8 true]) ++ [orient 1 6 8 true]) ++ [orient 2 6 8 false]) ++ [orient 3 6 8 false]) ++ [orient 4 6 8 false]) ++ [orient 5 6 8 true]) ++ [orient 0 7 8 true]) ++ [orient 1 7 8 true]) ++ [orient 2 7 8 true]) ++ [orient 3 7 8 false]) ++ [orient 4 7 8 false]) ++ [orient 5 7 8 true]) root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0 : Cover.Tree Split :=
   .node (.pair 5 7 8) [root_1_0_0_0_0_0_0_0_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0]
@@ -301,7 +301,7 @@ noncomputable def root_1_0_0_0_0_0_0_0_1_2 : Cover.Tree Split :=
   .node (.vertex 7 3) [.node (.vertex 7 4) []]
 
 theorem root_1_0_0_0_0_0_0_0_1_2_ok : checkTree spec (((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 1) ++ branchFacts 7 0 3) ++ branchFacts 7 1 3) root_1_0_0_0_0_0_0_0_1_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_0_1 : Cover.Tree Split :=
   .node (.vertex 7 1) [root_1_0_0_0_0_0_0_0_1_0, root_1_0_0_0_0_0_0_0_1_1, root_1_0_0_0_0_0_0_0_1_2]
@@ -317,7 +317,7 @@ noncomputable def root_1_0_0_0_0_0_0_0_2 : Cover.Tree Split :=
   .node (.vertex 7 1) [.node (.vertex 7 3) [], .node (.vertex 7 3) [.node (.vertex 7 4) []], .node (.vertex 7 3) [.node (.vertex 7 4) []]]
 
 theorem root_1_0_0_0_0_0_0_0_2_ok : checkTree spec ((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 1) ++ branchFacts 7 0 4) root_1_0_0_0_0_0_0_0_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_0 : Cover.Tree Split :=
   .node (.vertex 7 0) [root_1_0_0_0_0_0_0_0_0, root_1_0_0_0_0_0_0_0_1, root_1_0_0_0_0_0_0_0_2]
@@ -333,25 +333,25 @@ noncomputable def root_1_0_0_0_0_0_0_1_0_0_0_0_0_0 : Cover.Tree Split :=
   .node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 2 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 2 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0440.txt")]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0441.txt")]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0442.txt")]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) []]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_0_0_0_0_0_ok : checkTree spec (((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 1) ++ branchFacts 7 3 4) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 1) root_1_0_0_0_0_0_0_1_0_0_0_0_0_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_0 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 2 6 8) [.node (.pair 5 6 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0443.txt")]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0444.txt")]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0445.txt")]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_0_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 1) ++ branchFacts 7 3 4) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 2) root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_1 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0446.txt")]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0447.txt")]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_1_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 1) ++ branchFacts 7 3 4) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_2 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0448.txt")]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_2_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 1) ++ branchFacts 7 3 4) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_0_0_0_0_1 : Cover.Tree Split :=
   .node (.vertex 8 0) [root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_0, root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_1, root_1_0_0_0_0_0_0_1_0_0_0_0_0_1_2]
@@ -377,7 +377,7 @@ noncomputable def root_1_0_0_0_0_0_0_1_0_0_0_0_1 : Cover.Tree Split :=
   .node (.vertex 8 2) [.node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [], .node (.vertex 8 3) []], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0449.txt")]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) []]]], .node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [], .node (.vertex 8 3) []], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0450.txt")]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0451.txt")]]]]]]]]]]]]]]]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 2 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0452.txt")]]]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_0_0_0_1_ok : checkTree spec ((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 1) ++ branchFacts 7 3 4) ++ branchFacts 7 4 3) ++ branchFacts 8 5 4) root_1_0_0_0_0_0_0_1_0_0_0_0_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_0_0_0 : Cover.Tree Split :=
   .node (.vertex 8 5) [root_1_0_0_0_0_0_0_1_0_0_0_0_0, root_1_0_0_0_0_0_0_1_0_0_0_0_1]
@@ -413,31 +413,31 @@ noncomputable def root_1_0_0_0_0_0_0_1_0_1_0_0_0_0 : Cover.Tree Split :=
   .node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 2 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0453.txt")]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 2 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0454.txt")]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0455.txt")]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) []]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_1_0_0_0_0_ok : checkTree spec (((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 2) ++ branchFacts 7 3 3) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 1) root_1_0_0_0_0_0_0_1_0_1_0_0_0_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_0 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 2 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0456.txt")]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0457.txt")]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0458.txt")]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_0_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 2) ++ branchFacts 7 3 3) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 2) root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_0 : Cover.Tree Split :=
   .node (.vertex 8 3) []
 
 theorem root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_0_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 2) ++ branchFacts 7 3 3) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) ++ branchFacts 8 1 1) root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_1 : Cover.Tree Split :=
   .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 3 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0459.txt")]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_1_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 2) ++ branchFacts 7 3 3) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) ++ branchFacts 8 1 2) root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_2 : Cover.Tree Split :=
   .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0460.txt")]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_2_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 2) ++ branchFacts 7 3 3) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) ++ branchFacts 8 1 3) root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1 : Cover.Tree Split :=
   .node (.vertex 8 1) [root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_0, root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_1, root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1_2]
@@ -453,7 +453,7 @@ noncomputable def root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_2 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0461.txt")]]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_2_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 2) ++ branchFacts 7 3 3) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_1_0_0_0_1 : Cover.Tree Split :=
   .node (.vertex 8 0) [root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_0, root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_1, root_1_0_0_0_0_0_0_1_0_1_0_0_0_1_2]
@@ -479,7 +479,7 @@ noncomputable def root_1_0_0_0_0_0_0_1_0_1_0_0_1 : Cover.Tree Split :=
   .node (.vertex 8 2) [.node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [], .node (.vertex 8 3) []], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0462.txt")]]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) []]]], .node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [], .node (.vertex 8 3) []], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 3 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0463.txt")]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0464.txt")]]]]]]]]]]]]]]]]]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0465.txt")]]]]]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_1_0_0_1_ok : checkTree spec ((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 2) ++ branchFacts 7 3 3) ++ branchFacts 7 4 3) ++ branchFacts 8 5 4) root_1_0_0_0_0_0_0_1_0_1_0_0_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_1_0_0 : Cover.Tree Split :=
   .node (.vertex 8 5) [root_1_0_0_0_0_0_0_1_0_1_0_0_0, root_1_0_0_0_0_0_0_1_0_1_0_0_1]
@@ -515,19 +515,19 @@ noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_0 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 2 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0466.txt")]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0467.txt")]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]]
 
 theorem root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_0_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 3) ++ branchFacts 7 3 3) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 1) ++ branchFacts 8 0 2) root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_1 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0468.txt")]]]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]]
 
 theorem root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_1_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 3) ++ branchFacts 7 3 3) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 1) ++ branchFacts 8 0 3) root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_2 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) []]]
 
 theorem root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_2_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 3) ++ branchFacts 7 3 3) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 1) ++ branchFacts 8 0 4) root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_0 : Cover.Tree Split :=
   .node (.vertex 8 0) [root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_0, root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_1, root_1_0_0_0_0_0_0_1_0_2_0_0_0_0_2]
@@ -543,25 +543,25 @@ noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_0 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 2 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0469.txt")]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0470.txt")]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0471.txt")]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_0_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 3) ++ branchFacts 7 3 3) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 2) root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_0 : Cover.Tree Split :=
   .node (.vertex 8 3) []
 
 theorem root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_0_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 3) ++ branchFacts 7 3 3) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) ++ branchFacts 8 1 1) root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_1 : Cover.Tree Split :=
   .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0472.txt")]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_1_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 3) ++ branchFacts 7 3 3) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) ++ branchFacts 8 1 2) root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_2 : Cover.Tree Split :=
   .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 3 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0473.txt")]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_2_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 3) ++ branchFacts 7 3 3) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) ++ branchFacts 8 1 3) root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1 : Cover.Tree Split :=
   .node (.vertex 8 1) [root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_0, root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_1, root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1_2]
@@ -577,7 +577,7 @@ noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_2 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0474.txt")]]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_2_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 3) ++ branchFacts 7 3 3) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_0_1 : Cover.Tree Split :=
   .node (.vertex 8 0) [root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_0, root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_1, root_1_0_0_0_0_0_0_1_0_2_0_0_0_1_2]
@@ -603,7 +603,7 @@ noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0_1 : Cover.Tree Split :=
   .node (.vertex 8 2) [.node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [], .node (.vertex 8 3) []], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0475.txt")]]]]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) []]]], .node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [], .node (.vertex 8 3) []], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0476.txt")]]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 3 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0477.txt")]]]]]]]]]]]]]]]]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0478.txt")]]]]]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_0_2_0_0_1_ok : checkTree spec ((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 2) ++ branchFacts 7 1 3) ++ branchFacts 7 3 3) ++ branchFacts 7 4 2) ++ branchFacts 8 5 4) root_1_0_0_0_0_0_0_1_0_2_0_0_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_0_2_0_0 : Cover.Tree Split :=
   .node (.vertex 8 5) [root_1_0_0_0_0_0_0_1_0_2_0_0_0, root_1_0_0_0_0_0_0_1_0_2_0_0_1]
@@ -649,31 +649,31 @@ noncomputable def root_1_0_0_0_0_0_0_1_1_0 : Cover.Tree Split :=
   .node (.vertex 7 3) []
 
 theorem root_1_0_0_0_0_0_0_1_1_0_ok : checkTree spec (((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 1) root_1_0_0_0_0_0_0_1_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_0_0 : Cover.Tree Split :=
   .node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 2 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0479.txt")]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0480.txt")]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 2 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0481.txt")]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) []]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_0_0_ok : checkTree spec (((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 1) root_1_0_0_0_0_0_0_1_1_1_0_0_0_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_0 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 2 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0482.txt")]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 3 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0483.txt")]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0484.txt")]]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_0_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 2) root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_1 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0485.txt")]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0486.txt")]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_1_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_2 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0487.txt")]]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_2_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_0_1 : Cover.Tree Split :=
   .node (.vertex 8 0) [root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_0, root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_1, root_1_0_0_0_0_0_0_1_1_1_0_0_0_1_2]
@@ -699,43 +699,43 @@ noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_1_0 : Cover.Tree Split :=
   .node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [], .node (.vertex 8 3) []], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0488.txt")]]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]], .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) []]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_1_0_ok : checkTree spec (((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 4) ++ branchFacts 8 2 1) root_1_0_0_0_0_0_0_1_1_1_0_0_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_0 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [], .node (.vertex 8 3) []]
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_0_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 4) ++ branchFacts 8 2 2) ++ branchFacts 8 0 2) root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_1 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 3 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0489.txt")]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.node (.pair 5 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0490.txt")]]]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_1_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 4) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_0 : Cover.Tree Split :=
   .node (.vertex 8 3) []
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_0_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 4) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) ++ branchFacts 8 1 1) root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_1 : Cover.Tree Split :=
   .node (.vertex 8 3) [.node (.vertex 8 4) []]
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_1_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 4) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) ++ branchFacts 8 1 2) root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0 : Cover.Tree Split :=
   .cert (term_rows% "../../../../data/nine/six_hull/d0491.txt")
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_ok : checkTree spec ((((((((((((((((((((((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 4) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) ++ branchFacts 8 1 3) ++ branchFacts 8 3 1) ++ branchFacts 8 4 1) ++ [orient 0 6 7 true]) ++ [orient 1 6 7 true]) ++ [orient 2 6 7 false]) ++ [orient 3 6 7 false]) ++ [orient 5 6 7 true]) ++ [orient 0 6 8 true]) ++ [orient 1 6 8 true]) ++ [orient 2 6 8 false]) ++ [orient 3 6 8 false]) ++ [orient 4 6 8 false]) ++ [orient 5 6 8 true]) ++ [orient 0 7 8 true]) ++ [orient 1 7 8 true]) ++ [orient 3 7 8 false]) ++ [orient 4 7 8 false]) ++ [orient 5 7 8 true]) ++ [orient 4 6 7 false]) root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1 : Cover.Tree Split :=
   .cert (term_rows% "../../../../data/nine/six_hull/d0492.txt")
 
 theorem root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_ok : checkTree spec ((((((((((((((((((((((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 2) ++ branchFacts 7 3 2) ++ branchFacts 7 4 3) ++ branchFacts 8 5 4) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) ++ branchFacts 8 1 3) ++ branchFacts 8 3 1) ++ branchFacts 8 4 1) ++ [orient 0 6 7 true]) ++ [orient 1 6 7 true]) ++ [orient 2 6 7 false]) ++ [orient 3 6 7 false]) ++ [orient 5 6 7 true]) ++ [orient 0 6 8 true]) ++ [orient 1 6 8 true]) ++ [orient 2 6 8 false]) ++ [orient 3 6 8 false]) ++ [orient 4 6 8 false]) ++ [orient 5 6 8 true]) ++ [orient 0 7 8 true]) ++ [orient 1 7 8 true]) ++ [orient 3 7 8 false]) ++ [orient 4 7 8 false]) ++ [orient 5 7 8 true]) ++ [orient 4 6 7 true]) root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0 : Cover.Tree Split :=
   .node (.pair 4 6 7) [root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0, root_1_0_0_0_0_0_0_1_1_1_0_0_1_1_2_2_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1]
@@ -991,19 +991,19 @@ noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_0 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 2 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0493.txt")]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0494.txt")]]]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]]
 
 theorem root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_0_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 3) ++ branchFacts 7 3 2) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 1) ++ branchFacts 8 0 2) root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_1 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 2 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0495.txt")]]]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) []]]
 
 theorem root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_1_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 3) ++ branchFacts 7 3 2) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 1) ++ branchFacts 8 0 3) root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_2 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) []]]
 
 theorem root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_2_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 3) ++ branchFacts 7 3 2) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 1) ++ branchFacts 8 0 4) root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_0 : Cover.Tree Split :=
   .node (.vertex 8 0) [root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_0, root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_1, root_1_0_0_0_0_0_0_1_1_2_0_0_0_0_2]
@@ -1019,19 +1019,19 @@ noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_0 : Cover.Tree Split :=
   .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 2 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0496.txt")]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_0_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 3) ++ branchFacts 7 3 2) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 2) ++ branchFacts 8 1 1) root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_0 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_1 : Cover.Tree Split :=
   .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 1 7 8) [.node (.pair 3 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0497.txt")]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_1_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 3) ++ branchFacts 7 3 2) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 2) ++ branchFacts 8 1 2) root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_2 : Cover.Tree Split :=
   .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 3 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0498.txt")]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_2_ok : checkTree spec (((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 3) ++ branchFacts 7 3 2) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 2) ++ branchFacts 8 1 3) root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0 : Cover.Tree Split :=
   .node (.vertex 8 1) [root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_0, root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_1, root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0_2]
@@ -1047,13 +1047,13 @@ noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_1 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 5 6 8) [.node (.pair 1 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0499.txt")]]]]]]]]]]]]]]], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0500.txt")]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_1_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 3) ++ branchFacts 7 3 2) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 3) root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_1 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_2 : Cover.Tree Split :=
   .node (.vertex 8 1) [.node (.vertex 8 3) [], .node (.vertex 8 3) [.node (.vertex 8 4) []], .node (.vertex 8 3) [.node (.vertex 8 4) [.node (.pair 0 6 7) [.node (.pair 1 6 7) [.node (.pair 2 6 7) [.node (.pair 3 6 7) [.node (.pair 4 6 7) [.node (.pair 5 6 7) [.node (.pair 0 6 8) [.node (.pair 1 6 8) [.node (.pair 2 6 8) [.node (.pair 3 6 8) [.node (.pair 4 6 8) [.node (.pair 5 6 8) [.node (.pair 0 7 8) [.node (.pair 4 7 8) [.cert (term_rows% "../../../../data/nine/six_hull/d0501.txt")]]]]]]]]]]]]]]]]]
 
 theorem root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_2_ok : checkTree spec ((((((((((((((([] ++ branchFacts 6 5 2) ++ branchFacts 6 2 3) ++ branchFacts 6 0 2) ++ branchFacts 6 1 1) ++ branchFacts 6 3 4) ++ branchFacts 6 4 3) ++ branchFacts 7 5 3) ++ branchFacts 7 2 2) ++ branchFacts 7 0 3) ++ branchFacts 7 1 3) ++ branchFacts 7 3 2) ++ branchFacts 7 4 2) ++ branchFacts 8 5 3) ++ branchFacts 8 2 2) ++ branchFacts 8 0 4) root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_2 = true := by
-  decide +kernel
+  tree_decide
 
 noncomputable def root_1_0_0_0_0_0_0_1_1_2_0_0_0_1 : Cover.Tree Split :=
   .node (.vertex 8 0) [root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_0, root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_1, root_1_0_0_0_0_0_0_1_1_2_0_0_0_1_2]

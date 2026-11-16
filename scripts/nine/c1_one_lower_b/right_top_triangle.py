@@ -110,7 +110,7 @@ def main():
               'noncomputable def allCases : List ((ℕ × ℕ) × Cover.Tree C1ZeroLower.Model.Split) :=',
               '  [' + ',\n    '.join('((%d, %d), tree%d%d)' % (c + c) for c, _, _ in rows) + ']', '',
               'theorem allCases_ok : allCases.all (fun p => checkTree (spec p.1.1 p.1.2) [] p.2) = true := by',
-              '  decide +kernel', '',
+              '  tree_decide', '',
               'theorem allCases_keys : allCases.map Prod.fst = (List.range 5).flatMap fun i => (List.range 5).map fun j => (i, j) := by',
               '  decide +kernel', '',
               'end Heilbronn.Nine.C1OneLowerRightTopTriangle.Model', '']

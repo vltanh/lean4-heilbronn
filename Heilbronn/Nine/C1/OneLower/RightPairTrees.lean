@@ -18,48 +18,48 @@ noncomputable def tree_upper_0_0 : Cover.Tree C1ZeroLower.Model.Split :=
   .node (.tri 5 6 8) [.node (.tri 3 6 8) [.cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c00.txt"), .node (.tri 0 7 8) [.node (.tri 4 5 6) [.cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c01.txt"), .cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c02.txt")], .cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c03.txt")]], .node (.tri 0 7 8) [.cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c04.txt"), .cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c05.txt")]]
 
 theorem tree_upper_0_0_ok : checkTree (spec false 0 0) [] tree_upper_0_0 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The sign tree of the case [upper, 0, 1]. -/
 noncomputable def tree_upper_0_1 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c06.txt")
 
 theorem tree_upper_0_1_ok : checkTree (spec false 0 1) [] tree_upper_0_1 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The sign tree of the case [upper, 0, 2]. -/
 noncomputable def tree_upper_0_2 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c07.txt")
 
 theorem tree_upper_0_2_ok : checkTree (spec false 0 2) [] tree_upper_0_2 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The sign tree of the case [upper, 1, 0]. -/
 noncomputable def tree_upper_1_0 : Cover.Tree C1ZeroLower.Model.Split :=
   .node (.tri 5 6 8) [.cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c08.txt"), .cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c09.txt")]
 
 theorem tree_upper_1_0_ok : checkTree (spec false 1 0) [] tree_upper_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The sign tree of the case [upper, 1, 1]. -/
 noncomputable def tree_upper_1_1 : Cover.Tree C1ZeroLower.Model.Split :=
   .node (.tri 4 5 6) [.cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c10.txt"), .cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c11.txt")]
 
 theorem tree_upper_1_1_ok : checkTree (spec false 1 1) [] tree_upper_1_1 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The sign tree of the case [top, 0, 0]. -/
 noncomputable def tree_top_0_0 : Cover.Tree C1ZeroLower.Model.Split :=
   .node (.tri 4 5 6) [.cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c12.txt"), .cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c13.txt")]
 
 theorem tree_top_0_0_ok : checkTree (spec true 0 0) [] tree_top_0_0 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The sign tree of the case [top, 1, 0]. -/
 noncomputable def tree_top_1_0 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../data/nine/c1_one_lower_right_pair/c14.txt")
 
 theorem tree_top_1_0_ok : checkTree (spec true 1 0) [] tree_top_1_0 = true := by
-  decide +kernel
+  tree_decide
 
 end Heilbronn.Nine.C1OneLowerRightPair.Model

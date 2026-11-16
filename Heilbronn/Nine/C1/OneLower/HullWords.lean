@@ -8,9 +8,9 @@ Moved from `Heilbronn.Nine.C1.OneLower.TopCap` (same namespace `Heilbronn.Nine.C
 names) so that the certificate modules can be imported by the notes' main files. Radial words of
 a point with respect to a convex polygon `V₀, …, V_{n-1}`: `HullWord`, `hullSign` (the checkers'
 `sign`), `hullInside` (`inside`), `HasHullWord` (geometric meaning (12)), `HullAntisymm` (13),
-`ConvexPolygon`, `interiorWords`; `hullTriples`, `insideCount`; `AtMostInside` (capacity); the
+`ConvexPolygon`; `hullTriples`, `insideCount`; `AtMostInside` (capacity); the
 upper-pair rule `sameSector`, `upperPairSign`, `upperPairConflict` (15). General results:
-`hasHullWord_inside_iff`, `exists_hullWord` ((12)–(13)), `interiorWords_card_six`, `eq14` (the
+`hasHullWord_inside_iff`, `exists_hullWord` ((12)–(13)), `eq14` (the
 ray-order rule (14)).
 -/
 
@@ -51,11 +51,6 @@ instance {n : ℕ} (r : HullWord n) : Decidable (HullAntisymm r) := by
 vertices is counterclockwise. -/
 def ConvexPolygon {n : ℕ} (V : Fin n → Point) : Prop :=
   ∀ i j k : Fin n, i < j → j < k → 0 < sarea (V i) (V j) (V k)
-
-/-- The words of interior points: entries in `{1, …, n - 2}` (the two neighbouring hull-edge
-tests) satisfying (13). For `n = 6` there are 26 (`interiorWords_card_six`). -/
-def interiorWords (n : ℕ) : Finset (Fin n → Fin (n - 1)) :=
-  Finset.univ.filter fun r => (∀ i, 1 ≤ (r i : ℕ)) ∧ HullAntisymm fun i => (r i : ℕ)
 
 /-- The increasing index triples `a < b < c` of `Fin n`, in lexicographic order (the checkers'
 `combinations(range(n), 3)`). -/
@@ -405,11 +400,6 @@ theorem exists_hullWord {n : ℕ} [NeZero n] {V : Fin n → Point} (hV : ConvexP
     have b : ¬ 0 < sarea (V i) (V (i + j)) R := fun h => hc (k1.1 h)
     push Not at a b
     exact hne' (by linarith)
-
-/-- Helper: the 26 words of (13) for a hexagon ("The finite list of all words satisfying (13) has
-26 members"). `docs/proof/nine/C1_ONE_LOWER_TOP_CAP.md`, line 229. -/
-theorem interiorWords_card_six : (interiorWords 6).card = 26 := by
-  decide +kernel
 
 /-- **Claim** (`C1_ONE_LOWER_TOP_CAP:(14)`). The ray-order rule, for any convex polygon: at a
 vertex `Vᵢ` all rays towards the other vertices and the interior points lie in the convex angle

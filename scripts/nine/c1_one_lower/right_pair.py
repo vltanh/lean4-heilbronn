@@ -164,7 +164,7 @@ def main():
                   '  ' + lean_tree(cv['tree'], 0, name), '',
                   'theorem tree_%s_ok : checkTree (spec %s %d %d) [] tree_%s = true := by'
                   % (tag, 'true' if top else 'false', li, qi, tag),
-                  '  decide +kernel', '']
+                  '  tree_decide', '']
     lines += ['end Heilbronn.Nine.C1OneLowerRightPair.Model', '']
     LEAN.write_text('\n'.join(lines))
 

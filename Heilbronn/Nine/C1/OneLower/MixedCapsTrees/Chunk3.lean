@@ -27,6 +27,6 @@ noncomputable def chunk3 : List ((ℕ × ℕ × ℕ) × Cover.Tree MSplit) :=
     ((0, 1, 2), tree3_1)]
 
 theorem chunk3_ok : chunk3.all (fun p => checkTree (spec p.1) [] p.2) = true := by
-  decide +kernel
+  tree_decide
 
 end Heilbronn.Nine.C1OneLowerMixedCaps.Model

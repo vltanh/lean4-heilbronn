@@ -112,6 +112,6 @@ noncomputable def chunk13 : List (List ℕ × Cover.Tree Split) :=
     ([46, 55], tree13_18)]
 
 theorem chunk13_ok : chunk13.all (fun p => checkTree (spec p.1) [] p.2) = true := by
-  decide +kernel
+  tree_decide
 
 end Heilbronn.Nine.SevenInterior.Trees

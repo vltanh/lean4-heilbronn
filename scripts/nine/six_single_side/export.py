@@ -11,7 +11,7 @@
    expansion is compared with the checker's residual and its monomial bound rechecked.
    Writes data/nine/six_single_side/cNNN.txt.
 3. Writes the cover trees as Lean modules Heilbronn/Nine/SixBoundary/SingleSide/Trees/ChunkN.lean (about 2,500
-   terms per module, one `decide +kernel` theorem per base case) and
+   terms per module, one `tree_decide` theorem per base case) and
    Heilbronn/Nine/SixBoundary/SingleSide/Trees.lean collecting them.
 
 The full run exports 543 cells with 44,012 terms in 19 chunks.
@@ -226,7 +226,7 @@ def write_lean(ncases, Ws, only):
                       'noncomputable def tree%d : Cover.Tree Split :=' % ci, '  ' + c[2], '',
                       'theorem tree%d_ok : checkTree (spec %d %d) [] tree%d = true := by'
                       % (ci, c[1][0], c[1][1], ci),
-                      '  decide +kernel', '']
+                      '  tree_decide', '']
         lines += ['/-- The base cases of chunk %d with their trees. -/' % n,
                   'noncomputable def chunk%d : List ((ℕ × ℕ) × Cover.Tree Split) :=' % n]
         lines.append('  [' + ',\n    '.join('((%d, %d), tree%d)' % (c[1][0], c[1][1], c[0])

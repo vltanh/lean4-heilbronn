@@ -170,7 +170,9 @@ cases of the certificate package. -/
 theorem filters_keys : ∀ a b e g : Fin 11, a ≤ b → b ≤ e → e ≤ g →
     filtersB [a.val, b.val, e.val, g.val] = true →
       [a.val, b.val, e.val, g.val] ∈ Trees.caseKeys := by
-  decide +kernel
+  -- one kernel check per pair `a, b`, to bound the memory of each
+  intro a b
+  fin_cases a <;> fin_cases b <;> tree_decide
 
 
 end Heilbronn.Nine.C1ZeroLower

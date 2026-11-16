@@ -12,6 +12,6 @@ open Cover Model
 
 theorem part10_nnok :
     checkTree (spec [3, 3, 4, 7]) [((0, 5, 8), false), ((0, 5, 7), false)] part10_nn = true := by
-  decide +kernel
+  tree_decide
 
 end Heilbronn.Nine.C1ZeroLower.Trees

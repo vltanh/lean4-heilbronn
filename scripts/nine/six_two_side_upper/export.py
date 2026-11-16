@@ -189,7 +189,7 @@ def write_lean(tree, assign, weights):
         for name, path, t in subs_c:
             out.append('/-- The subtree below `%s`. -/\nnoncomputable def %s : Cover.Tree Split :=\n  %s\n\n'
                        % (' ∧ '.join('r_%d = %d' % p for p in path), name, lean_tree(t, assign)))
-            out.append('theorem %s_ok : checkTree spec %s %s = true := by\n  decide +kernel\n\n'
+            out.append('theorem %s_ok : checkTree spec %s %s = true := by\n  tree_decide\n\n'
                        % (name, facts_lean(path), name))
         out.append('end Heilbronn.Nine.SixBoundaryTwoSideUpper.Trees\n')
         (LEAN / ('Chunk%d.lean' % ci)).write_text(''.join(out))

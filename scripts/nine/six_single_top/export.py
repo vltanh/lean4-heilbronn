@@ -234,7 +234,7 @@ def main():
                       '',
                       'theorem tree%d_%d_ok : checkTree (spec %d %d) [] tree%d_%d = true := by'
                       % (n, j, c[1][0], c[1][1], n, j),
-                      '  decide +kernel', '']
+                      '  tree_decide', '']
         lines += ['/-- The base pairs of chunk %d with their trees. -/' % n,
                   'noncomputable def chunk%d : List ((ℕ × ℕ) × Cover.Tree Split) :=' % n]
         lines.append('  [' + ',\n    '.join('((%d, %d), tree%d_%d)' % (c[1][0], c[1][1], n, j)

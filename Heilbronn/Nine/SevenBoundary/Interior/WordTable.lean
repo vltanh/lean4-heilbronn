@@ -72,6 +72,8 @@ def tableOK (b02 b03 b04 b05 b13 b14 b15 b16 b24 b25 b26 b35 b36 b46 : Bool) : B
       i == j || wsign w i j == signOf b02 b03 b04 b05 b13 b14 b15 b16 b24 b25 b26 b35 b36 b46 i j
 
 theorem tableOK_true : ∀ b02 b03 b04 b05 b13 b14 b15 b16 b24 b25 b26 b35 b36 b46 : Bool, tableOK b02 b03 b04 b05 b13 b14 b15 b16 b24 b25 b26 b35 b36 b46 = true := by
-  decide +kernel
+  -- sixteen kernel checks, one per value of the first four signs, to bound the memory of each
+  intro b02 b03 b04 b05
+  cases b02 <;> cases b03 <;> cases b04 <;> cases b05 <;> decide +kernel
 
 end Heilbronn.Nine.SevenInterior.Model

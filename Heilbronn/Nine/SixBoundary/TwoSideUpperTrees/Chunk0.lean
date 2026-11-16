@@ -19,6 +19,6 @@ noncomputable def sub_3_2 : Cover.Tree Split :=
   .node (.vertex 5) [.node (.vertex 0) [.node (.vertex 1) [.node (.vertex 3) [.node (.vertex 4) [.node (.vertex 6) [.cert (term_rows% "../../../../data/nine/six_two_side_upper/c00.txt")]]], .node (.vertex 3) [.node (.vertex 4) [.node (.vertex 6) [.cert (term_rows% "../../../../data/nine/six_two_side_upper/c03.txt")]]], .node (.vertex 3) [.node (.vertex 4) [.node (.vertex 6) [.cert (term_rows% "../../../../data/nine/six_two_side_upper/c06.txt")]]]], .node (.vertex 1) [.node (.vertex 3) [], .node (.vertex 3) [.node (.vertex 4) [.node (.vertex 6) [.cert (term_rows% "../../../../data/nine/six_two_side_upper/c15.txt")]]], .node (.vertex 3) [.node (.vertex 4) [.node (.vertex 6) [.cert (term_rows% "../../../../data/nine/six_two_side_upper/c24.txt")]]]], .node (.vertex 1) [.node (.vertex 3) [], .node (.vertex 3) [.node (.vertex 4) []], .node (.vertex 3) [.node (.vertex 4) [.node (.vertex 6) [.cert (term_rows% "../../../../data/nine/six_two_side_upper/c44.txt")]]]]], .node (.vertex 0) [.node (.vertex 1) [.node (.vertex 3) [], .node (.vertex 3) [], .node (.vertex 3) []], .node (.vertex 1) [.node (.vertex 3) [], .node (.vertex 3) [], .node (.vertex 3) []], .node (.vertex 1) [.node (.vertex 3) [], .node (.vertex 3) [], .node (.vertex 3) []]]]
 
 theorem sub_3_2_ok : checkTree spec (([] ++ branchFacts 7 3) ++ branchFacts 2 2) sub_3_2 = true := by
-  decide +kernel
+  tree_decide
 
 end Heilbronn.Nine.SixBoundaryTwoSideUpper.Trees

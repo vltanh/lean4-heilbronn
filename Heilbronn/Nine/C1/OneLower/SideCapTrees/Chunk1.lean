@@ -18,420 +18,420 @@ noncomputable def tree83 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c083.txt")
 
 theorem tree83_ok : checkTree (spec true 1 3 11) [] tree83 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 3, 12]. -/
 noncomputable def tree84 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c084.txt")
 
 theorem tree84_ok : checkTree (spec true 1 3 12) [] tree84 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 3, 13]. -/
 noncomputable def tree85 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c085.txt")
 
 theorem tree85_ok : checkTree (spec true 1 3 13) [] tree85 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 3, 14]. -/
 noncomputable def tree86 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c086.txt")
 
 theorem tree86_ok : checkTree (spec true 1 3 14) [] tree86 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 3, 15]. -/
 noncomputable def tree87 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c087.txt")
 
 theorem tree87_ok : checkTree (spec true 1 3 15) [] tree87 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 3, 16]. -/
 noncomputable def tree88 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c088.txt")
 
 theorem tree88_ok : checkTree (spec true 1 3 16) [] tree88 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 3, 17]. -/
 noncomputable def tree89 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c089.txt")
 
 theorem tree89_ok : checkTree (spec true 1 3 17) [] tree89 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 4, 16]. -/
 noncomputable def tree90 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c090.txt")
 
 theorem tree90_ok : checkTree (spec true 1 4 16) [] tree90 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 4, 17]. -/
 noncomputable def tree91 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c091.txt")
 
 theorem tree91_ok : checkTree (spec true 1 4 17) [] tree91 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 5, 11]. -/
 noncomputable def tree92 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c092.txt")
 
 theorem tree92_ok : checkTree (spec true 1 5 11) [] tree92 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 5, 16]. -/
 noncomputable def tree93 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c093.txt")
 
 theorem tree93_ok : checkTree (spec true 1 5 16) [] tree93 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 8, 11]. -/
 noncomputable def tree94 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c094.txt")
 
 theorem tree94_ok : checkTree (spec true 1 8 11) [] tree94 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 10, 11]. -/
 noncomputable def tree95 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c095.txt")
 
 theorem tree95_ok : checkTree (spec true 1 10 11) [] tree95 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [1, 10, 16]. -/
 noncomputable def tree96 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c096.txt")
 
 theorem tree96_ok : checkTree (spec true 1 10 16) [] tree96 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 0, 1]. -/
 noncomputable def tree97 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c097.txt")
 
 theorem tree97_ok : checkTree (spec true 2 0 1) [] tree97 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 0, 2]. -/
 noncomputable def tree98 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c098.txt")
 
 theorem tree98_ok : checkTree (spec true 2 0 2) [] tree98 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 0, 6]. -/
 noncomputable def tree99 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c099.txt")
 
 theorem tree99_ok : checkTree (spec true 2 0 6) [] tree99 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 0, 7]. -/
 noncomputable def tree100 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c100.txt")
 
 theorem tree100_ok : checkTree (spec true 2 0 7) [] tree100 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 0, 8]. -/
 noncomputable def tree101 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c101.txt")
 
 theorem tree101_ok : checkTree (spec true 2 0 8) [] tree101 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 0, 9]. -/
 noncomputable def tree102 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c102.txt")
 
 theorem tree102_ok : checkTree (spec true 2 0 9) [] tree102 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 0, 10]. -/
 noncomputable def tree103 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c103.txt")
 
 theorem tree103_ok : checkTree (spec true 2 0 10) [] tree103 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 1, 3]. -/
 noncomputable def tree104 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c104.txt")
 
 theorem tree104_ok : checkTree (spec true 2 1 3) [] tree104 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 1, 4]. -/
 noncomputable def tree105 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c105.txt")
 
 theorem tree105_ok : checkTree (spec true 2 1 4) [] tree105 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 1, 6]. -/
 noncomputable def tree106 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c106.txt")
 
 theorem tree106_ok : checkTree (spec true 2 1 6) [] tree106 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 1, 7]. -/
 noncomputable def tree107 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c107.txt")
 
 theorem tree107_ok : checkTree (spec true 2 1 7) [] tree107 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 2, 3]. -/
 noncomputable def tree108 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c108.txt")
 
 theorem tree108_ok : checkTree (spec true 2 2 3) [] tree108 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 2, 4]. -/
 noncomputable def tree109 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c109.txt")
 
 theorem tree109_ok : checkTree (spec true 2 2 4) [] tree109 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 2, 6]. -/
 noncomputable def tree110 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c110.txt")
 
 theorem tree110_ok : checkTree (spec true 2 2 6) [] tree110 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 2, 7]. -/
 noncomputable def tree111 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c111.txt")
 
 theorem tree111_ok : checkTree (spec true 2 2 7) [] tree111 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 3, 6]. -/
 noncomputable def tree112 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c112.txt")
 
 theorem tree112_ok : checkTree (spec true 2 3 6) [] tree112 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 3, 7]. -/
 noncomputable def tree113 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c113.txt")
 
 theorem tree113_ok : checkTree (spec true 2 3 7) [] tree113 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 3, 8]. -/
 noncomputable def tree114 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c114.txt")
 
 theorem tree114_ok : checkTree (spec true 2 3 8) [] tree114 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 3, 9]. -/
 noncomputable def tree115 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c115.txt")
 
 theorem tree115_ok : checkTree (spec true 2 3 9) [] tree115 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 3, 10]. -/
 noncomputable def tree116 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c116.txt")
 
 theorem tree116_ok : checkTree (spec true 2 3 10) [] tree116 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 5, 6]. -/
 noncomputable def tree117 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c117.txt")
 
 theorem tree117_ok : checkTree (spec true 2 5 6) [] tree117 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 6, 8]. -/
 noncomputable def tree118 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c118.txt")
 
 theorem tree118_ok : checkTree (spec true 2 6 8) [] tree118 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [2, 6, 10]. -/
 noncomputable def tree119 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c119.txt")
 
 theorem tree119_ok : checkTree (spec true 2 6 10) [] tree119 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 0, 1]. -/
 noncomputable def tree120 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c120.txt")
 
 theorem tree120_ok : checkTree (spec true 3 0 1) [] tree120 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 0, 2]. -/
 noncomputable def tree121 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c121.txt")
 
 theorem tree121_ok : checkTree (spec true 3 0 2) [] tree121 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 0, 6]. -/
 noncomputable def tree122 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c122.txt")
 
 theorem tree122_ok : checkTree (spec true 3 0 6) [] tree122 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 0, 7]. -/
 noncomputable def tree123 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c123.txt")
 
 theorem tree123_ok : checkTree (spec true 3 0 7) [] tree123 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 0, 8]. -/
 noncomputable def tree124 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c124.txt")
 
 theorem tree124_ok : checkTree (spec true 3 0 8) [] tree124 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 0, 9]. -/
 noncomputable def tree125 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c125.txt")
 
 theorem tree125_ok : checkTree (spec true 3 0 9) [] tree125 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 0, 10]. -/
 noncomputable def tree126 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c126.txt")
 
 theorem tree126_ok : checkTree (spec true 3 0 10) [] tree126 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 1, 3]. -/
 noncomputable def tree127 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c127.txt")
 
 theorem tree127_ok : checkTree (spec true 3 1 3) [] tree127 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 1, 4]. -/
 noncomputable def tree128 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c128.txt")
 
 theorem tree128_ok : checkTree (spec true 3 1 4) [] tree128 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 1, 6]. -/
 noncomputable def tree129 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c129.txt")
 
 theorem tree129_ok : checkTree (spec true 3 1 6) [] tree129 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 1, 7]. -/
 noncomputable def tree130 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c130.txt")
 
 theorem tree130_ok : checkTree (spec true 3 1 7) [] tree130 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 2, 3]. -/
 noncomputable def tree131 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c131.txt")
 
 theorem tree131_ok : checkTree (spec true 3 2 3) [] tree131 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 2, 4]. -/
 noncomputable def tree132 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c132.txt")
 
 theorem tree132_ok : checkTree (spec true 3 2 4) [] tree132 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 2, 6]. -/
 noncomputable def tree133 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c133.txt")
 
 theorem tree133_ok : checkTree (spec true 3 2 6) [] tree133 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 2, 7]. -/
 noncomputable def tree134 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c134.txt")
 
 theorem tree134_ok : checkTree (spec true 3 2 7) [] tree134 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 2, 9]. -/
 noncomputable def tree135 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c135.txt")
 
 theorem tree135_ok : checkTree (spec true 3 2 9) [] tree135 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 3, 6]. -/
 noncomputable def tree136 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c136.txt")
 
 theorem tree136_ok : checkTree (spec true 3 3 6) [] tree136 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 3, 7]. -/
 noncomputable def tree137 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c137.txt")
 
 theorem tree137_ok : checkTree (spec true 3 3 7) [] tree137 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 3, 8]. -/
 noncomputable def tree138 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c138.txt")
 
 theorem tree138_ok : checkTree (spec true 3 3 8) [] tree138 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 3, 9]. -/
 noncomputable def tree139 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c139.txt")
 
 theorem tree139_ok : checkTree (spec true 3 3 9) [] tree139 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 3, 10]. -/
 noncomputable def tree140 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c140.txt")
 
 theorem tree140_ok : checkTree (spec true 3 3 10) [] tree140 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 4, 7]. -/
 noncomputable def tree141 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c141.txt")
 
 theorem tree141_ok : checkTree (spec true 3 4 7) [] tree141 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 4, 8]. -/
 noncomputable def tree142 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_side_cap/c142.txt")
 
 theorem tree142_ok : checkTree (spec true 3 4 8) [] tree142 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cases of chunk 1. -/
 noncomputable def chunk1 : List ((ℕ × ℕ × ℕ) × Cover.Tree C1ZeroLower.Model.Split) :=

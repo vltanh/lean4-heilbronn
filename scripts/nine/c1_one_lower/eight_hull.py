@@ -112,7 +112,7 @@ def main():
                   '  .cert (term_rows%% "../../../../data/nine/c1_one_lower_eight_hull/%s")' % name, '',
                   'theorem tree_%s_%d_ok : checkTree (spec %s (octWords.getD %d [])) [] tree_%s_%d = '
                   'true := by' % (tag, wi, 'true' if m else 'false', wi, tag, wi),
-                  '  decide +kernel', '']
+                  '  tree_decide', '']
     lines += ['end Heilbronn.Nine.C1OneLowerEightHull.Model', '']
     LEAN.write_text('\n'.join(lines))
 

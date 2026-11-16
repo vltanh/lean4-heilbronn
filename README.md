@@ -207,7 +207,9 @@ scripts/verify-comparator.sh
 The build uses Lean and mathlib `v4.36.0-rc2`, pinned by `lean-toolchain` and
 `lake-manifest.json`. `lake build` must succeed without warnings, and every
 `#print axioms` line must read `[propext, Classical.choice, Quot.sound]`. The
-certificates are checked by `decide +kernel`, never by `native_decide`. The last
+certificates are checked by the kernel, never by `native_decide`: by
+`decide +kernel`, or for a certificate tree by `tree_decide`, which gives each
+subtree a kernel check of its own so that no module needs much memory. The last
 command (Linux, `bwrap`) runs the check of the
 [Palomar registry](#palomar-registry). The trusted base is Lean, Lake and
 mathlib.

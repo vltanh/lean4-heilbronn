@@ -32,6 +32,6 @@ noncomputable def chunk2 : List ((ℕ × ℕ × ℕ) × Cover.Tree C1ZeroLower.M
     ((1, 1, 13), tree2_2)]
 
 theorem chunk2_ok : chunk2.all (fun p => checkTree ((fun k => spec k.1 k.2.1 k.2.2) p.1) [] p.2) = true := by
-  decide +kernel
+  tree_decide
 
 end Heilbronn.Nine.C1OneLowerTopTriangle.Model

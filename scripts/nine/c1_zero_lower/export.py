@@ -140,7 +140,7 @@ def main():
         lines.append('  [' + ',\n    '.join('(%s, tree%d_%d)' % (list(c[0]), n, j)
                                             for j, c in enumerate(chunk)) + ']')
         lines += ['', 'theorem chunk%d_ok : chunk%d.all (fun p => checkTree (spec p.1) [] p.2) = true'
-                  ' := by' % (n, n), '  decide +kernel', '', 'end Heilbronn.Nine.C1ZeroLower.Trees', '']
+                  ' := by' % (n, n), '  tree_decide', '', 'end Heilbronn.Nine.C1ZeroLower.Trees', '']
         (LEAN / ('Chunk%d.lean' % n)).write_text('\n'.join(lines))
         print('chunk %d: %d cases, %d terms' % (n, len(chunk), sum(c[2] for c in chunk)))
     if not only:

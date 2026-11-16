@@ -18,147 +18,147 @@ noncomputable def tree22_0 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c409.txt")
 
 theorem tree22_0_ok : checkTree (spec 13 16) [] tree22_0 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 401, words [13, 17]. -/
 noncomputable def tree22_1 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c410.txt")
 
 theorem tree22_1_ok : checkTree (spec 13 17) [] tree22_1 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 402, words [13, 18]. -/
 noncomputable def tree22_2 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c411.txt")
 
 theorem tree22_2_ok : checkTree (spec 13 18) [] tree22_2 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 403, words [13, 23]. -/
 noncomputable def tree22_3 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c412.txt")
 
 theorem tree22_3_ok : checkTree (spec 13 23) [] tree22_3 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 404, words [13, 24]. -/
 noncomputable def tree22_4 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c413.txt")
 
 theorem tree22_4_ok : checkTree (spec 13 24) [] tree22_4 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 405, words [13, 25]. -/
 noncomputable def tree22_5 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c414.txt")
 
 theorem tree22_5_ok : checkTree (spec 13 25) [] tree22_5 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 406, words [13, 28]. -/
 noncomputable def tree22_6 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c415.txt")
 
 theorem tree22_6_ok : checkTree (spec 13 28) [] tree22_6 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 407, words [13, 29]. -/
 noncomputable def tree22_7 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c416.txt")
 
 theorem tree22_7_ok : checkTree (spec 13 29) [] tree22_7 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 408, words [13, 30]. -/
 noncomputable def tree22_8 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c417.txt")
 
 theorem tree22_8_ok : checkTree (spec 13 30) [] tree22_8 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 409, words [13, 31]. -/
 noncomputable def tree22_9 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c418.txt")
 
 theorem tree22_9_ok : checkTree (spec 13 31) [] tree22_9 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 410, words [13, 32]. -/
 noncomputable def tree22_10 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c419.txt")
 
 theorem tree22_10_ok : checkTree (spec 13 32) [] tree22_10 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 411, words [13, 33]. -/
 noncomputable def tree22_11 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c420.txt")
 
 theorem tree22_11_ok : checkTree (spec 13 33) [] tree22_11 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 412, words [13, 34]. -/
 noncomputable def tree22_12 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c421.txt")
 
 theorem tree22_12_ok : checkTree (spec 13 34) [] tree22_12 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 413, words [13, 38]. -/
 noncomputable def tree22_13 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c422.txt")
 
 theorem tree22_13_ok : checkTree (spec 13 38) [] tree22_13 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 414, words [13, 39]. -/
 noncomputable def tree22_14 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c423.txt")
 
 theorem tree22_14_ok : checkTree (spec 13 39) [] tree22_14 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 415, words [13, 40]. -/
 noncomputable def tree22_15 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c424.txt")
 
 theorem tree22_15_ok : checkTree (spec 13 40) [] tree22_15 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 416, words [13, 41]. -/
 noncomputable def tree22_16 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c425.txt")
 
 theorem tree22_16_ok : checkTree (spec 13 41) [] tree22_16 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 417, words [13, 42]. -/
 noncomputable def tree22_17 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c426.txt")
 
 theorem tree22_17_ok : checkTree (spec 13 42) [] tree22_17 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 418, words [13, 43]. -/
 noncomputable def tree22_18 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c427.txt")
 
 theorem tree22_18_ok : checkTree (spec 13 43) [] tree22_18 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 419, words [13, 44]. -/
 noncomputable def tree22_19 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c428.txt")
 
 theorem tree22_19_ok : checkTree (spec 13 44) [] tree22_19 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cell tree of the base pair 420, words [13, 45]. -/
 noncomputable def tree22_20 : Cover.Tree Split :=
   .cert (term_rows% "../../../../../data/nine/six_single_top/c429.txt")
 
 theorem tree22_20_ok : checkTree (spec 13 45) [] tree22_20 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The base pairs of chunk 22 with their trees. -/
 noncomputable def chunk22 : List ((ℕ × ℕ) × Cover.Tree Split) :=

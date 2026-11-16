@@ -169,7 +169,7 @@ def emit(t, path, name, out, lines):
         lines.append('/-- The subtree below `%s` (%d terms). -/\nnoncomputable def %s : '
                      'Cover.Tree Split :=\n  %s\n\n' % (' ∧ '.join('r_%d = %d' % q for q in path),
                                                         terms_of(t, out), name, lean_tree(t, out)))
-        lines.append('theorem %s_ok : checkTree spec %s %s = true := by\n  decide +kernel\n\n'
+        lines.append('theorem %s_ok : checkTree spec %s %s = true := by\n  tree_decide\n\n'
                      % (name, facts_lean(path), name))
         return
     kids = []

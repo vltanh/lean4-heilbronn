@@ -162,6 +162,6 @@ noncomputable def chunk0 : List (List ℕ × Cover.Tree Split) :=
     ([0, 2, 3, 3], tree0_28)]
 
 theorem chunk0_ok : chunk0.all (fun p => checkTree (spec p.1) [] p.2) = true := by
-  decide +kernel
+  tree_decide
 
 end Heilbronn.Nine.C1ZeroLower.Trees

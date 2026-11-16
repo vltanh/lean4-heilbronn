@@ -47,7 +47,7 @@ def write_chunks(leaves, sizes, lean_dir, model_mod, ns, header_doc, chunk_prefi
         for name, facts, t, doc in lfs:
             out.append('/-- %s -/\nnoncomputable def %s : Cover.Tree Split :=\n  %s\n\n'
                        'theorem %s_ok : checkTree (pkg.spec Pkg.noClosed) (%s) %s = true := by\n'
-                       '  decide +kernel\n\n' % (doc, name, lean_tree(t), name, facts, name))
+                       '  tree_decide\n\n' % (doc, name, lean_tree(t), name, facts, name))
         out.append('end %s\n' % ns)
         (lean_dir / ('%s%d.lean' % (chunk_prefix, ci))).write_text(''.join(out))
         mods.append(ci)

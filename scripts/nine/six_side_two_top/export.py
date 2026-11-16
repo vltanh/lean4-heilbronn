@@ -161,7 +161,7 @@ def enumTree : Cover.Tree Split :=
   %s
 
 theorem enum_ok : checkTree (pkg.spec (pkg.enumClosed 8 words)) [] enumTree = true := by
-  decide +kernel
+  tree_decide
 
 /-- The initial facts of the word `words[i]`. -/
 def leafFacts (i : ℕ) : List Fact := (wordFacts 8 8 (words.getD i [])).map Sum.inl
@@ -176,7 +176,7 @@ def write_lean(words, tree, index, leaves):
                    'noncomputable def tree%d : Cover.Tree Split :=\n'
                    '  .cert (term_rows%% "../../../data/nine/six_side_two_top/w%d.txt")\n\n'
                    'theorem ok%d : checkTree (pkg.spec Pkg.noClosed) (leafFacts %d) tree%d = true := by\n'
-                   '  decide +kernel\n\n' % (list(words[i]), leaves[i], i, i, i, i, i))
+                   '  tree_decide\n\n' % (list(words[i]), leaves[i], i, i, i, i, i))
     out.append('theorem all_ok (i : ℕ) (hi : i < %d) :\n'
                '    ∃ T, checkTree (pkg.spec Pkg.noClosed) (leafFacts i) T = true := by\n'
                '  interval_cases i\n' % len(words))

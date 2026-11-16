@@ -92,7 +92,7 @@ def enumTree : Cover.Tree Split :=
   .node (.vertex 8 4) [.node (.vertex 8 6) [.node (.vertex 8 0) [.node (.vertex 8 1) [.node (.vertex 8 5) [.node (.vertex 8 2) [.node (.vertex 8 3) [.node (.vertex 8 7) [.closed 2]]], .node (.vertex 8 2) [.node (.vertex 8 3) [.node (.vertex 8 7) [.closed 1]]], .node (.vertex 8 2) [.node (.vertex 8 3) [.node (.vertex 8 7) [.closed 0]]]], .node (.vertex 8 5) [.node (.vertex 8 2) [.node (.vertex 8 3) [.node (.vertex 8 7) [.closed 3]]]]], .node (.vertex 8 1) [.node (.vertex 8 5) [], .node (.vertex 8 5) [.node (.vertex 8 2) [.node (.vertex 8 3) [.node (.vertex 8 7) [.closed 4]]], .node (.vertex 8 2) [.node (.vertex 8 3) [.node (.vertex 8 7) [.closed 5]]]]]]]]
 
 theorem enum_ok : checkTree (pkg.spec (pkg.enumClosed 8 words)) [] enumTree = true := by
-  decide +kernel
+  tree_decide
 
 /-- The initial facts of the word `words[i]`. -/
 def leafFacts (i : ℕ) : List Fact := (wordFacts 8 8 (words.getD i [])).map Sum.inl
@@ -102,42 +102,42 @@ noncomputable def tree0 : Cover.Tree Split :=
   .cert (term_rows% "../../../data/nine/six_side_two_top/w0.txt")
 
 theorem ok0 : checkTree (pkg.spec Pkg.noClosed) (leafFacts 0) tree0 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The certificate of the word `[4, 3, 2, 2, 1, 5, 6, 5]` (50 terms). -/
 noncomputable def tree1 : Cover.Tree Split :=
   .cert (term_rows% "../../../data/nine/six_side_two_top/w1.txt")
 
 theorem ok1 : checkTree (pkg.spec Pkg.noClosed) (leafFacts 1) tree1 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The certificate of the word `[4, 3, 3, 2, 1, 4, 6, 5]` (86 terms). -/
 noncomputable def tree2 : Cover.Tree Split :=
   .cert (term_rows% "../../../data/nine/six_side_two_top/w2.txt")
 
 theorem ok2 : checkTree (pkg.spec Pkg.noClosed) (leafFacts 2) tree2 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The certificate of the word `[4, 4, 3, 2, 1, 3, 6, 5]` (89 terms). -/
 noncomputable def tree3 : Cover.Tree Split :=
   .cert (term_rows% "../../../data/nine/six_side_two_top/w3.txt")
 
 theorem ok3 : checkTree (pkg.spec Pkg.noClosed) (leafFacts 3) tree3 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The certificate of the word `[5, 4, 3, 2, 1, 1, 6, 6]` (58 terms). -/
 noncomputable def tree4 : Cover.Tree Split :=
   .cert (term_rows% "../../../data/nine/six_side_two_top/w4.txt")
 
 theorem ok4 : checkTree (pkg.spec Pkg.noClosed) (leafFacts 4) tree4 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The certificate of the word `[5, 4, 3, 2, 1, 2, 6, 5]` (186 terms). -/
 noncomputable def tree5 : Cover.Tree Split :=
   .cert (term_rows% "../../../data/nine/six_side_two_top/w5.txt")
 
 theorem ok5 : checkTree (pkg.spec Pkg.noClosed) (leafFacts 5) tree5 = true := by
-  decide +kernel
+  tree_decide
 
 theorem all_ok (i : ℕ) (hi : i < 6) :
     ∃ T, checkTree (pkg.spec Pkg.noClosed) (leafFacts i) T = true := by

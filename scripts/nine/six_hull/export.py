@@ -188,7 +188,7 @@ class Emitter:
         if t[0] == 'cert' or (n <= LIMIT and leaves_of(t) <= LEAF_LIMIT):
             body = self.tree_lean(t)
             self.add('noncomputable def %s : Cover.Tree Split :=\n  %s\n\n'
-                     'theorem %s_ok : checkTree spec %s %s = true := by\n  decide +kernel\n\n'
+                     'theorem %s_ok : checkTree spec %s %s = true := by\n  tree_decide\n\n'
                      % (name, body, name, facts, name), n)
             return
         kids = []

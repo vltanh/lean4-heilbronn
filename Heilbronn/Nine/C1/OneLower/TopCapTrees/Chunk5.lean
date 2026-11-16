@@ -18,21 +18,21 @@ noncomputable def tree199 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_top_cap/c199.txt")
 
 theorem tree199_ok : checkTree (spec false 3 9 14) [] tree199 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 11, 12]. -/
 noncomputable def tree200 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_top_cap/c200.txt")
 
 theorem tree200_ok : checkTree (spec false 3 11 12) [] tree200 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The tree of the case [3, 12, 14]. -/
 noncomputable def tree201 : Cover.Tree C1ZeroLower.Model.Split :=
   .cert (term_rows% "../../../../../data/nine/c1_one_lower_top_cap/c201.txt")
 
 theorem tree201_ok : checkTree (spec false 3 12 14) [] tree201 = true := by
-  decide +kernel
+  tree_decide
 
 /-- The cases of chunk 5. -/
 noncomputable def chunk5 : List ((ℕ × ℕ × ℕ) × Cover.Tree C1ZeroLower.Model.Split) :=
