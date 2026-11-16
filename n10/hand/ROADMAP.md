@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 72.
+Checkpoint 73.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -612,15 +612,22 @@ four-corner alternative and all zero-area faces.
         fourteen polynomial identities, all 256 six-label sign conversions
         and three positive square gaps are checked.
         Proof: AREA_RELATIONS.md and check_area_relations.js.
-  - [ ] Complete the remaining sixteen exterior-cap counts with k=0
-        or k=1, outside the stated projection chambers. Counts below
-        are (k,j,r,t,l), up to exchange of the two side caps:
+  - [ ] Complete the remaining fifteen exterior-cap counts with k=0
+        or k=1, outside the stated projection chambers. The ledger also
+        retains the completed IIRR row. Counts are (k,j,r,t,l), up to
+        exchange of the two side caps:
     - [ ] N6-IRTL: (0,1,1,1,1).
     - [ ] N6-IRTT: (0,1,1,2,0).
     - [ ] N6-IRRT: (0,1,2,1,0).
     - [ ] N6-IIRT: (0,2,1,1,0).
     - [ ] N6-IITT: (0,2,0,2,0).
-    - [ ] N6-IIRR: (0,2,2,0,0).
+    - [x] N6-IIRR: (0,2,2,0,0), including its left-side reflection.
+          N6_IIRR.md and its two complete printed table files give
+          127 exhaustive sign splits, 45 geometric contradictions and
+          83 exact area contradictions. Independent manuscript readers
+          verify all 3,281 geometry steps, 13,957 rational updates,
+          65 caps and 1,000 endpoint values; a fresh implementation
+          also expands 4,321 physical determinant identities.
     - [ ] N6-IIRL: (0,2,1,0,1).
     - [ ] N6-BRTT: (1,0,1,2,0).
     - [ ] N6-BITT: (1,1,0,2,0).
@@ -952,6 +959,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_TWO_LOWER_TOP.md and N6_TWO_LOWER_TOP_TABLES.md | Entire two-lower/upper/top-cap placement: eight roots, 267 nodes, 821 deductions, 113 cubics, 65 geometric exclusions, 27,514 printed terms and 572 explicit shifted affine squares |
 | N6_TWO_LOWER_COMPLETE.md | Exhaustive assembly of every k=2 placement from the exact hull, upper/side, upper/top and two-exterior theorems |
 | TYPE_II_133_NONTRIANGULAR.md and TYPE_II_133_CELL_I.md | Exhaustive three-cell right-hull reduction and complete cell-I exclusion: sixty roots, 1,899 deductions, 24 cubics / 932 terms and 36 geometric exclusions |
+| N6_IIRR.md and its GEOMETRY/AREA_CHAINS tables | Entire two-central/side-pair count and reflection: 127 splits, 45 geometric and 83 exact scalar leaves, 3,281 deductions and 13,957 immutable area updates; both manuscript readers pass |
 | N6_SIDE_PAIR_REDUCTION.md | Every side pair has a triangular cap hull and Gamma2 endpoint cost; a side pair and top pair are incompatible, closing (0,0,2,2,0) and reflection |
 | ONE_LOWER_POINT.md | Four exhaustive local alternatives for one point in HABC, both central contact-order cubics, the impossible double-ear cell, a shared central-strip inequality, and exact coordinate-sum and central-coordinate bounds |
 | C1_SIDE_PAIR_OPPOSITE_TOP.md | A side pair, opposite side point and top point are incompatible; two complete count rows close by a cubic box and direct determinant inequalities |
