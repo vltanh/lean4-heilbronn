@@ -1637,6 +1637,32 @@ def c1_three_top_no_side():
     print('PASS: complete C1 three-top/no-side exclusion and both strict endpoint-container gaps')
 
 
+def n6_two_lower_complete():
+    from pathlib import Path
+    import re
+    import n6_exterior_geometry as geometry
+    geometry.set_locations('IT');known=geometry.initial('central')
+    assert geometry.inside(known,'HCEF','R')
+    assert not geometry.inside(known,'ABCEFH','S')
+    assert geometry.get(known,'EFS')==-1 and geometry.get(known,'HES')==1 and geometry.get(known,'CFS')==-1
+    e,f,j,k=sp.symbols('e f j k')
+    cap=-2*area(sp.Matrix([1,e]),sp.Matrix([f,1]),sp.Matrix([j,k]))
+    zero(cap-(1-e)*(j-f)+(1-f)*(1-k))
+    zero(cap-(1-f)*(k-e)+(1-e)*(1-j))
+    note=Path(__file__).with_name('N6_TWO_LOWER_TOP.md').read_text()
+    rows=re.findall(r'^\| IT/[^ |]+ \| X\d{4} \| (\d+) \| (\d+) \| (\d+) \| (\d+) \| (\d+) \|$',note,re.M)
+    assert len(rows)==8 and [sum(int(row[i]) for row in rows) for i in range(5)]==[267,113,65,27514,821]
+    tables=Path(__file__).with_name('N6_TWO_LOWER_TOP_TABLES.md').read_text()
+    squares=re.findall(r'^```n6x-squares\n(.*?)^```$',tables,re.M|re.S)
+    assert sum(len(block.strip().splitlines()) for block in squares)==572
+    for block in squares:
+        for line in block.strip().splitlines():
+            values=line.split();assert values[0].startswith('SOS') and len(values)==16
+            assert all(re.fullmatch(r'-?\d+',value) for value in values[1:])
+    assert sp.Rational(-20132663439404959,174570000000000000)<0
+    print('PASS: complete N6 upper/top-cap identities, eight-root inventory, explicit squares and entire two-lower assembly')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1695,3 +1721,4 @@ if __name__ == "__main__":
     n7_heptagon_two_upper_ear()
     c1_side_top_pair_complete()
     c1_three_top_no_side()
+    n6_two_lower_complete()

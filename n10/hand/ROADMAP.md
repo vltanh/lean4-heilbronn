@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 46.
+Checkpoint 47.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -313,8 +313,20 @@ four-corner alternative and all zero-area faces.
         26 geometric leaves; all 5,741 positive integer terms are printed.
         Independent geometry and separate Fraction/SymPy audits pass.
         Proof: N6_TWO_LOWER_SIDE.md and its complete table appendix.
-  - [ ] Complete all surviving exterior-cap placements outside the two
-        stated projection chambers.
+  - [x] N6-TWO-LOWER-UPPER-TOP. The entire k=2,j=1 placement
+        with a top-cap point, including closed outer square faces.
+        Eight roots, 267 nodes and 821 explicit deductions give 113
+        cubics and 65 geometric exclusions. All 27,514 printed terms,
+        572 local affine squares, 875 triangle/quadrilateral witnesses,
+        274 cap witnesses and 25 spread witnesses have independent
+        geometry and separate Fraction/SymPy audits.
+        Proof: N6_TWO_LOWER_TOP.md and its complete table appendix.
+  - [x] N6-TWO-LOWER-COMPLETE. Every placement with k=2 is excluded.
+        The exhaustive j=2, j=1 side/top and j=0 alternatives are
+        assembled in N6_TWO_LOWER_COMPLETE.md, with both side caps
+        retained after the single lower transposition.
+  - [ ] Complete all surviving exterior-cap placements with k=0 or k=1
+        outside the two stated projection chambers.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
       points and three strictly interior points.
   - [x] N7-PLACEMENTS. Both lower caps are empty, each upper cap has
@@ -573,6 +585,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_HEPTAGON_TWO_UPPER_EAR.md | Entire all-interior (0,2,1) count: 64 exhaustive leaves, 58 cubics / 13,979 printed terms, six clustered-triangle exclusions and 2,166 explicit deductions |
 | C1_TWO_LOWER_SIDE_TOP_PAIR.md and C1_TWO_LOWER_SIDE_TOP_COMPLETE.md | Entire side/top-pair count (2,0,1,2,0) and reflection: analytic hull reduction and four exhaustive cubics, 60 deductions and 764 printed terms |
 | C1_THREE_TOP_NO_SIDE.md | Three top points force both side caps empty; two complete exterior count rows close by endpoint-container and determinant inequalities |
+| N6_TWO_LOWER_TOP.md and N6_TWO_LOWER_TOP_TABLES.md | Entire two-lower/upper/top-cap placement: eight roots, 267 nodes, 821 deductions, 113 cubics, 65 geometric exclusions, 27,514 printed terms and 572 explicit shifted affine squares |
+| N6_TWO_LOWER_COMPLETE.md | Exhaustive assembly of every k=2 placement from the exact hull, upper/side, upper/top and two-exterior theorems |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

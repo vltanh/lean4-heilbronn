@@ -100,10 +100,12 @@ Those complete count exclusions use only endpoint bounds and overlap.
 Every surviving normalized N6 configuration satisfies (1), with all
 five counts at their stated locations, and r,t,l<=3. The exact-hull
 case is (2); all other cases have at least one exterior-cap point.
-N6_EXACT_HULL.md now excludes the entire case (2), with its complete
-printed orientation tree and polynomial identities.
+N6_TWO_LOWER_COMPLETE.md now excludes every placement with k=2,
+including the exact-hull case (2), one upper point with any cap point,
+and both remaining points in arbitrary exterior caps. Its four
+complete child theorems include all signs and outer square faces.
 N6_PROJECTED_CHAMBERS.md supplies strict sharp bounds for two broad
 candidate-like assignments of the four free points. A complete global
 N6 proof must still force one of those assignments or exclude every
-other placement. Neither this first count reduction nor the projected
+other placement with k=0 or k=1. Neither this first count reduction nor the projected
 chambers alone close HP12-N6.

@@ -516,6 +516,19 @@ caps empty, using two analytic endpoint containers with exact gaps
 The remaining C1 exterior catalogue has 24 rows with at most two
 lower points. The global algebra checker now has 57 passing groups.
 
+The entire N6 family with two lower points is now excluded by
+N6_TWO_LOWER_COMPLETE.md. Its final upper/top-cap child has eight
+roots, 267 nodes, 821 explicit deductions, 113 polynomial leaves and
+65 geometric exclusions. N6_TWO_LOWER_TOP.md and its appendix print
+all 27,514 positive integer terms and 572 unconditional shifted
+affine squares. Independent geometry checks all roots and splits,
+875 triangle/quadrilateral, 274 cap and 25 spread witnesses, including
+closed outer square faces. Separate Fraction and SymPy readers
+reproduce every exact negative bound. The largest is
+-20132663439404959/174570000000000000. Only k=0 or k=1 exterior
+placements remain in N6. The global algebra checker now has 58
+passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

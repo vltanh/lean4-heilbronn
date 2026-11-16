@@ -112,5 +112,6 @@ with Section 1, the complete remaining catalogue therefore satisfies
 The all-four-in-one-cap alternatives were already excluded in
 N6_PLACEMENTS.md. Every strict chord boundary would be an actual
 collinear triple, so these exclusions omit no positive-minimum face.
-The exact-hull 2/2 case is now closed in N6_EXACT_HULL.md. The surviving
-exterior placements remain separate obligations in ROADMAP.md.
+The entire k=2 family is now closed in N6_TWO_LOWER_COMPLETE.md.
+Surviving exterior placements with k=0 or k=1 remain separate
+obligations in ROADMAP.md.
