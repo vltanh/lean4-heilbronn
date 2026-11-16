@@ -4,8 +4,9 @@ This note continues the Type-II row (ell,c0,r)=(1,2,4) from
 [TYPE_II.md](TYPE_II.md). It excludes the entire alternative in which
 both central points lie below CE. If both lie above CE, it proves that
 the lower supporting fan EBH is empty, for every right-hull alternative.
-The one-upper and two-upper alternatives remain open; no exclusion of
-the whole count row is claimed.
+The triangular-right alternatives are now fully excluded in
+TYPE_II_R4_TRIANGLE_COMPLETE.md. The nontriangular right hull remains a
+separate obligation; no exclusion of the whole count row is claimed here.
 
 All areas below are DOUBLED. Write
 
@@ -145,5 +146,7 @@ forced into ECH. This keeps all right-hull alternatives explicit.
 After this note the row (1,2,4) has exactly the two possible cuts of
 its central pair relative to CE: one upper and one lower, or both upper.
 The entire both-lower alternative is excluded. The empty-fan statement
-adds a uniform restriction in the both-upper alternative. Neither of
-these remaining cuts, nor the parent Type-II family, is yet closed.
+adds a uniform restriction in the both-upper alternative. The subsequent
+TYPE_II_R4_TRIANGLE_COMPLETE.md closes both cuts for triangular right
+hulls. The nontriangular right-hull child and parent Type-II family
+remain open.

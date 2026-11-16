@@ -729,6 +729,95 @@ def lower_contact_projection_and_caps():
     print("PASS: N6/N7 projection identities, candidate margins, and exterior-cap rational bounds")
 
 
+
+def adjacent_upper_p_and_two_upper():
+    q=sp.Rational;s=q(93,1000)
+    lam,b,px,py,y,t,z,a,xx,xy,r,v,T = sp.symbols("lam b px py y t z a xx xy r v T")
+    E=sp.Matrix([0,lam]);B=sp.Matrix([b,0]);P=sp.Matrix([px,py]);Y=sp.Matrix([y,t]);R=sp.Matrix([r,v])
+    area2=lambda I,J,K:2*area(I,J,K)
+    ebp=area2(E,B,P)
+    expr=((1-lam)*(ebp-s)).subs({px:(py-lam-s)/(1-lam),b:q(9,50),py:q(9,20)})
+    zero(expr-(-q(41,50)*lam**2+q(189,1000)*lam-q(3,250)))
+    assert -q(3,250)+q(189,1000)**2/(4*q(41,50))==-q(3639,3280000)
+    assert ((1-3*s)*(1-s)-s)/(q(4,5)+1-3*s)==q(560947,1521000)
+    assert 1-s*(2-q(3539,18140))/q(602053,907000)==q(8996147,12041060)
+    assert (q(9,10)-s)/5-(q(9,10)-(1-3*s))*q(9,20)==q(1617,20000)<s
+    assert q(149,20)*s-q(3,4)*(1-s)==q(63,5000)>0
+    zero((y-b)*area2(E,R,Y)+(r-y)*area2(E,B,Y)-y*((r-b)*t-v*(y-b)))
+    F=T+s-s*(1+T)/(1-3*s-s*T)
+    assert F.subs(T,q(628,721))==q(230268674161,332696077000)
+    assert q(149,20)*s-F.subs(T,q(628,721))==q(4796055769,6653921540000)>0
+    assert 1-q(149,20)*s/(1-s)==q(4283,18140)
+    assert 1-q(157,20)*s/(1-q(31,300))==q(9997,53800)
+    assert q(93,500)-q(9997,53800)==q(49,269000)>0
+    assert q(93,500)*q(177,1000)+q(11,100)*(1-3*s-q(177,1000))==q(46381,500000)<s
+    b0=q(93,890)
+    assert q(81,1000)-(1-q(177,20)*s/(1-b0))==q(143,1594000)>0
+    assert q(185,1000)-(1-q(157,20)*s/(1-b0))==q(379,1594000)>0
+    assert 3*s/(1-b0)-q(311,1000)==q(443,797000)>0
+    assert q(585,1000)-(1-4*s/(1-b0))==q(13,31880)>0
+    assert 1-3*s-q(4,5)*(q(177,20)+1)*s==-q(37,3125)
+    print("PASS: upper-P sign contradictions, second-triangle identity, two-upper box constants")
+
+
+def adjacent_one_upper():
+    q=sp.Rational;s=q(93,1000);tau=q(93073,1000000)
+    b,T,lam,y,t,z,a = sp.symbols("b T lam y t z a")
+    D,E,B,Y,Z=(sp.Matrix(pt) for pt in [(0,1),(0,lam),(b,0),(y,t),(z,a)])
+    area2=lambda I,J,K:2*area(I,J,K)
+    zero(area2(E,Y,Z)-area2(D,Y,Z)-(1-lam)*(y-z))
+    zero(area2(E,Y,Z)-area2(B,Y,Z)-b*(a-t)-lam*(z-y))
+    assert 1-s/(1-q(177,20)*s)==q(1679,3539)<q(19,40)
+    assert q(279,907)+2*s==q(223851,453500)>q(49,100)
+    u=1-3*tau;Tb=1-tau/(1-b)
+    F=T+tau-tau*(1+T)/(u-b*T)
+    zero(sp.diff(F,T)-(1-tau*(u+b)/(u-b*T)**2))
+    zero(sp.diff(F,b)+tau*T*(1+T)/(u-b*T)**2)
+    assert 1-q(59,500)/q(27,50)**2==q(434,729)>0
+    g=Tb-3*tau**2/b;f=F.subs(T,Tb)
+    zero(sp.diff(g,b)-tau*(3*tau/b**2-1/(1-b)**2))
+    cut=q(327,2500);cap=q(933,125)*tau
+    assert f.subs(b,cut)==q(495032499115388709,712995842008000000)
+    assert g.subs(b,cut)==q(65774049426083,94742800000000)
+    assert cap==q(86837109,125000000)
+    assert cap-f.subs(b,cut)==q(35435259571886247,89124480251000000000)>0
+    assert cap-g.subs(b,cut)==q(217386892193,473714000000000)>0
+    assert q(433,250)**2==q(187489,62500)<3
+    print("PASS: single-upper containments' identities and exact monotone scalar cut")
+
+
+
+def adjacent_lower_p():
+    q=sp.Rational;s=q(93,1000);G=q(177,20);u=1-3*s
+    b,lam,r,v,y,t,px,py=sp.symbols("b lam r v y t px py")
+    F=u+s-(G-1)*s*b/(1-b)-s*u/b;B0=1-G*s
+    zero(sp.diff(F,b)-s*(u/b**2-(G-1)/(1-b)**2))
+    assert F.subs(b,B0)==q(3484138643,12528060000)
+    assert 3*s-F.subs(b,B0)==q(11190097,12528060000)>0
+    assert q(19,40)-q(15,8)*s==q(481,1600)
+    assert q(279,907)-q(481,1600)==q(10133,1451200)>0
+    assert (G+2)*s-1==q(181,20000)>0
+    lam0=29*s/(10*(1-s));b0=s/(1-lam0)
+    assert lam0==q(2697,9070) and b0==q(84351,637300)
+    assert b0-q(13,100)==q(751,318650)>0
+    assert 1-(G-1)*s/(1-q(13,100))==q(933,5800)
+    assert q(161,1000)-q(933,5800)==q(1,7250)>0
+    T=1-t;L=y-b*T;d=px-b*(1-py);c=lam-v;AA=r-b*c
+    D,E,B,R,P,Y=(sp.Matrix(pt) for pt in [(0,1),(0,lam),(b,0),(r,v),(px,py),(y,t)])
+    area2=lambda I,J,K:2*area(I,J,K)
+    zero(area2(D,P,Y)-(L*(1-py)-T*d))
+    zero(area2(E,B,R)+area2(E,R,P)-(AA*py+c*d))
+    zero(AA*T-c*L-(r*T-c*y))
+    assert q(9,10)*q(4,5)-q(19,40)*q(721,1000)==q(15101,40000)>0
+    h=1-s*(2-t)/L
+    zero(sp.diff(h,t)-s*(y+b)/L**2)
+    value=h.subs({y:q(721,1000),b:q(13,100),t:q(161,1000)})
+    assert value==q(440903,611930)
+    assert q(721,1000)-value==q(29853,61193000)>0
+    assert q(721,1000)-s/q(13,100)==q(73,13000)>0
+    print("PASS: final triangular-right cut, empty EBY cap, ER bounds, quadrilateral barycentric identity")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -752,3 +841,6 @@ if __name__ == "__main__":
     adjacent_triangular_right()
     adjacent_upper_pair()
     lower_contact_projection_and_caps()
+    adjacent_upper_p_and_two_upper()
+    adjacent_one_upper()
+    adjacent_lower_p()

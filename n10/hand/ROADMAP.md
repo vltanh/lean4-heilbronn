@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 17.
+Checkpoint 18.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -153,11 +153,22 @@ four-corner alternative and all zero-area faces.
     - [x] Both central points below CE: excluded by the two-interior-point
           capacity. If both are above CE, the bottom support fan EBH is
           empty for every right hull. Proof: TYPE_II_R4.md.
-    - [ ] One central point above CE and one below, or both above CE.
-          For a triangular right hull, TYPE_II_R4_TRIANGLE.md forces a
-          unique middle fan placement and fixes D positive and B negative
-          for the central-pair line. TYPE_II_UPPER_PAIR.md also fixes E
-          negative in the both-upper cut, for every right-hull alternative.
+    - [x] The entire triangular-right hull alternative, with every central
+          CE cut. TYPE_II_R4_TRIANGLE_COMPLETE.md assembles the exhaustive
+          three-row proof after the unique middle fan placement.
+      - [x] Lower-fan point P below CE, with Q on either side: an empty
+            supporting fan forces two points into an actual quadrilateral
+            whose doubled area is below 721/1000<8sigma.
+            Proof: TYPE_II_R4_LOWER_P.md.
+      - [x] P above CE and Q below: two containing triangles give opposing
+            monotone scalar bounds, split at b=327/2500.
+            Proof: TYPE_II_R4_ONE_UPPER.md.
+      - [x] Both above CE: the forced nested chamber has one printed cubic
+            contradiction with 76 positive integer entries, maximum 46.
+            Proof: TYPE_II_R4_UPPER_P.md and TYPE_II_R4_TWO_UPPER.md.
+    - [ ] Nontriangular right hull, with one or both central points above
+          CE. TYPE_II_UPPER_PAIR.md fixes E negative in the both-upper cut
+          for every right hull, but this child remains open.
   - [ ] II-(1,3,3). Its central triple must be distributed.
   - [ ] II-(2,2,3). Triangular left hull; nontriangular right hull whose
         support-normalized additional point is in cell II.
@@ -266,6 +277,11 @@ strictly interior points in N6 and N7 requires a separate argument.
 | TYPE_II.md | Four-row adjacent-corner reduction and complete stated side-hull exclusions; full II remains open |
 | TYPE_II_R4.md | Complete both-below-CE exclusion in (1,2,4), and uniform empty bottom fan in its both-above cut |
 | TYPE_II_R4_TRIANGLE.md | Unique middle fan placement for every triangular-right hull in (1,2,4), with fixed central-pair D/B signs |
+| TYPE_II_R4_UPPER_P.md | Upper-P containments and signs; the unique nested chamber when both central points are above CE |
+| TYPE_II_R4_TWO_UPPER.md | Complete both-upper triangular-right exclusion; one printed cubic with 76 integer entries |
+| TYPE_II_R4_ONE_UPPER.md | Complete upper-P/lower-Q triangular-right exclusion by two opposing scalar bounds |
+| TYPE_II_R4_LOWER_P.md | Complete lower-P triangular-right exclusion, allowing either CE side of Q |
+| TYPE_II_R4_TRIANGLE_COMPLETE.md | Full triangular-right child of Type-II (1,2,4), including all central CE cuts |
 | TYPE_II_UPPER_PAIR.md | Complete opposite-B/E sign exclusion for the two upper central points, with every right hull allowed |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |

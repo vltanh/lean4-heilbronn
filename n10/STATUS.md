@@ -139,6 +139,17 @@ projection theorems also exclude attainment in every stated secondary
 chamber, including all normalized candidate neighborhoods. Their global
 placement parents remain open.
 
+The entire triangular-right child of Type-II (1,2,4) is now excluded.
+The unique middle fan placement has three exhaustive CE cuts. When its
+lower-fan point is below CE, a forced two-point quadrilateral has doubled
+area below 721/1000<8sigma. The mixed cut has opposing monotone scalar
+bounds, and the both-upper cut has one fully printed cubic with 76
+positive integer entries, maximum 46. Independent geometry and exact
+Fraction/SymPy audits pass. TYPE_II_R4_TRIANGLE_COMPLETE.md assembles
+the child; its nontriangular sibling and the other three Type-II count
+rows remain open. The exact global algebra checker now has 25 passing
+groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

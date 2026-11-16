@@ -351,7 +351,7 @@ The line directed from P to Q has D on its positive side and B on its
 negative side. In the two-upper CE cut, TYPE_II_UPPER_PAIR.md further
 places E on the same negative side as B.
 
-TYPE_II_R4.md further excludes both central points below CE. Neither
-of the remaining one-upper and two-upper central cuts is excluded in
-full by the present note. Both must be covered before the entire
-triangular-right branch can be checked off.
+TYPE_II_R4.md further excludes both central points below CE. The
+subsequent three-cut argument in TYPE_II_R4_TRIANGLE_COMPLETE.md now
+excludes every placement left by this note and closes the entire
+triangular-right branch.
