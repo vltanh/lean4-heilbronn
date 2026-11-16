@@ -860,6 +860,29 @@ exact global checker to 95 passing groups. Eleven C1 count rows and
 the two central N7 lower cells CA/CB remain alongside those sixteen
 N6 rows; no global parent is marked complete prematurely.
 
+## Hand checkpoint 82: normalized BTTT ---+
+
+The complete normalized BTTT `---+` word is excluded in
+[N6_BTTT_REMAINING_TRIANGULAR.md](hand/N6_BTTT_REMAINING_TRIANGULAR.md).
+Thirteen actual-sign splits cover fourteen explicit contradictions, without
+coordinate cuts. The linked Markdown tables print all 1,356 geometric
+deductions, 1,493 coordinate updates, 525 physical factors, 664 scalar
+updates, 277 scalar relations and six capacity-forced signs. One leaf proves
+that the known zero determinant BPP has a strictly positive barycentric lower
+bound, with exact gap 4272887/40244750000.
+
+The standalone JavaScript reader and a separate Python/Fraction implementation
+both reconstruct the proof directly from those tables, including every source
+scope and both children of every split. Seven deliberately corrupted records
+are rejected. The separate
+[central-top lower-ear theorem](hand/N6_BTTT_REMAINING_CENTRAL_EAR.md)
+also excludes the entire `HBP<0` alternative in normalized `+--+`: no
+further cuts, 39 deductions, 28 factors and 152 coordinate updates yield
+the exact negative upper bound -18462201153/10^12. Both independent readers
+pass this table too. The `HBP>0` alternative in `+--+` remains open, so no
+whole N6 count or global parent is marked complete. The global hand
+obligations are still C1, N6 and N7; the computer-assisted proof above is unchanged.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
