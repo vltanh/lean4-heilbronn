@@ -320,6 +320,20 @@ the separate Fraction checker passes as well. Only (1,3,3) and
 (2,3,2) remain in the adjacent-corner family. The global algebra
 checker now has 41 passing groups.
 
+The entire N6 exact-hull 2/2 placement is now closed. N6_EXACT_HULL.md
+and its CS, CO and MIXED appendices print all eight roots, 686 case
+nodes, and 4,388 elementary geometric deductions. Every branch ends
+in one of 290 fixed cubic contradictions or 229 actual containment
+contradictions. All 44,924 positive integer terms and ten affine squares
+are printed; every exact upper bound is below -1/100. A standard-library
+checker reads the manuscript, verifies exhaustive branching and every
+geometric premise, and reconstructs the sums. A separate SymPy reader
+independently replays all deductions and expands every printed sum.
+A further independent geometry audit checked all nodes and 1,239
+triangle, 988 quadrilateral, 82 spread, and one distributed-mesh factor
+premises. The exterior-cap N6 placements remain open. The global
+algebra checker now has 42 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

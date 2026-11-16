@@ -1248,6 +1248,27 @@ def adjacent_223_complete():
     print("PASS: complete Type-II (2,2,3) selection cap, nine box bootstraps, geometric identities, and exhaustive eighteen-row catalogue")
 
 
+def n6_exact_hull_complete():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);K=q(149,20);J=q(4427,500)
+    a,b,c,h,x,y,u,v=sp.symbols("a b c h x y u v")
+    A,B,C,H,U,V=(sp.Matrix(pt) for pt in [(0,a),(b,0),(c,0),(0,h),(x,y),(u,v)])
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(A,U,V)-det(H,U,V)-(h-a)*(x-u))
+    zero(det(B,U,V)-det(C,U,V)-(c-b)*(v-y))
+    xx=sp.symbols("x0:12");AA,BB,CC,XX,YY,ZZ=[sp.Matrix(xx[2*i:2*i+2]) for i in range(6)]
+    faces=[(AA,BB,ZZ),(BB,CC,XX),(CC,AA,YY),(AA,ZZ,YY),(BB,XX,ZZ),(CC,YY,XX),(ZZ,XX,YY)]
+    zero(sum(det(*tri) for tri in faces)-det(AA,BB,CC))
+    assert q(559,250)**2<5 and (15+3*q(559,250))*s/2>1
+    assert 2*K>J+3 and q(93,91)>1 and s>q(1,11)
+    note=Path(__file__).with_name("N6_EXACT_HULL.md").read_text()
+    records=re.findall(r'^\| (CS--|CO--|CO\+-|CO\+\+|MH--|MH-\+|MH\+\+|MHC\+\+) \| N\d{4} \| (\d+) \| (\d+) \| (\d+) \| (\d+) \| (\d+) \|$',note,re.M)
+    assert len(records)==8
+    assert [sum(int(row[i]) for row in records) for i in range(1,6)]==[686,290,229,44924,4388]
+    print("PASS: N6 exact-hull contact gaps, distributed-mesh identity, capacity constants, and complete printed tree inventory")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1290,3 +1311,4 @@ if __name__ == "__main__":
     n7_long_triangle_caps()
     n7_corner_line()
     adjacent_223_complete()
+    n6_exact_hull_complete()

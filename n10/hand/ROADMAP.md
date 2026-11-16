@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 32.
+Checkpoint 33.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -244,8 +244,15 @@ four-corner alternative and all zero-area faces.
         mixed area and ratio bounds are proved and independently audited.
         Proof: N6_EXACT_HULL_REDUCTION.md. This is a reduction, not a
         closure of the exact-hull child.
-  - [ ] Complete the exact-hull 2/2 case and all exterior-cap placements
-        outside the two stated projection chambers.
+  - [x] N6-EXACT-HULL. The entire 2/2 child inside the contact hexagon.
+        Eight roots and 686 explicitly printed nodes have 290 cubic
+        contradictions and 229 geometric exclusions. All 4,388 sign
+        deductions, 44,924 positive integer terms, ten affine squares,
+        boxes, and actual occupancy/spread witnesses are printed.
+        Independent geometric replay and separate Fraction/SymPy
+        expansions pass. Proof: N6_EXACT_HULL.md and its three appendices.
+  - [ ] Complete all surviving exterior-cap placements outside the two
+        stated projection chambers.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
       points and three strictly interior points.
   - [x] N7-PLACEMENTS. Both lower caps are empty, each upper cap has
@@ -413,6 +420,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_PROJECTED_CHAMBERS.md | Strict sharp bounds for both two-secondary omission-pair orbits; complete normalized N6 candidate neighborhoods |
 | N6_EXTERIOR_CUTS.md | Complete exclusions of side-cap triples, two points in each side cap, and a top triple plus a side-cap point |
 | N6_EXACT_HULL_REDUCTION.md | Complete exact-hull lower catalogue and rational boxes; all nested mixed rows excluded, eight rows remain |
+| N6_EXACT_HULL.md | Entire exact-hull 2/2 child: complete 686-node geometric tree, 290 cubic and 229 geometric leaves; all 44,924 terms printed in the CS, CO and MIXED appendices |
 | N7_PLACEMENTS.md | Lower-cap exclusions, upper-cap capacity two, five exhaustive remaining counts and a uniform rational box |
 | N7_UPPER_OCCUPANCY.md | Complete (2,1,0) exclusion, at least one free point in the heptagon, and two-exterior chord placements |
 | N7_OPPOSITE_UPPER_CAPS.md | Complete exclusion of simultaneous occupancy of the two upper caps, including the entire (1,1,1) row |
