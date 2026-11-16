@@ -3,7 +3,8 @@
 [Back to the README](../README.md)
 
 These definitions carry the entire meaning of the results. All of them are in
-`Heilbronn/Geometry.lean`, and `Challenge.lean` restates them word for word.
+`Heilbronn/Geometry.lean`, and the Challenge of every case
+(`Palomar/<Case>/Challenge.lean`) restates them word for word.
 
 ## Points and the square
 
@@ -60,9 +61,8 @@ def heilbronnNumber (n : ℕ) : ℝ := sSup (minAreaValues n)
 
 `minAreaValues n` is the set of values of the least triangle area over all
 configurations of `n` points in the closed square, and `heilbronnNumber n` its
-supremum, the Heilbronn number `H_n` of the unit square. The main theorem says
-that for `n = 9` the supremum is a maximum, `IsGreatest (minAreaValues 9) A₀`,
-so `H_9 = A₀ = (9√65 − 55)/320`.
+supremum, the Heilbronn number `H_n` of the unit square. For each case treated,
+its theorems say the supremum is a maximum, and give its value.
 
 ## The symmetries of the square
 
@@ -84,14 +84,27 @@ the eight symmetries: the identity, the three rotations and the four
 reflections. Each maps the square onto itself and keeps every triangle area
 (`SquareSymmetry.apply_mem`, `SquareSymmetry.triangleArea_apply`).
 
-## The optimal configuration
+## Congruence
 
 ```lean
-def p₀ : ℝ := (15 - Real.sqrt 65) / 40   -- ≈ 0.17344, the smaller root of 20x² − 15x + 2
+def Congruent {n : ℕ} (P M : Fin n → Point) : Prop :=
+  ∃ (g : SquareSymmetry) (σ : Equiv.Perm (Fin n)), ∀ i, P (σ i) = g.apply (M i)
+```
 
-def optimalConfiguration : Fin 9 → Point :=
-  ![(0, 4 * p₀ - 1 / 2), (p₀, 0), (1 - 3 * p₀ / 2, 0), (1, 3 * p₀ / 2), (1, 1 - p₀),
-    (3 / 2 - 4 * p₀, 1), (p₀, 1), (0, 1 - p₀), (1 - 2 * p₀, 2 * p₀)]
+`Congruent P M` says that, after a relabelling `σ`, the points of `P` are the images
+of the points of `M` under one symmetry `g` of the square. Congruent configurations
+have the same least triangle area (`Congruent.minTriangleArea_eq`). The optimal
+configurations of each case are given up to congruence.
+
+## Nine points
+
+```lean
+def Nine.p₀ : ℝ := (15 - Real.sqrt 65) / 40   -- ≈ 0.17344, the smaller root of 20x² − 15x + 2
+
+def Nine.optimalConfiguration : Fin 9 → Point :=
+  ![(0, 4 * Nine.p₀ - 1 / 2), (Nine.p₀, 0), (1 - 3 * Nine.p₀ / 2, 0), (1, 3 * Nine.p₀ / 2),
+    (1, 1 - Nine.p₀), (3 / 2 - 4 * Nine.p₀, 1), (Nine.p₀, 1), (0, 1 - Nine.p₀),
+    (1 - 2 * Nine.p₀, 2 * Nine.p₀)]
 ```
 
 The configuration found by Comellas and Yebra (2002), in the order
@@ -100,19 +113,8 @@ square, `A, H` on the left, `B, C` at the bottom, `D, E` on the right and `F, G`
 at the top, and one point `O` inside. Its least triangle area is exactly
 `A₀ = (9√65 − 55)/320 ≈ 0.054876`, attained by eleven triangles
 (`ABC, ABH, ADO, AGH, BEO, CFO, CGO, DEF, DHO, EFG, FGH`); every other triangle is
-larger (`Heilbronn/Construction/Areas.lean`).
+larger (`Heilbronn/Nine/Construction/Areas.lean`).
 
-## Congruence to the optimal configuration
-
-The equality statement says that the configurations attaining `A₀` are exactly
-those with
-
-```lean
-∃ (g : SquareSymmetry) (σ : Equiv.Perm (Fin 9)),
-  ∀ i, P (σ i) = g.apply (optimalConfiguration i)
-```
-
-that is, a relabelling of the image of the optimal configuration under a
-symmetry of the square. The optimal configuration is symmetric under the
-reflection `(x, y) ↦ (1 − y, 1 − x)` in the anti-diagonal, and under no other
-non-identity symmetry, so there are exactly four optimal point sets.
+The optimal configuration is symmetric under the reflection
+`(x, y) ↦ (1 − y, 1 − x)` in the anti-diagonal (`SanityChecks.lean`), and under no
+other non-identity symmetry of the square, so exactly four point sets attain `H₉`.
