@@ -1,0 +1,41 @@
+(function checkUpperPairContactCaps(){
+"use strict";
+const gcd=(a,b)=>{a=a<0n?-a:a;b=b<0n?-b:b;while(b){const r=a%b;a=b;b=r;}return a;};
+const q=(a,b=1n)=>{if(Array.isArray(a))return a;if(typeof a==="string"){const p=a.split("/");return q(BigInt(p[0]),p.length===2?BigInt(p[1]):1n);}a=BigInt(a);b=BigInt(b);if(!b)throw Error("zero denominator");if(b<0n){a=-a;b=-b;}const g=gcd(a,b);return[a/g,b/g];};
+const add=(a,b)=>q(a[0]*b[1]+b[0]*a[1],a[1]*b[1]),neg=a=>[-a[0],a[1]],sub=(a,b)=>add(a,neg(b)),mul=(a,b)=>q(a[0]*b[0],a[1]*b[1]),div=(a,b)=>q(a[0]*b[1],a[1]*b[0]),eq=(a,b)=>a[0]*b[1]===b[0]*a[1],str=a=>a[1]===1n?String(a[0]):a[0]+"/"+a[1];
+const K=x=>new Map([["",q(x)]]),V=i=>new Map([[String(i),q(1)]]);
+const plus=(...ps)=>{const out=new Map();for(const p of ps)for(const[k,c]of p){const v=add(out.get(k)||q(0),c);if(v[0])out.set(k,v);else out.delete(k);}return out;};
+const scale=(p,c)=>new Map([...p].map(([m,a])=>[m,mul(a,q(c))])),minus=(a,b)=>plus(a,scale(b,-1));
+const times=(a,b)=>{const out=new Map();for(const[k,c]of a)for(const[l,d]of b){const key=[...k.split(",").filter(Boolean),...l.split(",").filter(Boolean)].map(Number).sort((x,y)=>x-y).join(","),v=add(out.get(key)||q(0),mul(c,d));if(v[0])out.set(key,v);else out.delete(key);}return out;};
+const[a,b,c,e,f,h]=Array.from({length:6},(_,i)=>V(i)),pts={A:[K(0),a],B:[b,K(0)],C:[c,K(0)],E:[K(1),e],F:[f,K(1)],H:[K(0),h]};
+const D=word=>{const[A,B,C]=[...word].map(t=>pts[t]);return minus(times(minus(B[0],A[0]),minus(C[1],A[1])),times(minus(B[1],A[1]),minus(C[0],A[0])));};
+let checks=0;const check=(b,m)=>{if(!b)throw Error(m);checks++;};
+check(plus(D("ABE"),D("AEF"),times(minus(e,a),minus(f,b)),K(-1)).size===0,"ABEF ceiling identity");
+check(minus(plus(D("ABE"),D("AEF")),plus(D("ABF"),D("BEF"))).size===0,"second ABEF diagonal");
+check(plus(D("CEF"),D("CFH"),times(minus(h,e),minus(c,f)),K(-1)).size===0,"HCEF ceiling identity");
+check(minus(times(D("AEF"),D("CFH")),plus(times(D("ACF"),D("EFH")),times(D("AFH"),D("CEF")))).size===0,"first Pluecker identity");
+check(minus(times(D("BEF"),D("CFH")),plus(times(D("BCF"),D("EFH")),times(D("BFH"),D("CEF")))).size===0,"second Pluecker identity");
+const s=q("93/1000"),T=mul(q("149/20"),s),R=sub(q(1),T),lower=add(mul(q("24/5"),mul(s,s)),mul(sub(T,s),s));
+check(eq(R,q("6143/20000"))&&R[0]>0n,"positive denominator");
+check(eq(lower,mul(q("45/4"),mul(s,s)))&&eq(lower,q("77841/800000")),"common lower product");
+const cap=sub(q(1),div(lower,R));
+check(eq(cap,q("167879/245720")),"contact triangle cap");
+const gap=sub(T,cap);check(eq(gap,q("1184051/122860000"))&&gap[0]>0n,"capacity gap");
+const squareGap=sub(lower,mul(R,R));check(eq(squareGap,q("1184051/400000000"))&&squareGap[0]>0n,"equivalent squared gap");
+check(eq(sub(q("449/1000"),mul(q("24/5"),s)),q("13/5000")),"weakened occupied quad cost");
+
+const L=q("270723/500000"),Ec=q("907/1000"),cl=q("27/50"),fu=q("71/250"),cu=q("291/500"),hl=q("93/100"),eu=q("17/20");
+const fGap=sub(add(mul(s,cl),mul(Ec,fu)),R);
+check(eq(fGap,q("329/500000"))&&fGap[0]>0n,"f below .284");
+const cGap=sub(add(mul(s,cu),mul(Ec,mul(q(3),s))),R);
+check(eq(cGap,q("29/1000000"))&&cGap[0]>0n,"c below .582 under f>=3s");
+const hGap=sub(L,mul(hl,cu));
+check(eq(hGap,q("93/500000"))&&hGap[0]>0n,"h above .93");
+const hefUpper=add(sub(q(1),hl),mul(fu,sub(hl,eu))),hefGap=sub(s,hefUpper);
+check(eq(hefUpper,q("2318/25000"))&&eq(hefGap,q("7/25000"))&&hefGap[0]>0n,"e below .85");
+const cefUpper=add(sub(q(1),cl),mul(eu,sub(cl,mul(q(3),s)))),cefGap=sub(T,cefUpper);
+check(eq(cefUpper,q("13637/20000"))&&eq(cefGap,q("11/1000"))&&cefGap[0]>0n,"final CEF contradiction");
+const report={passed:true,checks,cap:str(cap),capacity_gap:str(gap),empty_triangle:"ABF",f_upper:"279/1000"};
+if(typeof console!=="undefined")console.log(JSON.stringify(report));
+return report;
+})()

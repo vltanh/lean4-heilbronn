@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 80.
+Checkpoint 81.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -843,6 +843,15 @@ four-corner alternative and all zero-area faces.
         scalar and endpoint cap, all six chord and ten mesh deductions.
         Separate Fraction/SymPy readers reproduce every exact bound
         and all 41 explicit rational squares. Proof: N7_ONE_LOWER_ABC.md.
+  - [x] UPPER-PAIR-CONTACT-CAPS. Two occupants of CEF and a
+        central lower point give ABE,ABF<=167879/245720<(149/20)s.
+        Two actual quadrilateral sums and two signed product identities
+        prove both bounds. The lower endpoint floor further forces
+        f<3s, so ABF is empty. Both monotone substitution orders and
+        all exact gaps have independent review; eight fresh polynomial
+        expansions and the sixteen-check standalone reader pass.
+        Proof: UPPER_PAIR_CONTACT_CAPS.md. This shared N6/N7 lemma
+        leaves the containing placement parents open.
   - [x] N7-CENTRAL-ACD-CAP. In both central lower roots, the
         actual ACD area is below 27/40. Elimination of a and d using
         the shared lower strip and two actual anchor clearances leaves
@@ -1060,6 +1069,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_SIDE_PAIR_TOP_BOUNDS.md | Uniform .897 contact ceiling, narrow side-pair box, inner 2/9 barycentric bounds and an explicit actual-area transfer to N6 |
 | N7_ONE_LOWER_SETUP.md | Exhaustive four-cell reduction for the remaining all-interior (1,2,0) count, four proved rational boxes, capacity-ray rule and complete factor definitions |
 | N7_ONE_LOWER_ABH.md | Entire lower-ear ABH child: 58 splits, 55 cubics / 21,373 terms, four geometric terminals, 1,993 deductions and 41 explicit rational squares |
+| UPPER_PAIR_CONTACT_CAPS.md | Two CEF occupants and a central lower point give capacity one for ABE and ABF; the lower endpoint floor strengthens ABF to empty through five exact comparisons |
 | UPPER_EAR_SEPARATION.md | One lower point and two CEF occupants force HEF empty; two exact height cases exclude every negative-EH child of the E-only upper-pair cut |
 | N7_CENTRAL_ACD_CAP.md | Both central roots satisfy actual ACD<27/40; one positive cubic proves capacity one and ADG<0 forces ADO,ADP>0 |
 | N7_CENTRAL_PAIR_CUT.md | After HOP<0, the full DGO>0 child is impossible in both central roots; three actual capacity-one triangles and a short occupied-triangle contradiction leave six pair words |
