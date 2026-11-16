@@ -15,7 +15,8 @@ for(const [name,prev] of [
  ["c1_js_threecap_extension_02.json","c1_js_threecap_extension_01.json"],
  ["c1_js_threecap_extension_03.json","c1_js_threecap_extension_02.json"],
  ["c1_js_threecap_extension_04.json","c1_js_threecap_extension_03.json"],
- ["c1_js_threecap_extension_05.json","c1_js_threecap_extension_04.json"]
+ ["c1_js_threecap_extension_05.json","c1_js_threecap_extension_04.json"],
+ ["c1_js_threecap_extension_06.json","c1_js_threecap_extension_05.json"]
 ]){
  const p=read(name);
  if(p.type!=="C1-RTL-exact-frontier-extension" ||
@@ -48,6 +49,6 @@ for(const [name,prev] of [
  console.log(name,JSON.stringify(result));
 }
 const report=C1RTL_CHECK.check(state);
-if(report.splits!==35||report.area!==8||report.linear!==22||
-   report.open!==6||report.complete)throw Error("unexpected frontier");
-console.log("C1 remains open with six queued nodes");
+if(report.splits!==38||report.area!==8||report.linear!==24||
+   report.open!==7||report.complete)throw Error("unexpected frontier");
+console.log("C1 remains open with seven queued nodes");
