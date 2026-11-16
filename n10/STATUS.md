@@ -294,6 +294,20 @@ intercepts, strict scalar gaps, boundary-contact cases, and complete
 count table have been independently checked. The global C1 parent
 remains open. The global algebra checker now has 38 passing groups.
 
+N7_LONG_TRIANGLE_CAPS.md now gives capacity one for all eight long
+actual hull triangles, at every height and without an OP-line assumption.
+The analytic bound g<3/5 and eight fixed polynomial sums, containing
+3,212 positive integer terms, complete the remaining height direction.
+N7_CORNER_LINE.md closes the entire literal AB/EF line class: its
+forced quadrilateral has two separated diagonals, eighteen printed
+cubics cover all fifteen noncandidate oblique words, and the good word
+uses the sharp projected theorem. All 5,641 integer terms, signs, boxes,
+and occupancy witnesses have independent manuscript-based SymPy and
+Fraction checks. The two geometric arguments and their exact scalar
+identities have been reviewed. The other 4/4 edge pairs, remaining
+lower-height 3/5 arcs, and all-interior N7 placement remain open.
+The global algebra checker now has 40 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

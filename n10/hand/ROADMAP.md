@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 30.
+Checkpoint 31.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -284,9 +284,20 @@ four-corner alternative and all zero-area faces.
         All 22,579 integer terms, rational boxes, and geometric witnesses
         are printed and independently audited.
         Proof: N7_THREE_FIVE_UPPER_HEIGHT.md.
+  - [x] N7-LONG-TRIANGLE-CAPS. All eight actual long hull triangles
+        have area below 69/100 at every height, independently of OP.
+        The global g<3/5 bound and eight fixed sums supply the remaining
+        six targets; all 3,212 integer terms and exact boxes are printed.
+        Proof: N7_LONG_TRIANGLE_CAPS.md.
+  - [x] N7-SINGLE-EXTERIOR-4/4-AB/EF. The whole literal AB/EF edge
+        pair, with no height condition. Both diagonals separate O,P;
+        eighteen cubic rows close every noncandidate oblique sign word,
+        and the candidate word uses the sharp projected theorem.
+        All 5,641 integer terms and every geometric witness are printed.
+        Proof: N7_CORNER_LINE.md.
   - [ ] Complete the two surviving placement rows outside the proved
         sign chambers: all of (0,0,3), the other 3/5 positions with h<e,
-        and the 4/4 line splits of (1,0,2).
+        and the other 4/4 edge pairs of (1,0,2).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -407,6 +418,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_OP_LINE_CAPS.md | Every 1/7 and 2/6 line split in single-exterior N7; exhaustive eight-cap catalogue and five printed sums, 2,254 entries |
 | N7_THREE_FIVE_TOP.md | Entire HGF short-arc 3/5 class in single-exterior N7; eleven exhaustive cubic rows, 3,183 printed entries |
 | N7_THREE_FIVE_UPPER_HEIGHT.md | Every 3/5 short-arc position for h>=e; 71 printed cubic rows, 22,579 integer terms, and two direct sign contradictions |
+| N7_LONG_TRIANGLE_CAPS.md | All eight actual long triangles have capacity one, at every height and independently of OP; eight sums, 3,212 integer terms |
+| N7_CORNER_LINE.md | Complete literal AB/EF line class at every height; all oblique orientations, eighteen cubic sums, 5,641 integer terms |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

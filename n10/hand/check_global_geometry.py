@@ -1177,6 +1177,52 @@ def c1_exterior_reduction():
     print("PASS: C1 exterior support cuts, all scalar gaps, and the complete 32-row count catalogue")
 
 
+def n7_long_triangle_caps():
+    q=sp.Rational;s=q(93,1000)
+    f,g,h,e,z=sp.symbols("f g h e z")
+    E,F,G,H=(sp.Matrix(pt) for pt in [(1,e),(f,1),(g,z),(0,h)])
+    det=lambda A,B,C:2*area(A,B,C)
+    W=(1-f)*(1-h)+f*(1-e)
+    zero((1-f)*det(F,G,H)+f*det(E,F,G)-(f-g)*W)
+    B=(f-q(3,5))*((1-f)*(1-4*s+f*(4*s-q(117,1000)))-s*f)-s*(1-f)
+    zero(B+(1275*f**3+1565*f**2-5003*f+2349)/5000)
+    t=sp.symbols("t")
+    zero(B.subs(f,t+q(4,5))-(-q(51,200)*t**3-q(37,40)*t**2+q(51,5000)*t-q(1,5000)))
+    assert q(37,40)-q(51,1000)==q(437,500)
+    assert q(51,5000)**2/(4*q(437,500))-q(1,5000)==-q(14879,87400000)<0
+    assert s-q(609,2000)**2==q(1119,4000000)>0
+    assert q(121,250)-(1-q(609,2000))**2==q(1119,4000000)>0
+    assert q(149,20)*s>q(69,100)
+    print("PASS: N7 global g bound, paired-ear factors, and all long-triangle scalar comparisons")
+
+
+def n7_corner_line():
+    from pathlib import Path
+    from itertools import product
+    import re
+    q=sp.Rational;s=q(93,1000)
+    a,b,c,d,e,f,g,h,z,x,y,u,v=sp.symbols("a b c d e f g h z x y u v")
+    A,B,C,D,E,F,G,H,O,P=(sp.Matrix(pt) for pt in
+        [(0,a),(b,0),(c,0),(1,d),(1,e),(f,1),(g,z),(0,h),(x,y),(u,v)])
+    det=lambda A,B,C:2*area(A,B,C)
+    for T in [O,P]:
+        yy=T[1]
+        zero(z*det(B,H,T)-h*det(B,G,T)+yy*(b*(z-h)+h*g))
+        zero(det(D,F,T)-(1-d)*det(C,F,T)-(1-c+d*(c-f))*(1-yy))
+        zero((1-e)*det(F,H,T)+(1-h)*det(E,F,T)-det(E,F,H)*(1-yy))
+    zero(det(A,O,P)-det(E,O,P)-(v-y)+(e-a)*(u-x))
+    zero(det(F,O,P)-det(B,O,P)-(u-x)+(f-b)*(v-y))
+    zero(det(A,B,E)+det(A,E,F)-1+(e-a)*(f-b))
+    note=Path(__file__).with_name("N7_CORNER_LINE.md").read_text()
+    rows={row:choices.split(', ') for row,choices in re.findall(r'^\| (R\d+) \| ([A-Z+\-, ]+) \|$',note,re.M)}
+    assert len(rows)==18
+    for vals in product('+-',repeat=5):
+        given=dict(zip(['ADO','BGO','CFP','EHP','BHO'],vals))
+        hits=[row for row,choices in rows.items() if all(given[token[:3]]==token[-1] for token in choices)]
+        assert len(hits)==(0 if vals[:4]==('+','-','+','+') else 1)
+    print("PASS: N7 whole AB/EF class identities, ordinate bound, and exhaustive eighteen-row oblique ledger")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1216,3 +1262,5 @@ if __name__ == "__main__":
     n7_height_three_five()
     adjacent_223_core()
     c1_exterior_reduction()
+    n7_long_triangle_caps()
+    n7_corner_line()
