@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 40.
+Checkpoint 41.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -362,9 +362,17 @@ four-corner alternative and all zero-area faces.
         The right contact D is the boundary-valid side-cap point in
         N6_TWO_LOWER_SIDE.md, Section 6; both lower-normalized side
         locations are covered. No additional symmetry is assumed.
+  - [x] N7-SINGLE-EXTERIOR-4/4-BC/FG. The entire literal BC/FG
+        side-line class, at every height. Forty-nine exhaustive binary
+        leaves have 15,159 printed positive integer terms and 26
+        explicit rational squares. Independent geometry verifies
+        every sign, 75 five-chain bounds, 209 one-interior quadrilateral
+        witnesses and 154 other conditional witnesses. Separate
+        Fraction/SymPy manuscript readers reproduce every strict bound.
+        Proof: N7_SIDE_BC_FG.md.
   - [ ] Complete the two surviving placement rows outside the proved
-        sign chambers: the rest of (0,0,3) and the two remaining side-edge
-        4/4 pairs of (1,0,2).
+        sign chambers: the rest of (0,0,3) and the remaining literal
+        AH/DE side-edge 4/4 pair of (1,0,2).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -503,6 +511,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_CORNER_LINE.md | Complete literal AB/EF line class at every height; all oblique orientations, eighteen cubic sums, 5,641 integer terms |
 | N7_THREE_FIVE_LOWER_HEIGHT.md | Every remaining h<=e 3/5 position: seven exhaustive trees, 93 cubics, two geometric contradictions, 27,884 printed terms; completes all single-exterior 3/5 cases |
 | N7_CDGH_LINE.md | Complete literal CD/GH 4/4 line class: sixteen oblique words, two refinements, eighteen cubics, 5,926 terms and 23 used explicit squares |
+| N7_SIDE_BC_FG.md | Entire literal BC/FG side-line class at every height: 49 exhaustive leaves, 15,159 printed integer terms and 26 explicit rational squares |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

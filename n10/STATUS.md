@@ -434,6 +434,19 @@ as a boundary side-cap point. The N6 top-cap and other exterior counts
 and the remaining N7 counts stay open. The global algebra checker
 now has 50 passing groups.
 
+The entire literal BC/FG side-line class of single-exterior N7 is
+now excluded at every height. N7_SIDE_BC_FG.md gives a complete binary
+tree with 49 cubic leaves and all 15,159 positive integer terms.
+One leaf uses 26 explicitly printed rational linear squares, each
+unconditionally nonnegative. An independent geometry implementation
+reconstructs every common and additional sign, all 75 five-chain
+bounds, 209 one-interior quadrilateral witnesses and 154 other actual
+triangle, quadrilateral and spread witnesses. Separate Fraction and
+SymPy manuscript readers reproduce every exact negative bound. Only
+the literal AH/DE 4/4 side-line class remains in single-exterior N7;
+the unfinished all-interior placements remain separate. The global
+algebra checker now has 51 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

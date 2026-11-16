@@ -1440,6 +1440,30 @@ def n6_two_lower_two_exterior():
     print("PASS: complete N6 two-lower/two-exterior cap identities, TT catalogue, exterior line rule, and full printed inventory")
 
 
+def n7_bc_fg_complete():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000)
+    a,b,c,d,e,f,g,h,z,x,y=sp.symbols('a b c d e f g h z x y')
+    P={name:sp.Matrix(pair) for name,pair in zip('ABCDEFGHOT',[(0,a),(b,0),(c,0),(1,d),(1,e),(f,1),(g,z),(0,h),(x,y),(x,y)])}
+    D=lambda word:2*area(*(P[ch] for ch in word))
+    zero(f*D('AGT')-g*D('AFT')+x*D('AFG'))
+    zero((1-b)*D('CET')-(1-c)*D('BET')-(c-b)*e*(1-x))
+    note=Path(__file__).with_name('N7_SIDE_BC_FG.md').read_text()
+    rows=re.findall(r'^\| (R\d+) \| (\d+) \| (-[0-9/]+) \|$',note,re.M)
+    assert len(rows)==49 and sum(int(n) for _,n,_ in rows)==15159
+    assert all(q(bound)<0 for _,_,bound in rows)
+    paths=[path.split(', ') for _,path in re.findall(r'^\| (R\d+) \| ([A-Z+\-, ]+) \|$',note,re.M)]
+    def complete(paths):
+        if paths==[[]]:return 1
+        assert paths and all(paths) and len({pp[0][:3] for pp in paths})==1
+        return sum(complete([pp[1:] for pp in paths if pp[0][-1]==sg]) for sg in '-+')
+    assert complete(paths)==49
+    five=re.findall(r'^\| (F5_[A-H]{5}_[XY]) \| ([A-H]{3}) \| ([0-9/]+) \|$',note,re.M)
+    assert len(five)==75
+    print("PASS: complete N7 BC/FG identities, forty-nine-leaf exhaustive tree, all printed inventories and strict bounds")
+
+
 def n6_two_lower_upper_side():
     from pathlib import Path
     from itertools import product
@@ -1526,3 +1550,4 @@ if __name__ == "__main__":
     n6_two_lower_two_exterior()
     c1_two_lower_three_caps()
     n6_two_lower_upper_side()
+    n7_bc_fg_complete()
