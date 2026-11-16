@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 38.
+Checkpoint 39.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -236,7 +236,13 @@ four-corner alternative and all zero-area faces.
         Independent geometry and separate Fraction/SymPy audits pass.
         C1_THREE_LOWER_ONE_SIDE.md, Section 4 assembles all five
         placements, including the earlier exact-pentagon theorem.
-  - [ ] C1-EXTERIOR. Exclude the remaining 28 exterior count rows
+  - [x] C1-TWO-LOWER-THREE-CAPS. The entire count (2,0,1,1,1):
+        both lower points are unrestricted and each exterior cap is
+        occupied. An explicit quartic forces a rational contact box;
+        two determinant comparisons then give exact gaps 37/1000000
+        and 17639/1000000. The proof includes outer square faces and
+        uses no sign enumeration. Proof: C1_TWO_LOWER_THREE_CAPS.md.
+  - [ ] C1-EXTERIOR. Exclude the remaining 27 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -452,6 +458,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_THREE_LOWER_SIDE_TOP.md | Entire three-lower/side-top count and its reflection: four location models, nineteen cubic and twenty-one geometric leaves, 246 terms |
 | C1_THREE_LOWER_ONE_TOP.md | Entire three-lower/central-top count: both label orders, 47 cubic and four geometric leaves, 3,455 terms |
 | C1_THREE_LOWER_ONE_SIDE.md | Entire three-lower/central-side count and reflection: 51 cubic and ten geometric leaves, 2,264 terms; assembles the complete C1 three-lower subfamily |
+| C1_TWO_LOWER_THREE_CAPS.md | Entire two-lower/right-top-left count, including outer faces: analytic quartic box and two exact determinant gaps; no sign subdivision |
 | TYPE_II_UPPER_PAIR.md | Complete opposite-B/E sign exclusion for the two upper central points, with every right hull allowed |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |

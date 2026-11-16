@@ -1440,6 +1440,20 @@ def n6_two_lower_two_exterior():
     print("PASS: complete N6 two-lower/two-exterior cap identities, TT catalogue, exterior line rule, and full printed inventory")
 
 
+def c1_two_lower_three_caps():
+    q=sp.Rational;s=q(93,1000);rho=q(347,500)
+    z=sp.symbols('z')
+    P=23250000*z**4-180614500*z**3+268737713*z**2-125346463*z+11198037
+    zero(P/q(250000000)-(z*(1-z)-s)*(rho*(z-rho)-s*z*z)+s*rho*z*(1-z)*(z-rho))
+    assert sp.diff(P,z,3).subs(z,q(177,200))<0
+    assert sp.diff(P,z,2).subs(z,rho)<0
+    assert P.subs(z,q(807,1000))<0<sp.diff(P,z).subs(z,q(807,1000))
+    assert P.subs(z,q(86,100))<0 and sp.diff(P,z).subs(z,q(86,100))<0
+    assert q(53,1000)*q(403,1000)+q(663,1000)*q(108,1000)==s-q(37,1000000)
+    assert 2*q(403,1000)*q(892,1000)-1+q(597,1000)**2==s-q(17639,1000000)
+    print("PASS: complete C1 two-lower/three-cap quartic box and both strict determinant gaps")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1489,3 +1503,4 @@ if __name__ == "__main__":
     n7_cdgh_complete()
     adjacent_232_complete()
     n6_two_lower_two_exterior()
+    c1_two_lower_three_caps()

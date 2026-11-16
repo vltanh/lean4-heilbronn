@@ -404,6 +404,19 @@ implementations reproduce every fixed sum and its strict bound. The
 other N6 exterior placements remain open. The global algebra checker
 now has 48 passing groups.
 
+The complete C1 count (2,0,1,1,1), with two points below HC and one
+point in each exterior cap, is now excluded analytically. The note
+C1_TWO_LOWER_THREE_CAPS.md derives a quartic restriction from the
+three occupied caps and the two-point lower-triangle cost. Exact
+derivative comparisons force 807/1000<h,c<86/100 and
+597/1000<d,f<77/100. The right and left points then force both top-point
+coordinates below 892/1000, making its actual cap triangle too small.
+The two strict rational gaps are 37/1000000 and 17639/1000000.
+All square-side faces are included. Independent geometry review and
+separate rational and symbolic checks accept the argument. C1 retains
+27 exterior count rows with at most two lower points. The global
+algebra checker now has 49 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
