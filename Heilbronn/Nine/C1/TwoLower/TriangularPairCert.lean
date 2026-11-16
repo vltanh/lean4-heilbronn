@@ -2,14 +2,15 @@ module
 
 public import Heilbronn.Nine.C1.TwoLower.ConvexPairCert
 
-/-! # The Bernstein certificate of `docs/proof/nine/C1_TOP_CAP_TRIANGULAR_PAIR.md` §4
+/-! # The Bernstein certificate of the C1 top-cap triangular pair
 
-In the reduced parameters `(h, u, v, r)` = `var 0, 1, 2, 3` of (9)–(10) (`hc = ρ`, `u = hf`,
+In the reduced parameters `(h, u, v, r)` = `var 0, 1, 2, 3` (`hc = ρ`, `u = hf`,
 `v = cd`, `r = -[DFY]`), with `T = 1 - uv/ρ`, `d = vh/ρ` and the expressions `hA`, `U`, `hΔ`
-of `ConvexPairCert`: the four polynomials `P₀ = hF₀`, `P₁ = hF₁`, `P₂ = F₂`, `P₃ = F₃` of
-(5)–(8). On the box (10) a labelled subdivision tree (51 leaves, depth 18; the fixed bisection
-order `r, v, u, h` of the manuscript, found by `scripts/nine/c1_two_lower/triangular_pair.py`) shows
-that some `-Pᵢ` is positive at every point. -/
+of `ConvexPairCert`: the four polynomials `P₀ = hF₀`, `P₁ = hF₁`, `P₂ = F₂`, `P₃ = F₃`.
+On the box `ρ ≤ h ≤ 1`, `s ≤ u, v ≤ ρ`, `3s ≤ r ≤ 4225/5329` a labelled subdivision tree
+(51 leaves, depth 18, fixed bisection order `r, v, u, h`) shows that some `-Pᵢ` is positive at
+every point.
+Used by `C1TopCapTriangularPair.box_some_poly_neg`. -/
 
 @[expose] public section
 

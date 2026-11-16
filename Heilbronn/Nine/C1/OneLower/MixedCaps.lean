@@ -5,36 +5,38 @@ public import Heilbronn.Nine.C1.OneLower.RightTopTriangle
 public import Heilbronn.Nine.C1.OneLower.RightPair
 public import Heilbronn.Nine.C1.OneLower.MixedCapsCells
 
-/-! # One lower C1 point and two different exterior caps (`docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md`)
+/-! # One lower C1 point and two cap points in different exterior caps
 
-**Role.** Primary route: `docs/proof/nine/UNRESTRICTED.md` §3 sends the C1 configurations with exactly one
-free point in the lower triangle (`n₀ = 1`) to Theorem 2 here, the assembly of the whole one-lower
-class. Theorem 1 excludes the three mixed-cap rows `(U, R, T, L_cap) = (1,1,1,0), (1,1,0,1),
-(1,0,1,1)`.
+This file excludes the C1 configurations with exactly one free point in the lower anchor triangle
+`OHC` (`n₀ = 1`): `lowerCount_eq_one_false` is the case `n₀ = 1` of `Assembly.c1_exclusion`. On the way,
+`twoCaps_placement_false` excludes the three mixed-cap region patterns `(U, R, T, L_cap) = (1,1,1,0), (1,1,0,1),
+(1,0,1,1)` (the numbers of non-lower free points in the upper quadrilateral and in the right, top
+and left caps).
 
-**Setting (Theorem 1).** The C1 anchors `O, C, D, F, H` with `0 < d ≤ h < 1`, `0 < f ≤ c < 1`
-and `f ≤ d` (line 12), minimum triangle area at least `A₀`; `L ∈ OHC`, `Q ∈ HCDF` and two cap
+**Setting of `twoCaps_placement_false`.** The C1 anchors `O, C, D, F, H` with `0 < d ≤ h < 1`, `0 < f ≤ c < 1`
+and `f ≤ d`, minimum triangle area at least `A₀`; `L ∈ OHC`, `Q ∈ HCDF` and two cap
 points `X, Y` in two different caps, in the ordered classes `RT, RL, TL` (`X` in the first cap);
-configuration `c1Config h c d f X Y L Q` (the checker's vertex order `O, C, D, F, H, X, Y, L, Q`).
-Five-anchor words are those of `C1_ZERO_LOWER.md` (`Heilbronn.Nine.C1.HasWord`). Thresholds
+configuration `c1Config h c d f X Y L Q` (vertex order `O, C, D, F, H, X, Y, L, Q`).
+Five-anchor words are those of `Heilbronn.Nine.C1.HasWord`. Thresholds
 `s = 8/73`, `ρ = 49/60`, `γ = 1 - 7s/3` (local notations `s`, `ρ`).
 
-**Theorem 2 (the one-lower class).** For `c1Config h c d f W X Y Z` with `C1Anchors`, free points
+**The one-lower class (`lowerCount_eq_one_false`).** For `c1Config h c d f W X Y Z` with `C1Anchors`, free points
 in the square, `lowerCount = 1` and minimum triangle area at least `A₀`: a contradiction. The proof
 transposes the square if necessary to get `f ≤ d` (`C1ZeroLower.Comp.transpose`), sorts the free
-points by region (`claim_partition`: lower, upper, right, top, left), and runs the case tree
-`rows` over the twenty sorted region patterns: three upper points (`claim_E0`); one exterior
-point (`C1_ONE_LOWER_TOP_CAP`, `C1_ONE_LOWER_SIDE_CAP`); two right-cap points
-(`C1_ONE_LOWER_RIGHT_PAIR`); the mixed classes (Theorem 1); two top-cap points (`claim_top_hull`
-with `C1_ONE_LOWER_TOP_TRIANGLE`, `C1_ONE_LOWER_CONVEX_TOP`, `C1_ONE_LOWER_RIGHT_TOP_TRIANGLE`, and
-the eight-vertex hulls `claim_eight_vertices` with `C1_ONE_LOWER_EIGHT_HULL`); three top-cap points
-(`C1_ONE_LOWER_CONVEX_TOP`); and the occupancy restrictions of `C1_ZERO_LOWER.md` Theorem 2 (two
-left-cap points, a left-cap point with two top-cap points).
+points by region (`exists_regFact`: lower, upper, right, top, left), and runs the case tree
+`rows` over the twenty sorted region patterns: three upper points (`three_upperQuad_false`); one exterior
+point (`C1OneLowerTopCap.topCap_placement_false`, `C1OneLowerSideCap.sideCap_placement_false`); two right-cap points
+(`C1OneLowerRightPair.regionCount_right_le_one`); the mixed classes (`twoCaps_placement_false`); two top-cap points
+(`topHull_cases` with `C1OneLowerTopTriangle.topTriangle_excluded`, `C1OneLowerConvexTop.upper_or_threeTop_false`,
+`C1OneLowerRightTopTriangle.rightTopTriangle_excluded`, and the eight-vertex hulls `eight_oneEach`,
+`eight_twoTop` with `C1OneLowerEightHull.hullVertexCount_ne_eight`); three top-cap points
+(`C1OneLowerConvexTop.upper_or_threeTop_false`); and the occupancy restrictions of the zero-lower analysis (two
+left-cap points, `C1ZeroLower.Comp.left_pair`; a left-cap point with two top-cap points, `row334`).
 
-**Results.** `theorem1` (with `claim_words`; the package is `Heilbronn.Nine.C1.OneLower.MixedCapsCells`:
-the bounds (1)–(12), (15), the pruning (13), (14), the cyclic-sign pruning as two closed leaves,
-and the certificates), `theorem2` (with `claim_partition`, `claim_E0` (FLAG: `W ≥ 10s`),
-`claim_top_hull`, `claim_eight_vertices`, the rows `row111`–`row334` and `main_fd`).
+**Results.** `twoCaps_placement_false` (with `exists_mPre_of_placement`; the package is `Heilbronn.Nine.C1.OneLower.MixedCapsCells`:
+the bounds, the pruning `MPre.filter`, the cyclic-sign pruning as two closed leaves, and the
+certificates), `lowerCount_eq_one_false` (with `exists_regFact`, `three_upperQuad_false`, `topHull_cases`, `eight_oneEach`,
+`eight_twoTop`, the rows `row111`–`row334` and `main_fd`).
 -/
 
 @[expose] public section
@@ -43,7 +45,7 @@ noncomputable section
 namespace Heilbronn.Nine.C1OneLowerMixedCaps
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1ZeroLower Heilbronn.Nine.C1OneLowerB Cover
-open Heilbronn.Nine.C1OneLowerTopCap (ConvexPolygon HasHullWord)
+open Heilbronn.Nine.C1OneLowerTopCap (HasHullWord)
 open Heilbronn.Nine.C1OneLowerEightHull (hullVertexCount)
 
 /-- `s = 8/73 < 2A₀`. -/
@@ -54,7 +56,7 @@ local notation "ρ" => (49 / 60 : ℝ)
 
 /-! ### The three ordered cap classes -/
 
-/-- The three ordered cap classes of Theorem 1: `RT` (`X` in the right cap, `Y` in the top cap),
+/-- The three ordered cap classes of `twoCaps_placement_false`: `RT` (`X` in the right cap, `Y` in the top cap),
 `RL` (right, left) and `TL` (top, left). -/
 inductive CapClass
   | RT
@@ -73,15 +75,15 @@ def CapClass.second : CapClass → Region
   | .RL => .left
   | .TL => .left
 
-/-- The three lower words `(1,3,3,2,1), (2,3,2,2,1), (3,3,2,1,1)` (Section 3), indexed from zero. -/
+/-- The three lower words `(1,3,3,2,1), (2,3,2,2,1), (3,3,2,1,1)`, indexed from zero. -/
 def lowerWord : Fin 3 → Word := ![![1, 3, 3, 2, 1], ![2, 3, 2, 2, 1], ![3, 3, 2, 1, 1]]
 
-/-- The eight upper words (Section 3), indexed from zero in the displayed order. -/
+/-- The eight upper words, indexed from zero in the displayed order. -/
 def upperWord : Fin 8 → Word :=
   ![![1, 1, 3, 3, 2], ![1, 2, 3, 2, 2], ![2, 1, 1, 3, 3], ![2, 1, 2, 3, 2], ![2, 2, 1, 2, 3],
     ![2, 2, 2, 2, 2], ![3, 2, 1, 1, 3], ![3, 2, 2, 1, 2]]
 
-/-- The placement of Theorem 1 in class `k`: C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1`, `f ≤ d`;
+/-- The placement of `twoCaps_placement_false` in class `k`: C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1`, `f ≤ d`;
 minimum triangle area at least `A₀` for `c1Config h c d f X Y L Q`; `L` strictly inside `OHC`;
 `Q` strictly inside `HCDF`; `X` in the first and `Y` in the second cap of `k` (in the square;
 side contacts allowed). -/
@@ -96,7 +98,7 @@ structure Placement (k : CapClass) (h c d f : ℝ) (X Y L Q : Point) : Prop wher
   second : InRegion h c d f k.second Y
   secondSq : Y ∈ unitSquare
 
-/-! ### Theorem 1 -/
+/-! ### The mixed-cap placements are impossible -/
 
 /-- The index of a class in the certificate model (`RT, RL, TL ↦ 0, 1, 2`). -/
 def CapClass.idx : CapClass → ℕ
@@ -132,16 +134,14 @@ section
 
 variable {k : CapClass} {h c d f : ℝ} {X Y L Q : Point}
 
-/-- **Claim** (`C1_ONE_LOWER_MIXED_CAPS:claim-words`). In a placement of Theorem 1, the cap points
+/-- In a placement of `twoCaps_placement_false`, the cap points
 have the cap words of their caps, `L` one of the three lower words and `Q` one of the eight upper
 words (radial words of the convex anchor pentagon, `C1OneLowerTopCap.exists_hullWord`), so the
 configuration is a pre-cell of the package.
-FLAG (lines 167-169): the text justifies the prefix form by "the directions from each such vertex
-to the other four anchors occupy less than a half-turn"; the prefix property needs it for the rays
-to all points. Here it is proved for the interior points by the radial words of the convex
-pentagon, and for the cap points by `C1ZeroLower.Comp.word_exists` (every anchor lies on a side of
-the square). `docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md`, lines 159-189. -/
-theorem claim_words (hS : Placement k h c d f X Y L Q) :
+The words have the prefix form for the rays to all points: for the interior points by the radial
+words of the convex pentagon, and for the cap points by `C1ZeroLower.Comp.word_exists` (every
+anchor lies on a side of the square). -/
+theorem exists_mPre_of_placement (hS : Placement k h c d f X Y L Q) :
     ∃ i j, i < 3 ∧ j < 8 ∧ MPre (k.idx, i, j) h c d f ![X, Y, L, Q] := by
   obtain ⟨a0, a1, a2, a3, a4⟩ := sq_anchor hS.anchors
   have hLs : L ∈ unitSquare := inSquare_of_inTriangle hS.lower a0 a1 a4
@@ -156,9 +156,9 @@ theorem claim_words (hS : Placement k h c d f X Y L Q) :
     · exact inSquare_of_inTriangle h1 a2 a3 a4
   have H : Comp h c d f ![X, Y, L, Q] :=
     ⟨hS.anchors, fun i => by fin_cases i; exacts [hS.firstSq, hS.secondSq, hLs, hQs], hS.min⟩
-  have A := comp_areaOK H
+  have A := H.areaOK
   set V : Fin 5 → Point := fun i => cfg h c d f ![X, Y, L, Q] i.val with hVdef
-  have hV : ConvexPolygon V :=
+  have hV : IsConvexPolygon V :=
     convex_of_table (comp_capTable_holds H (ms := []) (by simp)) (fun i : Fin 5 => i.val)
       pentagon_table
   have hne : ∀ m, 7 ≤ m → m < 9 → ∀ a b : Fin 5, a ≠ b →
@@ -205,20 +205,17 @@ theorem claim_words (hS : Placement k h c d f X Y L Q) :
 
 end
 
-/-- **Theorem 1** (`C1_ONE_LOWER_MIXED_CAPS:Theorem1`). None of the three configurations `RT, RL,
+/-- None of the three configurations `RT, RL,
 TL` (`L ∈ OHC`, `Q ∈ HCDF`, `X, Y` in the two caps of the class, `f ≤ d`) has minimum triangle area
 at least `A₀`; additional contacts with the sides of the square are allowed. Proof: the words
-(`claim_words`), the pruning (13) (`MPre.filter`) and the certificate package
-(`MCell.false`: 62 cases, 136 leaves, kernel-checked).
-`docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md`, lines 253-255 and 332-334.
-Uses: C1_ONE_LOWER_MIXED_CAPS:claim-words, C1_ONE_LOWER_MIXED_CAPS:(13),
-C1_ONE_LOWER_MIXED_CAPS:(17)-(19). -/
-theorem theorem1 {k : CapClass} {h c d f : ℝ} {X Y L Q : Point}
+(`exists_mPre_of_placement`), the pruning (`MPre.filter`) and the certificate package
+(`MCell.false`: 62 cases, 136 leaves, kernel-checked). -/
+theorem twoCaps_placement_false {k : CapClass} {h c d f : ℝ} {X Y L Q : Point}
     (hS : Placement k h c d f X Y L Q) : False := by
-  obtain ⟨i, j, hi, hj, P⟩ := claim_words hS
+  obtain ⟨i, j, hi, hj, P⟩ := exists_mPre_of_placement hS
   exact (P.cell (by cases k <;> simp [CapClass.idx]) hi hj).false
 
-/-! ### Section 6: the complete one-lower assembly -/
+/-! ### The complete one-lower assembly -/
 
 section Assembly
 
@@ -233,10 +230,10 @@ def RegFact (h c d f : ℝ) : ℕ → Point → Prop
   | 3, X => InTopCap d f X
   | _, X => InLeftCap f h X ∧ AboveOF f X
 
-/-- **Claim** (`C1_ONE_LOWER_MIXED_CAPS:claim-partition`). Every free point of a competitive C1
+/-- Every free point of a competitive C1
 configuration is in one of the five regions `OHC, HCDF, 𝓡, 𝓣, 𝓛` (its zero-lower word when it is
-not in `OHC`, `C1ZeroLower.Comp.word_exists`). `docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md`, lines 19-21. -/
-theorem claim_partition (H : Comp h c d f Q) (a : Fin 4) :
+not in `OHC`, `C1ZeroLower.Comp.word_exists`). -/
+theorem exists_regFact (H : Comp h c d f Q) (a : Fin 4) :
     ∃ n, n < 5 ∧ RegFact h c d f n (Q a) ∧ (n = 0 ↔ InLower h c (Q a)) := by
   by_cases hL : InLower h c (Q a)
   · exact ⟨0, by norm_num, hL, iff_of_true rfl hL⟩
@@ -291,24 +288,20 @@ theorem regionCount_two {W X Y Z : Point} {r : Region} {a b : Fin 4} (hab : a �
   have := Finset.card_le_card this
   rwa [Finset.card_pair hab] at this
 
-/-- **Claim** (`C1_ONE_LOWER_MIXED_CAPS:claim-E0`). The upper quadrilateral `HCDF` of a competitive
+/-- The upper quadrilateral `HCDF` of a competitive
 C1 configuration cannot contain three free points (`C1ZeroLower.Comp.quad_three`: the seven-point
-quadrilateral theorem gives `W > 1`, contrary to `W = 1 - (h-d)(c-f) ≤ 1`).
-FLAG (line 357): the text says the seven-point bound "would give `W ≥ 10s > 1`" and cites no
-theorem; `QUADRILATERAL_HULL:Theorem2` gives `W ≥ ((13 + 3√5)/2) · 2A₀ ≈ 1.0815`, which is below
-`10s ≈ 1.0959` but still above `1`. The claim holds. `docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md`, lines
-355-358. Uses: QUADRILATERAL_HULL:Theorem2. -/
-theorem claim_E0 (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil : i ≠ l) (hjl : j ≠ l)
+quadrilateral bound `QuadrilateralHull.ncard_inQuad_le_two` gives `W > 1`, contrary to
+`W = 1 - (h-d)(c-f) ≤ 1`). -/
+theorem three_upperQuad_false (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil : i ≠ l) (hjl : j ≠ l)
     (hi : InUpperQuad h c d f (Q i)) (hj : InUpperQuad h c d f (Q j))
     (hl : InUpperQuad h c d f (Q l)) : False :=
   H.quad_three hij hil hjl hi hj hl
 
-/-- **Claim** (`C1_ONE_LOWER_MIXED_CAPS:claim-top-hull`). For two top-cap points `X, Y`, the "top
-hull" `conv{D, F, X, Y}` has `D, F` as vertices, so (when `[DXY], [XYF] ≠ 0`) it is triangular,
+/-- For two top-cap points `X, Y`, the top
+hull `conv{D, F, X, Y}` has `D, F` as vertices, so (when `[DXY], [XYF] ≠ 0`) it is triangular,
 with the inner point strictly inside the triangle of the other three (`Y ∈ DXF` or `X ∈ DYF`), or
-a convex quadrilateral `D, X, Y, F` or `D, Y, X, F`. `docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md`, lines
-388-390. -/
-theorem claim_top_hull {X Y : Point}
+a convex quadrilateral `D, X, Y, F` or `D, Y, X, F`. -/
+theorem topHull_cases {X Y : Point}
     (hX : InTopCap d f X) (hY : InTopCap d f Y) (hXY : sarea (ptD d) X Y ≠ 0)
     (hXYF : sarea X Y (ptF f) ≠ 0) :
     InTriangle Y (ptD d) X (ptF f) ∨ InTriangle X (ptD d) Y (ptF f) ∨
@@ -350,11 +343,11 @@ theorem hull_lt {S : Set Point} (α β γ : ℝ) (hS : ∀ p ∈ S, 0 < α * p.1
       linarith
   exact fun p hp => convexHull_min (fun q hq => hS q hq) hc hp
 
-/-- **Eight hull vertices**: if eight of nine points form a convex octagon `ι` and the ninth is
+/-- If eight of nine points form a convex octagon `ι` and the ninth is
 strictly inside every edge and inside a triangle of octagon vertices, the hull has eight
 vertices. -/
 theorem count_eight {P : Fin 9 → Point} (ι : Fin 8 → Fin 9) (hι : Function.Injective ι)
-    (hl : ∀ m, ι m ≠ 8) (hV : ConvexPolygon (P ∘ ι))
+    (hl : ∀ m, ι m ≠ 8) (hV : IsConvexPolygon (P ∘ ι))
     (hLin : ∀ m : Fin 8, 0 < sarea (P (ι m)) (P (ι (m + 1))) (P 8)) {a b e : Fin 8} (hab : a < b)
     (hbe : b < e) (hL : InTriangle (P 8) (P (ι a)) (P (ι b)) (P (ι e))) :
     hullVertexCount P = 8 := by
@@ -377,7 +370,7 @@ theorem count_eight {P : Fin 9 → Point} (ι : Fin 8 → Fin 9) (hι : Function
       subst hi
       apply hv
       obtain ⟨r1, r2, r3⟩ := hL
-      have hm := mem_convexHull_of_sarea (hV a b e hab hbe) r1.le r2.le r3.le
+      have hm := C1ZeroLower.mem_convexHull_of_sarea (hV a b e hab hbe) r1.le r2.le r3.le
       refine convexHull_mono ?_ hm
       intro p hp
       simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hp
@@ -467,7 +460,7 @@ theorem count_eight' {h c d f : ℝ} {R X Y L : Point} (_H : Comp h c d f ![R, X
   have hV0 := convex_of_table htb (n := 8) (fun i => (ι i).val) ht
   have e : ∀ i : Fin 9, cfg h c d f ![R, X, Y, L] i.val = c1Config h c d f R X Y L i := by
     intro i; fin_cases i <;> rfl
-  have hV : ConvexPolygon (c1Config h c d f R X Y L ∘ ι) := by
+  have hV : IsConvexPolygon (c1Config h c d f R X Y L ∘ ι) := by
     intro i j k hij hjk
     have := hV0 i j k hij hjk
     simp only [Function.comp_apply, ← e]
@@ -480,10 +473,9 @@ theorem count_eight' {h c d f : ℝ} {R X Y L : Point} (_H : Comp h c d f ![R, X
   exact inTriangle_edges (n := 8) (by norm_num) hV (a := 0) (b := 1) (c := 7) (by decide)
     (by decide) hL' m
 
-/-- **Claim** (`C1_ONE_LOWER_MIXED_CAPS:claim-eight-vertices`), mode `one_each`: the five anchors
+/-- Mode `one_each`: the five anchors
 and the three cap points (one in each cap) are the vertices of a convex octagon and the lower
-point is interior, so the full hull has eight vertices. `docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md`, lines
-384-392. -/
+point is interior, so the full hull has eight vertices. -/
 theorem eight_oneEach {h c d f : ℝ} {R X Y L : Point}
     (hE : C1OneLowerEightHull.OneEach h c d f R X Y L) :
     hullVertexCount (c1Config h c d f R X Y L) = 8 := by
@@ -548,8 +540,8 @@ theorem eight_oneEach {h c d f : ℝ} {R X Y L : Point}
   exact count_eight' H octOne (by decide +kernel) (by decide +kernel) (tb.append tb2) octOne_table
     rfl rfl rfl hE.lower
 
-/-- **Claim** (`C1_ONE_LOWER_MIXED_CAPS:claim-eight-vertices`), mode `two_top`: a right-cap point
-and two top-cap points with quadrilateral top hull. -/
+/-- Mode `two_top`: a right-cap point
+and two top-cap points with quadrilateral top hull give a hull with eight vertices. -/
 theorem eight_twoTop {h c d f : ℝ} {R X Y L : Point}
     (hE : C1OneLowerEightHull.TwoTop h c d f R X Y L) :
     hullVertexCount (c1Config h c d f R X Y L) = 8 := by
@@ -613,12 +605,12 @@ theorem lc_one {n1 n2 n3 : ℕ} (hA : C1Anchors h c d f) (R0 : InLower h c (Q 0)
   · exact not_lower_of_reg c2 hA R2
   · exact not_lower_of_reg c3 hA R3
 
-/-- Rows with two right-cap points (`C1_ONE_LOWER_RIGHT_PAIR:Theorem1`). -/
+/-- Rows with two right-cap points. -/
 theorem row_right2 (H : Comp h c d f Q) (hfd : f ≤ d) {n1 n2 n3 : ℕ}
     (R0 : InLower h c (Q 0)) (R1 : RegFact h c d f n1 (Q 1)) (R2 : RegFact h c d f n2 (Q 2))
     (R3 : RegFact h c d f n3 (Q 3)) (c1 : 1 ≤ n1) (c2 : 1 ≤ n2) (c3 : 1 ≤ n3) {a b : Fin 4}
     (hab : a ≠ b) (ha : InRightCap c d (Q a)) (hb : InRightCap c d (Q b)) : False := by
-  have := C1OneLowerRightPair.theorem1 H.hA hfd (H.hQ 0) (H.hQ 1) (H.hQ 2) (H.hQ 3)
+  have := C1OneLowerRightPair.regionCount_right_le_one H.hA hfd (H.hQ 0) (H.hQ 1) (H.hQ 2) (H.hQ 3)
     (lc_one H.hA R0 R1 R2 R3 c1 c2 c3) H.hmin
   have h2 := regionCount_two (h := h) (f := f) (W := Q 0) (X := Q 1) (Y := Q 2) (Z := Q 3)
     (r := .right) hab
@@ -628,29 +620,29 @@ theorem row_right2 (H : Comp h c d f Q) (hfd : f ≤ d) {n1 n2 n3 : ℕ}
 /-- Row `(3,0,0,0)`: three upper points. -/
 theorem row111 (H : Comp h c d f Q) (R1 : RegFact h c d f 1 (Q 1))
     (R2 : RegFact h c d f 1 (Q 2)) (R3 : RegFact h c d f 1 (Q 3)) : False :=
-  claim_E0 H (i := 1) (j := 2) (l := 3) (by decide) (by decide) (by decide) R1 R2 R3
+  three_upperQuad_false H (i := 1) (j := 2) (l := 3) (by decide) (by decide) (by decide) R1 R2 R3
 
-/-- Rows `(2,1,0,0)`, `(2,0,0,1)`: one side-cap point (`C1_ONE_LOWER_SIDE_CAP:Theorem1`). -/
+/-- Rows `(2,1,0,0)`, `(2,0,0,1)`: one side-cap point. -/
 theorem row11s (H : Comp h c d f Q) (R0 : InLower h c (Q 0)) (R1 : RegFact h c d f 1 (Q 1))
     (R2 : RegFact h c d f 1 (Q 2)) (hX : InLeftCap f h (Q 3) ∨ InRightCap c d (Q 3)) : False :=
-  C1OneLowerSideCap.theorem1 H.hA H.hmin R0 R1 R2 (H.hQ 3) hX
+  C1OneLowerSideCap.sideCap_placement_false H.hA H.hmin R0 R1 R2 (H.hQ 3) hX
 
-/-- Row `(2,0,1,0)`: one top-cap point (`C1_ONE_LOWER_TOP_CAP:Theorem`). -/
+/-- Row `(2,0,1,0)`: one top-cap point. -/
 theorem row113 (H : Comp h c d f Q) (R0 : InLower h c (Q 0)) (R1 : RegFact h c d f 1 (Q 1))
     (R2 : RegFact h c d f 1 (Q 2)) (R3 : RegFact h c d f 3 (Q 3)) : False :=
-  C1OneLowerTopCap.mainTheorem ⟨H.hA, H.hmin, R0, R1, R2, R3, H.hQ 3⟩
+  C1OneLowerTopCap.topCap_placement_false ⟨H.hA, H.hmin, R0, R1, R2, R3, H.hQ 3⟩
 
-/-- Rows `(1,1,1,0)`, `(1,1,0,1)`, `(1,0,1,1)`: Theorem 1. -/
+/-- Rows `(1,1,1,0)`, `(1,1,0,1)`, `(1,0,1,1)`: `twoCaps_placement_false`. -/
 theorem row_mixed (H : Comp h c d f Q) (hfd : f ≤ d) (k : CapClass) (R0 : InLower h c (Q 0))
     (R1 : RegFact h c d f 1 (Q 1)) (R2 : InRegion h c d f k.first (Q 2))
     (R3 : InRegion h c d f k.second (Q 3)) : False :=
-  theorem1 (k := k) ⟨H.hA, hfd, comp_perm H ![2, 3, 0, 1] (inj4 _ _ _ _ (by decide)), R0, R1, R2,
+  twoCaps_placement_false (k := k) ⟨H.hA, hfd, comp_perm H ![2, 3, 0, 1] (inj4 _ _ _ _ (by decide)), R0, R1, R2,
     H.hQ 2, R3, H.hQ 3⟩
 
 /-- The top-hull areas are actual. -/
 theorem top_ne (H : Comp h c d f Q) {a b : Fin 4} (hab : a ≠ b) :
     sarea (ptD d) (Q a) (Q b) ≠ 0 ∧ sarea (Q a) (Q b) (ptF f) ≠ 0 := by
-  have A := comp_areaOK H
+  have A := H.areaOK
   have e1 := A.ne_zero (a := 2) (b := a.val + 5) (e := b.val + 5) (by norm_num) (by omega)
     (by omega) (by omega) (by intro e; exact hab (Fin.ext (by omega))) (by omega)
   have e2 := A.ne_zero (a := a.val + 5) (b := b.val + 5) (e := 3) (by omega) (by omega)
@@ -658,24 +650,24 @@ theorem top_ne (H : Comp h c d f Q) {a b : Fin 4} (hab : a ≠ b) :
   rw [cfg_free, cfg_free] at e1 e2
   exact ⟨e1, e2⟩
 
-/-- Row `(1,0,2,0)`: the top hull is triangular (`C1_ONE_LOWER_TOP_TRIANGLE:Theorem`) or convex
-(`C1_ONE_LOWER_CONVEX_TOP:Theorem`, placement 1). -/
+/-- Row `(1,0,2,0)`: the top hull is triangular (`C1OneLowerTopTriangle.topTriangle_excluded`) or convex
+(`C1OneLowerConvexTop.upper_or_threeTop_false` with `L ∈ OHC`, `Q ∈ HCDF`). -/
 theorem row133 (H : Comp h c d f Q) (hfd : f ≤ d) (R0 : InLower h c (Q 0))
     (R1 : RegFact h c d f 1 (Q 1)) (R2 : RegFact h c d f 3 (Q 2))
     (R3 : RegFact h c d f 3 (Q 3)) : False := by
   obtain ⟨n1, n2⟩ := top_ne H (a := 2) (b := 3) (by decide)
-  rcases claim_top_hull R2 R3 n1 n2 with t | t | ⟨t1, t2⟩ | ⟨t1, t2⟩
-  · exact C1OneLowerTopTriangle.mainTheorem ⟨H.hA, comp_perm H ![0, 3, 1, 2]
+  rcases topHull_cases R2 R3 n1 n2 with t | t | ⟨t1, t2⟩ | ⟨t1, t2⟩
+  · exact C1OneLowerTopTriangle.topTriangle_excluded ⟨H.hA, comp_perm H ![0, 3, 1, 2]
       (inj4 _ _ _ _ (by decide)), R0, R1, R2, H.hQ 2, t⟩ hfd
-  · exact C1OneLowerTopTriangle.mainTheorem ⟨H.hA, comp_perm H ![0, 2, 1, 3]
+  · exact C1OneLowerTopTriangle.topTriangle_excluded ⟨H.hA, comp_perm H ![0, 2, 1, 3]
       (inj4 _ _ _ _ (by decide)), R0, R1, R3, H.hQ 3, t⟩ hfd
-  · exact C1OneLowerConvexTop.mainTheorem hfd (Or.inl ⟨H.hA, comp_perm H ![2, 3, 0, 1]
+  · exact C1OneLowerConvexTop.upper_or_threeTop_false hfd (Or.inl ⟨H.hA, comp_perm H ![2, 3, 0, 1]
       (inj4 _ _ _ _ (by decide)), R0, R1, R2, H.hQ 2, R3, H.hQ 3, t1, t2⟩)
-  · exact C1OneLowerConvexTop.mainTheorem hfd (Or.inl ⟨H.hA, comp_perm H ![3, 2, 0, 1]
+  · exact C1OneLowerConvexTop.upper_or_threeTop_false hfd (Or.inl ⟨H.hA, comp_perm H ![3, 2, 0, 1]
       (inj4 _ _ _ _ (by decide)), R0, R1, R3, H.hQ 3, R2, H.hQ 2, t1, t2⟩)
 
-/-- Row `(0,1,2,0)`: the top hull is triangular (`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:Theorem`) or
-convex (eight hull vertices, `C1_ONE_LOWER_EIGHT_HULL:Theorem`). -/
+/-- Row `(0,1,2,0)`: the top hull is triangular (`C1OneLowerRightTopTriangle.rightTopTriangle_excluded`) or
+convex (eight hull vertices, `C1OneLowerEightHull.hullVertexCount_ne_eight`). -/
 theorem row233 (H : Comp h c d f Q) (hfd : f ≤ d) (R0 : InLower h c (Q 0))
     (R1 : RegFact h c d f 2 (Q 1)) (R2 : RegFact h c d f 3 (Q 2))
     (R3 : RegFact h c d f 3 (Q 3)) : False := by
@@ -688,19 +680,19 @@ theorem row233 (H : Comp h c d f Q) (hfd : f ≤ d) (R0 : InLower h c (Q 0))
       · exact not_lower_of_reg (n := 3) (by norm_num) H.hA ha
       · exact not_lower_of_reg (n := 3) (by norm_num) H.hA hb
       · exact absurd rfl hi
-  rcases claim_top_hull R2 R3 n1 n2 with t | t | ⟨t1, t2⟩ | ⟨t1, t2⟩
-  · exact C1OneLowerRightTopTriangle.mainTheorem ⟨H.hA, hfd, comp_perm H ![1, 2, 0, 3]
+  rcases topHull_cases R2 R3 n1 n2 with t | t | ⟨t1, t2⟩ | ⟨t1, t2⟩
+  · exact C1OneLowerRightTopTriangle.rightTopTriangle_excluded ⟨H.hA, hfd, comp_perm H ![1, 2, 0, 3]
       (inj4 _ _ _ _ (by decide)), R0, R1.1, H.hQ 1, R2, H.hQ 2, t⟩
-  · exact C1OneLowerRightTopTriangle.mainTheorem ⟨H.hA, hfd, comp_perm H ![1, 3, 0, 2]
+  · exact C1OneLowerRightTopTriangle.rightTopTriangle_excluded ⟨H.hA, hfd, comp_perm H ![1, 3, 0, 2]
       (inj4 _ _ _ _ (by decide)), R0, R1.1, H.hQ 1, R3, H.hQ 3, t⟩
   · have hm := comp_perm H ![1, 2, 3, 0] (inj4 _ _ _ _ (by decide))
-    exact C1OneLowerEightHull.mainTheorem H.hA (H.hQ 1) (H.hQ 2) (H.hQ 3) (H.hQ 0)
+    exact C1OneLowerEightHull.hullVertexCount_ne_eight H.hA (H.hQ 1) (H.hQ 2) (H.hQ 3) (H.hQ 0)
       (lc 2 3 R2 R3) hm (eight_twoTop ⟨H.hA, hm, R0, R1.1, H.hQ 1, R2, H.hQ 2, R3, H.hQ 3, t1, t2⟩)
   · have hm := comp_perm H ![1, 3, 2, 0] (inj4 _ _ _ _ (by decide))
-    exact C1OneLowerEightHull.mainTheorem H.hA (H.hQ 1) (H.hQ 3) (H.hQ 2) (H.hQ 0)
+    exact C1OneLowerEightHull.hullVertexCount_ne_eight H.hA (H.hQ 1) (H.hQ 3) (H.hQ 2) (H.hQ 0)
       (lc 3 2 R3 R2) hm (eight_twoTop ⟨H.hA, hm, R0, R1.1, H.hQ 1, R3, H.hQ 3, R2, H.hQ 2, t1, t2⟩)
 
-/-- Row `(0,1,1,1)`: eight hull vertices (`C1_ONE_LOWER_EIGHT_HULL:Theorem`). -/
+/-- Row `(0,1,1,1)`: eight hull vertices. -/
 theorem row234 (H : Comp h c d f Q) (R0 : InLower h c (Q 0))
     (R1 : RegFact h c d f 2 (Q 1)) (R2 : RegFact h c d f 3 (Q 2))
     (R3 : RegFact h c d f 4 (Q 3)) : False := by
@@ -712,18 +704,19 @@ theorem row234 (H : Comp h c d f Q) (R0 : InLower h c (Q 0))
       · exact not_lower_of_reg (n := 3) (by norm_num) H.hA R2
       · exact not_lower_of_reg (n := 4) (by norm_num) H.hA R3
       · exact absurd rfl hi
-  exact C1OneLowerEightHull.mainTheorem H.hA (H.hQ 1) (H.hQ 2) (H.hQ 3) (H.hQ 0) lc hm
+  exact C1OneLowerEightHull.hullVertexCount_ne_eight H.hA (H.hQ 1) (H.hQ 2) (H.hQ 3) (H.hQ 0) lc hm
     (eight_oneEach ⟨H.hA, hm, R0, R1.1, H.hQ 1, R2, H.hQ 2, R3.1, H.hQ 3⟩)
 
-/-- Row `(0,0,3,0)`: three top-cap points (`C1_ONE_LOWER_CONVEX_TOP:Theorem`, placement 2). -/
+/-- Row `(0,0,3,0)`: three top-cap points (`C1OneLowerConvexTop.upper_or_threeTop_false`). -/
 theorem row333 (H : Comp h c d f Q) (hfd : f ≤ d) (R0 : InLower h c (Q 0))
     (R1 : RegFact h c d f 3 (Q 1)) (R2 : RegFact h c d f 3 (Q 2))
     (R3 : RegFact h c d f 3 (Q 3)) : False :=
-  C1OneLowerConvexTop.mainTheorem hfd (Or.inr ⟨H.hA, comp_perm H ![1, 2, 0, 3]
+  C1OneLowerConvexTop.upper_or_threeTop_false hfd (Or.inr ⟨H.hA, comp_perm H ![1, 2, 0, 3]
     (inj4 _ _ _ _ (by decide)), R0, R1, H.hQ 1, R2, H.hQ 2, R3, H.hQ 3⟩)
 
-/-- Row `(0,0,2,1)`: a left-cap point forbids two top-cap points (`C1_ZERO_LOWER:Theorem2`
-(iii): `f ≥ 4s` forces `Ω₀ ≤ (1-4s)² < 6A₀`). -/
+/-- Row `(0,0,2,1)`: a left-cap point forbids two top-cap points: `f ≥ 4s`
+(`C1ZeroLower.Comp.left_row`) forces the top-cap area `Ω₀ = (1-d)(1-f) ≤ (1-4s)² < 6A₀`, against
+`C1ZeroLower.Comp.top_two`. -/
 theorem row334 (H : Comp h c d f Q) (hfd : f ≤ d) (R1 : RegFact h c d f 3 (Q 1))
     (R2 : RegFact h c d f 3 (Q 2)) (R3 : RegFact h c d f 4 (Q 3)) : False := by
   obtain ⟨-, -, -, -, l5, -, -⟩ := H.left_row hfd 3 R3.1
@@ -734,12 +727,12 @@ theorem row334 (H : Comp h c d f Q) (hfd : f ≤ d) (R1 : RegFact h c d f 3 (Q 1
   nlinarith [mul_le_mul (show 1 - d ≤ 41 / 73 by linarith) (show 1 - f ≤ 41 / 73 by linarith)
     (by linarith) (by norm_num)]
 
-/-- Rows with two left-cap points (`C1_ZERO_LOWER:Theorem2` (i)). -/
+/-- Rows with two left-cap points (`C1ZeroLower.Comp.left_pair`). -/
 theorem row_left2 (H : Comp h c d f Q) (hfd : f ≤ d) (R2 : RegFact h c d f 4 (Q 2))
     (R3 : RegFact h c d f 4 (Q 3)) : False :=
   H.left_pair hfd (i := 2) (j := 3) (by decide) R2.1 R3.1 R2.2 R3.2
 
-/-- **The case tree** of Theorem 2 for a sorted configuration (codes `0 < n₁ ≤ n₂ ≤ n₃ ≤ 4`):
+/-- The case tree of `lowerCount_eq_one_false` for a sorted configuration (codes `0 < n₁ ≤ n₂ ≤ n₃ ≤ 4`):
 the twenty possible rows. -/
 theorem rows (H : Comp h c d f Q) (hfd : f ≤ d) {n1 n2 n3 : ℕ} (R0 : InLower h c (Q 0))
     (R1 : RegFact h c d f n1 (Q 1)) (R2 : RegFact h c d f n2 (Q 2))
@@ -780,11 +773,11 @@ theorem rows (H : Comp h c d f Q) (hfd : f ≤ d) {n1 n2 n3 : ℕ} (R0 : InLower
     obtain rfl : n3 = 4 := by omega
     exact row_left2 H hfd R2 R3
 
-/-- Theorem 2 under `f ≤ d`: sort the free points by region (`claim_partition`) and run the case
+/-- `lowerCount_eq_one_false` under `f ≤ d`: sort the free points by region (`exists_regFact`) and run the case
 tree. -/
 theorem main_fd (H : Comp h c d f Q) (hfd : f ≤ d) (hex : ∃ a, InLower h c (Q a))
     (huniq : ∀ a b, InLower h c (Q a) → InLower h c (Q b) → a = b) : False := by
-  choose code hcode using fun a => claim_partition H a
+  choose code hcode using fun a => exists_regFact H a
   have hmono := Tuple.monotone_sort code
   set σ := Tuple.sort code with hσ
   have H' := H.relabel σ
@@ -818,42 +811,31 @@ theorem main_fd (H : Comp h c d f Q) (hfd : f ≤ d) (hex : ∃ a, InLower h c (
 
 end Rows
 
-/-- **Theorem 2** (`C1_ONE_LOWER_MIXED_CAPS:Theorem2`). A competitive C1 configuration cannot have
+/-- A competitive C1 configuration cannot have
 exactly one of its four free points in `OHC`: for `c1Config h c d f W X Y Z` with C1 anchors
 `0 < d ≤ h < 1`, `0 < f ≤ c < 1`, free points in the closed square, `lowerCount = 1` and minimum
 triangle area at least `A₀`, a contradiction. (No order between `f` and `d` is assumed.)
 
 Proof outline. Transpose if necessary to arrange `f ≤ d`. Sort the free points by region
-(`claim_partition`) and run the case tree `rows`. If all three non-lower points lie in `HCDF`,
-`claim_E0`. If exactly one is exterior: `C1_ONE_LOWER_TOP_CAP:Theorem` (top cap) or
-`C1_ONE_LOWER_SIDE_CAP:Theorem1` (left or right cap). Two right-cap points are excluded by
-`C1_ONE_LOWER_RIGHT_PAIR:Theorem1`, two left-cap points by `C1ZeroLower.Comp.left_pair`, a
-left-cap point with two top-cap points by `row334` (`C1_ZERO_LOWER:Theorem2`); the remaining
+(`exists_regFact`) and run the case tree `rows`. If all three non-lower points lie in `HCDF`,
+`three_upperQuad_false`. If exactly one is exterior: `C1OneLowerTopCap.topCap_placement_false` (top cap) or
+`C1OneLowerSideCap.sideCap_placement_false` (left or right cap). Two right-cap points are excluded by
+`C1OneLowerRightPair.regionCount_right_le_one`, two left-cap points by `C1ZeroLower.Comp.left_pair`, a
+left-cap point with two top-cap points by `row334`; the remaining
 rows:
 
-* `(1,2,0,0)`, `(0,2,1,0)`: `C1_ONE_LOWER_RIGHT_PAIR:Theorem1`;
-* `(1,1,1,0)`, `(1,1,0,1)`, `(1,0,1,1)`: Theorem 1 (classes `RT`, `RL`, `TL`);
-* `(1,0,2,0)`: `C1_ONE_LOWER_TOP_TRIANGLE:Theorem` for a triangular top hull,
-  `C1_ONE_LOWER_CONVEX_TOP:Theorem` (placement 1) for a quadrilateral one;
-* `(0,1,2,0)`: `C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:Theorem` for a triangular top hull,
-  `C1_ONE_LOWER_EIGHT_HULL:Theorem` (eight hull vertices) for a quadrilateral one;
-* `(0,1,1,1)`: `C1_ONE_LOWER_EIGHT_HULL:Theorem` (eight hull vertices);
-* `(0,0,3,0)`: `C1_ONE_LOWER_CONVEX_TOP:Theorem` (placement 2, every three-top hull).
+* `(1,2,0,0)`, `(0,2,1,0)`: `C1OneLowerRightPair.regionCount_right_le_one`;
+* `(1,1,1,0)`, `(1,1,0,1)`, `(1,0,1,1)`: `twoCaps_placement_false` (classes `RT`, `RL`, `TL`);
+* `(1,0,2,0)`: `C1OneLowerTopTriangle.topTriangle_excluded` for a triangular top hull,
+  `C1OneLowerConvexTop.upper_or_threeTop_false` for a quadrilateral one;
+* `(0,1,2,0)`: `C1OneLowerRightTopTriangle.rightTopTriangle_excluded` for a triangular top hull,
+  `C1OneLowerEightHull.hullVertexCount_ne_eight` (eight hull vertices) for a quadrilateral one;
+* `(0,1,1,1)`: `C1OneLowerEightHull.hullVertexCount_ne_eight` (eight hull vertices);
+* `(0,0,3,0)`: `C1OneLowerConvexTop.upper_or_threeTop_false` (every three-top hull).
 
-The top-hull alternatives are `claim_top_hull`; the eight-vertex cases are `claim_eight_vertices`.
-FLAG (line 357): "`W ≥ 10s > 1`" for three upper points is not what the seven-point theorem gives;
-see `claim_E0` (only `W > 1` is needed and holds).
-`docs/proof/nine/C1_ONE_LOWER_MIXED_CAPS.md`, lines 349-398.
-Uses: C1_ONE_LOWER_MIXED_CAPS:claim-transpose, C1_ONE_LOWER_MIXED_CAPS:claim-partition,
-C1_ONE_LOWER_MIXED_CAPS:claim-E0, QUADRILATERAL_HULL:Theorem2, C1_ONE_LOWER_TOP_CAP:Theorem,
-C1_ONE_LOWER_SIDE_CAP:Theorem1, C1_ONE_LOWER_MIXED_CAPS:claim-occupancy,
-C1_ZERO_LOWER:claim-side-cap-capacity, C1_ZERO_LOWER:Theorem2,
-C1_ONE_LOWER_MIXED_CAPS:claim-nine-rows, C1_ONE_LOWER_RIGHT_PAIR:Theorem1,
-C1_ONE_LOWER_MIXED_CAPS:Theorem1, C1_ONE_LOWER_MIXED_CAPS:claim-top-hull,
-C1_ONE_LOWER_TOP_TRIANGLE:Theorem, C1_ONE_LOWER_CONVEX_TOP:Theorem,
-C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:Theorem, C1_ONE_LOWER_MIXED_CAPS:claim-eight-vertices,
-C1_ONE_LOWER_EIGHT_HULL:Theorem, C1_ZERO_LOWER:Lemma3. -/
-theorem theorem2 {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
+The top-hull alternatives are `topHull_cases`; the eight-vertex cases are `eight_oneEach` and
+`eight_twoTop`. -/
+theorem lowerCount_eq_one_false {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hn : lowerCount h c W X Y Z = 1)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) : False := by
@@ -871,7 +853,7 @@ theorem theorem2 {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
   have H : Comp h c d f ![W, X, Y, Z] := ⟨hA, fun i => by fin_cases i <;> assumption, hmin⟩
   by_cases hfd : f ≤ d
   · exact main_fd H hfd hex huniq
-  · -- transpose the square (`C1_ONE_LOWER_MIXED_CAPS:claim-transpose`)
+  · -- transpose the square
     refine main_fd H.transpose (by linarith) ?_ ?_
     · obtain ⟨a, ha⟩ := hex
       exact ⟨a, inLower_tr.2 ha⟩

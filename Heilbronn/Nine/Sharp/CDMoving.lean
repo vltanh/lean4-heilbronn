@@ -2,34 +2,30 @@ module
 
 public import Heilbronn.Nine.Sharp.BCMoving
 
-/-! # A sharp chamber with C and D moving inward simultaneously (`docs/proof/nine/SHARP_CD_MOVING.md`)
+/-! # A sharp chamber with C and D moving inward simultaneously
 
-**Role.** Component of the primary route: the equality branch of row N6-08
-(`SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION`, labels `(C,D,E,G,F,H,A,B)`). Its Section 3 elimination
-(10) is reused as (11) of `SHARP_BD_MOVING`.
+The sharp chamber of `Chamber.chamber_le` with the two adjacent contacts `C = (c,t)` and
+`D = (1-r,d)` moved inward. `SixBoundaryOppositeCapCompletion.sharp_chamber` uses
+`cdMoving_chamber_le`, after a rotation and a relabelling.
 
-**Setting.** The sharp chamber of `HAND_PROOF.md` with the two adjacent contacts `C = (c,t)` and
-`D = (1-r,d)` moved inward; `A=(0,a), B=(b,0), E=(1,e), F=(f,1), G=(g,1), H=(0,h)`, `O=(x,y)` in
-the square, the strict orders (`SharpOrders`) and the closed height conditions `0 ≤ t ≤ a`,
-`0 ≤ r ≤ 1-f` (1). The chamber is positivity of the eleven oriented doubled areas of the table.
-Constants and scalar functions as in `SHARP_BC_MOVING`.
+**Setting.** `A=(0,a), B=(b,0), E=(1,e), F=(f,1), G=(g,1), H=(0,h)`, `O=(x,y)` in the square, the
+strict orders (`SharpOrders`) and the closed height conditions `0 ≤ t ≤ a`, `0 ≤ r ≤ 1-f`
+(`CDMovingHyp`). The chamber is positivity of the eleven oriented doubled areas
+(`chamberSarea_cdMovingConfig`). Constants and scalar functions as in `SharpBCMoving`.
 
 **Results.**
-* `claim_chamber_formulas`: the eleven oriented doubled areas.
-* `theorem1`: minimum of the eleven areas `≤ A₀`; if all are `≥ A₀` then `t = r = 0` and the
+* `chamberSarea_cdMovingConfig`: the eleven oriented doubled areas.
+* `cdMoving_chamber_le`: minimum of the eleven areas `≤ A₀`; if all are `≥ A₀` then `t = r = 0` and the
   configuration is the sharp configuration.
-* `claim_bounds` (3)–(8): anchor bounds, `t ≤ α`, `r ≤ β`, `α, β > s`, the diagonal bounds,
-  `s ≤ g₀ - (1-v)r - (1-u)t`, `(u+v)/2 ≤ p₀`, `u, v < 1/5`, `2uv < s`.
-* `claim_eliminations` (9)–(10): `(s-ut)(1-y) ≤ α{(1-t)(x-u)-s}` and
-  `(s-vr)x ≤ β{(1-r)(1-v-y)-s}`.
-* `claim_identity` (11)–(12): `H₀ + λ(g₀-s) ≥ tT_u + rT_v + ut² + vr² - (α+β)tr` and
+* `Data.bounds`: anchor bounds, `t ≤ α`, `r ≤ β`, `α, β > s`, the diagonal bounds,
+  `s ≤ g₀ - (1-v)r - (1-u)t`, `u, v < 1/5`, `2uv < s`.
+* `Data.eliminations`: `(s-ut)(1-y) ≤ α{(1-t)(x-u)-s}` and `(s-vr)x ≤ β{(1-r)(1-v-y)-s}`.
+* `Data.identity`: `H + λ(g₀-s) ≥ tT_u + rT_v + ut² + vr² - (α+β)tr` and
   `T_u - αβ, T_v - αβ > 0`.
 
 The proofs go through `Data`, the hypotheses and the eleven bounds as plain real inequalities
-(with a general threshold `s`).
-
-Implicit in the manuscript: the claims inside the proof are stated under the proof's standing
-assumption "every displayed doubled area is at least `s = 2A₀`" (which implies the chamber).
+(with a general threshold `s`). These are stated under the assumption "every doubled area is at
+least `s`" (which implies the chamber).
 -/
 
 @[expose] public section
@@ -40,22 +36,21 @@ namespace Heilbronn.Nine.SharpCDMoving
 open Heilbronn.Nine.SharpBCMoving
 
 /-- The C/D-moving configuration: `C = (c,t)`, `D = (1-r,d)`, the other points as in
-`HAND_PROOF.md`, in the order `A, B, C, D, E, F, G, H, O`. -/
+`baseConfig`, in the order `A, B, C, D, E, F, G, H, O`. -/
 def cdMovingConfig (a b c d e f g h t r x y : ℝ) : Fin 9 → Point :=
   sharpConfig (0, a) (b, 0) (c, t) (1 - r, d) (1, e) (f, 1) (g, 1) (0, h) (x, y)
 
-/-- The hypotheses (1) of Theorem 1 other than the chamber: the strict orders, `0 ≤ t ≤ a`,
+/-- The hypotheses of `cdMoving_chamber_le` other than the chamber: the strict orders, `0 ≤ t ≤ a`,
 `0 ≤ r ≤ 1-f` and `O ∈ [0,1]²`. -/
 def CDMovingHyp (a b c d e f g h t r x y : ℝ) : Prop :=
   SharpOrders a b c d e f g h ∧ 0 ≤ t ∧ t ≤ a ∧ 0 ≤ r ∧ r ≤ 1 - f ∧
     ((x, y) : Point) ∈ unitSquare
 
-/-- **Claim** (`SHARP_CD_MOVING:claim-chamber-formulas`). The eleven oriented doubled areas:
+/-- The eleven oriented doubled areas of the C/D-moving chamber:
 `ABH = b(h-a)`, `ABC = a(c-b)+bt`, `AGH = g(h-a)`, `DEF = (1-f)(e-d)+r(1-e)`, `GHF = (f-g)(1-h)`,
 `GEF = (f-g)(1-e)`, `ADO = (1-r)(y-a)-(d-a)x`, `DHO = (1-r)(h-y)-(h-d)x`, `BOE = e(x-b)-(1-b)y`,
-`GCO = (1-t)x-c(1-y)-g(y-t)`, `OCF = c(1-y)+f(y-t)-(1-t)x`.
-`docs/proof/nine/SHARP_CD_MOVING.md`, lines 18-33. -/
-theorem claim_chamber_formulas (a b c d e f g h t r x y : ℝ) :
+`GCO = (1-t)x-c(1-y)-g(y-t)`, `OCF = c(1-y)+f(y-t)-(1-t)x`. -/
+theorem chamberSarea_cdMovingConfig (a b c d e f g h t r x y : ℝ) :
     chamberSarea (cdMovingConfig a b c d e f g h t r x y) =
       ![b * (h - a), a * (c - b) + b * t, g * (h - a), (1 - f) * (e - d) + r * (1 - e),
         (f - g) * (1 - h), (f - g) * (1 - e), (1 - r) * (y - a) - (d - a) * x,
@@ -68,7 +63,8 @@ theorem claim_chamber_formulas (a b c d e f g h t r x y : ℝ) :
 
 /-! ### The plain-real form -/
 
-/-- The hypotheses (1) and the eleven bounds "doubled area `≥ s`", as plain real inequalities. -/
+/-- The hypotheses `CDMovingHyp` and the eleven bounds "doubled area `≥ s`", as plain real
+inequalities. -/
 structure Data (s a b c d e f g h t r x y : ℝ) : Prop where
   hs1 : 7 / 64 < s
   hs2 : s < 11 / 100
@@ -110,7 +106,7 @@ theorem Data.of_hs {a b c d e f g h t r x y : ℝ} (hyp : CDMovingHyp a b c d e 
   obtain ⟨⟨ha, hah, hh1, hb, hbc, hc1, hd, hde, he1, hg, hgf, hf1⟩, ht0, hta, hr0, hrf, hx0, hx1,
     hy0, hy1⟩ := hyp
   obtain ⟨hs1, hs2, -, -⟩ := sharp_bounds
-  rw [claim_chamber_formulas] at hs
+  rw [chamberSarea_cdMovingConfig] at hs
   exact ⟨hs1, hs2, ha, hah, hh1, hb, hbc, hc1, hd, hde, he1, hg, hgf, hf1, ht0, hta, hr0, hrf,
     hx0, hx1, hy0, hy1, by simpa using hs 0, by simpa using hs 1, by simpa using hs 2,
     by simpa using hs 3, by simpa using hs 4, by simpa using hs 5, by simpa using hs 6,
@@ -120,8 +116,10 @@ section Plain
 
 variable {s a b c d e f g h t r x y u v : ℝ}
 
-/-- (3)–(8) in plain form (without (7)), with `α = 1-v-(h-a)`, `β = 1-u-(f-g)`, `uL = vM = s`;
-also the BOE bound before (6) and `u, v > 0`. -/
+/-- The bounds in plain form, with `α = 1-v-(h-a)`, `β = 1-u-(f-g)`, `uL = vM = s`: the anchor
+bounds, `α, β > s`, `t ≤ α`, `r ≤ β`, the diagonal bounds `2u + r ≤ 1 - x`, `2v + t ≤ y`,
+`b < x`, `y < e`, `s ≤ g₀ - (1-v)r - (1-u)t`, `u, v < 1/3`, `u, v < 1/5`, `2uv < s`, the BOE
+bound and `u, v > 0`. -/
 theorem Data.bounds (H : Data s a b c d e f g h t r x y) (hu : u * (h - a) = s)
     (hv : v * (f - g) = s) :
     (u ≤ b ∧ u ≤ g ∧ e ≤ 1 - v ∧ h ≤ 1 - v ∧ a ≤ 1 - v - (h - a) ∧
@@ -145,7 +143,7 @@ theorem Data.bounds (H : Data s a b c d e f g h t r x y) (hu : u * (h - a) = s)
   have hX : 2 * u ≤ 1 - r - x :=
     anchor_le hL0 (by linarith) (by linarith : 2 * u * (h - a) = 2 * s)
   have hY : 2 * v ≤ y - t := anchor_le hM0 (by linarith) (by linarith : 2 * v * (f - g) = 2 * s)
-  -- (4)
+  -- `a > s` and `β > s`
   have hsa : s < a := by
     linarith [mul_le_mul_of_nonneg_left hta hb.le, mul_pos ha (by linarith : (0:ℝ) < 1 - c)]
   have hβ : s < 1 - u - (f - g) := by
@@ -196,7 +194,8 @@ theorem Data.bounds (H : Data s a b c d e f g h t r x y) (hu : u * (h - a) = s)
     ⟨by linarith, hβ, by linarith, by linarith⟩, ⟨by linarith, by linarith⟩, ⟨hxb, hye⟩, h6',
     ⟨by linarith, by linarith⟩, ⟨hu5, hv5⟩, huv, hBOE, hu0, hv0⟩
 
-/-- (9)–(10) in plain form. -/
+/-- The two eliminations in plain form: `(s-ut)(1-y) ≤ α{(1-t)(x-u)-s}` (`elim_C`) and
+`(s-vr)x ≤ β{(1-r)(1-v-y)-s}` (`elim_D`). -/
 theorem Data.eliminations (H : Data s a b c d e f g h t r x y) (hu : u * (h - a) = s)
     (hv : v * (f - g) = s) :
     (s - u * t) * (1 - y) ≤ (1 - v - (h - a)) * ((1 - t) * (x - u) - s) ∧
@@ -206,7 +205,8 @@ theorem Data.eliminations (H : Data s a b c d e f g h t r x y) (hu : u * (h - a)
     elim_D (d := d) (e := e) (f := f) (h := h) H.h3 H.h7 hev hhv hfβ H.hr0 H.hrf H.hx0
       (by linarith) H.hde.le⟩
 
-/-- (11)–(12) in plain form. -/
+/-- The combined inequality `H + λ(g₀-s) ≥ tT_u + rT_v + ut² + vr² - (α+β)tr`, with its
+positive coefficients and `T_u - αβ, T_v - αβ > 0`, in plain form. -/
 theorem Data.identity {l : ℝ} (H : Data s a b c d e f g h t r x y) (hl1 : 1 / 4 < l)
     (hu : u * (h - a) = s) (hv : v * (f - g) = s) :
     0 < (1 - v - (h - a)) * (1 - t) - s + v * r + l * (1 - v) ∧
@@ -257,7 +257,7 @@ theorem Data.identity {l : ℝ} (H : Data s a b c d e f g h t r x y) (hl1 : 1 / 
         (by linarith : (0:ℝ) ≤ h - a - 2 * v),
       mul_nonneg hu0.le hv0.le, mul_le_mul_of_nonneg_right hl1.le (by linarith : (0:ℝ) ≤ 1 - v)]
 
-/-- Theorem 1 in plain form: the eleven bounds force `t = r = 0`. -/
+/-- `cdMoving_chamber_le` in plain form: the eleven bounds force `t = r = 0`. -/
 theorem Data.rigid {l : ℝ} (H : Data s a b c d e f g h t r x y) (hl1 : 1 / 4 < l)
     (hsc : ScalarIneq s l) : t = 0 ∧ r = 0 := by
   have hL0 : 0 < h - a := by linarith [H.hah]
@@ -284,17 +284,13 @@ theorem Data.rigid {l : ℝ} (H : Data s a b c d e f g h t r x y) (hl1 : 1 / 4 <
 
 end Plain
 
-/-! ### The claims of the manuscript -/
+/-! ### The chamber bound -/
 
-/-- **Theorem 1** (`SHARP_CD_MOVING:Theorem1`). Under (1) and positivity of the eleven oriented
-doubled areas, the minimum of the eleven ordinary triangle areas is at most `A₀`. If all eleven
-are at least `A₀`, then `t = r = 0` and the configuration is exactly the equality configuration
-of `HAND_PROOF.md` (the closed height conditions in (1) are included).
-`docs/proof/nine/SHARP_CD_MOVING.md`, lines 3-42, 175-200.
-Uses: SHARP_BC_MOVING:claim-constants, SHARP_BC_MOVING:Lemma1, SHARP_BC_MOVING:eq8,
-SHARP_CD_MOVING:claim-bounds, SHARP_CD_MOVING:claim-eliminations, SHARP_CD_MOVING:claim-identity,
-HAND_PROOF:Theorem1 -/
-theorem theorem1 {a b c d e f g h t r x y : ℝ} (hyp : CDMovingHyp a b c d e f g h t r x y)
+/-- **The C/D-moving chamber.** Under `CDMovingHyp` (which includes the closed height
+conditions) and positivity of the eleven oriented doubled areas, the minimum of the eleven ordinary
+triangle areas is at most `A₀`. If all eleven are at least `A₀`, then `t = r = 0` and the
+configuration is exactly the construction. -/
+theorem cdMoving_chamber_le {a b c d e f g h t r x y : ℝ} (hyp : CDMovingHyp a b c d e f g h t r x y)
     (hch : InChamber (cdMovingConfig a b c d e f g h t r x y)) :
     (∃ i, chamberArea (cdMovingConfig a b c d e f g h t r x y) i ≤ A₀) ∧
       ((∀ i, A₀ ≤ chamberArea (cdMovingConfig a b c d e f g h t r x y) i) →

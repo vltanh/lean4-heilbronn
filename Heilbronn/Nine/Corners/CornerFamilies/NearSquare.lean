@@ -3,27 +3,26 @@ module
 public import Heilbronn.Nine.Corners.CornerFamilies.SixPoint
 public import Heilbronn.Nine.Corners.FourCorners
 
-/-! # Corner families, §9: the near-square quadrilateral and the `2+4` class
-(`docs/proof/nine/CORNER_FAMILIES.md`, lines 727–860)
+/-! # Corner families: the near-square quadrilateral and the `2+4` class
 
-Part of `CORNER_FAMILIES.md` (module `Heilbronn.Nine.Corners.CornerFamilies`). A projective map with
-controlled area factor (the "controlled projective transfer") sends a quadrilateral
-`ABCR`, `A = (0,0)`, `B = (0,1)`, `C = (1,1)`, `R = (1 - ε, η)`, onto the unit square, fixing
-`A, B, C` and sending `R` to `D = (1,0)`; with `FOUR_CORNERS.md` this bounds nine points with
-hull `ABCR` when `r = 1 - ε - η ≥ 193/200`, and closes the Type-III class with two upper points.
+Part of `Heilbronn.Nine.Corners.CornerFamilies`. A projective map with controlled area factor (the
+"controlled projective transfer") sends a quadrilateral `ABCR`, `A = (0,0)`, `B = (0,1)`,
+`C = (1,1)`, `R = (1 - ε, η)`, onto the unit square, fixing `A, B, C` and sending `R` to
+`D = (1,0)`; with `FourCorners.fourCornersTheorem` this bounds nine points with hull `ABCR` when
+`r = 1 - ε - η ≥ 193/200`, and closes the Type-III class with two upper points.
 
-Definitions (23): with `r = 1 - ε - η`, `α = (1 - η)/(1 - ε)`, `g = -η(1 - η)/(r(1 - ε))`,
+Definitions: with `r = 1 - ε - η`, `α = (1 - η)/(1 - ε)`, `g = -η(1 - η)/(r(1 - ε))`,
 `h = ε/r`, `e = (1 - η)/r = 1 + h`, the denominator `q(x, y) = 1 + gx + hy` (`nsDenom`) and
 `F(x, y) = (αx/q, (gx + ey)/q)` (`projMap`); `nearSquareQuad ε η = conv{A, B, C, R}`.
 
-**Results.** `claim_projMap_vertices`, `claim_projMap_square`, `eq24` (exact area ratio
-`det M/(q₁q₂q₃)` with `det M = αe`), `claim_projective_transfer` (the general transfer bound
-`4r²/(1 + r)²`), `eq25`, `nearSquareQuadrilateralLemma` (22), `two_four_core`, `typeIII_2plus4`.
+**Results.** `projMap_vertices`, `projMap_mapsTo_unitSquare`, `triangleArea_projMap_eq_mul` (exact area ratio
+`det M/(q₁q₂q₃)` with `det M = αe`), `triangleArea_projMap_ge` (the general transfer bound
+`4r²/(1 + r)²`), `projMap_factor_bounds`, `nearSquareQuadrilateralLemma`, `two_four_core`, `typeIII_2plus4`.
 
-**Changes.** `nearSquareQuad` is the quadrilateral given by its four edge inequalities (not a
-convex hull); `claim_projMap_square` states `MapsTo` (the manuscript's bijectivity is not used);
+`nearSquareQuad` is the quadrilateral given by its four edge inequalities (not a convex hull);
+`projMap_mapsTo_unitSquare` states `MapsTo` (only the inclusion is needed);
 `nearSquareQuadrilateralLemma` assumes the points lie in `ABCR` and contain its four vertices
-(instead of "the convex hull is `ABCR`").
+(in place of "the convex hull is `ABCR`").
 -/
 
 @[expose] public section
@@ -31,7 +30,7 @@ convex hull); `claim_projMap_square` states `MapsTo` (the manuscript's bijectivi
 noncomputable section
 namespace Heilbronn.Nine.CornerFamilies
 
-/-! ### The projective map (23) -/
+/-! ### The projective map -/
 
 /-- `α = (1 - η)/(1 - ε)`. -/
 def nsAlpha (ε η : ℝ) : ℝ := (1 - η) / (1 - ε)
@@ -45,10 +44,10 @@ def nsH (ε η : ℝ) : ℝ := ε / (1 - ε - η)
 /-- `e = (1 - η)/r = 1 + h`. -/
 def nsE (ε η : ℝ) : ℝ := (1 - η) / (1 - ε - η)
 
-/-- The linear denominator `q(x, y) = 1 + gx + hy` of (23). -/
+/-- The linear denominator `q(x, y) = 1 + gx + hy` of the projective map `projMap`. -/
 def nsDenom (ε η : ℝ) (p : Point) : ℝ := 1 + nsG ε η * p.1 + nsH ε η * p.2
 
-/-- The projective map (23): `F(x, y) = (αx/q, (gx + ey)/q)`. -/
+/-- The projective map `F(x, y) = (αx/q, (gx + ey)/q)`. -/
 def projMap (ε η : ℝ) (p : Point) : Point :=
   (nsAlpha ε η * p.1 / nsDenom ε η p, (nsG ε η * p.1 + nsE ε η * p.2) / nsDenom ε η p)
 
@@ -58,8 +57,8 @@ and on the side of `B` of the lines `AR` and `RC`. For `ε, η ≥ 0`, `r = 1 - 
 def nearSquareQuad (ε η : ℝ) : Set Point :=
   {p | 0 ≤ p.1 ∧ p.2 ≤ 1 ∧ 0 ≤ sarea (0, 0) (1 - ε, η) p ∧ 0 ≤ sarea (1 - ε, η) (1, 1) p}
 
-/-- The scalar identities behind (23): `e = 1 + h`, `q(C) = α`, `g + e = α`, `q(R) = 1 - η`,
-`α(1 - ε) = 1 - η`, `g(1 - ε) + eη = 0`. -/
+/-- The scalar identities of the projective map: `e = 1 + h`, `q(C) = α`, `g + e = α`,
+`q(R) = 1 - η`, `α(1 - ε) = 1 - η`, `g(1 - ε) + eη = 0`. -/
 theorem ns_scalars (ε η : ℝ) (h1 : 1 - ε ≠ 0) (hr : 1 - ε - η ≠ 0) :
     nsE ε η = 1 + nsH ε η ∧ 1 + nsG ε η + nsH ε η = nsAlpha ε η ∧
       nsG ε η + nsE ε η = nsAlpha ε η ∧ 1 + nsG ε η * (1 - ε) + nsH ε η * η = 1 - η ∧
@@ -90,11 +89,10 @@ theorem proj_sarea' (α g h e x₁ y₁ x₂ y₂ x₃ y₃ q₁ q₂ q₃ : ℝ
   subst e₁ e₂ e₃
   ring
 
-/-- **Claim** (`CORNER_FAMILIES:NearSquareQuadrilateralLemma`), lines 763–777: for `ε, η ≥ 0` and
-`r = 1 - ε - η > 0`, the denominator takes the values `q(A) = 1`, `q(B) = e`, `q(C) = α`,
-`q(R) = 1 - η`, all in `[1 - η, e]`, hence `q ∈ [1 - η, e]` on the quadrilateral; and `F` fixes
-`A, B, C` and sends `R` to `(1, 0)`. -/
-theorem claim_projMap_vertices (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 0 < 1 - ε - η) :
+/-- For `ε, η ≥ 0` and `r = 1 - ε - η > 0`, the denominator takes the values `q(A) = 1`,
+`q(B) = e`, `q(C) = α`, `q(R) = 1 - η`, all in `[1 - η, e]`, hence `q ∈ [1 - η, e]` on the
+quadrilateral; and `F` fixes `A, B, C` and sends `R` to `(1, 0)`. -/
+theorem projMap_vertices (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 0 < 1 - ε - η) :
     nsDenom ε η (0, 0) = 1 ∧ nsDenom ε η (0, 1) = nsE ε η ∧
       nsDenom ε η (1, 1) = nsAlpha ε η ∧ nsDenom ε η (1 - ε, η) = 1 - η ∧
       (∀ p ∈ nearSquareQuad ε η, 1 - η ≤ nsDenom ε η p ∧ nsDenom ε η p ≤ nsE ε η) ∧
@@ -137,14 +135,12 @@ theorem claim_projMap_vertices (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (
     · show (nsG ε η * (1 - ε) + nsE ε η * η) / (1 - η) = 0
       rw [s6, zero_div]
 
-/-- **Claim** (`CORNER_FAMILIES:NearSquareQuadrilateralLemma`), lines 779–793: `F` maps the
-quadrilateral `ABCR` into the unit square: `F_x ≥ 0 ⟺ x ≥ 0`, `F_y ≤ 1 ⟺ y ≤ 1`,
-`F_y ≥ 0 ⟺ [ARp] ≥ 0`, `F_x ≤ 1 ⟺ [RCp] ≥ 0`. (Restated: the manuscript also proves the map is
-onto; only the inclusion is used.) -/
-theorem claim_projMap_square (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 0 < 1 - ε - η) :
+/-- `F` maps the quadrilateral `ABCR` into the unit square: `F_x ≥ 0 ⟺ x ≥ 0`,
+`F_y ≤ 1 ⟺ y ≤ 1`, `F_y ≥ 0 ⟺ [ARp] ≥ 0`, `F_x ≤ 1 ⟺ [RCp] ≥ 0`. -/
+theorem projMap_mapsTo_unitSquare (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 0 < 1 - ε - η) :
     Set.MapsTo (projMap ε η) (nearSquareQuad ε η) unitSquare := by
   intro p hp
-  have hq := ((claim_projMap_vertices ε η hε hη hr).2.2.2.2.1 p hp).1
+  have hq := ((projMap_vertices ε η hε hη hr).2.2.2.2.1 p hp).1
   have h1 : 0 < 1 - ε := by linarith
   have h2 : 0 < 1 - η := by linarith
   have hq0 : 0 < nsDenom ε η p := by linarith
@@ -169,11 +165,10 @@ theorem claim_projMap_square (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr
   · show (nsG ε η * p.1 + nsE ε η * p.2) / nsDenom ε η p ≤ 1
     rw [div_le_one hq0]; linarith
 
-/-- **Claim** (`CORNER_FAMILIES:NearSquareQuadrilateralLemma`), equation (24), exact form: for
-three points of the quadrilateral, `area(F P₁ F P₂ F P₃) = (det M/(q(P₁)q(P₂)q(P₃))) area(P₁P₂P₃)`
-with `det M = αe`, and the factor is at least `α/e² = r²/((1 - ε)(1 - η))`.
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 795–804. -/
-theorem eq24 (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 0 < 1 - ε - η) (P₁ P₂ P₃ : Point)
+/-- The area factor of `F`: for three points of the quadrilateral,
+`area(F P₁ F P₂ F P₃) = (det M/(q(P₁)q(P₂)q(P₃))) area(P₁P₂P₃)` with `det M = αe`, and the
+factor is at least `α/e² = r²/((1 - ε)(1 - η))`. -/
+theorem triangleArea_projMap_eq_mul (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 0 < 1 - ε - η) (P₁ P₂ P₃ : Point)
     (h₁ : P₁ ∈ nearSquareQuad ε η) (h₂ : P₂ ∈ nearSquareQuad ε η)
     (h₃ : P₃ ∈ nearSquareQuad ε η) :
     triangleArea (projMap ε η P₁) (projMap ε η P₂) (projMap ε η P₃) =
@@ -181,7 +176,7 @@ theorem eq24 (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 0 < 1 - ε - 
           triangleArea P₁ P₂ P₃ ∧
       (1 - ε - η) ^ 2 / ((1 - ε) * (1 - η)) ≤
         nsAlpha ε η * nsE ε η / (nsDenom ε η P₁ * nsDenom ε η P₂ * nsDenom ε η P₃) := by
-  have hv := claim_projMap_vertices ε η hε hη hr
+  have hv := projMap_vertices ε η hε hη hr
   obtain ⟨q1l, q1u⟩ := hv.2.2.2.2.1 P₁ h₁
   obtain ⟨q2l, q2u⟩ := hv.2.2.2.2.1 P₂ h₂
   obtain ⟨q3l, q3u⟩ := hv.2.2.2.2.1 P₃ h₃
@@ -207,18 +202,15 @@ theorem eq24 (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 0 < 1 - ε - 
     rw [hfac]
     exact div_le_div_of_nonneg_left (by positivity) (by positivity) hprod
 
-/-- **Claim** (`CORNER_FAMILIES:NearSquareQuadrilateralLemma`), the controlled projective
-transfer in general form: for `ε, η ≥ 0` with `r = 1 - ε - η > 0`, every triangle with vertices
-in `ABCR` has its image under `F` of area at least `4r²/(1 + r)²` times its own (from (24) and
-`(1 - ε)(1 - η) = r + εη ≤ (1 + r)²/4`). `docs/proof/nine/CORNER_FAMILIES.md`, lines 795–819.
-
-Uses: CORNER_FAMILIES:NearSquareQuadrilateralLemma (24) -/
-theorem claim_projective_transfer (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 0 < 1 - ε - η)
+/-- **Controlled projective transfer**: for `ε, η ≥ 0` with `r = 1 - ε - η > 0`, every triangle
+with vertices in `ABCR` has its image under `F` of area at least `4r²/(1 + r)²` times its own
+(from `triangleArea_projMap_eq_mul` and `(1 - ε)(1 - η) = r + εη ≤ (1 + r)²/4`). -/
+theorem triangleArea_projMap_ge (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 0 < 1 - ε - η)
     (P₁ P₂ P₃ : Point) (h₁ : P₁ ∈ nearSquareQuad ε η) (h₂ : P₂ ∈ nearSquareQuad ε η)
     (h₃ : P₃ ∈ nearSquareQuad ε η) :
     4 * (1 - ε - η) ^ 2 / (1 + (1 - ε - η)) ^ 2 * triangleArea P₁ P₂ P₃ ≤
       triangleArea (projMap ε η P₁) (projMap ε η P₂) (projMap ε η P₃) := by
-  obtain ⟨e1, e2⟩ := eq24 ε η hε hη hr P₁ P₂ P₃ h₁ h₂ h₃
+  obtain ⟨e1, e2⟩ := triangleArea_projMap_eq_mul ε η hε hη hr P₁ P₂ P₃ h₁ h₂ h₃
   rw [e1]
   have h1 : 0 < 1 - ε := by linarith
   have h2 : 0 < 1 - η := by linarith
@@ -227,10 +219,9 @@ theorem claim_projective_transfer (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η
     nlinarith [sq_nonneg (ε - η), sq_nonneg (1 - ε - η)]
   exact mul_le_mul_of_nonneg_right (hc.trans e2) (triangleArea_nonneg _ _ _)
 
-/-- **Claim** (`CORNER_FAMILIES:NearSquareQuadrilateralLemma`), equation (25): for
-`r = 1 - ε - η ≥ 193/200`, `r²/((1 - ε)(1 - η)) ≥ 4r²/(1 + r)² ≥ 148996/154449`.
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 806–825. -/
-theorem eq25 (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 193 / 200 ≤ 1 - ε - η) :
+/-- For `r = 1 - ε - η ≥ 193/200`, the area factor satisfies
+`r²/((1 - ε)(1 - η)) ≥ 4r²/(1 + r)² ≥ 148996/154449`. -/
+theorem projMap_factor_bounds (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 193 / 200 ≤ 1 - ε - η) :
     4 * (1 - ε - η) ^ 2 / (1 + (1 - ε - η)) ^ 2 ≤ (1 - ε - η) ^ 2 / ((1 - ε) * (1 - η)) ∧
       (148996 / 154449 : ℝ) ≤ 4 * (1 - ε - η) ^ 2 / (1 + (1 - ε - η)) ^ 2 := by
   have h1 : 0 < 1 - ε := by linarith
@@ -241,14 +232,11 @@ theorem eq25 (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η) (hr : 193 / 200 ≤
   · rw [le_div_iff₀ (by positivity)]
     nlinarith
 
-/-- **Near-square quadrilateral lemma** (`CORNER_FAMILIES:NearSquareQuadrilateralLemma`),
-equation (22): nine points in the quadrilateral `ABCR`, `A = (0,0)`, `B = (0,1)`, `C = (1,1)`,
-`R = (1 - ε, η)`, including its four vertices, with `ε, η ≥ 0` and `r = 1 - ε - η ≥ 193/200`,
-have minimum triangle area `t ≤ 154449/2830924 < 7/128`. (Restated: the manuscript's hypothesis
-"the convex hull is `ABCR`" is written as membership of the points in `ABCR` and presence of its
-vertices.) `docs/proof/nine/CORNER_FAMILIES.md`, lines 731–838.
-
-Uses: CORNER_FAMILIES:NearSquareQuadrilateralLemma (23)–(25), FOUR_CORNERS:Theorem -/
+/-- **Near-square quadrilateral lemma**: nine points in the quadrilateral `ABCR`, `A = (0,0)`,
+`B = (0,1)`, `C = (1,1)`, `R = (1 - ε, η)`, including its four vertices, with `ε, η ≥ 0` and
+`r = 1 - ε - η ≥ 193/200`, have minimum triangle area `t ≤ 154449/2830924 < 7/128`. (The
+hypothesis "the convex hull is `ABCR`" is written as membership of the points in `ABCR` and
+presence of its vertices.) -/
 theorem nearSquareQuadrilateralLemma (P : Fin 9 → Point) (ε η : ℝ) (hε : 0 ≤ ε) (hη : 0 ≤ η)
     (hr : 193 / 200 ≤ 1 - ε - η) (hP : ∀ i, P i ∈ nearSquareQuad ε η)
     (hA : ∃ i, P i = (0, 0)) (hB : ∃ i, P i = (0, 1)) (hC : ∃ i, P i = (1, 1))
@@ -256,17 +244,17 @@ theorem nearSquareQuadrilateralLemma (P : Fin 9 → Point) (ε η : ℝ) (hε : 
     minTriangleArea P ≤ 154449 / 2830924 ∧ (154449 / 2830924 : ℝ) < 7 / 128 := by
   refine ⟨?_, by norm_num⟩
   have hr0 : 0 < 1 - ε - η := by linarith
-  have hv := claim_projMap_vertices ε η hε hη hr0
+  have hv := projMap_vertices ε η hε hη hr0
   have hsq : ∀ i, (projMap ε η ∘ P) i ∈ unitSquare :=
-    fun i => claim_projMap_square ε η hε hη hr0 (hP i)
+    fun i => projMap_mapsTo_unitSquare ε η hε hη hr0 (hP i)
   have h19 := FourCorners.fourCornersTheorem (projMap ε η ∘ P) hsq
     (by obtain ⟨i, hi⟩ := hA; exact ⟨i, by simp [Function.comp, hi, hv.2.2.2.2.2.1]⟩)
     (by obtain ⟨i, hi⟩ := hB; exact ⟨i, by simp [Function.comp, hi, hv.2.2.2.2.2.2.1]⟩)
     (by obtain ⟨i, hi⟩ := hC; exact ⟨i, by simp [Function.comp, hi, hv.2.2.2.2.2.2.2.1]⟩)
     (by obtain ⟨i, hi⟩ := hR; exact ⟨i, by simp [Function.comp, hi, hv.2.2.2.2.2.2.2.2]⟩)
   obtain ⟨i, j, k, hij, hjk, he⟩ := exists_minTriangleArea_eq (by norm_num) (projMap ε η ∘ P)
-  have ht := claim_projective_transfer ε η hε hη hr0 (P i) (P j) (P k) (hP i) (hP j) (hP k)
-  have h25 := (eq25 ε η hε hη hr).2
+  have ht := triangleArea_projMap_ge ε η hε hη hr0 (P i) (P j) (P k) (hP i) (hP j) (hP k)
+  have h25 := (projMap_factor_bounds ε η hε hη hr).2
   have hm := minTriangleArea_le_of_lt P hij hjk
   have hnn := minTriangleArea_nonneg P
   simp only [Function.comp] at he
@@ -280,8 +268,7 @@ theorem nearSquareQuadrilateralLemma (P : Fin 9 → Point) (ε η : ℝ) (hε : 
   linarith
 
 /-- The `2+4` class with the upper points `U₁, U₂`, the third hull vertex `R` and the other three
-lower points `L₁, L₂, L₃` in the closed triangle `ACR`: the minimum area is at most `7/128`
-(lines 840–860). -/
+lower points `L₁, L₂, L₃` in the closed triangle `ACR`: the minimum area is at most `7/128`. -/
 theorem two_four_core {U₁ U₂ R L₁ L₂ L₃ : Point} (hU₁ : U₁ ∈ unitSquare) (hU₂ : U₂ ∈ unitSquare)
     (hR : R ∈ unitSquare) (hu₁ : U₁.1 < U₁.2) (hu₂ : U₂.1 < U₂.2) (hRl : R.2 < R.1)
     (hc₁ : InClosedTriangle L₁ (0, 0) R (1, 1)) (hc₂ : InClosedTriangle L₂ (0, 0) R (1, 1))
@@ -309,7 +296,7 @@ theorem two_four_core {U₁ U₂ R L₁ L₂ L₃ : Point} (hU₁ : U₁ ∈ uni
     rw [hk] at n1 n2 n3
     exact Or.inl ⟨lt_of_le_of_ne g1 (Ne.symm n1), lt_of_le_of_ne g2 (Ne.symm n2),
       lt_of_le_of_ne g3 (Ne.symm n3)⟩
-  have h4 := claim_fourth_vertex R L₁ L₂ L₃ hRl (inside 6 L₁ rfl hc₁ (by decide) (by decide)
+  have h4 := fst_sub_snd_ge_of_three_inside R L₁ L₂ L₃ hRl (inside 6 L₁ rfl hc₁ (by decide) (by decide)
     (by decide)) (inside 7 L₂ rfl hc₂ (by decide) (by decide) (by decide))
     (inside 8 L₃ rfl hc₃ (by decide) (by decide) (by decide)) _
     (min_sub (le_refl (minTriangleArea ![(0, 0), (0, 1), (1, 1), U₁, U₂, R, L₁, L₂, L₃])) _
@@ -361,13 +348,10 @@ theorem two_four_core {U₁ U₂ R L₁ L₂ L₃ : Point} (hU₁ : U₁ ∈ uni
     ⟨1, rfl⟩ ⟨2, rfl⟩ ⟨5, by simp⟩
   linarith [hns.1, hns.2]
 
-/-- **Type-III exclusion, `2+4` class** (`CORNER_FAMILIES:TypeIII-2+4`): a Type-III configuration
+/-- **Type-III exclusion, `2+4` class**: a Type-III configuration
 with exactly two free points above `y = x` has minimum area at most `7/128` (`< A₀`): otherwise
-the hull is `ABCR` with `r = r_x - r_y ≥ (11 + 3√5)t > 1239/1280 > 193/200`, and (22) gives
-`t < 7/128`. `docs/proof/nine/CORNER_FAMILIES.md`, lines 47–57, 840–860.
-
-Uses: CORNER_FAMILIES:claim-2+4-hull, CORNER_FAMILIES:claim-fourth-vertex,
-CORNER_FAMILIES:NearSquareQuadrilateralLemma -/
+the hull is `ABCR` with `r = r_x - r_y ≥ (11 + 3√5)t > 1239/1280 > 193/200`, and
+`nearSquareQuadrilateralLemma` gives `t < 7/128`. -/
 theorem typeIII_2plus4 (U V W X Y Z : Point) (hU : U ∈ unitSquare) (hV : V ∈ unitSquare)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (h2 : upperCount U V W X Y Z = 2) :

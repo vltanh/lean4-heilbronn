@@ -3,18 +3,19 @@ module
 public import Heilbronn.Nine.TypeII.Unbalanced.ChainBasic
 public import Heilbronn.Nine.Hulls.FourInteriorQuadrilaterals
 
-/-! # Common-sector inequalities of `FOUR_INTERIOR_QUADRILATERALS.md` for an actual quadrilateral
+/-! # Common-sector inequalities for an actual convex quadrilateral
 
-The normalized inequalities (2), (4), (5) of `docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`
-(`FourInteriorQuadrilaterals.eq2`, `claim_4`, `claim_5`) transported to an arbitrary
-counterclockwise convex quadrilateral `ABCD` by its normal frame (`FourInteriorQuadrilaterals.claim_1`)
-and rescaled to its doubled area `W = [ABC] + [ACD]`, with `a = [ABD]`, `b = [ABC]` the two
-containing triangles of the sector at the edge `AB` and `σ` the doubled threshold:
+The normalized common-sector inequalities `FourInteriorQuadrilaterals.inSector_normal_bounds`,
+`FourInteriorQuadrilaterals.two_sqrt_le_of_same_side` and `FourInteriorQuadrilaterals.four_mul_le_sq_of_isolated_vertex`, transported to an
+arbitrary counterclockwise convex quadrilateral `ABCD` by its normal frame
+(`FourInteriorQuadrilaterals.convexQuad_normal_form`) and rescaled to its doubled area `W = [ABC] + [ACD]`, with
+`a = [ABD]`, `b = [ABC]` the two containing triangles of the sector at the edge `AB` and `σ` the
+doubled threshold:
 
-* `sector_one` (2): one point in the sector gives `σ(a + b + W) ≤ ab`;
-* `sector_same` (4): two points whose line leaves `A, B` on one side give `ab - σ(a + b) > 0` and
+* `sector_one`: one point in the sector gives `σ(a + b + W) ≤ ab`;
+* `sector_same`: two points whose line leaves `A, B` on one side give `ab - σ(a + b) > 0` and
   `4σabW ≤ (ab - σ(a + b))²`;
-* `sector_iso` (5): two points whose line separates `A` from `B` give, when `C, D` are on the
+* `sector_iso`: two points whose line separates `A` from `B` give, when `C, D` are on the
   side of `B`, `ab - σ(W + a) > 0` and `4σabW ≤ (ab - σ(W + a))²`, and when `C, D` are on the
   side of `A`, the same with `W + b`.
 -/
@@ -39,23 +40,15 @@ theorem frame {A B C D : Point} (hq : UnbalancedRightHull.ConvexQuad A B C D) :
   have hq' : QuadrilateralHull.ConvexQuad A B C D := hq
   have e : 2 * QuadrilateralHull.quadArea A B C D = W := by
     unfold QuadrilateralHull.quadArea; ring
-  obtain ⟨h1, h2, h3, h4, -, -, α, β, γ, δ, ε, ζ, hdet, hA, hB, hD, hC⟩ := claim_1 hq'
+  obtain ⟨h1, h2, h3, h4, -, -, α, β, γ, δ, ε, ζ, hdet, hA, hB, hD, hC⟩ := convexQuad_normal_form hq'
   rw [e] at h1 h2 h3 h4 hdet hD hC
   have hW : 0 < W := by
     have h2 : 0 < sarea A C D := by rw [← sarea_cycle]; exact hq.2.2.1
     simp only [W]; linarith [hq.1]
   exact ⟨hW, h1, h2, h3, h4, α, β, γ, δ, ε, ζ, hdet, hA, hB, hD, hC⟩
 
-theorem inTriangle_affine {X A B C : Point} {α β γ δ ε ζ : ℝ} (hdet : 0 < α * δ - β * γ)
-    (h : InTriangle X A B C) :
-    InTriangle (affineMap α β γ δ ε ζ X) (affineMap α β γ δ ε ζ A) (affineMap α β γ δ ε ζ B)
-      (affineMap α β γ δ ε ζ C) := by
-  obtain ⟨h1, h2, h3⟩ := h
-  simp only [InTriangle, sarea_affineMap]
-  exact ⟨mul_pos hdet h1, mul_pos hdet h2, mul_pos hdet h3⟩
-
-/-- **(2) for an actual quadrilateral.** A point in the common sector at the edge `AB` gives
-`σ([ABD] + [ABC] + W) ≤ [ABD][ABC]`. -/
+/-- A point in the common sector at the edge `AB` of a convex quadrilateral `ABCD` gives
+`σ([ABD] + [ABC] + W) ≤ [ABD][ABC]`, with `W = [ABC] + [ACD]`. -/
 theorem sector_one {A B C D X : Point} {σ : ℝ} (hσ : 0 < σ)
     (hq : UnbalancedRightHull.ConvexQuad A B C D) (hX₁ : InTriangle X A B C)
     (hX₂ : InTriangle X A B D) (hmin : σ / 2 ≤ minTriangleArea ![A, B, C, D, X]) :
@@ -67,8 +60,8 @@ theorem sector_one {A B C D X : Point} {σ : ℝ} (hσ : 0 < σ)
   set b := sarea A B C / W with hb
   have hdet' : 0 < α * δ - β * γ := by rw [hdet]; positivity
   have hX : InSector (affineMap α β γ δ ε ζ X) (0, 0) (1, 0) ((1 - b) / a, b) (0, a) := by
-    have h1 := inTriangle_affine (ε := ε) (ζ := ζ) hdet' hX₁
-    have h2 := inTriangle_affine (ε := ε) (ζ := ζ) hdet' hX₂
+    have h1 := InTriangle.affine (ε := ε) (ζ := ζ) hdet' hX₁
+    have h2 := InTriangle.affine (ε := ε) (ζ := ζ) hdet' hX₂
     rw [eA, eB, eC] at h1; rw [eA, eB, eD] at h2
     exact ⟨h1, h2⟩
   have e : ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), affineMap α β γ δ ε ζ X] =
@@ -80,7 +73,7 @@ theorem sector_one {A B C D X : Point} {σ : ℝ} (hσ : 0 < σ)
     have := mul_le_mul_of_nonneg_left hmin (by positivity : (0 : ℝ) ≤ 1 / W)
     calc σ / W / 2 = 1 / W * (σ / 2) := by ring
       _ ≤ _ := this
-  obtain ⟨h1, h2, h3⟩ := eq2 ha0 ha1 hb0 hb1 (by positivity) hX hmin'
+  obtain ⟨h1, h2, h3⟩ := inSector_normal_bounds ha0 ha1 hb0 hb1 (by positivity) hX hmin'
   -- `a b - s(a + b) ≥ u ≥ s`
   have key : σ / W * (a + b) + σ / W ≤ a * b := by
     have i1 : σ / W / b + (1 - b) * (affineMap α β γ δ ε ζ X).2 / (a * b) ≤ 1 - (σ / W + (affineMap α β γ δ ε ζ X).2) / a := h2.trans h3
@@ -121,12 +114,12 @@ theorem sector_pair_frame {A B C D P Q : Point} {σ : ℝ}
   have hdet' : 0 < α * δ - β * γ := by rw [hdet]; positivity
   refine ⟨hW, ha0, ha1, hb0, hb1, affineMap α β γ δ ε ζ, α * δ - β * γ, hdet', hdet,
     fun X Y Z => sarea_affineMap _ _ _ _ _ _ _ _ _, eA, eB, eC, eD, ?_, ?_, ?_⟩
-  · have h1 := inTriangle_affine (ε := ε) (ζ := ζ) hdet' hP₁
-    have h2 := inTriangle_affine (ε := ε) (ζ := ζ) hdet' hP₂
+  · have h1 := InTriangle.affine (ε := ε) (ζ := ζ) hdet' hP₁
+    have h2 := InTriangle.affine (ε := ε) (ζ := ζ) hdet' hP₂
     rw [eA, eB, eC] at h1; rw [eA, eB, eD] at h2
     exact ⟨h1, h2⟩
-  · have h1 := inTriangle_affine (ε := ε) (ζ := ζ) hdet' hQ₁
-    have h2 := inTriangle_affine (ε := ε) (ζ := ζ) hdet' hQ₂
+  · have h1 := InTriangle.affine (ε := ε) (ζ := ζ) hdet' hQ₁
+    have h2 := InTriangle.affine (ε := ε) (ζ := ζ) hdet' hQ₂
     rw [eA, eB, eC] at h1; rw [eA, eB, eD] at h2
     exact ⟨h1, h2⟩
   · have e : ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), affineMap α β γ δ ε ζ P,
@@ -143,8 +136,9 @@ theorem sq_rescale {σ W a b N : ℝ} (hW : 0 < W) (h : 4 * (σ / W * a * b) ≤
   have e6 : 4 * (σ / W * a * b) * W ^ 4 = 4 * σ * (a * W) * (b * W) * W := by field_simp
   nlinarith [mul_le_mul_of_nonneg_right h (pow_nonneg hW.le 4)]
 
-/-- **(4) for an actual quadrilateral.** Two points in the common sector at `AB` whose line leaves
-`A, B` on the same side. -/
+/-- Two points in the common sector at `AB` of a convex quadrilateral `ABCD` whose line leaves
+`A, B` on the same side give `[ABD][ABC] - σ([ABD] + [ABC]) > 0` and
+`4σ[ABD][ABC]W ≤ ([ABD][ABC] - σ([ABD] + [ABC]))²`, with `W = [ABC] + [ACD]`. -/
 theorem sector_same {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ)
     (hq : UnbalancedRightHull.ConvexQuad A B C D) (hP₁ : InTriangle P A B C)
     (hP₂ : InTriangle P A B D) (hQ₁ : InTriangle Q A B C) (hQ₂ : InTriangle Q A B D)
@@ -162,7 +156,7 @@ theorem sector_same {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ)
     rw [← eA, ← eB, hM, hM]
     have : d * sarea P Q A * (d * sarea P Q B) = d ^ 2 * (sarea P Q A * sarea P Q B) := by ring
     rw [this]; positivity
-  obtain ⟨k1, k2⟩ := claim_4 ha0 ha1 hb0 hb1 (by positivity) hP hQ hmin' hs
+  obtain ⟨k1, k2⟩ := two_sqrt_le_of_same_side ha0 ha1 hb0 hb1 (by positivity) hP hQ hmin' hs
   have hWa : sarea A B D = a * W := by rw [ha]; field_simp
   have hWb : sarea A B C = b * W := by rw [hb]; field_simp
   have hX : a * b - σ / W * (a + b) = (a * W * (b * W) - σ * (a * W + b * W)) / W ^ 2 := by
@@ -177,8 +171,10 @@ theorem sector_same {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ)
   · have := (div_pos_iff_of_pos_right (by positivity : (0 : ℝ) < W ^ 2)).1 k1; exact this
   · exact sq_rescale hW hsq
 
-/-- **(5) for an actual quadrilateral.** Two points in the common sector at `AB` whose line puts
-`A` on its negative and `B` on its positive side. -/
+/-- Two points in the common sector at `AB` of a convex quadrilateral `ABCD` whose line puts
+`A` on its negative and `B` on its positive side. With `W = [ABC] + [ACD]`: if `C, D` are on the
+positive side, `[ABD][ABC] - σ(W + [ABD]) > 0` and `4σ[ABD][ABC]W ≤ ([ABD][ABC] - σ(W + [ABD]))²`;
+if `C, D` are on the negative side, the same with `W + [ABC]`. -/
 theorem sector_iso {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ)
     (hq : UnbalancedRightHull.ConvexQuad A B C D) (hP₁ : InTriangle P A B C)
     (hP₂ : InTriangle P A B D) (hQ₁ : InTriangle Q A B C) (hQ₂ : InTriangle Q A B D)
@@ -201,7 +197,7 @@ theorem sector_iso {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ)
   set a := sarea A B D / W with ha
   set b := sarea A B C / W with hb
   have sgn : ∀ X, sarea (M P) (M Q) (M X) = d * sarea P Q X := fun X => hM P Q X
-  have k := claim_5 ha0 ha1 hb0 hb1 (by positivity) hP hQ hmin'
+  have k := four_mul_le_sq_of_isolated_vertex ha0 ha1 hb0 hb1 (by positivity) hP hQ hmin'
     (by rw [← eA, sgn]; exact mul_neg_of_pos_of_neg hd hA)
     (by rw [← eB, sgn]; exact mul_pos hd hB)
   have hWa : sarea A B D = a * W := by rw [ha]; field_simp

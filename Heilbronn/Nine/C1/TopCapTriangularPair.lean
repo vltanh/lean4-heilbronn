@@ -4,27 +4,26 @@ public import Heilbronn.Nine.C1.TopCapConvexPair
 public import Heilbronn.Nine.C1.TwoLower.TriangularPairCert
 
 /-! # Complete exclusion of two C1 points beyond the top edge
-(`docs/proof/nine/C1_TOP_CAP_TRIANGULAR_PAIR.md`)
 
-Role: a component on the primary route: `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md` Theorem 2, step 3.
-With `docs/proof/nine/C1_TOP_CAP_CONVEX_PAIR.md` (convex upper hull) it excludes both remaining free points
-in the top cap.
+Together with `C1TopCapConvexPair.theorem_main` (convex upper hull) this excludes both remaining
+free points in the top cap; it is used by `C1TwoLowerCompletion.core`.
 
-Setting (lines 3-17): the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`,
+Setting (`Setting`): the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`,
 `s = 8/73`, `ρ = 49/60`; a competitive nine-point configuration `c1Config h c d f L M X Y`
 (least area at least `A₀`) with `L, M` inside `OHC` (so `hc > ρ`), and `X, Y` in the closed top
 cap with `X` strictly inside `DFY` (triangular upper hull).
 
-Definitions: `T = 1 - df`, and the four necessary polynomials `F₀, …, F₃` of (5)–(8) as
-functions of `(h, c, d, f, r)` with `r = -[DFY]`.
+Definitions: `T = 1 - df`, and the four necessary polynomials `F₀, …, F₃` (`poly0`, …, `poly3`)
+as functions of `(h, c, d, f, r)` with `r = -[DFY]`.
 
 Results:
-* `eq1_3`: `a = [ODY] > 0`, `b > 0`, `r = a + b - T ≥ 3s`, and, when `[OXY] > 0`,
-  `a(r - s) ≥ s(2r + T)` (3);
-* `eq5_8`: `F₀, F₁ ≥ 0`, and `F₂, F₃ ≥ 0` when `[OXY] > 0`;
-* `claim_reduction`: the necessary system holds at a point of the box (10) at `hc = ρ`;
-* `claim_certificate`: no point of the box (10) satisfies all four (51 Bernstein leaves);
-* `theorem_main` (**Theorem**): the two remaining points cannot both lie in the top cap.
+* `area_DFY_bounds`: `a = [ODY] > 0`, `b > 0`, `r = a + b - T ≥ 3s`, and, when `[OXY] > 0`,
+  `a(r - s) ≥ s(2r + T)`;
+* `polys_nonneg_of_setting`: `F₀, F₁ ≥ 0`, and `F₂, F₃ ≥ 0` when `[OXY] > 0`;
+* `exists_box_polys_nonneg`: the four inequalities hold at a point of the box `ρ ≤ h ≤ 1`,
+  `s ≤ u, v ≤ ρ`, `3s ≤ r ≤ (1 - s)²` of the reduced parametrization `reducedHCDF` (`hc = ρ`);
+* `box_some_poly_neg`: no point of this box satisfies all four (51 Bernstein leaves);
+* `theorem_main`: the two remaining points cannot both lie in the top cap.
 -/
 
 @[expose] public section
@@ -34,28 +33,28 @@ namespace Heilbronn.Nine.C1TopCapTriangularPair
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1TopCapConvexPair Heilbronn.Nine.C1TwoLower
 
-/-- `T = 1 - df` (1). -/
+/-- `T = 1 - df`. -/
 def capT (d f : ℝ) : ℝ := 1 - d * f
 
-/-- `F₀ = AU - s(A + U) - Δr` (5), `s = 8/73`. -/
+/-- `F₀ = AU - s(A + U) - Δr`, `s = 8/73`. -/
 def poly0 (h c d f r : ℝ) : ℝ :=
   areaA c d f * areaU h d f - 8 / 73 * (areaA c d f + areaU h d f) - areaΔ h c d f * r
 
-/-- `F₁ = (1 - f)(U - s) - fr` (6). -/
+/-- `F₁ = (1 - f)(U - s) - fr`. -/
 def poly1 (h d f r : ℝ) : ℝ := (1 - f) * (areaU h d f - 8 / 73) - f * r
 
-/-- `F₂ = {T(1 - d) - dr}(r - s) - s(1 - d)(2r + T)` (7). -/
+/-- `F₂ = {T(1 - d) - dr}(r - s) - s(1 - d)(2r + T)`. -/
 def poly2 (d f r : ℝ) : ℝ :=
   (capT d f * (1 - d) - d * r) * (r - 8 / 73) - 8 / 73 * (1 - d) * (2 * r + capT d f)
 
-/-- `F₃ = {T(U - s) + (T - h)r}(r - s) - sU(2r + T)` (8). -/
+/-- `F₃ = {T(U - s) + (T - h)r}(r - s) - sU(2r + T)`. -/
 def poly3 (h d f r : ℝ) : ℝ :=
   (capT d f * (areaU h d f - 8 / 73) + (capT d f - h) * r) * (r - 8 / 73) -
     8 / 73 * areaU h d f * (2 * r + capT d f)
 
-/-- The triangular-hull setting of the note: weak anchors, the nine-point configuration with
-least area at least `A₀`, `L, M` strictly inside `OHC`, `X, Y` in the closed top cap, and `X`
-strictly inside `DFY`. -/
+/-- The triangular-hull setting: weak anchors, the nine-point configuration with least area at
+least `A₀`, `L, M` strictly inside `OHC`, `X, Y` in the closed top cap, and `X` strictly inside
+`DFY`. -/
 structure Setting (h c d f : ℝ) (L M X Y : Point) : Prop where
   anchors : C1AnchorsWeak h c d f
   memL : L ∈ unitSquare
@@ -67,13 +66,12 @@ structure Setting (h c d f : ℝ) (L M X Y : Point) : Prop where
   lowerM : InLower h c M
   capX : sarea (ptD d) (ptF f) X ≤ 0
   capY : sarea (ptD d) (ptF f) Y ≤ 0
-  X_DFY : InsideTri X (ptD d) (ptF f) Y
+  X_DFY : InsideTriangle X (ptD d) (ptF f) Y
 
-/-- **Claim** (`C1_TOP_CAP_TRIANGULAR_PAIR:eq1-3`). In the setting, with `Y = (x, y)`:
-`a = y - dx = [ODY] > 0`, `b = x - fy > 0`, `r = -[DFY] = a + b - T` with `T = 1 - df`, and
-`r ≥ 3s` (2) (`s = 8/73`); if `[OXY] > 0` (arranged by transposition), then `[OXY] ≥ s` gives
-`a(r - s) ≥ s(2r + T)` (3). `docs/proof/nine/C1_TOP_CAP_TRIANGULAR_PAIR.md`, lines 28-70. -/
-theorem eq1_3 {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y) :
+/-- In the setting, with `Y = (x, y)`: `a = y - dx = [ODY] > 0`, `b = x - fy > 0`,
+`r = -[DFY] = a + b - T` with `T = 1 - df`, and `r ≥ 3s` (`s = 8/73`); if `[OXY] > 0` (arranged
+by transposition), then `[OXY] ≥ s` gives `a(r - s) ≥ s(2r + T)`. -/
+theorem area_DFY_bounds {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y) :
     0 < Y.2 - d * Y.1 ∧ 0 < Y.1 - f * Y.2 ∧
       -sarea (ptD d) (ptF f) Y = (Y.2 - d * Y.1) + (Y.1 - f * Y.2) - capT d f ∧
       3 * (8 / 73) ≤ -sarea (ptD d) (ptF f) Y ∧
@@ -130,9 +128,9 @@ theorem eq1_3 {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y) :
     mul_le_mul_of_nonneg_left s1 (by linarith)
   nlinarith
 
-/-- The derivation of (5)–(8) at arbitrary anchor heights `h, c` (used at the actual anchors and
-at the end of the decreasing path): from the cap costs `α = -[HFY]`, `β = [CDY] ≥ s`, the height
-`r = -[DFY]`, `x, y ≤ 1` and, for (7)–(8), the inequality (3). -/
+/-- The inequalities `F₀, …, F₃ ≥ 0` at arbitrary anchor heights `h, c` (used at the actual
+anchors and at the end of the decreasing path): from the cap costs `α = -[HFY]`, `β = [CDY] ≥ s`,
+the height `r = -[DFY]`, `x, y ≤ 1` and, for `F₂, F₃`, the inequality `a(r - s) ≥ s(2r + T)`. -/
 theorem F_all {h c d f : ℝ} {Y : Point} (hA0 : 0 ≤ areaA c d f) (hU0 : 0 ≤ areaU h d f)
     (hd1 : d ≤ 1) (hf1 : f ≤ 1) (hT : 0 ≤ capT d f) (hY1 : Y.1 ≤ 1) (hY2 : Y.2 ≤ 1)
     (hα : 8 / 73 ≤ -sarea (ptH h) (ptF f) Y) (hβ : 8 / 73 ≤ sarea (ptC c) (ptD d) Y)
@@ -184,21 +182,18 @@ theorem F_all {h c d f : ℝ} {Y : Point} (hA0 : 0 ≤ areaA c d f) (hU0 : 0 ≤
     have k3 := mul_le_mul_of_nonneg_left (ge_iff_le.1 h3) hU0
     linarith
 
-/-- **Claim** (`C1_TOP_CAP_TRIANGULAR_PAIR:eq5-8`). In the setting, with `r = -[DFY]`:
-`F₀ ≥ 0` (5) and `F₁ ≥ 0` (6); and if `[OXY] > 0`, also `F₂ ≥ 0` (7) and `F₃ ≥ 0` (8).
-`docs/proof/nine/C1_TOP_CAP_TRIANGULAR_PAIR.md`, lines 72-144.
-Uses: C1_TOP_CAP_CONVEX_PAIR:eq1-2, C1_TOP_CAP_CONVEX_PAIR:eq3-5,
-C1_TOP_CAP_TRIANGULAR_PAIR:eq1-3. -/
-theorem eq5_8 {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y) :
+/-- In the setting, with `r = -[DFY]`: `F₀ ≥ 0` and `F₁ ≥ 0`; and if `[OXY] > 0`, also `F₂ ≥ 0`
+and `F₃ ≥ 0`. -/
+theorem polys_nonneg_of_setting {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y) :
     0 ≤ poly0 h c d f (-sarea (ptD d) (ptF f) Y) ∧
       0 ≤ poly1 h d f (-sarea (ptD d) (ptF f) Y) ∧
       (0 < sarea ptO X Y →
         0 ≤ poly2 d f (-sarea (ptD d) (ptF f) Y) ∧
           0 ≤ poly3 h d f (-sarea (ptD d) (ptF f) Y)) := by
-  have h13 := eq1_3 hS
+  have h13 := area_DFY_bounds hS
   obtain ⟨hA, hL, hM, hX, hY, hmin, -, -, hXc, hYc, hXin⟩ := hS
   obtain ⟨b1, b2, -, -, hd1, hf1⟩ := anchor_bounds hA hmin
-  obtain ⟨-, -, -, -, -, hcap⟩ := eq3_5 hA hL hM hX hY hmin
+  obtain ⟨-, -, -, -, -, hcap⟩ := topCap_cost_bounds hA hL hM hX hY hmin
   obtain ⟨aY, bY, rY, -⟩ := hcap 3 hYc
   simp only [freePt, Matrix.cons_val] at aY bY rY
   obtain ⟨y0, y1, y2, y3⟩ := hY
@@ -209,8 +204,9 @@ theorem eq5_8 {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y) :
     aY bY rY
   exact ⟨g0, g1, fun hO => g2 (h13.2.2.2.2 hO)⟩
 
-/-- The end of the reduction of §3: at the endpoint `(h', c')` of the decreasing path the cap
-costs of `Y` have increased, and (5)–(8) hold at a point of the box (10). -/
+/-- At the endpoint `(h', c')` of the decreasing path (`h'c' = ρ`) the cap costs of `Y` have
+increased, so `F₀, …, F₃ ≥ 0` at a point of the box `ρ ≤ h ≤ 1`, `s ≤ u, v ≤ ρ`,
+`3s ≤ r ≤ (1 - s)²` of the reduced parametrization `reducedHCDF`. -/
 theorem reduction_core {h c d f h' c' : ℝ} {Y : Point} (hA : C1AnchorsWeak h c d f)
     (hd1 : d < 1) (hf1 : f < 1) (hY : Y ∈ unitSquare) (hYc : sarea (ptD d) (ptF f) Y ≤ 0)
     (aY : 8 / 73 ≤ -sarea (ptH h) (ptF f) Y) (bY : 8 / 73 ≤ sarea (ptC c) (ptD d) Y)
@@ -280,16 +276,14 @@ theorem reduction_core {h c d f h' c' : ℝ} {Y : Point} (hA : C1AnchorsWeak h c
   rw [reduced_eq h'0 hc'h']
   exact ⟨g0, g1, g2, g3⟩
 
-/-- **Claim** (`C1_TOP_CAP_TRIANGULAR_PAIR:claim-reduction`, made-up id). In the setting with
-`[OXY] > 0`: `F₀ ≥ 0`, `Δ > 0` and `r ≥ 3s` give `B > 0`, so the decreasing path of
-CONVEX_PAIR §3 applies; along it the cap costs of `X, Y` increase and the remaining costs are
-unchanged, so (5)–(8) hold at `hc = ρ`. Hence `F₀, …, F₃ ≥ 0` at a point of the box (10):
-`ρ ≤ h ≤ 1`, `s ≤ u, v ≤ ρ`, `3s ≤ r ≤ (1 - s)²`, in the parametrization (9) (`reducedHCDF`).
-`docs/proof/nine/C1_TOP_CAP_TRIANGULAR_PAIR.md`, lines 146-203.
-Uses: C1_TOP_CAP_CONVEX_PAIR:claim-reduction, C1_TOP_CAP_TRIANGULAR_PAIR:eq5-8. -/
--- Note: the reduction is a relaxation of the derived inequalities (the cap costs of `X, Y` are
--- recomputed at the decreased `h, c`), not a statement about the functions `F₀, …, F₃` alone.
-theorem claim_reduction {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y)
+/-- In the setting with `[OXY] > 0`: `F₀ ≥ 0`, `Δ > 0` and `r ≥ 3s` give `B > 0`, so the
+decreasing path of `C1TopCapConvexPair.path_endpoint` applies; along it the cap costs of `X, Y`
+increase and the remaining costs are unchanged, so the inequalities hold at `hc = ρ`. Hence
+`F₀, …, F₃ ≥ 0` at a point of the box `ρ ≤ h ≤ 1`, `s ≤ u, v ≤ ρ`, `3s ≤ r ≤ (1 - s)²`, in the
+reduced parametrization `reducedHCDF`. The reduction relaxes the derived inequalities (the cap
+costs are recomputed at the decreased `h, c`); it is not a statement about the functions
+`F₀, …, F₃` alone. -/
+theorem exists_box_polys_nonneg {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y)
     (hOXY : 0 < sarea ptO X Y) :
     ∃ h' u v r : ℝ, 49 / 60 ≤ h' ∧ h' ≤ 1 ∧ 8 / 73 ≤ u ∧ u ≤ 49 / 60 ∧
       8 / 73 ≤ v ∧ v ≤ 49 / 60 ∧ 3 * (8 / 73) ≤ r ∧ r ≤ (1 - 8 / 73) ^ 2 ∧
@@ -298,11 +292,11 @@ theorem claim_reduction {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f 
       0 ≤ poly1 (reducedHCDF h' u v).1 (reducedHCDF h' u v).2.2.1 (reducedHCDF h' u v).2.2.2 r ∧
       0 ≤ poly2 (reducedHCDF h' u v).2.2.1 (reducedHCDF h' u v).2.2.2 r ∧
       0 ≤ poly3 (reducedHCDF h' u v).1 (reducedHCDF h' u v).2.2.1 (reducedHCDF h' u v).2.2.2 r := by
-  have h13 := eq1_3 hS
-  have h58 := eq5_8 hS
+  have h13 := area_DFY_bounds hS
+  have h58 := polys_nonneg_of_setting hS
   obtain ⟨hA, hL, hM, hX, hY, hmin, hLl, hMl, hXc, hYc, hXin⟩ := hS
   obtain ⟨b1, b2, b3, b4, hd1, hf1⟩ := anchor_bounds hA hmin
-  obtain ⟨-, -, -, -, -, hcap⟩ := eq3_5 hA hL hM hX hY hmin
+  obtain ⟨-, -, -, -, -, hcap⟩ := topCap_cost_bounds hA hL hM hX hY hmin
   obtain ⟨aY, bY, rY, -⟩ := hcap 3 hYc
   simp only [freePt, Matrix.cons_val] at aY bY rY
   have hk := two_in hmin 0 1 4 5 6 (by decide) (Or.inl hLl) (Or.inl hMl)
@@ -313,7 +307,7 @@ theorem claim_reduction {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f 
     hA.2.2.2.2.1])
   rw [e, abs_of_nonneg hpos] at hk
   have hhc : 49 / 60 ≤ h * c := by linarith [kσ_gt]
-  have hΔ := (eq1_2 hA).2 hhc b3 b4
+  have hΔ := (area_sum_and_areaΔ_pos hA).2 hhc b3 b4
   obtain ⟨-, -, -, hr3, h3⟩ := h13
   have hB : 0 < bracketB h c d f := by
     have := h58.1; unfold poly0 at this; unfold bracketB
@@ -324,13 +318,11 @@ theorem claim_reduction {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f 
   exact reduction_core hA hd1 hf1 hY hYc aY bY rY (h3 hOXY) hr3 b3 b4 hc'h' h'0 h'd h'h c'f c'c
     h'f c'd
 
-/-- **Claim** (`C1_TOP_CAP_TRIANGULAR_PAIR:claim-certificate`, made-up id). At every point of the
-box (10), `ρ ≤ h ≤ 1`, `s ≤ u, v ≤ ρ`, `3s ≤ r ≤ (1 - s)²`, in the parametrization (9), one of
-`F₀, …, F₃` is negative. In the manuscript: 51 fixed dyadic boxes in `(H, U₀, V, R)` (depth at
-most 18), each labelled `i` with all tensor Bernstein coefficients of `P₀ = hF₀`, `P₁ = hF₁`,
-`P₂ = F₂` or `P₃ = F₃` negative; checked by `docs/proof/nine/check_c1_top_cap_triangular_pair.py`.
-`docs/proof/nine/C1_TOP_CAP_TRIANGULAR_PAIR.md`, lines 205-276. -/
-theorem claim_certificate (h u v r : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 1)
+/-- At every point of the box `ρ ≤ h ≤ 1`, `s ≤ u, v ≤ ρ`, `3s ≤ r ≤ (1 - s)²`, in the reduced
+parametrization `reducedHCDF`, one of `F₀, …, F₃` is negative: the box is covered by 51 dyadic
+boxes, each with all tensor Bernstein coefficients of `hF₀`, `hF₁`, `F₂` or `F₃` negative
+(`TriangularPairCert.check`). -/
+theorem box_some_poly_neg (h u v r : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 1)
     (hu : 8 / 73 ≤ u) (hu' : u ≤ 49 / 60) (hv : 8 / 73 ≤ v) (hv' : v ≤ 49 / 60)
     (hr : 3 * (8 / 73) ≤ r) (hr' : r ≤ (1 - 8 / 73) ^ 2) :
     poly0 (reducedHCDF h u v).1 (reducedHCDF h u v).2.1 (reducedHCDF h u v).2.2.1
@@ -391,8 +383,8 @@ theorem claim_certificate (h u v r : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 1)
 /-- The setting with `[OXY] > 0` is impossible. -/
 theorem core_pos {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y)
     (hOXY : 0 < sarea ptO X Y) : False := by
-  obtain ⟨h', u, v, r, a1, a2, a3, a4, a5, a6, a7, a8, g0, g1, g2, g3⟩ := claim_reduction hS hOXY
-  rcases claim_certificate h' u v r a1 a2 a3 a4 a5 a6 a7 a8 with h | h | h | h <;> linarith
+  obtain ⟨h', u, v, r, a1, a2, a3, a4, a5, a6, a7, a8, g0, g1, g2, g3⟩ := exists_box_polys_nonneg hS hOXY
+  rcases box_some_poly_neg h' u v r a1 a2 a3 a4 a5 a6 a7 a8 with h | h | h | h <;> linarith
 
 /-- Transposition of the setting (exchanging `D, F` and reversing `[OXY]`). -/
 theorem setting_tp {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y) :
@@ -416,14 +408,10 @@ theorem core_any {h c d f : ℝ} {L M X Y : Point} (hS : Setting h c d f L M X Y
     rw [← tp_O, sarea_tp]; linarith
   · exact core_pos hS h1
 
-/-- **Theorem** (`C1_TOP_CAP_TRIANGULAR_PAIR:Theorem`). In a competitive nine-point C1
-configuration `c1Config h c d f L M X Y` (weak anchor conditions, least area at least `A₀`) with
-`L, M` strictly inside `OHC`, the two remaining points `X, Y` cannot both lie in the closed top
-cap `conv{D, F, (1,1)}` (either hull, either order, either sign of `[OXY]`).
-`docs/proof/nine/C1_TOP_CAP_TRIANGULAR_PAIR.md`, lines 19-26 and 278-286.
-Uses: C1_TOP_CAP_CONVEX_PAIR:Theorem, C1_TOP_CAP_TRIANGULAR_PAIR:eq1-3,
-C1_TOP_CAP_TRIANGULAR_PAIR:eq5-8, C1_TOP_CAP_TRIANGULAR_PAIR:claim-reduction,
-C1_TOP_CAP_TRIANGULAR_PAIR:claim-certificate. -/
+/-- In a competitive nine-point C1 configuration `c1Config h c d f L M X Y` (weak anchor
+conditions, least area at least `A₀`) with `L, M` strictly inside `OHC`, the two remaining points
+`X, Y` cannot both lie in the closed top cap `conv{D, F, (1,1)}` (either hull, either order,
+either sign of `[OXY]`). -/
 theorem theorem_main {h c d f : ℝ} {L M X Y : Point} (hA : C1AnchorsWeak h c d f)
     (hL : L ∈ unitSquare) (hM : M ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f L M X Y))

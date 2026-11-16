@@ -1,63 +1,48 @@
 module
 
-public import Heilbronn.Nine.Local.HandProof
+public import Heilbronn.Nine.Local.Chamber
 public import Heilbronn.Nine.Global.MovingFCert
 
-/-! # Exterior caps and the moving-F chamber (`docs/proof/nine/GLOBAL_COMPLETION.md`)
+/-! # Exterior caps and the moving-F chamber
 
-**Role.** Theorems 2 and 3 are on the primary route.
-* **Theorem 1** (convex nonagon) is **not formalized any more**: case N6-05, its only use on the
-  primary route, is closed directly by `Heilbronn/Nine/SixBoundary/ThreeCaps.lean` (nine triangles, a
-  certificate). Theorem 1, `claim_7` (the polygon affine isoperimetric inequality, external
-  input), `eq8`, `eq9`, `claim_area_le_one`, `claim_strictly_convex` and the nonagon-only
-  definitions (`ConvexPosition`, `StrictConvexCCW`, `ear`, `polygonArea`) were deleted.
-  `IsHullVertex` is kept: `Hulls/ThreeInteriorTriangles.lean` and
-  `Hulls/FourInteriorQuadrilaterals.lean` count hull vertices with it. Note that
-  `FourInteriorQuadrilaterals.claim_hullcount` (an off-route hull count, used by nothing) cites
-  `GLOBAL_COMPLETION:Theorem1` in its proof for "at most eight hull vertices".
-* **Theorem 2** (lower exterior caps, seven boundary points). Used by `SEVEN_BOUNDARY_CAPS.md`
-  (lines 974-977) and `SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md` (line 405, uncited there).
-* **Theorem 3** (the sharp chamber with `F` moved inward). Used by
-  `SEVEN_BOUNDARY_TOP_CAP_RADIAL.md` (lines 99-104).
+* `minTriangleArea_lt_of_lowerCap`, the lower exterior caps with seven boundary points: a free point in a lower corner
+  cap forces a triangle of area below `7/128`. `Heilbronn/Nine/SevenBoundary/Caps.lean` uses it.
+* `movingF_chamber_le`, the sharp chamber with `F` moved inward: the least of the eleven chamber areas is at
+  most `A₀`, with equality only at the construction.
+  `Heilbronn/Nine/SevenBoundary/TopCapRadial.lean` uses it.
 
-**Setting of Theorem 2** (10). `A=(0,a), H=(0,h), B=(b,0), C=(c,0), D=(1,d), E=(1,e), F=(f,1)`
+`IsHullVertex` is also defined here; `Hulls/ThreeInteriorTriangles.lean` counts hull vertices
+with it.
+
+**Setting of `minTriangleArea_lt_of_lowerCap`.** `A=(0,a), H=(0,h), B=(b,0), C=(c,0), D=(1,d), E=(1,e), F=(f,1)`
 with `0<a<h<1, 0<b<c<1, 0<d<e<1, 0<f<1`, and two further points `P, Q` anywhere in the square
 (`sevenConfig`, in this order). No overlap or hull hypothesis is made (the square membership of
-`P, Q` is not even used). The proof follows the manuscript, with the three AM-GM steps of (14)
-done on squares (`left_cap_core`, `cap_scalar`); the right cap is the left cap of the reflected
-configuration.
+`P, Q` is not even used). The three AM-GM steps are done on squares (`left_cap_core`,
+`cap_scalar`); the right cap is the left cap of the reflected configuration.
 
-**Setting of Theorem 3** (15). The chamber of `HAND_PROOF.md` Part I with `F = (f, k)`,
-`0 ≤ k ≤ 1` (`movingFConfig`, order `A, B, C, D, E, F, G, H, O`). The chamber is positivity of
-the eleven oriented doubled areas of `HandProof.chamberTriangles`. `GHF` and `GEF` now depend
-on `k` (`eq15`).
+**Setting of `movingF_chamber_le`.** The chamber of `Chamber.chamber_le` with `F = (f, k)`, `0 ≤ k ≤ 1`
+(`movingFConfig`, order `A, B, C, D, E, F, G, H, O`). The chamber is positivity of the eleven
+oriented doubled areas of `Chamber.chamberTriangles`. `GHF` and `GEF` now depend on `k`
+(`chamberSarea_movingFConfig`).
 
-**The proof of Theorem 3 (changed).** §5.1 (`x < c`, `Hyps3.x_lt_c`, with the AM-GM step done as
-a discriminant) and the eliminations of §5.2 ((17), (18), (22), (23), (25), (27):
-`Hyps3.basic`, `Hyps3.step18`, …, `Hyps3.step27`) follow the manuscript. The case analysis of
-§§5.3-5.5 (the halves `u ≥ v` and `u < v`, with 32 + 886 Bernstein coefficients) is replaced by
-one certificate (`Heilbronn/Nine/Global/MovingFCert.lean`): the polynomial
-`T = u v² (1-v)(Δ - Φ B_*(1-g))`, the hand's `Δ` (33) corrected by `-Φ B_*(1-g) ≥ 0`, is positive
-on the whole region `1/8 ≤ u`, `0.1469 ≤ v`, `u + v ≤ 0.3469`, `0 ≤ z ≤ 1/4`, `s` near `s₀`
-(`Hyps3.region`), in both halves. Hence `C_* ≤ 0` (`claim_cstar`): if `C_* > 0`, (25) times
-`B_*(1-g)` and (27) would give `T ≤ 0`. Then (25) gives `Φ ≥ 0`, (26) gives `u = v = p₀`, and
-equality in (18) gives `w = 0`, i.e. `k = 1` (`Hyps3.k_eq_one`); `HandProof.claim_equality`
-finishes.
+**The proof of `movingF_chamber_le`.** With `u = s/L`, `v = s/M`, `w = δ/M` (`L = h-a`, `M = f-g`,
+`δ = 1-k`): first `x < c` (`Hyps3.x_lt_c`, with an AM-GM step done as a discriminant), then the
+eliminations `Hyps3.basic`, `Hyps3.budget`, `Hyps3.astar_bound`, `Hyps3.bstar_bound`, `Hyps3.w_bound` and
+`Hyps3.combined_nonneg`. The rest is one certificate (`Heilbronn/Nine/Global/MovingFCert.lean`): the
+polynomial `T = u v² (1-v)(Δ - Φ B_*(1-g))` (`MovingFCert.Treal`) is positive on the whole region
+`1/8 ≤ u`, `0.1469 ≤ v`, `u + v ≤ 0.3469`, `0 ≤ z ≤ 1/4`, `s` near `s₀` (`Hyps3.region`). Hence
+`C_* ≤ 0` (`Hyps3.cstar_nonpos`): if `C_* > 0`, `Hyps3.combined_nonneg` times `B_*(1-g)` and
+`Hyps3.w_bound` would give `T ≤ 0`. Then `Hyps3.combined_nonneg` gives `Φ ≥ 0` (`Hyps3.phi_nonneg`),
+`scalar_key` gives `u = v = p₀`, and equality in `Hyps3.budget` gives `w = 0`, i.e. `k = 1`
+(`Hyps3.k_eq_one`); `Chamber.coords_eq_of_two_A₀_le` finishes.
 
 **Results.**
-* `theorem2` (with `cap_scalar`, `left_cap_core`).
-* `eq15`, `claim_5_1`, `eq19`, `eq20`, `claim_25`, `claim_26`, `claim_27`, `claim_cstar`,
-  `theorem3`. `claim_5_3`, `claim_5_4`, `claim_5_5` (§§5.3-5.5) were deleted: `claim_cstar`
-  replaces them.
+* `minTriangleArea_lt_of_lowerCap` (with `cap_scalar`, `left_cap_core`).
+* `chamberSarea_movingFConfig`, `uv_mean_bounds`, `Hyps3.cstar_nonpos`, `Hyps3.k_eq_one`, `movingF_chamber_le`.
 
-**Implicit in the manuscript.**
-* Theorem 3: the claims inside the proof (§§5.2-5.5) are stated under the proof's standing
-  assumption (line 447) that all eleven doubled areas are at least `s = s₀ = 2A₀`, which implies
-  the chamber. `claim_26` is the scalar statement it is: its proof uses only (18) and
-  `0 < u, v < 1/2`.
-* Theorem 3's upper-bound part follows through the equality argument with `s = s₀` fixed
-  (§5.6). The "extension by continuity to the closure" (lines 882-885) is a remark and is not
-  stated.
+The intermediate claims of `movingF_chamber_le` are stated under the assumption that all eleven doubled
+areas are at least `s = s₀ = 2A₀`, which implies the chamber. The upper bound of `movingF_chamber_le`
+follows from the equality argument with `s = s₀` fixed.
 -/
 
 @[expose] public section
@@ -65,19 +50,19 @@ finishes.
 noncomputable section
 namespace Heilbronn.Nine.GlobalCompletion
 
-open HandProof
+open Chamber
 
 /-! ### Hull vertices -/
 
 /-- `P m` is a vertex of the convex hull of the configuration: some linear functional is strictly
-larger at `P m` than at every other point. (Kept for `Hulls/ThreeInteriorTriangles.lean` and
-`Hulls/FourInteriorQuadrilaterals.lean`, which count hull vertices with it.) -/
+larger at `P m` than at every other point. `Hulls/ThreeInteriorTriangles.lean` counts hull
+vertices with it. -/
 def IsHullVertex {n : ℕ} (P : Fin n → Point) (m : Fin n) : Prop :=
   ∃ u v : ℝ, ∀ l, l ≠ m → u * (P l).1 + v * (P l).2 < u * (P m).1 + v * (P m).2
 
-/-! ### §4. The lower exterior caps with seven boundary contacts -/
+/-! ### The lower exterior caps with seven boundary contacts -/
 
-/-- The seven-boundary configuration (10) with two further points, in the order
+/-- The seven-boundary configuration with two further points, in the order
 `A=(0,a), H=(0,h), B=(b,0), C=(c,0), D=(1,d), E=(1,e), F=(f,1), P, Q`. -/
 def sevenConfig (a h b c d e f : ℝ) (P Q : Point) : Fin 9 → Point :=
   ![(0, a), (0, h), (b, 0), (c, 0), (1, d), (1, e), (f, 1), P, Q]
@@ -92,10 +77,10 @@ def InLowerLeftCap (a b : ℝ) (X : Point) : Prop :=
 def InLowerRightCap (c d : ℝ) (X : Point) : Prop :=
   X.1 ≤ 1 ∧ 0 ≤ X.2 ∧ d * (1 - X.1) + (1 - c) * X.2 ≤ d * (1 - c)
 
-/-- The scalar end of the proof of Theorem 2, at `s = 7/64`: no positive `P₁, P₂, X₁, X₂, X₃`
+/-- The scalar end of the proof of `minTriangleArea_lt_of_lowerCap`, at `s = 7/64`: no positive `P₁, P₂, X₁, X₂, X₃`
 satisfy `s(P₁ + P₂) ≤ P₁P₂`, `X₁² ≥ 3P₁ + s`, `X₂² ≥ 3P₂`, `X₃² ≥ s` and
 `X₁ + X₂ + X₃ ≤ 2 - s/4`: indeed `X₁X₂ > 6s`, so `(X₁ + X₂)² > 25s`, and
-`(X₁ + X₂ + X₃)² > 36s > (2 - s/4)²` (the three AM-GM steps of (14)). -/
+`(X₁ + X₂ + X₃)² > 36s > (2 - s/4)²` (three AM-GM steps). -/
 theorem cap_scalar {P₁ P₂ X₁ X₂ X₃ : ℝ} (hP1 : 0 < P₁) (hP2 : 0 < P₂)
     (hP : 7 / 64 * (P₁ + P₂) ≤ P₁ * P₂) (hX1 : 3 * P₁ + 7 / 64 ≤ X₁ ^ 2)
     (hX2 : 3 * P₂ ≤ X₂ ^ 2) (hX3 : 7 / 64 ≤ X₃ ^ 2) (hX₁ : 0 < X₁) (hX₂ : 0 < X₂)
@@ -125,7 +110,7 @@ theorem cap_scalar {P₁ P₂ X₁ X₂ X₃ : ℝ} (hP1 : 0 < P₁) (hP2 : 0 < 
     nlinarith [mul_pos (add_pos hX₁ hX₂) hX₃]
   nlinarith
 
-/-- The left-cap exclusion as real inequalities (the proof of Theorem 2), at `s = 7/64`. With
+/-- The left-cap exclusion as real inequalities (the core of `minTriangleArea_lt_of_lowerCap`), at `s = 7/64`. With
 `P₁ = a(c-b)` and `P₂ = b(h-a)` the cap condition and `AHP`, `BCP` give `s(P₁ + P₂) ≤ P₁P₂`;
 `BCD`, `CDE`, `HFE` and AM-GM give `X₁ = M + (3a+d)/4`, `X₂ = 3L/4 + b`, `X₃ = R/4 + (1-c)` with
 `X₁² ≥ 3P₁ + s`, `X₂² ≥ 3P₂`, `X₃² ≥ s` and `X₁ + X₂ + X₃ = 1 + (3h+e)/4 ≤ 2 - s/4`
@@ -155,13 +140,12 @@ theorem left_cap_core {a h b c d e f x y : ℝ} (ha : 0 < a) (hah : a < h) (hh :
   · nlinarith [sq_nonneg (3 * (h - a) / 4 - b)]
   · nlinarith [sq_nonneg ((e - d) / 4 - (1 - c))]
 
-/-- **Theorem 2** (`GLOBAL_COMPLETION:Theorem2`). In the seven-boundary form (10), with the two
+/-- **The lower exterior caps.** In the seven-boundary configuration `sevenConfig`, with the two
 further points anywhere in the square, if either of them lies in either closed lower exterior cap
 `conv{(0,0),A,B}` or `conv{(1,0),C,D}`, then some triangle has area strictly less than `7/128`.
 For the left cap only `AHP, BCP, BCD, CDE, HFE` are used, and the horizontal reflection gives the
-right cap.
-`docs/proof/nine/GLOBAL_COMPLETION.md`, lines 205-320. -/
-theorem theorem2 {a h b c d e f : ℝ} {P Q : Point} (ha : 0 < a) (hah : a < h) (hh : h < 1)
+right cap. -/
+theorem minTriangleArea_lt_of_lowerCap {a h b c d e f : ℝ} {P Q : Point} (ha : 0 < a) (hah : a < h) (hh : h < 1)
     (hb : 0 < b) (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
     (hf : 0 < f) (hf1 : f < 1) (_hP : P ∈ unitSquare) (_hQ : Q ∈ unitSquare)
     (hcap : InLowerLeftCap a b P ∨ InLowerRightCap c d P ∨ InLowerLeftCap a b Q ∨
@@ -224,27 +208,26 @@ theorem theorem2 {a h b c d e f : ℝ} {P Q : Point} (ha : 0 < a) (hah : a < h) 
   · exact left 8 Q (by decide) rfl h1
   · exact right 8 Q (by decide) rfl h1
 
-/-! ### §5. The sharp chamber with `F` moving inward -/
+/-! ### The sharp chamber with `F` moving inward -/
 
-/-- The F-moving configuration (15), in the order `A, B, C, D, E, F, G, H, O`:
+/-- The F-moving configuration, in the order `A, B, C, D, E, F, G, H, O`:
 `A=(0,a), B=(b,0), C=(c,0), D=(1,d), E=(1,e), F=(f,k), G=(g,1), H=(0,h), O=(x,y)`. -/
 def movingFConfig (a b c d e f g h k x y : ℝ) : Fin 9 → Point :=
   ![(0, a), (b, 0), (c, 0), (1, d), (1, e), (f, k), (g, 1), (0, h), (x, y)]
 
-/-- The hypotheses of Theorem 3 other than the chamber: the strict orders, `0 ≤ k ≤ 1`, and `O`
+/-- The hypotheses of `movingF_chamber_le` other than the chamber: the strict orders, `0 ≤ k ≤ 1`, and `O`
 in the square. -/
 def MovingFHyp (a b c d e f g h k x y : ℝ) : Prop :=
   SharpOrders a b c d e f g h ∧ 0 ≤ k ∧ k ≤ 1 ∧ ((x, y) : Point) ∈ unitSquare
 
-/-- `X₀ = (u(1-3v) + s + 2v)/(1-v)`, the lower bound (21) for `x`. -/
+/-- `X₀ = (u(1-3v) + s + 2v)/(1-v)`, a lower bound for `x` (see `Hyps3.combined_nonneg`). -/
 def X0 (s u v : ℝ) : ℝ := (u * (1 - 3 * v) + s + 2 * v) / (1 - v)
 
-/-- **Claim** (`GLOBAL_COMPLETION:eq15`). The eleven oriented doubled areas of the F-moving
-chamber: `ABH = bL`, `ABC = a(c-b)`, `AGH = gL`, `DEF = (1-f)(e-d)`, `GHF = M(1-h) + gδ`,
-`GEF = M(1-e) - (1-g)δ`, `U₁, …, U₄` as in Part I and `OCF = U₅ = k(c-x) + (f-c)y` (with
-`L = h-a`, `M = f-g`, `δ = 1-k`).
-`docs/proof/nine/GLOBAL_COMPLETION.md`, lines 348-369. -/
-theorem eq15 (a b c d e f g h k x y : ℝ) :
+/-- The eleven oriented doubled areas of the F-moving chamber: `ABH = bL`, `ABC = a(c-b)`,
+`AGH = gL`, `DEF = (1-f)(e-d)`, `GHF = M(1-h) + gδ`, `GEF = M(1-e) - (1-g)δ`, `U₁, …, U₄` as in
+`Chamber.chamberSarea_baseConfig` and `OCF = U₅ = k(c-x) + (f-c)y` (with `L = h-a`, `M = f-g`,
+`δ = 1-k`). -/
+theorem chamberSarea_movingFConfig (a b c d e f g h k x y : ℝ) :
     chamberSarea (movingFConfig a b c d e f g h k x y) =
       ![b * (h - a), a * (c - b), g * (h - a), (1 - f) * (e - d),
         (f - g) * (1 - h) + g * (1 - k), (f - g) * (1 - e) - (1 - g) * (1 - k),
@@ -253,8 +236,8 @@ theorem eq15 (a b c d e f g h k x y : ℝ) :
   funext i
   fin_cases i <;> simp [chamberSarea, chamberTriangles, movingFConfig, sarea] <;> ring
 
-/-- The hypotheses of Theorem 3 with all eleven doubled areas at least `s`, as plain real
-inequalities (the doubled areas of `eq15`). -/
+/-- The hypotheses of `movingF_chamber_le` with all eleven doubled areas at least `s`, as plain real
+inequalities (the doubled areas of `chamberSarea_movingFConfig`). -/
 structure Hyps3 (s a b c d e f g h k x y : ℝ) : Prop where
   hs : 0 < s
   ha : 0 < a
@@ -290,7 +273,7 @@ structure Hyps3 (s a b c d e f g h k x y : ℝ) : Prop where
 theorem Hyps3.of_all {s a b c d e f g h k x y : ℝ} (hyp : MovingFHyp a b c d e f g h k x y)
     (hs : 0 < s) (hall : ∀ i, s ≤ chamberSarea (movingFConfig a b c d e f g h k x y) i) :
     Hyps3 s a b c d e f g h k x y := by
-  rw [eq15] at hall
+  rw [chamberSarea_movingFConfig] at hall
   obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hg, hgf, hf⟩, hk0, hk1, hx0, hx1, hy0, hy1⟩ :=
     hyp
   exact ⟨hs, ha, hah, hh, hb, hbc, hc, hd, hde, he, hg, hgf, hf, hk0, hk1, hx0, hx1, hy0, hy1,
@@ -298,9 +281,9 @@ theorem Hyps3.of_all {s a b c d e f g h k x y : ℝ} (hyp : MovingFHyp a b c d e
     by simpa using hall 4, by simpa using hall 5, by simpa using hall 6, by simpa using hall 7,
     by simpa using hall 8, by simpa using hall 9, by simpa using hall 10⟩
 
-/-! #### §5.1: `x < c` -/
+/-! #### `x < c` -/
 
-/-- §5.1: if all eleven doubled areas are at least `s ≥ 7/64`, then `x < c`. If `x ≥ c`, then
+/-- If all eleven doubled areas are at least `s ≥ 7/64`, then `x < c`. If `x ≥ c`, then
 `k ≥ e`, `f, e ≤ 7/8`, `b ≥ s`, and `U₃ + U₅ ≥ 2s` gives the quadratic inequality
 `(1-b)y² - ((f-b)e - s)y + se ≤ 0` in `y > 0`; its discriminant, with `t = s/e ≥ 1/8`, gives
 `(7/8 - b - t)² ≥ (f - b - t)² ≥ 4(1-b)t`, which fails for `b ≥ 7/64`. -/
@@ -362,14 +345,15 @@ theorem Hyps3.x_lt_c {s a b c d e f g h k x y : ℝ} (H : Hyps3 s a b c d e f g 
   nlinarith [mul_nonneg (by linarith : (0 : ℝ) ≤ b - 7 / 64) (by linarith : (0 : ℝ) ≤ 3 / 4 - b),
     mul_nonneg (by linarith : (0 : ℝ) ≤ t - 1 / 8) (by linarith : (0 : ℝ) ≤ 45 / 8 - 6 * b - t)]
 
-/-! #### §5.2: the eliminations, with `u = s/L`, `v = s/M`, `w = δ/M` -/
+/-! #### The eliminations, with `u = s/L`, `v = s/M`, `w = δ/M` -/
 
 section Steps3
 
 variable {s a b c d e f g h k x y u v w : ℝ}
 
-/-- The first consequences: `b, g ≥ u` (2), `h ≤ 1 - v + gw`, `e ≤ 1 - v - (1-g)w`, (17), and the
-signs `x > b`, `e > y` from `U₃ > 0`. -/
+/-- The first consequences: `u, v > 0`, `w ≥ 0`, `b, g ≥ u`, `h ≤ 1 - v + gw`,
+`e ≤ 1 - v - (1-g)w`, `x ≤ 1 - 2u`, `y ≥ 2v + w(c-x)`, and the signs `x > b`, `e > y` from
+`U₃ > 0`. -/
 theorem Hyps3.basic (H : Hyps3 s a b c d e f g h k x y) (hu : u * (h - a) = s)
     (hv : v * (f - g) = s) (hw : w * (f - g) = 1 - k) :
     0 < u ∧ 0 < v ∧ 0 ≤ w ∧ u ≤ b ∧ u ≤ g ∧ h ≤ 1 - v + g * w ∧ e ≤ 1 - v - (1 - g) * w ∧
@@ -399,8 +383,8 @@ theorem Hyps3.basic (H : Hyps3 s a b c d e f g h k x y) (hu : u * (h - a) = s)
   · nlinarith [H.t7, H.t8]
   · nlinarith [H.t10, H.t11]
 
-/-- (18) and its middle form: `s ≤ e(x-u) - (1-u)y` and `s ≤ 1 - 3u - 3v + 5uv`. -/
-theorem Hyps3.step18 (H : Hyps3 s a b c d e f g h k x y) (hxc : x < c)
+/-- `s ≤ e(x-u) - (1-u)y`, and its consequence `s ≤ 1 - 3u - 3v + 5uv`. -/
+theorem Hyps3.budget (H : Hyps3 s a b c d e f g h k x y) (hxc : x < c)
     (hu : u * (h - a) = s) (hv : v * (f - g) = s) (hw : w * (f - g) = 1 - k) :
     s ≤ e * (x - u) - (1 - u) * y ∧ s ≤ 1 - 3 * u - 3 * v + 5 * u * v := by
   obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu hv hw
@@ -415,8 +399,8 @@ theorem Hyps3.step18 (H : Hyps3 s a b c d e f g h k x y) (hxc : x < c)
       (by linarith : (0 : ℝ) ≤ 1 - 2 * u - x),
     mul_nonneg (by linarith [H.hbc, H.hc] : (0 : ℝ) ≤ 1 - u) (by linarith : (0 : ℝ) ≤ y - 2 * v)]
 
-/-- (22): `s(1-y) ≤ A*(x-u-s)` with `A* = 1 - v + gw - L`. -/
-theorem Hyps3.step22 (H : Hyps3 s a b c d e f g h k x y) (hu : u * (h - a) = s)
+/-- `s(1-y) ≤ A*(x-u-s)` with `A* = 1 - v + gw - L`. -/
+theorem Hyps3.astar_bound (H : Hyps3 s a b c d e f g h k x y) (hu : u * (h - a) = s)
     (hv : v * (f - g) = s) (hw : w * (f - g) = 1 - k) :
     s * (1 - y) ≤ (1 - v + g * w - (h - a)) * (x - u - s) := by
   obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu hv hw
@@ -429,8 +413,8 @@ theorem Hyps3.step22 (H : Hyps3 s a b c d e f g h k x y) (hu : u * (h - a) = s)
   nlinarith [mul_nonneg (sub_nonneg.2 h5a) (by linarith [H.he] : (0 : ℝ) ≤ 1 - y),
     mul_nonneg (H.ha.le.trans hαa) (sub_nonneg.2 h5b)]
 
-/-- (23): `sx ≤ B*(1 - v - y - s + w(g-x))` with `B* = 1 - f`. -/
-theorem Hyps3.step23 (H : Hyps3 s a b c d e f g h k x y) (hu : u * (h - a) = s)
+/-- `sx ≤ B*(1 - v - y - s + w(g-x))` with `B* = 1 - f`. -/
+theorem Hyps3.bstar_bound (H : Hyps3 s a b c d e f g h k x y) (hu : u * (h - a) = s)
     (hv : v * (f - g) = s) (hw : w * (f - g) = 1 - k) :
     s * x ≤ (1 - f) * (1 - v - y - s + w * (g - x)) := by
   obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu hv hw
@@ -440,26 +424,26 @@ theorem Hyps3.step23 (H : Hyps3 s a b c d e f g h k x y) (hu : u * (h - a) = s)
   nlinarith [mul_nonneg (sub_nonneg.2 H.t4) H.hx0,
     mul_nonneg (sub_pos.2 H.hf).le (sub_nonneg.2 h6b)]
 
-/-- (27): `w B*(1-g) < N = B*(1-v) - s`, from DEF and GEF. -/
-theorem Hyps3.step27 (H : Hyps3 s a b c d e f g h k x y) (hu : u * (h - a) = s)
+/-- `w B*(1-g) < N = B*(1-v) - s`, from DEF and GEF. -/
+theorem Hyps3.w_bound (H : Hyps3 s a b c d e f g h k x y) (hu : u * (h - a) = s)
     (hv : v * (f - g) = s) (hw : w * (f - g) = 1 - k) :
     w * (1 - f) * (1 - g) < (1 - f) * (1 - v) - s := by
   obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu hv hw
   nlinarith [H.t4, mul_pos (sub_pos.2 H.hf) H.hd,
     mul_nonneg (sub_pos.2 H.hf).le (by linarith : (0 : ℝ) ≤ 1 - v - (1 - g) * w - e)]
 
-/-- (25) in polynomial form, multiplied by `uv(1-v)`:
-`0 ≤ (1-v)·uvΦ - (1-v)uv·z a_v + uv·w·(1-v)C*`, with `z = g - u`, `B* = 1 - f` and
-`(1-v)C* = g(a_u + B*)(1-v) - B*·(1-v)X₀`. -/
-theorem Hyps3.step25 (H : Hyps3 s a b c d e f g h k x y) (hxc : x < c)
+/-- `Φ - z a_v + w C* ≥ 0` in polynomial form, multiplied by `uv(1-v)`:
+`0 ≤ (1-v)·uvΦ - (1-v)uv·z a_v + uv·w·(1-v)C*`, with `z = g - u`, `a_u = 1 - 3u - s`,
+`a_v = 1 - 3v - s`, `B* = 1 - f` and `(1-v)C* = g(a_u + B*)(1-v) - B*·(1-v)X₀`. -/
+theorem Hyps3.combined_nonneg (H : Hyps3 s a b c d e f g h k x y) (hxc : x < c)
     (hu : u * (h - a) = s) (hv : v * (f - g) = s) (hw : w * (f - g) = 1 - k) :
     0 ≤ (1 - v) * phiNum s u v - (1 - v) * (u * v) * ((g - u) * (1 - 3 * v - s)) +
       u * v * (w * (g * ((1 - 3 * u - s) + (1 - f)) * (1 - v) -
         (1 - f) * (u * (1 - 3 * v) + s + 2 * v))) := by
   obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu hv hw
-  obtain ⟨h18a, -⟩ := H.step18 hxc hu hv hw
-  have h22 := H.step22 hu hv hw
-  have h23 := H.step23 hu hv hw
+  obtain ⟨h18a, -⟩ := H.budget hxc hu hv hw
+  have h22 := H.astar_bound hu hv hw
+  have h23 := H.bstar_bound hu hv hw
   have has : s < a := by
     nlinarith [H.t2, mul_pos H.ha (by linarith [H.hb, H.hc] : (0 : ℝ) < 1 - (c - b))]
   have hfs : s < 1 - f := by
@@ -470,7 +454,7 @@ theorem Hyps3.step25 (H : Hyps3 s a b c d e f g h k x y) (hxc : x < c)
   have hev' : e ≤ 1 - v := by linarith
   have hcw0 := mul_nonneg hw0 (sub_pos.2 hxc).le
   have hyv' : 2 * v ≤ y := by linarith
-  -- (22) + (23) with `X = 1 - x ≥ 2u` and `Y = y ≥ 2v + w(c-x)`
+  -- `Hyps3.astar_bound` + `Hyps3.bstar_bound` with `X = 1 - x ≥ 2u` and `Y = y ≥ 2v + w(c-x)`
   have p1 := mul_nonneg (by linarith : (0 : ℝ) ≤ 1 - v + g * w - (h - a) - s)
     (by linarith : (0 : ℝ) ≤ 1 - x - 2 * u)
   have p2 := mul_nonneg (by linarith : (0 : ℝ) ≤ 1 - f - s)
@@ -502,7 +486,8 @@ end Steps3
 /-! #### The certificate: `C* ≤ 0` -/
 
 /-- The identity behind the certificate: with `v B = v(1 - u - z) - s`, `v` times the right side
-of (25) multiplied by `B(1-g)`, after `w B(1-g) ≤ N`, is `-T` (`MovingFCert.Treal`). -/
+of `Hyps3.combined_nonneg` multiplied by `B(1-g)`, after `w B(1-g) ≤ N` (`Hyps3.w_bound`), is `-T`
+(`MovingFCert.Treal`). -/
 theorem cert_identity (u v s g B : ℝ) (hv : v ≠ 0) (hB : v * B = v * (1 - g) - s) :
     v * ((1 - v) * phiNum s u v * (B * (1 - g)) -
       (1 - v) * (u * v) * ((g - u) * (1 - 3 * v - s)) * (B * (1 - g)) +
@@ -523,15 +508,15 @@ theorem p₀_lt' : p₀ < 0.173445 := by
   have := sqrt65_bounds; unfold p₀; linarith [this.1]
 
 /-- The region of the certificate, at `s = s₀`: `1/8 ≤ u` (from `u(1-u) ≥ s`, ABC),
-`0.1469 ≤ v` (from `v(1-v)(1-u) > s`, i.e. `N > 0`), `u + v ≤ 2p₀ < 0.3469` (19), and
+`0.1469 ≤ v` (from `v(1-v)(1-u) > s`, i.e. `N > 0`), `u + v ≤ 2p₀ < 0.3469` (as in `uv_mean_bounds`), and
 `z = g - u ≤ 1/4` (from `v(1-v)(1-g) > s`). -/
 theorem Hyps3.region {a b c d e f g h k x y u v w : ℝ}
     (H : Hyps3 (2 * A₀) a b c d e f g h k x y) (hxc : x < c)
     (hu : u * (h - a) = 2 * A₀) (hv : v * (f - g) = 2 * A₀) (hw : w * (f - g) = 1 - k) :
     1 / 8 ≤ u ∧ 1469 / 10000 ≤ v ∧ u + v ≤ 3469 / 10000 ∧ g - u ≤ 1 / 4 := by
   obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu hv hw
-  obtain ⟨-, h18⟩ := H.step18 hxc hu hv hw
-  have h27 := H.step27 hu hv hw
+  obtain ⟨-, h18⟩ := H.budget hxc hu hv hw
+  have h27 := H.w_bound hu hv hw
   obtain ⟨hs0, hs1⟩ := two_A₀_bounds
   have hpl := p₀_lt'
   have hcw0 := mul_nonneg hw0 (sub_pos.2 hxc).le
@@ -576,10 +561,9 @@ theorem Hyps3.region {a b c d e f g h k x y u v w : ℝ}
     nlinarith [mul_le_mul_of_nonneg_left hvv hg1.le]
   exact ⟨hu8, hv14, hS, hz4⟩
 
-/-- **The key consequence of the certificate** (`GLOBAL_COMPLETION:claim-cstar`, new). At
-`s = s₀`, with `u = s/L`, `v = s/M`, `w = δ/M`: `(1-v)C* ≤ 0`, i.e.
-`g(a_u + B*)(1-v) ≤ B*(1-v)X₀`. Otherwise (25) times `B*(1-g)` and (27) would give `T ≤ 0`, against
-`MovingFCert.T_pos`. -/
+/-- **The key consequence of the certificate.** At `s = s₀`, with `u = s/L`, `v = s/M`,
+`w = δ/M`: `(1-v)C* ≤ 0`, i.e. `g(a_u + B*)(1-v) ≤ B*(1-v)X₀`. Otherwise `Hyps3.combined_nonneg` times
+`B*(1-g)` and `Hyps3.w_bound` would give `T ≤ 0`, against `MovingFCert.T_pos`. -/
 theorem Hyps3.cstar_nonpos {a b c d e f g h k x y u v w : ℝ}
     (H : Hyps3 (2 * A₀) a b c d e f g h k x y) (hxc : x < c)
     (hu : u * (h - a) = 2 * A₀) (hv : v * (f - g) = 2 * A₀) (hw : w * (f - g) = 1 - k) :
@@ -587,8 +571,8 @@ theorem Hyps3.cstar_nonpos {a b c d e f g h k x y u v w : ℝ}
       (1 - f) * (u * (1 - 3 * v) + 2 * A₀ + 2 * v) ≤ 0 := by
   obtain ⟨hu0, hv0, hw0, hub, hug, -⟩ := H.basic hu hv hw
   obtain ⟨hu8, hv14, hS, hz4⟩ := H.region hxc hu hv hw
-  have h25 := H.step25 hxc hu hv hw
-  have h27 := H.step27 hu hv hw
+  have h25 := H.combined_nonneg hxc hu hv hw
+  have h27 := H.w_bound hu hv hw
   obtain ⟨hs0, hs1⟩ := two_A₀_bounds
   have hg1 : 0 < 1 - g := by linarith [H.hgf, H.hf]
   have hf1 : 0 < 1 - f := sub_pos.2 H.hf
@@ -614,14 +598,14 @@ theorem Hyps3.cstar_nonpos {a b c d e f g h k x y u v w : ℝ}
   rw [hid] at h4
   linarith
 
-/-- (25) and the certificate give `Φ ≥ 0` at `s = s₀`. -/
+/-- `Hyps3.combined_nonneg` and the certificate (`Hyps3.cstar_nonpos`) give `Φ ≥ 0` at `s = s₀`. -/
 theorem Hyps3.phi_nonneg {a b c d e f g h k x y u v w : ℝ}
     (H : Hyps3 (2 * A₀) a b c d e f g h k x y) (hxc : x < c)
     (hu : u * (h - a) = 2 * A₀) (hv : v * (f - g) = 2 * A₀) (hw : w * (f - g) = 1 - k) :
     0 ≤ phiNum (2 * A₀) u v := by
   obtain ⟨hu0, hv0, hw0, hub, hug, -⟩ := H.basic hu hv hw
   obtain ⟨hu8, hv14, hS, hz4⟩ := H.region hxc hu hv hw
-  have h25 := H.step25 hxc hu hv hw
+  have h25 := H.combined_nonneg hxc hu hv hw
   have hC := H.cstar_nonpos hxc hu hv hw
   have hA := A₀_bounds.2.2.2
   have hav : 0 < 1 - 3 * v - 2 * A₀ := by linarith
@@ -634,10 +618,11 @@ theorem Hyps3.phi_nonneg {a b c d e f g h k x y u v w : ℝ}
   have h3 : 0 ≤ (1 - v) * phiNum (2 * A₀) u v := by linarith
   exact nonneg_of_mul_nonneg_right (by linarith) hv1
 
-/-! #### §5.6: `k = 1`, and Theorem 3 -/
+/-! #### `k = 1`, and the F-moving chamber bound -/
 
 /-- If all eleven doubled areas are at least `s₀ = 2A₀`, then `k = 1`: by the certificate
-`C* ≤ 0`, so (25) gives `Φ ≥ 0`; by (26) `Φ = 0` and `u = v = p₀`; then equality in (18) forces
+`C* ≤ 0`, so `Hyps3.combined_nonneg` gives `Φ ≥ 0`; by `scalar_key` `Φ = 0` and `u = v = p₀`; then
+equality in `Hyps3.budget` forces
 `e = 1 - v`, and `e ≤ 1 - v - (1-g)w` forces `w = 0`. -/
 theorem Hyps3.k_eq_one {a b c d e f g h k x y : ℝ} (H : Hyps3 (2 * A₀) a b c d e f g h k x y) :
     k = 1 := by
@@ -651,13 +636,13 @@ theorem Hyps3.k_eq_one {a b c d e f g h k x y : ℝ} (H : Hyps3 (2 * A₀) a b c
   generalize 2 * A₀ / (f - g) = v at hv
   generalize (1 - k) / (f - g) = w at hw
   obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu hv hw
-  obtain ⟨h18a, h18⟩ := H.step18 hxc hu hv hw
+  obtain ⟨h18a, h18⟩ := H.budget hxc hu hv hw
   have hphi := H.phi_nonneg hxc hu hv hw
   have hcw0 := mul_nonneg hw0 (sub_pos.2 hxc).le
   have hg1 : 0 < 1 - g := by linarith [H.hgf, H.hf]
   obtain ⟨hQ, heq⟩ := scalar_key hu0 hv0 (by linarith [H.hb]) (by linarith [H.he]) h18
   obtain ⟨rfl, rfl⟩ := heq (le_antisymm hQ hphi)
-  -- equality in (18) forces `e = 1 - p₀`, then `w = 0`
+  -- equality in `Hyps3.budget` forces `e = 1 - p₀`, then `w = 0`
   have hq := p₀_quad
   have h1 := p₀_lt
   have h2 := p₀_gt
@@ -677,20 +662,18 @@ theorem Hyps3.k_eq_one {a b c d e f g h k x y : ℝ} (H : Hyps3 (2 * A₀) a b c
   subst hw'
   linarith
 
-/-! #### The claims of §5 as stated in the manuscript -/
+/-! #### The scalar bounds with `u = s/L`, `v = s/M` -/
 
-/-- `u, v, w` of §5.2 from their defining quotients. -/
+/-- `u, v, w` from their defining quotients `u = s/L`, `v = s/M`, `w = δ/M`. -/
 theorem uvw_of_div {s a f g h k u v : ℝ} (hah : a < h) (hgf : g < f) (hu : u = s / (h - a))
     (hv : v = s / (f - g)) :
     u * (h - a) = s ∧ v * (f - g) = s ∧ (1 - k) / (f - g) * (f - g) = 1 - k :=
   ⟨by rw [hu]; exact div_mul_cancel₀ _ (sub_pos.2 hah).ne',
     by rw [hv]; exact div_mul_cancel₀ _ (sub_pos.2 hgf).ne', div_mul_cancel₀ _ (sub_pos.2 hgf).ne'⟩
 
-/-- **Claim** (`GLOBAL_COMPLETION:eq19`). If all eleven doubled areas are at least `s = s₀`, then
-with `u = s/L`, `v = s/M`: `s < p ≤ p₀` for `p = (u+v)/2`, and `u + v < 347/1000` (19).
-`docs/proof/nine/GLOBAL_COMPLETION.md`, lines 476-492.
-Uses: GLOBAL_COMPLETION:claim-5.1 -/
-theorem eq19 {s a b c d e f g h k x y u v : ℝ} (hyp : MovingFHyp a b c d e f g h k x y)
+/-- If all eleven doubled areas are at least `s = s₀`, then with `u = s/L`, `v = s/M`:
+`s < p ≤ p₀` for `p = (u+v)/2`, and `u + v < 347/1000`. -/
+theorem uv_mean_bounds {s a b c d e f g h k x y u v : ℝ} (hyp : MovingFHyp a b c d e f g h k x y)
     (hs : s = 2 * A₀) (hall : ∀ i, s ≤ chamberSarea (movingFConfig a b c d e f g h k x y) i)
     (hu : u = s / (h - a)) (hv : v = s / (f - g)) :
     s < (u + v) / 2 ∧ (u + v) / 2 ≤ p₀ ∧ u + v < 347 / 1000 := by
@@ -699,7 +682,7 @@ theorem eq19 {s a b c d e f g h k x y u v : ℝ} (hyp : MovingFHyp a b c d e f g
   subst hs
   have hxc := H.x_lt_c (by linarith [A₀_bounds.1])
   obtain ⟨hu0, hv0, hw0, hub, hug, hhv, hev, hxu, hyv, hbx, hye⟩ := H.basic hu' hv' hw'
-  obtain ⟨-, h18⟩ := H.step18 hxc hu' hv' hw'
+  obtain ⟨-, h18⟩ := H.budget hxc hu' hv' hw'
   have hsu : 2 * A₀ < u := by
     nlinarith [mul_pos hu0 (by linarith [H.ha, H.hh] : (0 : ℝ) < 1 - (h - a))]
   have hsv : 2 * A₀ < v := by
@@ -710,14 +693,11 @@ theorem eq19 {s a b c d e f g h k x y u v : ℝ} (hyp : MovingFHyp a b c d e f g
   have hpp : (u + v) / 2 ≤ p₀ := le_p₀_of_scalarG (by linarith [H.hb, H.he]) h4
   exact ⟨by linarith, hpp, by linarith [p₀_lt]⟩
 
-/-- **Theorem 3** (`GLOBAL_COMPLETION:Theorem3`). Throughout the F-moving chamber (15) (strict
-orders, `0 ≤ k ≤ 1`, `O` in the square, all eleven oriented doubled areas positive), the least of
-the eleven chamber areas is at most `A₀`. If all eleven are at least `A₀`, then `k = 1` and the
-configuration is exactly the construction (16). No assumption `g < c`, `x < c` or `h ≤ e` is made.
-`docs/proof/nine/GLOBAL_COMPLETION.md`, lines 329-390 (proof 391-885).
-Uses: GLOBAL_COMPLETION:claim-5.1, GLOBAL_COMPLETION:claim-(25), GLOBAL_COMPLETION:claim-(26),
-GLOBAL_COMPLETION:claim-(27), GLOBAL_COMPLETION:claim-cstar, HAND_PROOF:Theorem1 -/
-theorem theorem3 {a b c d e f g h k x y : ℝ} (hyp : MovingFHyp a b c d e f g h k x y)
+/-- **The F-moving chamber bound.** Throughout the F-moving chamber (strict orders,
+`0 ≤ k ≤ 1`, `O` in the square, all eleven oriented doubled areas positive), the least of the
+eleven chamber areas is at most `A₀`. If all eleven are at least `A₀`, then `k = 1` and the
+configuration is exactly the construction. No assumption `g < c`, `x < c` or `h ≤ e` is made. -/
+theorem movingF_chamber_le {a b c d e f g h k x y : ℝ} (hyp : MovingFHyp a b c d e f g h k x y)
     (hch : InChamber (movingFConfig a b c d e f g h k x y)) :
     (∃ i, chamberArea (movingFConfig a b c d e f g h k x y) i ≤ A₀) ∧
       ((∀ i, A₀ ≤ chamberArea (movingFConfig a b c d e f g h k x y) i) →
@@ -733,7 +713,7 @@ theorem theorem3 {a b c d e f g h k x y : ℝ} (hyp : MovingFHyp a b c d e f g h
     have hk := (Hyps3.of_all hyp (by linarith [A₀_pos]) hall').k_eq_one
     subst hk
     obtain ⟨hord, -, -, hO⟩ := hyp
-    obtain ⟨ha, hb, hc, hd, he, hf, hg, hh, hx, hy⟩ := claim_equality hord hO hall'
+    obtain ⟨ha, hb, hc, hd, he, hf, hg, hh, hx, hy⟩ := coords_eq_of_two_A₀_le hord hO hall'
     subst ha hb hc hd he hf hg hh hx hy
     exact ⟨rfl, rfl⟩
   refine ⟨?_, heq⟩

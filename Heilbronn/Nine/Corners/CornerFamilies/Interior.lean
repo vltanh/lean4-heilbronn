@@ -1,22 +1,22 @@
 module
 
 public import Heilbronn.Nine.Setup.Families
+public import Heilbronn.Common.TwoInteriorPoints
 
-/-! # Corner families: interior points of a triangle (`docs/proof/nine/CORNER_FAMILIES.md` §§1, 7–8)
+/-! # Corner families: interior points of a triangle
 
-Part of `CORNER_FAMILIES.md` (module `Heilbronn.Nine.Corners.CornerFamilies`). This part holds the
-general area bounds for a triangle with interior points that the rest of the note (and about
-fifteen other notes) use, proved here before the star lemma of §2 needs them:
+General area bounds for a triangle containing interior points. They are used by the rest of
+`Heilbronn.Nine.Corners.CornerFamilies` (the star lemmas of `CornerFamilies/Stars.lean` need
+them) and by many other parts of the proof:
 
-* the two-interior-point lemma (13), `twoInteriorPointLemma`, from the identity
-  `S·d = (d + e₂)X₁ + (d + e₁)X₂ + (d + e₁)(d + e₂)` (`two_core`), which replaces the
-  manuscript's affine coordinates (lines 421–472);
-* the six-point triangular-hull theorem (14), `sixPointTriangularHullTheorem`, through the
-  labelled seven-face mesh (`mesh_core`, lines 516–661);
-* the tools: sub-configurations (`min_sub`), containment (`inTri_trans`), the fan of an
-  interior point (`fan_cases`), and the inequality behind (20) (`mesh_ineq`).
+* the six-point triangular-hull theorem `sixPointTriangularHullTheorem`, through the
+  labelled seven-face mesh (`mesh_core`); two points in one fan triangle give the stronger bound
+  of `fan_two`, from the two-interior-point lemma `twoInteriorPointLemma`
+  (`Heilbronn/Common/TwoInteriorPoints.lean`);
+* the tools: containment (`inTri_trans`), the fan of an interior point (`fan_cases`), and the
+  connector inequality of the mesh (`mesh_ineq`).
 
-Definitions: `InsideTriangle` (strictly inside, either orientation), `InClosedTriangle`.
+Definition: `InClosedTriangle` (the closed triangle, either orientation).
 -/
 
 @[expose] public section
@@ -26,9 +26,6 @@ namespace Heilbronn.Nine.CornerFamilies
 
 /-! ### Shared notions -/
 
-/-- `X` lies strictly inside the triangle `ABC`, whose vertices may be in either orientation. -/
-def InsideTriangle (X A B C : Point) : Prop := InTriangle X A B C ∨ InTriangle X A C B
-
 /-- `X` lies in the closed triangle `ABC` (either orientation): the three edge signs are all
 `≥ 0` or all `≤ 0`. For a nondegenerate triangle this is its convex hull. -/
 def InClosedTriangle (X A B C : Point) : Prop :=
@@ -36,24 +33,6 @@ def InClosedTriangle (X A B C : Point) : Prop :=
     (sarea A B X ≤ 0 ∧ sarea B C X ≤ 0 ∧ sarea C A X ≤ 0)
 
 /-! ### Tools -/
-
-/-- A sub-configuration (or a relabelling) given by an injective index map keeps the bound on the
-least area. -/
-theorem min_sub {n m : ℕ} {P : Fin n → Point} {t : ℝ} (h : t ≤ minTriangleArea P)
-    (Q : Fin m → Point) (f : Fin m → Fin n) (hm : 3 ≤ m) (hf : Function.Injective f)
-    (hQ : ∀ i, Q i = P (f i)) : t ≤ minTriangleArea Q := by
-  obtain rfl : Q = P ∘ f := funext hQ
-  exact h.trans (le_min_comp hm P hf)
-
-/-- `min_sub` with injectivity from a left inverse (cheaper to check by `decide`). -/
-theorem min_sub' {n m : ℕ} {P : Fin n → Point} {t : ℝ} (h : t ≤ minTriangleArea P)
-    (Q : Fin m → Point) (f : Fin m → Fin n) (g : Fin n → Fin m) (hm : 3 ≤ m)
-    (hg : ∀ i, g (f i) = i) (hQ : ∀ i, Q i = P (f i)) : t ≤ minTriangleArea Q :=
-  min_sub h Q f hm (Function.LeftInverse.injective hg) hQ
-
-theorem two_le_abs {p q r : Point} {t : ℝ} (h : t ≤ triangleArea p q r) :
-    2 * t ≤ |sarea p q r| := by
-  rw [triangleArea_eq] at h; linarith
 
 theorem sarea_ne_of {p q r : Point} {t : ℝ} (ht : 0 < t) (h : t ≤ triangleArea p q r) :
     sarea p q r ≠ 0 := by
@@ -68,9 +47,6 @@ theorem pos_of_mul_pos_right' {a b : ℝ} (h : 0 < a * b) (hb : 0 < b) : 0 < a :
 
 theorem inTri_rot {X A B C : Point} (h : InTriangle X A B C) : InTriangle X B C A :=
   ⟨h.2.1, h.2.2, h.1⟩
-
-theorem inTri_pos {X A B C : Point} (h : InTriangle X A B C) : 0 < sarea A B C := by
-  have := sarea_add_sarea_add_sarea A B C X; linarith [h.1, h.2.1, h.2.2]
 
 /-- Containment is transitive for triangles on a common edge: `X ∈ int PQY` and `Y ∈ int PQZ`
 give `X ∈ int PQZ`. -/
@@ -111,105 +87,10 @@ theorem fan_cases {A B C Y P : Point} (hY : InTriangle Y A B C) (hP : InTriangle
   · exact Or.inr (Or.inl ⟨p2, by linarith, hb⟩)
   · nlinarith [mul_pos y2 ha, mul_pos y3 hb, mul_pos y1 hc]
 
-/-! ### §7. Two interior points -/
+/-! ### Two interior points -/
 
-/-- The two-interior-point bound in signed form. `R` is the vertex alone on its side of the line
-`PQ` (`d = [PQR] > 0`), `S₁, S₂` the other two (`e₁ = -[PQS₁]`, `e₂ = -[PQS₂]`), `X₁ = [RS₁P]`,
-`X₂ = [RQS₂]`; the identity `S·d = (d + e₂)X₁ + (d + e₁)X₂ + (d + e₁)(d + e₂)` and
-`d + 3s²/d ≥ 2√3 s` give (13) (lines 433–472). -/
-theorem two_core {R S₁ S₂ P Q : Point} {s : ℝ} (hs : 0 < s) (hd : s ≤ sarea P Q R)
-    (he₁ : s ≤ -sarea P Q S₁) (he₂ : s ≤ -sarea P Q S₂) (hX₁ : s ≤ sarea R S₁ P)
-    (hX₂ : s ≤ sarea R Q S₂) : (4 + 2 * Real.sqrt 3) * s ≤ sarea R S₁ S₂ := by
-  have key : sarea R S₁ S₂ * sarea P Q R =
-      (sarea P Q R + -sarea P Q S₂) * sarea R S₁ P + (sarea P Q R + -sarea P Q S₁) * sarea R Q S₂ +
-        (sarea P Q R + -sarea P Q S₁) * (sarea P Q R + -sarea P Q S₂) := by
-    unfold sarea; ring
-  set S := sarea R S₁ S₂
-  set d := sarea P Q R
-  set e₁ := -sarea P Q S₁
-  set e₂ := -sarea P Q S₂
-  set X₁ := sarea R S₁ P
-  set X₂ := sarea R Q S₂
-  have h3 : Real.sqrt 3 ^ 2 = 3 := Real.sq_sqrt (by norm_num)
-  have m1 : (d + s) * s ≤ (d + e₂) * X₁ := mul_le_mul (by linarith) hX₁ hs.le (by linarith)
-  have m2 : (d + s) * s ≤ (d + e₁) * X₂ := mul_le_mul (by linarith) hX₂ hs.le (by linarith)
-  have m3 : (d + s) * (d + s) ≤ (d + e₁) * (d + e₂) :=
-    mul_le_mul (by linarith) (by linarith) (by linarith) (by linarith)
-  have hsq : 0 ≤ d ^ 2 - 2 * Real.sqrt 3 * s * d + 3 * s ^ 2 := by
-    have e : d ^ 2 - 2 * Real.sqrt 3 * s * d + 3 * s ^ 2 = (d - Real.sqrt 3 * s) ^ 2 := by
-      linear_combination (-s ^ 2) * h3
-    rw [e]; positivity
-  have : (4 + 2 * Real.sqrt 3) * s * d ≤ S * d := by nlinarith
-  exact le_of_mul_le_mul_right this (by linarith)
-
-/-- The two-interior-point lemma for a counterclockwise triangle, in doubled form. -/
-theorem two_ccw {A B C P Q : Point} {t : ℝ} (ht : 0 < t) (hP : InTriangle P A B C)
-    (hQ : InTriangle Q A B C) (hmin : t ≤ minTriangleArea ![A, B, C, P, Q]) :
-    (4 + 2 * Real.sqrt 3) * (2 * t) ≤ sarea A B C := by
-  have hs : 0 < 2 * t := by linarith
-  obtain ⟨p1, p2, p3⟩ := hP
-  obtain ⟨q1, q2, q3⟩ := hQ
-  -- the ten triangles
-  have tABP : 2 * t ≤ sarea A B P := ge_of_pos ht (area_of_le_min hmin 0 1 3) p1
-  have tBCP : 2 * t ≤ sarea B C P := ge_of_pos ht (area_of_le_min hmin 1 2 3) p2
-  have tCAP : 2 * t ≤ sarea C A P := ge_of_pos ht (area_of_le_min hmin 2 0 3) p3
-  have tABQ : 2 * t ≤ sarea A B Q := ge_of_pos ht (area_of_le_min hmin 0 1 4) q1
-  have tBCQ : 2 * t ≤ sarea B C Q := ge_of_pos ht (area_of_le_min hmin 1 2 4) q2
-  have tCAQ : 2 * t ≤ sarea C A Q := ge_of_pos ht (area_of_le_min hmin 2 0 4) q3
-  have aA : 2 * t ≤ |sarea P Q A| := two_le_abs (area_of_le_min hmin 3 4 0)
-  have aB : 2 * t ≤ |sarea P Q B| := two_le_abs (area_of_le_min hmin 3 4 1)
-  have aC : 2 * t ≤ |sarea P Q C| := two_le_abs (area_of_le_min hmin 3 4 2)
-  have e : sarea B C P * sarea P Q A + sarea C A P * sarea P Q B + sarea A B P * sarea P Q C = 0 := by
-    unfold sarea; ring
-  have sw : ∀ X : Point, sarea Q P X = -sarea P Q X := fun X => sarea_swap₁₂ _ _ _
-  have c1 : sarea A P C = sarea C A P := sarea_cycle C A P
-  have c2 : sarea B P A = sarea A B P := sarea_cycle A B P
-  have c3 : sarea C P B = sarea B C P := sarea_cycle B C P
-  have c4 : sarea A Q C = sarea C A Q := sarea_cycle C A Q
-  have c5 : sarea B Q A = sarea A B Q := sarea_cycle A B Q
-  have c6 : sarea C Q B = sarea B C Q := sarea_cycle B C Q
-  rcases le_or_gt 0 (sarea P Q A) with hA | hA <;> rcases le_or_gt 0 (sarea P Q B) with hB | hB <;>
-    rcases le_or_gt 0 (sarea P Q C) with hC | hC
-  · -- (+,+,+): impossible
-    rw [abs_of_nonneg hA] at aA; rw [abs_of_nonneg hB] at aB; rw [abs_of_nonneg hC] at aC
-    nlinarith [mul_pos (by linarith : (0:ℝ) < sarea B C P) (by linarith : (0:ℝ) < sarea P Q A),
-      mul_pos (by linarith : (0:ℝ) < sarea C A P) (by linarith : (0:ℝ) < sarea P Q B),
-      mul_pos (by linarith : (0:ℝ) < sarea A B P) (by linarith : (0:ℝ) < sarea P Q C)]
-  · -- (+,+,-): R = C, swap
-    rw [abs_of_nonneg hA] at aA; rw [abs_of_nonneg hB] at aB; rw [abs_of_neg hC] at aC
-    have := two_core (R := C) (S₁ := A) (S₂ := B) (P := Q) (Q := P) hs (by rw [sw]; linarith)
-      (by rw [sw]; linarith) (by rw [sw]; linarith) (by linarith) (by linarith)
-    linarith [sarea_cycle A B C, sarea_cycle B C A]
-  · -- (+,-,+): R = B, swap
-    rw [abs_of_nonneg hA] at aA; rw [abs_of_neg hB] at aB; rw [abs_of_nonneg hC] at aC
-    have := two_core (R := B) (S₁ := C) (S₂ := A) (P := Q) (Q := P) hs (by rw [sw]; linarith)
-      (by rw [sw]; linarith) (by rw [sw]; linarith) (by linarith) (by linarith)
-    linarith [sarea_cycle A B C, sarea_cycle B C A]
-  · -- (+,-,-): R = A
-    rw [abs_of_nonneg hA] at aA; rw [abs_of_neg hB] at aB; rw [abs_of_neg hC] at aC
-    exact two_core (R := A) (S₁ := B) (S₂ := C) (P := P) (Q := Q) hs (by linarith)
-      (by linarith) (by linarith) (by linarith) (by linarith)
-  · -- (-,+,+): R = A, swap
-    rw [abs_of_neg hA] at aA; rw [abs_of_nonneg hB] at aB; rw [abs_of_nonneg hC] at aC
-    exact two_core (R := A) (S₁ := B) (S₂ := C) (P := Q) (Q := P) hs (by rw [sw]; linarith)
-      (by rw [sw]; linarith) (by rw [sw]; linarith) (by linarith) (by linarith)
-  · -- (-,+,-): R = B
-    rw [abs_of_neg hA] at aA; rw [abs_of_nonneg hB] at aB; rw [abs_of_neg hC] at aC
-    have := two_core (R := B) (S₁ := C) (S₂ := A) (P := P) (Q := Q) hs (by linarith)
-      (by linarith) (by linarith) (by linarith) (by linarith)
-    linarith [sarea_cycle A B C, sarea_cycle B C A]
-  · -- (-,-,+): R = C
-    rw [abs_of_neg hA] at aA; rw [abs_of_neg hB] at aB; rw [abs_of_nonneg hC] at aC
-    have := two_core (R := C) (S₁ := A) (S₂ := B) (P := P) (Q := Q) hs (by linarith)
-      (by linarith) (by linarith) (by linarith) (by linarith)
-    linarith [sarea_cycle A B C, sarea_cycle B C A]
-  · -- (-,-,-): impossible
-    nlinarith [mul_pos (by linarith : (0:ℝ) < sarea B C P) (neg_pos.2 hA),
-      mul_pos (by linarith : (0:ℝ) < sarea C A P) (neg_pos.2 hB),
-      mul_pos (by linarith : (0:ℝ) < sarea A B P) (neg_pos.2 hC)]
-
-/-- Two points in one fan triangle `ABW` of an interior point `W`: `[ABC] ≥ (6 + 2√3)s`
-(the common step of lines 479–486 and 531–539), doubled form. -/
+/-- Two points in one fan triangle `ABW` of an interior point `W` of `ABC` force
+`[ABC] ≥ (6 + 2√3)s`, in doubled form (`s = 2t`). -/
 theorem fan_two {A B C W P Q : Point} {t : ℝ} (ht : 0 < t) (hW : InTriangle W A B C)
     (hP : InTriangle P A B W) (hQ : InTriangle Q A B W)
     (hmin : t ≤ minTriangleArea ![A, B, C, W, P, Q]) :
@@ -220,21 +101,6 @@ theorem fan_two {A B C W P Q : Point} {t : ℝ} (ht : 0 < t) (hW : InTriangle W 
   have h3 : 2 * t ≤ sarea C A W := ge_of_pos ht (area_of_le_min hmin 2 0 3) hW.2.2
   have e := sarea_add_sarea_add_sarea A B C W
   linarith
-
-/-- The two orientations: two points strictly inside `ABC` are inside with the same orientation. -/
-theorem inside_orient {X Y A B C : Point} (hX : InsideTriangle X A B C)
-    (hY : InsideTriangle Y A B C) :
-    (InTriangle X A B C ∧ InTriangle Y A B C) ∨ (InTriangle X A C B ∧ InTriangle Y A C B) := by
-  have sw : sarea A C B = -sarea A B C := sarea_swap₂₃ _ _ _
-  rcases hX with hX | hX <;> rcases hY with hY | hY
-  · exact Or.inl ⟨hX, hY⟩
-  · linarith [(inTri_pos hX), (inTri_pos hY)]
-  · linarith [(inTri_pos hX), (inTri_pos hY)]
-  · exact Or.inr ⟨hX, hY⟩
-
-theorem half_le {A B C : Point} {k t : ℝ} (h : k * (2 * t) ≤ sarea A B C) :
-    k * t ≤ triangleArea A B C := by
-  rw [triangleArea_eq]; linarith [le_abs_self (sarea A B C)]
 
 theorem sqrt3_gt : (1.7 : ℝ) < Real.sqrt 3 := by
   rw [Real.lt_sqrt (by norm_num)]; norm_num
@@ -254,10 +120,12 @@ theorem sqrt2_gt : (1.41 : ℝ) < Real.sqrt 2 := by
 theorem Gamma_le : (11 + 3 * Real.sqrt 5) / 2 ≤ 6 + 2 * Real.sqrt 3 := by
   linarith [sqrt3_gt, sqrt5_lt]
 
-/-! ### §8. The six-point theorem -/
+/-! ### The six-point theorem -/
 
-/-- The inequality behind (20): with all thirteen areas at least `s`, (18) and (19), the
-connectors satisfy `a + b + c ≥ 3φs` (`Z₀ ≥ 3(√5 - 1)/2`, lines 624–661). -/
+/-- The connector inequality of the seven-face mesh: if the thirteen areas are at least `s`
+and satisfy the edge identities `a = u_A + v_A - k` (and cyclically) and the product identities
+`xk = ab - u_A v_B` (and cyclically), then the connectors satisfy `a + b + c ≥ 3φs`,
+`φ = (1 + √5)/2`. -/
 theorem mesh_ineq {x y z a b c k uA uB uC vA vB vC s : ℝ} (hs : 0 < s) (hx : s ≤ x)
     (hy : s ≤ y) (hz : s ≤ z) (ha : s ≤ a) (hb : s ≤ b) (hc : s ≤ c) (hk : s ≤ k)
     (huA : s ≤ uA) (huB : s ≤ uB) (huC : s ≤ uC) (hvA : s ≤ vA) (hvB : s ≤ vB) (hvC : s ≤ vC)
@@ -287,8 +155,8 @@ theorem mesh_ineq {x y z a b c k uA uB uC vA vB vC s : ℝ} (hs : 0 < s) (hx : s
   have h2 : 0 < σ - (3 - 3 * Real.sqrt 5) / 2 * s := by nlinarith
   nlinarith [mul_neg_of_neg_of_pos h1 h2]
 
-/-- The labelled mesh (`Z ∈ int ABY`, `X ∈ int BCY`, counterclockwise `ABC`) gives the six-point
-bound, or two points share a fan triangle (lines 543–661). Doubled form. -/
+/-- The six-point bound for a labelled mesh (`Z ∈ int ABY`, `X ∈ int BCY`, counterclockwise
+`ABC`), in doubled form; when two points share a fan triangle, `fan_two` gives a stronger bound. -/
 theorem mesh_core {A B C X Y Z : Point} {t : ℝ} (ht : 0 < t) (hY : InTriangle Y A B C)
     (hZ : InTriangle Z A B Y) (hX : InTriangle X B C Y)
     (hmin : t ≤ minTriangleArea ![A, B, C, X, Y, Z]) :
@@ -428,28 +296,9 @@ theorem six_core {A B C X Y Z : Point} {t : ℝ} (ht : 0 < t) (hX : InTriangle X
         (by intro i; fin_cases i <;> simp))
     nlinarith
 
-/-- **Two-interior-point lemma** (`CORNER_FAMILIES:TwoInteriorPointLemma`), equation (13): a
-triangle `ABC` containing two points `P, Q` strictly inside, such that all triangles of the five
-points have area at least `t > 0`, has area at least `(4 + 2√3)t`.
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 421–472. (Proof: the identity of `two_core` replaces the
-manuscript's affine coordinates.) -/
-theorem twoInteriorPointLemma (A B C P Q : Point) (hP : InsideTriangle P A B C)
-    (hQ : InsideTriangle Q A B C) (t : ℝ) (ht : 0 < t)
-    (hmin : t ≤ minTriangleArea ![A, B, C, P, Q]) :
-    (4 + 2 * Real.sqrt 3) * t ≤ triangleArea A B C := by
-  rcases inside_orient hP hQ with ⟨hP, hQ⟩ | ⟨hP, hQ⟩
-  · exact half_le (two_ccw ht hP hQ hmin)
-  · rw [← triangleArea_swap₂₃]
-    exact half_le (two_ccw ht hP hQ (min_sub hmin ![A, C, B, P, Q] ![0, 2, 1, 3, 4] (by norm_num)
-      (by decide) (by intro i; fin_cases i <;> simp)))
-
-/-- **Six-point triangular-hull theorem** (`CORNER_FAMILIES:SixPointTriangularHullTheorem`),
-equation (14): six points whose convex hull is a triangle `ABC` (the other three strictly
-inside) and whose triangles all have area at least `t` satisfy
-`area(ABC) ≥ Γt`, `Γ = (11 + 3√5)/2`; the constant is sharp (`claim_Gamma_sharp`).
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 516–672.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, CORNER_FAMILIES:claim-nondistributed-bound -/
+/-- **Six-point triangular-hull theorem**: six points whose convex hull is a triangle `ABC`
+(the other three strictly inside) and whose triangles all have area at least `t` satisfy
+`area(ABC) ≥ Γt`, `Γ = (11 + 3√5)/2`. The constant is sharp (not formalized). -/
 theorem sixPointTriangularHullTheorem (A B C X Y Z : Point) (hX : InsideTriangle X A B C)
     (hY : InsideTriangle Y A B C) (hZ : InsideTriangle Z A B C) (t : ℝ)
     (hmin : t ≤ minTriangleArea ![A, B, C, X, Y, Z]) :

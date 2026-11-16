@@ -3,57 +3,50 @@ module
 public import Heilbronn.Nine.Corners.CornerFamilies.SixPoint
 public import Heilbronn.Nine.Corners.OppositeCorners
 
-/-! # Two points in the central part of a quadrilateral (`docs/proof/nine/ONE_CORNER_COMPLETION.md`)
+/-! # Two points in the central part of a quadrilateral
 
-**Role.** A component of the primary N6 and C1 routes. Theorems 1–3 and the general identities
-of §§1–2 are cited by the C1 notes (`C1_ZERO_LOWER`, `C1_ONE_LOWER_TOP_CAP`,
-`C1_ONE_LOWER_SIDE_CAP`, `C1_TWO_LOWER_SIDE_CAP`, `C1_TOP_CAP_RADIAL_SPLIT`,
-`C1_TOP_CAP_COMMON_CELL`, `C1_TWO_LOWER_COMPLETION`, `C1_MIXED_PENTAGON`) and by the six- and
-seven-boundary notes; they are therefore stated for an arbitrary convex quadrilateral and, for
-the identities, an arbitrary positive doubled threshold `σ`, *before* the normalization of the
-quadrilateral area (as the users cite them). §4 is a narrative index of the C1 two-lower
-completion; only its two concrete reductions are stated.
+Six points: the vertices `A, B, C, D` of a convex quadrilateral of area `S` and two points `P, Q`
+strictly inside both `ABC` and `ABD` (a central pair). The main results bound the minimum
+triangle area of the six points by `7S/64`:
 
-**Setting** (lines 13–92). `A, B, C, D` are the cyclic vertices of a convex quadrilateral
+* `minTriangleArea_lt_of_centralPair_separates`: if the line `PQ` separates `A` and `B`, the minimum area is below `7S/64`;
+* `minTriangleArea_lt_of_centralPair`: the same without the separation hypothesis; `minTriangleArea_lt_of_centralPair_of_le_half`: below `7/128`
+  when `S ≤ 1/2`;
+* `isolates_of_mixed_pair`: for a mixed pair (`P, Q` inside `ABC`, `P` inside `BCD`, `Q` inside `ABD`) with
+  minimum area at least `7S/64`, the line `PQ` isolates `B` from `A, C, D`.
+
+The general identities `sarea_C_pos_of_sarea_D_pos`, `three_mul_le_max_of_middle_signs`, `discr_of_isolates_A`, `discr_of_isolates_B`, `discr_of_same_side`, `central_height_bound` hold
+for an arbitrary convex quadrilateral and an arbitrary positive doubled threshold `σ`, without
+normalizing the area of the quadrilateral. The last section applies the theorems to the upper
+quadrilateral `HCDF` of a C1 configuration (`pentagon_no_central_pair`,
+`pentagon_mixed_isolates`); the other placements of an upper pair of a C1 configuration
+are excluded by `OneCorner.pentagon_diagonals_not_both_separate` and
+`OneCorner.pentagon_not_both_inside_HDF_CDF`.
+
+**Setting.** `A, B, C, D` are the cyclic vertices of a convex quadrilateral
 (`IsConvexQuad`, either orientation) of area `S = quadArea A B C D`; `quadConfig A B C D P Q`
 is the six points. With doubled areas `a = 2[ABD]` (`areaA`), `b = 2[ABC]` (`areaB`),
 `W = 2S` (`areaW`) and the overlap `J = a + b - W` (`overlapJ`), the canonical half-square
-coordinates (4) are `A = (0,0)`, `B = (1,1)`, `D = (0,h)`, `C = (f,1)` with `h = J/b`,
+coordinates are `A = (0,0)`, `B = (1,1)`, `D = (0,h)`, `C = (f,1)` with `h = J/b`,
 `β = 1 - f = J/a`, reached by an affine map multiplying doubled areas by `J/(ab) = 1/T`
-(`T = ab/J`); this is the `OPPOSITE_CORNERS.md` frame with `(A, E, H, F) = (A, B, D, C)`, in
-which the central cell `ABC ∩ ABD` is cell II. The manuscript normalizes `W = 1` and `s = 7/64`.
+(`T = ab/J`); this is the frame of `OppositeCorners` with `(A, E, H, F) = (A, B, D, C)`, in
+which the central cell `ABC ∩ ABD` is cell II.
 
 "Every doubled area of the six points is at least `σ`" is `σ / 2 ≤ minTriangleArea (quadConfig …)`.
 `d_V = sarea P Q V` is the pair-line sign of `V`; `Isolates P Q V V₁ V₂ V₃` says the line `PQ`
 puts `V` on one side and `V₁, V₂, V₃` strictly on the other.
 
-**Results.**
+The general identities need the canonical frame, i.e. `J > 0`, which they take as a hypothesis;
+`minTriangleArea_lt_of_centralPair_separates`, `minTriangleArea_lt_of_centralPair` and `isolates_of_mixed_pair` derive it from their thresholds.
 
-* `theorem1`, `theorem1_of_le_half` (Theorem 1), `theorem2`, `theorem2_of_le_half` (Theorem 2),
-  `theorem3` (Theorem 3);
-* the general identities (`ONE_CORNER_COMPLETION:claim-general-identities`):
-  `claim_canonical_frame` (4), `claim_sign_list` (5), `claim_middle_case`, `eq6`, `eq6_B`,
-  `eq9`, `eq10`;
-* §4: `claim_pentagon_reduction`, `claim_pentagon_reduction_mixed`.
-
-**Implicit in the manuscript.** The general identities need the canonical frame, i.e. `J > 0`
-(Theorems 1–3 derive it from their thresholds; the downstream users check it, e.g.
-`C1_TOP_CAP_COMMON_CELL` "canonical overlap"); it is a hypothesis here.
-
-**Citation gap in §4** (inventory 02): lines 467–472 credit "the quadrilateral theorems" with
-reducing the pentagonal branch to the mixed placements; Theorems 2–3 exclude only same-sector
-pairs, and the opposite-sector pairs and the pairs inside `CDF` or `HDF` are excluded by
-`ONE_CORNER.md` §§7–8 (`OneCorner.claim_pentagon_opposite_quadrants`,
-`OneCorner.claim_pentagon_HDF_CDF`). Only the two concrete reductions of §4 are stated here.
-
-**Proof organization.** The canonical frame (4) is the explicit map `frameMap A B C D`
+**Implementation notes.** The canonical frame is the explicit map `frameMap A B C D`
 (`X ↦ ([AXD]/[ABD], [AXD]/[ABD] + h[ABX]/[ABD])`, orientation-free, determinant `h/[ABD]`); it sends
 the six points to `halfSquareConfig h f`, a central point to cell II, and multiplies the minimum
 area by `t = J/(ab)` (`frame_min`). The general identities are proved for a counterclockwise
-quadrilateral (`*_ccw`) by applying the `OPPOSITE_CORNERS.md` lemmas in the frame, and transported to
-the clockwise case by the reflection `(x, y) ↦ (y, x)` (with `P, Q` swapped). Theorems 1–2 use
-only the general identities; Theorem 3 uses the frame of `(B, A, D, C)` (negative determinant).
-The bounds `a, b ≥ (4 + 2√3)σ` come from `CornerFamilies.twoInteriorPointLemma`.
+quadrilateral (`*_ccw`) by applying the `OppositeCorners` lemmas in the frame, and transported to
+the clockwise case by the reflection `(x, y) ↦ (y, x)` (with `P, Q` swapped). `minTriangleArea_lt_of_centralPair_separates` and
+`minTriangleArea_lt_of_centralPair` use only the general identities; `isolates_of_mixed_pair` uses the frame of `(B, A, D, C)` (negative
+determinant). The bounds `a, b ≥ (4 + 2√3)σ` come from `twoInteriorPointLemma`.
 -/
 
 @[expose] public section
@@ -61,7 +54,7 @@ The bounds `a, b ≥ (4 + 2√3)σ` come from `CornerFamilies.twoInteriorPointLe
 noncomputable section
 namespace Heilbronn.Nine.OneCornerCompletion
 
-open Heilbronn.Nine.CornerFamilies (InsideTriangle ConvexQuad)
+open Heilbronn.Nine.CornerFamilies (ConvexQuad)
 open Heilbronn.Nine.OppositeCorners (halfSquare halfSquareConfig lineL lineK lineN CellI CellII swapPt)
 
 /-- `A, B, C, D` are the cyclic vertices of a convex quadrilateral, in either orientation. -/
@@ -121,7 +114,7 @@ def frameH (A B C D : Point) : ℝ := (sarea A B D - sarea A C D) / sarea A B C
 /-- The parameter `f` of the canonical frame, `2[ACD] / 2[ABD]` (signed). -/
 def frameF (A B C D : Point) : ℝ := sarea A C D / sarea A B D
 
-/-- The canonical affine frame (4): `A ↦ (0,0)`, `B ↦ (1,1)`, `D ↦ (0,h)`, `C ↦ (f,1)`. -/
+/-- The canonical affine frame: `A ↦ (0,0)`, `B ↦ (1,1)`, `D ↦ (0,h)`, `C ↦ (f,1)`. -/
 def frameMap (A B C D : Point) (X : Point) : Point :=
   (sarea A X D / sarea A B D,
     sarea A X D / sarea A B D + frameH A B C D * (sarea A B X / sarea A B D))
@@ -476,13 +469,13 @@ theorem two_inside_bound {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ)
   · intro hP hQ
     have hm : σ / 2 ≤ minTriangleArea ![A, B, D, P, Q] :=
       hmin.trans (OppositeCorners.min_sub (quadConfig A B C D P Q) 0 1 3 4 5 (by decide))
-    have := CornerFamilies.twoInteriorPointLemma A B D P Q hP hQ (σ / 2) (by positivity) hm
+    have := twoInteriorPointLemma A B D P Q hP hQ (σ / 2) (by positivity) hm
     rw [triangleArea_eq] at this
     simp only [areaA]; linarith
   · intro hP hQ
     have hm : σ / 2 ≤ minTriangleArea ![A, B, C, P, Q] :=
       hmin.trans (OppositeCorners.min_sub (quadConfig A B C D P Q) 0 1 2 4 5 (by decide))
-    have := CornerFamilies.twoInteriorPointLemma A B C P Q hP hQ (σ / 2) (by positivity) hm
+    have := twoInteriorPointLemma A B C P Q hP hQ (σ / 2) (by positivity) hm
     rw [triangleArea_eq] at this
     simp only [areaB]; linarith
 
@@ -554,8 +547,9 @@ theorem middle_case_ccw {A B C D P Q : Point} {σ : ℝ} (hq : ConvexQuad A B C 
   have := le_of_mul_le_mul_left this hb
   linarith
 
-/-- (6) in the counterclockwise case with `d_B, d_D > 0`, from (24)–(25) in the canonical frame. -/
-theorem eq6_ccw {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ) (hq : ConvexQuad A B C D)
+/-- `discr_of_isolates_A` in the counterclockwise case with `d_B, d_D > 0`, from `OppositeCorners.cellII_bounds_of_dH_dE_pos` in the
+canonical frame. -/
+theorem discr_of_isolates_A_ccw {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ) (hq : ConvexQuad A B C D)
     (hP1 : InTriangle P A B C) (hP2 : InTriangle P A B D) (hQ1 : InTriangle Q A B C)
     (hQ2 : InTriangle Q A B D) (hmin : σ / 2 ≤ minTriangleArea (quadConfig A B C D P Q))
     (hJ : sarea A C D < sarea A B D) (hB : 0 < sarea P Q B) (hD : 0 < sarea P Q D) :
@@ -576,7 +570,7 @@ theorem eq6_ccw {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ) (hq : ConvexQuad
   have hm' : t * σ / 2 ≤ minTriangleArea (halfSquareConfig (frameH A B C D) (frameF A B C D)
       (frameMap A B C D P) (frameMap A B C D Q)) := by
     rw [hm, abs_of_pos k0]; have := mul_le_mul_of_nonneg_left hmin k0.le; linarith
-  obtain ⟨-, r1, r2⟩ := OppositeCorners.eq24_25 _ _ _ h0 h1 f0 f1 (mul_pos k0 hσ) _ _ PT QT hm'
+  obtain ⟨-, r1, r2⟩ := OppositeCorners.cellII_bounds_of_dH_dE_pos _ _ _ h0 h1 f0 f1 (mul_pos k0 hσ) _ _ PT QT hm'
     PII dE dH
   rw [eβ, eh] at r1 r2
   rw [ec]
@@ -597,16 +591,13 @@ theorem eq6_ccw {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ) (hq : ConvexQuad
         t ^ 4 * (a * b - σ * ((b + (a - t * a * b)) + a)) ^ 2 := by linarith
     exact le_of_mul_le_mul_left this ht4
 
-/-! ### The general identities of §§1–2 -/
+/-! ### The general identities -/
 
 set_option linter.unusedVariables false in
-/-- **Claim** (`ONE_CORNER_COMPLETION:claim-general-identities`), the sign list (5) at any
-threshold: for a central pair in general position (`J > 0`), orienting `PQ` so that
-`d_A < 0 < d_B`, `d_D > 0` forces `d_C > 0`; so `(d_D, d_C)` is `(+,+)`, `(-,+)` or `(-,-)`.
-`docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 94–127.
-
-Uses: OPPOSITE_CORNERS:claim-II-II-opposite-sign (23) -/
-theorem claim_sign_list (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
+/-- The sign list, at any threshold: for a central pair in general position (`J > 0`),
+orienting `PQ` so that `d_A < 0 < d_B`, `d_D > 0` forces `d_C > 0`; so `(d_D, d_C)` is `(+,+)`,
+`(-,+)` or `(-,-)`. -/
+theorem sarea_C_pos_of_sarea_D_pos (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
     (hc : CentralPair A B C D P Q) (hgp : 0 < minTriangleArea (quadConfig A B C D P Q))
     (hJ : 0 < overlapJ A B C D) (hA : sarea P Q A < 0) (hB : 0 < sarea P Q B)
     (hD : 0 < sarea P Q D) : 0 < sarea P Q C := by
@@ -621,11 +612,9 @@ theorem claim_sign_list (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
     rwa [sarea_swapPt_swap] at this
 
 set_option linter.unusedVariables false in
-/-- **Claim** (`ONE_CORNER_COMPLETION:claim-general-identities`), the middle case at any
-threshold `σ > 0`: if `d_A < 0 < d_B` and `d_D < 0 < d_C`, then `P` is strictly inside `DCQ`, so
-`3σ ≤ 2[DCQ] ≤ max(2[DCA], 2[DCB]) = max(W - b, W - a)`.
-`docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 129–147. -/
-theorem claim_middle_case (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ)
+/-- The middle case, at any threshold `σ > 0`: if `d_A < 0 < d_B` and `d_D < 0 < d_C`, then `P`
+is strictly inside `DCQ`, so `3σ ≤ 2[DCQ] ≤ max(2[DCA], 2[DCB]) = max(W - b, W - a)`. -/
+theorem three_mul_le_max_of_middle_signs (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ)
     (hq : IsConvexQuad A B C D) (hc : CentralPair A B C D P Q)
     (hmin : σ / 2 ≤ minTriangleArea (quadConfig A B C D P Q))
     (hA : sarea P Q A < 0) (hB : 0 < sarea P Q B) (hD : sarea P Q D < 0) (hC : 0 < sarea P Q C) :
@@ -655,14 +644,9 @@ theorem claim_middle_case (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ)
         sarea (swapPt A) (swapPt B) (swapPt D) = sarea (swapPt B) (swapPt C) (swapPt D) by linarith]
     exact this
 
-/-- **Claim** (`ONE_CORNER_COMPLETION:claim-general-identities`), equation (6) before the
-normalization `W = 1` (as used by `C1_TOP_CAP_RADIAL_SPLIT` (2), `C1_ONE_LOWER_SIDE_CAP`):
-for a central pair whose line isolates `A`, at any threshold `σ > 0` with `J > 0`,
-`ab - σ(W + a) > 0` and `[ab - σ(W + a)]² ≥ 4σWab`.
-`docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 149–172.
-
-Uses: OPPOSITE_CORNERS:claim-II-II-opposite-sign (24)–(25) -/
-theorem eq6 (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A B C D)
+/-- For a central pair whose line isolates `A`, at any threshold `σ > 0` with `J > 0`:
+`ab - σ(W + a) > 0` and `[ab - σ(W + a)]² ≥ 4σWab`. -/
+theorem discr_of_isolates_A (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A B C D)
     (hc : CentralPair A B C D P Q) (hmin : σ / 2 ≤ minTriangleArea (quadConfig A B C D P Q))
     (hJ : 0 < overlapJ A B C D) (hiso : Isolates P Q A B C D) :
     0 < areaA A B C D * areaB A B C D - σ * (areaW A B C D + areaA A B C D) ∧
@@ -699,37 +683,33 @@ theorem eq6 (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A
       by_contra hc'; push Not at hc'; nlinarith [mul_nonneg_of_nonpos_of_nonpos dA.le hc']
     have dD : 0 < sarea P Q D := by
       by_contra hc'; push Not at hc'; nlinarith [mul_nonneg_of_nonpos_of_nonpos dA.le hc']
-    exact eq6_ccw hσ hq hP1' hP2' hQ1' hQ2' hmin hJ' dB dD
+    exact discr_of_isolates_A_ccw hσ hq hP1' hP2' hQ1' hQ2' hmin hJ' dB dD
   · have dB : sarea P Q B < 0 := by
       by_contra hc'; push Not at hc'; nlinarith [mul_nonneg dA.le hc']
     have dD : sarea P Q D < 0 := by
       by_contra hc'; push Not at hc'; nlinarith [mul_nonneg dA.le hc']
-    exact eq6_ccw hσ hq hQ1' hQ2' hP1' hP2' (by rw [min_quadConfig_swap]; exact hmin) hJ'
+    exact discr_of_isolates_A_ccw hσ hq hQ1' hQ2' hP1' hP2' (by rw [min_quadConfig_swap]; exact hmin) hJ'
       (by rw [sarea_swap₁₂]; linarith) (by rw [sarea_swap₁₂]; linarith)
 
-/-- **Claim** (`ONE_CORNER_COMPLETION:claim-general-identities`), equation (6) with `a, b`
-interchanged (the case `(d_D, d_C) = (-,-)`): if the line of the central pair isolates `B`,
-`ab - σ(W + b) > 0` and `[ab - σ(W + b)]² ≥ 4σWab`.
-`docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 168–172.
-
-Uses: OPPOSITE_CORNERS:claim-II-II-opposite-sign (24)–(25) -/
-theorem eq6_B (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A B C D)
+/-- `discr_of_isolates_A` with `a, b` interchanged (the case `(d_D, d_C) = (-,-)`): if the line of the central
+pair isolates `B`, `ab - σ(W + b) > 0` and `[ab - σ(W + b)]² ≥ 4σWab`. -/
+theorem discr_of_isolates_B (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A B C D)
     (hc : CentralPair A B C D P Q) (hmin : σ / 2 ≤ minTriangleArea (quadConfig A B C D P Q))
     (hJ : 0 < overlapJ A B C D) (hiso : Isolates P Q B A C D) :
     0 < areaA A B C D * areaB A B C D - σ * (areaW A B C D + areaB A B C D) ∧
       4 * σ * areaW A B C D * (areaA A B C D * areaB A B C D) ≤
         (areaA A B C D * areaB A B C D - σ * (areaW A B C D + areaB A B C D)) ^ 2 := by
   obtain ⟨e1, e2, e3, -, e5⟩ := areas_relabel A B C D
-  have := eq6 B A D C P Q σ hσ (convexQuad_relabel hq) (centralPair_relabel.2 hc)
+  have := discr_of_isolates_A B A D C P Q σ hσ (convexQuad_relabel hq) (centralPair_relabel.2 hc)
     (by rw [min_quadConfig_relabel]; exact hmin) (by rw [e5]; exact hJ)
     ⟨hiso.1, hiso.2.2, hiso.2.1⟩
   rw [e1, e2, e3, mul_comm (areaB A B C D)] at this
   exact this
 
-/-- The normalized form of the contradiction (7): with `s = 7/64`, `x, y ≤ 1 - s`, a positive
+/-- The contradiction to `discr_of_isolates_A` in normalized form: with `s = 7/64`, `x, y ≤ 1 - s`, a positive
 bracket `xy - s(1 + x)` and `(xy - s(1 + x))² ≥ 4sxy` are incompatible (root monotonicity in `y`,
 then in `x`). -/
-theorem eq7_norm (x y : ℝ) (hx0 : 0 ≤ x) (hy : y ≤ 57 / 64)
+theorem discr_of_isolates_false_normalized (x y : ℝ) (hx0 : 0 ≤ x) (hy : y ≤ 57 / 64)
     (hpos : 0 < x * y - 7 / 64 * (1 + x))
     (hsq : 4 * (7 / 64) * (x * y) ≤ (x * y - 7 / 64 * (1 + x)) ^ 2) (hx : x ≤ 57 / 64) :
     False := by
@@ -756,9 +736,9 @@ theorem eq7_norm (x y : ℝ) (hx0 : 0 ≤ x) (hy : y ≤ 57 / 64)
       4 * (7 / 64) * (57 / 64 * (57 / 64)) = -13151 / 4194304 := by norm_num
   linarith
 
-/-- (7) in homogeneous form: at `σ = 7W/64`, `a, b ≤ W - σ`, the bracket `ab - σ(W + a)` positive
-and `[ab - σ(W + a)]² ≥ 4σWab` are incompatible. -/
-theorem eq7_contra {a b W : ℝ} (hW : 0 < W) (ha0 : 0 ≤ a) (ha : a ≤ W - 7 / 64 * W)
+/-- The contradiction to `discr_of_isolates_A` in homogeneous form: at `σ = 7W/64`, `a, b ≤ W - σ`, the bracket
+`ab - σ(W + a)` positive and `[ab - σ(W + a)]² ≥ 4σWab` are incompatible. -/
+theorem discr_of_isolates_false {a b W : ℝ} (hW : 0 < W) (ha0 : 0 ≤ a) (ha : a ≤ W - 7 / 64 * W)
     (hb : b ≤ W - 7 / 64 * W) (hpos : 0 < a * b - 7 / 64 * W * (W + a))
     (hsq : 4 * (7 / 64 * W) * W * (a * b) ≤ (a * b - 7 / 64 * W * (W + a)) ^ 2) : False := by
   obtain ⟨x, rfl⟩ : ∃ x, a = x * W := ⟨a / W, by field_simp⟩
@@ -772,14 +752,15 @@ theorem eq7_contra {a b W : ℝ} (hW : 0 < W) (ha0 : 0 ≤ a) (ha : a ≤ W - 7 
       W ^ 4 * (x * y - 7 / 64 * (1 + x)) ^ 2 := by ring
   rw [e1] at hpos
   rw [e2, e3] at hsq
-  refine eq7_norm x y (nonneg_of_mul_nonneg_left (by linarith) hW) ?_
+  refine discr_of_isolates_false_normalized x y (nonneg_of_mul_nonneg_left (by linarith) hW) ?_
     (pos_of_mul_pos_right hpos hW2.le) (le_of_mul_le_mul_left hsq hW4) ?_
   · nlinarith
   · nlinarith
 
-/-- The normalized numerical part of Theorem 2: (9), the height bound (10), `b ≤ a ≤ 1 - s`,
-`v > s` are incompatible at `s = 7/64` (the two rational intervals (11)–(13)). -/
-theorem thm2_norm (x y z : ℝ) (hyx : y ≤ x) (hx : x ≤ 57 / 64) (hy0 : 0 < y) (hy1 : y < 1)
+/-- The normalized numerical part of `minTriangleArea_lt_of_centralPair`: the inequality of `discr_of_same_side`, the height bound of
+`central_height_bound`, `b ≤ a ≤ 1 - s` and `v > s` are incompatible at `s = 7/64` (two cases, `b ≤ 17/20` and
+`b > 17/20`). -/
+theorem same_side_bounds_false_normalized (x y z : ℝ) (hyx : y ≤ x) (hx : x ≤ 57 / 64) (hy0 : 0 < y) (hy1 : y < 1)
     (hz : 7 / 64 < z) (hF : 0 ≤ x * y * (z - 7 / 64) - 7 / 64 * z * (x + y) - z ^ 2)
     (h10 : z * (1 - y) ≤ y * (1 - y) - 7 / 64 * x) : False := by
   have hx0 : 0 < x := by linarith
@@ -809,8 +790,9 @@ theorem abs_sarea_swapPt (p q r : Point) :
     |sarea (swapPt p) (swapPt q) (swapPt r)| = |sarea p q r| := by
   rw [sarea_swapPt, abs_neg]
 
-/-- (9) in the counterclockwise case with `d_A, d_B < 0`, from (21) in the canonical frame. -/
-theorem eq9_ccw {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ) (hq : ConvexQuad A B C D)
+/-- `discr_of_same_side` in the counterclockwise case with `d_A, d_B < 0`, from `OppositeCorners.pair_II_II_min_height_bound` in
+the canonical frame. -/
+theorem height_poly_nonneg_ccw {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ) (hq : ConvexQuad A B C D)
     (hP1 : InTriangle P A B C) (hP2 : InTriangle P A B D) (hQ1 : InTriangle Q A B C)
     (hQ2 : InTriangle Q A B D) (hmin : σ / 2 ≤ minTriangleArea (quadConfig A B C D P Q))
     (hJ : sarea A C D < sarea A B D) (hA : sarea P Q A < 0) (hB : sarea P Q B < 0) :
@@ -834,7 +816,7 @@ theorem eq9_ccw {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ) (hq : ConvexQuad
       (frameMap A B C D P) (frameMap A B C D Q)) := by
     rw [hm, abs_of_pos k0]; have := mul_le_mul_of_nonneg_left hmin k0.le; linarith
   obtain ⟨-, core⟩ :=
-    OppositeCorners.eq21_core _ _ _ h0 h1 f0 f1 (mul_pos k0 hσ) _ _ PT QT hm' PII QII dA' dE'
+    OppositeCorners.pair_II_II_min_height_bound _ _ _ h0 h1 f0 f1 (mul_pos k0 hσ) _ _ PT QT hm' PII QII dA' dE'
   rw [vP, vQ, ← mul_min_of_nonneg _ _ k0.le] at core
   rw [eβ, eh] at core
   rw [ec]
@@ -848,20 +830,20 @@ theorem eq9_ccw {A B C D P Q : Point} {σ : ℝ} (hσ : 0 < σ) (hq : ConvexQuad
     rw [key]; linarith
   exact (mul_nonneg_iff_of_pos_left (by positivity)).1 this
 
-/-- The height bound behind (10), in the frame of `OPPOSITE_CORNERS.md`: a point with
+/-- The height bound behind `central_height_bound`, in the frame of `OppositeCorners`: a point with
 `-L, -N ≥ σ` and `h ≥ β` has `f(β - w) ≥ σ`. -/
 theorem height_bound_frame {h f σ : ℝ} {X : Point} (hh : 0 < h) (hβ : 0 ≤ 1 - f)
     (hβh : 1 - f ≤ h) (hL : σ ≤ -lineL f X) (hN : σ ≤ -lineN h f X) :
     σ ≤ f * ((1 - f) - (X.2 - X.1)) := by
-  rw [(OppositeCorners.eq4 h f X).1] at hL
-  rw [(OppositeCorners.eq4 h f X).2.2] at hN
+  rw [(OppositeCorners.lineL_lineK_lineN_eq h f X).1] at hL
+  rw [(OppositeCorners.lineL_lineK_lineN_eq h f X).2.2] at hN
   have k1 := mul_le_mul_of_nonneg_left hN hβ
   have k2 := mul_le_mul_of_nonneg_left hL (by linarith : (0 : ℝ) ≤ h - (1 - f))
   have : h * σ ≤ h * (f * ((1 - f) - (X.2 - X.1))) := by linarith
   exact le_of_mul_le_mul_left this hh
 
-/-- (10) in the counterclockwise case. -/
-theorem eq10_ccw {A B C D P Q : Point} {σ : ℝ} (hq : ConvexQuad A B C D)
+/-- `central_height_bound` in the counterclockwise case. -/
+theorem central_height_bound_ccw {A B C D P Q : Point} {σ : ℝ} (hq : ConvexQuad A B C D)
     (hP1 : InTriangle P A B C) (hP2 : InTriangle P A B D) (hQ1 : InTriangle Q A B C)
     (hQ2 : InTriangle Q A B D) (hmin : σ / 2 ≤ minTriangleArea (quadConfig A B C D P Q))
     (hJ : sarea A C D < sarea A B D) (hab : sarea A B C ≤ sarea A B D) :
@@ -904,8 +886,9 @@ theorem eq10_ccw {A B C D P Q : Point} {σ : ℝ} (hq : ConvexQuad A B C D)
       vP,
     one Q QII (OppositeCorners.abs_sarea_ge hm' 0 3 5) (OppositeCorners.abs_sarea_ge hm' 2 3 5) vQ⟩
 
-/-- The algebraic consequences of (9). -/
-theorem eq9_tail {a b W σ v : ℝ} (ha : 0 < a) (hb : 0 < b) (hW : 0 < W) (hσ : 0 < σ)
+/-- The algebraic consequences of the inequality of `discr_of_same_side`: `ab(v - σ) - σv(a + b) - Wv² ≥ 0`
+gives `v > σ`, `ab - σ(a + b) > 0` and `[ab - σ(a + b)]² ≥ 4σWab`. -/
+theorem discr_of_height_poly {a b W σ v : ℝ} (ha : 0 < a) (hb : 0 < b) (hW : 0 < W) (hσ : 0 < σ)
     (hv : 0 < v) (hF : 0 ≤ a * b * (v - σ) - σ * v * (a + b) - W * v ^ 2) :
     σ < v ∧ 0 < a * b - σ * (a + b) ∧ 4 * σ * W * (a * b) ≤ (a * b - σ * (a + b)) ^ 2 := by
   have hab := mul_pos ha hb
@@ -919,17 +902,12 @@ theorem eq9_tail {a b W σ v : ℝ} (ha : 0 < a) (hb : 0 < b) (hW : 0 < W) (hσ 
   refine ⟨h1, h2, ?_⟩
   nlinarith [sq_nonneg (a * b - σ * (a + b) - 2 * W * v), mul_nonneg hW.le hF]
 
-/-! ### §1. Theorem 1 -/
+/-! ### Central pairs separating `A` and `B` -/
 
-/-- **Theorem 1** (`ONE_CORNER_COMPLETION:Theorem1`): for a convex quadrilateral `ABCD` of area
-`S > 0` and two points `P, Q` strictly inside both `ABC` and `ABD` such that the line `PQ`
-separates `A` and `B`, the six points have minimum triangle area strictly less than `7S/64`.
-`docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 25–209.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, OPPOSITE_CORNERS:claim-II-II-opposite-sign (23),
-OPPOSITE_CORNERS:claim-pair-I-II (15)–(16), OPPOSITE_CORNERS:claim-weighted-identity,
-OPPOSITE_CORNERS:claim-II-II-opposite-sign (24)–(25) -/
-theorem theorem1 (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
+/-- For a convex quadrilateral `ABCD` of area `S > 0` and two points `P, Q` strictly inside both
+`ABC` and `ABD` such that the line `PQ` separates `A` and `B`, the six points have minimum
+triangle area strictly less than `7S/64`. -/
+theorem minTriangleArea_lt_of_centralPair_separates (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
     (hc : CentralPair A B C D P Q) (hsep : sarea P Q A * sarea P Q B < 0) :
     minTriangleArea (quadConfig A B C D P Q) < 7 / 64 * quadArea A B C D := by
   by_contra hcon; push Not at hcon
@@ -959,21 +937,21 @@ theorem theorem1 (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
     rcases lt_or_gt_of_ne (OppositeCorners.ne_zero_of_abs_ge hσ aD) with dD | dD
     · rcases lt_or_gt_of_ne (OppositeCorners.ne_zero_of_abs_ge hσ aC) with dC | dC
       · -- `(-,-)`: the line isolates `B`
-        obtain ⟨r1, r2⟩ := eq6_B A B C D P Q _ hσ hq hc hmin hJ
+        obtain ⟨r1, r2⟩ := discr_of_isolates_B A B C D P Q _ hσ hq hc hmin hJ
           ⟨mul_neg_of_pos_of_neg dB dA, mul_neg_of_pos_of_neg dB dC,
             mul_neg_of_pos_of_neg dB dD⟩
         rw [mul_comm (areaA A B C D)] at r1 r2
-        exact eq7_contra hW pb.le (by linarith) (by linarith) r1 r2
+        exact discr_of_isolates_false hW pb.le (by linarith) (by linarith) r1 r2
       · -- the middle case
-        have := claim_middle_case A B C D P Q _ hσ hq hc hmin dA dB dD dC
+        have := three_mul_le_max_of_middle_signs A B C D P Q _ hσ hq hc hmin dA dB dD dC
         rcases le_total (areaW A B C D - areaB A B C D) (areaW A B C D - areaA A B C D) with
           h | h
         · rw [max_eq_right h] at this; linarith
         · rw [max_eq_left h] at this; linarith
-    · have dC := claim_sign_list A B C D P Q hq hc hgp hJ dA dB dD
-      obtain ⟨r1, r2⟩ := eq6 A B C D P Q _ hσ hq hc hmin hJ
+    · have dC := sarea_C_pos_of_sarea_D_pos A B C D P Q hq hc hgp hJ dA dB dD
+      obtain ⟨r1, r2⟩ := discr_of_isolates_A A B C D P Q _ hσ hq hc hmin hJ
         ⟨mul_neg_of_neg_of_pos dA dB, mul_neg_of_neg_of_pos dA dC, mul_neg_of_neg_of_pos dA dD⟩
-      exact eq7_contra hW pa.le (by linarith) (by linarith) r1 r2
+      exact discr_of_isolates_false hW pa.le (by linarith) (by linarith) r1 r2
   rcases lt_or_gt_of_ne (show sarea P Q A ≠ 0 by
     intro h0; rw [h0, zero_mul] at hsep; exact lt_irrefl 0 hsep) with dA | dA
   · exact core P Q hc hmin dA (by nlinarith)
@@ -981,18 +959,13 @@ theorem theorem1 (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
     · rw [sarea_swap₁₂]; linarith
     · rw [sarea_swap₁₂]; nlinarith
 
-/-! ### §2. Theorem 2 -/
+/-! ### Central pairs -/
 
-/-- **Claim** (`ONE_CORNER_COMPLETION:claim-general-identities`), equation (9) before the
-normalization `W = 1` (as used by `SIX_BOUNDARY_HULL` line 740, `SEVEN_BOUNDARY_RIGHT_PAIR` (12)):
-for a central pair whose line keeps `A, B` on the same side, at any threshold `σ > 0` with
+/-- For a central pair whose line keeps `A, B` on the same side, at any threshold `σ > 0` with
 `J > 0`, the smaller doubled height `v = min(2[ABP], 2[ABQ])` satisfies
 `F = ab(v - σ) - σv(a + b) - Wv² ≥ 0`; hence `v > σ`, and maximizing in `v`,
-`ab - σ(a + b) > 0` and `[ab - σ(a + b)]² ≥ 4σWab`.
-`docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 227–257.
-
-Uses: OPPOSITE_CORNERS:claim-II-II-same-sign (21)–(22) -/
-theorem eq9 (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A B C D)
+`ab - σ(a + b) > 0` and `[ab - σ(a + b)]² ≥ 4σWab`. -/
+theorem discr_of_same_side (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A B C D)
     (hc : CentralPair A B C D P Q) (hmin : σ / 2 ≤ minTriangleArea (quadConfig A B C D P Q))
     (hJ : 0 < overlapJ A B C D) (hsame : 0 < sarea P Q A * sarea P Q B) :
     let a := areaA A B C D
@@ -1032,11 +1005,11 @@ theorem eq9 (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A
       intro h0; rw [h0, zero_mul] at hsame; exact lt_irrefl 0 hsame) with dA | dA
     · have dB : sarea P Q B < 0 := by
         by_contra h; push Not at h; nlinarith [mul_nonpos_iff.2 (Or.inr ⟨dA.le, h⟩)]
-      have := eq9_ccw hσ hq hP1' hP2' hQ1' hQ2' hmin hJ' dA dB
+      have := height_poly_nonneg_ccw hσ hq hP1' hP2' hQ1' hQ2' hmin hJ' dA dB
       linarith
     · have dB : 0 < sarea P Q B := by
         by_contra h; push Not at h; nlinarith [mul_nonpos_iff.2 (Or.inl ⟨dA.le, h⟩)]
-      have := eq9_ccw hσ hq hQ1' hQ2' hP1' hP2' (by rw [min_quadConfig_swap]; exact hmin) hJ'
+      have := height_poly_nonneg_ccw hσ hq hQ1' hQ2' hP1' hP2' (by rw [min_quadConfig_swap]; exact hmin) hJ'
         (by rw [sarea_swap₁₂]; linarith) (by rw [sarea_swap₁₂]; linarith)
       rw [min_comm] at this
       linarith
@@ -1046,15 +1019,13 @@ theorem eq9 (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A
     have h1 : σ ≤ |sarea A B P| := OppositeCorners.abs_sarea_ge hmin 0 1 4
     have h2 : σ ≤ |sarea A B Q| := OppositeCorners.abs_sarea_ge hmin 0 1 5
     exact lt_min (by linarith) (by linarith)
-  exact ⟨hF, eq9_tail pa pb hW hσ hv hF⟩
+  exact ⟨hF, discr_of_height_poly pa pb hW hσ hv hF⟩
 
 set_option linter.unusedVariables false in
-/-- **Claim** (`ONE_CORNER_COMPLETION:claim-general-identities`), the opposite-edge height bound
-(10) before the normalization `W = 1`: for a central pair with `a ≥ b`, at any threshold
-`σ > 0` with `J > 0`, each point `X ∈ {P, Q}` has `2[ABX] ≤ b - σa/(W - b)`
-(normalized: `v ≤ b - sa/(1 - b) ≤ V(b) = b - sb/(1 - b)`).
-`docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 259–291. -/
-theorem eq10 (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A B C D)
+/-- The opposite-edge height bound: for a central pair with `a ≥ b`, at any threshold `σ > 0`
+with `J > 0`, each point `X ∈ {P, Q}` has `2[ABX] ≤ b - σa/(W - b)` (for `W = 1`:
+`2[ABX] ≤ b - σa/(1 - b) ≤ b - σb/(1 - b)`). -/
+theorem central_height_bound (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad A B C D)
     (hc : CentralPair A B C D P Q) (hmin : σ / 2 ≤ minTriangleArea (quadConfig A B C D P Q))
     (hJ : 0 < overlapJ A B C D) (hab : areaB A B C D ≤ areaA A B C D) :
     |sarea A B P| ≤ areaB A B C D - σ * areaA A B C D / (areaW A B C D - areaB A B C D) ∧
@@ -1085,16 +1056,13 @@ theorem eq10 (A B C D P Q : Point) (σ : ℝ) (hσ : 0 < σ) (hq : IsConvexQuad 
   rw [eA, eB] at hab
   rw [eA, eB, eW, abs_of_pos hP1'.1, abs_of_pos hQ1'.1,
     show sarea A B C + sarea A C D - sarea A B C = sarea A C D by ring]
-  exact eq10_ccw hq hP1' hP2' hQ1' hQ2' hmin hJ' hab
+  exact central_height_bound_ccw hq hP1' hP2' hQ1' hQ2' hmin hJ' hab
 
-/-- **Theorem 2** (`ONE_CORNER_COMPLETION:Theorem2`), the central-pair quadrilateral bound: for a
-convex quadrilateral `ABCD` of area `S` and two points strictly inside both `ABC` and `ABD`, the
-six points have minimum triangle area strictly less than `7S/64` (no separation hypothesis).
-Equivalently, at minimum area `≥ 7S/64` some hull diagonal separates the two interior points.
-`docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 211–350.
-
-Uses: ONE_CORNER_COMPLETION:Theorem1, OPPOSITE_CORNERS:claim-II-II-same-sign (21)–(22) -/
-theorem theorem2 (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
+/-- **Central-pair quadrilateral bound**: for a convex quadrilateral `ABCD` of area `S` and two
+points strictly inside both `ABC` and `ABD`, the six points have minimum triangle area strictly
+less than `7S/64` (no separation hypothesis). Equivalently, at minimum area `≥ 7S/64` some hull
+diagonal separates the two interior points. -/
+theorem minTriangleArea_lt_of_centralPair (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
     (hc : CentralPair A B C D P Q) :
     minTriangleArea (quadConfig A B C D P Q) < 7 / 64 * quadArea A B C D := by
   suffices H : ∀ A B C D P Q : Point, IsConvexQuad A B C D → CentralPair A B C D P Q →
@@ -1109,7 +1077,7 @@ theorem theorem2 (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
   intro A B C D P Q hq hc hab
   by_contra hcon; push Not at hcon
   rcases lt_or_ge (sarea P Q A * sarea P Q B) 0 with hsep | hsame
-  · exact absurd (theorem1 A B C D P Q hq hc hsep) (not_lt.2 hcon)
+  · exact absurd (minTriangleArea_lt_of_centralPair_separates A B C D P Q hq hc hsep) (not_lt.2 hcon)
   obtain ⟨dWa, dWb, pa, pb, pc, pe, hS⟩ := quad_abs hq
   have hW : 0 < areaW A B C D := by linarith
   have hσ : 0 < 7 / 64 * areaW A B C D := by positivity
@@ -1130,8 +1098,8 @@ theorem theorem2 (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
   have hprod : 0 < sarea P Q A * sarea P Q B :=
     lt_of_le_of_ne hsame (mul_ne_zero (OppositeCorners.ne_zero_of_abs_ge hσ aA)
       (OppositeCorners.ne_zero_of_abs_ge hσ aB)).symm
-  obtain ⟨hF, hv, -, -⟩ := eq9 A B C D P Q _ hσ hq hc hmin hJ hprod
-  obtain ⟨h10, -⟩ := eq10 A B C D P Q _ hσ hq hc hmin hJ hab
+  obtain ⟨hF, hv, -, -⟩ := discr_of_same_side A B C D P Q _ hσ hq hc hmin hJ hprod
+  obtain ⟨h10, -⟩ := central_height_bound A B C D P Q _ hσ hq hc hmin hJ hab
   have h10' := (min_le_left |sarea A B P| |sarea A B Q|).trans h10
   have hWb : 0 < areaW A B C D - areaB A B C D := by linarith
   have hWa : 7 / 64 * areaW A B C D ≤ areaW A B C D - areaA A B C D := by linarith
@@ -1144,7 +1112,7 @@ theorem theorem2 (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
   obtain ⟨y, rfl⟩ : ∃ y, b = y * W := ⟨b / W, by field_simp⟩
   obtain ⟨z, rfl⟩ : ∃ z, v = z * W := ⟨v / W, by field_simp⟩
   have hW3 : 0 < W ^ 3 := by positivity
-  refine thm2_norm x y z (le_of_mul_le_mul_right hab hW) ?_ (pos_of_mul_pos_left pb hW.le) ?_
+  refine same_side_bounds_false_normalized x y z (le_of_mul_le_mul_right hab hW) ?_ (pos_of_mul_pos_left pb hW.le) ?_
     ?_ ?_ ?_
   · nlinarith
   · nlinarith
@@ -1165,20 +1133,18 @@ theorem theorem2 (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
     rw [sub_mul, div_mul_cancel₀ _ hy1.ne'] at h2
     linarith
 
-/-- **Theorem 2** (`ONE_CORNER_COMPLETION:Theorem2`), the form at `S ≤ 1/2`: minimum area below
-`7/128`. `docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 211–225 (with lines 36–37).
-
-Uses: ONE_CORNER_COMPLETION:Theorem2 -/
-theorem theorem2_of_le_half (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
+/-- `minTriangleArea_lt_of_centralPair` for a quadrilateral of area `S ≤ 1/2`: the six points have minimum triangle area
+below `7/128`. -/
+theorem minTriangleArea_lt_of_centralPair_of_le_half (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
     (hc : CentralPair A B C D P Q) (hS : quadArea A B C D ≤ 1 / 2) :
     minTriangleArea (quadConfig A B C D P Q) < 7 / 128 := by
-  have := theorem2 A B C D P Q hq hc
+  have := minTriangleArea_lt_of_centralPair A B C D P Q hq hc
   linarith
 
-/-! ### §3. Theorem 3 -/
+/-! ### Mixed pairs -/
 
 /-- The canonical frame of the relabelled quadrilateral `(B, A, D, C)` of a counterclockwise
-`ABCD` (used in Theorem 3, with the labels `(A', E', H', F') = (B, A, C, D)`): with
+`ABCD` (used in `isolates_of_mixed_pair_ccw`, with the labels `(A', E', H', F') = (B, A, C, D)`): with
 `t = (b - e)/(ab)`, `h = tb`, `β = ta`, and the frame multiplies doubled areas by `-t`. -/
 theorem rel_BADC {A B C D : Point} (hq : ConvexQuad A B C D) :
     frameH B A D C = (sarea A B C - sarea B C D) / (sarea A B D * sarea A B C) * sarea A B C ∧
@@ -1196,16 +1162,16 @@ theorem rel_BADC {A B C D : Point} (hq : ConvexQuad A B C D) :
   refine ⟨by field_simp; ring, by field_simp, by field_simp; ring,
     by simpa using hb', by simpa using ha'⟩
 
-/-- The two discriminant contradictions of Theorem 3, (14): with `σ = 7W/64` and
+/-- The two discriminant contradictions of `isolates_of_mixed_pair_ccw`: with `σ = 7W/64` and
 `b ≥ (149/20)σ`, neither `a(W - a) ≥ σ(2W + b - a)` nor `a(W - a) ≥ σ(W + a + b)` holds. -/
-theorem thm3_poly {a b W : ℝ} (hW : 0 < W) (hb : 149 / 20 * (7 / 64 * W) ≤ b) :
+theorem mixed_pair_discr_lt {a b W : ℝ} (hW : 0 < W) (hb : 149 / 20 * (7 / 64 * W) ≤ b) :
     a * (W - a) < 7 / 64 * W * (2 * W + b - a) ∧ a * (W - a) < 7 / 64 * W * (W + a + b) := by
   constructor
   · nlinarith [sq_nonneg (a - 71 / 128 * W), sq_pos_of_pos hW]
   · nlinarith [sq_nonneg (a - 57 / 128 * W), sq_pos_of_pos hW]
 
-/-- Theorem 3 for a counterclockwise quadrilateral. -/
-theorem theorem3_ccw {A B C D P Q : Point} (hq : ConvexQuad A B C D)
+/-- `isolates_of_mixed_pair` for a counterclockwise quadrilateral. -/
+theorem isolates_of_mixed_pair_ccw {A B C D P Q : Point} (hq : ConvexQuad A B C D)
     (hmin : 7 / 64 * quadArea A B C D ≤ minTriangleArea (quadConfig A B C D P Q))
     (hP : InTriangle P A B C) (hQ : InTriangle Q A B C)
     (hPBCD : InTriangle P B C D) (hQABD : InTriangle Q A B D) :
@@ -1294,7 +1260,7 @@ theorem theorem3_ccw {A B C D P Q : Point} (hq : ConvexQuad A B C D)
   have mA : frameMap B A D C A = (1, 1) := frameMap_B hBAC
   have mC : frameMap B A D C C = (0, h) := frameMap_D hBAC
   have mD : frameMap B A D C D = (f, 1) := frameMap_C hBAC hBAD
-  obtain ⟨d1, d2, d3⟩ := OppositeCorners.eq14 h f _ h0 h1 f0 f1 hσ' _ _ PT QT hm' PI QII
+  obtain ⟨d1, d2, d3⟩ := OppositeCorners.pair_I_II_signs h f _ h0 h1 f0 f1 hσ' _ _ PT QT hm' PI QII
   rw [← mB, dd] at d1
   rw [← mD, dd] at d2
   rw [← mC, ← mA, dd, dd] at d3
@@ -1314,9 +1280,9 @@ theorem theorem3_ccw {A B C D P Q : Point} (hq : ConvexQuad A B C D)
   rcases lt_or_gt_of_ne (OppositeCorners.ne_zero_of_abs_ge hσ aC) with dC | dC <;>
     rcases lt_or_gt_of_ne (OppositeCorners.ne_zero_of_abs_ge hσ aA) with dA | dA
   · exact ⟨mul_neg_of_pos_of_neg dB dA, mul_neg_of_pos_of_neg dB dC, mul_neg_of_pos_of_neg dB dD⟩
-  · -- §5.1 in the frame
+  · -- `OppositeCorners.pair_I_II_bounds_of_dE_neg` in the frame
     exfalso
-    have r := (OppositeCorners.claim_pair_I_II_51 h f _ h0 h1 f0 f1 hσ' _ _ PT QT hm' PI QII
+    have r := (OppositeCorners.pair_I_II_bounds_of_dE_neg h f _ h0 h1 f0 f1 hσ' _ _ PT QT hm' PI QII
       (by rw [← mC, dd]; exact neg _ dC) (by rw [← mA, dd]; exact pos _ dA)).2
     rw [eβ, eh, eβ'] at r
     set a := sarea A B D
@@ -1330,10 +1296,10 @@ theorem theorem3_ccw {A B C D P Q : Point} (hq : ConvexQuad A B C D)
     have : 0 ≤ t ^ 2 * (a * (W - a) - σ * (2 * W + b - a)) := by
       rw [key, hE, mul_zero, add_zero]; linarith
     have := (mul_nonneg_iff_of_pos_left (by positivity)).1 this
-    have h2 := (thm3_poly (a := a) (b := b) hW (by linarith [hσd])).1
+    have h2 := (mixed_pair_discr_lt (a := a) (b := b) hW (by linarith [hσd])).1
     rw [← hσd] at h2
     linarith
-  · -- §5.2 in the frame
+  · -- `OppositeCorners.inTriangle_HFQ_bounds` in the frame
     exfalso
     have hba : sarea A B D < sarea A B C := by
       by_contra hc'; push Not at hc'; linarith
@@ -1345,7 +1311,7 @@ theorem theorem3_ccw {A B C D P Q : Point} (hq : ConvexQuad A B C D)
           simp only [lineN, sarea]; ring
         rw [e]; linarith [PI.2.2]
     have hβh : 1 - f ≤ h := by rw [eβ, eh]; exact mul_le_mul_of_nonneg_left hba.le ht0.le
-    have r := (OppositeCorners.eq15_16 h f _ h0 h1 f0 f1 hσ' _ _ PT QT hm' QII hin hβh).2
+    have r := (OppositeCorners.inTriangle_HFQ_bounds h f _ h0 h1 f0 f1 hσ' _ _ PT QT hm' QII hin hβh).2
     rw [eβ, eh, eβ'] at r
     set a := sarea A B D
     set b := sarea A B C
@@ -1358,38 +1324,33 @@ theorem theorem3_ccw {A B C D P Q : Point} (hq : ConvexQuad A B C D)
     have : 0 ≤ t ^ 2 * (a * (W - a) - σ * (W + a + b)) := by
       rw [key, hE, mul_zero, add_zero]; linarith
     have := (mul_nonneg_iff_of_pos_left (by positivity)).1 this
-    have h2 := (thm3_poly (a := a) (b := b) hW (by linarith [hσd])).2
+    have h2 := (mixed_pair_discr_lt (a := a) (b := b) hW (by linarith [hσd])).2
     rw [← hσd] at h2
     linarith
   · exact absurd ⟨pos _ dC, pos _ dA⟩ d3
 
-/-- **Theorem 3** (`ONE_CORNER_COMPLETION:Theorem3`), the mixed-pair line: for a convex
-quadrilateral `ABCD` of area `S` whose six-point minimum area is at least `7S/64`, if `P, Q` are
-strictly inside `ABC`, `P` strictly inside `BCD` and `Q` strictly inside `ABD`, then the line
-`PQ` puts `B` on one side and `A, C, D` on the other. `docs/proof/nine/ONE_CORNER_COMPLETION.md`,
-lines 352–439.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, OPPOSITE_CORNERS:claim-pair-I-II (5.1),
-OPPOSITE_CORNERS:claim-pair-I-II (15)–(16) -/
-theorem theorem3 (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
+/-- **Mixed-pair line**: for a convex quadrilateral `ABCD` of area `S` whose six-point minimum
+area is at least `7S/64`, if `P, Q` are strictly inside `ABC`, `P` strictly inside `BCD` and `Q`
+strictly inside `ABD`, then the line `PQ` puts `B` on one side and `A, C, D` on the other. -/
+theorem isolates_of_mixed_pair (A B C D P Q : Point) (hq : IsConvexQuad A B C D)
     (hmin : 7 / 64 * quadArea A B C D ≤ minTriangleArea (quadConfig A B C D P Q))
     (hP : InsideTriangle P A B C) (hQ : InsideTriangle Q A B C)
     (hPBCD : InsideTriangle P B C D) (hQABD : InsideTriangle Q A B D) :
     Isolates P Q B A C D := by
   rcases hq with hq | hq
   · obtain ⟨ha, hb, -, he⟩ := ccw_signs hq
-    exact theorem3_ccw hq hmin (inT_of_inside hP hb) (inT_of_inside hQ hb)
+    exact isolates_of_mixed_pair_ccw hq hmin (inT_of_inside hP hb) (inT_of_inside hQ hb)
       (inT_of_inside hPBCD he) (inT_of_inside hQABD ha)
   · have hq' := convexQuad_swapPt.2 hq
     obtain ⟨ha, hb, -, he⟩ := ccw_signs hq'
     obtain ⟨-, -, -, e4, -⟩ := areas_swapPt A B C D
-    have := theorem3_ccw hq' (by rw [e4, min_quadConfig_swapPt]; exact hmin)
+    have := isolates_of_mixed_pair_ccw hq' (by rw [e4, min_quadConfig_swapPt]; exact hmin)
       (inT_of_inside (insideTriangle_swapPt.2 hP) hb) (inT_of_inside (insideTriangle_swapPt.2 hQ) hb)
       (inT_of_inside (insideTriangle_swapPt.2 hPBCD) he)
       (inT_of_inside (insideTriangle_swapPt.2 hQABD) ha)
     exact (isolates_swapPt P Q B A C D).1 this
 
-/-! ### §4. Application to the pentagonal C1 branch -/
+/-! ### Application to the pentagonal C1 branch -/
 
 /-- The upper quadrilateral `HCDF` of a C1 configuration is convex (counterclockwise), with doubled
 area `W = 1 - (h - d)(c - f) ≤ 1`. -/
@@ -1417,36 +1378,30 @@ theorem pent_sub (h c d f : ℝ) (W X Y Z : Point) :
   convert this using 2
   funext i; fin_cases i <;> rfl
 
-/-- **Claim** (`ONE_CORNER_COMPLETION:claim-pentagon-reduction`), the central upper pair: in a C1
-configuration (anchors `O, C = (c,0), D = (1,d), F = (f,1), H = (0,h)`) of minimum area at least
-`A₀`, two free points cannot both lie in `HCD ∩ HCF` (Theorem 2 with `(A,B,C,D) = (H,C,D,F)`,
-`W = 1 - (h - d)(c - f) ≤ 1`). `docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 441–465.
-
-Uses: ONE_CORNER_COMPLETION:Theorem2 -/
-theorem claim_pentagon_reduction (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
+/-- The central upper pair: in a C1 configuration (anchors `O, C = (c,0), D = (1,d), F = (f,1),
+H = (0,h)`) of minimum area at least `A₀`, two free points cannot both lie in `HCD ∩ HCF`
+(`minTriangleArea_lt_of_centralPair_of_le_half` with `(A,B,C,D) = (H,C,D,F)`, `W = 1 - (h - d)(c - f) ≤ 1`). -/
+theorem pentagon_no_central_pair (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z))
     (hY : InsideTriangle Y (0, h) (c, 0) (1, d) ∧ InsideTriangle Y (0, h) (c, 0) (f, 1))
     (hZ : InsideTriangle Z (0, h) (c, 0) (1, d) ∧ InsideTriangle Z (0, h) (c, 0) (f, 1)) :
     False := by
   obtain ⟨hq, hS⟩ := pent_quad hanch
-  have := theorem2_of_le_half _ _ _ _ Y Z hq ⟨hY.1, hY.2, hZ.1, hZ.2⟩ hS
+  have := minTriangleArea_lt_of_centralPair_of_le_half _ _ _ _ Y Z hq ⟨hY.1, hY.2, hZ.1, hZ.2⟩ hS
   have := pent_sub h c d f W X Y Z
   linarith [A₀_bounds.1]
 
-/-- **Claim** (`ONE_CORNER_COMPLETION:claim-pentagon-reduction`), the mixed upper placement: in a
-C1 configuration of minimum area at least `A₀`, if the free point `Q` is in `HCD ∩ HCF` and the
-free point `P` is in `HCD ∩ CDF`, then the line `PQ` isolates `C` from `H, D, F` (Theorem 3
-with `(A,B,C,D) = (H,C,D,F)`); the reflected placement isolates `H`.
-`docs/proof/nine/ONE_CORNER_COMPLETION.md`, lines 467–472.
-
-Uses: ONE_CORNER_COMPLETION:Theorem3 -/
-theorem claim_pentagon_reduction_mixed (h c d f : ℝ) (hanch : C1Anchors h c d f)
+/-- The mixed upper placement: in a C1 configuration of minimum area at least `A₀`, if the free
+point `Q` is in `HCD ∩ HCF` and the free point `P` is in `HCD ∩ CDF`, then the line `PQ` isolates
+`C` from `H, D, F` (`isolates_of_mixed_pair` with `(A,B,C,D) = (H,C,D,F)`); the reflected placement isolates
+`H`. -/
+theorem pentagon_mixed_isolates (h c d f : ℝ) (hanch : C1Anchors h c d f)
     (W X P Q : Point) (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X P Q))
     (hQ : InsideTriangle Q (0, h) (c, 0) (1, d) ∧ InsideTriangle Q (0, h) (c, 0) (f, 1))
     (hP : InsideTriangle P (0, h) (c, 0) (1, d) ∧ InsideTriangle P (c, 0) (1, d) (f, 1)) :
     Isolates P Q (c, 0) (0, h) (1, d) (f, 1) := by
   obtain ⟨hq, hS⟩ := pent_quad hanch
   have hsub := pent_sub h c d f W X P Q
-  exact theorem3 _ _ _ _ P Q hq (by linarith [A₀_bounds.1]) hP.1 hQ.1 hP.2 hQ.2
+  exact isolates_of_mixed_pair _ _ _ _ P Q hq (by linarith [A₀_bounds.1]) hP.1 hQ.1 hP.2 hQ.2
 
 end Heilbronn.Nine.OneCornerCompletion

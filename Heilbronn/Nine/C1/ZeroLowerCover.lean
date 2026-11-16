@@ -3,30 +3,28 @@ module
 public import Heilbronn.Nine.C1.ZeroLowerKeys
 public import Mathlib.Data.Fin.Tuple.Sort
 
-/-! # The C1 configuration with no point in the lower anchor triangle, §§5–6 and Theorem 4
-(`docs/proof/nine/C1_ZERO_LOWER.md`)
+/-! # The C1 configuration with no point in the lower anchor triangle: the cover
 
-Role: on the primary route, `docs/proof/nine/UNRESTRICTED.md` row `n₀ = 0` (line 96) is closed by
-**Theorem 4** (`theorem4`): no competitive C1 configuration has its lower anchor triangle `OHC`
-empty. This file holds §5 (the finite cover by anchor-ray words and sign cells), §6 (the soundness
-of the certificate package `docs/proof/nine/c1_zero_lower_certificates.json`, whose kernel check is in
-`Heilbronn.Nine.C1.ZeroLowerTrees`), and Theorem 4. The geometric facts of §§1–4 are in
-`Heilbronn.Nine.C1.ZeroLower`; the computable model of the certificates in
+`lowerCount_eq_zero_false`: no competitive C1 configuration has its lower anchor triangle `OHC` empty. This file
+holds the finite cover by anchor-ray words and sign cells, the soundness of the certificate
+package (whose kernel check is in `Heilbronn.Nine.C1.ZeroLowerTrees`), and `lowerCount_eq_zero_false`. The
+geometric facts are in `Heilbronn.Nine.C1.ZeroLower`; the computable model of the certificates in
 `Heilbronn.Nine.C1.ZeroLowerModel`.
 
 Structure of the proof:
-* `Cell h c d f Q ks`: a competitive configuration (with (1) `f ≤ d`) whose labelled free points
+* `Cell h c d f Q ks`: a competitive configuration (with `f ≤ d`) whose labelled free points
   `Q 0, …, Q 3` have the zero-lower words `ks` (a retained case, `Trees.caseKeys`), satisfy the
-  initial signs `baseSigns ks` and, for the three-top-cap cases (16), the seeds of Lemma 3;
-* `Cell.atoms_nonneg`: every atom of the case is nonnegative at the point `zeta` of the cube
-  (the factors of §6 from the region rows, (7) and Lemma 1; the quadratic costs (19); the
-  strengthened triangle costs (18) from subdivision and the two-interior-point lemma; the cubic
-  costs (20));
-* `Cell.false`: the cover (`Cover.checkTree_sound` with the kernel-checked trees) excludes every
+  initial signs `baseSigns ks` and, for the three-top-cap cases (`topThreeCases`), one of the
+  seeds of `Comp.three_seeds`;
+* the atoms of the case are nonnegative at the point `zeta` of the cube: the affine factors from
+  the region rows, the top-cap bounds and `Comp.right_pair_bounds` (`Cell.factors_nonneg`), the
+  quadratic and cubic costs (`Cell.qcosts_nonneg`, `Cell.cubics_nonneg`), and the strengthened
+  triangle costs (`Package.AreaOK.costHyp`: subdivision and the two-interior-point lemma);
+* `Cell.false`: the cover (`Cover.tableSpec_sound` with the kernel-checked trees) excludes every
   cell;
-* §5: every free point has a word (`word_exists`), the labelling, the retained cases and the
-  initial signs;
-* `theorem4`.
+* every free point has a word (`Comp.word_exists`), the labelling (`Comp.main`), the retained
+  cases (`Labeled.filters`) and the initial signs (`Labeled.base`);
+* `lowerCount_eq_zero_false`.
 -/
 
 @[expose] public section
@@ -34,7 +32,7 @@ Structure of the proof:
 noncomputable section
 namespace Heilbronn.Nine.C1ZeroLower
 
-open Heilbronn.Nine.C1 Cover Model Cert Cert.Expr
+open Heilbronn.Nine.C1 Heilbronn.Nine.Package Cover Model Cert Cert.Expr
 
 variable {h c d f : ℝ} {Q : Fin 4 → Point} {ks : List ℕ}
 
@@ -69,16 +67,16 @@ theorem Comp.zeta_mem (H : Comp h c d f Q) (v : ℕ) :
 
 /-! ### Cells -/
 
-/-- A cell of the cover: a competitive configuration under (1) whose labelled free points have
-the words of the retained case `ks`, with its initial signs and (for (16)) the seeds of
-Lemma 3. -/
+/-- A cell of the cover: a competitive configuration under `f ≤ d` whose labelled free points
+have the words of the retained case `ks`, with its initial signs and (for the three-top-cap cases
+`topThreeCases`) one of the seeds `seedRaw ks i`, `i < 3`. -/
 structure Cell (h c d f : ℝ) (Q : Fin 4 → Point) (ks : List ℕ) : Prop where
   comp : Comp h c d f Q
   hfd : f ≤ d
   key : ks ∈ Trees.caseKeys
   word : ∀ a : Fin 4, WordAt (cfg h c d f Q) (Q a) (kw ks a)
-  base : AllHold (FHolds (cfg h c d f Q)) (baseSigns ks)
-  three : ks ∈ topThreeCases → ∃ i, i < 3 ∧ AllHold (FHolds (cfg h c d f Q)) (seedRaw ks i)
+  base : AllHold (FHolds 9 (cfg h c d f Q)) (baseSigns ks)
+  three : ks ∈ topThreeCases → ∃ i, i < 3 ∧ AllHold (FHolds 9 (cfg h c d f Q)) (seedRaw ks i)
 
 /-! ### The region of each free point -/
 
@@ -112,7 +110,7 @@ theorem Cell.region (C : Cell h c d f Q ks) (a : Fin 4) :
     (cat (kw ks a) = 3 → InLeftCap f h (Q a) ∧ AboveOF f (Q a)) :=
   C.comp.region ((keys_len ks C.key).2 a) (C.word a)
 
-/-! ### The affine factors of §6 -/
+/-! ### The affine factors -/
 
 theorem Cell.fac_base (C : Cell h c d f Q ks) :
     ∀ e ∈ [v 0 - k sQ, v 1 - k sQ, 1 - v 0, 1 - v 1, v 2 - k sQ, k (65 / 73) - v 2, v 3 - k sQ,
@@ -127,7 +125,8 @@ theorem Cell.fac_base (C : Cell h c d f Q ks) :
       eval_minus, eval_one, eval_v, eval_k, zeta, sQ]; push_cast
   and_intros <;> linarith
 
-/-- The table after (7), from `Ω₀` and (1). -/
+/-- The bounds on `f` and `d` implied by a lower bound `b ≤ Ω₀ = (1 - d)(1 - f)` on the top cap,
+under `f ≤ d`. -/
 theorem table_bounds (hfd : f ≤ d) (hf : 8 / 73 ≤ f) (hd1 : d < 1) {b : ℝ} (hΩ : b ≤ (1 - d) * (1 - f)) :
     (8 / 73 < b → f ≤ 67 / 100 ∧ d ≤ 57 / 65) ∧ (24 / 73 < b → f ≤ 3 / 7 ∧ d ≤ 41 / 65) ∧
       (7 / 11 < b → f ≤ 13 / 64 ∧ d ≤ 204 / 715) := by
@@ -182,7 +181,7 @@ theorem Cell.fac_top3 (C : Cell h c d f Q ks) :
     and_intros <;> linarith
   · simp
 
-/-- (5): a right-cap point gives `d ≥ 4s`, `1/7 < c < 6/7`. -/
+/-- From `dc(1 - c) > 8/73` (a right-cap point): `d ≥ 4s` and `1/7 ≤ c ≤ 6/7`. -/
 theorem right_consequences (hd1 : d ≤ 65 / 73) (hd : 0 < d) (h5 : 8 / 73 < d * c * (1 - c)) :
     32 / 73 ≤ d ∧ 1 / 7 ≤ c ∧ c ≤ 6 / 7 := by
   have hq : c * (1 - c) ≤ 1 / 4 := by nlinarith [sq_nonneg (c - 1 / 2)]
@@ -293,7 +292,7 @@ theorem Cell.factors_nonneg (C : Cell h c d f Q ks) :
   · exact C.fac_point 2 e he
   · exact C.fac_point 3 e he
 
-/-! ### The quadratic and cubic costs (19), (20) -/
+/-! ### The quadratic and cubic costs -/
 
 theorem Cell.qcosts_nonneg (C : Cell h c d f Q ks) :
     ∀ e ∈ qcosts ks, 0 ≤ e.eval (zeta h c d f Q) := by
@@ -352,122 +351,21 @@ theorem Cell.cubics_nonneg (C : Cell h c d f Q ks) :
       simp only [eval_minus, eval_times, eval_one, eval_v, eval_k, zeta, sQ]; push_cast; linarith
     · simp at he
 
-/-! ### The strengthened triangle costs (18) -/
-
-theorem sarea_self₁₂ (p r : Point) : sarea p p r = 0 := by unfold sarea; ring
-theorem sarea_self₁₃ (p q : Point) : sarea p q p = 0 := by unfold sarea; ring
-theorem sarea_self₂₃ (p q : Point) : sarea p q q = 0 := by unfold sarea; ring
-
-theorem orient_ne_zero {sg : Bool} {x : ℝ} (h : OrientHolds sg x) : x ≠ 0 := by
-  cases sg <;> simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at h <;>
-    [exact h.ne; exact h.ne']
-
-/-- An oriented actual triangle has doubled area at least `2A₀` (its indices are distinct, since
-the area is not zero). -/
-theorem Comp.orient_area (H : Comp h c d f Q) {sg : Bool} {a b e : ℕ} (ha : a < 9) (hb : b < 9)
-    (he : e < 9) (hs : OrientHolds sg (sarea (cfg h c d f Q a) (cfg h c d f Q b) (cfg h c d f Q e))) :
-    2 * A₀ ≤ sgArea sg (sarea (cfg h c d f Q a) (cfg h c d f Q b) (cfg h c d f Q e)) := by
-  have hne := orient_ne_zero hs
-  rw [sgArea_eq_abs hs]
-  refine H.area a b e ha hb he ?_ ?_ ?_
-  · rintro rfl; exact hne (sarea_self₁₂ _ _)
-  · rintro rfl; exact hne (sarea_self₂₃ _ _)
-  · rintro rfl; exact hne (sarea_self₁₃ _ _)
-
-theorem orient_idx_ne {P : ℕ → Point} {sg : Bool} {a b e : ℕ}
-    (hs : OrientHolds sg (sarea (P a) (P b) (P e))) : a ≠ b ∧ b ≠ e ∧ a ≠ e := by
-  have hne := orient_ne_zero hs
-  refine ⟨?_, ?_, ?_⟩
-  · rintro rfl; exact hne (sarea_self₁₂ _ _)
-  · rintro rfl; exact hne (sarea_self₂₃ _ _)
-  · rintro rfl; exact hne (sarea_self₁₃ _ _)
-
-/-- **(18)**: the strengthened cost of every signed triangle of the table is nonnegative: `s`
-for no certified inside point, `3s` for one (subdivision), `ρ` for two (the two-interior-point
-lemma). -/
-theorem Comp.cost_nonneg (H : Comp h c d f Q) {tb : List SFact}
-    (htb : AllHold (FHolds (cfg h c d f Q)) tb) {g : SFact} (hg : g ∈ tb) :
-    0 ≤ (costAtom pt bnd g (insideList tb [5, 6, 7, 8] g).length).eval (zeta h c d f Q) := by
-  rw [eval_costAtom]
-  simp only [ptEval_zeta]
-  obtain ⟨g1, g2, g3, gs⟩ := htb g hg
-  have htb' : AllHold (SFact.Holds (cfg h c d f Q)) tb := fun x hx => (htb x hx).2.2.2
-  have harea := H.orient_area (by omega) (by omega) g3 gs
-  have hLnd : (insideList tb [5, 6, 7, 8] g).Nodup := List.Nodup.filter _ (by decide)
-  have hmem : ∀ j ∈ insideList tb [5, 6, 7, 8] g, j < 9 := by
-    intro j hj
-    have := (insideList_sound htb' hj).1
-    simp only [List.mem_cons, List.not_mem_nil, or_false] at this; omega
-  have t := two_A₀
-  rcases hn : (insideList tb [5, 6, 7, 8] g).length with _ | _ | n
-  · simp only [bnd, ite_true]; push_cast; linarith
-  · obtain ⟨j, hj⟩ := List.exists_mem_of_length_pos (show 0 < (insideList tb [5, 6, 7, 8] g).length
-      by omega)
-    obtain ⟨-, o1, o2, o3⟩ := insideList_sound htb' hj
-    have hj9 := hmem j hj
-    have q1 := H.orient_area (by omega) (by omega) hj9 o1
-    have q2 := H.orient_area (by omega) g3 hj9 o2
-    have q3 := H.orient_area g3 (by omega) hj9 o3
-    rw [sgArea_eq_abs o1] at q1; rw [sgArea_eq_abs o2] at q2; rw [sgArea_eq_abs o3] at q3
-    have := three_le_sgArea (e := 2 * A₀) o1 o2 o3 q1 q2 q3
-    simp only [bnd]; norm_num; linarith
-  · obtain ⟨j₁, j₂, rest, hL⟩ : ∃ j₁ j₂ rest, insideList tb [5, 6, 7, 8] g = j₁ :: j₂ :: rest := by
-      rcases hL : insideList tb [5, 6, 7, 8] g with _ | ⟨j₁, _ | ⟨j₂, rest⟩⟩
-      · rw [hL] at hn; simp at hn
-      · rw [hL] at hn; simp at hn
-      · exact ⟨j₁, j₂, rest, rfl⟩
-    have hj₁ : j₁ ∈ insideList tb [5, 6, 7, 8] g := by rw [hL]; simp
-    have hj₂ : j₂ ∈ insideList tb [5, 6, 7, 8] g := by rw [hL]; simp
-    have h12 : j₁ ≠ j₂ := by
-      rw [hL] at hLnd; simp only [List.nodup_cons, List.mem_cons, not_or] at hLnd
-      exact hLnd.1.1
-    obtain ⟨-, o1, o2, o3⟩ := insideList_sound htb' hj₁
-    obtain ⟨-, p1, p2, p3⟩ := insideList_sound htb' hj₂
-    obtain ⟨-, n1, n2⟩ := orient_idx_ne o1
-    obtain ⟨-, n3, -⟩ := orient_idx_ne o2
-    obtain ⟨-, m1, m2⟩ := orient_idx_ne p1
-    obtain ⟨-, m3, -⟩ := orient_idx_ne p2
-    have := H.two_inside (by omega) (by omega) g3 (hmem _ hj₁) (hmem _ hj₂)
-      (by simp only [List.nodup_cons, List.mem_cons, List.not_mem_nil, or_false, not_or,
-        List.nodup_nil, and_true, not_false_eq_true]; omega)
-      (inTriangle_of_orient o1 o2 o3) (inTriangle_of_orient p1 p2 p3)
-    rw [← sgArea_eq_abs gs] at this
-    simp only [bnd]; norm_num; linarith
-
 /-! ### The cover -/
 
-theorem Cell.atoms_nonneg (C : Cell h c d f Q ks) (fs : List SFact)
-    (hfs : AllHold (FHolds (cfg h c d f Q)) fs) :
-    ∀ e ∈ atoms ks fs, 0 ≤ e.eval (zeta h c d f Q) := by
-  intro e he
-  simp only [atoms, List.mem_append, List.mem_map] at he
-  rcases he with ((he | he) | ⟨g, hg, rfl⟩) | he
-  · exact C.factors_nonneg e he
-  · exact C.qcosts_nonneg e he
-  · exact C.comp.cost_nonneg (C.base.append hfs) (List.mem_append.2 hg)
-  · exact C.cubics_nonneg e he
-
 theorem Cell.branch (C : Cell h c d f Q ks) (fs : List SFact) (s : Split) :
-    ∃ b ∈ (spec ks).branches fs s, AllHold (FHolds (cfg h c d f Q)) b := by
+    ∃ b ∈ branches ks fs s, AllHold (FHolds 9 (cfg h c d f Q)) b := by
   cases s with
   | tri a b e =>
-    simp only [spec, branches]
+    simp only [branches]
     split_ifs with hv
-    · obtain ⟨hab, hbe, he9⟩ := hv
-      have hne : sarea (cfg h c d f Q a) (cfg h c d f Q b) (cfg h c d f Q e) ≠ 0 := by
-        intro h0
-        have := C.comp.area a b e (by omega) (by omega) he9 (by omega) (by omega) (by omega)
-        rw [h0, abs_zero] at this; linarith [A₀_pos]
-      obtain ⟨br, hbr, hall⟩ := signBranches_exhaustive (P := cfg h c d f Q) (t := (a, b, e)) hne
-      refine ⟨br, hbr, fun x hx => ⟨?_, ?_, ?_, hall x hx⟩⟩ <;>
-      · simp only [signBranches, List.mem_cons, List.not_mem_nil, or_false] at hbr
-        rcases hbr with rfl | rfl <;> simp at hx <;> subst hx <;> simp <;> omega
+    · exact C.comp.areaOK.signBranches_ok hv
     · exact ⟨[], by simp, by simp [AllHold]⟩
   | three =>
-    simp only [spec, branches]
+    simp only [branches]
     split_ifs with h3
     · obtain ⟨i, hi, hall⟩ := C.three h3
-      have hsub : AllHold (FHolds (cfg h c d f Q)) (seed ks i) :=
+      have hsub : AllHold (FHolds 9 (cfg h c d f Q)) (seed ks i) :=
         fun x hx => hall x (List.mem_of_mem_filter hx)
       interval_cases i
       · exact ⟨_, List.mem_cons_self .., hsub⟩
@@ -475,21 +373,23 @@ theorem Cell.branch (C : Cell h c d f Q ks) (fs : List SFact) (s : Split) :
       · exact ⟨_, List.mem_cons_of_mem _ (List.mem_cons_of_mem _ (List.mem_cons_self ..)), hsub⟩
     · exact ⟨[], by simp, by simp [AllHold]⟩
 
-/-- **The certificate package** (`C1_ZERO_LOWER:claim-certificates`): every cell is impossible.
-The kernel has checked the sign tree of every retained case (`Trees.allCases_ok`); the atoms are
-nonnegative and the splits exhaustive at every cell, so `Cover.checkTree_sound` applies. -/
+/-- The certificate package: every cell is impossible. The kernel has checked the sign tree of
+every retained case (`Trees.allCases_ok`); the factors, quadratic and cubic costs are
+nonnegative, the strengthened triangle costs are nonnegative (`Package.AreaOK.costHyp`) and the
+splits are exhaustive at every cell, so `Cover.tableSpec_sound` applies. -/
 theorem Cell.false (C : Cell h c d f Q ks) : False := by
   have hk : ks ∈ Trees.allCases.map Prod.fst := Trees.caseKeys_eq ▸ C.key
   obtain ⟨p, hp, hpk⟩ := List.mem_map.1 hk
   have hT : checkTree (spec ks) [] p.2 = true := hpk ▸ Trees.allCases_ok p hp
-  have hcl : ∀ (fs : List SFact) (tag : ℕ), AllHold (FHolds (cfg h c d f Q)) fs →
-      (spec ks).closedOK fs tag = true → False := by
-    intro fs tag _ h; exact absurd h (by simp [spec])
-  exact checkTree_sound (σ := spec ks) (Holds := FHolds (cfg h c d f Q)) C.comp.zeta_mem
-    (fun fs hfs => C.atoms_nonneg fs hfs) (fun fs s _ => C.branch fs s) hcl
-    (fs := []) (fun _ h => absurd h List.not_mem_nil) hT
+  refine tableSpec_sound hT C.comp.zeta_mem (fun i _ => ptEval_zeta i)
+    (C.comp.areaOK.costHyp (by decide) (by decide)) ?_ C.cubics_nonneg C.base
+    (fun fs s _ => C.branch fs s)
+  intro e he
+  rcases List.mem_append.1 he with he | he
+  · exact C.factors_nonneg e he
+  · exact C.qcosts_nonneg e he
 
-/-! ### §5. Words -/
+/-! ### Words -/
 
 /-- One step of the radial order: `T ℓ₁ = A ℓ₂ + B ℓ₃` with `A, ℓ₂ ≥ 0` and `B, ℓ₁, ℓ₃ > 0`. -/
 theorem radial_step {T A B l1 l2 l3 : ℝ} (e : T * l1 = A * l2 + B * l3) (hl1 : 0 < l1)
@@ -497,10 +397,9 @@ theorem radial_step {T A B l1 l2 l3 : ℝ} (e : T * l1 = A * l2 + B * l3) (hl1 :
   have : 0 < T * l1 := by rw [e]; nlinarith [mul_nonneg hA hl2, mul_pos hB hl3]
   exact pos_of_mul_pos_left this hl1.le
 
-/-- The radial order at the anchors (`C1_ZERO_LOWER.md` lines 346–358): for a point `X` of the
-square, each anchor `V` sees the other anchors and `X` in a closed half-plane `ℓ ≥ 0`, in the
-cyclic order; the prefix implications follow from the identity
-`[VUX] ℓ(M - V) = [VUM] ℓ(X - V) + [VMX] ℓ(U - V)`. -/
+/-- The radial order at the anchors: for a point `X` of the square, each anchor `V` sees the
+other anchors and `X` in a closed half-plane `ℓ ≥ 0`, in the cyclic order; the prefix
+implications follow from the identity `[VUX] ℓ(M - V) = [VUM] ℓ(X - V) + [VMX] ℓ(U - V)`. -/
 theorem radial (hA : C1Anchors h c d f) {X : Point} (hX : X ∈ unitSquare) (hx : 0 < X.1) :
     (0 < sarea (0, 0) (f, 1) X → 0 < sarea (0, 0) (1, d) X) ∧
     (0 < sarea (c, 0) (f, 1) X → 0 < sarea (c, 0) (1, d) X) ∧
@@ -556,8 +455,7 @@ theorem radial (hA : C1Anchors h c d f) {X : Point} (hX : X ∈ unitSquare) (hx 
       (by simp only [sarea]; ring) hf aHDF x0 (by rw [sw]; linarith) one_pos
     rw [sw] at this; linarith
 
-/-- **Words** (`C1_ZERO_LOWER:claim-words`): a free point not in `OHC` has one of the eleven
-zero-lower words. -/
+/-- A free point not in `OHC` has one of the eleven zero-lower words. -/
 theorem Comp.word_exists (H : Comp h c d f Q) (a : Fin 4) (hL : ¬ InLower h c (Q a)) :
     ∃ w, w < 11 ∧ WordAt (cfg h c d f Q) (Q a) w := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
@@ -629,7 +527,7 @@ theorem Comp.word_exists (H : Comp h c d f Q) (a : Fin 4) (hL : ¬ InLower h c (
     | exact key (by assumption) (by assumption) rfl
     | exact keyn (by assumption) (by assumption) rfl
 
-/-! ### §5. The radial rule (14) -/
+/-! ### The radial rule -/
 
 /-- The functional `ℓ_v` of the closed half-plane seen from the anchor `v` (`x + y` at `O`, `y`
 at `C`, `1 - x` at `D`, `1 - y` at `F`, `x` at `H`), as coefficients of `X - V`. -/
@@ -658,7 +556,7 @@ theorem ell_anchor (hA : C1Anchors h c d f) {v m : ℕ} (hv : v < 5) (hm : m < 5
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA
   interval_cases v <;> interval_cases m <;> simp [ell, cfg] at hvm h1 h4 ⊢ <;> linarith
 
-/-- **The radial rule (14)**: if the words of two free points differ at the anchor `v`, the
+/-- The radial rule: if the words of two free points differ at the anchor `v`, the
 orientation of `[V_v X_a X_b]` is the sign of `r_v(b) - r_v(a)`. -/
 theorem Comp.radial_pair (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j) {wi wj : ℕ}
     (hwi : wi < 11) (hwj : wj < 11) (Wi : WordAt (cfg h c d f Q) (Q i) wi)
@@ -686,9 +584,9 @@ theorem Comp.radial_pair (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j) {wi 
   · exact h1
   · rw [← h1, abs_zero] at hne; linarith [A₀_pos]
 
-/-! ### §5. Labelled configurations and their initial signs -/
+/-! ### Labelled configurations and their initial signs -/
 
-/-- A labelled zero-lower configuration under (1): nondecreasing word indices `ks`, each free
+/-- A labelled zero-lower configuration under `f ≤ d`: nondecreasing word indices `ks`, each free
 point with its word, equal words ordered by angle from `O`. -/
 structure Labeled (h c d f : ℝ) (Q : Fin 4 → Point) (ks : List ℕ) : Prop where
   comp : Comp h c d f Q
@@ -731,22 +629,22 @@ theorem Labeled.pair_sound (L : Labeled h c d f Q ks) {i j : Fin 4} (hij : i < j
     obtain ⟨hRi, hODi⟩ := (L.comp.region hwi Wi).2.1 hc1
     obtain ⟨hRj, hODj⟩ := (L.comp.region hwj Wj).2.1 (h2 ▸ hc1)
     simp only [OrientHolds, ite_true, cfg]
-    exact (L.comp.lemma1 hne hRi hRj hODi hODj (L.order i j hij h2)).1
+    exact (L.comp.right_pair_signs hne hRi hRj hODi hODj (L.order i j hij h2)).1
   · obtain ⟨hc1, rfl⟩ := h5
     obtain ⟨hRi, hODi⟩ := (L.comp.region hwi Wi).2.1 hc1
     obtain ⟨hRj, hODj⟩ := (L.comp.region hwj Wj).2.1 (h2 ▸ hc1)
     simp only [OrientHolds, Bool.false_eq_true, ite_false, cfg]
-    exact (L.comp.lemma1 hne hRi hRj hODi hODj (L.order i j hij h2)).2
+    exact (L.comp.right_pair_signs hne hRi hRj hODi hODj (L.order i j hij h2)).2
   · exact (L.comp.upper_pair hne hwi hwj h6.1 h6.2 Wi Wj).2 v hv _ hs
 
-/-- **The initial signs** (`C1_ZERO_LOWER:claim-pair-signs`): every signed triangle of
-`baseSigns ks` holds. -/
-theorem Labeled.base (L : Labeled h c d f Q ks) : AllHold (FHolds (cfg h c d f Q)) (baseSigns ks) := by
+/-- The initial signs: every signed triangle of `baseSigns ks` holds. -/
+theorem Labeled.base (L : Labeled h c d f Q ks) :
+    AllHold (FHolds 9 (cfg h c d f Q)) (baseSigns ks) := by
   intro g hg
   simp only [baseSigns, List.mem_append, List.mem_filterMap, List.mem_flatMap, List.mem_range,
     Option.map_eq_some_iff] at hg
   rcases hg with ⟨t, ht, sg, hsg, rfl⟩ | ⟨p, hp, v, hv, sg, hsg, rfl⟩
-  · obtain ⟨t1, t2, t3⟩ := lexTriples_valid t ht
+  · obtain ⟨t1, t2, t3⟩ := mem_lexTriples ht
     refine ⟨t1, t2, t3, ?_⟩
     unfold anchorSign at hsg
     split_ifs at hsg with a1 a2 <;> simp only [Option.some.injEq] at hsg <;>
@@ -763,7 +661,7 @@ theorem Labeled.base (L : Labeled h c d f Q ks) : AllHold (FHolds (cfg h c d f Q
       · exact W.pos (by omega) a2 (by omega) hw
   · simp only [freePairs, List.mem_cons, List.not_mem_nil, or_false] at hp
     have key : ∀ i j : Fin 4, i < j → p = (i.val, j.val) →
-        FHolds (cfg h c d f Q) ((v, p.1 + 5, p.2 + 5), sg) := by
+        FHolds 9 (cfg h c d f Q) ((v, p.1 + 5, p.2 + 5), sg) := by
       intro i j hij hpe
       subst hpe
       refine ⟨by simp only; omega, by simp only; omega, by simp only; omega, ?_⟩
@@ -777,7 +675,7 @@ theorem Labeled.base (L : Labeled h c d f Q ks) : AllHold (FHolds (cfg h c d f Q
     · exact key 1 3 (by decide) rfl
     · exact key 2 3 (by decide) rfl
 
-/-! ### §5. The retained cases (`C1_ZERO_LOWER:claim-112`) -/
+/-! ### The retained cases -/
 
 theorem Labeled.filters (L : Labeled h c d f Q ks) : filtersB ks = true := by
   simp only [filtersB, Bool.and_eq_true, decide_eq_true_eq]
@@ -887,7 +785,7 @@ theorem Labeled.key (L : Labeled h c d f Q ks) : ks ∈ Trees.caseKeys := by
 theorem Labeled.cell (L : Labeled h c d f Q ks) : Cell h c d f Q ks :=
   ⟨L.comp, L.hfd, L.key, L.word, L.base, fun h3 => L.comp.three_seeds L.hfd h3 L.word L.order⟩
 
-/-! ### §5. The labelling -/
+/-! ### The labelling -/
 
 /-- The relabelling of the nine indices induced by a permutation of the free points. -/
 def relab (σ : Equiv.Perm (Fin 4)) (k : Fin 9) : ℕ :=
@@ -929,8 +827,8 @@ theorem WordAt.relabel {Q Q' : Fin 4 → Point} {X : Point} {w : ℕ}
   rw [cfg_anchor_eq h c d f Q' Q hu, cfg_anchor_eq h c d f Q' Q hv]
   exact W u v hu hv huv
 
-/-- **The labelling** (`C1_ZERO_LOWER:claim-labeling`): sort the free points by word index, and
-equal words by the slope `y/x` (the angle from `O`); the result is a labelled configuration. -/
+/-- The labelling: sort the free points by word index, and equal words by the slope `y/x` (the
+angle from `O`); the result is a labelled configuration. -/
 theorem Comp.main (H : Comp h c d f Q) (hfd : f ≤ d) (hL : ∀ a, ¬ InLower h c (Q a)) :
     False := by
   choose w hw11 hW using fun a => H.word_exists a (hL a)
@@ -971,7 +869,7 @@ theorem Comp.main (H : Comp h c d f Q) (hfd : f ≤ d) (hL : ∀ a, ¬ InLower h
       · rw [← h1, abs_zero] at hne; linarith
   exact L.cell.false
 
-/-! ### Theorem 4 -/
+/-! ### The zero-lower exclusion -/
 
 theorem inLower_tr {X : Point} : InLower c h (tr X) ↔ InLower h c X := by
   unfold InLower InTriangle ptO ptC ptH
@@ -985,11 +883,10 @@ theorem inLower_tr {X : Point} : InLower c h (tr X) ↔ InLower h c X := by
   · rintro ⟨a1, a2, a3⟩; exact ⟨a3, a2, a1⟩
   · rintro ⟨a1, a2, a3⟩; exact ⟨a3, a2, a1⟩
 
-/-- **Theorem 4** (`C1_ZERO_LOWER:Theorem4`, complete zero-lower exclusion). No competitive C1
-configuration has its lower anchor triangle `OHC` empty: for every position of the four free
-points in the closed unit square (every hull, every boundary contact), a C1 configuration with
-`n₀ = 0` has least triangle area below `A₀`. `docs/proof/nine/C1_ZERO_LOWER.md`, lines 605-609. -/
-theorem theorem4 {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
+/-- No competitive C1 configuration has its lower anchor triangle `OHC` empty: for every
+position of the four free points in the closed unit square (every hull, every boundary contact),
+a C1 configuration with no free point in `OHC` has least triangle area below `A₀`. -/
+theorem lowerCount_eq_zero_false {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (h0 : lowerCount h c W X Y Z = 0)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) : False := by

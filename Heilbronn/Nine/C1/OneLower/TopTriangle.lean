@@ -4,28 +4,28 @@ public import Heilbronn.Nine.C1.OneLower.SideCap
 public import Heilbronn.Nine.C1.OneLower.HullB
 public import Heilbronn.Nine.C1.OneLower.TopTriangleTrees
 
-/-! # The triangular two-top-cap placement with one lower C1 point (`docs/proof/nine/C1_ONE_LOWER_TOP_TRIANGLE.md`)
+/-! # The triangular two-top-cap placement with one lower C1 point
 
-**Role.** A component of the one-lower C1 class: `C1_ONE_LOWER_MIXED_CAPS:Theorem2` uses the
-Theorem for the occupancy row `(U, R, T, L_cap) = (1, 0, 2, 0)` when the hull of the two top-cap
-points with `D, F` is triangular. `C1_ONE_LOWER_CONVEX_TOP.md` covers the convex alternative.
+There is no competitive C1 configuration with one lower point, one point in `HCDF` and two
+top-cap points whose hull with `D, F` is triangular. `C1OneLowerMixedCaps.lowerCount_eq_one_false` uses this for
+the occupancy row `(U, R, T, L_cap) = (1, 0, 2, 0)`; the convex alternative is
+`C1OneLowerConvexTop.upper_or_threeTop_false`.
 
 **Setting.** The C1 anchors with `0 < d ≤ h < 1`, `0 < f ≤ c < 1`, minimum triangle area at
 least `A₀`; free points `L ∈ OHC`, `Q ∈ HCDF`, an outer top-cap point `X = (g, k)` and a second
 top-cap point `P` strictly inside the actual triangle `DXF`; configuration
-`c1Config h c d f L P Q X`. The full hull is the hexagon `O, C, D, X, F, H` of the top-cap note
+`c1Config h c d f L P Q X`. The full hull is the hexagon `O, C, D, X, F, H`
 (`C1OneLowerTopCap.hexagon`), with interior points `L, P, Q`. The proof assumes `f ≤ d` (after
-transposition); the claims using it carry that hypothesis. Thresholds `s = 8/73`, `ρ = 49/60`.
+transposition); the statements using it carry that hypothesis. Thresholds `s = 8/73`,
+`ρ = 49/60`.
 
 **Results.**
-* `mainTheorem` (`C1_ONE_LOWER_TOP_TRIANGLE:Theorem`), under `f ≤ d` (the caller,
-  `C1_ONE_LOWER_MIXED_CAPS:Theorem2`, transposes first).
-* `params`, `inner_bounds`, `Placement.bounds`, `Placement.factors_nonneg`: the bounds (1)–(8);
-  `ear_gen`, `ear_lt`, `ear_lt'` (the cross-ear bound, without AM-GM); `Placement.small`,
-  `Placement.cap1`: the four capacity-one triangles (9) (FLAG: the word "respectively" at lines
-  138-139).
-* `convex_hexagon`, `claim_cover` (the words and the capacity filter: 219 cases, 276 cells),
-  `eq13` (the certificate package, kernel-checked in `Heilbronn.Nine.C1.OneLower.TopTriangleTrees`).
+* `topTriangle_excluded`, under `f ≤ d` (the caller, `C1OneLowerMixedCaps.lowerCount_eq_one_false`, transposes first).
+* `params`, `inner_bounds`, `Placement.bounds`, `Placement.factors_nonneg`: the parameter and
+  point bounds; `ear_gen`, `ear_lt`, `ear_lt'` (the cross-ear bound, without AM-GM);
+  `Placement.small`, `Placement.cap1`: the four capacity-one triangles.
+* `convex_hexagon`, `exists_topTriangle_case` (the words and the capacity filter: 219 cases, 276 cells),
+  `topTriangle_cells_false` (the certificate package, kernel-checked in `Heilbronn.Nine.C1.OneLower.TopTriangleTrees`).
 -/
 
 @[expose] public section
@@ -34,7 +34,8 @@ noncomputable section
 namespace Heilbronn.Nine.C1OneLowerTopTriangle
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1ZeroLower Heilbronn.Nine.C1OneLowerB Cover Cert Cert.Expr
-open Heilbronn.Nine.C1OneLowerTopCap (HullWord HasHullWord hexagon ConvexPolygon)
+open Heilbronn.Nine.Package Heilbronn.Nine.C1OneLower
+open Heilbronn.Nine.C1OneLowerTopCap (HullWord HasHullWord hexagon)
 
 /-- `s = 8/73 < 2A₀`. -/
 local notation "s" => (8 / 73 : ℝ)
@@ -42,7 +43,7 @@ local notation "s" => (8 / 73 : ℝ)
 /-- `ρ = 49/60 < (4 + 2√3)s`. -/
 local notation "ρ" => (49 / 60 : ℝ)
 
-/-- The placement of the Theorem: C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1`; minimum triangle
+/-- The placement of `topTriangle_excluded`: C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1`; minimum triangle
 area at least `A₀`; `L` strictly inside `OHC`; `Q` strictly inside `HCDF`; `X = (g, k)` in the top
 cap (beyond `DF`, possibly on a side of the square); `P` strictly inside the actual triangle
 `DXF` (counterclockwise `D, X, F`). The configuration is `c1Config h c d f L P Q X`. -/
@@ -55,12 +56,12 @@ structure Placement (h c d f : ℝ) (L P Q X : Point) : Prop where
   topSq : X ∈ unitSquare
   inner : InTriangle P (ptD d) X (ptF f)
 
-/-! ### Section 1: bounds forced by the occupied cap triangle -/
+/-! ### Bounds forced by the occupied cap triangle -/
 
-/-- **Claims** (`C1_ONE_LOWER_TOP_TRIANGLE:(1)-(4)`), with an actual-area bound `t > s`:
-`hc ≥ 3t`, `hf, cd ≥ t` and `[DXF] = (1-d)(g-f) - (1-f)(1-k) = (1-f)(k-d) - (1-d)(1-g) ≥ 3t`
-(subdivision at `P`) give `h, c ≥ 3s`, `d, f ≥ s`, `g - f, k - d ≥ 3s`, `(1-d)(1-f) ≥ 3s`, and with
-`f ≤ d`: `d ≤ 41/65`, `f < 3/7`. `docs/proof/nine/C1_ONE_LOWER_TOP_TRIANGLE.md`, lines 42-73. -/
+/-- With an actual-area bound `t > s`: `hc ≥ 3t`, `hf, cd ≥ t` and
+`[DXF] = (1-d)(g-f) - (1-f)(1-k) = (1-f)(k-d) - (1-d)(1-g) ≥ 3t` (subdivision at `P`) give
+`h, c ≥ 3s`, `d, f ≥ s`, `g - f, k - d ≥ 3s`, `(1-d)(1-f) ≥ 3s`, and with `f ≤ d`: `d ≤ 41/65`,
+`f < 3/7`. -/
 theorem params {t h c d f g k : ℝ} (ht : 8 / 73 < t) (hd : 0 < d) (hh : h < 1) (hf : 0 < f)
     (hc : c < 1) (hfd : f ≤ d) (hdh : d ≤ h) (hfc : f ≤ c) (g1 : g ≤ 1) (k1 : k ≤ 1)
     (hc3 : 3 * t ≤ h * c) (aHF : t ≤ h * f) (_aCD : t ≤ c * d)
@@ -88,9 +89,8 @@ theorem params {t h c d f g k : ℝ} (ht : 8 / 73 < t) (hd : 0 < d) (hh : h < 1)
   refine ⟨by linarith, by linarith, by linarith, by linarith, by linarith, by linarith,
     by linarith, by nlinarith⟩
 
-/-- The inner cap point `P = (p_x, p_y)` ((5)–(7)): `-[DFP] ≥ t`, `[DXP] ≥ t`, `[XFP] ≥ t` give
-`p_x - f, p_y - d ≥ 8/65` and `p_x, p_y ≤ 1 - s`. `docs/proof/nine/C1_ONE_LOWER_TOP_TRIANGLE.md`, lines
-75-110. -/
+/-- The inner cap point `P = (p_x, p_y)`: `-[DFP] ≥ t`, `[DXP] ≥ t`, `[XFP] ≥ t` give
+`p_x - f, p_y - d ≥ 8/65` and `p_x, p_y ≤ 1 - s`. -/
 theorem inner_bounds {t d f g k px py : ℝ} (ht : 8 / 73 < t) (hd : 8 / 73 ≤ d) (hf : 8 / 73 ≤ f)
     (hd1 : d < 1) (hf1 : f < 1) (g1 : g ≤ 1) (k1 : k ≤ 1) (gf : 0 ≤ g - f) (kd : 0 ≤ k - d)
     (px1 : px ≤ 1) (py1 : py ≤ 1)
@@ -106,7 +106,7 @@ theorem inner_bounds {t d f g k px py : ℝ} (ht : 8 / 73 < t) (hd : 8 / 73 ≤ 
   rw [div_one] at r1 r2
   refine ⟨c1, c2, by linarith, by linarith⟩
 
-/-- The cross-ear bound (`C1_ONE_LOWER_TOP_CAP.md` (7), `C1_ONE_LOWER_MIXED_CAPS.md` (12)): for a
+/-- The cross-ear bound (as in `C1OneLowerTopCap.area_XFH_CDX_lt`): for a
 top-cap point `Z = (g, k)` with `(1-f)(k-d) - (1-d)(1-g) ≥ t` and `h ≥ 3t`,
 `[ZFH] = (1-h)g + f(h-k) < 1 - β` whenever `β < 3t` and `βu < 3tu² + (1-u)t` on `(0, 1]` (for
 `k ≥ h` it is at most `1 - h ≤ 1 - 3t`; for `k < h`, `(1-f)k ≥ t` gives
@@ -244,16 +244,15 @@ theorem Placement.comp (hS : Placement h c d f L P Q X) : Comp h c d f (freeQ L 
     exacts [hS.sq.1, hS.sq.2.1, hS.sq.2.2, hS.topSq], hS.min⟩
 
 theorem Placement.areaOK (hS : Placement h c d f L P Q X) : AreaOK (pts h c d f L P Q X) :=
-  (comp_areaOK hS.comp).comp idx idx_lt idx_inj
+  hS.comp.areaOK.comp idx idx_lt idx_inj
 
 /-- The anchor and cap table gives every increasing triple of the hexagon positive. -/
 theorem hexagon_table : ∀ i j k : Fin 6, i < j → j < k →
     orientedLookup (capTable [(8, 3)]) (idx i) (idx j) (idx k) = some true := by
   decide +kernel
 
-/-- Helper (implicit in the manuscript: "The full hull is the convex hexagon `O, C, D, X, F, H`",
-lines 145-148): the hull hexagon is convex (counterclockwise). -/
-theorem convex_hexagon (hS : Placement h c d f L P Q X) : ConvexPolygon (hexagon h c d f X) := by
+/-- The hull hexagon `O, C, D, X, F, H` is convex (counterclockwise). -/
+theorem convex_hexagon (hS : Placement h c d f L P Q X) : IsConvexPolygon (hexagon h c d f X) := by
   have H := hS.comp
   have tb := comp_capTable_holds H (ms := [(8, 3)]) (by
     intro p hp
@@ -314,7 +313,8 @@ theorem Placement.areas (hS : Placement h c d f L P Q X) :
   · convert a2 using 1; unfold sarea; ring
   · convert a3 using 1; unfold sarea; ring
 
-/-- The bounds (1)–(8) behind the 28 affine factors. -/
+/-- The bounds behind the 28 affine factors: the parameter bounds (`params`), the bounds on `L`
+(subdivision of `OHC`), on `P` (`inner_bounds`), and `s ≤ q_x, q_y ≤ 1 - s` for `Q`. -/
 theorem Placement.bounds (hS : Placement h c d f L P Q X) (hfd : f ≤ d) :
     24 / 73 ≤ h ∧ 24 / 73 ≤ c ∧ 8 / 73 ≤ d ∧ 8 / 73 ≤ f ∧ 24 / 73 ≤ X.1 - f ∧
       24 / 73 ≤ X.2 - d ∧ d ≤ 41 / 65 ∧ f ≤ 3 / 7 ∧
@@ -352,7 +352,8 @@ theorem Placement.bounds (hS : Placement h c d f L P Q X) (hfd : f ≤ d) :
   exact ⟨b1, b2, b3, b4, b5, b6, b7, b8, e1, e2, e3, e4, e5, g1, g2, g3, g4, by linarith,
     by linarith, by linarith, by linarith⟩
 
-/-- **The atoms of Section 3 are nonnegative**: the 28 affine factors, by (1)–(8). -/
+/-- The atoms of the certificate package are nonnegative: the 28 affine factors, by
+`Placement.bounds`. -/
 theorem Placement.factors_nonneg (hS : Placement h c d f L P Q X) (hfd : f ≤ d) :
     ∀ e ∈ Model.factors, 0 ≤ e.eval (zeta h c d f L P Q X) := by
   obtain ⟨b1, b2, b3, b4, b5, b6, b7, b8, e1, e2, e3, e4, e5, g1, g2, g3, g4, w1, w2, w3, w4⟩ :=
@@ -366,15 +367,9 @@ theorem Placement.factors_nonneg (hS : Placement h c d f L P Q X) (hfd : f ≤ d
   and_intros
   all_goals linarith
 
-/-- **Claim** (`C1_ONE_LOWER_TOP_TRIANGLE:(9)`). Under `f ≤ d`, the four actual triangles `CDX`,
-`XFH`, `OFH`, `DFH` (hexagon indices `(1,2,3), (3,4,5), (0,4,5), (2,4,5)`) have area below `ρ`
-(`[OFH] = hf < 3/7`; `[DFH] < ρ` by `C1_ZERO_LOWER.md` §4; `[XFH], [CDX] < ρ` by `ear_lt`), so
-none contains two of `L, P, Q` (two-interior-point theorem).
-FLAG (line 138-139): "the two height orders in that note give area at most `1 - 3s`, or strictly
-below `1 - 7s/3`, respectively" pairs the two bounds with `XFH`, `CDX`; in the top-cap note both
-height cases (`k ≥ h`: `≤ 1 - 3s`; `k < h`: `< 1 - 7s/3`) apply to each of the two triangles. The
-claim is unaffected. `docs/proof/nine/C1_ONE_LOWER_TOP_TRIANGLE.md`, lines 123-141.
-Uses: C1_ONE_LOWER_TOP_CAP:(7), CORNER_FAMILIES:TwoInteriorPointLemma. -/
+/-- Under `f ≤ d`, the four actual triangles `CDX`, `XFH`, `OFH`, `DFH` have doubled area below
+`ρ`: `[OFH] = hf < 3/7`; `[DFH] < ρ` by `C1ZeroLower.Comp.hdf_lt`; `[XFH], [CDX] < ρ` by
+`ear_lt` (for each of them, both height orders `k ≥ h` and `k < h` are covered). -/
 theorem Placement.small (hS : Placement h c d f L P Q X) (hfd : f ≤ d) :
     sarea (c, 0) (1, d) X < 49 / 60 ∧ sarea X (f, 1) (0, h) < 49 / 60 ∧
       sarea (0, 0) (f, 1) (0, h) < 49 / 60 ∧ sarea (1, d) (f, 1) (0, h) < 49 / 60 := by
@@ -409,15 +404,9 @@ theorem Placement.small (hS : Placement h c d f L P Q X) (hfd : f ≤ d) :
   refine ⟨by rw [e1]; linarith, by rw [e2]; linarith, ?_, hU⟩
   rw [e3]; nlinarith
 
-/-- **Claim** (`C1_ONE_LOWER_TOP_TRIANGLE:(9)`). Under `f ≤ d`, the four actual triangles `CDX`,
-`XFH`, `OFH`, `DFH` (hexagon indices `(1,2,3), (3,4,5), (0,4,5), (2,4,5)`) have area below `ρ`
-(`Placement.small`: `[OFH] = hf < 3/7`; `[DFH] < ρ` by `C1_ZERO_LOWER.md` §4; `[XFH], [CDX] < ρ`
-by `ear_lt`), so none contains two of `L, P, Q` (two-interior-point theorem).
-FLAG (line 138-139): "the two height orders in that note give area at most `1 - 3s`, or strictly
-below `1 - 7s/3`, respectively" pairs the two bounds with `XFH`, `CDX`; in the top-cap note both
-height cases (`k ≥ h`: `≤ 1 - 3s`; `k < h`: `< 1 - 7s/3`) apply to each of the two triangles. The
-claim is unaffected. `docs/proof/nine/C1_ONE_LOWER_TOP_TRIANGLE.md`, lines 123-141.
-Uses: C1_ONE_LOWER_TOP_CAP:(7), CORNER_FAMILIES:TwoInteriorPointLemma. -/
+/-- Under `f ≤ d`, none of the four actual triangles `CDX`, `XFH`, `OFH`, `DFH` (hexagon indices
+`(1,2,3), (3,4,5), (0,4,5), (2,4,5)`) contains two of `L, P, Q`: their doubled areas are below `ρ`
+(`Placement.small`), against the two-interior-point bound `AreaOK.two_inside`. -/
 theorem Placement.cap1 (hS : Placement h c d f L P Q X) (hfd : f ≤ d) {a b e j₁ j₂ : ℕ}
     (ht : (a, b, e) = (1, 2, 3) ∨ (a, b, e) = (3, 4, 5) ∨ (a, b, e) = (0, 4, 5) ∨
       (a, b, e) = (2, 4, 5))
@@ -449,9 +438,9 @@ theorem Placement.cap1 (hS : Placement h c d f L P Q X) (hfd : f ≤ d) {a b e j
 
 end
 
-/-! ### Section 2: the radial cover -/
+/-! ### The radial cover -/
 
-/-- The enumeration of the hexagon words (10) inside `OCH`: the four lower words. -/
+/-- The enumeration of the hexagon words inside `OCH`: the four lower words. -/
 theorem enum_lower :
     enumW 6 4 (fun w => !(hinside 6 w 0 1 5) || decide (w ∈ Model.lowerW)) 6 [] = true := by
   decide +kernel
@@ -472,8 +461,8 @@ def hexTriples : List (ℕ × ℕ × ℕ) :=
   (List.range 6).flatMap fun a => (List.range 6).flatMap fun b =>
     ((List.range 6).filter fun e => a < b ∧ b < e).map fun e => (a, b, e)
 
-/-- The capacity filter of Section 2: no hull triangle contains all three of `L, P, Q`, and none
-of the four triangles (9) contains two of them. -/
+/-- The capacity filter: no hull triangle contains all three of `L, P, Q`, and none of the four
+triangles `CDX`, `XFH`, `OFH`, `DFH` (`Placement.cap1`) contains two of them. -/
 def capFilter (wl wp wq : List ℕ) : Bool :=
   hexTriples.all (fun t => !(hinside 6 wl t.1 t.2.1 t.2.2 && hinside 6 wp t.1 t.2.1 t.2.2 &&
     hinside 6 wq t.1 t.2.1 t.2.2)) &&
@@ -497,15 +486,12 @@ theorem cases_keys (i : ℕ) (hi : i < 4) (j : ℕ) (hj : j < 4) (l : ℕ) (hl :
   rw [hc] at this
   simpa using this
 
-/-- **Claim** (`C1_ONE_LOWER_TOP_TRIANGLE:claim-cover`). Under `f ≤ d`, every placement is covered:
-the words of `L, P, Q` for the hexagon `O, C, D, X, F, H` ((10); completeness from Section 3 of the
-top-cap note) are a lower word `i`, a cap word `j` and an upper word `ℓ` with `(i, j, ℓ)` one of
-the 219 cases (capacity two of every hull triangle; capacity one of the triangles (9)); the eight
-split triples are divided further in the trees of the package.
-`docs/proof/nine/C1_ONE_LOWER_TOP_TRIANGLE.md`, lines 143-227.
-Uses: C1_ONE_LOWER_TOP_CAP:(12)-(13), ONE_CORNER:GlobalC1OccupancyCorollary,
-C1_ONE_LOWER_TOP_TRIANGLE:(9). -/
-theorem claim_cover {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X)
+/-- Under `f ≤ d`, every placement is covered: the radial words of `L, P, Q` for the hexagon
+`O, C, D, X, F, H` (which exist by `word_of_inTriangle`) are a lower word `i`, a cap word `j` and
+an upper word `ℓ` with `(i, j, ℓ)` one of the 219 cases (capacity two of every hull triangle;
+capacity one of the four triangles of `Placement.cap1`); the eight split triples are divided
+further in the trees of the package. -/
+theorem exists_topTriangle_case {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X)
     (hfd : f ≤ d) :
     ∃ i j l, (i, j, l) ∈ Model.caseKeys ∧
       HasHullWord (hexagon h c d f X) L (fun v => (Model.lowerW.getD i []).getD v.val 0) ∧
@@ -580,11 +566,11 @@ theorem claim_cover {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L 
     set A' := c1Config h c d f L P Q X ⟨idx a, idx_lt a (by omega)⟩
     set B' := c1Config h c d f L P Q X ⟨idx b, idx_lt b (by omega)⟩
     set E' := c1Config h c d f L P Q X ⟨idx e, idx_lt e (by omega)⟩
-    have m5 : (5 : Fin 9) ∈ {m : Fin 9 | CornerFamilies.InsideTriangle
+    have m5 : (5 : Fin 9) ∈ {m : Fin 9 | InsideTriangle
         (c1Config h c d f L P Q X m) A' B' E'} := Or.inl h1
-    have m6 : (6 : Fin 9) ∈ {m : Fin 9 | CornerFamilies.InsideTriangle
+    have m6 : (6 : Fin 9) ∈ {m : Fin 9 | InsideTriangle
         (c1Config h c d f L P Q X m) A' B' E'} := Or.inl h2
-    have m7 : (7 : Fin 9) ∈ {m : Fin 9 | CornerFamilies.InsideTriangle
+    have m7 : (7 : Fin 9) ∈ {m : Fin 9 | InsideTriangle
         (c1Config h c d f L P Q X m) A' B' E'} := Or.inl h3
     have := three_le_ncard m5 m6 m7 (by decide) (by decide) (by decide) (Set.toFinite _)
     omega
@@ -623,21 +609,18 @@ theorem claim_cover {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L 
     · simpa using hcap 0 4 5 (Or.inr (Or.inr (Or.inl rfl))) (by decide) (by decide) (by decide)
     · simpa using hcap 2 4 5 (Or.inr (Or.inr (Or.inr rfl))) (by decide) (by decide) (by decide)
 
-/-! ### Sections 3–4: the certificate package -/
+/-! ### The certificate package -/
 
-/-- **Claim** (`C1_ONE_LOWER_TOP_TRIANGLE:(13)`). The certificate package: under `f ≤ d`, no
+/-- The certificate package: under `f ≤ d`, no
 placement has its word triple among the 219 cases. Each of the 276 cells (the eight split triples
 divided by all sign choices of their listed actual areas, `(2, 3, 6)` with pattern
 `(-, +, -, -)` once more by `[LPQ]`) is excluded by a fixed positive combination (one of the 168
 certificates, converted to the atoms of the cell) of the products of the 28 affine factors and the
 signed actual-triangle costs with the strengthened occupancy rule, whose unit-cube bound is
-negative (kernel check `Model.allCases_ok`).
-`docs/proof/nine/C1_ONE_LOWER_TOP_TRIANGLE.md`, lines 193-321 (data
-`c1_one_lower_top_triangle_certificates.json`, checker `check_c1_one_lower_top_triangle.py`).
-Uses: C1_ONE_LOWER_TOP_CAP:(14), C1_ONE_LOWER_SIDE_CAP:(9). -/
-theorem eq13 {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X) (hfd : f ≤ d) :
+negative (kernel check `Model.allCases_ok`). -/
+theorem topTriangle_cells_false {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X) (hfd : f ≤ d) :
     False := by
-  obtain ⟨i, j, l, hk, hL, hP, hQ, bL, bP, bQ⟩ := claim_cover hS hfd
+  obtain ⟨i, j, l, hk, hL, hP, hQ, bL, bP, bQ⟩ := exists_topTriangle_case hS hfd
   have HC : HullCell 6 (hexagon h c d f X) (pts h c d f L P Q X)
       [Model.lowerW.getD i [], Model.capW.getD j [], Model.upperW.getD l []] := by
     refine ⟨by norm_num, rfl, convex_hexagon hS, pts_hexagon, fun k hk => ?_, fun k hk => ?_,
@@ -661,15 +644,13 @@ theorem eq13 {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X) 
   rcases v with _ | _ | _ | _ | _ | _ | _ | _ | _ | _ | _ | _ | v <;> simp only [zeta] <;>
     constructor <;> linarith
 
-/-- **Theorem** (`C1_ONE_LOWER_TOP_TRIANGLE:Theorem`). There is no competitive C1 configuration
-(with `f ≤ d`; `C1_ONE_LOWER_MIXED_CAPS:Theorem2` transposes first) with `L ∈ OHC`, `Q ∈ HCDF`,
-one exterior top-cap point `X` beyond `DF`, and a second top-cap point `P` strictly inside the
-actual triangle `DXF`. (If `D, F, X, P` have triangular hull, its third vertex can be named `X`;
-the convex alternative is `C1_ONE_LOWER_CONVEX_TOP:Theorem`.)
-`docs/proof/nine/C1_ONE_LOWER_TOP_TRIANGLE.md`, lines 18-34 and 319-321.
-Uses: C1_ONE_LOWER_TOP_TRIANGLE:claim-cover, C1_ONE_LOWER_TOP_TRIANGLE:(13). -/
-theorem mainTheorem {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X)
+/-- There is no competitive C1 configuration (with `f ≤ d`; `C1OneLowerMixedCaps.lowerCount_eq_one_false`
+transposes first) with `L ∈ OHC`, `Q ∈ HCDF`, one exterior top-cap point `X` beyond `DF`, and a
+second top-cap point `P` strictly inside the actual triangle `DXF`. (If `D, F, X, P` have
+triangular hull, its third vertex can be named `X`; the convex alternative is
+`C1OneLowerConvexTop.upper_or_threeTop_false`.) -/
+theorem topTriangle_excluded {h c d f : ℝ} {L P Q X : Point} (hS : Placement h c d f L P Q X)
     (hfd : f ≤ d) : False :=
-  eq13 hS hfd
+  topTriangle_cells_false hS hfd
 
 end Heilbronn.Nine.C1OneLowerTopTriangle

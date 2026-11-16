@@ -1,26 +1,27 @@
 module
 
-public import Heilbronn.Common.Cover
+public import Heilbronn.Common.SignTable
+public import Heilbronn.Nine.Setup.HeptagonWords
 
 /-! # The certificate model of the seven-boundary interior case
 
-Computable model, for the kernel check of the cover (`Heilbronn.Common.Cover`), of the case of
-`SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION.md` §5 in which both free points lie strictly inside the
-anchor heptagon. It replaces the hand case analysis (left pair, right pair, mixed placements,
-`docs/proof/nine/seven_boundary_mixed_{lower,above}_certificates.json`) by one cover over pairs of ray words,
-found by linear programming (`scripts/nine/seven_b/`). Everything is indexed by natural numbers:
+Computable model, for the kernel check of the cover (`Heilbronn.Common.Cover`, sign tables from
+`Heilbronn.Common.SignTable`), of the case in
+which both free points lie strictly inside the anchor heptagon: one cover over pairs of ray words,
+found by linear programming. Everything is indexed by natural numbers:
 
 * points `0, …, 6` are the anchors `A, B, C, D, E, F, H` in counterclockwise heptagon order,
   `7, 8` the free points `P, Q`; the eleven variables `0, …, 10` are
   `a, h, b, c, d, e, f, p_x, p_y, q_x, q_y` (`pt`);
-* `words`: the 57 ray words (`SEVEN_BOUNDARY_MIXED_LOWER.md` §2): `wsign w i j` is the truth of
-  `[V_i V_j X] > 0` for a point `X` with word `w` (`j - i mod 7 ≤ r_i`);
+* `words`: the 57 ray words: `wsign w i j` is the truth of `[V_i V_j X] > 0` for a point `X`
+  with word `w` (`j - i mod 7 ≤ r_i`);
 * a *case* `ks` is the list of the word indices of its free points (`[p]` for one point, `[p, q]`
   for two); `baseSigns ks` are its known signed triangles (all anchor triples positive, and the
   anchor–anchor–free triples from the words); `factors` the box and order factors;
 * `atoms ks fs`: the factors, the strengthened cost `±[abc] - bnd n` of every signed triangle of
   the table (`n` the number of free points certified inside), and the cut atoms of `fs`;
-* facts are signed triangles (`Sum.inl`) or cut atoms (`Sum.inr e`, meaning `e ≥ 0`); the splits
+* facts (`SignOrCut`) are signed triangles (`Sum.inl`) or cut atoms (`Sum.inr e`, meaning
+  `e ≥ 0`); the splits
   are `Split.tri a b c` (the orientation of `abc`) and `Split.cut i q` (`v_i ≤ q` or `v_i ≥ q`).
 
 `badKind w` classifies the words excluded for a single point (the ears `ABH`, `ABC`, `CDE`, the
@@ -34,23 +35,9 @@ namespace Heilbronn.Nine.SevenInterior.Model
 
 open Cert Cert.Expr Cover
 
-/-- The 57 ray words of a point inside the anchor heptagon, in lexicographic order. -/
-def words : List (List ℕ) :=
-  [[1, 1, 5, 5, 4, 3, 2], [1, 2, 5, 4, 4, 3, 2], [1, 3, 5, 4, 3, 3, 2], [1, 4, 5, 4, 3, 2, 2],
-    [1, 5, 5, 4, 3, 2, 1], [2, 1, 1, 5, 5, 4, 3], [2, 1, 2, 5, 4, 4, 3], [2, 1, 3, 5, 4, 3, 3],
-    [2, 1, 4, 5, 4, 3, 2], [2, 2, 1, 4, 5, 4, 3], [2, 2, 2, 4, 4, 4, 3], [2, 2, 3, 4, 4, 3, 3],
-    [2, 2, 4, 4, 4, 3, 2], [2, 3, 2, 4, 3, 4, 3], [2, 3, 3, 4, 3, 3, 3], [2, 3, 4, 4, 3, 3, 2],
-    [2, 4, 3, 4, 3, 2, 3], [2, 4, 4, 4, 3, 2, 2], [2, 5, 4, 4, 3, 2, 1], [3, 2, 1, 1, 5, 5, 4],
-    [3, 2, 1, 2, 5, 4, 4], [3, 2, 1, 3, 5, 4, 3], [3, 2, 2, 1, 4, 5, 4], [3, 2, 2, 2, 4, 4, 4],
-    [3, 2, 2, 3, 4, 4, 3], [3, 2, 3, 2, 4, 3, 4], [3, 2, 3, 3, 4, 3, 3], [3, 2, 4, 3, 4, 3, 2],
-    [3, 3, 2, 1, 3, 5, 4], [3, 3, 2, 2, 3, 4, 4], [3, 3, 2, 3, 3, 4, 3], [3, 3, 3, 2, 3, 3, 4],
-    [3, 3, 3, 3, 3, 3, 3], [3, 3, 4, 3, 3, 3, 2], [3, 4, 3, 2, 3, 2, 4], [3, 4, 3, 3, 3, 2, 3],
-    [3, 4, 4, 3, 3, 2, 2], [3, 5, 4, 3, 3, 2, 1], [4, 3, 2, 1, 1, 5, 5], [4, 3, 2, 1, 2, 5, 4],
-    [4, 3, 2, 2, 1, 4, 5], [4, 3, 2, 2, 2, 4, 4], [4, 3, 2, 3, 2, 4, 3], [4, 3, 3, 2, 1, 3, 5],
-    [4, 3, 3, 2, 2, 3, 4], [4, 3, 3, 3, 2, 3, 3], [4, 3, 4, 3, 2, 3, 2], [4, 4, 3, 2, 1, 2, 5],
-    [4, 4, 3, 2, 2, 2, 4], [4, 4, 3, 3, 2, 2, 3], [4, 4, 4, 3, 2, 2, 2], [4, 5, 4, 3, 2, 2, 1],
-    [5, 4, 3, 2, 1, 1, 5], [5, 4, 3, 2, 2, 1, 4], [5, 4, 3, 3, 2, 1, 3], [5, 4, 4, 3, 2, 1, 2],
-    [5, 5, 4, 3, 2, 1, 1]]
+/-- The 57 ray words of a point inside the anchor heptagon, in lexicographic order
+(`heptagonWords`). -/
+def words : List (List ℕ) := heptagonWords
 
 /-- The entry `i` of the word `w`. -/
 def wordAt (w i : ℕ) : ℕ := (words.getD w []).getD i 0
@@ -103,11 +90,6 @@ def factors : List Expr :=
 certified inside points. -/
 def bnd (n : ℕ) : ℚ := if n = 0 then 7 / 64 else if n = 1 then 21 / 64 else 102 / 125
 
-/-- The increasing index triples of `0, …, 8`, in lexicographic order. -/
-def lexTriples : List (ℕ × ℕ × ℕ) :=
-  (List.range 9).flatMap fun a => (List.range 9).flatMap fun b => (List.range 9).filterMap
-    fun c => if a < b ∧ b < c then some (a, b, c) else none
-
 /-- The known sign of an increasing triple: anchor triples are positive; an anchor–anchor–free
 triple has the sign given by the word of its free point. -/
 def anchorSign (ks : List ℕ) (t : ℕ × ℕ × ℕ) : Option Bool :=
@@ -117,27 +99,17 @@ def anchorSign (ks : List ℕ) (t : ℕ × ℕ × ℕ) : Option Bool :=
 
 /-- The initial signed triangles of the case `ks`. -/
 def baseSigns (ks : List ℕ) : List SFact :=
-  lexTriples.filterMap fun t => (anchorSign ks t).map fun sg => (t, sg)
+  (lexTriples 9).filterMap fun t => (anchorSign ks t).map fun sg => (t, sg)
 
 /-- The free points of the case `ks`. -/
 def free (ks : List ℕ) : List ℕ := (List.range ks.length).map (· + 7)
 
-/-- A fact: a signed triangle, or an expression known to be nonnegative (a cut). -/
-abbrev Fact := SFact ⊕ Expr
-
-/-- The signed triangles of the facts. -/
-def sgnFacts (fs : List Fact) : List SFact := fs.filterMap Sum.getLeft?
-
-/-- The cut atoms of the facts. -/
-def cutFacts (fs : List Fact) : List Expr := fs.filterMap Sum.getRight?
-
 /-- The sign table of the case `ks` with the extra facts `fs`. -/
-def table (ks : List ℕ) (fs : List Fact) : List SFact := baseSigns ks ++ sgnFacts fs
+def table (ks : List ℕ) (fs : List SignOrCut) : List SFact := baseSigns ks ++ sgnFacts fs
 
 /-- All the atoms of the case `ks` with the extra facts `fs`. -/
-def atoms (ks : List ℕ) (fs : List Fact) : List Expr :=
-  factors ++ (table ks fs).map (fun f => costAtom pt bnd f (insideList (table ks fs) (free ks) f).length) ++
-    cutFacts fs
+def atoms (ks : List ℕ) (fs : List SignOrCut) : List Expr :=
+  factors ++ tableCosts pt bnd (free ks) (table ks fs) ++ cutFacts fs
 
 /-! ### The cover package -/
 
@@ -147,14 +119,14 @@ inductive Split where
   | cut (i : ℕ) (q : ℚ)
 
 /-- The children of a split. An invalid split has one child with no new fact. -/
-def branches (ks : List ℕ) : List Fact → Split → List (List Fact)
+def branches (ks : List ℕ) : List SignOrCut → Split → List (List SignOrCut)
   | _, .tri a b c =>
     if a < b ∧ b < c ∧ c < 7 + ks.length then (signBranches (a, b, c)).map (List.map Sum.inl)
     else [[]]
   | _, .cut i q => (cutBranches (v i) q).map (List.map Sum.inr)
 
 /-- The cover package of the case `ks`. -/
-def spec (ks : List ℕ) : Spec Fact Split where
+def spec (ks : List ℕ) : Spec SignOrCut Split where
   atoms := atoms ks
   branches := branches ks
 

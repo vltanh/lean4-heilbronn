@@ -2,14 +2,13 @@ module
 
 public import Heilbronn.Nine.EightBoundary.CertCommon
 
-/-! # Theorem 12 by a polynomial certificate
+/-! # The double wedge without corner caps by a polynomial certificate
 
-`EIGHT_BOUNDARY.md` Theorem 12 (class R5): `O` in the central region, in `ADE ∩ HDE` and
-`BCF ∩ CFG`, outside both corner caps `BCDE`, `DEFG`. Instead of the scalar argument of §10
-(the weighted cancellation (32) and the two ranges of `R`), a degree-3 certificate on the
-fourteen oriented `O`-triangles `ADO, EHO, CFO, GBO, EAO, HDO, FBO, GCO, BEO, DGO, BCO, FGO, DEO,
-HAO`, the budgets, the gap bounds of Lemma 7 and the four overlaps of Lemma 10 shows that not all
-of these doubled areas can be at least `7/64` (`data/nine/eight/thm12_terms.txt`).
+`EightBoundary.minTriangleArea_lt_of_no_corner_cap` (class `R5`): `O` in the central region, in `ADE ∩ HDE` and
+`BCF ∩ CFG`, outside both corner caps `BCDE`, `DEFG`. A degree-3 certificate on the fourteen
+oriented `O`-triangles `ADO, EHO, CFO, GBO, EAO, HDO, FBO, GCO, BEO, DGO, BCO, FGO, DEO, HAO`, the
+budgets, the gap bounds of `EightBoundary.two_mul_minTriangleArea_le_maxGap` and the four overlaps of `EightBoundary.opposite_contacts_overlap`
+shows that not all of these doubled areas can be at least `7/64`.
 -/
 
 @[expose] public section
@@ -19,8 +18,8 @@ namespace Heilbronn.Nine.EightBoundary.CertModel
 
 open Heilbronn.Cert Heilbronn.Cert.Expr
 
-/-- The oriented `O`-triangles of Theorem 12 and the overlaps `c - g`, `f - b`, `e - a`,
-`h - d`. -/
+/-- The oriented `O`-triangles of `EightBoundary.minTriangleArea_lt_of_no_corner_cap` and the overlaps `c - g`, `f - b`,
+`e - a`, `h - d`. -/
 def case12 : List Expr :=
   [esarea pA pD pO - s, esarea pE pH pO - s, esarea pC pF pO - s, esarea pG pB pO - s,
    esarea pE pA pO - s, esarea pH pD pO - s, esarea pF pB pO - s, esarea pG pC pO - s,
@@ -32,7 +31,8 @@ theorem check12 :
       true := by
   decide +kernel
 
-/-- Theorem 12, the certificate: the fourteen oriented doubled areas cannot all be `≥ 7/64`. -/
+/-- The certificate for `EightBoundary.minTriangleArea_lt_of_no_corner_cap`: the fourteen oriented doubled areas cannot all
+be `≥ 7/64`. -/
 theorem cert12 {a b c d e f g h x y : ℝ} (H : Base a b c d e f g h x y)
     (oAD : 7 / 64 ≤ sarea (0, a) (1, d) (x, y)) (oEH : 7 / 64 ≤ sarea (1, e) (0, h) (x, y))
     (oCF : 7 / 64 ≤ sarea (c, 0) (f, 1) (x, y)) (_oGB : 7 / 64 ≤ sarea (g, 1) (b, 0) (x, y))

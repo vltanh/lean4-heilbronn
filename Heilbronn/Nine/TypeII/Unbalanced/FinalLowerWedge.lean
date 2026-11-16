@@ -13,56 +13,47 @@ public import Heilbronn.Nine.TypeII.Unbalanced.ChainBasic
 public import Heilbronn.Nine.TypeII.TypeIICompletion
 public import Heilbronn.Nine.Corners.CornerFamilies
 
-/-! # The last unbalanced cell and completion of Type II (`docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`)
+/-! # The last unbalanced cell and completion of Type II
 
-**Role.** Primary route. Theorem 1 excludes the last placement of the one-point upper cut in
-cell II; §5 (`claim_chain`) assembles the chain `UNBALANCED_ONE_UPPER_RADIAL` →
-`UNBALANCED_OCCUPIED_LOWER_EAR` → `UNBALANCED_FINAL_NEGATIVE_LINE` →
-`UNBALANCED_FINAL_UPPER_PAIR` → Theorem 1; and Theorem 2 is the complete Type-II theorem cited by
-`UNRESTRICTED.md` §3 (lines 80-84), `TYPE_II.md` (lines 5-12), `TYPE_II_COMPLETION.md`
-(lines 16-19) and `GLOBAL_THEOREM.md` (line 87). `typeII_exclusion` restates Theorem 2 in the
-form used by the assembly.
+`false_of_wedgeSetting` excludes the last placement of the one-point upper cut in support cell II;
+`false_of_oneUpperSetting` assembles the chain `UnbalancedOneUpperRadial.P_T_above_DR_Q_below` →
+`UnbalancedOccupiedLowerEar.Q_not_inside_EBR` → `UnbalancedFinalNegativeLine.sarea_QTE_pos` →
+`UnbalancedFinalUpperPair.Q_inside_ERS` → `false_of_wedgeSetting`; and `minTriangleArea_typeIIConfig_lt_A₀` is the complete Type-II
+theorem. `typeII_exclusion` restates `minTriangleArea_typeIIConfig_lt_A₀` in the form used by the assembly.
 
-**Setting of Theorem 1** (lines 5-30, `WedgeSetting`): `Row123 l b P Q R S T`, every actual
+**Setting of `false_of_wedgeSetting`** (`WedgeSetting`): `Row123 l b P Q R S T`, every actual
 doubled area at least `s = 8/73` (`4/73 ≤ minTriangleArea (typeIIConfig …)`), the right hull the
 quadrilateral `B, R, S, C` with `T` inside, in support cell II, and the strict placement
 `P` above `CE` and `DR`; `Q ∈ int ERS ∩ int EBS`, below `CE` and `DR`;
 `T ∈ int ECR ∩ int DCR ∩ int CQS`; `[QTE], [QTC] > 0`, `[QTS] < 0`. Write `R = (r, u)`,
 `S = (k, t)`, `q = 1 - λ`, `A = [ERC]`, `B₁ = [ESC]`, `δ = [ERS]`, `η = [RSC]`, `J = [DRS]`.
 
-Explicit functions of §§2-4 (generic in `s`): `aStar` (`A_* = 1 - q(1 - r)`), `deltaStar`
-(`δ_* = A_* - rB_*`), `fStar`, `gStar` (`F_*`, `G_*` of (5)), `betaFn`, `gammaFn` (`β`, `γ` of
-(7)), `discFn` (`Δ = β² + 14rγ`), and the quartics `p0Poly`, `p1Poly` of (9).
+Explicit scalar functions (generic in `s`): `aStar` (`A_* = 1 - q(1 - r)`), `deltaStar`
+(`δ_* = A_* - rB_*`), `fStar`, `gStar` (`F_*`, `G_*`), `betaFn`, `gammaFn` (`β`, `γ`),
+`discFn` (`Δ = β² + 14rγ`), and the quartics `p0Poly`, `p1Poly`.
 
 **Results.**
-* `claim_ids` (1): `δ = kA - rB₁`, `η = B₁ + δ - A`, `J = δ + q(k - r)`; `0 < δ < A`, `B₁ > η`.
-* `claim_F` (2): `F = (qr - 2s)δ - sq(k + r) ≥ 0`.
-* `claim_G` (3): `G = (B₁ - 2s)δ - s(A + B₁) ≥ 0`, so `B₁ > 3s`.
-* `claim_replace` (4)-(6): `qr ≥ 3s`, `F_*, G_* ≥ 0`, `3/5 < r < 65/73`, `3s/r ≤ q < 9/10`.
-* `eq7`, `eq8`, `claim_W` (7)-(9): the weighted quadratic `W = F_* + (7/2)G_*`, the endpoint
+* `wedge_identities`: `δ = kA - rB₁`, `η = B₁ + δ - A`, `J = δ + q(k - r)`; `0 < δ < A`, `B₁ > η`.
+* `F_nonneg`: `F = (qr - 2s)δ - sq(k + r) ≥ 0`.
+* `G_nonneg`: `G = (B₁ - 2s)δ - s(A + B₁) ≥ 0`, so `B₁ > 3s`.
+* `fStar_gStar_nonneg`: `qr ≥ 3s`, `F_*, G_* ≥ 0`, `3/5 < r < 65/73`, `3s/r ≤ q < 9/10`.
+* `fStar_add_gStar_eq`, `discFn_endpoints`, `discFn_nonneg_le_max`: the weighted quadratic `W = F_* + (7/2)G_*`, the endpoint
   values of `Δ`, and `0 ≤ Δ(q, r) ≤ max(Δ(3s/r, r), Δ(9/10, r))`.
-* `claim_quartics` (10)-(13): `P₀, P₁ < 0` on `[3/5, 65/73]`.
-* `theorem1`: the final placement is impossible.
-* `claim_chain` (§5): the one-point upper cut in cell II is impossible (minimum area `≥ A₀`).
-* `theorem2`: every Type-II configuration (`0 < b < 1`, `0 < λ < 1`, free points in the square)
+* `p0Poly_p1Poly_neg`: `P₀, P₁ < 0` on `[3/5, 65/73]`.
+* `false_of_wedgeSetting`: the final placement is impossible.
+* `false_of_oneUpperSetting`: the one-point upper cut in cell II is impossible (minimum area `≥ A₀`).
+* `minTriangleArea_typeIIConfig_lt_A₀`: every Type-II configuration (`0 < b < 1`, `0 < λ < 1`, free points in the square)
   has minimum triangle area `< A₀`; `typeII_exclusion`: none has `A₀ ≤ minTriangleArea`.
 
-Theorem 2 covers the whole Type-II family `IsTypeII`, not only `b ≤ 1/2`: its proof starts from
-the count reduction of `TYPE_II.md` §8, which includes the shear normalization of `TYPE_II.md`
-§2 (to `b ≤ 1/2` or Type III, area-equivalently, "after the permitted reflection", line 296).
-Its proof chains through the following results of other groups' manuscripts:
-`TYPE_II:ShearNormalization`, `TYPE_II:claim-two-residual-classes` (§8 count reduction, built on
-`TYPE_II:claim-count-bounds` and `TYPE_II:claim-exclude-213`), `CORNER_FAMILIES:TypeIII-complete`,
-`TYPE_II_COMPLETION:Theorem11` (row `(2,2,2)`), `TYPE_II:UnbalancedCutLemma` (no central point
-above `CE`), `TYPE_II_COMPLETION:Theorem12`, `TYPE_II_COMPLETION:Theorem14` (triangular right
-hull, via `TYPE_II_COMPLETION:Theorem13`), and, inside this group, `UNBALANCED_RIGHT_HULL`
-Theorems 1-4, `UNBALANCED_RADIAL_SPLIT:Theorem1`, `UNBALANCED_UPPER_CELL_II:Theorem1`,
-`UNBALANCED_CELL_I:Theorem1`, `UNBALANCED_CELL_III:Theorem1` and `claim_chain`.
-
-Implicit in the manuscript: the manuscript's Theorem 2 assembly (lines 308-313) does not list
-`UNBALANCED_RIGHT_HULL` Theorems 3-4 and `UNBALANCED_RADIAL_SPLIT:Theorem1`; they enter through
-`UNBALANCED_UPPER_CELL_II` (its line 51) and are listed in `Uses` below. Points on a dividing
-line give a zero area (line 285), so the strict alternatives of `claim_chain` are exhaustive.
+`minTriangleArea_typeIIConfig_lt_A₀` covers the whole Type-II family `IsTypeII`, not only `b ≤ 1/2`: its proof starts from
+the count reduction `TypeII.exists_areaEquiv_typeIII_or_residual_row`, which includes the shear normalization
+to `b ≤ 1/2` or Type III (area-equivalently, up to reflection). It then uses
+`CornerFamilies.typeIII_lt_A₀`, `TypeIICompletion.minTriangleArea_lt_A₀_of_balanced_counts` (row `(2,2,2)`),
+`TypeIICompletion.minTriangleArea_lt_A₀_of_triangular_right` (triangular right hull), `UnbalancedRightHull.quadHull_cell_of_not_triangular`,
+`TypeII.unbalancedCutLemma` (a central point above `CE`) and, for the quadrilateral right hull,
+`UnbalancedCellI.false_of_cellI_of_below_CE`, `UnbalancedCellIII.false_of_cellIII`, `UnbalancedRightHull.not_cellI_or_cellIII`,
+`UnbalancedUpperCellII.false_of_upperSetting` and `false_of_oneUpperSetting`. Points on a dividing line give a zero area,
+so the strict alternatives of `false_of_oneUpperSetting` are exhaustive.
 -/
 
 @[expose] public section
@@ -74,7 +65,8 @@ open UnbalancedRightHull UnbalancedChain
 
 variable {l b : ℝ} {P Q R S T : Point}
 
-/-- The final strict placement of the note (every actual doubled area at least `8/73`). -/
+/-- The final strict placement of the one-point upper cut in support cell II (every actual
+doubled area at least `8/73`). -/
 structure WedgeSetting (l b : ℝ) (P Q R S T : Point) : Prop where
   row : Row123 l b P Q R S T
   min : 4 / 73 ≤ minTriangleArea (typeIIConfig l b P Q R S T)
@@ -93,46 +85,48 @@ structure WedgeSetting (l b : ℝ) (P Q R S T : Point) : Prop where
   QTC_pos : 0 < sarea Q T ptC
   QTS_neg : sarea Q T S < 0
 
-/-! ### The scalar functions of §§2-4 -/
+/-! ### The scalar functions -/
 
-/-- `A_* = 1 - q(1 - r)`, (5). -/
+/-- `A_* = 1 - q(1 - r) = A + u`, the bound replacing `A = [ERC]`. -/
 def aStar (q r : ℝ) : ℝ := 1 - q * (1 - r)
 
-/-- `δ_* = A_* - rB_*`, (5). -/
+/-- `δ_* = A_* - rB_*`, the value of `δ = kA - rB₁` after `k → 1`, `A → A_*`. -/
 def deltaStar (q r B : ℝ) : ℝ := aStar q r - r * B
 
-/-- `F_* = (qr - 2s)δ_* - sq(1 + r)`, (5). -/
+/-- `F_* = (qr - 2s)δ_* - sq(1 + r)`, the value of `F` after `k → 1`, `A → A_*`. -/
 def fStar (s q r B : ℝ) : ℝ := (q * r - 2 * s) * deltaStar q r B - s * q * (1 + r)
 
-/-- `G_* = (B_* - 2s)δ_* - s(A_* + B_*)`, (5). -/
+/-- `G_* = (B_* - 2s)δ_* - s(A_* + B_*)`, the value of `G` after `k → 1`, `A → A_*`. -/
 def gStar (s q r B : ℝ) : ℝ := (B - 2 * s) * deltaStar q r B - s * (aStar q r + B)
 
-/-- `β(q, r) = -{2qr² - 7qr + 7q - 18rs + 7s - 7}/2`, (7). -/
+/-- `β(q, r) = -{2qr² - 7qr + 7q - 18rs + 7s - 7}/2`, the coefficient of `B` in
+`W = F_* + (7/2)G_*` (`fStar_add_gStar_eq`). -/
 def betaFn (s q r : ℝ) : ℝ :=
   -(2 * q * r ^ 2 - 7 * q * r + 7 * q - 18 * r * s + 7 * s - 7) / 2
 
-/-- `γ(q, r) = {2q²r² - 2q²r - 27qrs + 2qr + 23qs - 25s}/2`, (7). -/
+/-- `γ(q, r) = {2q²r² - 2q²r - 27qrs + 2qr + 23qs - 25s}/2`, the constant term of
+`W = F_* + (7/2)G_*` (`fStar_add_gStar_eq`). -/
 def gammaFn (s q r : ℝ) : ℝ :=
   (2 * q ^ 2 * r ^ 2 - 2 * q ^ 2 * r - 27 * q * r * s + 2 * q * r + 23 * q * s - 25 * s) / 2
 
-/-- `Δ(q, r) = β² + 14rγ`, (7). -/
+/-- `Δ(q, r) = β² + 14rγ`, the discriminant of `W` as a quadratic in `B` (`fStar_add_gStar_eq`). -/
 def discFn (s q r : ℝ) : ℝ := betaFn s q r ^ 2 + 14 * r * gammaFn s q r
 
-/-- `P₀(r)`, with `Δ(3s/r, r) = P₀(r)/(21316r²)` at `s = 8/73`, (8)-(9). -/
+/-- `P₀(r)`, with `Δ(3s/r, r) = P₀(r)/(21316r²)` at `s = 8/73` (`discFn_endpoints`). -/
 def p0Poly (r : ℝ) : ℝ := 9216 * r ^ 4 - 303968 * r ^ 3 + 447265 * r ^ 2 - 209328 * r + 28224
 
-/-- `P₁(r)`, with `Δ(9/10, r) = P₁(r)/2131600` at `s = 8/73`, (8)-(9). -/
+/-- `P₁(r)`, with `Δ(9/10, r) = P₁(r)/2131600` at `s = 8/73` (`discFn_endpoints`). -/
 def p1Poly (r : ℝ) : ℝ :=
   1726596 * r ^ 4 + 8301852 * r ^ 3 - 451251 * r ^ 2 - 7623182 * r + 2401
 
-/-! ### Theorem 1 -/
+/-! ### The final placement -/
 
 /-- The coordinate order and the positivity of `A = [ERC]` and `B₁ = [ESC]` in the final
 placement (the right points lie below `CE`). -/
 theorem wedge_facts (h : WedgeSetting l b P Q R S T) :
     0 < b ∧ b ≤ 1 / 2 ∧ 0 < l ∧ l < 1 ∧ R.2 < R.1 ∧ b < R.1 ∧ R.1 < S.1 ∧ S.1 ≤ 1 ∧
       0 ≤ R.2 ∧ R.2 < S.2 ∧ S.2 < 1 ∧ 0 < sarea (ptE l) R ptC ∧ 0 < sarea (ptE l) S ptC := by
-  obtain ⟨o1, o2, o3, o4, o5, o6, o7⟩ := UnbalancedCellI.claim_order h.row h.quad
+  obtain ⟨o1, o2, o3, o4, o5, o6, o7⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
   have hb := h.row.b_pos
   have hb2 := h.row.b_le
   have hl := h.row.l_pos
@@ -147,7 +141,8 @@ theorem wedge_min (h : WedgeSetting l b P Q R S T) :
     (8 / 73 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by
   have := h.min; linarith
 
-/-- The point `Q` is inside `EBC` and `ECR`, and the actual areas at `Q` used in §§1-2. -/
+/-- The point `Q` is inside `EBC` and `ECR`, and the actual areas `[ERQ]`, `[RSQ]`, `[SEQ]`,
+`[RDQ]`, `[DEQ]` are at least `8/73`. -/
 theorem wedge_Q (h : WedgeSetting l b P Q R S T) :
     InTriangle Q (ptE l) (ptB b) ptC ∧ InTriangle Q (ptE l) R ptC ∧
       8 / 73 ≤ sarea (ptE l) R Q ∧ 8 / 73 ≤ sarea R S Q ∧ 8 / 73 ≤ sarea S (ptE l) Q ∧
@@ -171,10 +166,9 @@ theorem wedge_Q (h : WedgeSetting l b P Q R S T) :
     ge_of_pos (abs_ge hm 7 2 5) q3, ge_of_pos (abs_ge hm 6 0 5) hRDQ,
     ge_of_pos (abs_ge hm 0 2 5) hDEQ⟩
 
-/-- **Claim** (`UNBALANCED_FINAL_LOWER_WEDGE:claim-ids`), equation (1). The identities
-`δ = kA - rB₁`, `η = B₁ + δ - A`, `J = δ + q(k - r)`, and in the final placement `0 < δ < A`
-and `B₁ > η`. `docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`, lines 41-57. -/
-theorem claim_ids (h : WedgeSetting l b P Q R S T) :
+/-- The identities `δ = kA - rB₁`, `η = B₁ + δ - A`, `J = δ + q(k - r)`, and in the final
+placement `0 < δ < A` and `B₁ > η`. -/
+theorem wedge_identities (h : WedgeSetting l b P Q R S T) :
     let A := sarea (ptE l) R ptC
     let B₁ := sarea (ptE l) S ptC
     let δ := sarea (ptE l) R S
@@ -196,17 +190,14 @@ theorem claim_ids (h : WedgeSetting l b P Q R S T) :
       mul_le_mul_of_nonneg_right hk1 hA.le]
   exact ⟨e1, e2, e3, hδ, hδA, show sarea R S ptC < sarea (ptE l) S ptC by rw [e2]; linarith⟩
 
-/-- **Claim** (`UNBALANCED_FINAL_LOWER_WEDGE:claim-F`), equation (2). `Q` below `DR` and inside
-`ERS` give `F = (qr - 2s)δ - sq(k + r) ≥ 0` (`s = 8/73`).
-`docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`, lines 59-73.
-Uses: UNBALANCED_FINAL_LOWER_WEDGE:claim-ids. -/
-theorem claim_F (h : WedgeSetting l b P Q R S T) :
+/-- `Q` below `DR` and inside `ERS` give `F = (qr - 2s)δ - sq(k + r) ≥ 0` (`s = 8/73`). -/
+theorem F_nonneg (h : WedgeSetting l b P Q R S T) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     0 ≤ (q * R.1 - 2 * s) * sarea (ptE l) R S - s * q * (S.1 + R.1) := by
   intro s q
   obtain ⟨hb, -, hl, hl1, -, hbr, hrk, -, -, -, -, -, -⟩ := wedge_facts h
-  obtain ⟨-, -, e3, hδ, -, -⟩ := claim_ids h
+  obtain ⟨-, -, e3, hδ, -, -⟩ := wedge_identities h
   obtain ⟨-, -, a1, a2, a3, a4, a5⟩ := wedge_Q h
   have hbar := bary (ptE l) R S Q R ptD
   have vE : sarea R ptD (ptE l) = (1 - l) * R.1 := by simp only [sarea, ptE, ptD]; ring
@@ -220,11 +211,8 @@ theorem claim_F (h : WedgeSetting l b P Q R S T) :
   nlinarith [mul_le_mul_of_nonneg_left a4 hδ.le, mul_le_mul_of_nonneg_right a1 hqr.le,
     mul_le_mul_of_nonneg_right a3 hqr.le, mul_le_mul_of_nonneg_right a1 hJ.le]
 
-/-- **Claim** (`UNBALANCED_FINAL_LOWER_WEDGE:claim-G`), equation (3). `T ∈ int CQS` gives
-`G = (B₁ - 2s)δ - s(A + B₁) ≥ 0`, hence `B₁ > 3s` (`s = 8/73`).
-`docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`, lines 76-100.
-Uses: UNBALANCED_FINAL_LOWER_WEDGE:claim-ids. -/
-theorem claim_G (h : WedgeSetting l b P Q R S T) :
+/-- `T ∈ int CQS` gives `G = (B₁ - 2s)δ - s(A + B₁) ≥ 0`, hence `B₁ > 3s` (`s = 8/73`). -/
+theorem G_nonneg (h : WedgeSetting l b P Q R S T) :
     let s : ℝ := 8 / 73
     let A := sarea (ptE l) R ptC
     let B₁ := sarea (ptE l) S ptC
@@ -233,7 +221,7 @@ theorem claim_G (h : WedgeSetting l b P Q R S T) :
   show 0 ≤ (sarea (ptE l) S ptC - 2 * (8 / 73)) * sarea (ptE l) R S -
       8 / 73 * (sarea (ptE l) R ptC + sarea (ptE l) S ptC) ∧ 3 * (8 / 73) < sarea (ptE l) S ptC
   obtain ⟨-, -, -, -, -, -, -, -, -, -, -, hA, hB⟩ := wedge_facts h
-  obtain ⟨-, e2, -, hδ, hδA, -⟩ := claim_ids h
+  obtain ⟨-, e2, -, hδ, hδA, -⟩ := wedge_identities h
   obtain ⟨-, -, a1, a2, a3, -, -⟩ := wedge_Q h
   have hm := wedge_min h
   obtain ⟨t1, t2, t3⟩ := h.T_CQS
@@ -261,9 +249,8 @@ theorem claim_G (h : WedgeSetting l b P Q R S T) :
   push Not at hcon
   nlinarith [mul_le_mul_of_nonneg_left hcon hδ.le, mul_pos hδ hA]
 
-/-- The scalar replacements `k → 1`, `A → A + u` of §2 (part of
-UNBALANCED_FINAL_LOWER_WEDGE:claim-replace): the coefficients of `k` in `F, G` and of `A` in
-`F, G` at `k = 1` are positive. -/
+/-- The replacements `k → 1`, `A → A + u` keep `F ≥ 0` and `G ≥ 0`: the coefficients of `k` in
+`F, G` and of `A` in `F, G` at `k = 1` are positive. -/
 theorem replace_scalar {s q r k A B u : ℝ} (hs : 0 < s) (hqr2 : 0 < q * r - 2 * s) (hr0 : 0 < r)
     (hk1 : k ≤ 1) (hk0 : 0 < k) (hB : 0 < B) (hB3 : 3 * s < B) (hA : 0 < A) (hu : 0 ≤ u)
     (hq : 0 < q) (hF : 0 ≤ (q * r - 2 * s) * (k * A - r * B) - s * q * (k + r))
@@ -280,20 +267,15 @@ theorem replace_scalar {s q r k A B u : ℝ} (hs : 0 < s) (hqr2 : 0 < q * r - 2 
   · nlinarith [mul_nonneg (by linarith : (0 : ℝ) ≤ B - 3 * s) hu,
       mul_nonneg (mul_nonneg (by linarith : (0 : ℝ) ≤ B - 2 * s) (sub_nonneg.2 hk1)) hA.le]
 
-/-- `qr ≥ 3s` and `qL < 3/16` give `r > 128/201 > 3/5` (`s = 8/73`, (6)). -/
+/-- `qr ≥ 3s` and `qL < 3/16` give `r > 3/5` (`s = 8/73`). -/
 theorem r_lower {q r : ℝ} (hDER : 3 * (8 / 73) ≤ q * r) (hqL : q * (1 - r) < 3 / 16)
     (hr0 : 0 < r) (hr1 : r < 1) : 3 / 5 < r := by
   nlinarith [mul_nonneg (sub_nonneg.2 hDER) (by linarith : (0 : ℝ) ≤ 1 - r),
     mul_pos (sub_pos.2 hqL) hr0]
 
-/-- **Claim** (`UNBALANCED_FINAL_LOWER_WEDGE:claim-replace`), equations (4)-(6). `qr ≥ 3s`
-(`Q ∈ DER`); after `k → 1` and `A → A_* = 1 - q(1 - r)`, `F_*(q, r, B₁) ≥ 0` and
-`G_*(q, r, B₁) ≥ 0`; and `3/5 < r < 65/73`, `3s/r ≤ q < 9/10` (`s = 8/73`).
-`docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`, lines 102-150.
-Uses: UNBALANCED_FINAL_LOWER_WEDGE:claim-F, UNBALANCED_FINAL_LOWER_WEDGE:claim-G,
-UNBALANCED_ONE_UPPER_RADIAL:claim-q<9/10, CORNER_FAMILIES:TwoInteriorPointLemma,
-UNBALANCED_FINAL_NEGATIVE_LINE:claim-params. -/
-theorem claim_replace (h : WedgeSetting l b P Q R S T) :
+/-- `qr ≥ 3s` (`Q ∈ DER`); after `k → 1` and `A → A_* = 1 - q(1 - r)`, `F_*(q, r, B₁) ≥ 0` and
+`G_*(q, r, B₁) ≥ 0`; and `3/5 < r < 65/73`, `3s/r ≤ q < 9/10` (`s = 8/73`). -/
+theorem fStar_gStar_nonneg (h : WedgeSetting l b P Q R S T) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     let r := R.1
@@ -302,13 +284,13 @@ theorem claim_replace (h : WedgeSetting l b P Q R S T) :
       3 * s / r ≤ q ∧ q < 9 / 10 := by
   intro s q r B₁
   obtain ⟨hb, hb2, hl, hl1, hur, hbr, hrk, hk1, hu0, hut, ht1, hA, hB⟩ := wedge_facts h
-  obtain ⟨e1, e2, -, hδ, hδA, -⟩ := claim_ids h
+  obtain ⟨e1, e2, -, hδ, hδA, -⟩ := wedge_identities h
   obtain ⟨-, hQERC, a1, a2, a3, a4, a5⟩ := wedge_Q h
   have hm := wedge_min h
-  have hF := claim_F h
-  obtain ⟨hG, hB3⟩ := claim_G h
+  have hF := F_nonneg h
+  obtain ⟨hG, hB3⟩ := G_nonneg h
   simp only at hF hG hB3
-  -- (4): `Q ∈ DER`
+  -- `qr ≥ 3s` from `Q ∈ DER`
   have hDER : 3 * (8 / 73) ≤ (1 - l) * R.1 := by
     have e : sarea ptD (ptE l) R = (1 - l) * R.1 := by simp only [sarea, ptD, ptE]; ring
     rw [← e]
@@ -321,7 +303,7 @@ theorem claim_replace (h : WedgeSetting l b P Q R S T) :
   have hAstar : sarea (ptE l) R ptC = 1 - R.2 - (1 - l) * (1 - R.1) := by
     simp only [sarea, ptE, ptC]; ring
   have hq910 : 1 - l < 9 / 10 :=
-    UnbalancedOneUpperRadial.claim_q_lt_9_10 h.row (by linarith [h.min]) h.quad
+    UnbalancedOneUpperRadial.q_lt_9_10 h.row (by linarith [h.min]) h.quad
   -- `[CRS] ≥ s` gives `1 - r > s`
   have hη : 8 / 73 ≤ sarea R S ptC := ge_of_pos (abs_ge hm 6 7 1) h.quad.1.2.1
   have hηe : sarea R S ptC = (1 - R.1) * (1 - S.2) - (1 - S.1) * (1 - R.2) := by
@@ -342,20 +324,18 @@ theorem claim_replace (h : WedgeSetting l b P Q R S T) :
   show 3 * (8 / 73) / R.1 ≤ 1 - l
   rw [div_le_iff₀ hr0]; linarith
 
-/-- **Equation (7)** (part of UNBALANCED_FINAL_LOWER_WEDGE:claim-W). The weighted sum
-`W = F_* + (7/2)G_*` is the concave quadratic `-(7r/2)B² + β(q, r)B + γ(q, r)` in `B = B_*`,
-and `Δ - 14rW = (7rB - β)²`. `docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`, lines 156-176. -/
-theorem eq7 (s q r B : ℝ) :
+/-- The weighted sum `W = F_* + (7/2)G_*` is the concave quadratic
+`-(7r/2)B² + β(q, r)B + γ(q, r)` in `B = B_*`, and `Δ - 14rW = (7rB - β)²`. -/
+theorem fStar_add_gStar_eq (s q r B : ℝ) :
     fStar s q r B + 7 / 2 * gStar s q r B = -(7 * r / 2) * B ^ 2 + betaFn s q r * B + gammaFn s q r ∧
       discFn s q r - 14 * r * (fStar s q r B + 7 / 2 * gStar s q r B) = (7 * r * B - betaFn s q r) ^ 2 := by
   unfold fStar gStar deltaStar aStar discFn betaFn gammaFn
   constructor <;> ring
 
-/-- **Equation (8)** (part of UNBALANCED_FINAL_LOWER_WEDGE:claim-W). At `s = 8/73` the
-discriminant `Δ` is a convex quadratic in `q`, with `q²` coefficient `(2r² + 7r - 7)²/4`, and
-endpoint values `Δ(3s/r, r) = P₀(r)/(21316r²)` (`r ≠ 0`) and `Δ(9/10, r) = P₁(r)/2131600`.
-`docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`, lines 184-208. -/
-theorem eq8 (r : ℝ) (hr : r ≠ 0) :
+/-- At `s = 8/73` the discriminant `Δ` is a quadratic in `q` with `q²` coefficient
+`(2r² + 7r - 7)²/4`, and endpoint values `Δ(3s/r, r) = P₀(r)/(21316r²)` (`r ≠ 0`) and
+`Δ(9/10, r) = P₁(r)/2131600`. -/
+theorem discFn_endpoints (r : ℝ) (hr : r ≠ 0) :
     (∃ c₁ c₀ : ℝ, ∀ q : ℝ,
         discFn (8 / 73) q r = (2 * r ^ 2 + 7 * r - 7) ^ 2 / 4 * q ^ 2 + c₁ * q + c₀) ∧
       discFn (8 / 73) (3 * (8 / 73) / r) r = p0Poly r / (21316 * r ^ 2) ∧
@@ -366,9 +346,8 @@ theorem eq8 (r : ℝ) (hr : r ≠ 0) :
   · unfold discFn betaFn gammaFn p0Poly; field_simp; ring
   · unfold discFn betaFn gammaFn p1Poly; ring
 
-/-- Convexity in `q` (part of UNBALANCED_FINAL_LOWER_WEDGE:claim-W): for `q₀ ≤ q ≤ q₁`,
-`Δ(q, r) ≤ max(Δ(q₀, r), Δ(q₁, r))`, since the `q²` coefficient `(2r² + 7r - 7)²/4` of `Δ` is
-nonnegative for every `s`. -/
+/-- Convexity in `q`: for `q₀ ≤ q ≤ q₁`, `Δ(q, r) ≤ max(Δ(q₀, r), Δ(q₁, r))`, since the `q²`
+coefficient `(2r² + 7r - 7)²/4` of `Δ` is nonnegative for every `s`. -/
 theorem disc_le_max {s q r q₀ q₁ : ℝ} (h₀ : q₀ ≤ q) (h₁ : q ≤ q₁) :
     discFn s q r ≤ max (discFn s q₀ r) (discFn s q₁ r) := by
   have key : (q₁ - q₀) * discFn s q r - (q₁ - q) * discFn s q₀ r - (q - q₀) * discFn s q₁ r =
@@ -389,19 +368,16 @@ theorem disc_le_max {s q r q₀ q₁ : ℝ} (h₀ : q₀ ≤ q) (h₁ : q ≤ q�
   nlinarith [mul_le_mul_of_nonneg_left hm0 (sub_nonneg.2 h₁),
     mul_le_mul_of_nonneg_left hm1 (sub_nonneg.2 h₀), mul_lt_mul_of_pos_left hcon (sub_pos.2 hlt)]
 
-/-- **Claim** (`UNBALANCED_FINAL_LOWER_WEDGE:claim-W`), equations (7)-(9). In the final
-placement `Δ(q, r) ≥ 0` (the maximum `Δ/(14r)` of `W ≥ 0` over `B_*`), and by convexity in `q`
-on `[3s/r, 9/10]`, `Δ(q, r) ≤ max(Δ(3s/r, r), Δ(9/10, r))` (`s = 8/73`).
-`docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`, lines 152-208.
-Uses: UNBALANCED_FINAL_LOWER_WEDGE:claim-replace. -/
-theorem claim_W (h : WedgeSetting l b P Q R S T) :
+/-- In the final placement `Δ(q, r) ≥ 0` (the maximum `Δ/(14r)` of `W ≥ 0` over `B_*`), and by
+convexity in `q` on `[3s/r, 9/10]`, `Δ(q, r) ≤ max(Δ(3s/r, r), Δ(9/10, r))` (`s = 8/73`). -/
+theorem discFn_nonneg_le_max (h : WedgeSetting l b P Q R S T) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     let r := R.1
     0 ≤ discFn s q r ∧ discFn s q r ≤ max (discFn s (3 * s / r) r) (discFn s (9 / 10) r) := by
   intro s q r
-  obtain ⟨-, hFs, hGs, hr3, -, hq0, hq1⟩ := claim_replace h
-  obtain ⟨e1, e2⟩ := eq7 s q r (sarea (ptE l) S ptC)
+  obtain ⟨-, hFs, hGs, hr3, -, hq0, hq1⟩ := fStar_gStar_nonneg h
+  obtain ⟨e1, e2⟩ := fStar_add_gStar_eq s q r (sarea (ptE l) S ptC)
   have hr0 : (0 : ℝ) < r := by simp only [r]; linarith
   have hW : 0 ≤ fStar s q r (sarea (ptE l) S ptC) + 7 / 2 * gStar s q r (sarea (ptE l) S ptC) := by
     simp only [s, q, r] at hFs hGs ⊢; linarith
@@ -409,10 +385,8 @@ theorem claim_W (h : WedgeSetting l b P Q R S T) :
   refine ⟨hΔ, ?_⟩
   exact disc_le_max (by simpa using hq0) hq1.le
 
-/-- **Claim** (`UNBALANCED_FINAL_LOWER_WEDGE:claim-quartics`), equations (10)-(13). For
-`3/5 ≤ r ≤ 65/73`, `P₀(r) < 0` and `P₁(r) < 0`. `docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`,
-lines 210-267. -/
-theorem claim_quartics {r : ℝ} (hr₁ : 3 / 5 ≤ r) (hr₂ : r ≤ 65 / 73) :
+/-- For `3/5 ≤ r ≤ 65/73`, `P₀(r) < 0` and `P₁(r) < 0`. -/
+theorem p0Poly_p1Poly_neg {r : ℝ} (hr₁ : 3 / 5 ≤ r) (hr₂ : r ≤ 65 / 73) :
     p0Poly r < 0 ∧ p1Poly r < 0 := by
   unfold p0Poly p1Poly
   have ha : 0 ≤ r - 3 / 5 := by linarith
@@ -423,15 +397,12 @@ theorem claim_quartics {r : ℝ} (hr₁ : 3 / 5 ≤ r) (hr₂ : r ≤ 65 / 73) :
   · nlinarith [mul_nonneg ha hb, mul_nonneg (mul_nonneg ha hb) ha, mul_nonneg (mul_nonneg ha hb) hb,
       mul_nonneg (mul_nonneg ha ha) (mul_nonneg ha hb), mul_nonneg (mul_nonneg hb hb) (mul_nonneg ha hb)]
 
-/-- **Theorem 1** (`UNBALANCED_FINAL_LOWER_WEDGE:Theorem1`). The final placement is impossible.
-`docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`, lines 32-37, 265-267.
-Uses: UNBALANCED_FINAL_LOWER_WEDGE:claim-W, UNBALANCED_FINAL_LOWER_WEDGE:claim-quartics,
-UNBALANCED_FINAL_LOWER_WEDGE:claim-replace. -/
-theorem theorem1 (h : WedgeSetting l b P Q R S T) : False := by
-  obtain ⟨hΔ, hmax⟩ := claim_W h
-  obtain ⟨-, -, -, hr3, hr65, -, -⟩ := claim_replace h
-  obtain ⟨-, e0, e1⟩ := eq8 R.1 (by linarith)
-  obtain ⟨p0, p1⟩ := claim_quartics hr3.le hr65.le
+/-- The final placement `WedgeSetting` is impossible. -/
+theorem false_of_wedgeSetting (h : WedgeSetting l b P Q R S T) : False := by
+  obtain ⟨hΔ, hmax⟩ := discFn_nonneg_le_max h
+  obtain ⟨-, -, -, hr3, hr65, -, -⟩ := fStar_gStar_nonneg h
+  obtain ⟨-, e0, e1⟩ := discFn_endpoints R.1 (by linarith)
+  obtain ⟨p0, p1⟩ := p0Poly_p1Poly_neg hr3.le hr65.le
   have h0 : discFn (8 / 73) (3 * (8 / 73) / R.1) R.1 < 0 := by
     rw [e0]; exact div_neg_of_neg_of_pos p0 (by positivity)
   have h1 : discFn (8 / 73) (9 / 10) R.1 < 0 := by
@@ -441,37 +412,33 @@ theorem theorem1 (h : WedgeSetting l b P Q R S T) : False := by
 
 /-! ### The one-point upper cut and the complete Type-II theorem -/
 
-/-- **Claim** (`UNBALANCED_FINAL_LOWER_WEDGE:claim-chain`), §5. The one-point upper cut in
-support cell II is impossible: with minimum area at least `A₀`, no configuration has `P` above
-`CE`, `Q` below `CE`, and a quadrilateral right hull in cell II. The exhaustive chain:
-`Q` below `DR` and `P, T` above it; `Q` above `ER`; `[QTE] > 0`; `T ∈ CQS` and `Q ∈ ERS`; the
-final placement. `docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`, lines 269-286.
-Uses: UNBALANCED_ONE_UPPER_RADIAL:Theorem1, UNBALANCED_OCCUPIED_LOWER_EAR:Theorem1,
-UNBALANCED_FINAL_NEGATIVE_LINE:Theorem1, UNBALANCED_FINAL_UPPER_PAIR:claim-CQS,
-UNBALANCED_FINAL_UPPER_PAIR:Theorem1, UNBALANCED_FINAL_LOWER_WEDGE:Theorem1. -/
-theorem claim_chain (h : UnbalancedOneUpperRadial.OneUpperSetting l b P Q R S T) : False := by
+/-- The one-point upper cut in support cell II is impossible: with minimum area at least `A₀`,
+no configuration has `P` above `CE`, `Q` below `CE`, and a quadrilateral right hull in cell II.
+The exhaustive chain: `Q` below `DR` and `P, T` above it; `Q` above `ER`; `[QTE] > 0`;
+`T ∈ CQS` and `Q ∈ ERS`; the final placement. -/
+theorem false_of_oneUpperSetting (h : UnbalancedOneUpperRadial.OneUpperSetting l b P Q R S T) : False := by
   have hb := h.row.b_pos
   have hb2 := h.row.b_le
   have hl := h.row.l_pos
   have hl1 := h.row.l_lt
-  -- step 1: `Q` below `DR`, `P, T` above it
-  obtain ⟨hPDR, hTDR, hQDR, -, -⟩ := UnbalancedOneUpperRadial.theorem1 h
-  -- step 2: the ear `EBR` is empty, `Q` is above `ER`
+  -- `Q` below `DR`, `P, T` above it
+  obtain ⟨hPDR, hTDR, hQDR, -, -⟩ := UnbalancedOneUpperRadial.P_T_above_DR_Q_below h
+  -- the ear `EBR` is empty, `Q` is above `ER`
   have hocc : UnbalancedOccupiedLowerEar.OccSetting l b P Q R S T :=
     ⟨h.row, h.min, h.quad, h.cell, h.P_above, h.Q_below, hPDR, hTDR, hQDR⟩
-  obtain ⟨-, -, hQER⟩ := UnbalancedOccupiedLowerEar.theorem1 hocc
-  -- step 3: `[QTE] > 0`
+  obtain ⟨-, -, hQER⟩ := UnbalancedOccupiedLowerEar.Q_not_inside_EBR hocc
+  -- `[QTE] > 0`
   have hTCE : sarea (ptE l) ptC T < 0 :=
     right_below_CE hb (by linarith) hl h.row.T_mem h.row.T_right
   have hneg : UnbalancedFinalNegativeLine.NegSetting l b P Q R S T :=
     ⟨h.row, h.min, h.quad, h.cell, h.Q_below, hQDR, hQER, hTDR, hTCE, h.P_above, hPDR⟩
-  have hQTE := UnbalancedFinalNegativeLine.theorem1 hneg
-  -- step 4: `T ∈ CQS`, `Q ∈ ERS`
+  have hQTE := UnbalancedFinalNegativeLine.sarea_QTE_pos hneg
+  -- `T ∈ CQS`, `Q ∈ ERS`
   have hmin8 : 4 / 73 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := s_le_A₀.trans h.min
   have hup : UnbalancedFinalUpperPair.UpperPairSetting l b P Q R S T :=
     ⟨h.row, hmin8, h.quad, h.cell, hQER, hQDR, h.Q_below, hTDR, hTCE, hQTE⟩
-  obtain ⟨hQES, hQERS⟩ := UnbalancedFinalUpperPair.theorem1 hup
-  obtain ⟨c1, c2, -, c4, hTCQS⟩ := UnbalancedFinalUpperPair.claim_CQS hup
+  obtain ⟨hQES, hQERS⟩ := UnbalancedFinalUpperPair.Q_inside_ERS hup
+  obtain ⟨c1, c2, -, c4, hTCQS⟩ := UnbalancedFinalUpperPair.T_inside_CQS hup
   -- the remaining containments of the final placement
   obtain ⟨-, hSy, -, hSy0, -⟩ := right_facts hb (by linarith) h.row.S_mem h.row.S_right
   have hSb := (right_facts hb (by linarith) h.row.S_mem h.row.S_right).1
@@ -495,8 +462,8 @@ theorem claim_chain (h : UnbalancedOneUpperRadial.OneUpperSetting l b P Q R S T)
     refine pos_of_inside hTDCR ?_ ?_ hERC.le (Or.inr (Or.inr hERC))
     · simp only [sarea, ptE, ptD]; nlinarith
     · exact (by unfold sarea; ring : sarea (ptE l) R R = 0).ge
-  -- step 5: the final placement is impossible
-  exact theorem1 ⟨h.row, hmin8, h.quad, h.cell, h.P_above, hPDR, hQERS, hQEBS, h.Q_below, hQDR,
+  -- the final placement is impossible
+  exact false_of_wedgeSetting ⟨h.row, hmin8, h.quad, h.cell, h.P_above, hPDR, hQERS, hQEBS, h.Q_below, hQDR,
     hTECR, hTDCR, hTCQS, c1, c2, c4⟩
 
 /-! ### The counts-to-labels bridge and the assembly -/
@@ -581,7 +548,7 @@ theorem counts_to_labels {l b : ℝ} {V W X Y Z : Point} (hd : TypeII.TypeIIData
     any_goals rfl
     all_goals exact (TypeII.typeIIConfig_freeIdx l b V W X Y Z _).symm
 
-/-- The standing row `(1, 2, 3)` of the unbalanced notes from the labelled counts. -/
+/-- The standing row `(1, 2, 3)` of the unbalanced case from the labelled counts. -/
 theorem row_of {l b : ℝ} {P Q R S T : Point} (hd : TypeII.TypeIIData l b P Q R S T)
     (hb2 : b ≤ 1 / 2) (hP : TypeII.IsCentral b P) (hQ : TypeII.IsCentral b Q)
     (hR : TypeII.IsRight b R) (hS : TypeII.IsRight b S) (hT : TypeII.IsRight b T) :
@@ -594,7 +561,7 @@ theorem row_of {l b : ℝ} {P Q R S T : Point} (hd : TypeII.TypeIIData l b P Q R
 theorem mem_of_inTriangle {X A B C : Point} (h : InTriangle X A B C) :
     X ∈ convexHull ℝ ({A, B, C} : Set Point) := by
   obtain ⟨h1, h2, h3⟩ := h
-  exact TypeII.mem_convexHull_of_sarea (by linarith [sarea_add_sarea_add_sarea A B C X]) h2.le
+  exact mem_convexHull_of_sarea (by linarith [sarea_add_sarea_add_sarea A B C X]) h2.le
     h3.le h1.le
 
 /-- A triangular right hull in the sense of `RightHullTriangular` is a triangular hull of the five
@@ -636,13 +603,13 @@ theorem one_above {l b : ℝ} {P Q R S T : Point} (hrow : Row123 l b P Q R S T)
   have hmin7 := s7_le_A₀.trans hmin
   rcases lt_or_gt_of_ne nQ with hQb | hQa
   · rcases hcell with c | c | c
-    · exact UnbalancedCellI.theorem1 hrow hmin7 hquad c hQb
-    · exact claim_chain ⟨hrow, hmin, hquad, c, hP, hQb⟩
-    · exact UnbalancedCellIII.theorem1 hrow hmin7 hquad c
+    · exact UnbalancedCellI.false_of_cellI_of_below_CE hrow hmin7 hquad c hQb
+    · exact false_of_oneUpperSetting ⟨hrow, hmin, hquad, c, hP, hQb⟩
+    · exact UnbalancedCellIII.false_of_cellIII hrow hmin7 hquad c
   · rcases hcell with c | c | c
-    · exact UnbalancedRightHull.theorem2 hrow hmin7 hP hQa hquad (Or.inl c)
-    · exact UnbalancedUpperCellII.theorem1 ⟨hrow, hmin, hP, hQa, hquad, c⟩
-    · exact UnbalancedRightHull.theorem2 hrow hmin7 hP hQa hquad (Or.inr c)
+    · exact UnbalancedRightHull.not_cellI_or_cellIII hrow hmin7 hP hQa hquad (Or.inl c)
+    · exact UnbalancedUpperCellII.false_of_upperSetting ⟨hrow, hmin, hP, hQa, hquad, c⟩
+    · exact UnbalancedRightHull.not_cellI_or_cellIII hrow hmin7 hP hQa hquad (Or.inr c)
 
 /-- The labelled quadrilateral right hull: the unbalanced cut lemma puts a central point above
 `CE`; exchange `P, Q` if needed. -/
@@ -667,19 +634,19 @@ theorem quad_false {l b : ℝ} {P Q R S T : Point} (hd : TypeII.TypeIIData l b P
       rw [min_swapPQ]; exact hmin
     exact one_above hrow' hmin' hquad hcell hQa.2.1 nP
 
-/-- The labelled row `(1, 2, 3)`: triangular right hull by `TYPE_II_COMPLETION` Theorem 14,
-nontriangular by `UNBALANCED_RIGHT_HULL` Theorem 1 and `quad_false`. -/
+/-- The labelled row `(1, 2, 3)`: triangular right hull by `TypeIICompletion.minTriangleArea_lt_A₀_of_triangular_right`,
+nontriangular by `UnbalancedRightHull.quadHull_cell_of_not_triangular` and `quad_false`. -/
 theorem labelled_false {l b : ℝ} {P Q R S T : Point} (hd : TypeII.TypeIIData l b P Q R S T)
     (hb2 : b ≤ 1 / 2) (hP : TypeII.IsCentral b P) (hQ : TypeII.IsCentral b Q)
     (hR : TypeII.IsRight b R) (hS : TypeII.IsRight b S) (hT : TypeII.IsRight b T)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T)) : False := by
   by_cases htri : TypeII.TriangularHull ![TypeII.ptB b, TypeII.ptC, R, S, T]
-  · have := TypeIICompletion.theorem14 hd hP hQ hR hS hT htri
+  · have := TypeIICompletion.minTriangleArea_lt_A₀_of_triangular_right hd hP hQ hR hS hT htri
     linarith
   have hrow := row_of hd hb2 hP hQ hR hS hT
   have hmin7 := s7_le_A₀.trans hmin
   have hnt : ¬ RightHullTriangular (ptB b) ptC R S T := fun h => htri (tri_of_right h)
-  obtain ⟨R', S', T', ⟨σ, hσ⟩, hquad, hcell⟩ := UnbalancedRightHull.theorem1 hrow hmin7 hnt
+  obtain ⟨R', S', T', ⟨σ, hσ⟩, hquad, hcell⟩ := UnbalancedRightHull.quadHull_cell_of_not_triangular hrow hmin7 hnt
   have eR : R' = ![R, S, T] (σ 0) := congrFun hσ 0
   have eS : S' = ![R, S, T] (σ 1) := congrFun hσ 1
   have eT : T' = ![R, S, T] (σ 2) := congrFun hσ 2
@@ -699,17 +666,10 @@ theorem labelled_false {l b : ℝ} {P Q R S T : Point} (hd : TypeII.TypeIIData l
   have hT' : TypeII.IsRight b T' := by rw [eT]; exact mem3 (TypeII.IsRight b) hR hS hT _
   exact quad_false hd' hb2 hP hQ hR' hS' hT' hmin' hquad hcell
 
-/-- **Theorem 2** (`UNBALANCED_FINAL_LOWER_WEDGE:Theorem2`). Every nine-point configuration in
-the Type-II normalization (`D = (0,1)`, `C = (1,1)`, `E = (0,λ)`, `B = (b,0)`, `0 < b < 1`,
-`0 < λ < 1`, five further points in the square) has a triangle of area strictly less than
-`A₀ = (9√65 - 55)/320`. `docs/proof/nine/UNBALANCED_FINAL_LOWER_WEDGE.md`, lines 288-320.
-Uses: TYPE_II:ShearNormalization, TYPE_II:claim-two-residual-classes,
-CORNER_FAMILIES:TypeIII-complete, TYPE_II_COMPLETION:Theorem11, TYPE_II:UnbalancedCutLemma,
-TYPE_II_COMPLETION:Theorem12, TYPE_II_COMPLETION:Theorem14, UNBALANCED_RIGHT_HULL:Theorem1,
-UNBALANCED_RIGHT_HULL:Theorem2, UNBALANCED_RIGHT_HULL:Theorem3, UNBALANCED_RIGHT_HULL:Theorem4,
-UNBALANCED_RADIAL_SPLIT:Theorem1, UNBALANCED_UPPER_CELL_II:Theorem1, UNBALANCED_CELL_I:Theorem1,
-UNBALANCED_CELL_III:Theorem1, UNBALANCED_FINAL_LOWER_WEDGE:claim-chain. -/
-theorem theorem2 {l b : ℝ} {V W X Y Z : Point} (hb₀ : 0 < b) (hb₁ : b < 1) (hl₀ : 0 < l)
+/-- Every nine-point configuration in the Type-II normalization (`D = (0,1)`, `C = (1,1)`,
+`E = (0,λ)`, `B = (b,0)`, `0 < b < 1`, `0 < λ < 1`, five further points in the square) has a
+triangle of area strictly less than `A₀ = (9√65 - 55)/320`. -/
+theorem minTriangleArea_typeIIConfig_lt_A₀ {l b : ℝ} {V W X Y Z : Point} (hb₀ : 0 < b) (hb₁ : b < 1) (hl₀ : 0 < l)
     (hl₁ : l < 1) (hV : V ∈ unitSquare) (hW : W ∈ unitSquare) (hX : X ∈ unitSquare)
     (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare) :
     minTriangleArea (typeIIConfig l b V W X Y Z) < A₀ := by
@@ -717,7 +677,7 @@ theorem theorem2 {l b : ℝ} {V W X Y Z : Point} (hb₀ : 0 < b) (hb₁ : b < 1)
   push Not at hcon
   have hP : IsTypeII (typeIIConfig l b V W X Y Z) :=
     ⟨l, b, V, W, X, Y, Z, hb₀, hb₁, hl₀, hl₁, hV, hW, hX, hY, hZ, rfl⟩
-  obtain ⟨Q, hQ, hcase⟩ := TypeII.claim_two_residual_classes _ hP hcon
+  obtain ⟨Q, hQ, hcase⟩ := TypeII.exists_areaEquiv_typeIII_or_residual_row _ hP hcon
   have hmQ := TypeII.minTriangleArea_of_areaEquiv hQ
   rw [← hmQ] at hcon
   rcases hcase with ⟨U₁, U₂, U₃, U₄, U₅, U₆, h1, h2, h3, h4, h5, h6, rfl⟩ |
@@ -727,17 +687,16 @@ theorem theorem2 {l b : ℝ} {V W X Y Z : Point} (hb₀ : 0 < b) (hb₁ : b < 1)
   · rcases hrow with ⟨hc, -, -⟩ | ⟨hc, -, -⟩
     · obtain ⟨P', Q', R', S', T', hd', hP', hQ', hR', hS', hT', hm⟩ := counts_to_labels hd hc
       exact labelled_false hd' hb2 hP' hQ' hR' hS' hT' (hm ▸ hcon)
-    · have := TypeIICompletion.theorem11 hd hb2 hc
+    · have := TypeIICompletion.minTriangleArea_lt_A₀_of_balanced_counts hd hb2 hc
       linarith
 
-/-- The complete Type-II exclusion in the form used by the assembly
-(Theorem 2 of the manuscript): no configuration `typeIIConfig l b V W X Y Z` with the
-conditions of `IsTypeII` has `A₀ ≤ minTriangleArea`. Immediate from `theorem2`.
-Uses: UNBALANCED_FINAL_LOWER_WEDGE:Theorem2. -/
+/-- The complete Type-II exclusion in the form used by the assembly: no configuration
+`typeIIConfig l b V W X Y Z` with the conditions of `IsTypeII` has `A₀ ≤ minTriangleArea`.
+Immediate from `minTriangleArea_typeIIConfig_lt_A₀`. -/
 theorem typeII_exclusion {l b : ℝ} {V W X Y Z : Point} (hb₀ : 0 < b) (hb₁ : b < 1)
     (hl₀ : 0 < l) (hl₁ : l < 1) (hV : V ∈ unitSquare) (hW : W ∈ unitSquare)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare) :
     ¬ A₀ ≤ minTriangleArea (typeIIConfig l b V W X Y Z) :=
-  not_le.2 (theorem2 hb₀ hb₁ hl₀ hl₁ hV hW hX hY hZ)
+  not_le.2 (minTriangleArea_typeIIConfig_lt_A₀ hb₀ hb₁ hl₀ hl₁ hV hW hX hY hZ)
 
 end Heilbronn.Nine.UnbalancedFinalLowerWedge

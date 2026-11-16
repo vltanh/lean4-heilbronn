@@ -4,17 +4,16 @@ public import Heilbronn.Common.CertNotation
 public import Heilbronn.Common.DataReader
 public import Heilbronn.Nine.EightBoundary.RadialCatalogue
 
-/-! # The 28 exterior certificates (`docs/proof/nine/seven_boundary_exterior_certificates.json`)
+/-! # The 28 exterior certificates
 
-The certificate package of `SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md` §§2–3 as kernel-checked
-`Cert.check` instances. Variables `z = (a, h, b, c, d, e, f, g, k, x, y)` (`var 0, …, var 10`).
-The atoms of a word `w` are the 23 affine factors `l₀, …, l₂₂` (`factors`), then the 84 oriented
-costs `q_t = ε_t [V_i V_j V_l] - s` over the triples `i < j < l` of `{0, …, 8}` in lexicographic
-order (`triples`), with vertices `A, B, C, D, E, X, F, H, P` and the sign `ε = +1` when `l < 8` or
-`j - i ≤ w i`, else `-1` (`qAtom`). The weights are those of the JSON file (`w/4096`), rescaled
-to Lean's integer polynomials by `scripts/nine/seven_a/export_exterior.py` (data in
-`data/nine/seven_exterior/`). `atoms_false` is the soundness statement used by
-`SevenBoundaryExteriorCompletion.claim_certificates`.
+The certificates of the seven-boundary exterior case (`SevenBoundaryExteriorCompletion`) as
+kernel-checked `Cert.check` instances. Variables `z = (a, h, b, c, d, e, f, g, k, x, y)`
+(`var 0, …, var 10`). The atoms of a word `w` are the 23 affine factors `l₀, …, l₂₂` (`factors`),
+then the 84 oriented costs `q_t = ε_t [V_i V_j V_l] - s` over the triples `i < j < l` of
+`{0, …, 8}` in lexicographic order (`triples`), with vertices `A, B, C, D, E, X, F, H, P` and the
+sign `ε = +1` when `l < 8` or `j - i ≤ w i`, else `-1` (`qAtom`). The certificate terms, with
+integer weights, are read from data files. `atoms_false` is the soundness statement used by
+`SevenBoundaryExteriorCompletion.minTriangleArea_lt_of_mem_certificateWords`.
 -/
 
 @[expose] public section
@@ -27,7 +26,8 @@ open Cert Cert.Expr RadialCatalogue
 /-- The doubled threshold `s = 7/64`. -/
 abbrev s : Cert.Expr := k (7 / 64)
 
-/-- The 23 affine factors `l₀, …, l₂₂` (§2, table). -/
+/-- The 23 affine factors `l₀, …, l₂₂`, nonnegative by
+`SevenBoundaryExteriorCompletion.common_bounds`. -/
 def factors : List Cert.Expr :=
   [v 0 - k (5 / 32), v 1 - v 0, v 8 - v 1, 1 - v 8, v 4 - k (5 / 32), v 5 - v 4,
     v 8 - v 5 - k (1 / 8), v 2 - k (3 / 20), v 6 - v 2, v 3 - v 6, k (27 / 32) - v 3,
@@ -44,7 +44,7 @@ def triples : List (Fin 9 × Fin 9 × Fin 9) :=
   (List.finRange 9).flatMap fun i => (List.finRange 9).flatMap fun j =>
     (List.finRange 9).filterMap fun l => if i < j ∧ j < l then some (i, j, l) else none
 
-/-- The sign rule (11): positive unless the triangle contains `P` and `j - i > w i`. -/
+/-- The sign rule: positive unless the triangle contains `P` and `j - i > w i`. -/
 def sgn (w : Word) (t : Fin 9 × Fin 9 × Fin 9) : Bool :=
   decide ((t.2.2 : ℕ) < 8) || decide ((t.2.1 : ℕ) - t.1 ≤ w (Fin.ofNat 8 t.1))
 

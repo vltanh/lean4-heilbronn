@@ -6,16 +6,15 @@ public import Heilbronn.Nine.EightBoundary.Setting
 
 /-! # The certificate model of the eight-boundary classes
 
-Shared by `Heilbronn/Nine/EightBoundary/Cert11.lean`, `Cert12.lean` and
-`Heilbronn/Nine/EightBoundary/CertR6.lean`, which exclude the radial classes R2, R5 and R6 at doubled area
-`s = 7/64` by polynomial certificates (`Heilbronn/Common/Certificate.lean`) instead of the long
-scalar arguments of `EIGHT_BOUNDARY.md` §§9–10 and `R6_BOUND.md`.
+Shared by the modules `Heilbronn.Nine.EightBoundary.CertSingleCap`, `Heilbronn.Nine.EightBoundary.CertNoCap`
+and `Heilbronn.Nine.EightBoundary.CertR6`, which exclude the radial classes `R2`, `R5` and `R6` at
+doubled area `s = 7/64` by polynomial certificates (`Heilbronn/Common/Certificate.lean`).
 
 The variables are `a b c d e f g h x y = v 0, …, v 9`, the points
 `A = (0,a), B = (b,0), C = (c,0), D = (1,d), E = (1,e), F = (f,1), G = (g,1), H = (0,h)`,
 `O = (x,y)`. The common atoms are the order and square facts (`orders`), the eight boundary
-budgets `[XYZ] - s` (`budgets`) and the four gap bounds `11/16 - gap` (`gaps`, from Lemma 7).
-The data and the generating script are `data/nine/eight/` and `scripts/nine/eight/certs.py`.
+budgets `[XYZ] - s` (`budgets`) and the four gap bounds `11/16 - gap` (`gaps`, from
+`EightBoundary.two_mul_minTriangleArea_le_maxGap`). The certificate terms are read from data files.
 -/
 
 @[expose] public section
@@ -48,7 +47,7 @@ def budgets : List Expr :=
   [esarea pA pB pH - s, esarea pA pB pC - s, esarea pB pC pD - s, esarea pC pD pE - s,
    esarea pD pE pF - s, esarea pE pF pG - s, esarea pF pG pH - s, esarea pG pH pA - s]
 
-/-- The gap bounds `L, B, R, T ≤ 11/16` (Lemma 7 at area `7/128`). -/
+/-- The gap bounds `L, B, R, T ≤ 11/16` (`EightBoundary.two_mul_minTriangleArea_le_maxGap` at area `7/128`). -/
 def gaps : List Expr :=
   [k (11 / 16) - (v 7 - v 0), k (11 / 16) - (v 2 - v 1), k (11 / 16) - (v 4 - v 3),
    k (11 / 16) - (v 5 - v 6)]

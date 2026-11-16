@@ -3,14 +3,14 @@ module
 public import Heilbronn.Common.Bernstein
 public import Heilbronn.Common.CertNotation
 
-/-! # The Bernstein certificate of `docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, §7
+/-! # The Bernstein certificate for the upper cell II
 
-The polynomial `H(b, q, z)` of (26), as a certificate expression `negH = -H` in the variables
-`var 0 = b`, `var 1 = q`, `var 2 = z`, written structurally from (19), (23)-(26) (as in
-`docs/proof/nine/check_unbalanced_upper_cell_ii.py`), and the twelve subboxes of the table of §7 (in the
-unit coordinates (30), mapped to physical boxes by `phys`), each checked by `bernsteinBoxCheck` at
-degree `(4, 3, 3)` (`decide +kernel`). `negH_pos_rowN` is the resulting sign `-H > 0` on box `N`;
-`Heilbronn.Nine.UnbalancedUpperCellII` identifies `negH.eval` with `-hPoly`.
+The polynomial `H(b, q, z)` of `Heilbronn.Nine.UnbalancedUpperCellII`, as a certificate expression
+`negH = -H` in the variables `var 0 = b`, `var 1 = q`, `var 2 = z`, written structurally from
+its defining quantities, and twelve subboxes covering the box `base` (given in unit coordinates
+and mapped to physical boxes by `phys`), each checked by `bernsteinBoxCheck` at degree
+`(4, 3, 3)` (`decide +kernel`). `hReal_neg` turns a passed check into the sign `H < 0` on its
+box; `Heilbronn.Nine.UnbalancedUpperCellII` identifies `negH.eval` with `-hPoly`.
 -/
 
 @[expose] public section
@@ -26,7 +26,7 @@ def vb : Expr := .var 0
 def vq : Expr := .var 1
 def vz : Expr := .var 2
 
-/-- The definitions (19), (23)-(26) with `s = 8/73`. -/
+/-- The defining quantities of `H`, with `s = 8/73`. -/
 def s : Expr := C (8 / 73)
 def w : Expr := C 1 - vb
 def lam : Expr := C 1 - vq
@@ -46,77 +46,77 @@ def H : Expr := N0 + C (9 / 512) * F00 + C (7 / 2048) * S0
 /-- The certified sign is `H < 0`, i.e. `-H > 0`. -/
 def negH : Expr := C 0 - H
 
-/-- The box (27). -/
+/-- The box `[8/73, 1/2] × [67/80, 119/128] × [14/73, 3/4]` of `(b, q, z)`. -/
 def base : List (ℚ × ℚ) := [(8 / 73, 1 / 2), (67 / 80, 119 / 128), (14 / 73, 3 / 4)]
 
-/-- A subbox of the unit cube in the coordinates (30), as a physical box. -/
+/-- A subbox of the unit cube, in coordinates affine on each side of `base`, as a physical box. -/
 def phys (unit : List (ℚ × ℚ)) : List (ℚ × ℚ) :=
   List.zipWith (fun a u => (a.1 + (a.2 - a.1) * u.1, a.1 + (a.2 - a.1) * u.2)) base unit
 
 /-- The degree `(4, 3, 3)` of `H`. -/
 def degs : List ℕ := [4, 3, 3]
 
-/-- Row 1 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[0, 1/4] × [0, 1] × [0, 1/8]`. -/
 theorem row01 : bernsteinBoxCheck negH (phys [(0, 1/4), (0, 1), (0, 1/8)]) degs
     201292 = true := by
   decide +kernel
 
-/-- Row 2 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[1/4, 1/2] × [0, 1] × [0, 1/8]`. -/
 theorem row02 : bernsteinBoxCheck negH (phys [(1/4, 1/2), (0, 1), (0, 1/8)]) degs
     28701 = true := by
   decide +kernel
 
-/-- Row 3 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[0, 1/8] × [0, 1/2] × [1/8, 3/16]`. -/
 theorem row03 : bernsteinBoxCheck negH (phys [(0, 1/8), (0, 1/2), (1/8, 3/16)]) degs
     673376 = true := by
   decide +kernel
 
-/-- Row 4 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[0, 1/8] × [1/2, 1] × [1/8, 3/16]`. -/
 theorem row04 : bernsteinBoxCheck negH (phys [(0, 1/8), (1/2, 1), (1/8, 3/16)]) degs
     85605 = true := by
   decide +kernel
 
-/-- Row 5 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[1/8, 1/4] × [0, 1/2] × [1/8, 3/16]`. -/
 theorem row05 : bernsteinBoxCheck negH (phys [(1/8, 1/4), (0, 1/2), (1/8, 3/16)]) degs
     264312 = true := by
   decide +kernel
 
-/-- Row 6 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[1/8, 1/4] × [1/2, 1] × [1/8, 3/16]`. -/
 theorem row06 : bernsteinBoxCheck negH (phys [(1/8, 1/4), (1/2, 1), (1/8, 3/16)]) degs
     87739 = true := by
   decide +kernel
 
-/-- Row 7 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[0, 1/4] × [0, 1/2] × [3/16, 1/4]`. -/
 theorem row07 : bernsteinBoxCheck negH (phys [(0, 1/4), (0, 1/2), (3/16, 1/4)]) degs
     141939 = true := by
   decide +kernel
 
-/-- Row 8 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[0, 1/4] × [1/2, 1] × [3/16, 1/4]`. -/
 theorem row08 : bernsteinBoxCheck negH (phys [(0, 1/4), (1/2, 1), (3/16, 1/4)]) degs
     94199 = true := by
   decide +kernel
 
-/-- Row 9 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[1/4, 1/2] × [0, 1] × [1/8, 1/4]`. -/
 theorem row09 : bernsteinBoxCheck negH (phys [(1/4, 1/2), (0, 1), (1/8, 1/4)]) degs
     68199 = true := by
   decide +kernel
 
-/-- Row 10 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[1/2, 1] × [0, 1] × [0, 1/4]`. -/
 theorem row10 : bernsteinBoxCheck negH (phys [(1/2, 1), (0, 1), (0, 1/4)]) degs
     6165 = true := by
   decide +kernel
 
-/-- Row 11 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[0, 1] × [0, 1] × [1/4, 1/2]`. -/
 theorem row11 : bernsteinBoxCheck negH (phys [(0, 1), (0, 1), (1/4, 1/2)]) degs
     29261 = true := by
   decide +kernel
 
-/-- Row 12 of the table of §7. -/
+/-- The Bernstein check of `-H` on the unit subbox `[0, 1] × [0, 1] × [1/2, 1]`. -/
 theorem row12 : bernsteinBoxCheck negH (phys [(0, 1), (0, 1), (1/2, 1)]) degs
     2153 = true := by
   decide +kernel
 
-/-- The real function computed by `negH`, in the structure of (19), (23)-(26). -/
+/-- The real function computed by `negH`, built from the same defining quantities. -/
 noncomputable def hReal (b q z : ℝ) : ℝ :=
   let s : ℝ := 8 / 73
   let c := 1 - (1 - b) * q
@@ -136,7 +136,7 @@ theorem eval_negH (x : ℕ → ℝ) : negH.eval x = -hReal (x 0) (x 1) (x 2) := 
   push_cast
   ring
 
-/-- The point of the box (27) with unit coordinates `(u, v, t)` (30). -/
+/-- The point of the box `base` with unit coordinates `(u, v, t)`. -/
 noncomputable def unitX (u v t : ℝ) : ℕ → ℝ := fun i =>
   if i = 0 then 8 / 73 + (1 / 2 - 8 / 73) * u
   else if i = 1 then 67 / 80 + (119 / 128 - 67 / 80) * v

@@ -3,46 +3,37 @@ module
 public import Heilbronn.Nine.Hulls.GlobalCapacity
 public import Heilbronn.Nine.Hulls.QuadrilateralHull
 
-/-! # Four interior points must alternate around the diagonals (`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`)
+/-! # Four interior points must alternate around the diagonals
 
-**Role.** A component on the primary route. Theorem 1 is used by `TYPE_II_COMPLETION.md` (lines
-367, 1340, 1489; the balanced `(2,2,2)` row, Theorem 11), by `UNBALANCED_RADIAL_SPLIT`,
-`UNBALANCED_ONE_UPPER_RADIAL` and `UNBALANCED_FINAL_UPPER_PAIR` (Type II), and by
-`C1_MIXED_PENTAGON.md` (line 31), which feeds `C1_TWO_LOWER_COMPLETION`.
-
-**Setting.** Nine points in the unit square with least area at least `A₀`. A convex quadrilateral
-`ABCD` (counterclockwise, `QuadrilateralHull.ConvexQuad`) is spanned by four of the points, and
+Nine points in the unit square with least area at least `A₀`. A convex quadrilateral `ABCD`
+(counterclockwise, `QuadrilateralHull.ConvexQuad`) is spanned by four of the points, and
 "contains" means strictly inside (`QuadrilateralHull.InQuad`). With `O = AC ∩ BD`, the four
 diagonal sectors are the open triangles `ABO, BCO, CDO, DAO`. The sector `ABO` is the intersection
 of the triangles `ABC` and `ABD` (`InSector X A B C D`), and the others are its cyclic relabellings.
 
-**Normalized coordinates** (1). After an affine map, `A=(0,0), B=(1,0), C=((1-b)/a, b),
-D=(0,a)`, with doubled area one, `a = 2·area(ABD)`, `b = 2·area(ABC)`, `0 < a, b < 1`. In these
-coordinates "every doubled area at least `s`" is written `s/2 ≤ minTriangleArea ![…]` over the
-points the step uses. For two points `P, Q`, `d_X = sarea P Q X` is the pair-line sign at `X`.
+**Normalized coordinates.** After an affine map, `A=(0,0), B=(1,0), C=((1-b)/a, b), D=(0,a)`,
+with doubled area one, `a = 2·area(ABD)`, `b = 2·area(ABC)`, `0 < a, b < 1`. In these coordinates
+"every doubled area at least `s`" is written `s/2 ≤ minTriangleArea ![…]` over the points the step
+uses. For two points `P, Q`, `d_X = sarea P Q X` is the pair-line sign at `X`.
 
-**Results.**
-* `theorem1`: at most four points inside; if four, exactly one in each diagonal sector.
-* `claim_1`, `eq2`, `eq3`: the normal form (1), the sector bounds (2) and the identities (3).
-* `claim_4`: the same-side inequality `ab - s(a+b) ≥ 2√(sab)` (4).
-* `claim_5`: the isolated-endpoint inequality (5), and its mirror image.
-* `claim_sectors`: the sector counts are `(k, 2-k, k, 2-k)`.
-* `eq7`: in the excluded alternative, `a, b < 115/192 < 3/5` at `s = 7/128` (7).
-* `claim_no_separation`, `claim_final`: §§4-5, the alternative `(2,0,2,0)` is impossible.
+## Main results
 
-**Implicit in the manuscript.**
-* Theorem 1: "contains four further actual points" is read as "exactly four", with the last
-  assertion "a quadrilateral cannot contain five" giving at most four. Both are stated together.
-* §§4-5 work in the normalized coordinates of the alternative `(2,0,2,0)`, with `P, Q` in `ABO`,
-  `R, T` in `CDO` and doubled threshold `s = 7/128` (line 186). The middle case of §4 uses the
-  global triangle capacity of the (affine image of the) configuration, which is stated as the
-  hypothesis `TriangleCapacityTwo` of the eight points.
-* The proofs of (4), (5) and of §4 are done once for an arbitrary convex quadrilateral
-  (`claim4_general`, `claim5_general`, `no_sep_general`) by transport through the affine normal
-  frame of (1) (`normal_frame`); Theorem 1 applies them to the actual quadrilateral, the
-  normalized claims to `ABCD` and to `CDAB`.
-* §6 (`claim-hullcount`, 5 to 8 hull vertices) is not stated: it is unused, and it rests on the
-  off-route convex-nonagon theorem of `GLOBAL_COMPLETION.md`.
+* `ncard_inQuad_le_four`: at most four points inside; if four, exactly one in each diagonal sector.
+* `convexQuad_normal_form`, `inSector_normal_bounds`, `sarea_pair_normal_identities`: the normal form, the sector bounds and the pair-line identities.
+* `two_sqrt_le_of_same_side`: the same-side inequality `ab - s(a+b) ≥ 2√(sab)`.
+* `four_mul_le_sq_of_isolated_vertex`: the isolated-endpoint inequality, and its mirror image.
+* `sector_counts`: each diagonal leaves at most two interior points on either side, so four
+  interior points have sector counts `(k, 2-k, k, 2-k)`.
+* `two_two_lt_of_normal`: in the alternative `(2,0,2,0)`, `a, b < 115/192 < 3/5` at `s = 7/128`.
+* `no_sep_general`, `two_two_impossible`: the alternative `(2,0,2,0)` is impossible.
+
+The alternative `(2,0,2,0)` is excluded in the normalized coordinates, with `P, Q` in `ABO`,
+`R, T` in `CDO` and doubled threshold `s = 7/128`. Its middle case uses the global triangle
+capacity (`ThreeInteriorTriangles.triangleCapacityTwo_of_A₀_le`) of the configuration, stated as the hypothesis `TriangleCapacityTwo` of
+the eight points. The inequalities of `two_sqrt_le_of_same_side`, `four_mul_le_sq_of_isolated_vertex` and the no-separation step are proved
+once for an arbitrary convex quadrilateral (`two_sqrt_le_of_same_side_general`, `four_mul_le_sq_of_isolated_vertex_general`, `no_sep_general`)
+by transport through the affine normal frame (`normal_frame`); `ncard_inQuad_le_four` applies them to the
+actual quadrilateral, the normalized results to `ABCD` and to `CDAB`.
 -/
 
 @[expose] public section
@@ -58,15 +49,13 @@ open ThreeInteriorTriangles QuadrilateralHull
 def InSector (X A B C D : Point) : Prop :=
   InTriangle X A B C ∧ InTriangle X A B D
 
-/-! ### §1. General quadrilateral coordinates -/
+/-! ### General quadrilateral coordinates -/
 
-/-- **Claim** (`FOUR_INTERIOR_QUADRILATERALS:claim-(1)-(3)`, normal form (1)). For a convex
-quadrilateral `ABCD` of doubled area `W = 2·quadArea`, put `a = sarea(A,B,D)/W` and
-`b = sarea(A,B,C)/W`. Then `0 < a, b < 1`, the complementary triangles `BCD`, `CDA` have normalized
-doubled areas `1 - a`, `1 - b`, and some affine map of determinant `1/W` sends
-`A, B, D, C` to `(0,0), (1,0), (0,a), ((1-b)/a, b)`.
-`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`, lines 32-55. -/
-theorem claim_1 {A B C D : Point} (hq : ConvexQuad A B C D) :
+/-- Normal form of a convex quadrilateral. For a convex quadrilateral `ABCD` of doubled area
+`W = 2·quadArea`, put `a = sarea(A,B,D)/W` and `b = sarea(A,B,C)/W`. Then `0 < a, b < 1`, the
+complementary triangles `BCD`, `CDA` have normalized doubled areas `1 - a`, `1 - b`, and some
+affine map of determinant `1/W` sends `A, B, D, C` to `(0,0), (1,0), (0,a), ((1-b)/a, b)`. -/
+theorem convexQuad_normal_form {A B C D : Point} (hq : ConvexQuad A B C D) :
     0 < sarea A B D / (2 * quadArea A B C D) ∧ sarea A B D / (2 * quadArea A B C D) < 1 ∧
       0 < sarea A B C / (2 * quadArea A B C D) ∧ sarea A B C / (2 * quadArea A B C D) < 1 ∧
       sarea B C D / (2 * quadArea A B C D) = 1 - sarea A B D / (2 * quadArea A B C D) ∧
@@ -109,8 +98,9 @@ theorem claim_1 {A B C D : Point} (hq : ConvexQuad A B C D) :
       rw [e2]; unfold sarea; ring
     · field_simp; unfold sarea; ring
 
-/-- `(2)` with the denominators cleared: `u ≥ s`, `as + (1-b)u ≤ abp`, `ap ≤ a - s - u`. -/
-theorem eq2' {a b s : ℝ} (ha : 0 < a) (hs : 0 < s)
+/-- The sector bounds of `inSector_normal_bounds` with the denominators cleared: `u ≥ s`, `as + (1-b)u ≤ abp`,
+`ap ≤ a - s - u`. -/
+theorem inSector_normal_bounds_mul {a b s : ℝ} (ha : 0 < a) (hs : 0 < s)
     {P : Point} (hP : InSector P (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
     (hmin : s / 2 ≤ minTriangleArea ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), P]) :
     s ≤ P.2 ∧ a * s + (1 - b) * P.2 ≤ a * b * P.1 ∧ a * P.1 ≤ a - s - P.2 := by
@@ -125,26 +115,22 @@ theorem eq2' {a b s : ℝ} (ha : 0 < a) (hs : 0 < s)
   rw [e, le_div_iff₀ ha] at g2
   linarith
 
-/-- **Claim** (`FOUR_INTERIOR_QUADRILATERALS:eq2`). In normalized
-coordinates, if every doubled area of `A, B, C, D, P` is at least `s > 0` and `P = (p, u)` lies in
-the sector `ABO`, then the triangles `ABP, ACP, BDP` give `u ≥ s` and
-`s/b + (1-b)u/(ab) ≤ p ≤ 1 - (s+u)/a`. No sign of `a + b - 1` is assumed.
-`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`, lines 57-68. -/
-theorem eq2 {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b < 1) (hs : 0 < s)
+/-- Sector bounds. In normalized coordinates, if every doubled area of `A, B, C, D, P` is at least
+`s > 0` and `P = (p, u)` lies in the sector `ABO`, then the triangles `ABP, ACP, BDP` give `u ≥ s`
+and `s/b + (1-b)u/(ab) ≤ p ≤ 1 - (s+u)/a`. No sign of `a + b - 1` is assumed. -/
+theorem inSector_normal_bounds {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b < 1) (hs : 0 < s)
     {P : Point} (hP : InSector P (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
     (hmin : s / 2 ≤ minTriangleArea ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), P]) :
     s ≤ P.2 ∧ s / b + (1 - b) * P.2 / (a * b) ≤ P.1 ∧ P.1 ≤ 1 - (s + P.2) / a := by
-  obtain ⟨h1, h2, h3⟩ := eq2' ha hs hP hmin
+  obtain ⟨h1, h2, h3⟩ := inSector_normal_bounds_mul ha hs hP hmin
   refine ⟨h1, ?_, ?_⟩
   · rw [div_add_div _ _ hb.ne' (by positivity), div_le_iff₀ (by positivity)]; nlinarith
   · rw [le_sub_iff_add_le, ← le_sub_iff_add_le', div_le_iff₀ ha]; linarith
 
-/-- **Claim** (`FOUR_INTERIOR_QUADRILATERALS:eq3`). With
-`A=(0,0), B=(1,0), D=(0,a)`, `P=(p,u)`, `Q=(q,v)` and `d_X = sarea P Q X`:
-`d_A = pv - uq`, `d_B = d_A + u - v`, `d_D = d_A + a(q-p)`, and
-`u d_D + (a-u) d_B = [a(1-p) - u](u - v)`.
-`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`, lines 70-85. -/
-theorem eq3 (a p u q v : ℝ) :
+/-- Pair-line identities. With `A=(0,0), B=(1,0), D=(0,a)`, `P=(p,u)`, `Q=(q,v)` and
+`d_X = sarea P Q X`: `d_A = pv - uq`, `d_B = d_A + u - v`, `d_D = d_A + a(q-p)`, and
+`u d_D + (a-u) d_B = [a(1-p) - u](u - v)`. -/
+theorem sarea_pair_normal_identities (a p u q v : ℝ) :
     sarea (p, u) (q, v) (0, 0) = p * v - u * q ∧
       sarea (p, u) (q, v) (1, 0) = sarea (p, u) (q, v) (0, 0) + u - v ∧
       sarea (p, u) (q, v) (0, a) = sarea (p, u) (q, v) (0, 0) + a * (q - p) ∧
@@ -152,15 +138,12 @@ theorem eq3 (a p u q v : ℝ) :
         (a * (1 - p) - u) * (u - v) := by
   refine ⟨?_, ?_, ?_, ?_⟩ <;> unfold sarea <;> ring
 
-/-! ### §2. Two inequalities for a pair in a common sector -/
+/-! ### Two inequalities for a pair in a common sector -/
 
-/-- **Claim** (`FOUR_INTERIOR_QUADRILATERALS:claim-(4)`). In normalized coordinates, let `P, Q`
-lie in the sector `ABO`, with every doubled area of `A, B, C, D, P, Q` at least `s > 0`. If the
-line `PQ` leaves `A` and `B` on the same side, then `ab - s(a+b) > 0` and
-`ab - s(a+b) ≥ 2√(sab)`.
-`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`, lines 87-122.
-Uses: FOUR_INTERIOR_QUADRILATERALS:eq2 -/
-theorem claim_4 {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b < 1) (hs : 0 < s)
+/-- The same-side inequality. In normalized coordinates, let `P, Q` lie in the sector `ABO`, with
+every doubled area of `A, B, C, D, P, Q` at least `s > 0`. If the line `PQ` leaves `A` and `B` on
+the same side, then `ab - s(a+b) > 0` and `ab - s(a+b) ≥ 2√(sab)`. -/
+theorem two_sqrt_le_of_same_side {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b < 1) (hs : 0 < s)
     {P Q : Point} (hP : InSector P (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
     (hQ : InSector Q (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
     (hmin : s / 2 ≤ minTriangleArea ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), P, Q])
@@ -169,9 +152,9 @@ theorem claim_4 {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b
   have hs2 : 0 < s / 2 := by positivity
   obtain ⟨p, u⟩ := P
   obtain ⟨q, v⟩ := Q
-  obtain ⟨hP1, hP2, hP3⟩ := eq2' ha hs hP
+  obtain ⟨hP1, hP2, hP3⟩ := inSector_normal_bounds_mul ha hs hP
     (le_min_sub (by norm_num) ![0, 1, 2, 3, 4] (by decide) (fun i => by fin_cases i <;> rfl) hmin)
-  obtain ⟨hQ1, hQ2, hQ3⟩ := eq2' ha hs hQ
+  obtain ⟨hQ1, hQ2, hQ3⟩ := inSector_normal_bounds_mul ha hs hQ
     (le_min_sub (by norm_num) ![0, 1, 2, 3, 5] (by decide) (fun i => by fin_cases i <;> rfl) hmin)
   simp only at hP1 hP2 hP3 hQ1 hQ2 hQ3
   have dA : s ≤ |sarea (p, u) (q, v) (0, 0)| := by
@@ -230,16 +213,14 @@ theorem claim_4 {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b
   have hsn := Real.sqrt_nonneg (s * a * b)
   nlinarith [sq_nonneg (Real.sqrt (s * a * b) - m)]
 
-/-- **Claim** (`FOUR_INTERIOR_QUADRILATERALS:claim-(5)`). In normalized coordinates, let `P, Q`
-lie in the sector `ABO`, with every doubled area of `A, B, C, D, P, Q` at least `s > 0`, and orient
-the line `PQ` so that `d_A < 0 < d_B`.
+/-- The isolated-endpoint inequality. In normalized coordinates, let `P, Q` lie in the sector
+`ABO`, with every doubled area of `A, B, C, D, P, Q` at least `s > 0`, and orient the line `PQ` so
+that `d_A < 0 < d_B`.
 * If `d_C, d_D > 0` (`A` is the only vertex on the negative side), then
-  `[ab - s(1+a)]² ≥ 4sab` and `ab - s(1+a) > 0` (5).
-* If `d_C, d_D < 0`, interchanging `A ↔ B`, `C ↔ D` and the orientation gives (5) with `a` and `b`
-  interchanged: `[ab - s(1+b)]² ≥ 4sab` and `ab - s(1+b) > 0`.
-`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`, lines 124-160.
-Uses: FOUR_INTERIOR_QUADRILATERALS:eq2, FOUR_INTERIOR_QUADRILATERALS:eq3 -/
-theorem claim_5 {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b < 1) (hs : 0 < s)
+  `[ab - s(1+a)]² ≥ 4sab` and `ab - s(1+a) > 0`.
+* If `d_C, d_D < 0`, interchanging `A ↔ B`, `C ↔ D` and the orientation gives the same with `a`
+  and `b` interchanged: `[ab - s(1+b)]² ≥ 4sab` and `ab - s(1+b) > 0`. -/
+theorem four_mul_le_sq_of_isolated_vertex {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b < 1) (hs : 0 < s)
     {P Q : Point} (hP : InSector P (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
     (hQ : InSector Q (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
     (hmin : s / 2 ≤ minTriangleArea ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), P, Q])
@@ -251,9 +232,9 @@ theorem claim_5 {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b
   have hs2 : 0 < s / 2 := by positivity
   obtain ⟨p, u⟩ := P
   obtain ⟨q, v⟩ := Q
-  obtain ⟨hP1, hP2, hP3⟩ := eq2' ha hs hP
+  obtain ⟨hP1, hP2, hP3⟩ := inSector_normal_bounds_mul ha hs hP
     (le_min_sub (by norm_num) ![0, 1, 2, 3, 4] (by decide) (fun i => by fin_cases i <;> rfl) hmin)
-  obtain ⟨hQ1, -, -⟩ := eq2' ha hs hQ
+  obtain ⟨hQ1, -, -⟩ := inSector_normal_bounds_mul ha hs hQ
     (le_min_sub (by norm_num) ![0, 1, 2, 3, 5] (by decide) (fun i => by fin_cases i <;> rfl) hmin)
   simp only at hP1 hP2 hP3 hQ1
   have hu : 0 < u := by linarith
@@ -282,7 +263,7 @@ theorem claim_5 {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b
       have h : 2 * (s / 2) ≤ sarea (p, u) (q, v) (0, a) :=
         sarea_ge_of_le_min_of_pos hs2 hmin 4 5 3 hD
       linarith
-    have e3 := (eq3 a p u q v).2.2.2
+    have e3 := (sarea_pair_normal_identities a p u q v).2.2.2
     have eBD : sarea (1, 0) (0, a) (p, u) = a * (1 - p) - u := by unfold sarea; ring
     rw [eBD] at hBD
     have hua : u < a := by nlinarith
@@ -332,7 +313,7 @@ theorem claim_5 {a b s : ℝ} (ha : 0 < a) (_ha1 : a < 1) (hb : 0 < b) (_hb1 : b
     apply fin (z := u - s) (by linarith)
     linarith
 
-/-! ### Affine transport and the general-quadrilateral forms of (4), (5) -/
+/-! ### Affine transport and the general-quadrilateral forms of `two_sqrt_le_of_same_side`, `four_mul_le_sq_of_isolated_vertex` -/
 
 theorem InSector.affine {X A B C D : Point} {α β γ δ ε ζ : ℝ} (hdet : 0 < α * δ - β * γ)
     (h : InSector X A B C D) :
@@ -340,7 +321,8 @@ theorem InSector.affine {X A B C D : Point} {α β γ δ ε ζ : ℝ} (hdet : 0 
       (affineMap α β γ δ ε ζ C) (affineMap α β γ δ ε ζ D) :=
   ⟨InTriangle.affine hdet h.1, InTriangle.affine hdet h.2⟩
 
-/-- The normal frame `(1)` of a convex quadrilateral, as an affine map of positive determinant. -/
+/-- The normal frame of `convexQuad_normal_form` for a convex quadrilateral, as an affine map of positive
+determinant. -/
 theorem normal_frame {A B C D : Point} (hq : ConvexQuad A B C D) :
     ∃ α β γ δ ε ζ : ℝ, 0 < α * δ - β * γ ∧ α * δ - β * γ = 1 / (2 * quadArea A B C D) ∧
       affineMap α β γ δ ε ζ A = (0, 0) ∧ affineMap α β γ δ ε ζ B = (1, 0) ∧
@@ -348,20 +330,20 @@ theorem normal_frame {A B C D : Point} (hq : ConvexQuad A B C D) :
       affineMap α β γ δ ε ζ C =
         ((1 - sarea A B C / (2 * quadArea A B C D)) / (sarea A B D / (2 * quadArea A B C D)),
           sarea A B C / (2 * quadArea A B C D)) := by
-  obtain ⟨-, -, -, -, -, -, α, β, γ, δ, ε, ζ, hdet, h⟩ := claim_1 hq
+  obtain ⟨-, -, -, -, -, -, α, β, γ, δ, ε, ζ, hdet, h⟩ := convexQuad_normal_form hq
   have hW := QuadrilateralHull.ConvexQuad.quadArea_pos hq
   exact ⟨α, β, γ, δ, ε, ζ, by rw [hdet]; positivity, hdet, h⟩
 
-/-- `(4)` for an arbitrary counterclockwise convex quadrilateral, in the normalized quantities
+/-- `two_sqrt_le_of_same_side` for an arbitrary counterclockwise convex quadrilateral, in the normalized quantities
 `a = [ABD]/W`, `b = [ABC]/W`, `s = σ/W`, `W = 2·area`. -/
-theorem claim4_general {A B C D P Q : Point} {a b s σ : ℝ} (hq : ConvexQuad A B C D)
+theorem two_sqrt_le_of_same_side_general {A B C D P Q : Point} {a b s σ : ℝ} (hq : ConvexQuad A B C D)
     (ha : a = sarea A B D / (2 * quadArea A B C D)) (hb : b = sarea A B C / (2 * quadArea A B C D))
     (hs : s = σ / (2 * quadArea A B C D)) (hσ : 0 < σ)
     (hP : InSector P A B C D) (hQ : InSector Q A B C D)
     (hmin : σ / 2 ≤ minTriangleArea ![A, B, C, D, P, Q])
     (hsame : 0 < sarea P Q A * sarea P Q B) :
     0 < a * b - s * (a + b) ∧ 2 * Real.sqrt (s * a * b) ≤ a * b - s * (a + b) := by
-  obtain ⟨ha0, ha1, hb0, hb1, -⟩ := claim_1 hq
+  obtain ⟨ha0, ha1, hb0, hb1, -⟩ := convexQuad_normal_form hq
   obtain ⟨α, β, γ, δ, ε, ζ, hdet, hdet', eA, eB, eD, eC⟩ := normal_frame hq
   rw [← ha] at eD; rw [← ha, ← hb] at eC
   rw [← ha] at ha0 ha1; rw [← hb] at hb0 hb1
@@ -372,7 +354,7 @@ theorem claim4_general {A B C D P Q : Point} {a b s σ : ℝ} (hq : ConvexQuad A
   have e : ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), affineMap α β γ δ ε ζ P,
       affineMap α β γ δ ε ζ Q] = affineMap α β γ δ ε ζ ∘ ![A, B, C, D, P, Q] := by
     funext i; fin_cases i <;> simp [eA, eB, eC, eD]
-  refine claim_4 ha0 ha1 hb0 hb1 (by rw [hs]; positivity) hP' hQ' ?_ ?_
+  refine two_sqrt_le_of_same_side ha0 ha1 hb0 hb1 (by rw [hs]; positivity) hP' hQ' ?_ ?_
   · rw [e, minTriangleArea_affineMap, abs_of_pos hdet, hdet', hs]
     have := mul_le_mul_of_nonneg_left hmin (by positivity : (0 : ℝ) ≤ 1 / (2 * quadArea A B C D))
     calc σ / (2 * quadArea A B C D) / 2 = 1 / (2 * quadArea A B C D) * (σ / 2) := by ring
@@ -382,9 +364,9 @@ theorem claim4_general {A B C D P Q : Point} {a b s σ : ℝ} (hq : ConvexQuad A
         (α * δ - β * γ) ^ 2 * (sarea P Q A * sarea P Q B) := by ring
     rw [this]; positivity
 
-/-- `(5)` for an arbitrary counterclockwise convex quadrilateral (normalized quantities as in
-`claim4_general`). -/
-theorem claim5_general {A B C D P Q : Point} {a b s σ : ℝ} (hq : ConvexQuad A B C D)
+/-- `four_mul_le_sq_of_isolated_vertex` for an arbitrary counterclockwise convex quadrilateral (normalized quantities as in
+`two_sqrt_le_of_same_side_general`). -/
+theorem four_mul_le_sq_of_isolated_vertex_general {A B C D P Q : Point} {a b s σ : ℝ} (hq : ConvexQuad A B C D)
     (ha : a = sarea A B D / (2 * quadArea A B C D)) (hb : b = sarea A B C / (2 * quadArea A B C D))
     (hs : s = σ / (2 * quadArea A B C D)) (hσ : 0 < σ)
     (hP : InSector P A B C D) (hQ : InSector Q A B C D)
@@ -394,7 +376,7 @@ theorem claim5_general {A B C D P Q : Point} {a b s σ : ℝ} (hq : ConvexQuad A
       4 * s * a * b ≤ (a * b - s * (1 + a)) ^ 2 ∧ 0 < a * b - s * (1 + a)) ∧
     (sarea P Q C < 0 → sarea P Q D < 0 →
       4 * s * a * b ≤ (a * b - s * (1 + b)) ^ 2 ∧ 0 < a * b - s * (1 + b)) := by
-  obtain ⟨ha0, ha1, hb0, hb1, -⟩ := claim_1 hq
+  obtain ⟨ha0, ha1, hb0, hb1, -⟩ := convexQuad_normal_form hq
   obtain ⟨α, β, γ, δ, ε, ζ, hdet, hdet', eA, eB, eD, eC⟩ := normal_frame hq
   rw [← ha] at eD; rw [← ha, ← hb] at eC
   rw [← ha] at ha0 ha1; rw [← hb] at hb0 hb1
@@ -413,7 +395,7 @@ theorem claim5_general {A B C D P Q : Point} {a b s σ : ℝ} (hq : ConvexQuad A
       _ ≤ _ := this
   have sgn (X : Point) : sarea (affineMap α β γ δ ε ζ P) (affineMap α β γ δ ε ζ Q)
       (affineMap α β γ δ ε ζ X) = (α * δ - β * γ) * sarea P Q X := sarea_affineMap _ _ _ _ _ _ _ _ _
-  have k := claim_5 ha0 ha1 hb0 hb1 (by rw [hs]; positivity) hP' hQ' hmin'
+  have k := four_mul_le_sq_of_isolated_vertex ha0 ha1 hb0 hb1 (by rw [hs]; positivity) hP' hQ' hmin'
     (by rw [← eA, sgn]; exact mul_neg_of_pos_of_neg hdet hA)
     (by rw [← eB, sgn]; exact mul_pos hdet hB)
   refine ⟨fun hC hD => k.1 ?_ ?_, fun hC hD => k.2 ?_ ?_⟩
@@ -422,8 +404,9 @@ theorem claim5_general {A B C D P Q : Point} {a b s σ : ℝ} (hq : ConvexQuad A
   · rw [← eC, sgn]; exact mul_neg_of_pos_of_neg hdet hC
   · rw [← eD, sgn]; exact mul_neg_of_pos_of_neg hdet hD
 
-/-- The rational comparison `(9)`: `(5)` fails throughout `a, b < 3/5` at `s = 7/128`. -/
-theorem eq9 {a b : ℝ} (ha : 0 < a) (ha1 : a < 3 / 5) (hb1 : b < 3 / 5)
+/-- The rational comparison: the isolated-endpoint inequality of `four_mul_le_sq_of_isolated_vertex`,
+`[ab - s(1+a)]² ≥ 4sab` with `ab - s(1+a) > 0`, fails throughout `a, b < 3/5` at `s = 7/128`. -/
+theorem isolated_vertex_ineq_impossible {a b : ℝ} (ha : 0 < a) (ha1 : a < 3 / 5) (hb1 : b < 3 / 5)
     (hK : 0 < a * b - 7 / 128 * (1 + a)) (hK2 : 4 * (7 / 128) * a * b ≤ (a * b - 7 / 128 * (1 + a)) ^ 2) :
     False := by
   have hb : 0 < b := by
@@ -431,9 +414,9 @@ theorem eq9 {a b : ℝ} (ha : 0 < a) (ha1 : a < 3 / 5) (hb1 : b < 3 / 5)
   nlinarith [mul_pos hK (mul_pos ha (sub_pos.2 hb1)), mul_pos ha hb,
     mul_pos (sub_pos.2 ha1) (sub_pos.2 hb1), mul_pos hK (sub_pos.2 ha1), mul_pos ha (sub_pos.2 ha1)]
 
-/-- §4 for an arbitrary counterclockwise convex quadrilateral `ABCD` with `P, Q` in the sector
-`ABO`, `R, T` in `CDO`, normalized doubled threshold `7/128`, normalized `a, b < 3/5`, and triangle
-capacity two: oriented with `d_A < 0 < d_B`, impossible. -/
+/-- No separation, one orientation. For an arbitrary counterclockwise convex quadrilateral `ABCD`
+with `P, Q` in the sector `ABO`, `R, T` in `CDO`, normalized doubled threshold `7/128`, normalized
+`a, b < 3/5`, and triangle capacity two, the line `PQ` cannot have `d_A < 0 < d_B`. -/
 theorem no_sep_oriented {A B C D P Q R T : Point} {a b : ℝ} (hq : ConvexQuad A B C D)
     (ha : a = sarea A B D / (2 * quadArea A B C D)) (hb : b = sarea A B C / (2 * quadArea A B C D))
     (ha35 : a < 3 / 5) (hb35 : b < 3 / 5)
@@ -456,12 +439,12 @@ theorem no_sep_oriented {A B C D P Q R T : Point} {a b : ℝ} (hq : ConvexQuad A
     linarith
   have hs : (7 / 128 : ℝ) = 7 / 128 * (2 * quadArea A B C D) / (2 * quadArea A B C D) := by
     field_simp
-  have k := claim5_general ⟨q1, q2, q3, q4⟩ ha hb hs (by positivity) hP hQ hmin6 hA hB
+  have k := four_mul_le_sq_of_isolated_vertex_general ⟨q1, q2, q3, q4⟩ ha hb hs (by positivity) hP hQ hmin6 hA hB
   have ha0 : 0 < a := by rw [ha, sarea_cycle D A B]; positivity
   have hb0 : 0 < b := by rw [hb]; positivity
   rcases lt_or_gt_of_ne nC with hC | hC <;> rcases lt_or_gt_of_ne nD with hD | hD
   · obtain ⟨k1, k2⟩ := k.2 hC hD
-    exact eq9 hb0 hb35 ha35 (by linarith) (by nlinarith)
+    exact isolated_vertex_ineq_impossible hb0 hb35 ha35 (by linarith) (by nlinarith)
   · -- alternating signs: impossible for a line and a convex quadrilateral
     have e : sarea B C D * sarea P Q A + sarea D A B * sarea P Q C =
         sarea C D A * sarea P Q B + sarea A B C * sarea P Q D := by unfold sarea; ring
@@ -521,9 +504,10 @@ theorem no_sep_oriented {A B C D P Q R T : Point} {a b : ℝ} (hq : ConvexQuad A
           (![A, B, C, D, P, Q, R, T] 3) (![A, B, C, D, P, Q, R, T] 5)} := hcard ▸ h3
     omega
   · obtain ⟨k1, k2⟩ := k.1 hC hD
-    exact eq9 ha0 ha35 hb35 k2 (by nlinarith)
+    exact isolated_vertex_ineq_impossible ha0 ha35 hb35 k2 (by nlinarith)
 
-/-- §4 in general form: `PQ` does not separate `A` from `B`. -/
+/-- No separation, in general form: under the hypotheses of `no_sep_oriented`, the line `PQ`
+does not separate `A` from `B`. -/
 theorem no_sep_general {A B C D P Q R T : Point} {a b : ℝ} (hq : ConvexQuad A B C D)
     (ha : a = sarea A B D / (2 * quadArea A B C D)) (hb : b = sarea A B C / (2 * quadArea A B C D))
     (ha35 : a < 3 / 5) (hb35 : b < 3 / 5)
@@ -553,7 +537,8 @@ theorem no_sep_general {A B C D P Q R T : Point} {a b : ℝ} (hq : ConvexQuad A 
       (by rw [sarea_swap₁₂]; linarith) (by rw [sarea_swap₁₂]; linarith)).elim
   · exact mul_pos hA hB
 
-/-- The arithmetic of `(10)`. -/
+/-- The final arithmetic: at `s = 7/128` the same-side inequality `ab - s(a+b) ≥ 2√(sab)` of
+`two_sqrt_le_of_same_side` does not hold for both `(a, b)` and `(1-a, 1-b)`. -/
 theorem final_arith {a b s : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 1)
     (hs : s = 7 / 128)
     (h1 : 2 * Real.sqrt (s * a * b) ≤ a * b - s * (a + b))
@@ -598,10 +583,10 @@ theorem final_arith {a b s : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 :
   rw [hs] at k1
   linarith
 
-/-! ### §3. Two possible sector patterns -/
+/-! ### Two possible sector patterns -/
 
-/-- The four two-interior-point bounds behind `(7)`: `a, b, 1-a, 1-b ≥ Ks > (22/3)·(7/128)`. -/
-theorem eq7_full {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 1)
+/-- The four two-interior-point bounds behind `two_two_lt_of_normal`: `a, b, 1-a, 1-b ≥ Ks > (22/3)·(7/128)`. -/
+theorem two_two_lt_of_normal_full {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 1)
     {P Q R T : Point}
     (hP : InSector P (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
     (hQ : InSector Q (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
@@ -612,16 +597,16 @@ theorem eq7_full {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 
   have hK : 22 / 3 * (7 / 256) < (4 + 2 * Real.sqrt 3) * (7 / 256 : ℝ) := by
     have : (5 / 3 : ℝ) < Real.sqrt 3 := by rw [Real.lt_sqrt (by norm_num)]; norm_num
     nlinarith
-  have k1 := CornerFamilies.twoInteriorPointLemma _ _ _ P Q (Or.inl hP.1) (Or.inl hQ.1)
+  have k1 := twoInteriorPointLemma _ _ _ P Q (Or.inl hP.1) (Or.inl hQ.1)
     (7 / 256) (by norm_num)
     (le_min_sub (by norm_num) ![0, 1, 2, 4, 5] (by decide) (fun i => by fin_cases i <;> rfl) hmin)
-  have k2 := CornerFamilies.twoInteriorPointLemma _ _ _ P Q (Or.inl hP.2) (Or.inl hQ.2)
+  have k2 := twoInteriorPointLemma _ _ _ P Q (Or.inl hP.2) (Or.inl hQ.2)
     (7 / 256) (by norm_num)
     (le_min_sub (by norm_num) ![0, 1, 3, 4, 5] (by decide) (fun i => by fin_cases i <;> rfl) hmin)
-  have k3 := CornerFamilies.twoInteriorPointLemma _ _ _ R T (Or.inl hR.1) (Or.inl hT.1)
+  have k3 := twoInteriorPointLemma _ _ _ R T (Or.inl hR.1) (Or.inl hT.1)
     (7 / 256) (by norm_num)
     (le_min_sub (by norm_num) ![2, 3, 0, 6, 7] (by decide) (fun i => by fin_cases i <;> rfl) hmin)
-  have k4 := CornerFamilies.twoInteriorPointLemma _ _ _ R T (Or.inl hR.2) (Or.inl hT.2)
+  have k4 := twoInteriorPointLemma _ _ _ R T (Or.inl hR.2) (Or.inl hT.2)
     (7 / 256) (by norm_num)
     (le_min_sub (by norm_num) ![2, 3, 1, 6, 7] (by decide) (fun i => by fin_cases i <;> rfl) hmin)
   have e1 : triangleArea ((0 : ℝ), (0 : ℝ)) (1, 0) ((1 - b) / a, b) = b / 2 := by
@@ -639,25 +624,22 @@ theorem eq7_full {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 
   rw [e1] at k1; rw [e2] at k2; rw [e3] at k3; rw [e4] at k4
   refine ⟨by linarith, by linarith, by linarith, by linarith⟩
 
-/-- **Claim** (`FOUR_INTERIOR_QUADRILATERALS:eq7`). In the alternative `(2,0,2,0)`, normalized
-with `P, Q` in `ABO`, `R, T` in `CDO`, and every doubled area of the eight points at least
-`s = 7/128`, the two-interior-point bound on `ABC, ABD, CDA, CDB` gives
-`a, b, 1-a, 1-b ≥ Ks`, hence `a, b < 1 - (22/3)s = 115/192 < 3/5`.
-`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`, lines 180-200.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem eq7 {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 1) {P Q R T : Point}
+/-- In the alternative `(2,0,2,0)`, normalized with `P, Q` in `ABO`, `R, T` in `CDO`, and every
+doubled area of the eight points at least `s = 7/128`, the two-interior-point bound on
+`ABC, ABD, CDA, CDB` gives `a, b, 1-a, 1-b ≥ Ks`, hence `a, b < 1 - (22/3)s = 115/192 < 3/5`. -/
+theorem two_two_lt_of_normal {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 1) {P Q R T : Point}
     (hP : InSector P (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
     (hQ : InSector Q (0, 0) (1, 0) ((1 - b) / a, b) (0, a))
     (hR : InSector R ((1 - b) / a, b) (0, a) (0, 0) (1, 0))
     (hT : InSector T ((1 - b) / a, b) (0, a) (0, 0) (1, 0))
     (hmin : 7 / 256 ≤ minTriangleArea ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), P, Q, R, T]) :
     a < 115 / 192 ∧ b < 115 / 192 := by
-  have h := eq7_full ha ha1 hb hb1 hP hQ hR hT hmin
+  have h := two_two_lt_of_normal_full ha ha1 hb hb1 hP hQ hR hT hmin
   exact ⟨by linarith [h.1], by linarith [h.2.1]⟩
 
-/-! ### §§4-5. Excluding two points in each of two opposite sectors -/
+/-! ### Excluding two points in each of two opposite sectors -/
 
-/-! ### §3 and Theorem 1: counting the four sectors -/
+/-! ### Counting the four sectors -/
 
 theorem ncard_split {n : ℕ} (p r : Fin n → Prop) :
     Set.ncard {m | p m} = Set.ncard {m | p m ∧ r m} + Set.ncard {m | p m ∧ ¬ r m} :=
@@ -768,10 +750,10 @@ theorem sector_counts {P : Fin 9 → Point} (hA : A₀ ≤ minTriangleArea P)
     congrArg Set.ncard hS4, ?_, ?_, ?_, ?_, ?_⟩ <;> omega
 
 /-- The two-interior-point bound in doubled form. -/
-theorem tw_bound {U V X Y Z : Point} (hY : CornerFamilies.InsideTriangle Y U V X)
-    (hZ : CornerFamilies.InsideTriangle Z U V X) (hmin : A₀ ≤ minTriangleArea ![U, V, X, Y, Z])
+theorem tw_bound {U V X Y Z : Point} (hY : InsideTriangle Y U V X)
+    (hZ : InsideTriangle Z U V X) (hmin : A₀ ≤ minTriangleArea ![U, V, X, Y, Z])
     (hpos : 0 < sarea U V X) : 2 * ((4 + 2 * Real.sqrt 3) * A₀) ≤ sarea U V X := by
-  have k := CornerFamilies.twoInteriorPointLemma _ _ _ _ _ hY hZ A₀ A₀_pos hmin
+  have k := twoInteriorPointLemma _ _ _ _ _ hY hZ A₀ A₀_pos hmin
   rw [QuadrilateralHull.triangleArea_of_pos hpos] at k
   linarith
 
@@ -779,8 +761,8 @@ theorem tw_bound {U V X Y Z : Point} (hY : CornerFamilies.InsideTriangle Y U V X
 theorem quadArea_le_one {A B C D : Point} (hA : A ∈ unitSquare) (hB : B ∈ unitSquare)
     (hC : C ∈ unitSquare) (hD : D ∈ unitSquare) (hq : ConvexQuad A B C D) :
     2 * quadArea A B C D ≤ 2 := by
-  have h1 := CornerFamilies.claim_area_le_half _ _ _ hA hB hC
-  have h2 := CornerFamilies.claim_area_le_half _ _ _ hA hC hD
+  have h1 := CornerFamilies.triangleArea_le_half_of_mem_unitSquare _ _ _ hA hB hC
+  have h2 := CornerFamilies.triangleArea_le_half_of_mem_unitSquare _ _ _ hA hC hD
   have hACD : 0 < sarea A C D := by rw [← sarea_cycle A C D]; exact hq.2.2.1
   rw [QuadrilateralHull.triangleArea_of_pos hq.1] at h1
   rw [QuadrilateralHull.triangleArea_of_pos hACD] at h2
@@ -838,7 +820,7 @@ theorem two_two_core {A B C D P Q R T : Point} (hW1 : 2 * quadArea A B C D ≤ 2
     (hcap8 : TriangleCapacityTwo ![A, B, C, D, P, Q, R, T]) : False := by
   have hW := QuadrilateralHull.ConvexQuad.quadArea_pos hq
   obtain ⟨ha35, hb35, ha35', hb35'⟩ := two_two_ab hW1 hq hP hQ hR hT hmin8
-  obtain ⟨ha0, ha1, hb0, hb1, ha'e, hb'e, -⟩ := claim_1 hq
+  obtain ⟨ha0, ha1, hb0, hb1, ha'e, hb'e, -⟩ := convexQuad_normal_form hq
   set W := 2 * quadArea A B C D with hWdef
   have hW0 : 0 < W := by positivity
   have hmin8' : 7 / 256 * W ≤ minTriangleArea ![A, B, C, D, P, Q, R, T] := by
@@ -861,13 +843,13 @@ theorem two_two_core {A B C D P Q R T : Point} (hW1 : 2 * quadArea A B C D ≤ 2
       funext a; fin_cases a <;> rfl
     rwa [e] at this
   have same2 := no_sep_general hq2 ha' hb' ha35' hb35' hR hT hP hQ hmin8r hcap8r
-  have g1 := claim4_general (s := 7 / 128) (σ := 7 / 128 * W) hq rfl rfl (by field_simp; rfl)
+  have g1 := two_sqrt_le_of_same_side_general (s := 7 / 128) (σ := 7 / 128 * W) hq rfl rfl (by field_simp; rfl)
     (by positivity) hP hQ
     (by
       have := le_min_sub (Q := ![A, B, C, D, P, Q]) (by norm_num) ![0, 1, 2, 3, 4, 5]
         (by decide) (fun a => by fin_cases a <;> rfl) hmin8'
       linarith) same1
-  have g2 := claim4_general (s := 7 / 128) (σ := 7 / 128 * W) hq2 ha' hb'
+  have g2 := two_sqrt_le_of_same_side_general (s := 7 / 128) (σ := 7 / 128 * W) hq2 ha' hb'
     (by rw [eW']; field_simp) (by positivity) hR hT
     (by
       have := le_min_sub (Q := ![C, D, A, B, R, T]) (by norm_num) ![2, 3, 0, 1, 6, 7]
@@ -920,15 +902,11 @@ theorem two_two_impossible {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare
     rwa [e] at this
   exact two_two_core (quadArea_le_one (hP i) (hP j) (hP k) (hP l) hq) hq hp hq' hr ht hmin8 hcap8
 
-/-- **Theorem 1** (`FOUR_INTERIOR_QUADRILATERALS:Theorem1`). For nine points in the unit square
-with least area at least `A₀`, a convex quadrilateral spanned by four of them contains at most four
-further points. If it contains four, each of the four open diagonal sectors contains exactly one
-of them. In particular two points in each of two opposite sectors is impossible.
-`docs/proof/nine/FOUR_INTERIOR_QUADRILATERALS.md`, lines 9-16 (proof 162-289).
-Uses: THREE_INTERIOR_TRIANGLES:Corollary5, FOUR_INTERIOR_QUADRILATERALS:claim-sectors,
-FOUR_INTERIOR_QUADRILATERALS:claim-(1)-(3), FOUR_INTERIOR_QUADRILATERALS:eq7,
-FOUR_INTERIOR_QUADRILATERALS:claim-no-separation, FOUR_INTERIOR_QUADRILATERALS:claim-final -/
-theorem theorem1 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
+/-- For nine points in the unit square with least area at least `A₀`, a convex quadrilateral
+spanned by four of them contains at most four further points. If it contains four, each of the
+four open diagonal sectors contains exactly one of them. In particular two points in each of two
+opposite sectors is impossible (`two_two_impossible`). -/
+theorem ncard_inQuad_le_four {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (hA : A₀ ≤ minTriangleArea P) {i j k l : Fin 9}
     (hq : ConvexQuad (P i) (P j) (P k) (P l)) :
     Set.ncard {m | InQuad (P m) (P i) (P j) (P k) (P l)} ≤ 4 ∧
@@ -937,7 +915,7 @@ theorem theorem1 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
         Set.ncard {m | InSector (P m) (P j) (P k) (P l) (P i)} = 1 ∧
         Set.ncard {m | InSector (P m) (P k) (P l) (P i) (P j)} = 1 ∧
         Set.ncard {m | InSector (P m) (P l) (P i) (P j) (P k)} = 1) := by
-  have hcap := corollary5 hP hA
+  have hcap := triangleCapacityTwo_of_A₀_le hP hA
   obtain ⟨n₁, n₂, n₃, n₄, e1, e2, e3, e4, e, c1, c2, c3, c4⟩ := sector_counts hA hcap hq
   refine ⟨by omega, fun h4 => ?_⟩
   rw [e1, e2, e3, e4]

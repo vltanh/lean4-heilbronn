@@ -8,8 +8,9 @@ public import Heilbronn.Nine.EightBoundary.Scalar
 
 The eight boundary budgets (`budgets`), the comparison of the nine-point and octagon least areas
 (`min_le_oct`), the transfer of closed-polygon membership along a rotation
-(`inClosedPolygon_rot`), and the proofs of Lemma 3 (`lemma3_core`), Theorem 2 in the corner at
-the origin (`theorem2_corner`) and Theorem 4 for `ABCD` (`theorem4_ABCD`).
+(`inClosedPolygon_rot`), and the proofs of the quadrilateral inequality of `quadrilateral_area_ge`
+(`quadrilateral_area_ge_aux`), of `minTriangleArea_le_of_not_inPolygon` in the corner at the origin (`minTriangleArea_le_of_corner_side`) and of `minTriangleArea_lt_of_side_quad`
+for `ABCD` (`minTriangleArea_lt_of_side_quad_ABCD`).
 -/
 
 @[expose] public section
@@ -69,12 +70,14 @@ theorem inClosedPolygon_rot {n : ℕ} {W W' : Fin n → Point} {O : Point} (r : 
     InClosedPolygon W' ((symOf false r).apply O) := fun i => by
   rw [hW, hW, symOf_sarea]; simpa using h i
 
-/-- The ninth point is strictly inside the square, numerically. -/
+/-- `√6 > 71/29`. -/
 theorem sqrt_six_bounds : (71 / 29 : ℝ) < Real.sqrt 6 := by
   rw [Real.lt_sqrt (by norm_num)]; norm_num
 
-/-- The proof of Lemma 3 (`EightBoundary.lemma3`). -/
-theorem lemma3_core {V₁ V₂ V₃ V₄ O : Point} {s : ℝ} (hs : 0 < s)
+/-- The quadrilateral inequality of `quadrilateral_area_ge`, without the convexity hypothesis: if `O` is in the
+closed quadrilateral `V₁V₂V₃V₄` and every triangle on the five points has doubled area at least
+`s > 0`, then `[V₁V₂V₃] + [V₁V₃V₄] ≥ 2(1+√2)s`. -/
+theorem quadrilateral_area_ge_aux {V₁ V₂ V₃ V₄ O : Point} {s : ℝ} (hs : 0 < s)
     (hO : InClosedPolygon ![V₁, V₂, V₃, V₄] O)
     (hmin : s / 2 ≤ minTriangleArea ![V₁, V₂, V₃, V₄, O]) :
     2 * (1 + Real.sqrt 2) * s ≤ sarea V₁ V₂ V₃ + sarea V₁ V₃ V₄ := by
@@ -122,8 +125,9 @@ theorem lemma3_core {V₁ V₂ V₃ V₄ O : Point} {s : ℝ} (hs : 0 < s)
       exact le_of_sq_le_sq this (by linarith)
     linarith
 
-/-- Theorem 2 in the corner at the origin (`O` on the corner side of `AB`). -/
-theorem theorem2_corner {a b c d e f g h : ℝ} {O : Point} (hA : EightAnchors a b c d e f g h)
+/-- `minTriangleArea_le_of_not_inPolygon` in the corner at the origin: if `O` is weakly on the corner side of `AB`, the
+minimum triangle area is at most `(5-2√6)/2`. -/
+theorem minTriangleArea_le_of_corner_side {a b c d e f g h : ℝ} {O : Point} (hA : EightAnchors a b c d e f g h)
     (hO : InOpenSquare O)
     (hc : sarea (octagon a b c d e f g h 0) (octagon a b c d e f g h 1) O ≤ 0) :
     minTriangleArea (eightConfig a b c d e f g h O) ≤ (5 - 2 * Real.sqrt 6) / 2 := by
@@ -156,8 +160,9 @@ theorem theorem2_corner {a b c d e f g h : ℝ} {O : Point} (hA : EightAnchors a
     (by linarith [div_le_of_le_mul' hR b5, div_le_of_le_mul' hL b8])
   linarith
 
-/-- Theorem 4 for the quadrilateral `ABCD`. -/
-theorem theorem4_ABCD {a b c d e f g h : ℝ} {O : Point} (hA : EightAnchors a b c d e f g h)
+/-- `minTriangleArea_lt_of_side_quad` for the quadrilateral `ABCD`: if `O` is in the closed quadrilateral `ABCD`, the
+minimum triangle area is less than `7/128`. -/
+theorem minTriangleArea_lt_of_side_quad_ABCD {a b c d e f g h : ℝ} {O : Point} (hA : EightAnchors a b c d e f g h)
     (hq : InClosedPolygon ![(0, a), (b, 0), (c, 0), (1, d)] O) :
     minTriangleArea (eightConfig a b c d e f g h O) < 7 / 128 := by
   by_contra hcon
@@ -174,7 +179,7 @@ theorem theorem4_ABCD {a b c d e f g h : ℝ} {O : Point} (hA : EightAnchors a b
         ![(0, a), (b, 0), (c, 0), (1, d), O] := by
       funext i; fin_cases i <;> rfl
     rw [e] at this; linarith
-  have hL3 := lemma3_core (by linarith : 0 < 2 * t) hq hsub
+  have hL3 := quadrilateral_area_ge_aux (by linarith : 0 < 2 * t) hq hsub
   simp only [sarea] at hL3
   set s := 2 * t with hs
   have hL : 0 < h - a := by linarith

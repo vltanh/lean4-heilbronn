@@ -8,38 +8,36 @@ public import Heilbronn.Nine.SixBoundary.TwoTopTriangularHull
 public import Heilbronn.Nine.SixBoundary.Hull
 
 /-! # Two opposite-cap points with triangular hull in N
-(`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`)
 
-**Role.** Primary route: the triangular-cap-hull branch of the six-boundary occupancy N6-06
-`(n_L,n_T,n_R;n_I) = (0,2,0;1)` of `docs/proof/nine/UNRESTRICTED.md`, Section 4 (strict bound); assembled
-with `SIX_BOUNDARY_TWO_TOP_CONVEX` in `SIX_BOUNDARY_TWO_TOP_COMPLETION`.
+The triangular-cap-hull branch of the six-boundary case with two free points in the opposite cap
+and one inside the anchor hexagon (strict bound); assembled with `SixBoundaryTwoTopConvex` in
+`SixBoundaryTwoTopCompletion`.
 
-**Setting.** The N anchors (`NAnchors`, (1)); two free points in the opposite cap `T = DF(1,1)`
+**Setting.** The N anchors (`NAnchors`); two free points in the opposite cap `T = DF(1,1)`
 (`InCapT`) whose hull with `D, F` is a triangle: the outer point `X = (x_x,x_y)` and the inner
 point `P = (p_x,p_y) ∈ int(DXF)`; the ninth point `Q = (q_x,q_y)` strictly inside the anchor
 hexagon. The configuration is `nConfig a h b c d f X P Q`. Contradiction hypothesis: every actual
 doubled area is at least `σ = 8/73` (`4/73 ≤ minTriangleArea`); `ρ = 49/60 < (4+2√3)σ`.
-Transposition preserves the occupancy and the triangular top hull, so the proof imposes `f ≤ d`;
-the claims that use it carry the hypothesis `f ≤ d`. The full hull is the heptagon
+Transposition preserves the placement and the triangular top hull, so the proof imposes `f ≤ d`;
+the results that use it carry the hypothesis `f ≤ d`. The full hull is the heptagon
 `(V₀,…,V₆) = (A,B,C,D,X,F,H)` (`SixBoundarySingleTop.heptagon`), with interior points
 `V₇ = P`, `V₈ = Q`. Notation `L = h-a`, `M = c-b`, `δ = (1-d)(1-f)`, `W = 1-(h-d)(c-f)`.
 
 **Results.**
-* `theorem1`: `minTriangleArea < 4/73 < A₀` throughout the triangular-hull branch.
-* `claim_hull`: the heptagon is strictly convex with `P, Q` inside.
-* `claim_anchor` (4)–(5), `eq6`, `claim_cap` (6)–(8), `claim_Q_box` (9): the affine bounds behind
-  the 27 factors (10).
-* `claim_words`: 57 words; `P ∈ DXF` iff `r₃(P) = 1` (five words (13)); `Q` has one of the 52
-  hexagon words (19 lower, 33 upper).
-* `claim_splits`: every actual sign is nonzero (cases 230 and 238 split on `[CPQ]`, `[BPQ]`;
-  262 terminal cells).
-* `claim_lower_Q` (15)–(16): bounds when `Q` is below `HC`.
-* `claim_case230` (17)–(18): in case 230 both `P, Q` lie in `CXF`, giving four extra factors.
-* `claim_W_hc` (19), `claim_ears` (20): the extra costs.
-* `claim_certificate`: with `f ≤ d` no pair of words is possible (220 cubics, 29,641 terms).
+* `twoTopTriangular_lt`: `minTriangleArea < 4/73 < A₀` throughout the triangular-hull branch.
+* `heptagon_hull`: the heptagon is strictly convex with `P, Q` inside.
+* `fam_bounds` (with `capX_bounds`, `capP_bounds`, `anchor_areas'`), `cap_identities`, `Q_box`: the
+  affine bounds behind the 27 common factors.
+* `exists_capWord_hexagonWord`: 57 words; `P ∈ DXF` iff `r₃(P) = 1` (the five words `capWords`); `Q` has one of
+  the 52 hexagon words (19 lower, 33 upper).
+* `bounds_of_Q_below`: bounds when `Q` is below `HC`.
+* `cell_CXF_bounds`: for the words `case230P`, `case230Q` both `P, Q` lie in `CXF`, giving four
+  extra factors.
+* `W_hc_bounds`, `ears_lt`: the extra costs.
+* `no_word_pair`: with `f ≤ d` no pair of words is possible (220 cubics, 29,641 terms, 262
+  terminal cells).
 
-Implicit in the manuscript: the claims are stated under `4/73 ≤ minTriangleArea` and, where
-used, `f ≤ d`.
+The results are stated under `4/73 ≤ minTriangleArea` and, where used, `f ≤ d`.
 -/
 
 @[expose] public section
@@ -52,22 +50,24 @@ open Heilbronn.Nine.SixBoundary SixRadial Cover Cert Cert.Expr
 local notation "heptagon" => SixBoundarySingleTop.heptagon
 local notation "hexagonWords" => SixBoundarySingleTop.hexagonWords
 
-/-- The triangular-hull branch of N6-06: N anchors, `X, P` in the opposite cap `DF(1,1)` with
+/-- The triangular-hull two-top placement: N anchors, `X, P` in the opposite cap `DF(1,1)` with
 `P` strictly inside the triangle `DXF`, and `Q` strictly inside the anchor hexagon. -/
 def TriangularFamily (a h b c d f : ℝ) (X P Q : Point) : Prop :=
   NAnchors a h b c d f ∧ InCapT d f X ∧ InCapT d f P ∧ InTriangle P (ptD d) X (ptF f) ∧
     InHexagon a h b c d f Q
 
-/-- The five heptagon words (13) of the inner cap point `P` (`r₃ = 1`), at full-list indices
-19, 22, 28, 38, 39. -/
+/-- The five heptagon words of the inner cap point `P` (`r₃ = 1`), at indices 19, 22, 28, 38, 39
+of `heptagonWords`. -/
 def capWords : Finset (Fin 7 → Fin 7) :=
   {![3, 2, 1, 1, 5, 5, 4], ![3, 2, 2, 1, 4, 5, 4], ![3, 3, 2, 1, 3, 5, 4],
     ![4, 3, 2, 1, 1, 5, 5], ![4, 3, 2, 1, 2, 5, 4]}
 
-/-- The words of case 230: `r(P) = (4,3,2,1,2,5,4)` (index 39). -/
+/-- The word `r(P) = (4,3,2,1,2,5,4)` of the cell with four extra factors (index 39 of
+`heptagonWords`). -/
 def case230P : Fin 7 → Fin 7 := ![4, 3, 2, 1, 2, 5, 4]
 
-/-- The words of case 230: `r(Q) = (3,2,2,3,4,4,3)` (index 24). -/
+/-- The word `r(Q) = (3,2,2,3,4,4,3)` of the cell with four extra factors (index 24 of
+`heptagonWords`). -/
 def case230Q : Fin 7 → Fin 7 := ![3, 2, 2, 3, 4, 4, 3]
 
 local notation "HEPT" => SixBoundarySingleTop.heptagon
@@ -77,7 +77,7 @@ local notation "HEXW" => SixBoundarySingleTop.hexagonWords
 
 section Scalar
 
-/-- The opposite-cap bounds (6)–(7) for the outer point `X` (`[DXF] ≥ 3σ`, `f ≤ d`). -/
+/-- The opposite-cap bounds for the outer point `X` (`[DXF] ≥ 3σ`, `f ≤ d`). -/
 theorem capX_bounds {d f xx xy : ℝ} (hd8 : 1 / 8 < d) (hd1 : d < 1) (hf8 : 1 / 8 < f)
     (hfd : f ≤ d) (hxx : xx ≤ 1) (hxy : xy ≤ 1)
     (hDXF : 3 * (8 / 73) ≤ (1 - d) * (xx - f) - (1 - f) * (1 - xy)) :
@@ -107,7 +107,7 @@ theorem capX_bounds {d f xx xy : ℝ} (hd8 : 1 / 8 < d) (hd1 : d < 1) (hf8 : 1 /
   · have := mul_lt_mul_of_pos_right (by linarith : 1 - d < 7 / 8) hpos; linarith
   · have := mul_lt_mul_of_pos_right (by linarith : 1 - f < 7 / 8) hpos2; linarith
 
-/-- The inner cap point bounds (8) for `P` from `[DPF], [DXP], [XFP] ≥ σ`. -/
+/-- The inner cap point bounds for `P` from `[DPF], [DXP], [XFP] ≥ σ`. -/
 theorem capP_bounds {d f xx xy px py : ℝ} (hd8 : 1 / 8 < d) (hd1 : d < 1) (hf8 : 1 / 8 < f)
     (hf1 : f < 1) (hxx : xx ≤ 1) (hxy : xy ≤ 1) (hpx : px ≤ 1) (hpy : py ≤ 1)
     (hxf : 0 ≤ xx - f) (hxd : 0 ≤ xy - d)
@@ -138,7 +138,7 @@ theorem capP_bounds {d f xx xy px py : ℝ} (hd8 : 1 / 8 < d) (hd1 : d < 1) (hf8
     linarith
   exact ⟨hof, hod, hox, hoy⟩
 
-/-- The bounds (15) of a lower `Q`: from `[CHQ] ≥ σ`, `(h-a)q_x ≥ σ`, `(c-b)q_y ≥ σ`. -/
+/-- The bounds of a lower `Q`: from `[CHQ] ≥ σ`, `(h-a)q_x ≥ σ`, `(c-b)q_y ≥ σ`. -/
 theorem lowerQ_bounds {a h b c qx qy : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
     (hbc : b < c) (hc : c < 1) (hqx : 0 ≤ qx) (hqy : 0 ≤ qy)
     (hCHQ : 8 / 73 ≤ h * c - h * qx - c * qy) (hHAQ : 8 / 73 ≤ (h - a) * qx)
@@ -303,7 +303,7 @@ theorem fam_bounds (hfam : TriangularFamily a h b c d f X P Q) (hfd : f ≤ d)
 
 end Model
 
-/-! ### Section 1: the hull -/
+/-! ### The hull -/
 
 section Hull
 
@@ -313,7 +313,7 @@ variable {a h b c d f : ℝ} {X P Q : Point}
 collinear with `P` or with `Q`. -/
 theorem fam_hull (hfam : TriangularFamily a h b c d f X P Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    IsConvexCCW (HEPT a h b c d f X) ∧ InPolygon (HEPT a h b c d f X) P ∧
+    IsConvexPolygon (HEPT a h b c d f X) ∧ InPolygon (HEPT a h b c d f X) P ∧
       InPolygon (HEPT a h b c d f X) Q ∧
       (∀ i j : Fin 7, i ≠ j → sarea (HEPT a h b c d f X i) (HEPT a h b c d f X j) P ≠ 0) ∧
       (∀ i j : Fin 7, i ≠ j → sarea (HEPT a h b c d f X i) (HEPT a h b c d f X j) Q ≠ 0) := by
@@ -342,7 +342,7 @@ theorem fam_hull (hfam : TriangularFamily a h b c d f X P Q)
   have H : Hull a h b c d f X.1 X.2 := ⟨by linarith, by linarith, by linarith, by linarith,
     by linarith, by linarith, by linarith, by linarith, by linarith, by linarith, by linarith,
     by linarith, by linarith, by linarith, by linarith⟩
-  have hconv : IsConvexCCW (HEPT a h b c d f X) := by
+  have hconv : IsConvexPolygon (HEPT a h b c d f X) := by
     have := H.convex (fun i j k hij hjk => by
       rw [heptV_eq (P := P) (Q := Q), heptV_eq (P := P) (Q := Q), heptV_eq (P := P) (Q := Q)]
       exact cfg_area hmin (by omega) (by omega) (by omega) (fun e => by
@@ -366,12 +366,11 @@ theorem fam_hull (hfam : TriangularFamily a h b c d f X P Q)
     (p5 := 6) (by decide) (by decide) (by decide) (by decide) (by decide) q1 q2 q3 q4 q5 q6
     (gQ 0 2 (by decide)) (gQ 0 3 (by decide)) (gQ 0 5 (by decide)), gen 7 (Or.inl rfl), gQ⟩
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-hull`). The full cyclic hull is the strictly
-convex heptagon `(A, B, C, D, X, F, H)` (3), with `P` and `Q` strictly inside.
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 45-55. -/
-theorem claim_hull (hfam : TriangularFamily a h b c d f X P Q)
+/-- The full cyclic hull is the strictly convex heptagon `(A, B, C, D, X, F, H)`
+(`SixBoundarySingleTop.heptagon`), with `P` and `Q` strictly inside. -/
+theorem heptagon_hull (hfam : TriangularFamily a h b c d f X P Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
-    IsConvexCCW (HEPT a h b c d f X) ∧ InPolygon (HEPT a h b c d f X) P ∧
+    IsConvexPolygon (HEPT a h b c d f X) ∧ InPolygon (HEPT a h b c d f X) P ∧
       InPolygon (HEPT a h b c d f X) Q :=
   ⟨(fam_hull hfam hmin).1, (fam_hull hfam hmin).2.1, (fam_hull hfam hmin).2.2.1⟩
 
@@ -391,20 +390,18 @@ theorem anchor_areas' (hfam : TriangularFamily a h b c d f X P Q)
     area_ge hmin (i := 0) (j := 1) (k := 6) (by norm_num) (by norm_num) (by norm_num)
     (by norm_num) (by norm_num) (by norm_num) (by simp only [cfg, sarea]; ring) (by nlinarith)⟩
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:eq6`). The cap identities (6), for every point
-`X`: `[DXF] = (1-d)(x_x-f) - (1-f)(1-x_y) = (1-f)(x_y-d) - (1-d)(1-x_x)` and
-`δ - [DXF] = (1-d)(1-x_x) + (1-f)(1-x_y)`. `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 74-81.
+/-- The cap identities, for every point `X`:
+`[DXF] = (1-d)(x_x-f) - (1-f)(1-x_y) = (1-f)(x_y-d) - (1-d)(1-x_x)` and
+`δ - [DXF] = (1-d)(1-x_x) + (1-f)(1-x_y)`.
 -/
-theorem eq6 (d f : ℝ) (X : Point) :
+theorem cap_identities (d f : ℝ) (X : Point) :
     sarea (ptD d) X (ptF f) = (1 - d) * (X.1 - f) - (1 - f) * (1 - X.2) ∧
       sarea (ptD d) X (ptF f) = (1 - f) * (X.2 - d) - (1 - d) * (1 - X.1) ∧
       (1 - d) * (1 - f) - sarea (ptD d) X (ptF f) = (1 - d) * (1 - X.1) + (1 - f) * (1 - X.2) := by
   refine ⟨?_, ?_, ?_⟩ <;> simp only [sarea] <;> ring
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-Q-box`). With `σ = 8/73`:
-`σ ≤ q_x, q_y ≤ 1-σ` (bases `AH`, `BC` and the identities (9)).
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 111-123. -/
-theorem claim_Q_box (hfam : TriangularFamily a h b c d f X P Q)
+/-- With `σ = 8/73`: `σ ≤ q_x, q_y ≤ 1-σ` (bases `AH`, `BC` and the projection identities). -/
+theorem Q_box (hfam : TriangularFamily a h b c d f X P Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
     8 / 73 ≤ Q.1 ∧ Q.1 ≤ 1 - 8 / 73 ∧ 8 / 73 ≤ Q.2 ∧ Q.2 ≤ 1 - 8 / 73 := by
   obtain ⟨hN, -, -, -, hQ⟩ := hfam
@@ -429,21 +426,19 @@ theorem claim_Q_box (hfam : TriangularFamily a h b c d f X P Q)
       (by norm_num) (by norm_num) (by norm_num) (by simp only [cfg, sarea]; ring)
       (by simp only [sarea] at q5; linarith))
 
-/-! ### Section 3: the additional bounds for lower Q and for case 230 -/
+/-! ### The additional bounds for a lower `Q` and for the words `case230P`, `case230Q` -/
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-lower-Q`). Equations (15)–(16): if `Q` is
-below `HC`, then with `σ = 8/73`: `hc ≥ σ/(3-2√2) > 7/11`, `h, c ≥ 7/11`, `c - q_x ≥ 2σ`,
-`h - q_y ≥ 2σ`, `q_x + q_y ≤ 1-σ` (endpoint theorem for `H, C, A, B, Q` in `(0,0)HC`).
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 194-214.
-Uses: TYPE_II:EndpointTriangleTheorem -/
-theorem claim_lower_Q (hfam : TriangularFamily a h b c d f X P Q)
+/-- If `Q` is below `HC`, then with `σ = 8/73`: `hc ≥ σ/(3-2√2) > 7/11`, `h, c ≥ 7/11`,
+`c - q_x ≥ 2σ`, `h - q_y ≥ 2σ`, `q_x + q_y ≤ 1-σ` (endpoint theorem for `H, C, A, B, Q` in
+`(0,0)HC`). -/
+theorem bounds_of_Q_below (hfam : TriangularFamily a h b c d f X P Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q))
     (hlow : sarea (ptH h) (ptC c) Q < 0) :
     let σ : ℝ := 8 / 73
     σ / (3 - 2 * Real.sqrt 2) ≤ h * c ∧ 7 / 11 < σ / (3 - 2 * Real.sqrt 2) ∧
       7 / 11 ≤ h ∧ 7 / 11 ≤ c ∧ 2 * σ ≤ c - Q.1 ∧ 2 * σ ≤ h - Q.2 ∧ Q.1 + Q.2 ≤ 1 - σ := by
   dsimp only
-  have Ob := claim_Q_box hfam hmin
+  have Ob := Q_box hfam hmin
   obtain ⟨hN, -, -, -, hQ⟩ := hfam
   obtain ⟨q1, q2, q3, q4, q5, q6⟩ := hQ
   obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN
@@ -488,9 +483,9 @@ theorem rho_lt : (49 / 60 : ℝ) < (4 + 2 * Real.sqrt 3) * (8 / 73) := by
 at least `(4 + 2√3)σ` (the two-interior-point lemma). -/
 theorem two_inside (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) {i j k : ℕ}
     (hi : i < 7) (hj : j < 7) (hk : k < 7) (hij : i ≠ j) (hjk : j ≠ k) (hik : i ≠ k)
-    (hP : CornerFamilies.InsideTriangle P (cfg a h b c d f X P Q i) (cfg a h b c d f X P Q j)
+    (hP : InsideTriangle P (cfg a h b c d f X P Q i) (cfg a h b c d f X P Q j)
       (cfg a h b c d f X P Q k))
-    (hQ : CornerFamilies.InsideTriangle Q (cfg a h b c d f X P Q i) (cfg a h b c d f X P Q j)
+    (hQ : InsideTriangle Q (cfg a h b c d f X P Q i) (cfg a h b c d f X P Q j)
       (cfg a h b c d f X P Q k)) :
     (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ |sarea (cfg a h b c d f X P Q i) (cfg a h b c d f X P Q j)
       (cfg a h b c d f X P Q k)| := by
@@ -509,17 +504,15 @@ theorem two_inside (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q
     have h1 := cfg_area hmin (X := X) (P := P) (Q := Q) (hv x) (hv y) (hv z) (hinj.ne hxy.ne)
       (hinj.ne hyz.ne) (hinj.ne (hxy.trans hyz).ne)
     rw [triangleArea_eq]; linarith
-  have := CornerFamilies.twoInteriorPointLemma _ _ _ P Q hP hQ (4 / 73) (by norm_num) hsub
+  have := twoInteriorPointLemma _ _ _ P Q hP hQ (4 / 73) (by norm_num) hsub
   rw [triangleArea_eq] at this
   linarith
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-case230`). Equations (17)–(18): in case 230
-(`r(P) = (4,3,2,1,2,5,4)`, `r(Q) = (3,2,2,3,4,4,3)`) both `P` and `Q` lie strictly inside the
-actual triangle `CXF`, so with `σ = 8/73`, `ρ = 49/60`: `T = [CXF] ≥ (4+2√3)σ > ρ`,
-`x_x - f ≥ ρ`, `f ≤ 1-ρ = 11/60`, `x_y ≥ 2234/2745` and `h - a ≥ 480/803`.
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 216-253.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem claim_case230 (hfam : TriangularFamily a h b c d f X P Q)
+/-- For the words `r(P) = (4,3,2,1,2,5,4)` (`case230P`) and `r(Q) = (3,2,2,3,4,4,3)`
+(`case230Q`), both `P` and `Q` lie strictly inside the actual triangle `CXF`, so with
+`σ = 8/73`, `ρ = 49/60`: `T = [CXF] ≥ (4+2√3)σ > ρ`, `x_x - f ≥ ρ`, `f ≤ 1-ρ = 11/60`,
+`x_y ≥ 2234/2745` and `h - a ≥ 480/803`. -/
+theorem cell_CXF_bounds (hfam : TriangularFamily a h b c d f X P Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q))
     (hP : HasRadialWord (HEPT a h b c d f X) P (fun i => (case230P i : ℕ)))
     (hQ : HasRadialWord (HEPT a h b c d f X) Q (fun i => (case230Q i : ℕ))) :
@@ -568,10 +561,9 @@ section Claims3
 
 variable {a h b c d f : ℝ} {X P Q : Point}
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-W-hc`). The costs (19), with `σ = 8/73` and
-`W = 1-(h-d)(c-f)`: if `Q` is above `HC`, `hc ≥ 4σ` and `W ≥ 4σ`; if below, `hc ≥ 7/11` and
-`W ≥ 2σ`; always `δ ≥ 3σ`. `docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 268-280. -/
-theorem claim_W_hc (hfam : TriangularFamily a h b c d f X P Q)
+/-- The costs `W`, `hc`, `δ`, with `σ = 8/73` and `W = 1-(h-d)(c-f)`: if `Q` is above `HC`,
+`hc ≥ 4σ` and `W ≥ 4σ`; if below, `hc ≥ 7/11` and `W ≥ 2σ`; always `δ ≥ 3σ`. -/
+theorem W_hc_bounds (hfam : TriangularFamily a h b c d f X P Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
     let σ : ℝ := 8 / 73
     (0 < sarea (ptH h) (ptC c) Q → 4 * σ ≤ h * c ∧ 4 * σ ≤ 1 - (h - d) * (c - f)) ∧
@@ -603,7 +595,7 @@ theorem claim_W_hc (hfam : TriangularFamily a h b c d f X P Q)
   have hFDP := g (i := 5) (j := 3) (k := 7) (by norm_num) (by norm_num) (by norm_num)
     (by norm_num) (by norm_num) (by norm_num) (V := sarea (ptF f) (ptD d) P) rfl i3.le
   have e := sarea_add_sarea_add_sarea (ptD d) X (ptF f) P
-  have e2 := (eq6 d f X).2.2
+  have e2 := (cap_identities d f X).2.2
   have m1 := mul_nonneg (by linarith : (0 : ℝ) ≤ 1 - d) (by linarith : (0 : ℝ) ≤ 1 - X.1)
   have m2 := mul_nonneg (by linarith : (0 : ℝ) ≤ 1 - f) (by linarith : (0 : ℝ) ≤ 1 - X.2)
   refine ⟨fun hup => ?_, fun hlow => ?_, by linarith⟩
@@ -618,22 +610,20 @@ theorem claim_W_hc (hfam : TriangularFamily a h b c d f X P Q)
     have wq : 1 - (h - d) * (c - f) = sarea (ptH h) (ptC c) Q + sarea (ptC c) (ptD d) Q +
         sarea (ptD d) (ptF f) Q + sarea (ptF f) (ptH h) Q := by simp only [sarea]; ring
     exact ⟨hhc, by linarith⟩
-  · have := (claim_lower_Q hfam hmin hlow).1
+  · have := (bounds_of_Q_below hfam hmin hlow).1
     have := endpoint_const.2
     exact ⟨by linarith, by linarith⟩
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-ears`). The costs (20): the six anchor ears
-`ABH, ABC, BCD, CDF, DFH, FHA` have doubled area `< 13/16` (`SIX_BOUNDARY_HULL` Theorem 1).
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 282-291.
-Uses: SIX_BOUNDARY_HULL:Theorem1 -/
-theorem claim_ears (hfam : TriangularFamily a h b c d f X P Q)
+/-- The ear costs: the six anchor ears `ABH, ABC, BCD, CDF, DFH, FHA` have doubled area
+`< 13/16` (`SixBoundaryHull.ears_sarea_lt_atMostOne`). -/
+theorem ears_lt (hfam : TriangularFamily a h b c d f X P Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
     sarea (ptA a) (ptB b) (ptH h) < 13 / 16 ∧ sarea (ptA a) (ptB b) (ptC c) < 13 / 16 ∧
       sarea (ptB b) (ptC c) (ptD d) < 13 / 16 ∧ sarea (ptC c) (ptD d) (ptF f) < 13 / 16 ∧
       sarea (ptD d) (ptF f) (ptH h) < 13 / 16 ∧ sarea (ptF f) (ptH h) (ptA a) < 13 / 16 := by
-  obtain ⟨o1, o2, o3, o4⟩ := claim_Q_box hfam hmin
+  obtain ⟨o1, o2, o3, o4⟩ := Q_box hfam hmin
   obtain ⟨hN, hX, hP, -, -⟩ := hfam
-  exact (SixBoundaryHull.theorem1 hN hX.1 hP.1 ⟨by linarith, by linarith, by linarith,
+  exact (SixBoundaryHull.ears_sarea_lt_atMostOne hN hX.1 hP.1 ⟨by linarith, by linarith, by linarith,
     by linarith⟩ (by linarith)).1
 
 end Claims3
@@ -665,13 +655,13 @@ theorem fac_nonneg (f1 : 1 / 8 ≤ a) (f2 : 1 / 8 ≤ b) (f3 : 4 * (8 / 73) ≤ 
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> linarith
 
-/-- The costs (19)–(20) are nonnegative. -/
+/-- The appended costs `Model.extra` are nonnegative. -/
 theorem extra_nonneg (hfam : TriangularFamily a h b c d f X P Q)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) {tb : List SFact}
     (htb : AllHold (SFact.Holds (cfg a h b c d f X P Q)) tb) :
     ∀ e ∈ Model.extra tb, 0 ≤ e.eval (zeta a h b c d f X P Q) := by
-  obtain ⟨Wup, Wlow, hδ⟩ := claim_W_hc hfam hmin
-  obtain ⟨r1, r2, r3, r4, r5, r6⟩ := claim_ears hfam hmin
+  obtain ⟨Wup, Wlow, hδ⟩ := W_hc_bounds hfam hmin
+  obtain ⟨r1, r2, r3, r4, r5, r6⟩ := ears_lt hfam hmin
   obtain ⟨hconv, -⟩ := fam_hull hfam hmin
   obtain ⟨hABC, hABH⟩ := anchor_areas' hfam hmin
   obtain ⟨⟨ha, hah, hh, hb, hbc, hc, -⟩, -⟩ := hfam
@@ -753,13 +743,13 @@ theorem htwo_ok (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) 
     have e := sarea_add_sarea_add_sarea (Pt i) (Pt j) (Pt k) (Pt j₁)
     cases sg <;> simp only [OrientHolds, Bool.false_eq_true, ite_false, ite_true] at a1 a2 a3 ⊢ <;>
       linarith
-  have inP : CornerFamilies.InsideTriangle P (Pt i) (Pt j) (Pt k) := by
+  have inP : InsideTriangle P (Pt i) (Pt j) (Pt k) := by
     rcases h1 with rfl | rfl
     · exact inTriangle_of_orient a1 a2 a3
     · rcases h2 with rfl | rfl
       · exact inTriangle_of_orient b1 b2 b3
       · exact absurd rfl hne
-  have inQ : CornerFamilies.InsideTriangle Q (Pt i) (Pt j) (Pt k) := by
+  have inQ : InsideTriangle Q (Pt i) (Pt j) (Pt k) := by
     rcases h1 with rfl | rfl
     · rcases h2 with rfl | rfl
       · exact absurd rfl hne
@@ -829,7 +819,7 @@ theorem fam_hyp (hfam : TriangularFamily a h b c d f X P Q) (hfd : f ≤ d)
 
 end Cover
 
-/-! ### Section 2 and 5: the radial cover and the certificates -/
+/-! ### The radial cover and the certificates -/
 
 section Final
 
@@ -891,14 +881,12 @@ theorem word_indices (hfam : TriangularFamily a h b c d f X P Q)
     (fun i hi => cfg_hept i hi) (by simp [Model.pkgQ])
   exact ⟨idx _ _ _ hw hwr, idx _ _ _ hw' hwr'⟩
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-words`), restated. The explicit lists of the
-words of `P` (`r₃ = 1`) and of `Q` (`r₃ ≥ 2`), the leaves of the kernel-checked enumerations
-`Model.EnumP.enumTree`, `Model.EnumQ.enumTree`, have 5 and 52 entries, 19 of the latter with
-`r₆ < 3`; the case-230 words are in `capWords` and `hexagonWords`; `P` has a word in `capWords`,
-`Q` one in `hexagonWords`, and `[HCQ] > 0` exactly when `r₆(Q) ≥ 3`. (The cardinalities of the
-Finsets over all `7⁷` tuples are not computed.)
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 137-169. -/
-theorem claim_words :
+/-- The explicit lists of the words of `P` (`r₃ = 1`) and of `Q` (`r₃ ≥ 2`), the leaves of the
+kernel-checked enumerations `Model.EnumP.enumTree`, `Model.EnumQ.enumTree`, have 5 and 52
+entries, 19 of the latter with `r₆ < 3`; the words `case230P`, `case230Q` are in `capWords` and
+`hexagonWords`; `P` has a word in `capWords`, `Q` one in `hexagonWords`, and `[HCQ] > 0` exactly
+when `r₆(Q) ≥ 3`. (The cardinalities of the Finsets over all `7⁷` tuples are not computed.) -/
+theorem exists_capWord_hexagonWord :
     Model.wordsP.length = 5 ∧ Model.wordsQ.length = 52 ∧
       (Model.wordsQ.filter fun w => w.getD 6 0 < 3).length = 19 ∧
       case230P ∈ capWords ∧ case230Q ∈ HEXW ∧
@@ -915,8 +903,8 @@ theorem claim_words :
   refine ⟨by decide, by decide, by decide, by decide, (memQ _).2 (by decide),
     fun {a h b c d f X P Q} hfam hmin => ?_⟩
   obtain ⟨hconv, hpolyP, hpolyQ, hgenP, hgenQ⟩ := fam_hull hfam hmin
-  obtain ⟨p, hp, hpw⟩ := claim_radial_word _ P (by norm_num) hconv hpolyP hgenP
-  obtain ⟨q, hq, hqw⟩ := claim_radial_word _ Q (by norm_num) hconv hpolyQ hgenQ
+  obtain ⟨p, hp, hpw⟩ := exists_radialWord _ P (by norm_num) hconv hpolyP hgenP
+  obtain ⟨q, hq, hqw⟩ := exists_radialWord _ Q (by norm_num) hconv hpolyQ hgenQ
   obtain ⟨⟨ip, hip, hpr⟩, -⟩ := word_indices hfam hmin hp hpw hq hqw
   have hrange : ∀ i, q i < 7 := fun i => by have := hqw.1 i; omega
   refine ⟨?_, fun i => ⟨q i, hrange i⟩, (memQ _).2 ⟨hqw, ?_⟩, hq, hq 6 3 (by norm_num) (by norm_num)⟩
@@ -936,7 +924,8 @@ theorem cell_holds (hfam : TriangularFamily a h b c d f X P Q)
     (hp : HasRadialWord (HEPT a h b c d f X) P p) (hq : HasRadialWord (HEPT a h b c d f X) Q q)
     {ip iq : ℕ} (hpr : ∀ i (hi : i < 7), p ⟨i, hi⟩ = (Model.wordsP.getD ip []).getD i 0)
     (hqr : ∀ i (hi : i < 7), q ⟨i, hi⟩ = (Model.wordsQ.getD iq []).getD i 0) :
-    AllHold (Holds (cfg a h b c d f X P Q) (zeta a h b c d f X P Q)) (Model.cellFacts ip iq) := by
+    AllHold (FactHolds (SFact.Holds (cfg a h b c d f X P Q)) (zeta a h b c d f X P Q))
+      (Model.cellFacts ip iq) := by
   obtain ⟨hconv, hpolyP, hpolyQ, hgenP, hgenQ⟩ := fam_hull hfam hmin
   have hP := wordFacts_holds (p := 7) (Pt := cfg a h b c d f X P Q) hp hgenP
     (fun i hi => cfg_hept i hi) rfl (by norm_num) hpr
@@ -950,7 +939,7 @@ theorem cell_holds (hfam : TriangularFamily a h b c d f X P Q)
     split_ifs at hg with he
     simp only [Option.some.injEq] at hg
     subst hg
-    have L := claim_pair_line_sign _ P Q (by norm_num) hconv hpolyP hpolyQ p q hp hq ⟨v, hv⟩
+    have L := sarea_sign_of_radialWord _ P Q (by norm_num) hconv hpolyP hpolyQ p q hp hq ⟨v, hv⟩
     rw [hpr v hv, hqr v hv] at L
     simp only [SFact.Holds]
     rw [cfg_hept v hv]
@@ -972,7 +961,7 @@ theorem cell_holds (hfam : TriangularFamily a h b c d f X P Q)
         have e : q 6 = q ⟨6, by norm_num⟩ := rfl
         omega
       exact lt_of_le_of_ne (not_lt.1 this) hne
-    obtain ⟨-, -, l1, l2, l3, l4, l5⟩ := claim_lower_Q hfam hmin hlt
+    obtain ⟨-, -, l1, l2, l3, l4, l5⟩ := bounds_of_Q_below hfam hmin hlt
     simp only [Model.lowerF, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff,
       implies_true, and_true, eval_minus, eval_v, eval_k, zeta]
     push_cast
@@ -984,7 +973,7 @@ theorem cell_holds (hfam : TriangularFamily a h b c d f X P Q)
     have e2 : q = fun i => (case230Q i : ℕ) := funext fun i => (hqr i.1 i.2).trans (by
       fin_cases i <;> rfl)
     subst e1 e2
-    obtain ⟨-, -, -, -, l1, l2, l3, l4⟩ := claim_case230 hfam hmin hp hq
+    obtain ⟨-, -, -, -, l1, l2, l3, l4⟩ := cell_CXF_bounds hfam hmin hp hq
     simp only [Model.c230F, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff,
       implies_true, and_true, eval_minus, eval_v, eval_k, zeta]
     push_cast
@@ -998,23 +987,15 @@ theorem cell_holds (hfam : TriangularFamily a h b c d f X P Q)
     · exact allHold_inr (h230 h2)
     · simp [AllHold]
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-certificate`). The certificate package
-(`docs/proof/nine/six_boundary_two_top_triangular_certificates.json`, verified by
-`docs/proof/nine/check_six_boundary_two_top_triangular.py`): with the normalization `f ≤ d`, no pair of
-radial words (`P` from (13), `Q` from the 52 hexagon words) is possible. In the manuscript the
-262 terminal cells are covered by 220 fixed rational cubics (29,641 positive terms) in the affine
-factors (10), (16), (18) and the costs: known-sign signed areas minus `σ, 3σ, ρ` (containment
-count), (19) and (20); each is nonnegative on its cell with cube bound (21) below `-3/4`
-(greatest `-4128115667948309/4197433925959680`), with reuse across cells checked. Here every
-cell has its own kernel-checked certificate on the atoms of `Model.pkg` (the reused ones
-re-indexed, `Heilbronn.Nine.SixBoundary.TwoTopTriangularTrees*`).
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 255-332.
-Uses: SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-anchor, SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-cap,
-SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-Q-box, SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-splits,
-SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-lower-Q, SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-case230,
-SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-W-hc, SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-ears,
-CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem claim_certificate (hfam : TriangularFamily a h b c d f X P Q) (hfd : f ≤ d)
+/-- With the normalization `f ≤ d`, no pair of radial words (`P` from `capWords`, `Q` from the 52
+hexagon words) is possible. The 262 terminal cells are covered by 220 fixed rational cubics
+(29,641 positive terms) in the affine factors (`Model.factors`, `Model.lowerF`, `Model.c230F`)
+and the costs: known-sign signed areas minus `σ, 3σ, ρ` (by containment count) and the appended
+costs `Model.extra`; each is nonnegative on its cell with cube bound below `-3/4` (greatest
+`-4128115667948309/4197433925959680`). Every cell has its own kernel-checked certificate on the
+atoms of `Model.pkg` (certificates shared between cells re-indexed,
+`Heilbronn.Nine.SixBoundary.TwoTopTriangularTrees*`). -/
+theorem no_word_pair (hfam : TriangularFamily a h b c d f X P Q) (hfd : f ≤ d)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q)) :
     ∀ p ∈ capWords, ∀ q ∈ HEXW,
       HasRadialWord (HEPT a h b c d f X) P (fun i => (p i : ℕ)) →
@@ -1032,38 +1013,30 @@ theorem claim_certificate (hfam : TriangularFamily a h b c d f X P Q) (hfd : f �
   obtain ⟨T, hT⟩ := Model.all_ok ip hip iq hiq
   exact Model.pkg.sound_cert H (cell_holds hfam hmin hp hq hpr hqr) hT
 
-/-- **Theorem 1** (`SIX_BOUNDARY_TWO_TOP_TRIANGULAR:Theorem1`). Every configuration of the
-triangular-hull branch of N6-06 (two free points in the opposite cap `DF(1,1)` whose hull with
-`D, F` is a triangle `DXF` containing the inner one, the third free point strictly inside the
-anchor hexagon; no line-sign assumptions, square-side positions of `X` allowed) has minimum
-ordinary triangle area strictly below `4/73 < A₀`.
-`docs/proof/nine/SIX_BOUNDARY_TWO_TOP_TRIANGULAR.md`, lines 20-32, 330-332.
-Uses: SIX_BOUNDARY_HULL:claim-transposition, SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-hull,
-SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-anchor, SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-cap,
-SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-Q-box, SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-words,
-SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-splits, SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-lower-Q,
-SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-case230, SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-W-hc,
-SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-ears, SIX_BOUNDARY_TWO_TOP_TRIANGULAR:claim-certificate -/
-theorem theorem1 (hfam : TriangularFamily a h b c d f X P Q) :
+/-- Every configuration of the triangular-hull two-top placement (two free points in the opposite
+cap `DF(1,1)` whose hull with `D, F` is a triangle `DXF` containing the inner one, the third free
+point strictly inside the anchor hexagon; no line-sign assumptions, square-side positions of `X`
+allowed) has minimum ordinary triangle area strictly below `4/73 < A₀`. -/
+theorem twoTopTriangular_lt (hfam : TriangularFamily a h b c d f X P Q) :
     minTriangleArea (nConfig a h b c d f X P Q) < 4 / 73 ∧ (4 / 73 : ℝ) < A₀ := by
   refine ⟨?_, by linarith [A₀_bounds.2.1]⟩
   have main : ∀ {a h b c d f : ℝ} {X P Q : Point}, TriangularFamily a h b c d f X P Q → f ≤ d →
       4 / 73 ≤ minTriangleArea (nConfig a h b c d f X P Q) → False := by
     intro a h b c d f X P Q hfam hfd hmin
-    obtain ⟨⟨p, hpm, hp⟩, q, hqm, hq, -⟩ := claim_words.2.2.2.2.2 hfam hmin
-    exact claim_certificate hfam hfd hmin p hpm q hqm hp hq
+    obtain ⟨⟨p, hpm, hp⟩, q, hqm, hq, -⟩ := exists_capWord_hexagonWord.2.2.2.2.2 hfam hmin
+    exact no_word_pair hfam hfd hmin p hpm q hqm hp hq
   by_contra hge
   push Not at hge
   rcases le_total f d with hfd | hdf
   · exact main hfam hfd hge
   obtain ⟨hN, hX, hP, hin, hQ⟩ := hfam
-  have T := claim_transposition a h b c d f X P Q
+  have T := transpose_invariant a h b c d f X P Q
   have hin' : InTriangle (transpose P) (ptD f) (transpose X) (ptF d) := by
     obtain ⟨i1, i2, i3⟩ := hin
     refine ⟨?_, ?_, ?_⟩ <;> simp only [transpose, sarea] at i1 i2 i3 ⊢ <;> linarith
-  exact main ⟨T.1.1 hN, (claim_transposition a h b c d f X P Q).2.2.2.2.2.2.2.1.1 hX,
-    (claim_transposition a h b c d f P X Q).2.2.2.2.2.2.2.1.1 hP, hin',
-    (claim_transposition a h b c d f Q X P).2.2.2.2.2.2.2.2.2.1.1 hQ⟩ hdf (by rw [T.2.2.1]; exact hge)
+  exact main ⟨T.1.1 hN, (transpose_invariant a h b c d f X P Q).2.2.2.2.2.2.2.1.1 hX,
+    (transpose_invariant a h b c d f P X Q).2.2.2.2.2.2.2.1.1 hP, hin',
+    (transpose_invariant a h b c d f Q X P).2.2.2.2.2.2.2.2.2.1.1 hQ⟩ hdf (by rw [T.2.2.1]; exact hge)
 
 end Final
 

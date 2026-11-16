@@ -14,9 +14,18 @@ their sub-configurations. This file provides:
   expected;
 * `sarea_ge_of_le_min_of_pos` and `sarea_le_of_le_min_of_neg`: the same as a bound on the doubled
   signed area, given the orientation;
-* `le_min_comp`: a sub-configuration has least area at least that of the configuration;
-* `InTriangle X A B C`: `X` is strictly inside the counterclockwise triangle `ABC`;
-* `minTriangleArea_affineMap`: an affine map multiplies the least area by `|det|`.
+* `two_le_abs`: a triangle of area at least `t` has doubled signed area at least `2t` in absolute
+  value;
+* `le_min_comp`: a sub-configuration has least area at least that of the configuration, and
+  `min_sub`, `min_sub'`: the same for a bound on the least area, with the sub-configuration given
+  pointwise and injectivity given directly or by a left inverse;
+* `InTriangle X A B C`: `X` is strictly inside the counterclockwise triangle `ABC`, and then
+  `0 < sarea A B C` (`inTri_pos`); `InsideTriangle X A B C`: strictly inside, in either
+  orientation;
+* `IsConvexPolygon V`: the vertices `V 0, …, V (n-1)` of a strictly convex polygon, in
+  counterclockwise order;
+* `minTriangleArea_affineMap`: an affine map multiplies the least area by `|det|`, and
+  `InTriangle.affine`: an affine map of positive determinant keeps strict containment.
 
 The value `A₀` of nine points and its brackets are in `Heilbronn/Nine/Setup/Value.lean`.
 -/
@@ -62,6 +71,11 @@ theorem sarea_le_of_nonpos {p q r : Point} {t : ℝ} (ht : 0 < t)
     (h0 : sarea p q r ≤ 0) (h : t ≤ triangleArea p q r) : sarea p q r ≤ -(2 * t) := by
   rcases (le_triangleArea_iff p q r t).1 h with h' | h' <;> [linarith; exact h']
 
+/-- A triangle of area at least `t` has doubled signed area at least `2t` in absolute value. -/
+theorem two_le_abs {p q r : Point} {t : ℝ} (h : t ≤ triangleArea p q r) :
+    2 * t ≤ |sarea p q r| := by
+  rw [triangleArea_eq] at h; linarith
+
 /-- Three distinct points of a configuration of positive least area are not collinear. -/
 theorem sarea_ne_zero_of_min_pos {P : Fin n → Point} (h : 0 < minTriangleArea P) (i j k : Fin n)
     (hij : i ≠ j := by decide) (hjk : j ≠ k := by decide) (hik : i ≠ k := by decide) :
@@ -79,14 +93,40 @@ theorem le_min_comp {m : ℕ} (hm : 3 ≤ m) (P : Fin n → Point) {f : Fin m �
   le_minTriangleArea hm _ fun _ _ _ hij hjk =>
     minTriangleArea_le P (hf.ne hij.ne) (hf.ne hjk.ne) (hf.ne (hij.trans hjk).ne)
 
+/-- A sub-configuration (or a relabelling) given by an injective index map keeps a lower bound
+on the least area. -/
+theorem min_sub {m : ℕ} {P : Fin n → Point} {t : ℝ} (h : t ≤ minTriangleArea P)
+    (Q : Fin m → Point) (f : Fin m → Fin n) (hm : 3 ≤ m) (hf : Function.Injective f)
+    (hQ : ∀ i, Q i = P (f i)) : t ≤ minTriangleArea Q := by
+  obtain rfl : Q = P ∘ f := funext hQ
+  exact h.trans (le_min_comp hm P hf)
+
+/-- `min_sub` with injectivity from a left inverse (cheaper to check by `decide`). -/
+theorem min_sub' {m : ℕ} {P : Fin n → Point} {t : ℝ} (h : t ≤ minTriangleArea P)
+    (Q : Fin m → Point) (f : Fin m → Fin n) (g : Fin n → Fin m) (hm : 3 ≤ m)
+    (hg : ∀ i, g (f i) = i) (hQ : ∀ i, Q i = P (f i)) : t ≤ minTriangleArea Q :=
+  min_sub h Q f hm (Function.LeftInverse.injective hg) hQ
+
 /-- `X` lies strictly inside the triangle `ABC`, whose vertices are counterclockwise. -/
 def InTriangle (X A B C : Point) : Prop :=
   0 < sarea A B X ∧ 0 < sarea B C X ∧ 0 < sarea C A X
+
+/-- `X` lies strictly inside the triangle `ABC`, whose vertices may be in either orientation. -/
+def InsideTriangle (X A B C : Point) : Prop := InTriangle X A B C ∨ InTriangle X A C B
+
+/-- `V 0, …, V (n-1)` are the vertices of a strictly convex polygon in counterclockwise order:
+every triple of vertices taken in increasing index order turns counterclockwise. -/
+def IsConvexPolygon (V : Fin n → Point) : Prop :=
+  ∀ i j k : Fin n, i < j → j < k → 0 < sarea (V i) (V j) (V k)
 
 /-- The three sub-triangles at a point add up to the triangle. -/
 theorem sarea_add_sarea_add_sarea (A B C X : Point) :
     sarea A B X + sarea B C X + sarea C A X = sarea A B C := by
   unfold sarea; ring
+
+/-- A triangle with a point strictly inside is counterclockwise. -/
+theorem inTri_pos {X A B C : Point} (h : InTriangle X A B C) : 0 < sarea A B C := by
+  have := sarea_add_sarea_add_sarea A B C X; linarith [h.1, h.2.1, h.2.2]
 
 /-- The least area of the image under an affine map is `|det|` times the least area. -/
 theorem minTriangleArea_affineMap (a b c d e f : ℝ) (P : Fin n → Point) :
@@ -102,5 +142,14 @@ theorem minTriangleArea_affineMap (a b c d e f : ℝ) (P : Fin n → Point) :
   · refine le_minTriangleArea hn _ fun i' j' k' h1 h2 => ?_
     simp only [Function.comp, triangleArea_affineMap]
     exact mul_le_mul_of_nonneg_left (minTriangleArea_le_of_lt P h1 h2) (abs_nonneg _)
+
+/-- An affine map of positive determinant keeps strict containment in a triangle. -/
+theorem InTriangle.affine {X A B C : Point} {α β γ δ ε ζ : ℝ} (hdet : 0 < α * δ - β * γ)
+    (h : InTriangle X A B C) :
+    InTriangle (affineMap α β γ δ ε ζ X) (affineMap α β γ δ ε ζ A) (affineMap α β γ δ ε ζ B)
+      (affineMap α β γ δ ε ζ C) := by
+  obtain ⟨h1, h2, h3⟩ := h
+  simp only [InTriangle, sarea_affineMap]
+  exact ⟨mul_pos hdet h1, mul_pos hdet h2, mul_pos hdet h3⟩
 
 end Heilbronn

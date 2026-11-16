@@ -60,33 +60,33 @@ def optimum : Optimum 9
 `IsOptimal P` is `Congruent P optimalConfiguration`.
 
 `maximizer_congruent` is the whole proof. It normalizes
-the maximizer (`GlobalStructure.theorem3`) into one of five families and calls
+the maximizer (`GlobalStructure.normalize`) into one of five families and calls
 one theorem per family or case:
 
 | family or case | theorem | conclusion |
 | --- | --- | --- |
-| normalization | `GlobalStructure.theorem3` | a configuration with the same least area in N, C1, C2, Type II or Type III, optimal only if the original is |
-| C2: two opposite corners | `OppositeCorners.corollary2_lt_A₀` | least area below `A₀` |
+| normalization | `GlobalStructure.normalize` | a configuration with the same least area in N, C1, C2, Type II or Type III, optimal only if the original is |
+| C2: two opposite corners | `OppositeCorners.minTriangleArea_c2Config_lt_A₀` | least area below `A₀` |
 | Type III: three corners | `CornerFamilies.typeIII_lt_A₀` | below `A₀` |
 | Type II: two adjacent corners | `UnbalancedFinalLowerWedge.typeII_exclusion` | below `A₀` |
-| C1, no lower point | `C1ZeroLower.theorem4` | below `A₀` |
-| C1, one lower point | `C1OneLowerMixedCaps.theorem2` | below `A₀` |
-| C1, two lower points | `C1TwoLowerCompletion.theorem2` | below `A₀` |
-| C1, three or more | `OneCorner.claim_C1_at_most_two_lower` | impossible |
-| N, eight boundary points | `EightBoundary.theorem13` | at most `A₀`, with equality only at the construction |
-| N, seven boundary points | `SevenBoundaryMixedAboveCompletion.theorem2_nConfig` | below `A₀` |
-| N, six, the free points in the anchor hexagon | `SixBoundaryHull.theorem7` | impossible |
-| N6-01: one point in a side cap | `SixBoundarySingleSide.n6_01` | impossible |
-| N6-02: one in each side cap | `SixBoundaryTwoSideUpper.n6_02` | the construction |
-| N6-03: one in the opposite cap | `SixBoundarySingleTop.theorem1` | below `4/73 < A₀` |
-| N6-04: a side cap and the opposite cap | `SixBoundarySideOpposite.theorem1` | at most `A₀`, equality only at the construction |
-| N6-05: three caps | `SixBoundaryThreeCaps.three_caps` | below `7/128 < A₀` |
-| N6-06: two in the opposite cap | `SixBoundaryTwoTopCompletion.theorem1` | at most `A₀`, equality only at the construction |
-| N6-07: a side cap and two in the opposite cap | `SixBoundarySideTwoTop.theorem1` | below `4/73` |
-| N6-08: three in the opposite cap | `SixBoundaryOppositeCapCompletion.n6_08` | the construction |
+| C1, no lower point | `C1ZeroLower.lowerCount_eq_zero_false` | below `A₀` |
+| C1, one lower point | `C1OneLowerMixedCaps.lowerCount_eq_one_false` | below `A₀` |
+| C1, two lower points | `C1TwoLowerCompletion.lowerCount_eq_two_false` | below `A₀` |
+| C1, three or more | `OneCorner.c1_ncard_inside_OHC_le_two` | impossible |
+| N, eight boundary points | `EightBoundary.minTriangleArea_le_A₀_of_eight_boundary` | at most `A₀`, with equality only at the construction |
+| N, seven boundary points | `SevenBoundaryMixedAboveCompletion.minTriangleArea_nConfig_lt_A₀` | below `A₀` |
+| N, six, the free points in the anchor hexagon | `SixBoundaryHull.false_of_all_inHexagon` | impossible |
+| one point in a side cap | `SixBoundarySingleSide.singleSide_false_of_A₀_le` | impossible |
+| one in each side cap | `SixBoundaryTwoSideUpper.twoSide_isOptimal_of_A₀_le` | the construction |
+| one in the opposite cap | `SixBoundarySingleTop.singleTop_lt` | below `4/73 < A₀` |
+| a side cap and the opposite cap | `SixBoundarySideOpposite.sideOpposite_le_A₀` | at most `A₀`, equality only at the construction |
+| three caps | `SixBoundaryThreeCaps.three_caps` | below `7/128 < A₀` |
+| two in the opposite cap | `SixBoundaryTwoTopCompletion.twoTop_le_A₀` | at most `A₀`, equality only at the construction |
+| a side cap and two in the opposite cap | `SixBoundarySideTwoTop.sideTwoTop_lt` | below `4/73` |
+| three in the opposite cap | `SixBoundaryOppositeCapCompletion.oppositeCap_isOptimal_of_A₀_le` | the construction |
 
 The equality cases go through the sharp chambers (`Sharp/`), which all end with
-the eleven-triangle chamber `HandProof.theorem1`; the transfer of equality back
+the eleven-triangle chamber `Chamber.chamber_le`; the transfer of equality back
 through the normalizing shears uses strict local optimality,
-`HandProof.theorem2`.
+`Chamber.strict_local_max`.
 

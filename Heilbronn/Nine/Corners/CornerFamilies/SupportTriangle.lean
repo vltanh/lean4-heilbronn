@@ -3,24 +3,23 @@ module
 public import Heilbronn.Nine.Corners.CornerFamilies.Stars
 public import Heilbronn.Nine.Corners.OppositeCorners
 
-/-! # Corner families, §6: at most one upper point (`docs/proof/nine/CORNER_FAMILIES.md`, lines 304–413)
+/-! # Corner families: at most one upper point
 
-Part of `CORNER_FAMILIES.md` (module `Heilbronn.Nine.Corners.CornerFamilies`). The support-triangle
-normalization reduces any set of at least six points in the triangle
-`T = conv{(0,0), (1,0), (1,1)}` that contains both endpoints of the diagonal and has a
-nontriangular hull to Theorem 1 of `OPPOSITE_CORNERS.md`; with the triangular-hull lemma this
-bounds seven points of `T` containing the two endpoints, and closes the Type-III classes with at
-most one upper point.
+Part of `Heilbronn.Nine.Corners.CornerFamilies`. The support-triangle normalization reduces any
+set of at least six points in the triangle `T = conv{(0,0), (1,0), (1,1)}` that contains both
+endpoints of the diagonal and has a nontriangular hull to `OppositeCorners.minTriangleArea_halfSquareConfig_le`; with
+`triangularHullLemma` this bounds seven points of `T` containing the two endpoints, and closes
+the Type-III classes with at most one upper point.
 
 Definitions: `lowerTriangle` (the closed triangle `T`, by sign conditions).
 
 **Results.**
 
-* `nontriangularHullLemma` (support triangle, at `7/128`) and its affine form
+* `support_core` (the support-triangle normalization, at `7/128`) and its affine form
   `nontriangularHullLemma_affine` (points in a triangle of area `S` including two of its
-  vertices: minimum area `≤ 7S/64`), used by `TYPE_II.md`, `TYPE_II_COMPLETION.md` and §12 here;
+  vertices: minimum area `≤ 7S/64`), also used in the Type-II completion;
 * `endpointLemma`;
-* `typeIII_le1upper` (9).
+* `typeIII_le1upper`.
 
 The hull hypothesis "nontriangular convex hull" is written: the convex hull of the points is not
 the convex hull of any three of them.
@@ -31,8 +30,7 @@ the convex hull of any three of them.
 noncomputable section
 namespace Heilbronn.Nine.CornerFamilies
 
-/-- The closed triangle `T = conv{A = (0,0), D = (1,0), C = (1,1)}`: `0 ≤ y ≤ x ≤ 1`
-(line 314). -/
+/-- The closed triangle `T = conv{A = (0,0), D = (1,0), C = (1,1)}`: `0 ≤ y ≤ x ≤ 1`. -/
 def lowerTriangle : Set Point := {p | 0 ≤ p.2 ∧ p.2 ≤ p.1 ∧ p.1 ≤ 1}
 
 /-! ### Closed triangles and convex hulls -/
@@ -86,13 +84,13 @@ theorem hull_eq_of_closed {n : ℕ} (P : Fin n → Point) (a r c : Fin n)
 
 /-! ### The support triangle -/
 
-/-- The support-triangle normalization (lines 316–379), in the form used here: at least six
+/-- The support-triangle normalization: at least six
 points of `T` containing `A = (0,0)` and `C = (1,1)`, of positive least area, either have least
 area at most `7/128`, or have a triangular hull `A R C` with `R` one of the points. In the second
 case the two support contacts coincide; otherwise the linear map
 `(x, y) ↦ ((y - ρx)/(1 - ρ), (x - ηy)/(1 - η))` (the affine map `ACR → T` followed by the
-reflection in `y = x`) sends six of the points to the family of `OPPOSITE_CORNERS.md`
-Theorem 1, with determinant of absolute value `(1 - ρη)/((1 - ρ)(1 - η)) ≥ 1`. -/
+reflection in `y = x`) sends six of the points to the family of `OppositeCorners.minTriangleArea_halfSquareConfig_le`, with
+determinant of absolute value `(1 - ρη)/((1 - ρ)(1 - η)) ≥ 1`. -/
 theorem support_core {n : ℕ} (hn : 6 ≤ n) (P : Fin n → Point) (hP : ∀ i, P i ∈ lowerTriangle)
     (a c : Fin n) (ha : P a = (0, 0)) (hc : P c = (1, 1)) (hpos : 0 < minTriangleArea P) :
     minTriangleArea P ≤ 7 / 128 ∨
@@ -240,7 +238,7 @@ theorem support_core {n : ℕ} (hn : 6 ≤ n) (P : Fin n → Point) (hP : ∀ i,
           rw [div_eq_one_iff_eq h1η.ne']; linarith
       intro i
       fin_cases i <;> simp [OppositeCorners.halfSquareConfig, e0, e1, e2, e3]
-    have h6 := OppositeCorners.theorem1 h f hh0 hh1 hf0 hf1 _ _ (Mhalf u) (Mhalf v)
+    have h6 := OppositeCorners.minTriangleArea_halfSquareConfig_le h f hh0 hh1 hf0 hf1 _ _ (Mhalf u) (Mhalf v)
     rw [show OppositeCorners.halfSquareConfig h f (M (P u)) (M (P v)) =
       M ∘ ![P a, P c, P p, P q, P u, P v] from funext hconf, hM, minTriangleArea_affineMap] at h6
     have hdet : 1 ≤ |-ρ / (1 - ρ) * (-η / (1 - η)) - 1 / (1 - ρ) * (1 / (1 - η))| := by
@@ -256,14 +254,10 @@ theorem support_core {n : ℕ} (hn : 6 ≤ n) (P : Fin n → Point) (hP : ∀ i,
     have h0 := minTriangleArea_nonneg ![P a, P c, P p, P q, P u, P v]
     nlinarith
 
-/-- **Nontriangular-hull lemma** (`CORNER_FAMILIES:NontriangularHullLemma`), affine form (the
-"support-triangle lemma" of `TYPE_II_COMPLETION.md` lines 28–33, and of §12 here): at least six
-points in the closed triangle `UVW` of area `S > 0`, including two of its vertices `U, V`, whose
-convex hull is not a triangle, have minimum triangle area at most `7S/64`. It follows from the
-`T` form by the affine map `UVW → T` sending `U, V` to the diagonal endpoints.
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 306–379 (rescaled from area `1/2`).
-
-Uses: CORNER_FAMILIES:NontriangularHullLemma -/
+/-- **Nontriangular-hull lemma**, affine form: at least six points in the closed triangle `UVW`
+of area `S > 0`, including two of its vertices `U, V`, whose convex hull is not a triangle, have
+minimum triangle area at most `7S/64`. It follows from `support_core` (the triangle `T`, of
+area `1/2`) by the affine map `UVW → T` sending `U, V` to the diagonal endpoints. -/
 theorem nontriangularHullLemma_affine {n : ℕ} (hn : 6 ≤ n) (P : Fin n → Point)
     (U V W : Point) (hUVW : sarea U V W ≠ 0) (hP : ∀ i, InClosedTriangle (P i) U V W)
     (hU : ∃ i, P i = U) (hV : ∃ i, P i = V)
@@ -362,12 +356,9 @@ theorem nontriangularHullLemma_affine {n : ℕ} (hn : 6 ≤ n) (P : Fin n → Po
       · exact Or.inl ⟨pp _ hk' h1, pp _ hk' h2, pp _ hk' h3⟩
       · exact Or.inr ⟨pn _ hk' h1, pn _ hk' h2, pn _ hk' h3⟩
 
-/-- **Endpoint lemma** (`CORNER_FAMILIES:EndpointLemma`): seven points of the triangle `T`
-including `A = (0,0)` and `C = (1,1)` have minimum triangle area at most `7/128` (by the
-nontriangular-hull lemma or, for a triangular hull, the triangular-hull lemma
-`t ≤ 1/(14 + 4√2) < 7/128`). `docs/proof/nine/CORNER_FAMILIES.md`, lines 381–396.
-
-Uses: CORNER_FAMILIES:NontriangularHullLemma, CORNER_FAMILIES:TriangularHullLemma -/
+/-- **Endpoint lemma**: seven points of the triangle `T` including `A = (0,0)` and `C = (1,1)`
+have minimum triangle area at most `7/128` (by `support_core` or, for a triangular hull,
+`triangularHullLemma`: `t ≤ 1/(14 + 4√2) < 7/128`). -/
 theorem endpointLemma (P : Fin 7 → Point) (hP : ∀ i, P i ∈ lowerTriangle)
     (hA : ∃ i, P i = (0, 0)) (hC : ∃ i, P i = (1, 1)) :
     minTriangleArea P ≤ 7 / 128 := by
@@ -425,7 +416,8 @@ theorem endpointLemma (P : Fin 7 → Point) (hP : ∀ i, P i ∈ lowerTriangle)
   have hs2 := sqrt2_gt
   nlinarith
 
-/-- Five free points on or below the diagonal give (9) through the endpoint lemma. -/
+/-- Five free points on or below the diagonal give minimum area at most `7/128`, through
+`endpointLemma`. -/
 theorem typeIII_five_lower {U V W X Y Z : Point} (hU : U ∈ unitSquare) (hV : V ∈ unitSquare)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (e₁ e₂ e₃ e₄ e₅ : Fin 6)
@@ -450,11 +442,8 @@ theorem typeIII_five_lower {U V W X Y Z : Point} (hU : U ∈ unitSquare) (hV : V
         · simp [typeIIIConfig]
         all_goals exact (typeIII_fr U V W X Y Z _).symm)).trans h7
 
-/-- **Type-III exclusion (9)** (`CORNER_FAMILIES:TypeIII-le1upper`): a Type-III configuration with
-at most one free point above `y = x` has minimum area at most `7/128` (`< A₀`).
-`docs/proof/nine/CORNER_FAMILIES.md`, lines 36–45, 398–413.
-
-Uses: CORNER_FAMILIES:EndpointLemma -/
+/-- **Type-III exclusion, at most one upper point**: a Type-III configuration with at most one
+free point above `y = x` has minimum area at most `7/128` (`< A₀`). -/
 theorem typeIII_le1upper (U V W X Y Z : Point) (hU : U ∈ unitSquare) (hV : V ∈ unitSquare)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (h1 : upperCount U V W X Y Z ≤ 1) :

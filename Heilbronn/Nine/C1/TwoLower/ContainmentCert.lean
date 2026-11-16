@@ -2,13 +2,13 @@ module
 
 public import Heilbronn.Nine.C1.TwoLower.Quart
 
-/-! # The Bernstein certificate of `docs/proof/nine/C1_TOP_CAP_CONTAINMENT_PAIR.md` §1
+/-! # The Bernstein certificate of the C1 top-cap containment pair
 
 Variables `H₀, C₀` = `var 0, 1` in `[0, 1]`: `c = ρ + (1 - ρ)C₀`, `p = ρ + (c - ρ)H₀`,
 `D = 2p`, `ℓ = c²`, `W = (c - s)D - ℓ`; `f = (ℓ + Wθ)/D`, `θ ∈ [0, 1]`, runs over
 `[c²/(2p), c - s]`. The five Bernstein coefficients `N₀, …, N₄` in `θ` of `D⁴c²R` (`Quart.eN`)
-are negative on the unit square, one Bernstein check of degree `(6, 10)` per theorem
-(`scripts/nine/c1_two_lower/quart.py`). -/
+are negative on the unit square, one Bernstein check of degree `(6, 10)` per theorem.
+Used by `C1TopCapContainmentPair.ct_N_neg`. -/
 
 @[expose] public section
 

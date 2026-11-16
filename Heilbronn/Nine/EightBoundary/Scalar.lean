@@ -2,19 +2,20 @@ module
 
 public import Heilbronn.Nine.Setup.Value
 
-/-! # Scalar cores of the eight-boundary theorems (`docs/proof/nine/EIGHT_BOUNDARY.md`)
+/-! # Scalar cores of the eight-boundary theorems
 
-Pure real-variable forms of the inequality chains of `EIGHT_BOUNDARY.md`, used by
+Pure real-variable forms of the inequality chains used by
 `Heilbronn/Nine/EightBoundary/Basic.lean`. Divisions such as `s/L` are replaced by auxiliary
 variables `uL` with `uL * L = s`, so that every step is a polynomial inequality.
 
-* `scalar_bound_core`: the scalar contradiction (6)–(10) of §4 (`claim_scalar_bound`);
-* `gap_core`: Lemma 7 for one choice of the largest gap;
-* `overlap_core`: Lemma 10 (`s ≤ (3-2√2)/2`);
-* `corner_core`: Theorem 2 in the corner at the origin (`s ≤ 5-2√6`);
-* `wedge_core`: Theorem 6 (`s ≤ 5-2√6`);
-* `caps_core`: Theorem 8 (`s(m²+5m+1) ≤ m²`);
-* `split_core`: Theorem 9 (`s < 1/10`).
+* `scalar_bound_core`: the scalar contradiction for the side quadrilaterals
+  (`side_quad_scalar_bound`);
+* `gap_core`: `two_mul_minTriangleArea_le_maxGap` for one choice of the largest gap;
+* `overlap_core`: `opposite_contacts_overlap` (`s ≤ (3-2√2)/2`);
+* `corner_core`: `minTriangleArea_le_of_not_inPolygon` in the corner at the origin (`s ≤ 5-2√6`);
+* `wedge_core`: `minTriangleArea_le_of_adjacent_double_wedges` (`s ≤ 5-2√6`);
+* `caps_core`: `minTriangleArea_le_of_two_corner_caps` (`s(m²+5m+1) ≤ m²`);
+* `split_core`: `minTriangleArea_lt_of_opposite_double_wedge` (`s < 1/10`).
 -/
 
 @[expose] public section
@@ -22,9 +23,9 @@ variables `uL` with `uL * L = s`, so that every step is a polynomial inequality.
 noncomputable section
 namespace Heilbronn.Nine.EightBoundary
 
-/-! ### The scalar bound of §4 -/
+/-! ### The scalar bound for the side quadrilaterals -/
 
-/-- `P(u) = 35 - 306u + 827u² - 640u³ > 0` on `[0, 1/2]`, (10). -/
+/-- `P(u) = 35 - 306u + 827u² - 640u³ > 0` on `[0, 1/2]`. -/
 theorem cubic_P_pos {u : ℝ} (h1 : u ≤ 1 / 2) :
     0 < 35 - 306 * u + 827 * u ^ 2 - 640 * u ^ 3 := by
   rcases le_total u (3 / 10) with h | h
@@ -34,7 +35,8 @@ theorem cubic_P_pos {u : ℝ} (h1 : u ≤ 1 / 2) :
 theorem sqrt_two_gt : (7 / 5 : ℝ) < Real.sqrt 2 := by
   rw [Real.lt_sqrt (by norm_num)]; norm_num
 
-/-- The scalar contradiction (6)–(10) of `EIGHT_BOUNDARY.md` §4. -/
+/-- The scalar contradiction of `side_quad_scalar_bound`: if `XZ ≥ 4`, `sZ < 1` and
+`2(1+√2)s ≤ 2 - sZ - s(2-sZ)/(1-sZ) - X + 2s`, then `s < 7/64`. -/
 theorem scalar_bound_core {s X Z : ℝ} (hs : 0 < s) (hX : 0 < X) (hsZ : s * Z < 1)
     (hXZ : 4 ≤ X * Z)
     (hQ : 2 * (1 + Real.sqrt 2) * s ≤ 2 - s * Z - s * (2 - s * Z) / (1 - s * Z) - X + 2 * s) :
@@ -76,9 +78,9 @@ theorem scalar_bound_core {s X Z : ℝ} (hs : 0 < s) (hX : 0 < X) (hsZ : s * Z <
     nlinarith [mul_le_mul_of_nonneg_right hcon hcoef.le]
   nlinarith
 
-/-! ### Lemma 7 -/
+/-! ### The largest gap -/
 
-/-- Lemma 7 for one choice of the largest gap `m` (`m' ≤ m` the opposite gap, `p, q` the two
+/-- `two_mul_minTriangleArea_le_maxGap` for one choice of the largest gap `m` (`m' ≤ m` the opposite gap, `p, q` the two
 other gaps): `s ≤ m(1-m)/2`. -/
 theorem gap_core {s m m' p q um um' up uq : ℝ} (hs : 0 < s) (hm : 0 < m) (hm' : 0 < m')
     (hmm : m' ≤ m) (hp : 0 < p) (hq : 0 < q) (hum : um * m = s) (hum' : um' * m' = s)
@@ -100,10 +102,10 @@ theorem gap_core {s m m' p q um um' up uq : ℝ} (hs : 0 < s) (hm : 0 < m) (hm' 
   have h8 : m ≤ 1 - 2 * um := by linarith only [h6, hum]
   nlinarith only [mul_le_mul_of_nonneg_left h8 hm.le, hum]
 
-/-! ### Lemma 10 -/
+/-! ### Overlapping opposite contacts -/
 
-/-- Lemma 10: with `S = B + T` and `Z = L + R`, the budgets `B + T + s/L + s/R ≤ 1` and
-`L, R + s/B + s/T ≤ 1` force `s ≤ (3 - 2√2)/2`. -/
+/-- The scalar part of `opposite_contacts_overlap`: with `S = B + T` and `Z = L + R`, the budgets
+`B + T + s/L + s/R ≤ 1` and `L, R + s/B + s/T ≤ 1` force `s ≤ (3 - 2√2)/2`. -/
 theorem overlap_core {s L R B T uL uR uB uT : ℝ} (hs : 0 < s) (hL : 0 < L) (hR : 0 < R)
     (hB : 0 < B) (hT : 0 < T) (huL : uL * L = s) (huR : uR * R = s) (huB : uB * B = s)
     (huT : uT * T = s) (h1 : B + T + uL + uR ≤ 1) (h2 : L + uB + uT ≤ 1)
@@ -156,13 +158,13 @@ theorem overlap_core {s L R B T uL uR uB uT : ℝ} (hs : 0 < s) (hL : 0 < L) (hR
     _ ≤ ((2 - Real.sqrt 2) / 2) ^ 2 := pow_le_pow_left₀ hσ0.le hσb 2
     _ = (3 - 2 * Real.sqrt 2) / 2 := by linear_combination (1 / 4 : ℝ) * hr2
 
-/-! ### Theorem 2 -/
+/-! ### The corner at the origin -/
 
 /-- `√6 = √3 √2`. -/
 theorem sqrt_six_eq : Real.sqrt 6 = Real.sqrt 3 * Real.sqrt 2 := by
   rw [← Real.sqrt_mul (by norm_num)]; norm_num
 
-/-- Theorem 2, final step: from `(√3 + √2) σ ≤ 1`, `s = σ² ≤ 5 - 2√6`. -/
+/-- From `(√3 + √2) σ ≤ 1`: `s = σ² ≤ 5 - 2√6` (the final step of `corner_core`). -/
 theorem le_five_sub_of_sigma {s σ : ℝ} (hσ0 : 0 ≤ σ) (hσs : σ ^ 2 = s)
     (hsum : (Real.sqrt 3 + Real.sqrt 2) * σ ≤ 1) : s ≤ 5 - 2 * Real.sqrt 6 := by
   have hr2 : Real.sqrt 2 ^ 2 = 2 := Real.sq_sqrt (by norm_num)
@@ -182,8 +184,8 @@ theorem amgm_div {Z X W : ℝ} (hZ : 0 < Z) (hW : W * Z = X ^ 2) : 2 * X ≤ Z +
   have : 2 * X * Z ≤ (Z + W) * Z := by nlinarith only [sq_nonneg (Z - X), hW]
   exact le_of_mul_le_mul_right this hZ
 
-/-- Theorem 2, in the corner at the origin: `O = (x, y)` with `ax + by ≤ ab`, the triangles
-`AHO`, `BCO` and the side budgets give `s ≤ 5 - 2√6`. -/
+/-- The scalar part of `minTriangleArea_le_of_not_inPolygon` in the corner at the origin: `O = (x, y)` with `ax + by ≤ ab`,
+the triangles `AHO`, `BCO` and the side budgets give `s ≤ 5 - 2√6`. -/
 theorem corner_core {s a b x y L B R T uL uB uR uT : ℝ} (hs : 0 < s) (ha : 0 < a) (hb : 0 < b)
     (hL : 0 < L) (hB : 0 < B) (hR : 0 < R) (hT : 0 < T)
     (huL : uL * L = s) (huB : uB * B = s) (huR : uR * R = s) (huT : uT * T = s)
@@ -232,9 +234,9 @@ theorem corner_core {s a b x y L B R T uL uB uR uT : ℝ} (hs : 0 < s) (ha : 0 <
     linarith only [hA1, hA2, hA3, hA4, hX12s, hleft, hbot, hright, htop]
   exact le_five_sub_of_sigma hσ0.le hσs hsum
 
-/-! ### Theorem 6 -/
+/-! ### Two adjacent double wedges -/
 
-/-- Theorem 6, final step: from (15') `s(1+ℓ)(ℓ+r) ≤ ℓr(1-ℓ)` and (16') `s(ℓ+r) ≤ ℓr(1-r)`,
+/-- The final step of `wedge_core`: from `s(1+ℓ)(ℓ+r) ≤ ℓr(1-ℓ)` and `s(ℓ+r) ≤ ℓr(1-r)`,
 `s ≤ 5 - 2√6`. -/
 theorem wedge_final {s ℓ r : ℝ} (hs : 0 < s) (hℓ0 : 0 < ℓ) (hr0 : 0 < r)
     (h15 : s * (1 + ℓ) * (ℓ + r) ≤ ℓ * r * (1 - ℓ)) (h16 : s * (ℓ + r) ≤ ℓ * r * (1 - r)) :
@@ -265,8 +267,9 @@ theorem wedge_final {s ℓ r : ℝ} (hs : 0 < s) (hℓ0 : 0 < ℓ) (hr0 : 0 < r)
   exact le_of_mul_le_mul_left (by linarith only [hs_t, hfin] :
     (2 + t) * s ≤ (2 + t) * (5 - 2 * Real.sqrt 6)) h2t
 
-/-- Theorem 6: with `X = 1-x`, `Y = y`, the four inequalities (13) and the bottom and right
-budgets give `s ≤ 5 - 2√6`. Here `p = s/B`, `q = s/T`, `u = s/L`, `w = s/R`. -/
+/-- The scalar part of `minTriangleArea_le_of_adjacent_double_wedges`: with `X = 1-x`, `Y = y`, the four costs `i1`–`i4` of the
+hypotheses and the bottom and right budgets give `s ≤ 5 - 2√6`. Here `p = s/B`, `q = s/T`,
+`u = s/L`, `w = s/R`. -/
 theorem wedge_core {s X Y L B R T p q u w : ℝ} (hs : 0 < s) (hL : 0 < L) (hB : 0 < B)
     (hR : 0 < R) (hT : 0 < T) (hL1 : L < 1) (hT1 : T < 1)
     (hp : p * B = s) (hq : q * T = s) (hu : u * L = s) (hw : w * R = s)
@@ -278,7 +281,7 @@ theorem wedge_core {s X Y L B R T p q u w : ℝ} (hs : 0 < s) (hL : 0 < L) (hB :
   have hu0 : 0 < u := by nlinarith only [hu, hs, hL]
   have hw0 : 0 < w := by nlinarith only [hw, hs, hR]
   have hLT : L * T < 1 := by nlinarith only [hL1, hT, hT1]
-  -- (14), multiplied by `1 - LT`
+  -- the four costs combined, multiplied by `1 - LT`
   have h14 : (1 + 2 * T + L * T) * (p + s) + (1 + 2 * L + L * T) * (w + s) +
       (1 - L * T) * (q + u + 2 * s) ≤ 2 * (1 - L * T) := by
     have hTY := mul_le_mul_of_nonneg_left i1 hT.le
@@ -323,7 +326,7 @@ theorem wedge_core {s X Y L B R T p q u w : ℝ} (hs : 0 < s) (hL : 0 < L) (hB :
   have g5 : 2 * r ≤ B + R := by
     have h4 : (2 * r) ^ 2 ≤ (B + R) ^ 2 := by nlinarith only [hr2, sq_nonneg (B - R)]
     exact le_of_sq_le_sq h4 (by positivity)
-  -- (15'): `ℓ r (1 - ℓ) ≥ s (1 + ℓ)(ℓ + r)`
+  -- `ℓ r (1 - ℓ) ≥ s (1 + ℓ)(ℓ + r)`
   have h15 : s * (1 + ℓ) * (ℓ + r) ≤ ℓ * r * (1 - ℓ) := by
     rw [← hℓ2] at h14
     have hl2 : 0 ≤ 1 - ℓ ^ 2 := by nlinarith only [hℓ1, hℓ0]
@@ -335,7 +338,7 @@ theorem wedge_core {s X Y L B R T p q u w : ℝ} (hs : 0 < s) (hL : 0 < L) (hB :
     have key : s * (1 + ℓ) * (ℓ + r) * (1 + ℓ) ≤ ℓ * r * (1 - ℓ) * (1 + ℓ) := by
       linarith only [hM, e1, e2, e3, e4]
     exact le_of_mul_le_mul_right key (by linarith)
-  -- (16'): `ℓ r (1 - r) ≥ s (ℓ + r)`
+  -- `ℓ r (1 - r) ≥ s (ℓ + r)`
   have h16 : s * (ℓ + r) ≤ ℓ * r * (1 - r) := by
     have hsum : B + R + (u + q) + (p + w) ≤ 2 := by linarith only [hbot, hright]
     have e1 := mul_le_mul_of_nonneg_left g1 hr0.le
@@ -344,9 +347,9 @@ theorem wedge_core {s X Y L B R T p q u w : ℝ} (hs : 0 < s) (hL : 0 < L) (hB :
     linarith only [mul_le_mul_of_nonneg_left hsum (mul_pos hℓ0 hr0).le, e1, e2, e3]
   exact wedge_final hs hℓ0 hr0 h15 h16
 
-/-! ### Theorem 8 -/
+/-! ### Two neighbouring corner caps -/
 
-/-- Theorem 8, scalar part: with `x(1+R) ≥ 1 + uR + 2s` (18), `x ≤ 1 - w - s` (19), `u = s/L`,
+/-- The scalar part of `minTriangleArea_le_of_two_corner_caps`: with `x(1+R) ≥ 1 + uR + 2s`, `x ≤ 1 - w - s`, `u = s/L`,
 `w = s/R` and `L, R ≤ m`, `s (m² + 5m + 1) ≤ m²`. -/
 theorem caps_core {s x L R m u w : ℝ} (hs : 0 < s) (hL : 0 < L) (hR : 0 < R) (hLm : L ≤ m)
     (hRm : R ≤ m) (hu : u * L = s) (hw : w * R = s) (h18 : 1 + u * R + 2 * s ≤ (1 + R) * x)
@@ -367,20 +370,20 @@ theorem caps_core {s x L R m u w : ℝ} (hs : 0 < s) (hL : 0 < L) (hR : 0 < R) (
       mul_nonneg (mul_nonneg (mul_nonneg hs.le hR.le) hm0.le) (sub_nonneg.2 hRm)]
   exact le_of_mul_le_mul_left h3 (by positivity)
 
-/-! ### Theorem 9 -/
+/-! ### A double wedge facing the opposite split -/
 
-/-- Theorem 9, scalar part: (22) `R ≥ s(3 + L/R + 3(L+R))` and (23)
-`1 - s/L - s/R ≥ 2s/(1-R)` force `s < 1/10`. Written with `u = s/L`, `w = s/R`. -/
+/-- The scalar part of `minTriangleArea_lt_of_opposite_double_wedge`: `R ≥ s(3 + L/R + 3(L+R))` and `1 - s/L - s/R ≥ 2s/(1-R)`
+force `s < 1/10`. Written with `u = s/L`, `w = s/R`. -/
 theorem split_core {s L R u w : ℝ} (hL : 0 < L) (hR : 0 < R) (hR1 : R < 1)
     (hu : u * L = s) (hw : w * R = s) (h22 : s * (3 * R + L + 3 * (L + R) * R) ≤ R * R)
     (h23 : 2 * s ≤ (1 - u - w) * (1 - R)) : s < 1 / 10 := by
   by_contra hcon
   push Not at hcon
-  -- (22) at `s ≥ 1/10`
+  -- the first bound at `s ≥ 1/10`
   have hpos : 0 < 3 * R + L + 3 * (L + R) * R := by positivity
   have e22 : 3 * R + L + 3 * (L + R) * R ≤ 10 * (R * R) := by
     nlinarith only [h22, mul_le_mul_of_nonneg_right hcon hpos.le]
-  -- (23) at `s ≥ 1/10`
+  -- the second bound at `s ≥ 1/10`
   have h1 : 2 * s * (L * R) ≤ (L * R - s * R - s * L) * (1 - R) := by
     have e : (L * R) * ((1 - u - w) * (1 - R)) = (L * R - s * R - s * L) * (1 - R) := by
       have : L * R - s * R - s * L = L * R - (u * L) * R - (w * R) * L := by rw [hu, hw]

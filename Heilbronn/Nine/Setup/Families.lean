@@ -5,9 +5,9 @@ public import Heilbronn.Nine.Setup.Value
 /-!
 # The five normalized families and the contact properties of a maximizer
 
-`docs/proof/nine/GLOBAL_STRUCTURE.md`, Section 2 and Theorem 3, and `docs/proof/nine/BOUNDARY_REDUCTION.md`: after
-area-preserving normalizations, a maximizing configuration lies in one of five families. Each is
-given here by its configuration of named points, in a fixed order, with the free points last:
+After area-preserving normalizations (`GlobalStructure.normalize`), a maximizing configuration
+lies in one of five families. Each is given here by its configuration of named points, in a fixed
+order, with the free points last:
 
 | family | configuration | conditions |
 |---|---|---|
@@ -17,15 +17,12 @@ given here by its configuration of named points, in a fixed order, with the free
 | Type II | `D=(0,1), C=(1,1), E=(0,λ), B=(b,0)`, then 5 free points | `0<b<1`, `0<λ<1` |
 | Type III | `A=(0,0), B=(0,1), C=(1,1)`, then 6 free points | — |
 
-The labels and orders follow the manuscripts: N and C2 are `GLOBAL_STRUCTURE.md` (2)–(6), C1 is
-`UNRESTRICTED.md` §3 (with corner `O`, as in its certificate checkers), Type II is `TYPE_II.md`
-(5), Type III is `CORNER_FAMILIES.md` (the three corners `A, B, C`). The free points range over the
-whole closed square.
+The free points range over the whole closed square.
 
-`ContactOverlap P` is the projection-overlap property of `BOUNDARY_REDUCTION.md`: the points on
-the bottom side and on the top side have overlapping ranges of `x`-coordinates, and the points on
-the left and right sides overlapping ranges of `y`-coordinates (in particular every side is
-contacted).
+`ContactOverlap P` is the projection-overlap property (`BoundaryReduction.contactOverlap_of_isMaximizer`): the
+points on the bottom side and on the top side have overlapping ranges of `x`-coordinates, and the
+points on the left and right sides overlapping ranges of `y`-coordinates (in particular every side
+is contacted).
 -/
 
 @[expose] public section
@@ -35,7 +32,7 @@ namespace Heilbronn.Nine
 
 /-! ### Family N -/
 
-/-- The conditions on the anchors of family N, `GLOBAL_STRUCTURE.md` (3). -/
+/-- The conditions on the anchors of family N. -/
 def NAnchors (a h b c d f : ℝ) : Prop :=
   0 < a ∧ a < h ∧ h < 1 ∧ 0 < b ∧ b < c ∧ c < 1 ∧ a ≤ d ∧ d ≤ h ∧ b ≤ f ∧ f ≤ c
 
@@ -50,7 +47,7 @@ def IsN (P : Fin 9 → Point) : Prop :=
 
 /-! ### Family C1: one occupied corner -/
 
-/-- The conditions on the anchors of family C1, `GLOBAL_STRUCTURE.md` (5). -/
+/-- The conditions on the anchors of family C1 (and of family C2). -/
 def C1Anchors (h c d f : ℝ) : Prop :=
   0 < d ∧ d ≤ h ∧ h < 1 ∧ 0 < f ∧ f ≤ c ∧ c < 1
 
@@ -82,7 +79,7 @@ def IsC2 (P : Fin 9 → Point) : Prop :=
 def typeIIConfig (l b : ℝ) (V W X Y Z : Point) : Fin 9 → Point :=
   ![(0, 1), (1, 1), (0, l), (b, 0), V, W, X, Y, Z]
 
-/-- `P` is a configuration of Type II, `TYPE_II.md` (5). -/
+/-- `P` is a configuration of Type II. -/
 def IsTypeII (P : Fin 9 → Point) : Prop :=
   ∃ (l b : ℝ) (V W X Y Z : Point), 0 < b ∧ b < 1 ∧ 0 < l ∧ l < 1 ∧
     V ∈ unitSquare ∧ W ∈ unitSquare ∧ X ∈ unitSquare ∧ Y ∈ unitSquare ∧ Z ∈ unitSquare ∧
@@ -101,7 +98,7 @@ def IsTypeIII (P : Fin 9 → Point) : Prop :=
 
 /-! ### Contacts of a maximizer -/
 
-/-- The projection-overlap property (`BOUNDARY_REDUCTION.md`): the bottom and top contact
+/-- The projection-overlap property: the bottom and top contact
 intervals of `x`-coordinates meet, and so do the left and right contact intervals of
 `y`-coordinates. Each condition says that some bottom point is weakly left of some top point and
 some top point weakly left of some bottom point (and likewise for left and right). -/

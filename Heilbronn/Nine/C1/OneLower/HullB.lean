@@ -2,14 +2,17 @@ module
 
 public import Heilbronn.Nine.C1.OneLower.CompB
 
-/-! # More helpers for the hull packages of group B
+/-! # More helpers for the one-lower hull packages
+
+Used by the packages of the top triangle, the right top triangle, the convex top and the mixed
+caps.
 
 * `hsign_of_pos`, `hsign_of_neg`, `inTriangle_of_hinside`: list words and polygon signs;
 * `word_of_edges`: a radial word passing a pruned enumeration, for a point inside every edge;
 * `lower_bounds1`: the lower-point bounds `ℓ_x, ℓ_y ≥ s`, `c - ℓ_x, h - ℓ_y ≥ 2s`,
   `ℓ_x + ℓ_y ≤ 1 - s`;
 * `uv_pos`: two top-cap points with `[DXY], [XYF] > 0` have `x_x > y_x`, `y_y > x_y`
-  (`C1_ONE_LOWER_EIGHT_HULL.md` (13)–(14));
+  (as in `C1OneLowerEightHull.topCap_pair_order`);
 * `xy_pos`: then every anchor `V` has `[VXY] > 0`;
 * `not_triangularHull_four`: the four points `D, F, X, Y` in convex position do not have a
   triangular hull;
@@ -22,7 +25,7 @@ noncomputable section
 namespace Heilbronn.Nine.C1OneLowerB
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1ZeroLower Cover Model
-open Heilbronn.Nine.C1OneLowerTopCap (ConvexPolygon HasHullWord)
+open Heilbronn.Nine.C1OneLowerTopCap (HasHullWord)
 
 /-! ### Words -/
 
@@ -45,7 +48,7 @@ theorem inTriangle_of_hinside {n : ℕ} {V : Fin n → Point} {R : Point} {w : L
 
 /-- A point strictly inside every edge of a convex polygon (with no zero area against two
 vertices) has a radial word passing every pruned enumeration test checked by `enumW`. -/
-theorem word_of_edges {n : ℕ} [NeZero n] {V : Fin n → Point} (hV : ConvexPolygon V) {R : Point}
+theorem word_of_edges {n : ℕ} [NeZero n] {V : Fin n → Point} (hV : IsConvexPolygon V) {R : Point}
     (hin : ∀ i : Fin n, 0 < sarea (V i) (V (i + 1)) R)
     (hne : ∀ i j : Fin n, i ≠ j → sarea (V i) (V j) R ≠ 0) {p : List ℕ → Bool}
     (he : enumW n (n - 2) p n [] = true) :
@@ -58,7 +61,7 @@ theorem word_of_edges {n : ℕ} [NeZero n] {V : Fin n → Point} (hV : ConvexPol
 
 /-! ### The lower point -/
 
-/-- **The lower-point bounds** (subdivision of `OHC` at `L`): `ℓ_x, ℓ_y ≥ s`, `c - ℓ_x ≥ 2s`,
+/-- The lower-point bounds (subdivision of `OHC` at `L`): `ℓ_x, ℓ_y ≥ s`, `c - ℓ_x ≥ 2s`,
 `h - ℓ_y ≥ 2s`, `ℓ_x + ℓ_y ≤ 1 - s`. -/
 theorem lower_bounds1 {t h c lx ly : ℝ} (ht : 8 / 73 < t) (hh : h < 1) (hc : c < 1)
     (hh0 : 0 < h) (hc0 : 0 < c) (lx0 : 0 ≤ lx) (ly0 : 0 ≤ ly)
@@ -80,8 +83,8 @@ theorem lower_bounds1 {t h c lx ly : ℝ} (ht : 8 / 73 < t) (hh : h < 1) (hc : c
 
 /-! ### Two top-cap points in convex position -/
 
-/-- (`C1_ONE_LOWER_EIGHT_HULL.md` (13)–(14)) Two top-cap points `X, Y` of the square with
-`[DXY] > 0` and `[XYF] > 0` have `u = x_x - y_x > 0` and `v = y_y - x_y > 0`. -/
+/-- Two top-cap points `X, Y` of the square with `[DXY] > 0` and `[XYF] > 0` have
+`u = x_x - y_x > 0` and `v = y_y - x_y > 0` (as in `C1OneLowerEightHull.topCap_pair_order`). -/
 theorem uv_pos {d f : ℝ} (hd1 : d < 1) (hf1 : f < 1) {X Y : Point} (hX : InTopCap d f X)
     (hY : InTopCap d f Y) (hXs : X ∈ unitSquare) (hYs : Y ∈ unitSquare)
     (h1 : 0 < sarea (ptD d) X Y) (h2 : 0 < sarea X Y (ptF f)) :
@@ -188,7 +191,7 @@ theorem not_mem_hull {A B C Z : Point} (hC : 0 ≤ sarea A B C) (hZ : sarea A B 
   rw [← sarea_affine' A B Z] at this
   linarith
 
-/-- **The convex top hull is not triangular**: for `D, X, Y, F` in convex position
+/-- The convex top hull is not triangular: for `D, X, Y, F` in convex position
 (`[DXY], [XYF] > 0`, `X, Y` beyond `DF`), the four points `D, F, X, Y` do not have a triangular
 hull. -/
 theorem not_triangularHull_four {d f : ℝ} {X Y : Point} (hX : InTopCap d f X)
@@ -270,9 +273,9 @@ theorem upper_inTriangle {h c d f : ℝ} {X : Point} (hU : InUpperQuad h c d f X
 
 /-! ### Points beyond `DF` -/
 
-/-- **Claim** (`C1_ONE_LOWER_CONVEX_TOP:(4)`). A point `Z = (z, w)` beyond `DF` with
+/-- A point `Z = (z, w)` beyond `DF` with
 `-[DFZ] = (1-d)(z-f) - (1-f)(1-w) = (1-f)(w-d) - (1-d)(1-z) ≥ t` has `z - f ≥ 8/65` and
-`w - d ≥ 8/65` (with `d, f ≥ s`). `docs/proof/nine/C1_ONE_LOWER_CONVEX_TOP.md`, lines 69-77. -/
+`w - d ≥ 8/65` (with `d, f ≥ s`). -/
 theorem cap_pt {t d f zx zy : ℝ} (ht : 8 / 73 < t) (hd : 8 / 73 ≤ d) (hf : 8 / 73 ≤ f)
     (hd1 : d < 1) (hf1 : f < 1) (zx1 : zx ≤ 1) (zy1 : zy ≤ 1)
     (a : t ≤ (1 - d) * (zx - f) - (1 - f) * (1 - zy)) : 8 / 65 ≤ zx - f ∧ 8 / 65 ≤ zy - d := by

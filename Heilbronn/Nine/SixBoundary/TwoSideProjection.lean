@@ -2,34 +2,28 @@ module
 
 public import Heilbronn.Nine.SixBoundary.Exterior
 
-/-! # A sharp two-contact projection chamber in family N
-(`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_PROJECTION.md`)
+/-! # Side-cap projections in family N
 
-Role: primary-route component, restricted to what the primary route uses. Lemma 2
-(`[BCX] < 3s` for a point `X` of the side cap `R = CD(1,0)`; transposed `[AHY] < 3s` for `Y` in
-`L = FH(0,1)`) is used by the single-side, side-opposite and side-top notes; the
-projection-preservation checks of Sections 2-3 are reused by
-`SIX_BOUNDARY_TWO_SIDE_COMPLETION.md` (Sections 1 and 5).
-
-Not stated here: Theorem 1 (the chamber (2) with a double projection onto eight contacts). It is
-not on the primary route: `SIX_BOUNDARY_TWO_SIDE_COMPLETION.md` treats the whole occupancy with
-the lower point below `HC`, and the chamber (2) implies its sufficient condition (3), since
-`(t - a)[AQX] = r(t - a)(y - a) - x(t - a)²`.
+`sideCap_BCX_lt` (`[BCX] < 3s` for a point `X` of the side cap `R = CD(1,0)`; transposed `[HAY] < 3s`
+for `Y` in `L = FH(0,1)`) is used by the single-side, side-opposite and side-two-top cases; the
+projection checks `sideCap_projection` and `pair_projection` are used by the two-side completion
+(`SixBoundaryTwoSideCompletion`).
 
 Setting: `nConfig a h b c d f X Y Q` with `NAnchors a h b c d f`, `X = (x, y)` in the closed cap
 `R`, `Y = (z, w)` in the closed cap `L`, `Q = (r, t)` in the closed virtual triangle
-`T₀ = (0,0)HC`. Threshold `s = 7/64` (doubled) for Lemma 2; the projection checks hold at any
-doubled threshold `μ ≥ s` bounded by the original minimum doubled area (the manuscript takes
-`μ` equal to that minimum, `μ ≥ 2A₀ > s`).
+`T₀ = (0,0)HC`. Threshold `s = 7/64` (doubled) for `sideCap_BCX_lt`; the projection checks hold at any
+doubled threshold `μ ≥ s` bounded by the original minimum doubled area. The sign condition
+`(t - a)[AQX] ≤ 0` of `sideCap_projection` follows from `(t - a)(y - a) ≤ 0`, since
+`(t - a)[AQX] = r(t - a)(y - a) - x(t - a)²`.
 
 Results:
-* `lemma2`: `[BCX] < 3s` for `X ∈ R`, so `BCX` contains no free point; transposed for `L`;
-* `claim_BQX_sign`: `[BQX] < 0` (5), and transposed `[AQY] > 0`;
-* `claim_X_projection`: moving `x` to `1` keeps every triangle of `X` with two anchors or with
+* `sideCap_BCX_lt`: `[BCX] < 3s` for `X ∈ R`, so `BCX` contains no free point; transposed for `L`;
+* `sarea_BQX_neg`: `[BQX] < 0`, and transposed `[AQY] > 0`;
+* `sideCap_projection`: moving `x` to `1` keeps every triangle of `X` with two anchors or with
   `Q` and an anchor other than `A` above `μ`, and the one with `Q` and `A` under
-  `(t - a)(y - a) ≤ 0`; transposed for `Y` (exceptional anchor `B`, condition
-  `(r - b)(z - b) ≤ 0`);
-* `claim_XY_pairs`: every triangle using both cap points stays above `μ` when `x` and `w`
+  `(t - a)[AQX] ≤ 0`; transposed for `Y` (exceptional anchor `B`, condition
+  `(r - b)[BQY] ≥ 0`);
+* `pair_projection`: every triangle using both cap points stays above `μ` when `x` and `w`
   increase to `1`.
 -/
 
@@ -40,9 +34,9 @@ namespace Heilbronn.Nine.SixBoundaryTwoSideProjection
 
 open SixBoundary SixBoundaryExterior
 
-/-- The scalar core of Lemma 2: `my ≥ 3s`, `α(d - y) ≥ s`, `b ≥ s`, `d ≤ 1 - s` are
+/-- The scalar core of `sideCap_BCX_lt`: `my ≥ 3s`, `α(d - y) ≥ s`, `b ≥ s`, `d ≤ 1 - s` are
 incompatible (`m = c - b`, `α = 1 - c`; Cauchy-Schwarz with `√3 > 17/10`). -/
-theorem lemma2_core {b c d y : ℝ} (hb : 7 / 64 ≤ b) (hbc : b < c) (hc : c < 1)
+theorem sideCap_BCX_scalar {b c d y : ℝ} (hb : 7 / 64 ≤ b) (hbc : b < c) (hc : c < 1)
     (hy : 3 * (7 / 64) ≤ (c - b) * y) (hdy : 7 / 64 ≤ (1 - c) * (d - y)) (hd1 : d ≤ 1 - 7 / 64) :
     False := by
   set m := c - b with hm
@@ -65,13 +59,10 @@ theorem lemma2_core {b c d y : ℝ} (hb : 7 / 64 ≤ b) (hbc : b < c) (hc : c < 
   have hd0 : 0 ≤ d := by nlinarith
   nlinarith [mul_le_mul h5 hd1 hd0 (by norm_num : (0:ℝ) ≤ 1 - 7 / 64)]
 
-/-- **Lemma 2** (`SIX_BOUNDARY_TWO_SIDE_PROJECTION:Lemma2`). If every doubled area is at least
-`s = 7/64` and the free point `X` lies in the lower-right cap `CD(1,0)`, then `[BCX] < 3s`, so
-`BCX` contains no further free point. Transposed: if `X` lies in the upper-left cap `FH(0,1)`,
-then `[HAX] < 3s` and `HAX` contains no further free point.
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_PROJECTION.md`, lines 67-102.
-Uses: SIX_BOUNDARY_HULL:claim-transposition -/
-theorem lemma2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- If every doubled area is at least `s = 7/64` and the free point `X` lies in the lower-right
+cap `CD(1,0)`, then `[BCX] < 3s`, so `BCX` contains no further free point. Transposed: if `X` lies
+in the upper-left cap `FH(0,1)`, then `[HAX] < 3s` and `HAX` contains no further free point. -/
+theorem sideCap_BCX_lt {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (_hX : X ∈ unitSquare) (_hY : Y ∈ unitSquare) (_hZ : Z ∈ unitSquare)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     (InCapR c d X →
@@ -101,7 +92,7 @@ theorem lemma2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     have hlt : sarea (ptB b) (ptC c) X < 3 * (7 / 64) := by
       by_contra hge
       push Not at hge
-      exact lemma2_core hbs hbc hc (by simp only [sarea] at hge; linarith) hdy hd1
+      exact sideCap_BCX_scalar hbs hbc hc (by simp only [sarea] at hge; linarith) hdy hd1
     refine ⟨hlt, fun hY => ?_, fun hZ => ?_⟩
     · have := SixBoundaryExterior.three_s_of_inTriangle (P := nConfig a h b c d f X Y Z)
         (i := 2) (j := 3) (k := 6) (l := 7) hmin (by decide) (by decide) (by decide) (by decide)
@@ -121,7 +112,7 @@ theorem lemma2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     have hlt : sarea (ptH h) (ptA a) X < 3 * (7 / 64) := by
       by_contra hge
       push Not at hge
-      exact lemma2_core has hah hh (by simp only [sarea] at hge; linarith) hfx hf1
+      exact sideCap_BCX_scalar has hah hh (by simp only [sarea] at hge; linarith) hfx hf1
     refine ⟨hlt, fun hY => ?_, fun hZ => ?_⟩
     · have := SixBoundaryExterior.three_s_of_inTriangle (P := nConfig a h b c d f X Y Z)
         (i := 1) (j := 0) (k := 6) (l := 7) hmin (by decide) (by decide) (by decide) (by decide)
@@ -132,13 +123,10 @@ theorem lemma2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
         (by decide) (by decide) hZ
       exact absurd this (not_le.2 hlt)
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_PROJECTION:claim-BQX-sign`). With every doubled area at
-least `7/64` and `Q` in `T₀ = (0,0)HC`: if `X` is in the cap `CD(1,0)` then `[BQX] < 0` (5)
-(`Q` is on the positive sides of `BC` and `CX`, and `BCX` is empty by Lemma 2); transposed, if
-`Y` is in the cap `FH(0,1)` then `[AQY] > 0`.
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_PROJECTION.md`, lines 104-120.
-Uses: SIX_BOUNDARY_TWO_SIDE_PROJECTION:Lemma2, SIX_BOUNDARY_HULL:claim-transposition -/
-theorem claim_BQX_sign {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
+/-- With every doubled area at least `7/64` and `Q` in `T₀ = (0,0)HC`: if `X` is in the cap
+`CD(1,0)` then `[BQX] < 0` (`Q` is on the positive sides of `BC` and `CX`, and `BCX` is empty by
+`sideCap_BCX_lt`); transposed, if `Y` is in the cap `FH(0,1)` then `[AQY] > 0`. -/
+theorem sarea_BQX_neg {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hQ : Q ∈ unitSquare) (hQT : InT0 h c Q)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     (InCapR c d X → sarea (ptB b) Q X < 0) ∧ (InCapL f h Y → 0 < sarea (ptA a) Q Y) := by
@@ -146,7 +134,7 @@ theorem claim_BQX_sign {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b 
   obtain ⟨q0, q1, q2⟩ := hQT
   have hN' := hN
   obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN'
-  have hL := lemma2 hN hX hY hQ hmin
+  have hL := sideCap_BCX_lt hN hX hY hQ hmin
   have hQT' : h * Q.1 + c * Q.2 ≤ h * c := by simp only [sarea] at q2; linarith
   have hQ2h : Q.2 ≤ h := by nlinarith
   have hQ1c : Q.1 ≤ c := by nlinarith
@@ -195,7 +183,7 @@ theorem claim_BQX_sign {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b 
     rcases lt_or_gt_of_ne nAQY with h1 | h1
     · exfalso
       have hYc : (Y : Point) ∈ unitSquare := ⟨z0, z1, w0, w1⟩
-      have := (lemma2 (X := Y) (Y := X) (Z := Q) hN hY hX hQ (by
+      have := (sideCap_BCX_lt (X := Y) (Y := X) (Z := Q) hN hY hX hQ (by
         rw [show nConfig a h b c d f Y X Q = nConfig a h b c d f X Y Q ∘ Equiv.swap 6 7 by
           funext i; fin_cases i <;> rfl, minTriangleArea_comp_perm]; exact hmin)).2
         ⟨hYc, by simp only [sarea]; linarith⟩
@@ -304,7 +292,7 @@ theorem xProj_F {h c f μ x y r t x' : ℝ} (hh : 0 < h) (hh1 : h < 1) (hc0 : 0 
   · nlinarith [mul_nonneg hy0 (sub_nonneg.2 hfc)]
   · nlinarith [mul_nonneg hxf (sub_nonneg.2 hh1.le), mul_nonneg hf0 hy1']
 
-/-- Projection step for the anchor `A`, under the sign condition (3) `(t - a)[AQX] ≤ 0`. -/
+/-- Projection step for the anchor `A`, under the sign condition `(t - a)[AQX] ≤ 0`. -/
 theorem xProj_A {a μ x y r t x' : ℝ} (hμ : 0 < μ) (hA : μ ≤ |x * (t - a) - r * (y - a)|)
     (hxx : x ≤ x') (h3 : (t - a) * (r * (y - a) - x * (t - a)) ≤ 0) :
     μ ≤ |x' * (t - a) - r * (y - a)| := by
@@ -322,7 +310,7 @@ theorem xProj_A {a μ x y r t x' : ℝ} (hμ : 0 < μ) (hA : μ ≤ |x * (t - a)
       nlinarith
     rw [le_abs]; left; nlinarith [mul_nonneg hxx' hta]
 
-/-- The orders (3) of the placements, from a positive least area. -/
+/-- The coordinate orders of the three placements, from a positive least area. -/
 theorem orders {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y) (_hQ : Q ∈ unitSquare) (hQT : InT0 h c Q)
     (hpos : 0 < minTriangleArea (nConfig a h b c d f X Y Q)) :
@@ -380,8 +368,8 @@ theorem anchorPairBound_of_min {a h b c d f μ : ℝ} {X Y Z : Point}
     (fun e => hij.ne (Fin.ext (by simpa [Fin.ext_iff] using e)))
     (fun e => by simp [Fin.ext_iff] at e; omega) (fun e => by simp [Fin.ext_iff] at e; omega)
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_PROJECTION:claim-X-projection`), the right-cap half. -/
-theorem claim_X_projection_R {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
+/-- The right-cap half of `sideCap_projection`. -/
+theorem projection_capR {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y) (hQ : Q ∈ unitSquare) (hQT : InT0 h c Q)
     (hμ : 7 / 64 ≤ μ) (hmin : μ / 2 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     ∀ x' : ℝ, X.1 ≤ x' → x' ≤ 1 →
@@ -393,7 +381,7 @@ theorem claim_X_projection_R {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAncho
   have hmin' : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q) := by linarith
   have hpos : 0 < minTriangleArea (nConfig a h b c d f X Y Q) := by linarith
   obtain ⟨⟨hxc, hy0, hyd⟩, -, ⟨hr0, ht0, hT⟩⟩ := orders hN hX hY hQ hQT hpos
-  have hBQX := (claim_BQX_sign hN hX.1 hY.1 hQ hQT hmin').1 hX
+  have hBQX := (sarea_BQX_neg hN hX.1 hY.1 hQ hQT hmin').1 hX
   have hN' := hN
   obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN'
   obtain ⟨⟨x0, x1, y0, y1⟩, cX⟩ := hX
@@ -418,7 +406,7 @@ theorem claim_X_projection_R {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAncho
   change μ ≤ |sarea (1, d) X Q| at bD
   change μ ≤ |sarea (f, 1) X Q| at bF
   simp only [sarea] at bA bH bB bC bD bF hBQX cX
-  refine ⟨SixBoundaryExterior.lemma6R hN hμ0 X ⟨⟨x0, x1, y0, y1⟩, cX⟩
+  refine ⟨SixBoundaryExterior.anchorPairBound_slide_capR hN hμ0 X ⟨⟨x0, x1, y0, y1⟩, cX⟩
     (anchorPairBound_of_min hmin) x' hxx hx'1, fun i hi => ?_, fun h3 => ?_⟩
   · fin_cases i
     · exact absurd rfl hi
@@ -450,20 +438,16 @@ theorem sarea_anchorPts_transpose (a h b c d f : ℝ) (P Q : Point) (i : Fin 6) 
       -sarea (anchorPts a h b c d f (![2, 3, 0, 1, 5, 4] i)) P Q := by
   fin_cases i <;> simp [anchorPts, sarea, transpose]
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_PROJECTION:claim-X-projection`). Let `X = (x, y) ∈ CD(1,0)`,
-`Y = (z, w) ∈ FH(0,1)`, `Q = (r, t) ∈ T₀`, and let `7/64 ≤ μ` with every doubled area of the
-configuration at least `μ`. For every `x ≤ x' ≤ 1`, the point `X' = (x', y)` has all triangles
-with two anchors (EXTERIOR Lemma 6) and the triangles `X'Q` with `B, C, H, F` or `D` of unsigned
-doubled area at least `μ`; the triangle `X'QA` too when `(t - a)[AQX] ≤ 0` ((3) of
-`SIX_BOUNDARY_TWO_SIDE_COMPLETION.md`, which makes `|[AQX]|` nondecreasing in `x`; it follows
-from the chamber condition `(t - a)(y - a) ≤ 0` of the projection note). Transposed: for
-`w ≤ w' ≤ 1`, `Y' = (z, w')` has all triangles with two anchors and with `Q` and `A, H, C, D` or
-`F` of unsigned doubled area at least `μ`, and with `Q` and `B` when `(r - b)[BQY] ≥ 0` ((4)).
-(Anchors are indexed as in `nConfig`: `A, H, B, C, D, F` = `0, …, 5`.)
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_PROJECTION.md`, lines 122-185.
-Uses: SIX_BOUNDARY_EXTERIOR:Lemma6, SIX_BOUNDARY_TWO_SIDE_PROJECTION:claim-BQX-sign,
-SIX_BOUNDARY_HULL:claim-transposition -/
-theorem claim_X_projection {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
+/-- Let `X = (x, y) ∈ CD(1,0)`, `Y = (z, w) ∈ FH(0,1)`, `Q = (r, t) ∈ T₀`, and let `7/64 ≤ μ`
+with every doubled area of the configuration at least `μ`. For every `x ≤ x' ≤ 1`, the point
+`X' = (x', y)` has all triangles with two anchors (`SixBoundaryExterior.anchorPairBound_slide`) and the
+triangles `X'Q` with `B, C, H, F` or `D` of unsigned doubled area at least `μ`; the triangle
+`X'QA` too when `(t - a)[AQX] ≤ 0` (which makes `|[AQX]|` nondecreasing in `x`; it follows from
+`(t - a)(y - a) ≤ 0`). Transposed: for `w ≤ w' ≤ 1`, `Y' = (z, w')` has all triangles with two
+anchors and with `Q` and `A, H, C, D` or `F` of unsigned doubled area at least `μ`, and with `Q`
+and `B` when `(r - b)[BQY] ≥ 0`. (Anchors are indexed as in `nConfig`: `A, H, B, C, D, F` =
+`0, …, 5`.) -/
+theorem sideCap_projection {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y) (hQ : Q ∈ unitSquare) (hQT : InT0 h c Q)
     (hμ : 7 / 64 ≤ μ) (hmin : μ / 2 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     (∀ x' : ℝ, X.1 ≤ x' → x' ≤ 1 →
@@ -474,21 +458,21 @@ theorem claim_X_projection {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAnchors
       AnchorPairBound a h b c d f μ (Y.1, w') ∧
         (∀ i : Fin 6, i ≠ 2 → μ ≤ |sarea (anchorPts a h b c d f i) (Y.1, w') Q|) ∧
         (0 ≤ (Q.1 - b) * sarea (ptB b) Q Y → μ ≤ |sarea (ptB b) (Y.1, w') Q|)) := by
-  refine ⟨claim_X_projection_R hN hX hY hQ hQT hμ hmin, fun w' hw hw1 => ?_⟩
+  refine ⟨projection_capR hN hX hY hQ hQT hμ hmin, fun w' hw hw1 => ?_⟩
   have hμ0 : 0 < μ := by linarith
-  have T := claim_transposition a h b c d f Y X Q
+  have T := transpose_invariant a h b c d f Y X Q
   have hNt : NAnchors b c a h f d := T.1.1 hN
   have hYt : InCapR h f (transpose Y) := T.2.2.2.2.2.2.1.1 hY
-  have hXt : InCapL d c (transpose X) := (claim_transposition a h b c d f X Y Q).2.2.2.2.2.1.1 hX
-  have hQt : InT0 c h (transpose Q) := (claim_transposition a h b c d f Q X Y).2.2.2.2.2.2.2.2.2.2.2.2.1 hQT
-  have hQsq : transpose Q ∈ unitSquare := (claim_transposition a h b c d f Q X Y).2.1.1 hQ
+  have hXt : InCapL d c (transpose X) := (transpose_invariant a h b c d f X Y Q).2.2.2.2.2.1.1 hX
+  have hQt : InT0 c h (transpose Q) := (transpose_invariant a h b c d f Q X Y).2.2.2.2.2.2.2.2.2.2.2.2.1 hQT
+  have hQsq : transpose Q ∈ unitSquare := (transpose_invariant a h b c d f Q X Y).2.1.1 hQ
   have hmint : μ / 2 ≤ minTriangleArea (nConfig b c a h f d (transpose Y) (transpose X)
       (transpose Q)) := by
     rw [T.2.2.1, show nConfig a h b c d f Y X Q = nConfig a h b c d f X Y Q ∘ Equiv.swap 6 7 by
       funext i; fin_cases i <;> rfl, minTriangleArea_comp_perm]; exact hmin
-  have K := claim_X_projection_R hNt hYt hXt hQsq hQt hμ hmint w' hw hw1
+  have K := projection_capR hNt hYt hXt hQsq hQt hμ hmint w' hw hw1
   have ePt : ((w', (transpose Y).2) : Point) = transpose (Y.1, w') := rfl
-  refine ⟨SixBoundaryExterior.lemma6 hN hμ0 |>.2 Y hY (anchorPairBound_of_min (Y := X) (Z := Q)
+  refine ⟨SixBoundaryExterior.anchorPairBound_slide hN hμ0 |>.2 Y hY (anchorPairBound_of_min (Y := X) (Z := Q)
     (by rw [show nConfig a h b c d f Y X Q = nConfig a h b c d f X Y Q ∘ Equiv.swap 6 7 by
       funext i; fin_cases i <;> rfl, minTriangleArea_comp_perm]; exact hmin)) w' hw hw1,
     fun i hi => ?_, fun h4 => ?_⟩
@@ -558,15 +542,13 @@ theorem xy_pos {p q x y z w : ℝ} (hxz : z < x) (hyw : y < w) (hz0 : 0 ≤ z) (
     · nlinarith [mul_nonneg (sub_nonneg.2 hxz.le) hq', mul_nonneg hz0 (sub_nonneg.2 hyw.le)]
   · nlinarith [mul_nonneg hp (sub_nonneg.2 hyw.le), mul_nonneg hy0 (sub_nonneg.2 hxz.le)]
 
-/-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_PROJECTION:claim-XY-pairs`). In the setting of
-`claim_X_projection`, every triangle using both cap points stays above `μ` when `x` and `w`
-increase to `1`: for all `x ≤ x' ≤ 1` and `w ≤ w' ≤ 1`, with `X' = (x', y)`, `Y' = (z, w')`,
-the triangles `VX'Y'` (`V` an anchor) and `QX'Y'` have unsigned doubled area at least `μ`.
-(`[AXY], [HXY], [BXY], [CXY], [QXY]` are positive and nondecreasing in `x` and `w`;
+/-- In the setting of `sideCap_projection`, every triangle using both cap points stays above `μ`
+when `x` and `w` increase to `1`: for all `x ≤ x' ≤ 1` and `w ≤ w' ≤ 1`, with `X' = (x', y)`,
+`Y' = (z, w')`, the triangles `VX'Y'` (`V` an anchor) and `QX'Y'` have unsigned doubled area at
+least `μ`. (`[AXY], [HXY], [BXY], [CXY], [QXY]` are positive and nondecreasing in `x` and `w`;
 `-[DX'Y'] ≥ (d - y)(1 - z) ≥ μ` and `-[FX'Y'] ≥ (1 - y)(f - z) ≥ μ`; so each single projection,
-and the two-segment path, are covered.)
-`docs/proof/nine/SIX_BOUNDARY_TWO_SIDE_PROJECTION.md`, lines 187-247. -/
-theorem claim_XY_pairs {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
+and the two-segment path, are covered.) -/
+theorem pair_projection {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapL f h Y) (hQ : Q ∈ unitSquare) (hQT : InT0 h c Q)
     (hμ : 7 / 64 ≤ μ) (hmin : μ / 2 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     ∀ x' w' : ℝ, X.1 ≤ x' → x' ≤ 1 → Y.2 ≤ w' → w' ≤ 1 →

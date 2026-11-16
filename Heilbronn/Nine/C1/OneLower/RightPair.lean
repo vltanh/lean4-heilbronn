@@ -3,24 +3,23 @@ module
 public import Heilbronn.Nine.C1.OneLower.TopCap
 public import Heilbronn.Nine.C1.OneLower.RightPairTrees
 
-/-! # One lower C1 point excludes a pair in the right cap (`docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`)
+/-! # One lower C1 point excludes a pair in the right cap
 
-**Role.** A component of the one-lower C1 class: `C1_ONE_LOWER_MIXED_CAPS:Theorem2` uses
-Theorem 1 for the occupancy rows `(U, R, T, L_cap) = (1, 2, 0, 0)` ("upper row") and
-`(0, 2, 1, 0)` ("top row").
+With exactly one free point in the lower triangle `OHC`, the right cap contains at most one free
+point. `C1OneLowerMixedCaps.lowerCount_eq_one_false` uses this for the occupancy rows
+`(U, R, T, L_cap) = (1, 2, 0, 0)` ("upper row") and `(0, 2, 1, 0)` ("top row").
 
-**Setting.** The C1 anchors with `0 < d ≤ h < 1`, `0 < f ≤ c < 1` and `f ≤ d` ((1); arranged by
+**Setting.** The C1 anchors with `0 < d ≤ h < 1`, `0 < f ≤ c < 1` and `f ≤ d` (arranged by
 transposing the square), minimum triangle area at least `A₀`. If the right cap contains two free
-points, Lemma 1 of `C1_ZERO_LOWER.md` names them `X` (outer) and `Y` (inner, `Y ∈ CDX ∩ ODX`); `L`
+points, `C1ZeroLower.Comp.right_pair_signs` names them `X` (outer) and `Y` (inner, `Y ∈ CDX ∩ ODX`); `L`
 is the lower point and `Q` the remaining free point. The configuration is
-`c1Config h c d f X Y L Q` (the checker's vertex order `O, C, D, F, H, X, Y, L, Q`), and the
-five-anchor words are those of `C1_ZERO_LOWER.md` (11)–(12) (`Heilbronn.Nine.C1.HasWord`). Thresholds
-`s = 8/73`, `ρ = 49/60`.
+`c1Config h c d f X Y L Q` (vertex order `O, C, D, F, H, X, Y, L, Q`), and the five-anchor words
+are those of `Heilbronn.Nine.C1.HasWord`. Thresholds `s = 8/73`, `ρ = 49/60`.
 
 **Results.**
-* `theorem1` (`C1_ONE_LOWER_RIGHT_PAIR:Theorem1`): the right cap contains at most one free point.
-* `eq2` (Lemma 1 of the zero-lower note), `eq3` (the two rows; FLAG: citation), `claim_fan`,
-  `eq4`–`eq6`, `eq7` (seven word cases), `eq8`, `eq9_10` (the certificate package).
+* `regionCount_right_le_one`: the right cap contains at most one free point.
+* `rightPair_nested_bounds` (the right pair is nested), `upperQuad_or_topCap` (the two rows), `L_Q_above_OD`, `HDF_empty_OFH_capacity_one`–`top_row_bounds`, `exists_rightPairCase_words` (seven
+  word cases), `XY_anchor_signs`, `rightPairCase_false` (the certificate package).
 -/
 
 @[expose] public section
@@ -37,7 +36,7 @@ local notation "s" => (8 / 73 : ℝ)
 /-- `ρ = 49/60 < (4 + 2√3)s`. -/
 local notation "ρ" => (49 / 60 : ℝ)
 
-/-! ### Section 1: only two geometric rows remain -/
+/-! ### Only two geometric rows remain -/
 
 /-- Two free points `X, Y` in the right cap (in the square), the lower point `L ∈ OHC`, and a
 fourth free point `Q` of the square not in `OHC` (exactly one lower point); C1 anchors with
@@ -90,20 +89,17 @@ theorem TwoRight.comp {h c d f : ℝ} {X Y L Q : Point} (hS : TwoRight h c d f X
 /-- A nonzero area from the least area. -/
 theorem area_ne {h c d f : ℝ} {Q4 : Fin 4 → Point} (H : Comp h c d f Q4) {u v w : ℕ} (hu : u < 9)
     (hv : v < 9) (hw : w < 9) (huv : u ≠ v) (hvw : v ≠ w) (huw : u ≠ w) :
-    sarea (cfg h c d f Q4 u) (cfg h c d f Q4 v) (cfg h c d f Q4 w) ≠ 0 := by
-  intro h0
-  have := H.area u v w hu hv hw huv hvw huw
-  rw [h0, abs_zero] at this; linarith [A₀_pos]
+    sarea (cfg h c d f Q4 u) (cfg h c d f Q4 v) (cfg h c d f Q4 w) ≠ 0 :=
+  H.areaOK.ne_zero hu hv hw huv hvw huw
 
 section
 
 variable {h c d f : ℝ} {X Y L Q : Point}
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_PAIR:(2)`). Lemma 1 of `C1_ZERO_LOWER.md` (which does not need
-the zero-lower hypothesis): of two right-cap points one, `Y`, lies strictly in `CDX ∩ ODX`, where
-`X` is the other; moreover `d, h ≥ ρ`, `c, f ≤ 1 - 3s`, `d(1-c) ≥ 3s`.
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`, lines 40-49. Uses: C1_ZERO_LOWER:Lemma1. -/
-theorem eq2 (hS : TwoRight h c d f X Y L Q) :
+/-- Of the two right-cap points, one lies strictly inside the triangles `CD·` and `OD·` of the
+other: `Y ∈ CDX ∩ ODX` or `X ∈ CDY ∩ ODY` (`C1ZeroLower.Comp.right_pair_core`, which does not need
+the zero-lower hypothesis); moreover `d, h ≥ ρ`, `c, f ≤ 1 - 3s`, `d(1-c) ≥ 3s`. -/
+theorem rightPair_nested_bounds (hS : TwoRight h c d f X Y L Q) :
     ((InTriangle Y (ptC c) X (ptD d) ∧ InTriangle Y ptO X (ptD d)) ∨
         (InTriangle X (ptC c) Y (ptD d) ∧ InTriangle X ptO Y (ptD d))) ∧
       ρ ≤ d ∧ ρ ≤ h ∧ c ≤ 1 - 3 * s ∧ f ≤ 1 - 3 * s ∧ 3 * s ≤ d * (1 - c) := by
@@ -131,14 +127,11 @@ theorem eq2 (hS : TwoRight h c d f X Y L Q) :
     refine ⟨⟨a2, a3, a1⟩, ⟨a4, a3, ?_⟩⟩
     have := sarea_swap₁₂ ptO (ptD d) X; simp only [ptO, ptD] at this hX ⊢; linarith
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_PAIR:(3)`). The left cap is empty and the right cap has no third
-point, so `Q` lies in `HCDF` (upper row) or in the top cap `DF(1,1) \ DF` (top row).
-FLAG (citation, lines 52-54): "the right cap cannot contain a third point" is attributed to
-Theorem 2 of `C1_ZERO_LOWER.md`; it is the unnumbered claim after its Lemma 1 (lines 104-110,
-via `TYPE_II_COMPLETION:Theorem1`). The left cap is empty by its Theorem 2.2.
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`, lines 51-62.
-Uses: C1_ZERO_LOWER:Theorem2, C1_ZERO_LOWER:claim-side-cap-capacity. -/
-theorem eq3 (hS : Row h c d f X Y L Q) : InUpperQuad h c d f Q ∨ InTopCap d f Q := by
+/-- The right cap has no third point (at most two free points lie below `OD`,
+`C1ZeroLower.Comp.fan_below`) and the left cap is empty (`C1ZeroLower.Comp.left_row` against the
+bounds of the right pair), so `Q` lies in `HCDF` (upper row) or in the top cap `DF(1,1) \ DF`
+(top row). -/
+theorem upperQuad_or_topCap (hS : Row h c d f X Y L Q) : InUpperQuad h c d f Q ∨ InTopCap d f Q := by
   have H := hS.comp
   have hX := below_of_right hS.anchors hS.rightXSq hS.rightX
   have hY := below_of_right hS.anchors hS.rightYSq hS.rightY
@@ -184,10 +177,9 @@ theorem eq3 (hS : Row h c d f X Y L Q) : InUpperQuad h c d f Q ∨ InTopCap d f 
   exact ⟨hHC, lt_of_le_of_ne (not_lt.1 hR) (Ne.symm n12), lt_of_le_of_ne (not_lt.1 hT) (Ne.symm n23),
     lt_of_le_of_ne (not_lt.1 hL) (Ne.symm n34)⟩
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_PAIR:claim-fan`). The two right-cap points fill the below-`OD`
-fan capacity ((4) of `C1_ZERO_LOWER.md`), so `L` and `Q` lie strictly above `OD`.
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`, lines 64-66. Uses: C1_ZERO_LOWER:eq4. -/
-theorem claim_fan (hS : Row h c d f X Y L Q) :
+/-- The two right-cap points fill the capacity two below `OD` (`C1ZeroLower.Comp.fan_below`), so
+`L` and `Q` lie strictly above `OD`. -/
+theorem L_Q_above_OD (hS : Row h c d f X Y L Q) :
     0 < sarea ptO (ptD d) L ∧ 0 < sarea ptO (ptD d) Q := by
   have H := hS.comp
   have hX := below_of_right hS.anchors hS.rightXSq hS.rightX
@@ -204,18 +196,16 @@ theorem claim_fan (hS : Row h c d f X Y L Q) :
     exact H.fan_below (i := 0) (j := 1) (l := 3) (by decide) (by decide) (by decide) hX hY
       (lt_of_le_of_ne hn hne)
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_PAIR:(4)`). `[HDF] ≤ 1 - d ≤ 1 - ρ < 3s`, so `HDF` contains no
-free point; `[OFH] = hf ≤ f ≤ 1 - 3s < ρ`, so `OFH` has capacity one; in the upper row `Q` lies in
-`HCD`. `docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`, lines 68-77.
-Uses: C1_ONE_LOWER_RIGHT_PAIR:(2), CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem eq4 (hS : Row h c d f X Y L Q) :
+/-- `[HDF] ≤ 1 - d ≤ 1 - ρ < 3s`, so `HDF` contains no free point; `[OFH] = hf ≤ f ≤ 1 - 3s < ρ`,
+so `OFH` contains at most one free point; in the upper row `Q` lies in `HCD`. -/
+theorem HDF_empty_OFH_capacity_one (hS : Row h c d f X Y L Q) :
     sarea (ptD d) (ptF f) (ptH h) ≤ 1 - d ∧ 1 - ρ < 3 * s ∧
       (∀ i, ¬ InTriangle (freePt X Y L Q i) (ptD d) (ptF f) (ptH h)) ∧
       sarea ptO (ptF f) (ptH h) ≤ 1 - 3 * s ∧
       AtMostInside 1 ptO (ptF f) (ptH h) (freePt X Y L Q) ∧
       (InUpperQuad h c d f Q → InTriangle Q (ptH h) (ptC c) (ptD d)) := by
   have H := hS.comp
-  obtain ⟨-, hrd, -, hc3, hf3, -⟩ := eq2 hS.toTwoRight
+  obtain ⟨-, hrd, -, hc3, hf3, -⟩ := rightPair_nested_bounds hS.toTwoRight
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have t := C1ZeroLower.two_A₀
   have hDFH : sarea (ptD d) (ptF f) (ptH h) ≤ 1 - d := by
@@ -270,10 +260,9 @@ theorem eq4 (hS : Row h c d f X Y L Q) :
     exact noDFH 3 ⟨hU.2.2.1, hU.2.2.2, by
       have := sarea_swap₁₂ (ptD d) (ptH h) Q; show 0 < sarea (ptH h) (ptD d) Q; linarith⟩
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_PAIR:(5)`). The lower point gives `hc ≥ 3s`, so `c ≥ 3s`, and
-`ℓ_x, ℓ_y ≥ s`, `c - ℓ_x, h - ℓ_y ≥ 2s`, `ℓ_x + ℓ_y ≤ 1 - s`.
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`, lines 79-93. -/
-theorem eq5 (hS : Row h c d f X Y L Q) :
+/-- The lower point gives `hc ≥ 3s`, so `c ≥ 3s`, and `ℓ_x, ℓ_y ≥ s`, `c - ℓ_x, h - ℓ_y ≥ 2s`,
+`ℓ_x + ℓ_y ≤ 1 - s`. -/
+theorem row_lower_point_bounds (hS : Row h c d f X Y L Q) :
     3 * s ≤ c ∧ s ≤ L.1 ∧ s ≤ L.2 ∧ 2 * s ≤ c - L.1 ∧ 2 * s ≤ h - L.2 ∧
       L.1 + L.2 ≤ 1 - s := by
   have H := hS.comp
@@ -302,13 +291,11 @@ theorem eq5 (hS : Row h c d f X Y L Q) :
   by_contra hn; push Not at hn
   nlinarith
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_PAIR:(6)`). In the top row: `(1-d)(1-f) ≥ s`,
-`f ≤ 1 - s/(1-ρ) = 323/803`, `d ≤ 57/65`. `docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`, lines 95-102.
-Uses: C1_ONE_LOWER_RIGHT_PAIR:(2). -/
-theorem eq6 (hS : Row h c d f X Y L Q) (hQ : InTopCap d f Q) :
+/-- In the top row: `(1-d)(1-f) ≥ s`, `f ≤ 1 - s/(1-ρ) = 323/803`, `d ≤ 57/65`. -/
+theorem top_row_bounds (hS : Row h c d f X Y L Q) (hQ : InTopCap d f Q) :
     s ≤ (1 - d) * (1 - f) ∧ f ≤ 323 / 803 ∧ d ≤ 57 / 65 := by
   have H := hS.comp
-  obtain ⟨-, hrd, -, -, -, -⟩ := eq2 hS.toTwoRight
+  obtain ⟨-, hrd, -, -, -, -⟩ := rightPair_nested_bounds hS.toTwoRight
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   obtain ⟨-, -, hΩ⟩ := H.top_row 3 hQ
   obtain ⟨a1, -, -, -⟩ := H.anchor_bounds
@@ -325,7 +312,7 @@ theorem eq6 (hS : Row h c d f X Y L Q) (hQ : InTopCap d f Q) :
 
 end
 
-/-! ### Section 2: seven exhaustive five-anchor word cases -/
+/-! ### Seven exhaustive five-anchor word cases -/
 
 /-- The right-cap word `(1, 0, 4, 3, 2)` (of both `X` and `Y`). -/
 def wordR : Word := ![1, 0, 4, 3, 2]
@@ -340,7 +327,7 @@ def wordL : Fin 2 → Word := ![![2, 3, 2, 2, 1], ![3, 3, 2, 1, 1]]
 `U₂ = (3, 2, 2, 1, 2)`. -/
 def wordU : Fin 3 → Word := ![![2, 1, 2, 3, 2], ![2, 2, 2, 2, 2], ![3, 2, 2, 1, 2]]
 
-/-- The seven cases (7) as (word of `L`, word of `Q`): `(L₀,U₀), (L₀,U₁), (L₀,U₂), (L₁,U₀),
+/-- The seven cases as (word of `L`, word of `Q`): `(L₀,U₀), (L₀,U₁), (L₀,U₂), (L₁,U₀),
 (L₁,U₁), (L₀,T), (L₁,T)` (the pair `(L₁, U₂)` puts both points in `OFH`). -/
 def rightPairCases : List (Word × Word) :=
   [(wordL 0, wordU 0), (wordL 0, wordU 1), (wordL 0, wordU 2), (wordL 1, wordU 0),
@@ -431,8 +418,8 @@ def rpWords : List (List ℕ) :=
   [Model.wR, Model.wT, [2, 3, 2, 2, 1], [3, 3, 2, 1, 1], [2, 1, 2, 3, 2], [2, 2, 2, 2, 2],
     [3, 2, 2, 1, 2]]
 
-/-- The radial separation of two words of the package at an anchor `v` (as `radial_words` of the
-zero-lower package): the next ray `m = v + r_v + 1` separates them. -/
+/-- The radial separation of two words of the package at an anchor `v` (as
+`C1ZeroLower.radial_words`): the next ray `m = v + r_v + 1` separates them. -/
 theorem rp_radial : ∀ wa ∈ rpWords, ∀ wb ∈ rpWords, ∀ v : Fin 5, wa.getD v 0 < wb.getD v 0 →
     (v.val + wa.getD v 0 + 1) % 5 ≠ v.val ∧ ¬(v.val = 1 ∧ (v.val + wa.getD v 0 + 1) % 5 = 0) ∧
       ¬(v.val = 4 ∧ (v.val + wa.getD v 0 + 1) % 5 = 0) ∧
@@ -440,7 +427,7 @@ theorem rp_radial : ∀ wa ∈ rpWords, ∀ wb ∈ rpWords, ∀ v : Fin 5, wa.ge
       Model.lsign wb v ((v.val + wa.getD v 0 + 1) % 5) = true := by
   decide +kernel
 
-/-- **The radial rule** for the words of the package: if the words of two free points differ at
+/-- The radial rule for the words of the package: if the words of two free points differ at
 the anchor `v`, the orientation of `[V_v Zᵢ Zⱼ]` is the sign of `r_v(j) - r_v(i)`. -/
 theorem radial_pair_l {h c d f : ℝ} {Q4 : Fin 4 → Point} (H : Comp h c d f Q4) {i j : Fin 4}
     (hij : i ≠ j) {wa wb : List ℕ} (ha : wa ∈ rpWords) (hb : wb ∈ rpWords)
@@ -524,14 +511,14 @@ theorem Row.word_Q (hS : Row h c d f X Y L Q) :
       (InTopCap d f Q ∧ WordAtL (cfg h c d f ![X, Y, L, Q]) Q Model.wT) := by
   have H := hS.comp
   obtain ⟨w, hw, W⟩ := H.word_exists 3 hS.notLowerQ
-  have hOD := (claim_fan hS).2
+  have hOD := (L_Q_above_OD hS).2
   have pos : ∀ u v, u < 5 → v < 5 → u ≠ v → 0 < sarea (cfg h c d f ![X, Y, L, Q] u)
       (cfg h c d f ![X, Y, L, Q] v) Q → C1ZeroLower.Model.wsign w u v = true :=
     fun u v hu hv huv hp => (W u v hu hv huv).1 hp
-  rcases eq3 hS with hU | hT
+  rcases upperQuad_or_topCap hS with hU | hT
   · left
     refine ⟨hU, ?_⟩
-    obtain ⟨-, -, -, -, -, hHCD⟩ := eq4 hS
+    obtain ⟨-, -, -, -, -, hHCD⟩ := HDF_empty_OFH_capacity_one hS
     obtain ⟨t1, t2, t3⟩ := hHCD hU
     rcases zword_hcd ⟨w, hw⟩ (pos 0 2 (by norm_num) (by norm_num) (by norm_num) hOD)
       (pos 4 1 (by norm_num) (by norm_num) (by norm_num) t1)
@@ -561,7 +548,7 @@ theorem Row.word_L (hS : Row h c d f X Y L Q) :
   simp only [ptO, ptC, ptH] at l1 l2 l3
   have K := lower_key hS.anchors hS.lower
   have h01 : 0 < sarea (0, 0) (c, 0) L := l1
-  have h02 : 0 < sarea (0, 0) (1, d) L := (claim_fan hS).1
+  have h02 : 0 < sarea (0, 0) (1, d) L := (L_Q_above_OD hS).1
   have h04 : sarea (0, 0) (0, h) L < 0 := by
     have := sarea_swap₁₂ (0, 0) (0, h) L; linarith
   have h12 : 0 < sarea (c, 0) (1, d) L := K _ _ (by simp only [sarea]; nlinarith)
@@ -595,13 +582,10 @@ theorem Row.word_L (hS : Row h c d f X Y L Q) :
 
 end
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_PAIR:(7)`). Both right-cap points have word `(1, 0, 4, 3, 2)`;
-`L` has `L₀` or `L₁`; `Q` has `U₀, U₁, U₂` (upper row) or `T` (top row); the pair `(L₁, U₂)` puts
-both `L, Q` in `OFH`, contradicting its capacity one. So the word pair of `(L, Q)` is one of the
-seven cases. `docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`, lines 108-140.
-Uses: C1_ZERO_LOWER:claim-words, C1_ONE_LOWER_RIGHT_PAIR:(3), C1_ONE_LOWER_RIGHT_PAIR:claim-fan,
-C1_ONE_LOWER_RIGHT_PAIR:(4). -/
-theorem eq7 {h c d f : ℝ} {X Y L Q : Point} (hS : Row h c d f X Y L Q) :
+/-- Both right-cap points have word `(1, 0, 4, 3, 2)`; `L` has `L₀` or `L₁`; `Q` has `U₀, U₁, U₂`
+(upper row) or `T` (top row); the pair `(L₁, U₂)` puts both `L, Q` in `OFH`, contradicting its
+capacity one. So the word pair of `(L, Q)` is one of the seven cases `rightPairCases`. -/
+theorem exists_rightPairCase_words {h c d f : ℝ} {X Y L Q : Point} (hS : Row h c d f X Y L Q) :
     HasWord h c d f X wordR ∧ HasWord h c d f Y wordR ∧
       ∃ w ∈ rightPairCases, HasWord h c d f L w.1 ∧ HasWord h c d f Q w.2 := by
   refine ⟨hasWord_of_wordAtL wordR_eq (hS.word_right 0 (Or.inl rfl)),
@@ -623,7 +607,7 @@ theorem eq7 {h c d f : ℝ} {X Y L Q : Point} (hS : Row h c d f X Y L Q) :
         hasWord_of_wordAtL (wordU_eq 1) hq⟩
     · -- `(L₁, U₂)`: both `L, Q` in `OFH`, which has capacity one
       exfalso
-      obtain ⟨-, -, -, -, hcap, -⟩ := eq4 hS
+      obtain ⟨-, -, -, -, hcap, -⟩ := HDF_empty_OFH_capacity_one hS
       have iL : InTriangle (freePt X Y L Q 2) ptO (ptF f) (ptH h) :=
         ⟨hOF, (hl 3 4 (by norm_num) (by norm_num) (by norm_num)).2 rfl,
           (hl 4 0 (by norm_num) (by norm_num) (by norm_num)).2 rfl⟩
@@ -640,10 +624,9 @@ theorem eq7 {h c d f : ℝ} {X Y L Q : Point} (hS : Row h c d f X Y L Q) :
   · exact ⟨(wordL 1, wordT), by decide, hasWord_of_wordAtL (wordL_eq 1) hl,
       hasWord_of_wordAtL wordT_eq hq⟩
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_PAIR:(8)`). For the equal-word pair `X, Y`, the containments (2)
-give `[OXY] > 0`, `[CXY] > 0`, `[DXY] < 0`. `docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`, lines 142-148.
-Uses: C1_ONE_LOWER_RIGHT_PAIR:(2). -/
-theorem eq8 {h c d f : ℝ} {X Y L Q : Point} (hS : Row h c d f X Y L Q) :
+/-- For the equal-word pair `X, Y`, the containments `Y ∈ CDX ∩ ODX` give `[OXY] > 0`,
+`[CXY] > 0`, `[DXY] < 0`. -/
+theorem XY_anchor_signs {h c d f : ℝ} {X Y L Q : Point} (hS : Row h c d f X Y L Q) :
     0 < sarea ptO X Y ∧ 0 < sarea (ptC c) X Y ∧ sarea (ptD d) X Y < 0 := by
   obtain ⟨c1, c2, c3⟩ := hS.innerCDX
   obtain ⟨o1, -, -⟩ := hS.innerODX
@@ -652,7 +635,7 @@ theorem eq8 {h c d f : ℝ} {X Y L Q : Point} (hS : Row h c d f X Y L Q) :
   have := sarea_swap₂₃ (ptD d) X Y
   linarith
 
-/-! ### Sections 3–4: the certificate package -/
+/-! ### The certificate package -/
 
 /-! ### The cell soundness -/
 
@@ -707,18 +690,18 @@ theorem pair_sound {Q4 : Fin 4 → Point} (H : Comp h c d f Q4) {ws : List (List
   · subst v1; exact oh_pos o2
   · subst v2; exact oh_neg o3
 
-/-- **The initial signs** of a cell hold. -/
+/-- The initial signs of a cell hold. -/
 theorem base_holds {Q4 : Fin 4 → Point} (H : Comp h c d f Q4) {ws : List (List ℕ)}
     (hW : ∀ a : Fin 4, WordAtL (cfg h c d f Q4) (Q4 a) (ws.getD a []))
     (hmem : ∀ a : Fin 4, ws.getD a [] ∈ rpWords)
     (h01 : 0 < sarea (0, 0) (Q4 0) (Q4 1) ∧ 0 < sarea (c, 0) (Q4 0) (Q4 1) ∧
       sarea (1, d) (Q4 0) (Q4 1) < 0) :
-    Cover.AllHold (C1ZeroLower.FHolds (cfg h c d f Q4)) (Model.baseSigns ws) := by
+    Cover.AllHold (Cover.FHolds 9 (cfg h c d f Q4)) (Model.baseSigns ws) := by
   intro g hg
   simp only [Model.baseSigns, List.mem_append, List.mem_filterMap, List.mem_flatMap,
     List.mem_range, Option.map_eq_some_iff] at hg
   rcases hg with ⟨t, ht, sg, hsg, rfl⟩ | ⟨p, hp, v, hv, sg, hsg, rfl⟩
-  · obtain ⟨t1, t2, t3⟩ := C1ZeroLower.lexTriples_valid t ht
+  · obtain ⟨t1, t2, t3⟩ := Cover.mem_lexTriples ht
     refine ⟨t1, t2, t3, ?_⟩
     unfold Model.anchorSign at hsg
     split_ifs at hsg with a1 a2 <;> simp only [Option.some.injEq] at hsg
@@ -735,7 +718,7 @@ theorem base_holds {Q4 : Fin 4 → Point} (H : Comp h c d f Q4) {ws : List (List
       exact (hW ⟨t.2.2 - 5, ha⟩).orient (by omega) a2 (by omega) hne
   · simp only [C1ZeroLower.Model.freePairs, List.mem_cons, List.not_mem_nil, or_false] at hp
     have key : ∀ i j : Fin 4, i < j → p = (i.val, j.val) →
-        C1ZeroLower.FHolds (cfg h c d f Q4) ((v, p.1 + 5, p.2 + 5), sg) := by
+        Cover.FHolds 9 (cfg h c d f Q4) ((v, p.1 + 5, p.2 + 5), sg) := by
       intro i j hij hpe
       subst hpe
       refine ⟨by simp only; omega, by simp only; omega, by simp only; omega, ?_⟩
@@ -773,7 +756,7 @@ theorem Row.params (hS : Row h c d f X Y L Q) :
       d ≤ 65 / 73 ∧ 8 / 73 ≤ f ∧ 24 / 73 ≤ h * c := by
   have H := hS.comp
   have t := C1ZeroLower.two_A₀
-  obtain ⟨-, e1, e2, e3, e4, e5⟩ := eq2 hS.toTwoRight
+  obtain ⟨-, e1, e2, e3, e4, e5⟩ := rightPair_nested_bounds hS.toTwoRight
   obtain ⟨-, a2, a3, -⟩ := H.anchor_bounds
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have hhc := hS.lower_hc
@@ -801,7 +784,7 @@ theorem Row.right_pt (hS : Row h c d f X Y L Q) (a : Fin 4) (ha : a = 0 ∨ a = 
 /-- The anchor-triangle costs of both rows. -/
 theorem Row.tri_costs (hS : Row h c d f X Y L Q) :
     sarea (1, d) (f, 1) (0, h) ≤ 24 / 73 ∧ sarea (0, 0) (f, 1) (0, h) ≤ 49 / 60 := by
-  obtain ⟨k1, -, -, k4, -, -⟩ := eq4 hS
+  obtain ⟨k1, -, -, k4, -, -⟩ := HDF_empty_OFH_capacity_one hS
   obtain ⟨-, e2, -⟩ := hS.params
   simp only [ptD, ptF, ptH, ptO] at k1 k4
   constructor <;> linarith
@@ -816,7 +799,7 @@ theorem Row.pre_upper (hS : Row h c d f X Y L Q) (hU : InUpperQuad h c d f Q) :
       8 / 73 ≤ X.1 - c ∧ 8 / 73 ≤ d * c * (1 - c) := hS.right_pt 0 (Or.inl rfl)
   obtain ⟨y1, y2, y3, y4, y5, -⟩ : 8 / 73 ≤ Y.1 ∧ 8 / 73 ≤ Y.2 ∧ Y.1 ≤ 1 ∧ 8 / 73 ≤ d - Y.2 ∧
       8 / 73 ≤ Y.1 - c ∧ 8 / 73 ≤ d * c * (1 - c) := hS.right_pt 1 (Or.inr rfl)
-  obtain ⟨f6, f7, f8, f9, f10, f11⟩ := eq5 hS
+  obtain ⟨f6, f7, f8, f9, f10, f11⟩ := row_lower_point_bounds hS
   obtain ⟨f15, f16⟩ := hS.tri_costs
   obtain ⟨q1, q2⟩ : 2 * A₀ ≤ Q.1 ∧ 2 * A₀ ≤ Q.2 := H.coord_ge 3
   obtain ⟨u1, u2⟩ : Q.1 ≤ 1 - 2 * A₀ ∧ Q.2 ≤ 1 - 2 * A₀ := H.upper_row 3 hU
@@ -863,10 +846,10 @@ theorem Row.pre_top (hS : Row h c d f X Y L Q) (hT : InTopCap d f Q) :
       8 / 73 ≤ X.1 - c ∧ 8 / 73 ≤ d * c * (1 - c) := hS.right_pt 0 (Or.inl rfl)
   obtain ⟨y1, y2, y3, y4, y5, -⟩ : 8 / 73 ≤ Y.1 ∧ 8 / 73 ≤ Y.2 ∧ Y.1 ≤ 1 ∧ 8 / 73 ≤ d - Y.2 ∧
       8 / 73 ≤ Y.1 - c ∧ 8 / 73 ≤ d * c * (1 - c) := hS.right_pt 1 (Or.inr rfl)
-  obtain ⟨f6, f7, f8, f9, f10, f11⟩ := eq5 hS
+  obtain ⟨f6, f7, f8, f9, f10, f11⟩ := row_lower_point_bounds hS
   obtain ⟨f15, f16⟩ := hS.tri_costs
   obtain ⟨q1, q2⟩ : 2 * A₀ ≤ Q.1 ∧ 2 * A₀ ≤ Q.2 := H.coord_ge 3
-  obtain ⟨-, g2, g3⟩ := eq6 hS hT
+  obtain ⟨-, g2, g3⟩ := top_row_bounds hS hT
   obtain ⟨t1, t2, -⟩ : 2 * A₀ ≤ Q.1 - f ∧ 2 * A₀ ≤ Q.2 - d ∧ 2 * A₀ ≤ topCapArea d f :=
     H.top_row 3 hT
   obtain ⟨-, s1, -, s2⟩ := hS.sqQ
@@ -893,7 +876,7 @@ theorem cell_false (hS : Row h c d f X Y L Q) {x : Bool × ℕ × ℕ} (hx : x �
   have H := hS.comp
   obtain ⟨T, hT⟩ := trees_ok x hx
   obtain ⟨-, -, -, -, -, f17⟩ := hS.right_pt 0 (Or.inl rfl)
-  obtain ⟨o1, c1, d1⟩ := eq8 hS
+  obtain ⟨o1, c1, d1⟩ := XY_anchor_signs hS
   refine C1OneLower.tableSpec_false hT H.zeta_mem (fun i _ => C1ZeroLower.ptEval_zeta i)
     (fun a b e ha hb he hab hbe hae => H.area a b e ha hb he hab hbe hae) (by decide) (by decide)
     hpre ?_ (base_holds H hW (caseWords_mem x hx) ⟨o1, c1, d1⟩)
@@ -911,21 +894,15 @@ theorem upQ (k : Fin 3) (hQ : HasWord h c d f Q (wordU k)) :
 
 end
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_PAIR:(9)-(10)`). The certificate package: no named right pair has
-its word pair `(L, Q)` among the seven cases. The cases are split by the finite sign trees of
-Section 2 (`(L₀,U₀)`: six cells by `[XYQ], [FYQ], [OLQ], [HXY]`; `(L₁,U₀)` by `[XYQ]`; `(L₁,U₁)`,
-`(L₀,T)` by `[HXY]`; 15 cells in all), and each cell is excluded by a fixed positive combination of
-products of the 30 (upper row) or 34 (top row) affine factors, the quadratic costs (9) (`hc - 3s`,
-`d(1-c) - 3s`, `3s - [DFH]`, `ρ - [OFH]`, upper row `W - 4s`, then the signed actual triangles
-minus `s, 3s, ρ` by certified occupancy) and the cubic (10) `dc(1-c) - s`, with unit-cube bound
-at most `-3/4` (largest `-77021124287/77678914560`).
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`, lines 151-263 (data `c1_one_lower_right_pair_certificates.json`,
-checker `check_c1_one_lower_right_pair.py`).
-Uses: C1_ONE_LOWER_RIGHT_PAIR:(2), C1_ONE_LOWER_RIGHT_PAIR:(4), C1_ONE_LOWER_RIGHT_PAIR:(5),
-C1_ONE_LOWER_RIGHT_PAIR:(6), C1_ONE_LOWER_RIGHT_PAIR:(8), C1_ZERO_LOWER:claim-region-bounds,
-C1_ZERO_LOWER:eq5-6, C1_ZERO_LOWER:claim-pair-signs, ONE_CORNER:GlobalC1OccupancyCorollary,
-CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem eq9_10 {h c d f : ℝ} {X Y L Q : Point} (hS : Row h c d f X Y L Q) {w : Word × Word}
+/-- The certificate package: no named right pair has its word pair `(L, Q)` among the seven
+cases. The cases are split by finite sign trees (`(L₀,U₀)`: six cells by
+`[XYQ], [FYQ], [OLQ], [HXY]`; `(L₁,U₀)` by `[XYQ]`; `(L₁,U₁)`, `(L₀,T)` by `[HXY]`; 15 cells in
+all), and each cell is excluded by a fixed positive combination of products of the 30 (upper row)
+or 34 (top row) affine factors, the quadratic costs (`hc - 3s`, `d(1-c) - 3s`, `3s - [DFH]`,
+`ρ - [OFH]`, upper row `W - 4s`, then the signed actual triangles minus `s, 3s, ρ` by certified
+occupancy) and the cubic `dc(1-c) - s`, with unit-cube bound at most `-3/4` (largest
+`-77021124287/77678914560`). -/
+theorem rightPairCase_false {h c d f : ℝ} {X Y L Q : Point} (hS : Row h c d f X Y L Q) {w : Word × Word}
     (hw : w ∈ rightPairCases) (hL : HasWord h c d f L w.1) (hQ : HasWord h c d f Q w.2) :
     False := by
   have H := hS.comp
@@ -990,16 +967,13 @@ theorem twoRight_of {h c d f : ℝ} {P : Fin 4 → Point} (H : Comp h c d f P) (
 
 /-- A named right pair is impossible. -/
 theorem Row.false {h c d f : ℝ} {X Y L Q : Point} (hS : Row h c d f X Y L Q) : False := by
-  obtain ⟨-, -, w, hw, hLw, hQw⟩ := eq7 hS
-  exact eq9_10 hS hw hLw hQw
+  obtain ⟨-, -, w, hw, hLw, hQw⟩ := exists_rightPairCase_words hS
+  exact rightPairCase_false hS hw hLw hQw
 
-/-- **Theorem 1** (`C1_ONE_LOWER_RIGHT_PAIR:Theorem1`). Under `f ≤ d`, if exactly one of the four
-free points of a competitive C1 configuration lies in `OHC`, the right exterior cap `CD(1,0)`
-contains at most one free point. (Every full hull and additional square-side contacts are
-allowed.) `docs/proof/nine/C1_ONE_LOWER_RIGHT_PAIR.md`, lines 14-30 and 261-263.
-Uses: C1_ONE_LOWER_RIGHT_PAIR:(2), C1_ONE_LOWER_RIGHT_PAIR:(3), C1_ONE_LOWER_RIGHT_PAIR:(7),
-C1_ONE_LOWER_RIGHT_PAIR:(9)-(10). -/
-theorem theorem1 {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f) (hfd : f ≤ d)
+/-- Under `f ≤ d`, if exactly one of the four free points of a competitive C1 configuration lies
+in `OHC`, the right exterior cap `CD(1,0)` contains at most one free point. (Every full hull and
+additional square-side contacts are allowed.) -/
+theorem regionCount_right_le_one {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f) (hfd : f ≤ d)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hn : lowerCount h c W X Y Z = 1)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) :
@@ -1033,7 +1007,7 @@ theorem theorem1 {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f) (hfd
     a b l
   have hq : ¬ InLower h c (P q) := fun hi => hql (huniq q hi)
   have tw := twoRight_of H hfd hab hal hbl hqa hqb hql ha hb hlL hq
-  rcases (eq2 tw).1 with ⟨i1, i2⟩ | ⟨i1, i2⟩
+  rcases (rightPair_nested_bounds tw).1 with ⟨i1, i2⟩ | ⟨i1, i2⟩
   · exact Row.false ⟨tw, i1, i2⟩
   · exact Row.false ⟨twoRight_of H hfd hab.symm hbl hal hqb hqa hql hb ha hlL hq, i1, i2⟩
 

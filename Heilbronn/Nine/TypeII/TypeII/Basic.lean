@@ -2,26 +2,25 @@ module
 
 public import Heilbronn.Nine.TypeII.TypeII.EndpointTriangle
 
-/-! # The Type-II setting: anchors, containers, counts (`docs/proof/nine/TYPE_II.md`, (5) and §3)
+/-! # The Type-II setting: anchors, containers, counts
 
-Shared definitions for the Type-II notes `docs/proof/nine/TYPE_II.md`, `docs/proof/nine/TYPE_II_BALANCED.md`,
-`docs/proof/nine/TYPE_II_COMPLETION.md`, `docs/proof/nine/BALANCED_BOTTOM_INNER_SECTOR.md`,
-`docs/proof/nine/BALANCED_RIGHT_MIXED.md` (and the unbalanced notes of the other group).
+Shared definitions for the Type-II files (the modules `Heilbronn.Nine.TypeII.TypeII.*`,
+`TypeIIBalanced`, `TypeIICompletion`, `BalancedBottomInnerSector`, `BalancedRightMixed` and the
+unbalanced modules).
 
 The Type-II configuration is `typeIIConfig l b V W X Y Z = ![D, C, E, B, V, W, X, Y, Z]`
 (`Heilbronn.Nine.Setup.Families`) with the anchors `D = (0,1)`, `C = (1,1)`, `E = (0,λ)`,
-`B = (b,0)` of `TYPE_II.md` (5) (here `ptD`, `ptC`, `ptE l`, `ptB b`, with `l` for `λ`).
-All brackets of the manuscripts are written with `sarea P Q R`, the signed doubled area,
+`B = (b,0)` (here `ptD`, `ptC`, `ptE l`, `ptB b`, with `l` for `λ`).
+A bracket `[PQR]` in the documentation stands for `sarea P Q R`, the signed doubled area,
 positive for counterclockwise `P, Q, R`. The counterclockwise orders of the recurring triangles
 are `D E B` (the left triangle `DBE`), `D B C` (the central triangle), `D E C` (`DCE`, above
 `CE`), `E B C` (`EBC`, below `CE`), `B R C` (a right triangle `BCR`), `E B R`, `E R C`, `D E R`,
 `D R C`, `D B R`.
 
 * `IsLeft b X`, `IsCentral b X`, `IsRight b X`: the containers `T_L, T_C, T_R` cut by `DB` and
-  `BC` (`TYPE_II.md` lines 251–272): strictly left of `DB`, strictly inside `DBC`, strictly right
-  of `BC`. For points of the square these are `T_L` and `T_R` without the dividing segment, and
-  the open central triangle; a point on a dividing segment, or on `DC`, makes a zero-area
-  triangle.
+  `BC`: strictly left of `DB`, strictly inside `DBC`, strictly right of `BC`. For points of the
+  square these are `T_L` and `T_R` without the dividing segment, and the open central triangle;
+  a point on a dividing segment, or on `DC`, makes a zero-area triangle.
 * `countLeft`, `countCentral`, `countRight`, `typeIICounts`: the counts `(ℓ, c, r)` of the six
   points other than `D, C, B` (`E` counts as a left point).
 * "Above `CE`" (the `D` side) is `0 < sarea (ptE l) ptC X`, "below `CE`" is
@@ -30,10 +29,9 @@ are `D E B` (the left triangle `DBE`), `D B C` (the central triangle), `D E C` (
   interior, and its four open diagonal sectors.
 * `AreaEquiv P Q`: `Q` is a relabelling of the image of `P` under an affine map of determinant
   `±1` ("area-equivalent", "without changing any triangle area").
-* `IsTypeIIHalf`: a Type-II configuration with the further normalization `b ≤ 1/2` (`TYPE_II.md`
-  (6)).
+* `IsTypeIIHalf`: a Type-II configuration with the further normalization `b ≤ 1/2`.
 
-Results: `claim_central_cut` (`TYPE_II.md` lines 672–676).
+Results: `central_inTriangle_iff`.
 -/
 
 @[expose] public section
@@ -62,13 +60,13 @@ theorem typeIIConfig_eq (l b : ℝ) (V W X Y Z : Point) :
 /-- The five free points of a Type-II configuration. -/
 def freePts (V W X Y Z : Point) : Fin 5 → Point := ![V, W, X, Y, Z]
 
-/-- The Type-II anchor conditions `0 < b < 1`, `0 < λ < 1` of (5), with the five free points in
-the square. -/
+/-- The Type-II anchor conditions `0 < b < 1`, `0 < λ < 1`, with the five free points in the
+square. -/
 def TypeIIData (l b : ℝ) (V W X Y Z : Point) : Prop :=
   0 < b ∧ b < 1 ∧ 0 < l ∧ l < 1 ∧ V ∈ unitSquare ∧ W ∈ unitSquare ∧ X ∈ unitSquare ∧
     Y ∈ unitSquare ∧ Z ∈ unitSquare
 
-/-- A Type-II configuration with the bottom normalization `b ≤ 1/2` of `TYPE_II.md` (6). -/
+/-- A Type-II configuration with the bottom normalization `b ≤ 1/2`. -/
 def IsTypeIIHalf (P : Fin 9 → Point) : Prop :=
   ∃ (l b : ℝ) (V W X Y Z : Point), TypeIIData l b V W X Y Z ∧ b ≤ 1 / 2 ∧
     P = typeIIConfig l b V W X Y Z
@@ -106,7 +104,7 @@ open Classical in
 def countRight (b : ℝ) (pts : Fin 5 → Point) : ℕ :=
   (Finset.univ.filter fun i => IsRight b (pts i)).card
 
-/-- The count triple `(ℓ, c, r)` of `TYPE_II.md` §3: the six points other than `D, C, B` in the
+/-- The count triple `(ℓ, c, r)`: the numbers of the six points other than `D, C, B` in the
 left, central and right containers, `E` included among the left points. -/
 def typeIICounts (b : ℝ) (V W X Y Z : Point) : ℕ × ℕ × ℕ :=
   (1 + countLeft b (freePts V W X Y Z), countCentral b (freePts V W X Y Z),
@@ -132,10 +130,9 @@ def DiagSector (W X Y Z P : Point) : Prop :=
 
 /-! ### The cut by `CE` -/
 
-/-- **Claim** (`TYPE_II:claim-central-cut`, made up). A central point is inside `DCE` exactly
-when it is above `CE` (`[ECX] > 0`), and inside `EBC` exactly when it is below `CE`: the other
-edge tests are automatic. `docs/proof/nine/TYPE_II.md`, lines 672–676 (there in affine coordinates). -/
-theorem claim_central_cut {l b : ℝ} {X : Point} (hb : 0 < b) (_hb1 : b < 1) (hl : 0 < l)
+/-- A central point is inside `DCE` exactly when it is above `CE` (`[ECX] > 0`), and inside `EBC`
+exactly when it is below `CE`: the other edge tests are automatic. -/
+theorem central_inTriangle_iff {l b : ℝ} {X : Point} (hb : 0 < b) (_hb1 : b < 1) (hl : 0 < l)
     (hl1 : l < 1) (hX : IsCentral b X) :
     (InTriangle X ptD (ptE l) ptC ↔ 0 < sarea (ptE l) ptC X) ∧
       (InTriangle X (ptE l) (ptB b) ptC ↔ sarea (ptE l) ptC X < 0) := by

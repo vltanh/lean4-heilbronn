@@ -7,10 +7,10 @@ public import Heilbronn.Nine.TypeII.Unbalanced.FinalLowerWedge
 /-!
 # Assembly: the corner families C2, Type II and Type III
 
-`docs/proof/nine/UNRESTRICTED.md`, Section 3: no configuration of the families C2
-(`OppositeCorners.corollary2_lt_A₀`), Type II (`UnbalancedFinalLowerWedge.typeII_exclusion`) or
-Type III (`CornerFamilies.typeIII_lt_A₀`) has least area at least `A₀`. (The family C1 is
-`Heilbronn.Nine.Assembly.c1_exclusion`, `Heilbronn/Nine/Assembly/FamilyC1.lean`.)
+No configuration of the families C2 (`OppositeCorners.minTriangleArea_c2Config_lt_A₀`), Type II
+(`UnbalancedFinalLowerWedge.typeII_exclusion`) or Type III (`CornerFamilies.typeIII_lt_A₀`) has
+least area at least `A₀`. (The family C1 is `Heilbronn.Nine.Assembly.c1_exclusion`,
+`Heilbronn/Nine/Assembly/FamilyC1.lean`.)
 -/
 
 @[expose] public section
@@ -22,7 +22,7 @@ namespace Heilbronn.Nine.Assembly
 theorem c2_exclusion {P : Fin 9 → Point} (hP : IsC2 P) (hmin : A₀ ≤ minTriangleArea P) :
     False := by
   obtain ⟨h, c, d, f, X, Y, Z, hA, hX, hY, hZ, rfl⟩ := hP
-  exact absurd hmin (not_le.2 (OppositeCorners.corollary2_lt_A₀ h c d f hA X Y Z hX hY hZ))
+  exact absurd hmin (not_le.2 (OppositeCorners.minTriangleArea_c2Config_lt_A₀ h c d f hA X Y Z hX hY hZ))
 
 /-- **Type II is excluded.** -/
 theorem typeII_exclusion {P : Fin 9 → Point} (hP : IsTypeII P) (hmin : A₀ ≤ minTriangleArea P) :

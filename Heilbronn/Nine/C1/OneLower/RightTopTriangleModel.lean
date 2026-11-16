@@ -2,14 +2,14 @@ module
 
 public import Heilbronn.Nine.C1.OneLower.ModelB
 
-/-! # The certificate model of `docs/proof/nine/C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`
+/-! # The certificate model of the right top triangle
 
-Computable mirror of `docs/proof/nine/check_c1_one_lower_right_top_triangle.py`. The nine points are the
-heptagon `O, C, R, D, X, F, H` (indices `0, …, 6`) and the interior points `L, P` (`7, 8`), in the
-variables `h, c, d, f, r_x, r_y, x_x, x_y, ℓ_x, ℓ_y, p_x, p_y` (`v 0, …, v 11`). The atoms of the
-cell `(i, j)` (lower word `i`, cap word `j`) are the 28 affine factors (12), the cost
-`(1-d)(1-f) - 3s`, and the strengthened costs of `hullTable 7 [lowerW i, capW j]`. The
-certificates are exported by `scripts/nine/c1_one_lower_b/right_top_triangle.py` and checked in
+Computable definitions for the certificate package of `C1OneLowerRightTopTriangle.rightTopTriangle_cell_false`. The nine
+points are the heptagon `O, C, R, D, X, F, H` (indices `0, …, 6`) and the interior points `L, P`
+(`7, 8`), in the variables `h, c, d, f, r_x, r_y, x_x, x_y, ℓ_x, ℓ_y, p_x, p_y`
+(`v 0, …, v 11`). The atoms of the cell `(i, j)` (lower word `i`, cap word `j`) are the 28 affine
+factors, the cost `(1-d)(1-f) - 3s`, and the strengthened costs of
+`hullTable 7 [lowerW i, capW j]`. The certificates are checked in
 `Heilbronn.Nine.C1.OneLower.RightTopTriangleTrees`.
 -/
 
@@ -32,7 +32,8 @@ def pt : ℕ → Expr × Expr
   | 8 => (v 10, v 11)
   | _ => (0, 0)
 
-/-- The 28 affine factors (12), in the checker's order. -/
+/-- The 28 affine factors, from the region bounds
+`C1OneLowerRightTopTriangle.params`–`inner_bounds`. -/
 def factors : List Expr :=
   [v 0 - k (216 / 511), 1 - v 0, v 1 - k (24 / 73), k (7 / 9) - v 1, v 2 - k (32 / 73),
     k (41 / 65) - v 2, v 3 - k (8 / 73), k (17 / 41) - v 3, v 0 - v 2, v 1 - v 3, v 2 - v 3,
@@ -45,18 +46,19 @@ def factors : List Expr :=
 /-- The cost `(1-d)(1-f) - 3s`. -/
 def q0 : Expr := (1 - v 2) * (1 - v 3) - k (24 / 73)
 
-/-- The five lower words (9) of the heptagon. -/
+/-- The five lower words of the heptagon (radial words of a point inside `OCH`). -/
 def lowerW : List (List ℕ) :=
   [[1, 5, 5, 4, 3, 2, 1], [2, 5, 4, 4, 3, 2, 1], [3, 5, 4, 3, 3, 2, 1], [4, 5, 4, 3, 2, 2, 1],
     [5, 5, 4, 3, 2, 1, 1]]
 
-/-- The five cap words (10) of `P ∈ DXF`. -/
+/-- The five cap words of `P ∈ DXF`. -/
 def capW : List (List ℕ) :=
   [[3, 2, 1, 1, 5, 5, 4], [3, 2, 2, 1, 4, 5, 4], [3, 3, 2, 1, 3, 5, 4], [4, 3, 2, 1, 1, 5, 5],
     [4, 3, 2, 1, 2, 5, 4]]
 
 /-- The cover package of the cell `(i, j)`. -/
 def spec (i j : ℕ) : Spec SFact C1ZeroLower.Model.Split :=
-  tableSpec (factors ++ [q0]) [] pt [7, 8] (hullTable 7 [lowerW.getD i [], capW.getD j []])
+  tableSpec pt Package.bnd [7, 8] (factors ++ [q0]) []
+    (hullTable 7 [lowerW.getD i [], capW.getD j []]) C1ZeroLower.Model.triBranches
 
 end Heilbronn.Nine.C1OneLowerRightTopTriangle.Model

@@ -3,70 +3,64 @@ module
 public import Heilbronn.Nine.Corners.CornerFamilies
 public import Heilbronn.Nine.Hulls.ThreeInteriorTriangles
 
-/-! # One occupied corner: a complete three-interior-point exclusion (`docs/proof/nine/ONE_CORNER.md`)
+/-! # One occupied corner: three points inside a corner triangle
 
-**Role.**
+A configuration of nine points in the unit square that contains a corner `O` of the square and
+one point on each of the two sides at `O`, say `H` and `C₀`, and has minimum triangle area above
+`7/128`, has at most two points strictly inside `OHC₀`. This file proves that statement and its
+consequences for C1 configurations: capacity two
+for every triangle, and two exclusions for the pentagonal `2+2` placement (two free points inside
+`OHC`, two inside the quadrilateral `HCDF`).
 
-* Primary route: the C1 lower count `n₀ ≥ 3` is closed by the corner-triangle occupancy theorem of
-  §§1–4 (`UNRESTRICTED.md` line 99): `cornerTriangleOccupancyTheorem` (general form, also used by
-  `THREE_INTERIOR_TRIANGLES.md` and `TYPE_II_BALANCED.md`) and its C1 forms
-  `cornerTriangleOccupancy_c1`, `claim_C1_at_most_two_lower`.
-* §6 (capacity two in C1, `globalC1OccupancyCorollary`) is cited by the C1 rows and by
-  `THREE_INTERIOR_TRIANGLES.md` Corollary 5.
-* §7 (Pattern I, `claim_pattern_I`, used by `SIX_BOUNDARY_HULL.md` lines 370–373) and §§7–8
-  (the pentagonal `2+2` diagonal-quadrant reductions) are needed on the C1 `n₀ = 2` route.
-* §5 is a remark (not a premise) and is not stated.
+**Setting.** For the corner triangle: nine points of the unit square containing `O = (0,0)`,
+`H = (0,η)`, `C₀ = (ξ,0)`, `0 < ξ, η ≤ 1`. The affine map `(x, y) ↦ (x/ξ, 1 - y/η)`
+(`cornerNormalize`) sends `O, H, C₀` to `B = (0,1)`, `A = (0,0)`, `C = (1,1)` and the square to
+the rectangle `[0, L] × [1 - M, 1]`, `L = 1/ξ`, `M = 1/η` (`CornerFamilies.rectangle`); doubled
+areas at least `σ = 7/64` become doubled areas at least `s = σLM`, with `L, M ≤ s/σ`. The upper
+triple is labelled as in `CornerFamilies.MeshLabelled (0,0) (0,1) (1,1) X Y Z`.
+For C1 configurations: the normal form `c1Config h c d f W X Y Z`, `O = (0,0)`, `C = (c,0)`,
+`D = (1,d)`, `F = (f,1)`, `H = (0,h)`, `0 < d ≤ h < 1`, `0 < f ≤ c < 1` (`C1Anchors`).
 
-**Setting.** §§1–4: nine points of the unit square containing `O = (0,0)`, `H = (0,η)`,
-`C₀ = (ξ,0)`, `0 < ξ, η ≤ 1`. The affine map `(x, y) ↦ (x/ξ, 1 - y/η)` (`cornerNormalize`) sends
-`O, H, C₀` to `B = (0,1)`, `A = (0,0)`, `C = (1,1)` and the square to the rectangle
-`[0, L] × [1 - M, 1]`, `L = 1/ξ`, `M = 1/η` (`CornerFamilies.rectangle`); doubled areas are at
-least `s = σLM ≥ σ = 7/64` with `L, M ≤ s/σ` (2)–(3), `δ = M - 1`. The upper triple is labelled
-as in `CORNER_FAMILIES.md` §11 (`CornerFamilies.MeshLabelled (0,0) (0,1) (1,1) X Y Z`).
-§§6–8: the C1 normal form `c1Config h c d f W X Y Z`, `O = (0,0)`, `C = (c,0)`, `D = (1,d)`,
-`F = (f,1)`, `H = (0,h)`, `0 < d ≤ h < 1`, `0 < f ≤ c < 1` (`C1Anchors`).
+**Main results.**
 
-**Results.**
+* `cornerTriangleOccupancyTheorem`: three points strictly inside `OHC₀` force minimum area at
+  most `7/128`; its C1 forms `cornerTriangleOccupancy_c1` and `c1_ncard_inside_OHC_le_two`; the
+  normalization steps `cornerNormalize_spec` and `ncard_inside_eq_three_and_distributed`.
+* `globalC1OccupancyCorollary`: in a C1 configuration of minimum area at least `A₀`, every
+  triangle of the configuration contains at most two of its points (`c1_capacity_two`, in the
+  `ThreeInteriorTriangles.TriangleCapacityTwo` form), using `c1_anchor_bounds` and
+  `c1_cap_ear_bounds`.
+* `pentagon_diagonals_not_both_separate`: with two free points inside `OHC` and two inside `HCDF`,
+  the diagonals `HD` and `CF` do not both separate the latter two (via `anchors_eq_diagXY`, `hc_le_of_patternI`,
+  `patternII_false`).
+* `pentagon_not_both_inside_HDF_CDF`: in the same situation the two upper points are not both inside `HDF`
+  and not both inside `CDF`.
 
-* §§1–4: `cornerTriangleOccupancyTheorem` (1), `cornerTriangleOccupancy_c1`,
-  `claim_normalization_map` (2)–(3), `claim_normalization` (1a), `claim_mesh_all_s` (1b, (4)),
-  `claim_uniform_signs_rectangle` (1c, (5)–(6)), `claim_one_per_side` (1d, (7)–(10)),
-  `claim_C1_at_most_two_lower`;
-* §6: `claim_anchor_bounds`, `claim_cap_ear_bounds`, `c1_capacity_two` (the corollary in the
-  `ThreeInteriorTriangles.TriangleCapacityTwo` form), `globalC1OccupancyCorollary`;
-* §7: `eq12`, `claim_pattern_I`, `claim_pattern_II`, `claim_pentagon_opposite_quadrants`;
-* §8: `claim_pentagon_HDF_CDF`.
+**Implementation notes.**
 
-**Proof notes (routes chosen for the formalization).**
-
-* §6: instead of counting hull vertices, the proof uses the two hull edges `C' → A' → B'` given by
-  `ThreeInteriorTriangles.theorem1` and classifies hull edges of a C1 configuration
-  (`c1_edge_aa`: anchor to anchor, consecutive in `O → C → D → F → H`; `c1_edge_af`,
-  `c1_edge_fa`: anchor to free point, the free point beyond the pentagon edge `CD`, `DF` or `FH`,
-  i.e. in a corner cap, `capR_closed`, `capT_closed`, `capL_closed`; `caps_disjoint`). The ear
-  `C'A'B'` is then one of the five anchor ears or one of the nine cap ears of the table
-  (`c1_ear_false`); the corner ear `HOC` goes to `cornerTriangleOccupancyTheorem`.
-* §7, Pattern I: the convexity of `hc` in `ℓ` is replaced by the identities
-  `(1 - y)hc - x(1 - Wy) = -(1 - h)(x(1 - y) - yb)` and its mirror image (`patternI_combine`),
-  which bound `hc` by an endpoint value directly; the endpoint bounds are `patternI_endpoint`.
-* §7, Pattern II: the monotone relaxation of (16) is `ratio_mono`, (17) is `relaxed17`
-  (the manuscript's two cases `δ ≤ 1/5`, `δ ≥ 1/5`).
-* §7: inequality (5) of `QUADRILATERAL_HULL.md` is `QuadrilateralHull.sector_bound`, applied to
+* Capacity two: instead of counting hull vertices, the proof uses the two hull edges
+  `C' → A' → B'` given by `ThreeInteriorTriangles.three_inside_is_ear` and classifies the hull edges of a
+  C1 configuration (`c1_edge_aa`: anchor to anchor, consecutive in `O → C → D → F → H`;
+  `c1_edge_af`, `c1_edge_fa`: anchor to free point, the free point beyond the pentagon edge `CD`,
+  `DF` or `FH`, i.e. in a corner cap, `capR_closed`, `capT_closed`, `capL_closed`;
+  `caps_disjoint`). The ear `C'A'B'` is then one of the five anchor ears or one of the nine cap
+  ears (`c1_ear_false`); the corner ear `HOC` goes to `cornerTriangleOccupancyTheorem`.
+* The labelling of the upper triple in fixed coordinates comes from
+  `CornerFamilies.exists_mesh_labelling`; the `CornerFamilies` mesh lemmas carry the threshold `s`
+  and the rectangle `[0, L] × [1 - M, 1]` as parameters, so the normalized configuration is an
+  instance of them (`CornerFamilies.three_three_upper`).
+* Pattern I (`Wx(1 - y) ≥ σ(2 + x - y)`, `Wy(1 - x) ≥ σ(2 + y - x)` in the diagonal parameters
+  `x, y` of `HCDF`): the identities `(1 - y)hc - x(1 - Wy) = -(1 - h)(x(1 - y) - yb)` and its
+  mirror image (`patternI_combine`) bound `hc` by an endpoint value directly; the endpoint bounds
+  are `patternI_endpoint`.
+* Pattern II (`W(1 - x)(1 - y) ≥ σ(3 - x - y)`): the monotone relaxation is `ratio_mono`, the
+  relaxed bound `patternII_relaxed` (two cases, `δ ≤ 1/5` and `δ ≥ 1/5`).
+* The two patterns come from the sector inequalities `QuadrilateralHull.sector_bound`, applied to
   the four rotations of `HCDF` (`pentagon_patI`, `pentagon_patII`).
-* §8: the reflection across `x = y` is the substitution `(h, c, d, f) ↦ (c, h, f, d)` in the
-  area-only core `hdf_core`.
-
-**Implicit in the manuscript.**
-
-* Gap 1 (inventory 02): the labelling `Z ∈ ABY`, `X ∈ BCY` in fixed coordinates (lines 71–78) needs
-  `CornerFamilies.claim_mesh_labelling`.
-* Gap 2: §2 asserts that `CORNER_FAMILIES.md` §10 holds for every `s ≥ σ`; the Lean statements of
-  §§10–12 there carry the parameters `s, L, M`, and §§2–4 here are their instances.
-* §§7–8 assume the hull is exactly the anchor pentagon with two free points on each side of `HC`;
-  the proofs use only that two free points are inside `OHC` and the stated placement of the
-  other two, which is what the statements assume.
-* §7 uses the internal inequalities (5) of `QUADRILATERAL_HULL.md` Theorem 1 (Patterns I/II at
-  normalized threshold `σ/W`), not its stated conclusion (inventory 02, gap 4).
+* `CDF` is reduced to `HDF` by the reflection across `x = y`, the substitution
+  `(h, c, d, f) ↦ (c, h, f, d)` in the area-only core `hdf_core`.
+* The pentagon results assume only that two free points are strictly inside `OHC` and the stated
+  placement of the other two.
 -/
 
 @[expose] public section
@@ -74,20 +68,19 @@ as in `CORNER_FAMILIES.md` §11 (`CornerFamilies.MeshLabelled (0,0) (0,1) (1,1) 
 noncomputable section
 namespace Heilbronn.Nine.OneCorner
 
-open Heilbronn.Nine.CornerFamilies (InsideTriangle InClosedTriangle InQuad Distributed MeshLabelled
-  rectangle)
+open Heilbronn.Nine.CornerFamilies (InClosedTriangle InQuad Distributed MeshLabelled rectangle)
 open Heilbronn.Nine.CornerFamilies
 
-/-- The normalization `(x, y) ↦ (x/ξ, 1 - y/η)` of `ONE_CORNER.md` §1 (line 42). -/
+/-- The affine normalization `(x, y) ↦ (x/ξ, 1 - y/η)` of the corner triangle `OHC₀`. -/
 def cornerNormalize (ξ η : ℝ) (p : Point) : Point := (p.1 / ξ, 1 - p.2 / η)
 
-/-- `W = 1 - (h - d)(c - f)`, the doubled area of the quadrilateral `HCDF` (§7). -/
+/-- `W = 1 - (h - d)(c - f)`, the doubled area of the quadrilateral `HCDF`. -/
 def quadWOf (h c d f : ℝ) : ℝ := 1 - (h - d) * (c - f)
 
-/-- `x = (c - hm)/W`, `m = c - f`: the intersection parameter along `HD` (§7, line 449). -/
+/-- `x = (c - hm)/W`, `m = c - f`: the parameter of the diagonal intersection along `HD`. -/
 def diagX (h c d f : ℝ) : ℝ := (c - h * (c - f)) / quadWOf h c d f
 
-/-- `y = (h - cℓ)/W`, `ℓ = h - d`: the intersection parameter along `CF` (§7, line 449). -/
+/-- `y = (h - cℓ)/W`, `ℓ = h - d`: the parameter of the diagonal intersection along `CF`. -/
 def diagY (h c d f : ℝ) : ℝ := (h - c * (h - d)) / quadWOf h c d f
 
 /-! ### Tools -/
@@ -136,14 +129,13 @@ theorem area_OHC (ξ η : ℝ) (hξ : 0 < ξ) (hη : 0 < η) :
   rw [show (0 - 0) * (0 - 0) - (η - 0) * (ξ - 0) = -(ξ * η) by ring, abs_neg,
     abs_of_pos (mul_pos hξ hη)]
 
-/-! ### §§1–4. The corner-triangle occupancy theorem -/
+/-! ### The corner-triangle occupancy theorem -/
 
-/-- **Claim** (`ONE_CORNER:claim-normalization`), (2)–(3): the map `(x, y) ↦ (x/ξ, 1 - y/η)`
+/-- The normalization `cornerNormalize ξ η`, `(x, y) ↦ (x/ξ, 1 - y/η)`,
 sends `O, H, C₀` to `B = (0,1)`, `A = (0,0)`, `C = (1,1)`, the square into the rectangle
 `[0, L] × [1 - M, 1]` (`L = 1/ξ ≥ 1`, `M = 1/η ≥ 1`), and multiplies signed doubled areas by
-`-LM`; so doubled areas `≥ σ` become `≥ s = σLM`, with `σ ≤ s`, `L, M ≤ s/σ`.
-`docs/proof/nine/ONE_CORNER.md`, lines 39–63. -/
-theorem claim_normalization_map (ξ η : ℝ) (hξ : 0 < ξ) (hξ1 : ξ ≤ 1) (hη : 0 < η)
+`-LM`; so doubled areas `≥ σ` become `≥ s = σLM`, with `σ ≤ s`, `L, M ≤ s/σ`. -/
+theorem cornerNormalize_spec (ξ η : ℝ) (hξ : 0 < ξ) (hξ1 : ξ ≤ 1) (hη : 0 < η)
     (hη1 : η ≤ 1) :
     cornerNormalize ξ η (0, 0) = (0, 1) ∧ cornerNormalize ξ η (0, η) = (0, 0) ∧
       cornerNormalize ξ η (ξ, 0) = (1, 1) ∧
@@ -165,14 +157,12 @@ theorem claim_normalization_map (ξ η : ℝ) (hξ : 0 < ξ) (hξ1 : ξ ≤ 1) (
   · intro p q r
     rw [cornerNormalize_eq, sarea_affineMap]; ring
 
-/-- **Claim** (`ONE_CORNER:claim-normalization`) (1a): under the hypotheses of the theorem and
-`t > 7/128`, exactly three points lie strictly inside `OHC₀` (four would contradict the
-triangular-hull lemma), and every three points strictly inside `OHC₀` are distributed (otherwise
-the two-interior-point lemma gives a doubled area `≤ ξη/(6 + 2√3) < σ`).
-`docs/proof/nine/ONE_CORNER.md`, lines 30–87.
-
-Uses: CORNER_FAMILIES:TriangularHullLemma, CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem claim_normalization (P : Fin 9 → Point) (_hP : ∀ i, P i ∈ unitSquare)
+/-- Under the hypotheses of `cornerTriangleOccupancyTheorem` and minimum area `t > 7/128`,
+exactly three points lie strictly inside `OHC₀` (four would contradict
+`CornerFamilies.triangularHullLemma`), and every three points strictly inside `OHC₀` are
+distributed (otherwise `CornerFamilies.triangleArea_ge_of_not_distributed` gives a doubled area
+`≤ ξη/(6 + 2√3) < σ`). -/
+theorem ncard_inside_eq_three_and_distributed (P : Fin 9 → Point) (_hP : ∀ i, P i ∈ unitSquare)
     (ξ η : ℝ) (hξ : 0 < ξ) (hξ1 : ξ ≤ 1) (hη : 0 < η) (hη1 : η ≤ 1)
     (hO : ∃ i, P i = (0, 0)) (hH : ∃ i, P i = (0, η)) (hC : ∃ i, P i = (ξ, 0))
     (h3 : 3 ≤ {m : Fin 9 | InsideTriangle (P m) (0, 0) (0, η) (ξ, 0)}.ncard)
@@ -226,7 +216,7 @@ theorem claim_normalization (P : Fin 9 → Point) (_hP : ∀ i, P i ∈ unitSqua
     obtain ⟨jo, jh, jc⟩ := v j hj
     obtain ⟨ko, kh, kc⟩ := v k hk
     by_contra hnd
-    have := claim_nondistributed_bound (0, 0) (0, η) (ξ, 0) (P i) (P j) (P k) hi hj hk
+    have := triangleArea_ge_of_not_distributed (0, 0) (0, η) (ξ, 0) (P i) (P j) (P k) hi hj hk
       (minTriangleArea P) hpos
       (min_sub (le_refl _) _ ![o, hh, cc, i, j, k] (by norm_num) (by inj_tac)
         (by intro x; fin_cases x
@@ -237,13 +227,9 @@ theorem claim_normalization (P : Fin 9 → Point) (_hP : ∀ i, P i ∈ unitSqua
     rw [harea] at this
     nlinarith [CornerFamilies.sqrt3_gt]
 
-/-- **Corner-triangle occupancy theorem** (`ONE_CORNER:CornerTriangleOccupancyTheorem`),
-equation (1): nine points of the unit square that include `O = (0,0)`, `H = (0,η)`,
-`C₀ = (ξ,0)` (`0 < ξ, η ≤ 1`), with at least three of them strictly inside `OHC₀`, have minimum
-triangle area `t ≤ 7/128` (`< A₀`). `docs/proof/nine/ONE_CORNER.md`, lines 5–24 (proof 30–295).
-
-Uses: ONE_CORNER:claim-normalization, ONE_CORNER:claim-mesh-all-s,
-ONE_CORNER:claim-uniform-signs-rectangle, ONE_CORNER:claim-one-per-side -/
+/-- **Corner-triangle occupancy theorem**: nine points of the unit square that include
+`O = (0,0)`, `H = (0,η)`, `C₀ = (ξ,0)` (`0 < ξ, η ≤ 1`), with at least three of them strictly
+inside `OHC₀`, have minimum triangle area `t ≤ 7/128` (`< A₀`). -/
 theorem cornerTriangleOccupancyTheorem (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare)
     (ξ η : ℝ) (hξ : 0 < ξ) (hξ1 : ξ ≤ 1) (hη : 0 < η) (hη1 : η ≤ 1)
     (hO : ∃ i, P i = (0, 0)) (hH : ∃ i, P i = (0, η)) (hC : ∃ i, P i = (ξ, 0))
@@ -251,7 +237,7 @@ theorem cornerTriangleOccupancyTheorem (P : Fin 9 → Point) (hP : ∀ i, P i �
     minTriangleArea P ≤ 7 / 128 := by
   by_contra hcon
   push Not at hcon
-  obtain ⟨hcount, -⟩ := claim_normalization P hP ξ η hξ hξ1 hη hη1 hO hH hC h3 hcon
+  obtain ⟨hcount, -⟩ := ncard_inside_eq_three_and_distributed P hP ξ η hξ hξ1 hη hη1 hO hH hC h3 hcon
   obtain ⟨o, ho⟩ := hO
   obtain ⟨hh, hhh⟩ := hH
   obtain ⟨cc, hcc⟩ := hC
@@ -302,7 +288,7 @@ theorem cornerTriangleOccupancyTheorem (P : Fin 9 → Point) (hP : ∀ i, P i �
     simp only [hQ, hN, Function.comp, ho, affineMap]; ext <;> simp
   have eC : Q cc = (1, 1) := by
     simp only [hQ, hN, Function.comp, hcc, affineMap]; ext <;> field_simp <;> ring
-  obtain ⟨-, -, -, hrect, -, hL, hM, hLM1, hLM2⟩ := claim_normalization_map ξ η hξ hξ1 hη hη1
+  obtain ⟨-, -, -, hrect, -, hL, hM, hLM1, hLM2⟩ := cornerNormalize_spec ξ η hξ hξ1 hη hη1
   rw [cornerNormalize_eq] at hrect
   set L := 1 / ξ
   set M := 1 / η
@@ -359,7 +345,7 @@ theorem cornerTriangleOccupancyTheorem (P : Fin 9 → Point) (hP : ∀ i, P i �
             · simp [eB]
             · simp [eC]
             all_goals simp)
-    have := claim_nondistributed_bound (0, 0) (0, 1) (1, 1) (Q m₁) (Q m₂) (Q m₃)
+    have := triangleArea_ge_of_not_distributed (0, 0) (0, 1) (1, 1) (Q m₁) (Q m₂) (Q m₃)
       (insQ m₁ hi₁) (insQ m₂ hi₂) (insQ m₃ hi₃) _ hQpos h6 hnd
     have harea : triangleArea ((0 : ℝ), (0 : ℝ)) (0, 1) (1, 1) = 1 / 2 := by
       simp only [triangleArea_eq, sarea]; norm_num
@@ -378,12 +364,8 @@ theorem cornerTriangleOccupancyTheorem (P : Fin 9 → Point) (hP : ∀ i, P i �
     (lowQ r₁ r1o r1h r1c r1m1 r1m2 r1m3) (lowQ r₂ r2o r2h r2c r2m1 r2m2 r2m3)
     (lowQ r₃ r3o r3h r3c r3m1 r3m2 r3m3) h9
 
-/-- **Corner-triangle occupancy theorem** (`ONE_CORNER:CornerTriangleOccupancyTheorem`), C1 form
-(the row `n₀ ≥ 3` of `UNRESTRICTED.md`): a C1 configuration with at least three of its four free
-points strictly inside `OHC` has minimum area at most `7/128`. `docs/proof/nine/ONE_CORNER.md`,
-lines 12–24.
-
-Uses: ONE_CORNER:CornerTriangleOccupancyTheorem -/
+/-- **Corner-triangle occupancy theorem**, C1 form: a C1 configuration with at least three of
+its four free points strictly inside `OHC` has minimum area at most `7/128`. -/
 theorem cornerTriangleOccupancy_c1 (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (h3 : 3 ≤ {i : Fin 4 | InsideTriangle (![W, X, Y, Z] i) (0, 0) (0, h) (c, 0)}.ncard) :
@@ -416,12 +398,9 @@ theorem cornerTriangleOccupancy_c1 (h c d f : ℝ) (hanch : C1Anchors h c d f) (
     simp only [Fin.mk.injEq] at hij
     exact Fin.ext (by omega)
 
-/-- **Claim** (`ONE_CORNER:claim-C1-at-most-two-lower`): a C1 configuration of minimum area at
-least `A₀` has at most two of its four free points strictly inside `OHC`.
-`docs/proof/nine/ONE_CORNER.md`, lines 297–309.
-
-Uses: ONE_CORNER:CornerTriangleOccupancyTheorem -/
-theorem claim_C1_at_most_two_lower (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
+/-- A C1 configuration of minimum area at least `A₀` has at most two of its four free points
+strictly inside `OHC`. -/
+theorem c1_ncard_inside_OHC_le_two (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) :
     {i : Fin 4 | InsideTriangle (![W, X, Y, Z] i) (0, 0) (0, h) (c, 0)}.ncard ≤ 2 := by
@@ -430,13 +409,13 @@ theorem claim_C1_at_most_two_lower (h c d f : ℝ) (hanch : C1Anchors h c d f) (
   have := cornerTriangleOccupancy_c1 h c d f hanch W X Y Z hW hX hY hZ h3
   linarith [A₀_bounds.1]
 
-/-! ### §6. Every competitive C1 triangle has capacity two -/
+/-! ### Every competitive C1 triangle has capacity two -/
 
-/-- **Claim** (`ONE_CORNER:GlobalC1OccupancyCorollary`), the anchor bounds (lines 333–352): in a C1
+/-- The anchor bounds: in a C1
 configuration with all doubled areas at least `s > 0`, `hf ≥ s`, `cd ≥ s`, `h, c, d, f ≥ s`
 and, from `2[HDF] = 1 - h + f(h - d) ≤ 1 - d` and `2[CDF] = 1 - c + d(c - f) ≤ 1 - f`,
 `d, f ≤ 1 - s`. -/
-theorem claim_anchor_bounds (h c d f s : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
+theorem c1_anchor_bounds (h c d f s : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
     (hs : 0 < s) (hmin : s / 2 ≤ minTriangleArea (c1Config h c d f W X Y Z)) :
     s ≤ h * f ∧ s ≤ c * d ∧ s ≤ h ∧ s ≤ c ∧ s ≤ d ∧ s ≤ f ∧ d ≤ 1 - s ∧ f ≤ 1 - s := by
   obtain ⟨hd, hdh, hh1, hf, hfc, hc1⟩ := hanch
@@ -457,7 +436,7 @@ theorem claim_anchor_bounds (h c d f s : ℝ) (hanch : C1Anchors h c d f) (W X Y
   refine ⟨t1, t2, by nlinarith, by nlinarith, by nlinarith, by nlinarith, by nlinarith,
     by nlinarith⟩
 
-/-! #### Tools for §6 -/
+/-! #### Tools for the capacity bound -/
 
 /-- An affine function `sarea Q R ·` is bounded on a closed nondegenerate triangle by its absolute
 values at the three vertices (the maximum of a convex function at a vertex). -/
@@ -498,13 +477,13 @@ theorem abs_sarea_le_of_closed {A B C P Q R : Point} {b : ℝ} (hABC : sarea A B
 theorem abs_le_of_mem {e b : ℝ} (h0 : 0 ≤ e) (h1 : e ≤ b) : |e| ≤ b := by
   rw [abs_of_nonneg h0]; exact h1
 
-/-- **Claim** (`ONE_CORNER:GlobalC1OccupancyCorollary`), the table of lines 398–408: for an
+/-- The cap-ear bounds: for an
 additional hull vertex `P` in one of the corner caps `T_L = conv{H, F, (0,1)}`,
 `T_R = conv{C, D, (1,0)}`, `T_T = conv{D, F, (1,1)}`, the three new ears have doubled areas
 bounded by their values at the cap vertices: in `T_L`, `DFP ≤ 1 - d`, `FPH ≤ 1 - h`,
 `PHO ≤ f`; in `T_R`, `OCP ≤ d`, `CPD ≤ 1 - c`, `PDF ≤ 1 - f`; in `T_T`,
 `CDP ≤ max(1 - f, 1 - c)`, `DPF ≤ 1 - d`, `PFH ≤ max(1 - d, 1 - h)`. -/
-theorem claim_cap_ear_bounds (h c d f : ℝ) (hanch : C1Anchors h c d f) (P : Point) :
+theorem c1_cap_ear_bounds (h c d f : ℝ) (hanch : C1Anchors h c d f) (P : Point) :
     (InClosedTriangle P (0, h) (f, 1) (0, 1) →
       |sarea (1, d) (f, 1) P| ≤ 1 - d ∧ |sarea (f, 1) P (0, h)| ≤ 1 - h ∧
         |sarea P (0, h) (0, 0)| ≤ f) ∧
@@ -804,7 +783,7 @@ theorem c1_edge_fa {h c d f : ℝ} (hanch : C1Anchors h c d f) {W X Y Z : Point}
       have : sarea (f, 1) (0, h) Q = -sarea Q (0, h) (f, 1) := by unfold sarea; ring
       linarith⟩)
 
-/-- The ear analysis of §6: an ear `C'A'B'` of the full hull (`C' → A'` and `A' → B'` hull
+/-- The ear analysis: an ear `C'A'B'` of the full hull (`C' → A'` and `A' → B'` hull
 edges) with at most one free vertex, other than the corner ear `HOC`, has doubled area at most
 `1 - 2A₀`. -/
 theorem c1_ear_false {h c d f : ℝ} (hanch : C1Anchors h c d f) {W X Y Z : Point}
@@ -821,10 +800,10 @@ theorem c1_ear_false {h c d f : ℝ} (hanch : C1Anchors h c d f) {W X Y Z : Poin
       (c1Config h c d f W X Y Z C'))
     (hcorner : ¬ (A' = 0 ∧ B' = 1 ∧ C' = 4)) : False := by
   have hanch' := hanch
-  obtain ⟨t1, t2, t3, t4, t5, t6, t7, t8⟩ := claim_anchor_bounds h c d f (2 * A₀) hanch W X Y Z
+  obtain ⟨t1, t2, t3, t4, t5, t6, t7, t8⟩ := c1_anchor_bounds h c d f (2 * A₀) hanch W X Y Z
     (by linarith [A₀_pos]) (by linarith)
   obtain ⟨hd, hdh, hh1, hf, hfc, hc1⟩ := hanch
-  have ears := claim_cap_ear_bounds h c d f hanch'
+  have ears := c1_cap_ear_bounds h c d f hanch'
   have disj := fun {Q : Point} (hQ : Q ∈ unitSquare) => caps_disjoint hanch' hQ
   rcases lt_or_ge A'.val 5 with hA5 | hA5 <;> rcases lt_or_ge B'.val 5 with hB5 | hB5 <;>
     rcases lt_or_ge C'.val 5 with hC5 | hC5
@@ -933,7 +912,7 @@ theorem inTriangle_of_inside_neg {X A B C : Point} (h : sarea A B C < 0)
     linarith
   · exact hX
 
-/-- **Capacity two in C1** (the core of the global C1 occupancy corollary): every
+/-- **Capacity two in C1** (the core of `globalC1OccupancyCorollary`): every
 counterclockwise actual triangle of a C1 configuration with least area at least `A₀` contains at
 most two further points. -/
 theorem c1_capacity_two (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
@@ -946,7 +925,7 @@ theorem c1_capacity_two (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : P
   have hP := c1Config_mem hanch hW hX hY hZ
   set P := c1Config h c d f W X Y Z with hPdef
   obtain ⟨A', B', C', hrot, h3, -, sup1, sup2, -⟩ :=
-    ThreeInteriorTriangles.theorem1 hP hmin hccw (by omega)
+    ThreeInteriorTriangles.three_inside_is_ear hP hmin hccw (by omega)
   have hccw' : 0 < sarea (P A') (P B') (P C') := by
     rcases hrot with ⟨e1, e2, e3⟩ | ⟨e1, e2, e3⟩ | ⟨e1, e2, e3⟩ <;> rw [e1, e2, e3] <;>
       (unfold sarea at hccw ⊢; linarith)
@@ -1012,13 +991,10 @@ theorem c1_capacity_two (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : P
   have g := QuadrilateralHull.gamma_one_A₀
   exact c1_ear_false hanch hP hmin hAB hAC hf1 hf2 hf3 sup1 sup2 (by linarith) hcorner
 
-/-- **Global C1 occupancy corollary** (`ONE_CORNER:GlobalC1OccupancyCorollary`): in a C1
+/-- **Global C1 occupancy corollary**: in a C1
 configuration (free points anywhere in the square) of minimum area at least `A₀`, every
 triangle spanned by three of the nine points contains at most two of the points in its
-interior. `docs/proof/nine/ONE_CORNER.md`, lines 317–427.
-
-Uses: THREE_INTERIOR_TRIANGLES:Theorem1, ONE_CORNER:CornerTriangleOccupancyTheorem,
-CORNER_FAMILIES:SixPointTriangularHullTheorem -/
+interior. -/
 theorem globalC1OccupancyCorollary (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) (i j k : Fin 9) :
@@ -1044,12 +1020,11 @@ theorem globalC1OccupancyCorollary (h c d f : ℝ) (hanch : C1Anchors h c d f) (
   · exact le_trans (Set.ncard_le_ncard (fun m hm => inTriangle_of_inside_pos hpos hm)
       (Set.toFinite _)) (cap i j k hpos)
 
-/-! ### §7. Opposite diagonal quadrants in the pentagonal `2+2` case -/
+/-! ### Opposite diagonal quadrants in the pentagonal `2+2` case -/
 
-/-- **Claim** (`ONE_CORNER:claim-pentagon-opposite-quadrants`), equation (12): with
-`ℓ = h - d`, `m = c - f`, `W = 1 - ℓm ≠ 0`, `h = y + ℓx` and `c = x + my`.
-`docs/proof/nine/ONE_CORNER.md`, lines 445–457. -/
-theorem eq12 (h c d f : ℝ) (hW : quadWOf h c d f ≠ 0) :
+/-- The anchors in terms of the diagonal parameters: with `ℓ = h - d`, `m = c - f`,
+`W = 1 - ℓm ≠ 0`, `x = diagX h c d f` and `y = diagY h c d f`, `h = y + ℓx` and `c = x + my`. -/
+theorem anchors_eq_diagXY (h c d f : ℝ) (hW : quadWOf h c d f ≠ 0) :
     h = diagY h c d f + (h - d) * diagX h c d f ∧ c = diagX h c d f + (c - f) * diagY h c d f := by
   unfold diagX diagY
   unfold quadWOf at hW ⊢
@@ -1057,7 +1032,7 @@ theorem eq12 (h c d f : ℝ) (hW : quadWOf h c d f ≠ 0) :
   · rw [mul_div_assoc', ← add_div, eq_div_iff hW]; ring
   · rw [mul_div_assoc', ← add_div, eq_div_iff hW]; ring
 
-/-! #### Tools for §7 -/
+/-! #### Tools for the diagonal quadrants -/
 
 /-- The diagonal parameters: `W > 0`, `Wx = 2[HCF]`, `Wy = 2[HCD]`, `W(1 - x) = 2[CDF]`,
 `W(1 - y) = 2[DFH]`. -/
@@ -1088,8 +1063,8 @@ theorem diag_identities {h c d f : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h �
   · linear_combination hW' - ex
   · linear_combination hW' - ey
 
-/-- The endpoint bound of Pattern I (lines 498–544): at `h = 1`, `c = x(1 - Wy)/(1 - y)`, and
-Pattern I gives `c ≤ F ≤ (1 - 2σ)²/(8σ) = 625/896`. -/
+/-- The endpoint bound of Pattern I: at `h = 1` the anchor `c` is `x(1 - Wy)/(1 - y)`, and
+Pattern I at `σ = 7/64` bounds it by `(1 - 2σ)²/(8σ) = 625/896`. -/
 theorem patternI_endpoint {x y W : ℝ} (hx : 0 < x) (hx1 : x < 1) (hy : 0 < y) (hy1 : y < 1)
     (hW1 : W ≤ 1)
     (hI₁ : 7 / 64 * (2 + x - y) ≤ W * x * (1 - y))
@@ -1124,10 +1099,10 @@ theorem patternI_endpoint {x y W : ℝ} (hx : 0 < x) (hx1 : x < 1) (hy : 0 < y) 
     have : 0 ≤ (1 - x) * (625 / 896 * (1 - y) - x * (1 - W * y)) := by nlinarith
     nlinarith [(mul_nonneg_iff_of_pos_left (by linarith : (0:ℝ) < 1 - x)).1 this]
 
-/-- Pattern I, the reduction to the endpoints (lines 480–497): with `h = y + a`, `c = x + b`,
+/-- Pattern I, the reduction to the endpoints: with `h = y + a`, `c = x + b`,
 `ab = (1 - W)xy`, the product `hc` is bounded by one of the endpoint values `c|_{h=1}`,
-`h|_{c=1}`. (The convexity argument of the manuscript is replaced by the two identities
-`(1 - y)hc - x(1 - Wy) = -(1 - h)(x(1 - y) - yb)` and its mirror image.) -/
+`h|_{c=1}`, through the identity `(1 - y)hc - x(1 - Wy) = -(1 - h)(x(1 - y) - yb)` and its mirror
+image. -/
 theorem patternI_combine {h c x y a b W : ℝ} (eh : h = y + a) (ec : c = x + b)
     (eab : a * b = (1 - W) * x * y) (hh1 : h ≤ 1) (hc1 : c ≤ 1)
     (hx : 0 < x) (hx1 : x < 1) (hy : 0 < y) (hy1 : y < 1)
@@ -1151,12 +1126,11 @@ theorem patternI_combine {h c x y a b W : ℝ} (eh : h = y + a) (ec : c = x + b)
       nlinarith [mul_nonneg (show (0:ℝ) ≤ 1 - c by linarith) (sub_nonneg.2 hxa)]
     exact le_of_mul_le_mul_left this (by linarith)
 
-/-- **Claim** (`ONE_CORNER:claim-pentagon-opposite-quadrants`), Pattern I forces `hc ≤ 625/896`
-(lines 478–544), as a general algebraic statement (also used by `SIX_BOUNDARY_HULL.md`
-lines 370–378): if `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`, the intersection parameters `x, y` are in
-`(0, 1)`, and Pattern I of (13) holds at `σ = 7/64`,
-`Wx(1 - y) ≥ σ(2 + x - y)`, `Wy(1 - x) ≥ σ(2 + y - x)`, then `hc ≤ (1 - 2σ)²/(8σ) = 625/896`. -/
-theorem claim_pattern_I (h c d f : ℝ) (hd : 0 < d) (hdh : d ≤ h) (hh1 : h ≤ 1) (hf : 0 < f)
+/-- Pattern I forces `hc ≤ 625/896`, as a general algebraic statement: if `0 < d ≤ h ≤ 1`,
+`0 < f ≤ c ≤ 1`, the diagonal parameters `x = diagX h c d f`, `y = diagY h c d f` are in
+`(0, 1)`, and Pattern I holds at `σ = 7/64`, `Wx(1 - y) ≥ σ(2 + x - y)` and
+`Wy(1 - x) ≥ σ(2 + y - x)`, then `hc ≤ (1 - 2σ)²/(8σ) = 625/896`. -/
+theorem hc_le_of_patternI (h c d f : ℝ) (hd : 0 < d) (hdh : d ≤ h) (hh1 : h ≤ 1) (hf : 0 < f)
     (hfc : f ≤ c) (hc1 : c ≤ 1) (hx : 0 < diagX h c d f) (hx1 : diagX h c d f < 1)
     (hy : 0 < diagY h c d f) (hy1 : diagY h c d f < 1)
     (hI₁ : 7 / 64 * (2 + diagX h c d f - diagY h c d f) ≤
@@ -1180,7 +1154,7 @@ theorem claim_pattern_I (h c d f : ℝ) (hd : 0 < d) (hdh : d ≤ h) (hh1 : h �
   exact patternI_combine eh ec eab hh1 hc1 hx hx1 hy hy1
     (patternI_endpoint hx hx1 hy hy1 hW1 hI₁ hI₂) (patternI_endpoint hy hy1 hx hx1 hW1 hI₂ hI₁)
 
-/-- `C(δ) ≥ 1/8` on `[1/5, 1]` (§7, Pattern II, lines 640–650). -/
+/-- For Pattern II: `C(δ) = 13/40 - δ + 3δ²/2 - 5δ⁴/8 ≥ 1/8` on `[1/5, 1]`. -/
 theorem patternII_C {δ : ℝ} (h1 : 1 / 5 ≤ δ) (h2 : δ ≤ 1) :
     0 ≤ 1 / 5 - δ + 3 / 2 * δ ^ 2 - 5 / 8 * δ ^ 4 := by
   rcases le_total δ (1 / 2) with h | h
@@ -1191,8 +1165,8 @@ theorem patternII_C {δ : ℝ} (h1 : 1 / 5 ≤ δ) (h2 : δ ≤ 1) :
       mul_nonneg (mul_nonneg (sub_nonneg.2 h) (sub_nonneg.2 h2)) (sub_nonneg.2 h),
       mul_nonneg (mul_nonneg (sub_nonneg.2 h) (sub_nonneg.2 h2)) (sub_nonneg.2 h2)]
 
-/-- (17) when `Z ≤ R` (lines 600–663), with `δ = R - Z`, `v = (R + Z - 1)/2`. -/
-theorem relaxed17_core {β R Z : ℝ} (hb1 : β ≤ 1 / 5) (hR1 : R ≤ 1) (hZ : 0 ≤ Z) (hZR : Z ≤ R) :
+/-- `patternII_relaxed` in the case `Z ≤ R`, with `δ = R - Z`, `v = (R + Z - 1)/2`. -/
+theorem patternII_relaxed_core {β R Z : ℝ} (hb1 : β ≤ 1 / 5) (hR1 : R ≤ 1) (hZ : 0 ≤ Z) (hZR : Z ≤ R) :
     10 * ((β + Z * (1 - R)) * (1 / 5 - β + R * (1 - Z))) <
       (1 - R * Z) + (β + Z * (1 - R)) + (1 / 5 - β + R * (1 - Z)) := by
   set δ := R - Z with hδ
@@ -1237,21 +1211,21 @@ theorem relaxed17_core {β R Z : ℝ} (hb1 : β ≤ 1 / 5) (hR1 : R ≤ 1) (hZ :
       nlinarith [sq_nonneg (v - 5 / 26), mul_le_mul_of_nonneg_right hcoef (sq_nonneg v)]
     linarith
 
-/-- (17): `AB/(W + A + B) < 1/10` on the relaxed family `A = β + Z(1 - R)`,
+/-- The relaxed Pattern II bound: `AB/(W + A + B) < 1/10` on the relaxed family `A = β + Z(1 - R)`,
 `B = 1/5 - β + R(1 - Z)`, `W = 1 - RZ`, `0 ≤ β ≤ 1/5`, `R, Z ∈ [0, 1]`. -/
-theorem relaxed17 {β R Z : ℝ} (hb : 0 ≤ β) (hb1 : β ≤ 1 / 5) (hR : 0 ≤ R) (hR1 : R ≤ 1)
+theorem patternII_relaxed {β R Z : ℝ} (hb : 0 ≤ β) (hb1 : β ≤ 1 / 5) (hR : 0 ≤ R) (hR1 : R ≤ 1)
     (hZ : 0 ≤ Z) (hZ1 : Z ≤ 1) :
     10 * ((β + Z * (1 - R)) * (1 / 5 - β + R * (1 - Z))) <
       (1 - R * Z) + (β + Z * (1 - R)) + (1 / 5 - β + R * (1 - Z)) := by
   rcases le_total Z R with h | h
-  · exact relaxed17_core hb1 hR1 hZ h
-  · have := relaxed17_core (β := 1 / 5 - β) (by linarith) hZ1 hR h
+  · exact patternII_relaxed_core hb1 hR1 hZ h
+  · have := patternII_relaxed_core (β := 1 / 5 - β) (by linarith) hZ1 hR h
     have e1 : 1 / 5 - (1 / 5 - β) = β := by ring
     rw [e1] at this
     nlinarith [this]
 
-/-- The monotonicity step of (16)–(17): the ratio `AB/(W + A + B)` increases with `A, B ≥ 0` and
-decreases with `W ≥ 0`. -/
+/-- The monotonicity step of the relaxation: the ratio `AB/(W + A + B)` increases with
+`A, B ≥ 0` and decreases with `W ≥ 0`. -/
 theorem ratio_mono {A B W A₁ B₁ W₁ : ℝ} (hA0 : 0 ≤ A) (hB0 : 0 ≤ B) (hAA : A ≤ A₁)
     (hBB : B ≤ B₁) (hW1 : 0 ≤ W₁) (hWW : W₁ ≤ W) (hS : 0 < W + A + B)
     (hS₁ : 0 < W₁ + A₁ + B₁) (key : 10 * (A₁ * B₁) < W₁ + A₁ + B₁) :
@@ -1266,7 +1240,7 @@ theorem ratio_mono {A B W A₁ B₁ W₁ : ℝ} (hA0 : 0 ≤ A) (hB0 : 0 ≤ B) 
   have := mul_le_mul_of_nonneg_left hcon hS₁.le
   nlinarith [mul_lt_mul_of_pos_right key hS]
 
-/-- Pattern II, the relaxation (16)–(17) in the original parameters: with
+/-- Pattern II, the relaxation in the original parameters: with
 `A = 2[CDF] = 1 - c + d(c - f)`, `B = 2[DFH] = 1 - h + f(h - d)`, `W = 1 - (h - d)(c - f)` and
 `hc > 13/16`, `10AB < W + A + B`. (`H₀ = hc` is relaxed to `1` and `α + β = 2 - h - c < 1/5` to
 `1/5`, with `R = (h - d)/h`, `Z = (c - f)/c`.) -/
@@ -1306,13 +1280,12 @@ theorem patternII_ratio {h c d f : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h �
   exact ratio_mono (A₁ := (1 - c) + Z * (1 - R)) (B₁ := (1 / 5 - (1 - c)) + R * (1 - Z))
     (W₁ := 1 - R * Z) (by linarith) (by linarith) (by linarith) (by linarith) (by linarith)
     (by linarith) (by linarith) (by linarith)
-    (relaxed17 (β := 1 - c) (by linarith) (by linarith) hR hR1.le hZ hZ1)
+    (patternII_relaxed (β := 1 - c) (by linarith) (by linarith) hR hR1.le hZ hZ1)
 
-/-- **Claim** (`ONE_CORNER:claim-pentagon-opposite-quadrants`), Pattern II is impossible
-(lines 546–663): under the same parameter ranges, `hc > 13/16` (11) and the second inequality of
-Pattern II, `W(1 - x)(1 - y) ≥ σ(3 - x - y)` at `σ = 7/64`, are incompatible (the relaxed ratio
-`AB/(W + A + B)` of (17) is below `1/10 < σ`). -/
-theorem claim_pattern_II (h c d f : ℝ) (hd : 0 < d) (hdh : d ≤ h) (hh1 : h ≤ 1) (hf : 0 < f)
+/-- Pattern II is impossible: under the parameter ranges of `hc_le_of_patternI`, `hc > 13/16`
+and the Pattern II inequality `W(1 - x)(1 - y) ≥ σ(3 - x - y)` at `σ = 7/64` are incompatible
+(the relaxed ratio `AB/(W + A + B)` of `patternII_relaxed` is below `1/10 < σ`). -/
+theorem patternII_false (h c d f : ℝ) (hd : 0 < d) (hdh : d ≤ h) (hh1 : h ≤ 1) (hf : 0 < f)
     (hfc : f ≤ c) (hc1 : c ≤ 1) (_hx : 0 < diagX h c d f) (hx1 : diagX h c d f < 1)
     (_hy : 0 < diagY h c d f) (hy1 : diagY h c d f < 1) (hhc : 13 / 16 < h * c)
     (hII : 7 / 64 * (3 - diagX h c d f - diagY h c d f) ≤
@@ -1332,14 +1305,14 @@ theorem claim_pattern_II (h c d f : ℝ) (hd : 0 < d) (hdh : d ≤ h) (hh1 : h �
 theorem sqrt3_gt_12_7 : (12 / 7 : ℝ) < Real.sqrt 3 := by
   rw [Real.lt_sqrt (by norm_num)]; norm_num
 
-/-- `(4 + 2√3) · 2A₀ > 13/16` (11). -/
+/-- `(4 + 2√3) · 2A₀ > 13/16`. -/
 theorem K_two_A₀ : 13 / 16 < (4 + 2 * Real.sqrt 3) * (2 * A₀) := by
   have := sqrt3_gt_12_7
   have := A₀_bounds.1
   nlinarith
 
-/-- (11) and (18): two further points strictly inside a triangle of a configuration of least area
-at least `A₀` force its doubled area above `13/16` (two-interior-point lemma). -/
+/-- Two further points strictly inside a triangle of a configuration of least area at least `A₀`
+force its doubled area above `13/16` (by `twoInteriorPointLemma`). -/
 theorem doubled_gt_of_two_inside {A B C P Q : Point} (hP : InsideTriangle P A B C)
     (hQ : InsideTriangle Q A B C) (hmin : A₀ ≤ minTriangleArea ![A, B, C, P, Q]) :
     13 / 16 < |sarea A B C| := by
@@ -1347,7 +1320,7 @@ theorem doubled_gt_of_two_inside {A B C P Q : Point} (hP : InsideTriangle P A B 
   rw [triangleArea_eq] at this
   linarith [K_two_A₀]
 
-/-- Inequality (5) of `QUADRILATERAL_HULL.md` Theorem 1 in the diagonal coordinates: from
+/-- The sector inequality `QuadrilateralHull.sector_bound` in the diagonal coordinates: from
 `s(W + Wp + Wq) ≤ (Wp)(Wq)` with `s ≥ σ`, the pattern inequality `σ(1 + p + q) ≤ Wpq`. -/
 theorem sector_to_pattern {w p q s : ℝ} (hw : 0 < w) (hs : 7 / 64 ≤ s) (hpq : 0 < 1 + p + q)
     (h : s * (w + w * p + w * q) ≤ (w * p) * (w * q)) : 7 / 64 * (1 + p + q) ≤ w * p * q := by
@@ -1390,9 +1363,9 @@ theorem diag_areas {h c d f : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h ≤ 1) 
   · rw [eA]; unfold sarea; ring
   · rw [eB]; unfold sarea; ring
 
-/-- §7, Pattern I: a point in the diagonal sector of `HCDF` at `FH` and one in the opposite
-sector at `CD`, all relevant doubled areas at least `s ≥ σ`, force `hc ≤ 625/896`, against
-`hc > 13/16`. -/
+/-- Pattern I in the pentagon: a point in the diagonal sector of `HCDF` at `FH` and one in the
+opposite sector at `CD`, all relevant doubled areas at least `s ≥ σ`, force `hc ≤ 625/896`,
+against `hc > 13/16`. -/
 theorem pentagon_patI {h c d f s : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h < 1) (hf : 0 < f)
     (hfc : f ≤ c) (hc1 : c < 1) (hhc : 13 / 16 < h * c) (hs : 7 / 64 ≤ s) {P Q : Point}
     (p1 : s ≤ sarea (c, 0) (f, 1) P) (p2 : s ≤ sarea (0, h) (1, d) P)
@@ -1418,12 +1391,12 @@ theorem pentagon_patI {h c d f s : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h < 
   rw [aDFH, e2, e3, aHCD] at s2
   have I1 := sector_to_pattern (p := x) (q := 1 - y) hw hs (by linarith) (by linarith [s1])
   have I2 := sector_to_pattern (p := y) (q := 1 - x) hw hs (by linarith) (by linarith [s2])
-  have := claim_pattern_I h c d f hd hdh hh1.le hf hfc hc1.le hx hx1 hy hy1
+  have := hc_le_of_patternI h c d f hd hdh hh1.le hf hfc hc1.le hx hx1 hy hy1
     (by linarith [I1]) (by linarith [I2])
   linarith
 
-/-- §7, Pattern II: a point in the diagonal sector of `HCDF` at `DF`, all relevant doubled
-areas at least `s ≥ σ`, is incompatible with `hc > 13/16`. -/
+/-- Pattern II in the pentagon: a point in the diagonal sector of `HCDF` at `DF`, all relevant
+doubled areas at least `s ≥ σ`, is incompatible with `hc > 13/16`. -/
 theorem pentagon_patII {h c d f s : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h < 1) (hf : 0 < f)
     (hfc : f ≤ c) (hc1 : c < 1) (hhc : 13 / 16 < h * c) (hs : 7 / 64 ≤ s) {P : Point}
     (p1 : s ≤ sarea (0, h) (1, d) P) (p2 : s ≤ sarea (f, 1) (c, 0) P)
@@ -1445,10 +1418,10 @@ theorem pentagon_patII {h c d f s : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h <
   rw [e1, e2, e3, aCDF] at s1
   have I := sector_to_pattern (p := 1 - y) (q := 1 - x) hw hs (by linarith) (by linarith [s1])
   have e4 : w * (1 - y) * (1 - x) = w * (1 - x) * (1 - y) := by ring
-  exact claim_pattern_II h c d f hd hdh hh1.le hf hfc hc1.le hx hx1 hy hy1 hhc
+  exact patternII_false h c d f hd hdh hh1.le hf hfc hc1.le hx hx1 hy hy1 hhc
     (by linarith [I, e4])
 
-/-- (11): two free points strictly inside `OHC` give `hc > 13/16`. -/
+/-- Two free points strictly inside `OHC` give `hc > 13/16`. -/
 theorem hc_gt_of_two_lower {h c d f : ℝ} (hanch : C1Anchors h c d f) {W X Y Z : Point}
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z))
     (hW : InsideTriangle W (0, 0) (0, h) (c, 0)) (hX : InsideTriangle X (0, 0) (0, h) (c, 0)) :
@@ -1460,14 +1433,12 @@ theorem hc_gt_of_two_lower {h c d f : ℝ} (hanch : C1Anchors h c d f) {W X Y Z 
     abs_of_pos (mul_pos (by linarith) (by linarith))] at this
   exact this
 
-/-- **Claim** (`ONE_CORNER:claim-pentagon-opposite-quadrants`): in a C1 configuration of minimum
-area at least `A₀` with two free points `W, X` strictly inside `OHC` and two free points `Y, Z`
-strictly inside the quadrilateral `HCDF`, the two diagonals `HD` and `CF` cannot both separate
-`Y` and `Z`: (11) gives `hc ≥ (4 + 2√3)(2t) > 13/16`, and the two opposite-quadrant patterns
-(13) are excluded. `docs/proof/nine/ONE_CORNER.md`, lines 429–668.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, QUADRILATERAL_HULL:Theorem1 (its inequalities (5)) -/
-theorem claim_pentagon_opposite_quadrants (h c d f : ℝ) (hanch : C1Anchors h c d f)
+/-- In a C1 configuration of minimum area at least `A₀` with two free points `W, X` strictly
+inside `OHC` and two free points `Y, Z` strictly inside the quadrilateral `HCDF`, the two
+diagonals `HD` and `CF` cannot both separate `Y` and `Z`: `hc_gt_of_two_lower` gives
+`hc ≥ (4 + 2√3)(2t) > 13/16`, and the two opposite-quadrant placements are excluded by
+`pentagon_patI` and `pentagon_patII`. -/
+theorem pentagon_diagonals_not_both_separate (h c d f : ℝ) (hanch : C1Anchors h c d f)
     (W X Y Z : Point) (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z))
     (hW : InsideTriangle W (0, 0) (0, h) (c, 0)) (hX : InsideTriangle X (0, 0) (0, h) (c, 0))
     (hY : InQuad Y (0, h) (c, 0) (1, d) (f, 1)) (hZ : InQuad Z (0, h) (c, 0) (1, d) (f, 1))
@@ -1516,15 +1487,15 @@ theorem claim_pentagon_opposite_quadrants (h c d f : ℝ) (hanch : C1Anchors h c
       (ge 2 4 7 (by decide) (by decide) (by decide) (neg hY1))
       (ge 1 2 7 (by decide) (by decide) (by decide) y2)
 
-/-! ### §8. Both upper points in `HDF` or both in `CDF` -/
+/-! ### Both upper points in `HDF` or both in `CDF` -/
 
-/-- The area-only argument of §8, (18)–(21): `hc ≥ R`, `2[HDF] ≥ R`, `cd ≥ σ` and
+/-- The area-only argument: `hc ≥ R`, `2[HDF] ≥ R`, `cd ≥ σ` and
 `2[CDF] ≥ σ` (`R = 13/16`, `σ = 7/64`) are incompatible for C1 anchors. -/
 theorem hdf_core {h c d f : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h < 1) (hf : 0 < f)
     (hfc : f ≤ c) (hc1 : c < 1) (h1 : 13 / 16 ≤ h * c) (h2 : 13 / 16 ≤ 1 - h + f * (h - d))
     (h3 : 7 / 64 ≤ c * d) (h4 : 7 / 64 ≤ 1 - c + d * (c - f)) : False := by
   have hc0 : 0 < c := by linarith
-  -- (20), multiplied by `c`
+  -- `2[HDF] ≥ R` times `c`, plus `hc ≥ R` times `1 - f`
   have e20 : 13 / 16 * c ≤ c - 13 / 16 * (1 - f) - c * f * d := by
     nlinarith [mul_le_mul_of_nonneg_right h1 (show (0:ℝ) ≤ 1 - f by linarith),
       mul_le_mul_of_nonneg_left h2 hc0.le]
@@ -1544,7 +1515,7 @@ theorem hdf_core {h c d f : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h < 1) (hf 
     have hk1 : k ≤ d * (c - f) := by linarith
     have hk0 : 0 ≤ k := by linarith
     have hkσ : k ≤ 7 / 64 := by linarith
-    -- (21) multiplied by `q`
+    -- `e20'` times `d`, with `k ≤ d(c - f)`
     have main : (c * d) ^ 2 + k * (13 / 16 - c * d) ≤ d * (c - 13 / 16) := by
       have := mul_le_mul_of_nonneg_left e20' hd.le
       have := mul_le_mul_of_nonneg_right hk1 (show (0:ℝ) ≤ 13 / 16 - c * d by linarith)
@@ -1569,20 +1540,17 @@ theorem hdf_core {h c d f : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h < 1) (hf 
       nlinarith
     nlinarith
 
-/-- **Claim** (`ONE_CORNER:claim-pentagon-HDF-CDF`): in a C1 configuration of minimum area at
-least `A₀` with two free points `W, X` strictly inside `OHC`, the other two free points `Y, Z`
-are not both strictly inside `HDF`, nor both strictly inside `CDF` (area-only argument with
-`R = 13/16`, (18)–(21); `CDF` by the reflection across `x = y`). `docs/proof/nine/ONE_CORNER.md`,
-lines 670–765.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem claim_pentagon_HDF_CDF (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
+/-- In a C1 configuration of minimum area at least `A₀` with two free points `W, X` strictly
+inside `OHC`, the other two free points `Y, Z` are not both strictly inside `HDF`, nor both
+strictly inside `CDF` (the area-only argument `hdf_core` with `R = 13/16`; `CDF` by the
+reflection across `x = y`). -/
+theorem pentagon_not_both_inside_HDF_CDF (h c d f : ℝ) (hanch : C1Anchors h c d f) (W X Y Z : Point)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z))
     (hW : InsideTriangle W (0, 0) (0, h) (c, 0)) (hX : InsideTriangle X (0, 0) (0, h) (c, 0)) :
     ¬ (InsideTriangle Y (0, h) (1, d) (f, 1) ∧ InsideTriangle Z (0, h) (1, d) (f, 1)) ∧
       ¬ (InsideTriangle Y (c, 0) (1, d) (f, 1) ∧ InsideTriangle Z (c, 0) (1, d) (f, 1)) := by
   have hanch' := hanch
-  obtain ⟨t1, t2, -, -, -, -, -, -⟩ := claim_anchor_bounds h c d f (2 * A₀) hanch W X Y Z
+  obtain ⟨t1, t2, -, -, -, -, -, -⟩ := c1_anchor_bounds h c d f (2 * A₀) hanch W X Y Z
     (by linarith [A₀_pos]) (by linarith)
   obtain ⟨hd, hdh, hh1, hf, hfc, hc1⟩ := hanch
   have hs : 7 / 64 ≤ 2 * A₀ := by linarith [A₀_bounds.1]

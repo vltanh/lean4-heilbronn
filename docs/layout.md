@@ -28,12 +28,15 @@ only `Common/` and its own folder.
 
 | file | content |
 | --- | --- |
-| `Basic.lean` | the doubled signed area `sarea`; the least area under relabelling, affine maps and the symmetries of the square; its continuity; existence of a maximizer |
-| `Config.lean` | triangle areas of a named configuration; sub-configurations; affine images |
+| `Basic.lean` | the doubled signed area `sarea`; the least area under relabelling, affine maps and the symmetries of the square; its continuity; existence of a maximizer; the open square |
+| `Config.lean` | triangle areas of a named configuration; sub-configurations; affine images; points strictly inside a triangle; convex polygons |
+| `Plane.lean` | closed triangles (convex hulls of three points) by barycentric coordinates and by signs |
+| `TwoInteriorPoints.lean` | the two-interior-point lemma: a triangle with two points strictly inside, all of whose triangles have area at least `t`, has area at least `(4 + 2√3)t` |
 | `Optimum.lean` | the optimum of a case, and the value, the Heilbronn number and the optimal configurations that follow from it |
 | `Certificate.lean` | polynomial certificates on the unit cube, checked by the kernel, with `check_sound` |
 | `Bernstein.lean` | positivity on boxes by Bernstein coefficients, with `bernsteinBoxCheck_sound` |
 | `Cover.lean` | case splits with certificate leaves (sign splits, scalar cuts, strengthened area costs), with `checkTree_sound` |
+| `SignTable.lean` | the shared layer of the sign-table packages: lexicographic triples, oriented facts, word branches, strengthened cost tables and their premises `CostHyp`, the package `tableSpec` with `tableSpec_sound` |
 | `CertNotation.lean` | arithmetic notation for certificate expressions |
 | `DataReader.lean` | `term_rows%` and its relatives: certificate data read from text files as raw literals |
 
@@ -45,7 +48,7 @@ the remaining ones force the construction.
 
 | folder or file | content |
 | --- | --- |
-| `Setup/` | `A₀` and its brackets (`Value.lean`); the five normalized families N, C1, C2, Type II, Type III (`Families.lean`) |
+| `Setup/` | `A₀` and its brackets (`Value.lean`); the five normalized families N, C1, C2, Type II, Type III (`Families.lean`); the nine-point layer of the sign-table packages: occupancy bounds, `AreaOK` and its cost premises (`Package.lean`); the 57 heptagon words (`HeptagonWords.lean`) |
 | `Construction.lean`, `Construction/` | the 84 triangle areas of the optimal configuration |
 | `Uniqueness.lean`, `Assembly/` | every maximizer is the construction, from the family theorems; `Nine.optimum` and the three theorems |
 | `Normalization/` | side contacts, projection overlap and the shears, from the absence of an expanding affine map; the normalization into the five families and the transfer of equality |
@@ -54,9 +57,9 @@ the remaining ones force the construction.
 | `Hulls/` | triangles with three interior points, quadrilaterals with four, capacity two for every configuration of least area at least `A₀` |
 | `Corners/` | C2, Type III, C1 with three or more lower points, the hull bounds and the quadrilateral identities used throughout |
 | `TypeII/` | two adjacent occupied corners, ending in `typeII_exclusion` |
-| `EightBoundary/` | the radial catalogue of words and family N with eight or more boundary points, ending in Theorem 13 (`Theorem13.lean`) |
+| `EightBoundary/` | the radial catalogue of words and family N with eight or more boundary points, ending in `Completion.lean` |
 | `SevenBoundary/` | family N with exactly seven boundary points, with the interior cover of 403 certificates |
-| `SixBoundary/` | family N with exactly six boundary points: the anchor hexagon and the eight occupancies of its caps |
+| `SixBoundary/` | family N with exactly six boundary points: the anchor hexagon and the eight occupancies of its caps; `SingleCommon/` is shared by the cases of one point in a side cap and one in the opposite cap |
 | `Sharp/` | the seven sharp chambers in which one or two points move |
 | `C1/` | one occupied corner, by the number of lower points |
 

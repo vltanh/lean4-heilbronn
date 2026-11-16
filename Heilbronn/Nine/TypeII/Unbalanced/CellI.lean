@@ -2,38 +2,39 @@ module
 
 public import Heilbronn.Nine.TypeII.Unbalanced.RightHull
 
-/-! # Complete exclusion of unbalanced right support cell I (`docs/proof/nine/UNBALANCED_CELL_I.md`)
+/-! # Exclusion of the unbalanced right support cell I
 
-**Role.** Primary route. `UNBALANCED_FINAL_LOWER_WEDGE:Theorem2` cites Theorem 1 for the
-one-point upper cut in cell I (the two-point upper cut of cell I is
-`UNBALANCED_RIGHT_HULL:Theorem2`), so cell I is excluded from the whole unbalanced row.
-`claim_order` (the coordinate order of a quadrilateral right hull) and `lemma2`/`eq10` (the
-two-interior-point rigidity inequality) are reused by `UNBALANCED_CELL_III`,
-`UNBALANCED_ONE_UPPER_RADIAL` and `UNBALANCED_UPPER_CELL_II`.
+`false_of_cellI_of_below_CE` shows that in support cell I of a quadrilateral right hull no central point lies
+below `CE`. This settles the one-point upper cut in cell I (used by
+`UnbalancedFinalLowerWedge.minTriangleArea_typeIIConfig_lt_A₀`); the two-point upper cut of cell I is
+`UnbalancedRightHull.not_cellI_or_cellIII`, so cell I is excluded from the whole unbalanced row.
+`coord_order_of_quadHull` (the coordinate order of a quadrilateral right hull) and `two_mul_lt_sarea_of_lineIsolates`/`area_ge_of_lineIsolates` (the
+two-interior-point rigidity inequality) are also used for cells II and III and for the
+one-upper radial case.
 
-**Setting** (lines 5-22): `Row123 l b P Q R S T` (anchors `D, C, E, B`, `0 < b ≤ 1/2`), every
+**Setting**: `Row123 l b P Q R S T` (anchors `D, C, E, B`, `0 < b ≤ 1/2`), every
 actual doubled area at least `s = 7/64` (`7/128 ≤ minTriangleArea (typeIIConfig …)`), the right
 hull is the quadrilateral `B, R, S, C` with `T` inside (`QuadHull`), in support cell I
 (`T ∈ int BRS ∩ int BCR`). Write `R = (r, u)`, `S = (k, t)`, `q = 1 - λ`, `w = 1 - b`,
 `U = [BRS]`, `V = [CRS]`, `g = [BRC]`, `δ = [EBR]`, `J = [ERS]`, `α = [ERC]`.
 
 **Results.**
-* `claim_order`: `r > u`, `b < r < k ≤ 1`, `0 ≤ u < t < 1` for every quadrilateral right hull.
-* `claim_b_range` (2)-(3): `13/100 < b < 3/16`, `w ≥ Ks > 13/16`.
-* `claim_empty_EBR` (4)-(5): `δ < 3s`, so `EBR` contains no further actual point.
-* `claim_ERS_cap` (6): `J < Ks` for every right quadrilateral, so `ERS` has capacity one.
-* `claim_J` (7): `J < 39/64` in cell I.
-* `claim_containments` (8): a central point `Q` below `CE` lies in `ECR ∩ ECS`, and
+* `coord_order_of_quadHull`: `r > u`, `b < r < k ≤ 1`, `0 ≤ u < t < 1` for every quadrilateral right hull.
+* `b_range_of_cellI`: `13/100 < b < 3/16`, `w ≥ Ks > 13/16`.
+* `noPointInside_EBR_of_cellI`: `δ < 3s`, so `EBR` contains no further actual point.
+* `atMostOneInside_ERS`: `J < Ks` for every right quadrilateral, so `ERS` has capacity one.
+* `sarea_ERS_lt_of_cellI`: `J < 39/64` in cell I.
+* `containments_of_cellI`: a central point `Q` below `CE` lies in `ECR ∩ ECS`, and
   `T ∈ ECR ∩ BRS ∩ ERS`.
-* `claim_alpha` (9): `r < 1 - 2s` and `α < 335/384 < 8s`.
-* `eq10` and `lemma2`: the rigidity inequality for two interior points of a triangle whose line
+* `sarea_ERC_lt_of_cellI`: `r < 1 - 2s` and `α < 335/384 < 8s`.
+* `area_ge_of_lineIsolates` and `two_mul_lt_sarea_of_lineIsolates`: the rigidity inequality for two interior points of a triangle whose line
   isolates a vertex.
-* `claim_RCT` (13), `claim_ERT` (14)-(15): `[RCT], [ERT] < 2s`.
-* `theorem1`: no central point lies below `CE` in cell I.
+* `sarea_RCT_lt_of_cellI`, `sarea_ERT_lt_of_cellI`: `[RCT], [ERT] < 2s`.
+* `false_of_cellI_of_below_CE`: no central point lies below `CE` in cell I.
 
-Implicit in the manuscript: Theorem 1 concerns either central point; by the symmetric roles of
-`P` and `Q` in the setting it is stated for `Q`. `lemma2` is stated for a counterclockwise
-triangle `VAB` (relabel `A, B` otherwise).
+`false_of_cellI_of_below_CE` is stated for `Q`; by the symmetric roles of `P` and `Q` in the setting it applies to
+either central point. `two_mul_lt_sarea_of_lineIsolates` is stated for a counterclockwise triangle `VAB` (relabel `A, B`
+otherwise).
 -/
 
 @[expose] public section
@@ -73,8 +74,8 @@ theorem bary_pos {A B C X U V : Point} (hX : InTriangle X A B C) (hA : 0 ≤ sar
   push Not at hcon
   nlinarith [mul_nonpos_of_nonneg_of_nonpos hABC.le hcon]
 
-/-- The scalar core of (5): if `c - 2d - 2√(cd)` has `c ≤ C₀`, `d ≥ d₀ > 0`, `d ≤ c`, `d₀ ≤ C₀`,
-then it is below `C₀ - 2d₀ - 2√(C₀d₀)` (monotone in both arguments), strictly if `d > d₀`. -/
+/-- The scalar core of `noPointInside_EBR_of_cellI`: `c - 2d - 2√(cd)` increases in `c` and decreases in
+`d` for `d ≤ c`, so `0 < d₀ < d ≤ c ≤ C₀` gives `c - 2d - 2√(cd) < C₀ - 2d₀ - 2√(C₀d₀)`. -/
 theorem ear_mono {c d C₀ d₀ : ℝ} (hd₀ : 0 < d₀) (hdd : d₀ < d) (hdc : d ≤ c) (hc : c ≤ C₀) :
     c - 2 * d - 2 * Real.sqrt (c * d) < C₀ - 2 * d₀ - 2 * Real.sqrt (C₀ * d₀) := by
   have hd0 : 0 ≤ d := by linarith
@@ -105,7 +106,8 @@ theorem amgm_inv {z b : ℝ} (hz : 0 < z) (hb : 0 < b) :
   rw [div_add_div _ _ hz.ne' hb.ne', div_le_div_iff₀ hsb (by positivity)]
   nlinarith [sq_nonneg (z - Real.sqrt b), mul_pos hz hsb]
 
-/-- The scalar core of (6): `J ≤ 1 + s - s(1/z + z/b)` with `z = 1 - r`. -/
+/-- The scalar core of `atMostOneInside_ERS`: from `[RSC] ≥ s` and `[DEB] ≥ s`,
+`J = r(t - λ) - (u - λ)k ≤ 1 + s - s(1/z + z/b)` with `z = 1 - r`. -/
 theorem ERS_alg {b l r u k t s : ℝ} (hb : 0 < b) (hl : 0 < l) (hr1 : r < 1)
     (hur : u < r) (hu : 0 ≤ u) (hk : k ≤ 1)
     (hRSC : s ≤ (k - r) * (1 - u) - (t - u) * (1 - r)) (hDEB : s ≤ b * (1 - l)) :
@@ -126,7 +128,7 @@ theorem ERS_alg {b l r u k t s : ℝ} (hb : 0 < b) (hl : 0 < l) (hr1 : r < 1)
   rw [e, le_div_iff₀ (mul_pos hb hz)]
   linarith
 
-/-- The scalar core of (11)-(13) in the support frame of cell I (`UNBALANCED_CELL_I.md` §6.1):
+/-- The scalar core of `sarea_RCT_lt_of_cellI` in the support frame of cell I:
 `x₁ = [EFX], x₂ = [FHX], x₃ = [HEX]` are the subareas of `X` in `E, F, H`, all at least `σ ≥ 1/8`,
 `hf ≥ σ`, and `g = [FAX]` satisfies `(1-h)(1-f) g = (1-f)x₂ - fhx₁`. Then `g < 1/4`. -/
 theorem rct_alg {h f σ g x1 x2 x3 : ℝ} (hh : 0 < h) (hh1 : h < 1) (hf : 0 < f) (hf1 : f < 1)
@@ -200,8 +202,10 @@ theorem isolates_trichotomy {X Y A B C : Point} (hX : InTriangle X A B C)
   · exact Or.inr (Or.inr (Or.inr ⟨c, a, b⟩))
   · exfalso; nlinarith [mul_pos x2 a, mul_pos x3 b, mul_pos x1 c]
 
-/-- Equation (10) in the orientation `[XYV] > 0 > [XYA], [XYB]`. -/
-theorem eq10_oriented {s : ℝ} {V A B X Y : Point} (hX : InTriangle X V A B)
+/-- The data behind `area_ge_of_lineIsolates` in the orientation `[XYV] > 0 > [XYA], [XYB]`: an identity for
+`[XYV][VAB]`, the barycentric identities for `[ABX]` and `[ABY]`, and the lower bounds `s` on the
+areas involved. -/
+theorem sarea_identities_of_neg_of_neg {s : ℝ} {V A B X Y : Point} (hX : InTriangle X V A B)
     (hY : InTriangle Y V A B) (hmin : s / 2 ≤ minTriangleArea ![V, A, B, X, Y]) (hA : sarea X Y A < 0) (hB : sarea X Y B < 0) :
     sarea X Y V * sarea V A B = (sarea X Y V - sarea X Y A) * (sarea X Y V - sarea X Y B) +
         (sarea X Y V - sarea X Y B) * sarea V A X + (sarea X Y V - sarea X Y A) * sarea B V Y ∧
@@ -229,7 +233,7 @@ theorem eq10_oriented {s : ℝ} {V A B X Y : Point} (hX : InTriangle X V A B)
 
 /-- `H ≥ (a+c)(a+d)/a + s((a+c)/a + (a+d)/a) ≥ a + 4s + 3s²/a` and `[ABX], [ABY] ≥ Hs/(a+s)`,
 from the oriented data. -/
-theorem eq10_alg {s a c d H X1 X2 Y1 Y2 W1 W2 : ℝ} (hs : 0 < s) (ha : 0 < a)
+theorem area_ge_of_identities {s a c d H X1 X2 Y1 Y2 W1 W2 : ℝ} (hs : 0 < s) (ha : 0 < a)
     (hid : a * H = (a + c) * (a + d) + (a + d) * X1 + (a + c) * Y1)
     (hc : s ≤ c) (hd : s ≤ d) (hX1 : s ≤ X1) (hY1 : s ≤ Y1)
     (hW1 : W1 * a = X2 * c + X1 * d) (hW2 : W2 * a = Y1 * c + Y2 * d)
@@ -262,11 +266,9 @@ open TypeII
 
 variable {l b : ℝ} {P Q R S T : Point}
 
-/-- **Claim** (`UNBALANCED_CELL_I:claim-order`). For every quadrilateral right hull `B, R, S, C`
-with `R = (r, u)`, `S = (k, t)` in the right container: `r > u`, `b < r < k ≤ 1` and
-`0 ≤ u < t < 1` (from the identity `V/w = ((x-y)(z-x) - (1-x)U/w)/x`).
-`docs/proof/nine/UNBALANCED_CELL_I.md`, lines 40-49. -/
-theorem claim_order (h : Row123 l b P Q R S T) (hq : QuadHull (ptB b) R S ptC T) :
+/-- For every quadrilateral right hull `B, R, S, C` with `R = (r, u)`, `S = (k, t)` in the right
+container: `r > u`, `b < r < k ≤ 1` and `0 ≤ u < t < 1`. -/
+theorem coord_order_of_quadHull (h : Row123 l b P Q R S T) (hq : QuadHull (ptB b) R S ptC T) :
     R.2 < R.1 ∧ b < R.1 ∧ R.1 < S.1 ∧ S.1 ≤ 1 ∧ 0 ≤ R.2 ∧ R.2 < S.2 ∧ S.2 < 1 := by
   exact quad_order h.b_pos (by linarith [h.b_le]) h.R_mem h.S_mem hq.1
 
@@ -284,7 +286,8 @@ theorem DEB_ge (h : Row123 l b P Q R S T)
   rw [e, abs_of_pos (by nlinarith)] at hDEB
   exact hDEB
 
-/-- `UNBALANCED_RIGHT_HULL.md` §4.2 (cut-independent): in cells I and III, `b > 13/100`. -/
+/-- In support cells I and III, `b > 13/100`, in every cut (from the outer-ear bound
+`outerEar_nonpos`). -/
 theorem b_gt_13_100 (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T)
@@ -292,7 +295,7 @@ theorem b_gt_13_100 (h : Row123 l b P Q R S T)
   have hDEB := DEB_ge h hmin
   have hb := h.b_pos
   have hl1 := h.l_lt
-  have hN := claim_Nb h hmin hq hc
+  have hN := outerEar_nonpos h hmin hq hc
   by_contra hcon
   push Not at hcon
   have hsb : 7 / 64 ≤ b := by nlinarith [mul_pos hb h.l_pos]
@@ -311,8 +314,8 @@ theorem b_gt_13_100 (h : Row123 l b P Q R S T)
   have := mul_nonpos_of_nonpos_of_nonneg hC (by positivity : (0:ℝ) ≤ 4096 * b ^ 2)
   linarith
 
-/-- A right point is strictly below `CE` (`UNBALANCED_CELL_I.md` §3: the container is below `BC`,
-and `CE` is above `BC` for `x < 1`). -/
+/-- A right point is strictly below `CE`: the container is below `BC`, and `CE` is above `BC`
+for `x < 1`. -/
 theorem below_CE_of_right {l b : ℝ} {X : Point} (hb : 0 < b) (hb1 : b < 1) (hl : 0 < l)
     (hl1 : l < 1) (hX : X ∈ unitSquare) (hr : 0 < sarea (ptB b) X ptC) :
     sarea (ptE l) ptC X < 0 := by
@@ -320,23 +323,17 @@ theorem below_CE_of_right {l b : ℝ} {X : Point} (hb : 0 < b) (hb1 : b < 1) (hl
   simp only [sarea, ptB, ptC, ptE] at hr ⊢
   nlinarith [mul_nonneg (by nlinarith : (0:ℝ) ≤ 1 - (1 - b) * (1 - l)) (sub_nonneg.2 x1)]
 
-/-- **Claim** (`UNBALANCED_CELL_I:claim-b-range`), equations (2)-(3). In cell I:
-`w ≥ Ks > 13/16`, `b < 3/16` and `b > 13/100` (`s = 7/64`).
-`docs/proof/nine/UNBALANCED_CELL_I.md`, lines 51-69.
-Uses: UNBALANCED_RIGHT_HULL:claim-outer-cell-scale, UNBALANCED_RIGHT_HULL:claim-Nb (the
-cut-independent §4.2 argument of that note). -/
-theorem claim_b_range (h : Row123 l b P Q R S T)
+/-- In support cell I: `w ≥ Ks > 13/16`, `b < 3/16` and `b > 13/100` (`s = 7/64`). -/
+theorem b_range_of_cellI (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellI (ptB b) R S ptC T) :
     Kc * (7 / 64) ≤ 1 - b ∧ 13 / 16 < Kc * (7 / 64) ∧ b < 3 / 16 ∧ 13 / 100 < b := by
-  obtain ⟨-, h1, h2, h3⟩ := claim_outer_cell_scale h hmin hq (Or.inl hc)
+  obtain ⟨-, h1, h2, h3⟩ := outer_cell_bounds h hmin hq (Or.inl hc)
   exact ⟨h1, h2, h3, b_gt_13_100 h hmin hq (Or.inl hc)⟩
 
-/-- **Claim** (`UNBALANCED_CELL_I:claim-empty-EBR`), equations (4)-(5). In cell I,
-`δ = [EBR] < C₀ - 2d₀ - 2√(C₀d₀) < 3s` with `C₀ = 101/192`, `d₀ = 1/64` (`s = 7/64`); hence
-`EBR` contains no further actual point. `docs/proof/nine/UNBALANCED_CELL_I.md`, lines 71-90.
-Uses: UNBALANCED_RIGHT_HULL:claim-ear-root, UNBALANCED_CELL_I:claim-b-range. -/
-theorem claim_empty_EBR (h : Row123 l b P Q R S T)
+/-- In support cell I, `δ = [EBR] < C₀ - 2d₀ - 2√(C₀d₀) < 3s` with `C₀ = 101/192`, `d₀ = 1/64`
+(`s = 7/64`); hence `EBR` contains no further actual point. -/
+theorem noPointInside_EBR_of_cellI (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellI (ptB b) R S ptC T) :
     sarea (ptE l) (ptB b) R < 101 / 192 - 2 * (1 / 64) - 2 * Real.sqrt (101 / 192 * (1 / 64)) ∧
@@ -346,8 +343,8 @@ theorem claim_empty_EBR (h : Row123 l b P Q R S T)
   have hl := h.l_pos
   have hb1 : b < 1 := by linarith [h.b_le]
   have hw : 0 < 1 - b := by linarith
-  obtain ⟨-, -, h316, h13⟩ := claim_b_range h hmin hq hc
-  have hroot := (claim_ear_root h hmin hq (Or.inl hc)).2.2.2.1
+  obtain ⟨-, -, h316, h13⟩ := b_range_of_cellI h hmin hq hc
+  have hroot := (EBR_le_ear_root h hmin hq (Or.inl hc)).2.2.2.1
   have hDEB := DEB_ge h hmin
   -- `c ≤ 1 + s - s/b < 101/192`, `d > 1/64`, `d ≤ c`
   have hcC : b + l * (1 - b) < 101 / 192 := by
@@ -371,12 +368,10 @@ theorem claim_empty_EBR (h : Row123 l b P Q R S T)
   rw [typeIIConfig_eq] at hmin ⊢
   exact noPointInside_of_lt (a := 2) (b := 3) (c := 6) (by linarith) (hδ.trans h2)
 
-/-- **Claim** (`UNBALANCED_CELL_I:claim-ERS-cap`), equation (6). For every right quadrilateral
-(any cell, `b ≤ 1/2`), with `z = 1 - r`, `s = 7/64`:
+/-- For every right quadrilateral (any cell, `b ≤ 1/2`), with `z = 1 - r`, `s = 7/64`:
 `J = [ERS] ≤ 1 + s - s(1/z + z/b) ≤ 1 + s - 2s/√b < Ks`, so `ERS` contains at most one further
-actual point. `docs/proof/nine/UNBALANCED_CELL_I.md`, lines 92-116.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_ERS_cap (h : Row123 l b P Q R S T)
+actual point. -/
+theorem atMostOneInside_ERS (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) :
     let s : ℝ := 7 / 64
@@ -430,28 +425,24 @@ theorem claim_ERS_cap (h : Row123 l b P Q R S T)
   exact atMostOneInside_of_lt (a := 2) (b := 6) (c := 7) (by norm_num) hm
     (lt_of_le_of_lt (hJ.trans h2) h3)
 
-/-- **Claim** (`UNBALANCED_CELL_I:claim-J`), equation (7). In cell I, `J = [ERS] < 1/2 + s =
-39/64`. `docs/proof/nine/UNBALANCED_CELL_I.md`, lines 117-121.
-Uses: UNBALANCED_CELL_I:claim-ERS-cap, UNBALANCED_CELL_I:claim-b-range. -/
-theorem claim_J (h : Row123 l b P Q R S T)
+/-- In support cell I, `J = [ERS] < 1/2 + s = 39/64`. -/
+theorem sarea_ERS_lt_of_cellI (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellI (ptB b) R S ptC T) :
     sarea (ptE l) R S < 39 / 64 := by
   have hb := h.b_pos
-  obtain ⟨hJ, h2, -, -⟩ := claim_ERS_cap h hmin hq
-  obtain ⟨-, -, h316, -⟩ := claim_b_range h hmin hq hc
+  obtain ⟨hJ, h2, -, -⟩ := atMostOneInside_ERS h hmin hq
+  obtain ⟨-, -, h316, -⟩ := b_range_of_cellI h hmin hq hc
   have hsb : Real.sqrt b < 7 / 16 := by
     rw [Real.sqrt_lt' (by norm_num)]; linarith
   have hsb0 := Real.sqrt_pos.2 hb
   have : 1 / 2 < 2 * (7 / 64) / Real.sqrt b := by rw [lt_div_iff₀ hsb0]; linarith
   linarith
 
-/-- **Claim** (`UNBALANCED_CELL_I:claim-containments`), equation (8). The right points are below
-`CE`. In cell I, if the central point `Q` is below `CE`, then `Q, T ∈ int ECR`, `Q ∈ int ECS`,
-and `T ∈ int BRS ∩ int ERS` (counterclockwise orders `E, R, C`; `E, S, C`; `B, R, S`;
-`E, R, S`). `docs/proof/nine/UNBALANCED_CELL_I.md`, lines 123-143.
-Uses: UNBALANCED_CELL_I:claim-empty-EBR, UNBALANCED_CELL_I:claim-ERS-cap. -/
-theorem claim_containments (h : Row123 l b P Q R S T)
+/-- The right points are below `CE`. In support cell I, if the central point `Q` is below `CE`,
+then `Q, T ∈ int ECR`, `Q ∈ int ECS`, and `T ∈ int BRS ∩ int ERS` (counterclockwise orders
+`E, R, C`; `E, S, C`; `B, R, S`; `E, R, S`). -/
+theorem containments_of_cellI (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellI (ptB b) R S ptC T)
     (hQ : sarea (ptE l) ptC Q < 0) :
@@ -466,13 +457,13 @@ theorem claim_containments (h : Row123 l b P Q R S T)
   have hS := below_CE_of_right hb hb1 hl hl1 h.S_mem h.S_right
   have hT := below_CE_of_right hb hb1 hl hl1 h.T_mem h.T_right
   refine ⟨hR, hS, hT, ?_⟩
-  obtain ⟨-, -, hEBR⟩ := claim_empty_EBR h hmin hq hc
-  obtain ⟨-, -, -, hERS⟩ := claim_ERS_cap h hmin hq
+  obtain ⟨-, -, hEBR⟩ := noPointInside_EBR_of_cellI h hmin hq hc
+  obtain ⟨-, -, -, hERS⟩ := atMostOneInside_ERS h hmin hq
   obtain ⟨hur, hbr, hrk, hk1, hu, hut, ht1⟩ := quad_order hb hb1 h.R_mem h.S_mem hq.1
   have hmin' := hmin
   rw [typeIIConfig_eq] at hmin'
   have hpos : 0 < minTriangleArea ![ptD, ptC, ptE l, ptB b, P, Q, R, S, T] := by linarith
-  have hQE := (claim_central_cut hb hb1 hl hl1 h.Q_central).2.2 hQ
+  have hQE := (central_inTriangle_iff hb hb1 hl hl1 h.Q_central).2.2 hQ
   obtain ⟨⟨q1, q2, q3, q4⟩, t1, t2, t3, t4⟩ := hq
   have hBRC : 0 < sarea (ptB b) R ptC := h.R_right
   have hERC : 0 < sarea (ptE l) R ptC := by
@@ -578,11 +569,9 @@ theorem claim_containments (h : Row123 l b P Q R S T)
     · exact hpos'
   exact ⟨hQ1, hT1, ⟨hESQ, hSCQ, hCEQ⟩, hc.1, hT2⟩
 
-/-- **Claim** (`UNBALANCED_CELL_I:claim-alpha`), equation (9). In cell I, `r < 1 - 2s` and
-`α = [ERC] = 1 - u - q(1-r) < 335/384 < 8s` (`s = 7/64`). `docs/proof/nine/UNBALANCED_CELL_I.md`,
-lines 145-162.
-Uses: UNBALANCED_RIGHT_HULL:claim-lower-vertex, UNBALANCED_CELL_I:claim-b-range. -/
-theorem claim_alpha (h : Row123 l b P Q R S T)
+/-- In support cell I, `r < 1 - 2s` and `α = [ERC] = 1 - u - q(1-r) < 335/384 < 8s`
+(`s = 7/64`). -/
+theorem sarea_ERC_lt_of_cellI (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellI (ptB b) R S ptC T) :
     R.1 < 1 - 2 * (7 / 64) ∧ sarea (ptE l) R ptC < 335 / 384 ∧ (335 / 384 : ℝ) < 8 * (7 / 64) := by
@@ -590,7 +579,7 @@ theorem claim_alpha (h : Row123 l b P Q R S T)
   have hl := h.l_pos
   have hb1 : b < 1 := by linarith [h.b_le]
   have hw : 0 < 1 - b := by linarith
-  obtain ⟨-, -, h316, h13⟩ := claim_b_range h hmin hq hc
+  obtain ⟨-, -, h316, h13⟩ := b_range_of_cellI h hmin hq hc
   obtain ⟨hx0, hx1, hu, hux, ha, -, hI, -⟩ := quad_ears h hmin hq
   have hear := hI hc
   have hDEB := DEB_ge h hmin
@@ -618,14 +607,12 @@ theorem claim_alpha (h : Row123 l b P Q R S T)
   nlinarith [mul_le_mul_of_nonneg_left (by linarith : (2:ℝ) * (7 / 64) ≤ 1 - R.1)
     (by linarith : (0:ℝ) ≤ 1 - l)]
 
-/-- **Equation (10)** of UNBALANCED_CELL_I:Lemma2 (the line-coordinate inequality). Let `X, Y`
-lie strictly inside the counterclockwise triangle `VAB`, every doubled triangle on these five
-points be at least `s > 0`, and `XY` isolate `V` from `A, B`. With `H = [VAB]`, `a = |[VXY]|`,
-`c = |[AXY]|`, `d = |[BXY]|`:
+/-- The line-coordinate inequality. Let `X, Y` lie strictly inside the counterclockwise triangle
+`VAB`, every doubled triangle on these five points be at least `s > 0`, and `XY` isolate `V` from
+`A, B`. With `H = [VAB]`, `a = |[VXY]|`, `c = |[AXY]|`, `d = |[BXY]|`:
 `H ≥ (a+c)(a+d)/a + s((a+c)/a + (a+d)/a) ≥ a + 4s + 3s²/a`, and each interior point has opposite
-subtriangle area at least `Hs/(a+s)` (`aθ ≥ s(1-θ)` for the barycentric weight `θ` of `V`).
-`docs/proof/nine/UNBALANCED_CELL_I.md`, lines 173-196. -/
-theorem eq10 {s : ℝ} {V A B X Y : Point} (hs : 0 < s) (hX : InTriangle X V A B)
+subtriangle area at least `Hs/(a+s)` (`aθ ≥ s(1-θ)` for the barycentric weight `θ` of `V`). -/
+theorem area_ge_of_lineIsolates {s : ℝ} {V A B X Y : Point} (hs : 0 < s) (hX : InTriangle X V A B)
     (hY : InTriangle Y V A B) (hmin : s / 2 ≤ minTriangleArea ![V, A, B, X, Y])
     (hiso : LineIsolates X Y V A B) :
     let H := sarea V A B
@@ -647,32 +634,31 @@ theorem eq10 {s : ℝ} {V A B X Y : Point} (hs : 0 < s) (hX : InTriangle X V A B
   have hsumX := sarea_add_sarea_add_sarea V A B X
   have hsumY := sarea_add_sarea_add_sarea V A B Y
   rcases hiso with ⟨h1, h2, h3⟩ | ⟨h1, h2, h3⟩
-  · obtain ⟨i1, e1, e2, e3, e4, i2, i3, e5, e6⟩ := eq10_oriented hX hY hmin h2 h3
+  · obtain ⟨i1, e1, e2, e3, e4, i2, i3, e5, e6⟩ := sarea_identities_of_neg_of_neg hX hY hmin h2 h3
     have ha : a = sarea X Y V := abs_of_pos h1
     have hc : c = -sarea X Y A := abs_of_neg h2
     have hd : d = -sarea X Y B := abs_of_neg h3
     rw [ha, hc, hd]
-    exact eq10_alg hs h1 (by rw [i1]; ring) e1 e2 e3 e4 i2 i3 e5 e6 (by linarith) (by linarith)
-  · obtain ⟨i1, e1, e2, e3, e4, i2, i3, e5, e6⟩ := eq10_oriented hY hX hsw
+    exact area_ge_of_identities hs h1 (by rw [i1]; ring) e1 e2 e3 e4 i2 i3 e5 e6 (by linarith) (by linarith)
+  · obtain ⟨i1, e1, e2, e3, e4, i2, i3, e5, e6⟩ := sarea_identities_of_neg_of_neg hY hX hsw
       (by rw [cA]; linarith) (by rw [cB]; linarith)
     have ha : a = sarea Y X V := by rw [cV]; exact abs_of_neg h1
     have hc : c = -sarea Y X A := by rw [cA, neg_neg]; exact abs_of_pos h2
     have hd : d = -sarea Y X B := by rw [cB, neg_neg]; exact abs_of_pos h3
     rw [ha, hc, hd]
-    obtain ⟨k1, k2, k3, k4⟩ := eq10_alg hs (by rw [cV]; linarith) (by rw [i1]; ring) e1 e2 e3 e4
+    obtain ⟨k1, k2, k3, k4⟩ := area_ge_of_identities hs (by rw [cV]; linarith) (by rw [i1]; ring) e1 e2 e3 e4
       i2 i3 e5 e6 (by linarith) (by linarith)
     exact ⟨k1, k2, k4, k3⟩
 
-/-- **Lemma 2** (`UNBALANCED_CELL_I:Lemma2`). Suppose the (counterclockwise) actual triangle
-`VAB` contains two actual points `X, Y`, every doubled triangle on these five points is at least
-`s > 0`, its doubled area `H` is less than `8s`, and `XY` isolates `V` from `A, B`. Then both
-opposite areas `[ABX]`, `[ABY]` are greater than `2s`; the proof also gives `a = |[VXY]| < 3s`.
-`docs/proof/nine/UNBALANCED_CELL_I.md`, lines 164-203. -/
-theorem lemma2 {s : ℝ} {V A B X Y : Point} (hs : 0 < s) (hX : InTriangle X V A B)
+/-- Two-interior-point rigidity. Suppose the (counterclockwise) actual triangle `VAB` contains two
+actual points `X, Y`, every doubled triangle on these five points is at least `s > 0`, its doubled
+area `H` is less than `8s`, and `XY` isolates `V` from `A, B`. Then both opposite areas `[ABX]`,
+`[ABY]` are greater than `2s`; the proof also gives `a = |[VXY]| < 3s`. -/
+theorem two_mul_lt_sarea_of_lineIsolates {s : ℝ} {V A B X Y : Point} (hs : 0 < s) (hX : InTriangle X V A B)
     (hY : InTriangle Y V A B) (hmin : s / 2 ≤ minTriangleArea ![V, A, B, X, Y])
     (hiso : LineIsolates X Y V A B) (hH : sarea V A B < 8 * s) :
     |sarea X Y V| < 3 * s ∧ 2 * s < sarea A B X ∧ 2 * s < sarea A B Y := by
-  obtain ⟨k1, k2, k3, k4⟩ := eq10 hs hX hY hmin hiso
+  obtain ⟨k1, k2, k3, k4⟩ := area_ge_of_lineIsolates hs hX hY hmin hiso
   have hpos : 0 < minTriangleArea ![V, A, B, X, Y] := by linarith
   have nV : sarea X Y V ≠ 0 := sarea_ne_zero_of_min_pos hpos 3 4 0
   set a := |sarea X Y V| with ha_def
@@ -696,17 +682,15 @@ theorem lemma2 {s : ℝ} {V A B X Y : Point} (hs : 0 < s) (hX : InTriangle X V A
     nlinarith [mul_le_mul_of_nonneg_right hH hs.le]
   exact ⟨ha3, key.trans_le k3, key.trans_le k4⟩
 
-/-- **Claim** (`UNBALANCED_CELL_I:claim-RCT`), equation (13). In cell I,
-`[RCT] < Ω/4 ≤ w/4 < 2s`, where `Ω ≤ w` is the area scale of the right support normalization
-(`s = 7/64`). `docs/proof/nine/UNBALANCED_CELL_I.md`, lines 207-247.
-Uses: TYPE_II:claim-support-normalization, UNBALANCED_CELL_I:claim-b-range. -/
-theorem claim_RCT (h : Row123 l b P Q R S T)
+/-- In support cell I, `[RCT] < Ω/4 ≤ w/4 < 2s`, where `Ω ≤ w` is the area scale of the right
+support normalization `quad_support` (`s = 7/64`). -/
+theorem sarea_RCT_lt_of_cellI (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellI (ptB b) R S ptC T) :
     sarea R ptC T < (1 - b) / 4 ∧ (1 - b) / 4 < 2 * (7 / 64) := by
   have hb := h.b_pos
   have hb1 : b < 1 := by linarith [h.b_le]
-  obtain ⟨-, -, h316, h13⟩ := claim_b_range h hmin hq hc
+  obtain ⟨-, -, h316, h13⟩ := b_range_of_cellI h hmin hq hc
   refine ⟨?_, by linarith⟩
   obtain ⟨Ω, hh, f, m, hΩ, hΩ1, hm, mC, mB, mS, mR, hN⟩ := quad_support hb1 h.R_mem h.S_mem hq
   rw [typeIIConfig_eq] at hmin
@@ -749,22 +733,19 @@ theorem claim_RCT (h : Row123 l b P Q R S T)
   rw [p4, div_lt_iff₀ hΩ] at hlt
   linarith
 
-/-- **Claim** (`UNBALANCED_CELL_I:claim-ERT`), equations (14)-(15). In cell I,
-`U = [BRS] < 1521/4096` and `[ERT] < 21239/97344 = 2s - 55/97344 < 2s` (`s = 7/64`).
-`docs/proof/nine/UNBALANCED_CELL_I.md`, lines 249-273.
-Uses: TYPE_II:claim-support-normalization, UNBALANCED_CELL_I:claim-J,
-UNBALANCED_CELL_I:claim-empty-EBR. -/
-theorem claim_ERT (h : Row123 l b P Q R S T)
+/-- In support cell I, `U = [BRS] < 1521/4096` and `[ERT] < 21239/97344 = 2s - 55/97344 < 2s`
+(`s = 7/64`). -/
+theorem sarea_ERT_lt_of_cellI (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellI (ptB b) R S ptC T) :
     sarea (ptB b) R S < 1521 / 4096 ∧ sarea (ptE l) R T < 21239 / 97344 ∧
       (21239 / 97344 : ℝ) < 2 * (7 / 64) := by
   have hb := h.b_pos
   have hb1 : b < 1 := by linarith [h.b_le]
-  obtain ⟨-, -, h316, h13⟩ := claim_b_range h hmin hq hc
-  have hJ := claim_J h hmin hq hc
+  obtain ⟨-, -, h316, h13⟩ := b_range_of_cellI h hmin hq hc
+  have hJ := sarea_ERS_lt_of_cellI h hmin hq hc
   have hsq := sqrt_U_add_sqrt_V hb1 h.R_mem h.S_mem hq
-  obtain ⟨hsEBR, -, -, -, -⟩ := claim_ear_root h hmin hq (Or.inl hc)
+  obtain ⟨hsEBR, -, -, -, -⟩ := EBR_le_ear_root h hmin hq (Or.inl hc)
   obtain ⟨hur, hbr, hrk, hk1, hu, hut, ht1⟩ := quad_order hb hb1 h.R_mem h.S_mem hq.1
   rw [typeIIConfig_eq] at hmin
   have hm : (7 / 64 : ℝ) / 2 ≤ minTriangleArea ![ptD, ptC, ptE l, ptB b, P, Q, R, S, T] := by
@@ -775,7 +756,7 @@ theorem claim_ERT (h : Row123 l b P Q R S T)
   have hU3 : 3 * (7 / 64) ≤ sarea (ptB b) R S :=
     three_le_of_inside (X := ![ptD, ptC, ptE l, ptB b, P, Q, R, S, T]) (i := 8)
       (a := 3) (b := 6) (c := 7) hm hc.1
-  -- (14): `√U < 39/64`
+  -- `√U < 39/64`, hence `U < 1521/4096`
   have hU : sarea (ptB b) R S < 1521 / 4096 := by
     have h1 : Real.sqrt (1 - b) < 15 / 16 := by rw [Real.sqrt_lt' (by norm_num)]; linarith
     have h2 : 21 / 64 < Real.sqrt (sarea ptC R S) := by
@@ -811,12 +792,9 @@ theorem claim_ERT (h : Row123 l b P Q R S T)
   have k4 := mul_le_mul_of_nonneg_right hcon hUpos.le
   nlinarith
 
-/-- **Theorem 1** (`UNBALANCED_CELL_I:Theorem1`). In support cell I no central point lies below
-`CE`. With UNBALANCED_RIGHT_HULL:Theorem2 (and the unbalanced cut lemma), cell I is excluded
-in every cut. `docs/proof/nine/UNBALANCED_CELL_I.md`, lines 24-30, 275-291.
-Uses: UNBALANCED_CELL_I:claim-containments, UNBALANCED_CELL_I:claim-alpha,
-UNBALANCED_CELL_I:Lemma2, UNBALANCED_CELL_I:claim-RCT, UNBALANCED_CELL_I:claim-ERT. -/
-theorem theorem1 (h : Row123 l b P Q R S T)
+/-- In support cell I no central point lies below `CE`. With `UnbalancedRightHull.not_cellI_or_cellIII` and
+the unbalanced cut lemma `TypeII.unbalancedCutLemma`, cell I is excluded in every cut. -/
+theorem false_of_cellI_of_below_CE (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellI (ptB b) R S ptC T)
     (hQ : sarea (ptE l) ptC Q < 0) : False := by
@@ -824,10 +802,10 @@ theorem theorem1 (h : Row123 l b P Q R S T)
   have hl := h.l_pos
   have hl1 := h.l_lt
   have hb1 : b < 1 := by linarith [h.b_le]
-  obtain ⟨-, -, -, hQ1, hT1, hQ3, hT2, -⟩ := claim_containments h hmin hq hc hQ
-  obtain ⟨-, hα, hα8⟩ := claim_alpha h hmin hq hc
-  obtain ⟨hRCT, hRCT2⟩ := claim_RCT h hmin hq hc
-  obtain ⟨-, hERT, hERT2⟩ := claim_ERT h hmin hq hc
+  obtain ⟨-, -, -, hQ1, hT1, hQ3, hT2, -⟩ := containments_of_cellI h hmin hq hc hQ
+  obtain ⟨-, hα, hα8⟩ := sarea_ERC_lt_of_cellI h hmin hq hc
+  obtain ⟨hRCT, hRCT2⟩ := sarea_RCT_lt_of_cellI h hmin hq hc
+  obtain ⟨-, hERT, hERT2⟩ := sarea_ERT_lt_of_cellI h hmin hq hc
   rw [typeIIConfig_eq] at hmin
   have hpos : 0 < minTriangleArea ![ptD, ptC, ptE l, ptB b, P, Q, R, S, T] := by linarith
   have m5 : ∀ (f : Fin 5 → Fin 9) (Y : Fin 5 → Point), Function.Injective f →
@@ -841,12 +819,12 @@ theorem theorem1 (h : Row123 l b P Q R S T)
     fun ⟨a1, a2, a3⟩ => ⟨a3, a1, a2⟩
   rcases isolates_trichotomy hQ1 nE nR nC with hiso | hiso | hiso
   · -- `E` isolated: `[RCT] > 2s`
-    have := lemma2 (s := 7 / 64) (by norm_num) hQ1 hT1
+    have := two_mul_lt_sarea_of_lineIsolates (s := 7 / 64) (by norm_num) hQ1 hT1
       (m5 ![2, 6, 1, 5, 8] _ (by decide) (by funext x; fin_cases x <;> rfl)) hiso
       (by linarith)
     linarith [this.2.2]
   · -- `R` isolated: a sign contradiction through `B` and `S`
-    have hQE := (claim_central_cut hb hb1 hl hl1 h.Q_central).2.2 hQ
+    have hQE := (central_inTriangle_iff hb hb1 hl hl1 h.Q_central).2.2 hQ
     have i1 := sarea_bary (ptE l) (ptB b) ptC Q Q T
     have i2 := sarea_bary (ptB b) R S T Q T
     have i3 := sarea_bary (ptE l) S ptC Q Q T
@@ -865,7 +843,7 @@ theorem theorem1 (h : Row123 l b P Q R S T)
       have hS : 0 < sarea Q T S := by nlinarith [mul_pos b2 (neg_pos.2 hB), mul_pos b3 (neg_pos.2 hR)]
       nlinarith [mul_pos c2 hE, mul_pos c1 hC, mul_pos c3 hS]
   · -- `C` isolated: `[ERT] > 2s`
-    have := lemma2 (s := 7 / 64) (by norm_num) (rot hQ1) (rot hT1)
+    have := two_mul_lt_sarea_of_lineIsolates (s := 7 / 64) (by norm_num) (rot hQ1) (rot hT1)
       (m5 ![1, 2, 6, 5, 8] _ (by decide) (by funext x; fin_cases x <;> rfl)) hiso
       (by rw [show sarea ptC (ptE l) R = sarea (ptE l) R ptC by unfold sarea; ring]; linarith)
     linarith [this.2.2]

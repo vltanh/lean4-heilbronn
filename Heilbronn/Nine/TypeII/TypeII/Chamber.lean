@@ -3,27 +3,22 @@ module
 public import Heilbronn.Nine.TypeII.TypeII.Basic
 
 /-! # Type II: the two-point chamber lemma and the central-pair line table
-(`docs/proof/nine/TYPE_II.md`, §§6 and 12)
 
-Two central points `P, Q` strictly inside both `DCB` and `DCE` (`TYPE_II.md` lines 406–535 and
-1141–1211).
+Two central points `P, Q` strictly inside both `DCB` and `DCE`.
 
-* `twoPointChamberLemma` (**Two-point chamber lemma**, §6): with `b ≤ 1/2`, the orientations
-  `[BPQ] > 0`, `[EPQ] < 0` (13) force a triangle of area `< 7/128` among `D, C, B, E, P, Q`.
-* `chamberG`, `claim_chamber_general`: the proof of §6 only uses `b ≤ 1/2` to show that the
-  polynomial `G(b, z)` of (20) is positive at `z = 1 - λ`; the derivative bound (18)–(19) holds
-  for every `b ≥ 0` (`TYPE_II.md` §9 lines 855–877 and `TYPE_II_COMPLETION.md` §8.3, lines
-  890–905, use this form).
-* `claim_PQ_line_table` (§12 table): when `B, E` are on the same side of `PQ`, at a general
+* `twoPointChamberLemma` (the two-point chamber lemma): with `b ≤ 1/2`, the orientations
+  `[BPQ] > 0`, `[EPQ] < 0` force a triangle of area `< 7/128` among `D, C, B, E, P, Q`.
+* `chamberG`, `minTriangleArea_lt_of_chamberG_pos`: the proof of the chamber lemma only uses `b ≤ 1/2` to
+  show that the polynomial `G(b, z)` is positive at `z = 1 - λ`; the derivative bound holds for
+  every `b ≥ 0`, and later files use this general form.
+* `pq_line_table` (the line table): when `B, E` are on the same side of `PQ`, at a general
   positive doubled threshold `s`, the three positions of `D, C` and their necessary quadratic
-  inequalities `A² ≥ 4sq(1+bq)`, `A > 0`. Stated, as `TYPE_II_COMPLETION.md` §8.2 and
-  `TYPE_II_BALANCED.md` §6 use it, at a general threshold, for `0 < b < 1`, with the same-side
-  hypothesis on `B, E` (no `b ≤ 1/2`, no appeal to §6).
-* `claim_b_le_two_sevenths` ((36)): at doubled threshold `7/64` and `b ≤ 1/2`, if `D, C` are on
+  inequalities `A² ≥ 4sq(1+bq)`, `A > 0`. Stated at a general threshold, for `0 < b < 1`, with
+  the same-side hypothesis on `B, E` (no `b ≤ 1/2`, no appeal to the chamber lemma).
+* `b_le_two_sevenths`: at doubled threshold `7/64` and `b ≤ 1/2`, if `D, C` are on
   opposite sides of `PQ` then `b ≤ 2/7`.
 
-The brackets `[BPQ]` of (13) are signed ordinary areas; only their signs are used, so they are
-written `sarea`.
+The brackets `[BPQ]` are signed areas; only their signs are used, so they are written `sarea`.
 -/
 
 @[expose] public section
@@ -238,15 +233,16 @@ theorem pq_table_row3 (hs : 0 < s) (hb : 0 < b) (hq : 0 < 1 - l)
 
 end PQTable
 
-/-- The polynomial `G(b, z)` of `TYPE_II.md` (20), with `F(q₀) = -z G(b,z) / (4096 (1+bz)²)`. -/
+/-- The polynomial `G(b, z)`, with `F(q₀) = -z G(b,z) / (4096 (1+bz)²)` for the quadratic `F` of
+`chamber_core`. -/
 def chamberG (b z : ℝ) : ℝ :=
   448 * b ^ 3 * z ^ 3 + b ^ 2 * z ^ 2 * (1890 - 3648 * z) +
     b * z * (3648 * z ^ 2 - 5293 * z + 2135) + 399 * z ^ 2 - 847 * z + 644
 
-/-- The scalar core of §6, for `λ ∈ [0, 1/4]`: with `σ = 7/64`, `z = 1 - λ ≥ 3/4`, `G(b,z) > 0`
-and `q ≥ q₀` (15), the quadratic `F(q)` of (17) is negative. Here
-`(1+bz)² F(q) = -z G(b,z)/4096 + d M/64 - a d²`, `d = (1+bz)(q - q₀)`, `M = 64(1+bz)F'(q₀)` of
-(18), `a = bz + λ`. -/
+/-- The scalar core of the chamber lemma, for `λ ∈ [0, 1/4]`: with `σ = 7/64`, `z = 1 - λ ≥ 3/4`,
+`G(b,z) > 0` and `q ≥ q₀` (the hypothesis `hq0`), the quadratic `F(q)` of `hF` is negative. Here
+`(1+bz)² F(q) = -z G(b,z)/4096 + d M/64 - a d²`, `d = (1+bz)(q - q₀)`, `M = 64(1+bz)F'(q₀)`,
+`a = bz + λ`. -/
 theorem chamber_core {b l q : ℝ} (hb : 0 ≤ b) (hz : 3 / 4 ≤ 1 - l) (hl : 0 ≤ l)
     (hG : 0 < chamberG b (1 - l))
     (hq0 : l + (2 - l) * (7 / 64) + b * (1 - l) ≤ q * (1 + b * (1 - l)))
@@ -274,8 +270,8 @@ theorem chamber_core {b l q : ℝ} (hb : 0 ≤ b) (hz : 3 / 4 ≤ 1 - l) (hl : 0
   nlinarith [mul_pos (by linarith : (0:ℝ) < z) hG, mul_nonpos_of_nonneg_of_nonpos hd0 hM.le,
     mul_nonneg (by positivity : (0:ℝ) ≤ b * z + l) (sq_nonneg d)]
 
-/-- `G(b, z) > 0` for `0 ≤ b ≤ 1/2`, `3/4 ≤ z ≤ 1` (`TYPE_II.md` lines 509–532): `G` lies above
-its chord in `b`, `G(0,z) ≥ 196` and `G(1/2,z) > 0`. -/
+/-- `G(b, z) > 0` for `0 ≤ b ≤ 1/2`, `3/4 ≤ z ≤ 1`: `G` lies above its chord in `b`,
+`G(0,z) ≥ 196` and `G(1/2,z) > 0`. -/
 theorem chamberG_pos {b z : ℝ} (hb : 0 ≤ b) (hb2 : b ≤ 1 / 2) (hz : 3 / 4 ≤ z) (hz1 : z ≤ 1) :
     0 < chamberG b z := by
   have hG0 : 0 < 399 * z ^ 2 - 847 * z + 644 := by nlinarith [sq_nonneg (z - 847 / 798)]
@@ -295,7 +291,7 @@ theorem chamberG_pos {b z : ℝ} (hb : 0 ≤ b) (hb2 : b ≤ 1 / 2) (hz : 3 / 4 
   · nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ 1 - 2 * b) hG0.le, mul_pos h0 hGh]
 
 /-- In the chamber setting with least area at least `7/128`, the two-interior-point lemma on `DCE`
-gives `z = 1 - λ ≥ (4+2√3)(7/64) > 13/16` ((14)). -/
+gives `z = 1 - λ ≥ (4+2√3)(7/64) > 13/16`. -/
 theorem chamber_z_bound {l b : ℝ} {P Q : Point}
     (hPE : InTriangle P ptD (ptE l) ptC) (hQE : InTriangle Q ptD (ptE l) ptC)
     (hmin : 7 / 128 ≤ minTriangleArea ![ptD, ptC, ptE l, ptB b, P, Q]) :
@@ -303,7 +299,7 @@ theorem chamber_z_bound {l b : ℝ} {P Q : Point}
   have hsub : 7 / 128 ≤ minTriangleArea ![ptD, ptE l, ptC, P, Q] :=
     hmin.trans (min_le_min_reindex (by norm_num) _ _ ![0, 2, 1, 4, 5] (by decide)
       (by funext m; fin_cases m <;> rfl))
-  have h2 := CornerFamilies.twoInteriorPointLemma ptD (ptE l) ptC P Q (Or.inl hPE) (Or.inl hQE)
+  have h2 := twoInteriorPointLemma ptD (ptE l) ptC P Q (Or.inl hPE) (Or.inl hQE)
     (7 / 128) (by norm_num) hsub
   have hpos : 0 < sarea ptD (ptE l) ptC := by
     have := sarea_add_sarea_add_sarea ptD (ptE l) ptC P
@@ -313,15 +309,11 @@ theorem chamber_z_bound {l b : ℝ} {P Q : Point}
   simp only [sarea, ptD, ptE, ptC] at h2
   nlinarith [sqrt_three_gt]
 
-/-- **Claim** (`TYPE_II:claim-chamber-general`, made up). The proof of the chamber lemma for a
-general bottom parameter: for `0 < b < 1`, `0 ≤ λ < 1`, the hypotheses of the chamber lemma and
-`G(b, 1-λ) > 0` already give a triangle of area less than `7/128`. The derivative bound
-(18)–(19) needs no bound on `b` (completion of the square), and `z = 1` (`λ = 0`) is included.
-`docs/proof/nine/TYPE_II.md`, lines 422–535, with the remarks at lines 855–857, 915–917, and
-`docs/proof/nine/TYPE_II_COMPLETION.md` lines 890–905.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_chamber_general {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb1 : b < 1)
+/-- The chamber lemma for a general bottom parameter: for `0 < b < 1`, `0 ≤ λ < 1`, the
+hypotheses of the chamber lemma and `G(b, 1-λ) > 0` already give a triangle of area less than
+`7/128`. The derivative bound needs no bound on `b` (completion of the square), and `z = 1`
+(`λ = 0`) is included. -/
+theorem minTriangleArea_lt_of_chamberG_pos {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb1 : b < 1)
     (hl : 0 ≤ l) (hl1 : l < 1)
     (hPB : InTriangle P ptD (ptB b) ptC) (hPE : InTriangle P ptD (ptE l) ptC)
     (hQB : InTriangle Q ptD (ptB b) ptC) (hQE : InTriangle Q ptD (ptE l) ptC)
@@ -373,12 +365,10 @@ theorem claim_chamber_general {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb1 : b < 
       mul_le_mul_of_nonneg_left (by linarith : P.2 - Q.2 ≤ 1 - 7 / 64 - Q.2)
         (by nlinarith : (0:ℝ) ≤ (b * (1 - l) + l) * (Q.2 - l) - l * (7 / 64))]
 
-/-- **Two-point chamber lemma** (`TYPE_II:TwoPointChamberLemma`). In the notation (5) with
-`b ≤ 1/2`, if two further points `P, Q` lie strictly inside both `DCB` and `DCE` and
-`[BPQ] > 0`, `[EPQ] < 0` (13), then some triangle determined by `D, C, E, B, P, Q` has area less
-than `7/128`. `docs/proof/nine/TYPE_II.md`, lines 406–535.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, TYPE_II:claim-chamber-general. -/
+/-- The two-point chamber lemma. In the Type-II setting with `b ≤ 1/2`, if two further points
+`P, Q` lie strictly inside both `DCB` and `DCE` and `[BPQ] > 0`, `[EPQ] < 0`, then some triangle
+determined by `D, C, E, B, P, Q` has area less than `7/128` (`minTriangleArea_lt_of_chamberG_pos` with
+`chamberG_pos`). -/
 theorem twoPointChamberLemma {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤ 1 / 2)
     (hl : 0 < l) (hl1 : l < 1)
     (hPB : InTriangle P ptD (ptB b) ptC) (hPE : InTriangle P ptD (ptE l) ptC)
@@ -388,26 +378,23 @@ theorem twoPointChamberLemma {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤
   by_contra hcon
   push Not at hcon
   have hz := chamber_z_bound hPE hQE hcon
-  exact absurd (claim_chamber_general hb (by linarith) hl.le hl1 hPB hPE hQB hQE hBPQ hEPQ
+  exact absurd (minTriangleArea_lt_of_chamberG_pos hb (by linarith) hl.le hl1 hPB hPE hQB hQE hBPQ hEPQ
     (chamberG_pos hb.le hb2 (by linarith) (by linarith))) (not_lt.2 hcon)
 
-/-- **Claim** (`TYPE_II:claim-PQ-line-table`). Let `P, Q` be strictly inside both `DCB` and
-`DCE`, every doubled area of `D, C, E, B, P, Q` at least `s > 0`, `0 < b < 1`, `0 < λ < 1`,
-`q = 1 - λ`, and let `B, E` be on the same side of the line `PQ`. Writing `σ_X = [PQX]`, exactly
-one of three positions occurs:
+/-- The line table. Let `P, Q` be strictly inside both `DCB` and `DCE`, every doubled area of
+`D, C, E, B, P, Q` at least `s > 0`, `0 < b < 1`, `0 < λ < 1`, `q = 1 - λ`, and let `B, E` be on
+the same side of the line `PQ`. Writing `σ_X = [PQX]`, exactly one of three positions occurs:
 
 * `D, C` on the same side (opposite to `B, E`): `A = q - s(q+1) > 0` and `A² ≥ 4sq(1+bq)`;
 * `D` isolated from `B, C, E`: `A = q - s[1 + (1+b)q] > 0` and `A² ≥ 4sq(1+bq)`;
 * `C` isolated from `B, D, E`: `A = q - s(2 + bq) > 0` and `A² ≥ 4sq(1+bq)`.
 
-The calculation is the one of `OPPOSITE_CORNERS.md` (21)–(22), (24)–(25), after the map
-`(x,y) ↦ (x, x + (1-b)(1-y))` (`h = (1-b)q`, `β = 1-b`, `f = b`, `σ = (1-b)s`), valid at a general
-positive threshold. `docs/proof/nine/TYPE_II.md`, lines 1141–1187.
+These are the opposite-corner bounds after the map `(x,y) ↦ (x, x + (1-b)(1-y))`
+(`h = (1-b)q`, `β = 1-b`, `f = b`, `σ = (1-b)s`), valid at a general positive threshold.
 
-Implicit in the manuscript: in §12 the same-side position of `B, E` comes from §6 (at `7/64` and
-`b ≤ 1/2`); here it is a hypothesis, as `TYPE_II_COMPLETION.md` §8.2 and `TYPE_II_BALANCED.md`
-§6 use the table. -/
-theorem claim_PQ_line_table {l b s : ℝ} {P Q : Point} (hs : 0 < s) (hb : 0 < b) (_hb1 : b < 1)
+The same-side position of `B, E` is a hypothesis here; at `7/64` and `b ≤ 1/2` it follows from
+`twoPointChamberLemma` in both orientations. -/
+theorem pq_line_table {l b s : ℝ} {P Q : Point} (hs : 0 < s) (hb : 0 < b) (_hb1 : b < 1)
     (_hl : 0 < l) (hl1 : l < 1)
     (hPB : InTriangle P ptD (ptB b) ptC) (hPE : InTriangle P ptD (ptE l) ptC)
     (hQB : InTriangle Q ptD (ptB b) ptC) (hQE : InTriangle Q ptD (ptE l) ptC)
@@ -451,8 +438,8 @@ theorem claim_PQ_line_table {l b s : ℝ} {P Q : Point} (hs : 0 < s) (hb : 0 < b
     pq_table_row2 hs hb hq pu px pe px0 qu qx qe qx0 eE eC hBE,
     pq_table_row3 hs hb hq pu pu1 px pe qu qu1 qx qe eD eB⟩
 
-/-- The root location of (36) in the row "C isolated": `A > 0`, `F(q) ≥ 0`, `q ≤ 1` give
-`F(1) ≥ 0` (at `s = 7/64`). -/
+/-- The root location for `b_le_two_sevenths` in the row "C isolated": `A > 0`, `F(q) ≥ 0`,
+`q ≤ 1` give `F(1) ≥ 0` (at `s = 7/64`). -/
 theorem F1_of_row3 {b q : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hq1 : q ≤ 1)
     (hA : 0 < q - 7 / 64 * (2 + b * q))
     (hFq : 4 * (7 / 64) * q * (1 + b * q) ≤ (q - 7 / 64 * (2 + b * q)) ^ 2) :
@@ -481,7 +468,7 @@ theorem F1_of_row3 {b q : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hq1 : q ≤ 1)
     mul_pos (by nlinarith) hA
   exact nonneg_of_mul_nonneg_right (by linarith) hmA
 
-/-- The root location of (36) in the row "D isolated". -/
+/-- The root location for `b_le_two_sevenths` in the row "D isolated". -/
 theorem F1_of_row2 {b q : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hq1 : q ≤ 1)
     (hA : 0 < q - 7 / 64 * (1 + (1 + b) * q))
     (hFq : 4 * (7 / 64) * q * (1 + b * q) ≤ (q - 7 / 64 * (1 + (1 + b) * q)) ^ 2) :
@@ -509,13 +496,11 @@ theorem F1_of_row2 {b q : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hq1 : q ≤ 1)
     mul_pos (by nlinarith) hA
   exact nonneg_of_mul_nonneg_right (by linarith) hmA
 
-/-- **Equation (36)** (`TYPE_II:claim-b-le-2/7`). At doubled threshold `7/64`, with
-`0 < b ≤ 1/2` and `P, Q` strictly inside both `DCB` and `DCE`: if `D, C` lie on opposite sides
-of `PQ`, then `b ≤ 2/7` (`F(1) = (7b-2)(7b-354)/4096 ≥ 0`). `docs/proof/nine/TYPE_II.md`, lines 1189–1211.
-
-Uses: TYPE_II:TwoPointChamberLemma (both orientations, so `B, E` are on the same side),
-TYPE_II:claim-PQ-line-table. -/
-theorem claim_b_le_two_sevenths {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤ 1 / 2)
+/-- At doubled threshold `7/64`, with `0 < b ≤ 1/2` and `P, Q` strictly inside both `DCB` and
+`DCE`: if `D, C` lie on opposite sides of `PQ`, then `b ≤ 2/7`
+(`F(1) = (7b-2)(7b-354)/4096 ≥ 0`). By `twoPointChamberLemma` in both orientations, `B, E` are on
+the same side of `PQ`, so `pq_line_table` applies. -/
+theorem b_le_two_sevenths {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤ 1 / 2)
     (hl : 0 < l) (hl1 : l < 1)
     (hPB : InTriangle P ptD (ptB b) ptC) (hPE : InTriangle P ptD (ptE l) ptC)
     (hQB : InTriangle Q ptD (ptB b) ptC) (hQE : InTriangle Q ptD (ptE l) ptC)
@@ -550,7 +535,7 @@ theorem claim_b_le_two_sevenths {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b 
         (by rw [← cE]; exact hE)
       linarith
     · exact mul_pos hB hE
-  obtain ⟨-, -, h2, h3⟩ := claim_PQ_line_table (s := 7 / 64) (by norm_num) hb (by linarith) hl
+  obtain ⟨-, -, h2, h3⟩ := pq_line_table (s := 7 / 64) (by norm_num) hb (by linarith) hl
     hl1 hPB hPE hQB hQE hmin' hBE
 
   have hq : 0 < 1 - l := by linarith

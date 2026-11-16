@@ -4,23 +4,22 @@ public import Heilbronn.Nine.C1.TopCapOfSplit
 public import Heilbronn.Nine.C1.TwoLower.Bern
 
 /-! # Pair-line exclusions in the remaining C1 common-cell placement
-(`docs/proof/nine/C1_TOP_CAP_COMMON_CELL.md`)
 
-Role: a component on the primary route: `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md` Theorem 2, step 5
-(the two isolated-endpoint pair-line cases).
+The two isolated-endpoint pair-line cases of the common-cell placement, used by
+`C1TwoLowerCompletion.commonCellSetting_false`.
 
-Setting (lines 3-40; `CommonCellSetting` of `Heilbronn.Nine.C1.TopCapOfSplit`): the C1 anchors with
+Setting (`CommonCellSetting` of `Heilbronn.Nine.C1.TopCapOfSplit`): the C1 anchors with
 the weak conditions, a competitive nine-point configuration (`s = 8/73`, `K = 4 + 2√3`,
 `ρ = 49/60`), two lower points `L, M ∈ OHC ∩ OCF`, a top-cap point `X = (x, Y)` beyond `DF`, and
-`P` inside the pentagon, with `P, M ∈ OCX`, `L ∈ OHX`; hence `hc, cY ≥ Ks > ρ` and `f < x < c`
-(1). The point `P` is used only through `cY ≥ Ks`.
+`P` inside the pentagon, with `P, M ∈ OCX`, `L ∈ OHX`; hence `hc, cY ≥ Ks > ρ` and `f < x < c`.
+The point `P` is used only through `cY ≥ Ks`.
 
 Results:
-* `eq2_5`: if `LM` isolates `C`: the endpoint inequality (2)–(3) in `p = hc`, `z = hf/c`, and
-  `p > 71/80` (4), `z < 2p - 5/3` (5);
-* `eq6`: the cap bound `s ≤ -[HFX] ≤ 𝒜(p, c, z)` (any pair-line case);
-* `theorem_C` (**Theorem**, first part): `LM` cannot isolate `C` from `O, H, F`;
-* `theorem_O` (**Theorem**, second part): `LM` cannot isolate `O` from `C, H, F`.
+* `endpoint_bounds_of_isolates_C`: if `LM` isolates `C`: the endpoint inequality in `p = hc`, `z = hf/c`, and
+  `p > 71/80`, `z < 2p - 5/3`;
+* `cap_cost_HFX_bounds`: the cap bound `s ≤ -[HFX] ≤ 𝒜(p, c, z)` (any pair-line case);
+* `theorem_C`: `LM` cannot isolate `C` from `O, H, F`;
+* `theorem_O`: `LM` cannot isolate `O` from `C, H, F`.
 -/
 
 @[expose] public section
@@ -30,10 +29,11 @@ namespace Heilbronn.Nine.C1TopCapCommonCell
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1TopCapOfSplit Heilbronn.Nine.C1TwoLower Heilbronn.Nine.C1TopCapConvexPair
 
-/-- `G(p, z) = [p - 2s - sz]² - 4sp(1 + z)` of (3), `s = 8/73`. -/
+/-- The endpoint function `G(p, z) = [p - 2s - sz]² - 4sp(1 + z)`, `s = 8/73`. -/
 def endpointG (p z : ℝ) : ℝ := (p - 2 * (8 / 73) - 8 / 73 * z) ^ 2 - 4 * (8 / 73) * p * (1 + z)
 
-/-- `𝒜(p, c, z) = (c - p)(1 - s/p + ρ(1 - c)/(cp)) + zc(1 - ρ/p)` of (6). -/
+/-- The cap bound `𝒜(p, c, z) = (c - p)(1 - s/p + ρ(1 - c)/(cp)) + zc(1 - ρ/p)`, `s = 8/73`,
+`ρ = 49/60`. -/
 def capBound (p c z : ℝ) : ℝ :=
   (c - p) * (1 - 8 / 73 / p + 49 / 60 * (1 - c) / (c * p)) + z * c * (1 - 49 / 60 / p)
 
@@ -44,8 +44,8 @@ theorem cc_facts {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d
       8 / 73 ≤ h * f ∧ f < X.1 ∧ X.1 < c ∧ f ≤ c - 8 / 73 ∧
       8 / 73 ≤ -sarea (ptH h) (ptF f) X ∧ 8 / 73 ≤ sarea (ptC c) (ptD d) X ∧
       (49 / 60 : ℝ) < (4 + 2 * Real.sqrt 3) * (8 / 73) := by
-  obtain ⟨hk, hkY, kgt⟩ := eq1 hS.toOneCapSetting
-  obtain ⟨hfx, hxc, hfcs⟩ := claim_x_lt_c hS.toOneCapSetting
+  obtain ⟨hk, hkY, kgt⟩ := oneCap_kσ_le_hc_cY hS.toOneCapSetting
+  obtain ⟨hfx, hxc, hfcs⟩ := oneCap_f_lt_x_lt_c hS.toOneCapSetting
   have h8 : A₀ ≤ minTriangleArea ![ptO, ptC c, ptD d, ptF f, ptH h, L, M, X] :=
     min8 hS.competitive
   obtain ⟨-, -, -, -, k1, -, k2, -, -, hhf, -⟩ :=
@@ -80,7 +80,7 @@ theorem cc_quad {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d 
     Or.inl ⟨by rw [eOCF]; exact c0, by rw [eCFH]; exact p1, by rw [eFHO]; exact mul_pos h0 hf,
       by rw [eHOC]; exact mul_pos h0 c0⟩
   have hA : A₀ ≤ minTriangleArea (OneCornerCompletion.quadConfig ptO (ptC c) (ptF f) (ptH h) L M) :=
-    CornerFamilies.min_sub hS.competitive _ ![0, 1, 3, 4, 5, 6] (by norm_num) (by decide)
+    min_sub hS.competitive _ ![0, 1, 3, 4, 5, 6] (by norm_num) (by decide)
       (by intro i; fin_cases i <;> rfl)
   have ea : OneCornerCompletion.areaA ptO (ptC c) (ptF f) (ptH h) = h * c := by
     simp only [OneCornerCompletion.areaA]; rw [eOCH, abs_of_pos (mul_pos h0 c0)]
@@ -94,7 +94,8 @@ theorem cc_quad {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d 
   have := mul_pos h0 (show (0 : ℝ) < c - f by linarith); linarith
 
 set_option linter.unusedVariables false in
-/-- (3)–(5) in scalar form. -/
+/-- The endpoint inequality in scalar form: if `p ≤ 1`, `z ≥ s`, `G(p, z) ≥ 0` and
+`p - 2s - sz > 0`, then `p > 71/80` and `z < 2p - 5/3`. -/
 theorem cc_scal {p z : ℝ} (hp1 : p ≤ 1) (hz : 8 / 73 ≤ z) (hG : 0 ≤ endpointG p z)
     (hb : 0 < p - 2 * (8 / 73) - 8 / 73 * z) : 71 / 80 < p ∧ z < 2 * p - 5 / 3 := by
   unfold endpointG at hG
@@ -127,17 +128,14 @@ theorem cc_scal {p z : ℝ} (hp1 : p ≤ 1) (hz : 8 / 73 ≤ z) (hG : 0 ≤ endp
     nlinarith
   nlinarith [mul_nonneg (show (0 : ℝ) ≤ p - 71 / 80 by linarith) (show (0 : ℝ) ≤ 1 - p by linarith)]
 
-/-- **Claim** (`C1_TOP_CAP_COMMON_CELL:eq2-5`). In the common-cell placement, if `LM` isolates
-`C` from `O, H, F`, then with `p = hc`, `z = hf/c`, `W = c + hf`:
-`[pc - s(W + c)]² ≥ 4sWpc` with `pc - s(W + c) > 0` (2); equivalently `G(p, z) ≥ 0` with
-`p - 2s - sz > 0` (3); consequently `p > 71/80` (4) and `z < 2p - 5/3` (5).
-`docs/proof/nine/C1_TOP_CAP_COMMON_CELL.md`, lines 52-134.
-The isolated-endpoint calculation is the general weighted identity of ONE_CORNER_COMPLETION §1 on
-the quadrilateral `O, C, F, H` at threshold `s/W`.
-Uses: ONE_CORNER_COMPLETION:claim-general-identities. -/
--- Note (line 65): only `p + c - W > 0` is checked for the canonical normalization; `W > p` and
--- `W > c` are also needed (true: `W - p = c(1 - h) + hf`, `W - c = hf`).
-theorem eq2_5 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
+-- Besides `p + c - W > 0`, the isolated-endpoint bound needs `W > p` and `W > c`, which hold:
+-- `W - p = c(1 - h) + hf`, `W - c = hf`.
+/-- In the common-cell placement, if `LM` isolates `C` from `O, H, F`, then with `p = hc`,
+`z = hf/c`, `W = c + hf`: `[pc - s(W + c)]² ≥ 4sWpc` with `pc - s(W + c) > 0`; equivalently
+`G(p, z) ≥ 0` with `p - 2s - sz > 0`; consequently `p > 71/80` and `z < 2p - 5/3`.
+The first inequality is the isolated-endpoint bound `OneCornerCompletion.discr_of_isolates_B` on the
+quadrilateral `O, C, F, H`. -/
+theorem endpoint_bounds_of_isolates_C {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
     (hiso : Isolates L M (ptC c) ptO (ptH h) (ptF f)) :
     4 * (8 / 73) * (c + h * f) * (h * c) * c ≤
         ((h * c) * c - 8 / 73 * ((c + h * f) + c)) ^ 2 ∧
@@ -152,7 +150,7 @@ theorem eq2_5 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f 
   unfold OppSide at i1; unfold SameSide at i2 i3
   have hiso' : OneCornerCompletion.Isolates L M (ptC c) ptO (ptF f) (ptH h) := by
     exact ⟨i1, sign_trans i1 i3, sign_trans i1 i2⟩
-  have := OneCornerCompletion.eq6_B _ _ _ _ L M (8 / 73) (by norm_num) hq hcp hmin6 hJ hiso'
+  have := OneCornerCompletion.discr_of_isolates_B _ _ _ _ L M (8 / 73) (by norm_num) hq hcp hmin6 hJ hiso'
   rw [ea, eb, eW] at this
   obtain ⟨b1, b2⟩ := this
   have hz : 8 / 73 ≤ h * f / c := by
@@ -172,7 +170,7 @@ theorem eq2_5 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f 
   exact ⟨by linarith, b1, hG, hb, h71, hz5⟩
 
 set_option linter.unusedVariables false in
-/-- The cap bound (6) in scalar form. -/
+/-- The cap bound `(1 - h)x + f(h - Y) ≤ 𝒜(hc, c, hf/c)` in scalar form, for `X = (x, Y)`. -/
 theorem cap_bound_scal {h c d f x Y : ℝ} (hd : 0 < d) (hdh : d ≤ h) (h0 : 0 < h) (hh : h ≤ 1)
     (c0 : 0 < c) (hc : c ≤ 1) (hhρ : 49 / 60 ≤ h) (hcρ : 49 / 60 ≤ c) (hhf : 8 / 73 ≤ h * f)
     (hxc : x < c) (hcY : 49 / 60 ≤ c * Y) (hβ : 8 / 73 ≤ (1 - c) * Y + d * (c - x)) :
@@ -213,11 +211,9 @@ theorem capBound_c1 {p c z : ℝ} (hp : 49 / 60 ≤ p) (hpc : p ≤ c) (hc : c �
     norm_num at b3 ⊢; nlinarith
   rw [← sub_nonneg, e]; exact mul_nonneg (by linarith) this
 
-/-- **Claim** (`C1_TOP_CAP_COMMON_CELL:eq6`). In the common-cell placement (any pair-line case),
-the cap cost `α = -[HFX]` satisfies `s ≤ α ≤ 𝒜(p, c, z)` (6), `p = hc`, `z = hf/c`, `s = 8/73`.
-`docs/proof/nine/C1_TOP_CAP_COMMON_CELL.md`, lines 136-168.
-Uses: C1_TOP_CAP_OF_SPLIT:claim-x-lt-c, C1_TOP_CAP_OF_SPLIT:eq1. -/
-theorem eq6 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P) :
+/-- In the common-cell placement (any pair-line case), the cap cost `α = -[HFX]` satisfies
+`s ≤ α ≤ 𝒜(p, c, z)`, `p = hc`, `z = hf/c`, `s = 8/73`. -/
+theorem cap_cost_HFX_bounds {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P) :
     8 / 73 ≤ -sarea (ptH h) (ptF f) X ∧
       -sarea (ptH h) (ptF f) X ≤ capBound (h * c) c (h * f / c) := by
   obtain ⟨hk, hkY, hhf, hfx, hxc, hfcs, k1, k2, kgt⟩ := cc_facts hS
@@ -232,15 +228,12 @@ theorem eq6 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L 
   rw [e1]; rw [e2] at k2
   exact cap_bound_scal hd hdh h0 hh c0 hc (by nlinarith) (by nlinarith) hhf hxc (by linarith) k2
 
-/-- **Theorem** (`C1_TOP_CAP_COMMON_CELL:Theorem-C`, first of the two "Theorems"). In the
-common-cell placement, the line `LM` cannot isolate `C` from `O, H, F`.
-`docs/proof/nine/C1_TOP_CAP_COMMON_CELL.md`, lines 42-44 and 170-207.
-Uses: C1_TOP_CAP_COMMON_CELL:eq2-5, C1_TOP_CAP_COMMON_CELL:eq6. -/
+/-- In the common-cell placement, the line `LM` cannot isolate `C` from `O, H, F`. -/
 theorem theorem_C {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P) :
     ¬ Isolates L M (ptC c) ptO (ptH h) (ptF f) := by
   intro hiso
-  obtain ⟨-, -, -, -, h71, hz5⟩ := eq2_5 hS hiso
-  obtain ⟨k1, k2⟩ := eq6 hS
+  obtain ⟨-, -, -, -, h71, hz5⟩ := endpoint_bounds_of_isolates_C hS hiso
+  obtain ⟨k1, k2⟩ := cap_cost_HFX_bounds hS
   obtain ⟨hk, hkY, hhf, hfx, hxc, hfcs, -, -, kgt⟩ := cc_facts hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have h0 : 0 < h := by nlinarith
@@ -283,10 +276,10 @@ theorem fhl_pos {h c f : ℝ} {R : Point} (h0 : 0 < h) (c0 : 0 < c) (hf : 0 < f)
   have : 0 < sarea (ptF f) (ptH h) R * (h * c) := by rw [e]; linarith
   exact pos_of_mul_pos_left this (mul_pos h0 c0).le
 
-/-- `F₁` of (9). -/
+/-- `F₁(h, p, z, v) = (v - s)(p - hs - (1 + z)v) - ps`, `s = 8/73`. -/
 def capF1 (h p z v : ℝ) : ℝ := (v - 8 / 73) * (p - h * (8 / 73) - (1 + z) * v) - p * (8 / 73)
 
-/-- `F₂` of (9). -/
+/-- `F₂(h, p, z, v) = (v - s)((1 - h + z)(p - v) - hs) - ps(1 - h)`, `s = 8/73`. -/
 def capF2 (h p z v : ℝ) : ℝ :=
   (v - 8 / 73) * ((1 - h + z) * (p - v) - h * (8 / 73)) - p * (8 / 73) * (1 - h)
 
@@ -315,7 +308,8 @@ theorem cc_LMO {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f
   have := mul_nonneg hn hx0.le
   linarith
 
-/-- (7)–(9) in scalar form, for `L = (ℓ, y)`, `M = (m, t)`. -/
+/-- The point inequalities `cy > s`, `F₁ ≥ 0`, `F₂ ≥ 0` (with `p = hc`, `z = hf/c`, `v = cy`) in
+scalar form, for `L = (ℓ, y)`, `M = (m, t)`. -/
 theorem O_scal1 {h c f l y m t : ℝ} (h0 : 0 < h) (c0 : 0 < c) (hh1 : h ≤ 1) (hy0 : 0 < y)
     (hyh : y < h) (eC : 8 / 73 ≤ (c - l) * (y - t) - y * (m - l))
     (eH : 8 / 73 ≤ (h - y) * (m - l) - l * (y - t)) (hb : 0 < h * c - h * l - c * y)
@@ -356,7 +350,8 @@ theorem O_scal1 {h c f l y m t : ℝ} (h0 : 0 < h) (c0 : 0 < c) (hh1 : h ≤ 1) 
       (show (0 : ℝ) ≤ c * y - 8 / 73 by linarith)
     linarith
 
-/-- The point inequalities (7)–(9) when `LM` isolates `O`. -/
+/-- The point inequalities `cℓ_y > s`, `F₁ ≥ 0`, `F₂ ≥ 0` (with `p = hc`, `z = hf/c`,
+`v = cℓ_y`) when `LM` isolates `O`. -/
 theorem O_geom {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
     (hiso : Isolates L M ptO (ptC c) (ptH h) (ptF f)) :
     8 / 73 < c * L.2 ∧ 0 ≤ capF1 h (h * c) (h * f / c) (c * L.2) ∧
@@ -400,7 +395,7 @@ theorem O_geom {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f
 section quartics
 open Cert Cert.Expr
 
-/-- `P₁` and `P₂` of §4 as expressions in `var 0 = p`. -/
+/-- The quartics `P₁` and `P₂` as expressions in `var 0 = p`. -/
 def eP1 : Expr := k 2131600 * v 0 * v 0 * v 0 * v 0 - k 5837080 * v 0 * v 0 * v 0 +
   k 5365281 * v 0 * v 0 - k 1692432 * v 0 + k 33856
 def eP2 : Expr := k 17515357200 * v 0 * v 0 * v 0 * v 0 - k 79495677240 * v 0 * v 0 * v 0 +
@@ -430,7 +425,9 @@ theorem P2_neg {p : ℝ} (h1 : 89 / 100 ≤ p) (h2 : p ≤ 1) :
 
 end quartics
 
-/-- The low interval `p ≤ 89/100` of §4. -/
+/-- On the low interval `ρ ≤ p ≤ 89/100`, the conditions for `F₁(p, p, z, ·) ≥ 0` and
+`F₂(p, p, z, ·) ≥ 0` to have solutions `v > s` (a positive linear coefficient and a nonnegative
+discriminant, in `v - s`) are incompatible. -/
 theorem O_low {p z : ℝ} (hp : 49 / 60 ≤ p) (hpl : p ≤ 89 / 100)
     (hB1p : 0 < p - 8 / 73 * (1 + p + z))
     (hG1 : 0 ≤ (p - 8 / 73 * (1 + p + z)) ^ 2 - 4 * (8 / 73) * p * (1 + z))
@@ -482,7 +479,8 @@ theorem O_low {p z : ℝ} (hp : 49 / 60 ≤ p) (hpl : p ≤ 89 / 100)
   have := quad_up (sq_nonneg _) hy0 hpl r0 r
   norm_num at this
 
-/-- The high interval `p ≥ 89/100` of §4. -/
+/-- On the high interval `89/100 ≤ p ≤ 1`, the condition for `F₁(p, p, z, ·) ≥ 0` to have a
+solution `v > s` is incompatible with `𝒜(p, 1, z) ≥ s`. -/
 theorem O_high {p z : ℝ} (hpl : 89 / 100 ≤ p) (hp1 : p ≤ 1)
     (hB1p : 0 < p - 8 / 73 * (1 + p + z))
     (hG1 : 0 ≤ (p - 8 / 73 * (1 + p + z)) ^ 2 - 4 * (8 / 73) * p * (1 + z))
@@ -515,7 +513,8 @@ theorem O_high {p z : ℝ} (hpl : 89 / 100 ≤ p) (hp1 : p ≤ 1)
       4 * (8 / 73) * p * (1 + q)) := by positivity
   linarith
 
-/-- §§3–4 in scalar form: the relaxed system (10)–(11) has no solution. -/
+/-- The relaxed system `v > s`, `F₁(p, p, z, v) ≥ 0`, `F₂(p, p, z, v) ≥ 0`, `𝒜(p, 1, z) ≥ s`
+(for `ρ ≤ p ≤ 1`, `z ≥ s`) has no solution. -/
 theorem O_scalar {p z v : ℝ} (hp : 49 / 60 ≤ p) (hp1 : p ≤ 1) (hz : 8 / 73 ≤ z) (hv : 8 / 73 < v)
     (F1 : 0 ≤ capF1 p p z v) (F2 : 0 ≤ capF2 p p z v) (h11 : 8 / 73 ≤ capBound p 1 z) : False := by
   unfold capF1 at F1; unfold capF2 at F2
@@ -552,16 +551,14 @@ theorem O_scalar {p z v : ℝ} (hp : 49 / 60 ≤ p) (hp1 : p ≤ 1) (hz : 8 / 73
     exact O_low hp hpl hB1p hG1 hB2p hG2
   · exact O_high hpl hp1 hB1p hG1 h11
 
-/-- **Theorem** (`C1_TOP_CAP_COMMON_CELL:Theorem-O`, second of the two "Theorems"). In the
-common-cell placement, the line `LM` cannot isolate `O` from `C, H, F`.
-`docs/proof/nine/C1_TOP_CAP_COMMON_CELL.md`, lines 42-44 and 209-419 (inequalities (7)–(11), the monotone
-reduction to `h = p`, `c = 1`, and the quartics `P₁, P₂` on `[ρ, 89/100]` and `[89/100, 1]`).
-Uses: C1_TOP_CAP_COMMON_CELL:eq6, C1_TOP_CAP_OF_SPLIT:claim-x-lt-c. -/
+/-- In the common-cell placement, the line `LM` cannot isolate `O` from `C, H, F`. The proof
+reduces monotonically to `h = p`, `c = 1` and uses the quartics `P₁, P₂` on `[ρ, 89/100]` and
+`[89/100, 1]`. -/
 theorem theorem_O {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P) :
     ¬ Isolates L M ptO (ptC c) (ptH h) (ptF f) := by
   intro hiso
   obtain ⟨hv, F1, F2⟩ := O_geom hS hiso
-  obtain ⟨k1, k2⟩ := eq6 hS
+  obtain ⟨k1, k2⟩ := cap_cost_HFX_bounds hS
   obtain ⟨hk, hkY, hhf, hfx, hxc, hfcs, -, -, kgt⟩ := cc_facts hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have h0 : 0 < h := by nlinarith

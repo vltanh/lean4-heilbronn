@@ -5,36 +5,33 @@ public import Heilbronn.Nine.TypeII.Unbalanced.CellI
 public import Heilbronn.Nine.TypeII.Unbalanced.ChainSector
 
 /-! # Radial restrictions in the final one-upper-point Type-II case
-(`docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`)
 
-**Role.** Primary route: step 1 of the chain `UNBALANCED_FINAL_LOWER_WEDGE:claim-chain` (§5,
-line 274) closing the one-point upper cut in cell II. Its universal bounds (1), (3), (5) are
-reused by `UNBALANCED_OCCUPIED_LOWER_EAR` and `UNBALANCED_FINAL_LOWER_WEDGE` (`q < 9/10`).
+`P_T_above_DR_Q_below` closes the first step of `UnbalancedFinalLowerWedge.false_of_oneUpperSetting`, the one-point
+upper cut in cell II: `P, T` are above `DR` and `Q` is below it. The universal bound
+`q_lt_9_10` is reused by `UnbalancedFinalLowerWedge`.
 
-**Setting** (lines 5-20, `OneUpperSetting`): `Row123 l b P Q R S T`, minimum area at least `A₀`
-(every actual doubled area exceeds `s = 7/64` and the global capacity theorem applies), the right
+**Setting** (`OneUpperSetting`): `Row123 l b P Q R S T`, minimum area at least `A₀`
+(every actual doubled area exceeds `s = 7/64` and the global capacity bound applies), the right
 hull the quadrilateral `B, R, S, C` with `T` inside, in support cell II, `P` above `CE` and `Q`
 below it. Coordinates `R = (r, 1 - v)`, `S = (k, 1 - z)`, `b < r < k ≤ 1`, `0 < z < v ≤ 1`.
 
 **Results.**
-* `claim_DBR` (1): `[DBR] < 25/32 < Ks`, so `DBR` has capacity one (any right quadrilateral).
-* `claim_q_lt_9_10` (2)-(4): `q < 9/10` for every quadrilateral right hull.
-* `claim_DEZ` (5): `[DEQ], [DET] < 513/640 < Ks`, so `DEQ`, `DET` have capacity one.
-* `claim_one_point_sector` (6): `aa' ≥ s(a + a' + H)` for a point in the common sector at an
-  edge of a convex quadrilateral.
-* `claim_DRS` (7)-(10): in cell II, `J = [DRS] < 4/5 < Ks`, so `DRS` has capacity one.
-* `claim_one_below`: exactly one of `P, Q, T` is below `DR`.
-* `claim_P_not_below` (§§4-5), `claim_T_not_below` (§6): neither `P` nor `T` is that point.
-* `theorem1`: `P, T` above `DR`, `Q` below it; `DRS` has capacity one; one of `P, T` is above
+* `atMostOneInside_DBR`: `[DBR] < 25/32 < Ks`, so `DBR` has capacity one (any right quadrilateral).
+* `q_lt_9_10`: `q < 9/10` for every quadrilateral right hull.
+* `atMostOneInside_DEQ_DET`: `[DEQ], [DET] < 513/640 < Ks`, so `DEQ`, `DET` have capacity one.
+* `atMostOneInside_DRS`: in cell II, `J = [DRS] < 4/5 < Ks`, so `DRS` has capacity one.
+* `exactly_one_below_DR`: exactly one of `P, Q, T` is below `DR`.
+* `P_not_below_DR`, `T_not_below_DR`: neither `P` nor `T` is that point.
+* `P_T_above_DR_Q_below`: `P, T` above `DR`, `Q` below it; `DRS` has capacity one; one of `P, T` is above
   `DS`.
 
-Implicit in the manuscript: the bounds of §1 and (10) are stated "for every nontriangular right
-hull" and "for both central cuts"; their proofs use only `s = 7/64`, so they are stated under the
-weaker hypothesis that every doubled area is at least `7/64` (`7/128 ≤ minTriangleArea`), which
-is how `UNBALANCED_FINAL_LOWER_WEDGE` (threshold `8/73`) uses `q < 9/10`. "Above `DS`" is the
-`C`-side, `0 < [DSX]`. `claim_one_point_sector` is stated for a general counterclockwise convex
-quadrilateral `A, B, C, D` and the sector at the edge `AB` (inside `ABC` and `ABD`); the note
-applies it to `C, B, R, S` (edge `BC`) and to `B, R, C, D` (edge `BR`).
+`atMostOneInside_DBR`, `q_lt_9_10`, `atMostOneInside_DEQ_DET` (every nontriangular right hull) and `atMostOneInside_DRS`
+(cell II) hold for both central cuts; their proofs use only `s = 7/64`, so they are stated under
+the weaker hypothesis that every doubled area is at least `7/64` (`7/128 ≤ minTriangleArea`),
+which is how `UnbalancedFinalLowerWedge` (threshold `8/73`) uses `q < 9/10`. "Above `DS`" is
+the `C`-side, `0 < [DSX]`. The one-point sector inequality `UnbalancedChain.sector_one`
+(`aa' ≥ s(a + a' + H)` for a point in the common sector at an edge of a convex quadrilateral) is
+applied to `C, B, R, S` (edge `BC`) and to `B, R, C, D` (edge `BR`).
 -/
 
 @[expose] public section
@@ -46,8 +43,8 @@ open UnbalancedRightHull UnbalancedChain
 
 variable {l b : ℝ} {P Q R S T : Point}
 
-/-- The standing setting of the note: the one-point upper cut (`P` above `CE`, `Q` below it) in
-support cell II, minimum area at least `A₀`. -/
+/-- The standing setting: the one-point upper cut (`P` above `CE`, `Q` below it) with a
+quadrilateral right hull in support cell II, minimum area at least `A₀`. -/
 structure OneUpperSetting (l b : ℝ) (P Q R S T : Point) : Prop where
   row : Row123 l b P Q R S T
   min : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T)
@@ -58,7 +55,8 @@ structure OneUpperSetting (l b : ℝ) (P Q R S T : Point) : Prop where
 
 /-! ### Scalar lemmas -/
 
-/-- `102400 𝒩_b(1 - 9w/10) = P₀(b) > 0` on `[s, 1/2]`, (4). -/
+/-- `P₀(b) = 82944b³ - 44352b² + 6217b - 9 > 0` on `[7/64, 1/2]`; `P₀(b)` is `102400` times
+`genericEar s b (1 - 9w/10)` (`s = 7/64`, `w = 1 - b`). -/
 theorem P0q {b : ℝ} (h1 : 7 / 64 ≤ b) (_h2 : b ≤ 1 / 2) : 0 < 82944 * b ^ 3 - 44352 * b ^ 2 + 6217 * b - 9 := by
   rcases le_total b (1 / 4) with h | h
   · have hu : 0 ≤ 1 / 4 - b := by linarith
@@ -117,9 +115,9 @@ theorem DRS_scalar {b v z a a' : ℝ} (hb : 7 / 64 ≤ b) (hb2 : b ≤ 1 / 2) (h
     exact pos_of_mul_pos_right this (by linarith)
   set D₂ := (w + s) * z - 2 * s with hD₂
   have hD2 : 0 < D₂ := by rw [hD₂]; nlinarith
-  -- (iii): `a ≥ sa'(1+v)/D₁`
+  -- `a ≥ sa'(1+v)/D₁`
   have ha1 : s * a' * (1 + v) / (a' - s * (2 - z)) ≤ a := by rw [div_le_iff₀ hD1]; linarith
-  -- (iv): `a'/D₁ ≥ wz/D₂`
+  -- `a'/D₁ ≥ wz/D₂`
   have hq : w * z / D₂ ≤ a' / (a' - s * (2 - z)) := by
     rw [div_le_div_iff₀ hD2 hD1, hD₂]; nlinarith [mul_nonneg (by linarith : (0 : ℝ) ≤ 2 - z) (sub_nonneg.2 ha'w)]
   have hJ1 : v * (1 + a') - z * (1 + a) ≤ v * (1 + w * z) - z - s * (w * z) * z * (1 + v) / D₂ := by
@@ -129,7 +127,7 @@ theorem DRS_scalar {b v z a a' : ℝ} (hb : 7 / 64 ≤ b) (hb2 : b ≤ 1 / 2) (h
     rw [e2]
     nlinarith [mul_le_mul_of_nonneg_left ha1 hz0.le, mul_le_mul_of_nonneg_left this hz0.le,
       mul_le_mul_of_nonneg_left ha'w hv0.le]
-  -- (vi): `v → 1`
+  -- the bound increases with `v`: put `v = 1`
   have hcoef : s * (w * z) * z / D₂ ≤ 1 + w * z := by
     rw [div_le_iff₀ hD2, hD₂]; nlinarith
   have hJ2 : v * (1 + w * z) - z - s * (w * z) * z * (1 + v) / D₂ ≤
@@ -145,14 +143,13 @@ theorem DRS_scalar {b v z a a' : ℝ} (hb : 7 / 64 ≤ b) (hb2 : b ≤ 1 / 2) (h
       2 * (7 / 64) * (1 - b) * z ^ 2 / (((1 - b) + 7 / 64) * z - 2 * (7 / 64)) := rfl
   linarith [hJ1.trans hJ2]
 
-/-! ### §1. Two bounds for every nontriangular right hull -/
+/-! ### Two bounds for every nontriangular right hull -/
 
-/-- **Claim** (`UNBALANCED_ONE_UPPER_RADIAL:claim-DBR`), equation (1). For every quadrilateral
+/-- For every quadrilateral
 right hull and either cut, with `v = 1 - R_y`, `s = 7/64`:
 `[DBR] = r - bv < 1 - s/v - bv ≤ 1 - 2√(bs) < 1 - 2s = 25/32 < Ks`; so `DBR` contains at most
-one further actual point. `docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`, lines 47-61.
-Uses: UNBALANCED_CELL_I:claim-order, CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_DBR (h : Row123 l b P Q R S T)
+one further actual point. -/
+theorem atMostOneInside_DBR (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) :
     let s : ℝ := 7 / 64
@@ -160,7 +157,7 @@ theorem claim_DBR (h : Row123 l b P Q R S T)
       25 / 32 < Kc * s ∧ AtMostOneInside (typeIIConfig l b P Q R S T) ptD (ptB b) R := by
   intro s
   have hm : (7 / 64 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by linarith
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h hq
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h hq
   have hDEB := TypeII.s_le_DEB (row_data h) hm
   have hb := h.b_pos
   have hl := h.l_pos
@@ -189,10 +186,10 @@ theorem claim_DBR (h : Row123 l b P Q R S T)
   refine ⟨h1, by linarith, by linarith, ?_⟩
   exact cap_one (by norm_num) hm 0 3 6 (show sarea ptD (ptB b) R < Kc * (7 / 64) by linarith)
 
-/-- **Claim** (`UNBALANCED_ONE_UPPER_RADIAL:claim-q<9/10`), equations (2)-(4). For every
-quadrilateral right hull, `q < 9/10`. `docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`, lines 63-104.
-Uses: UNBALANCED_RIGHT_HULL:claim-generic-ear. -/
-theorem claim_q_lt_9_10 (h : Row123 l b P Q R S T)
+/-- For every
+quadrilateral right hull, `q < 9/10`: otherwise the generic ear bound
+(`UnbalancedRightHull.genericEar_nonpos`) fails at `C = 1 - 9w/10` (`P0q`). -/
+theorem q_lt_9_10 (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) :
     1 - l < 9 / 10 := by
@@ -202,17 +199,16 @@ theorem claim_q_lt_9_10 (h : Row123 l b P Q R S T)
   have hb := h.b_pos
   have hl := h.l_pos
   have hsb : 7 / 64 < b := by nlinarith [mul_pos hb hl]
-  obtain ⟨-, hge⟩ := UnbalancedRightHull.claim_generic_ear h hmin hq
+  obtain ⟨-, hge⟩ := UnbalancedRightHull.genericEar_nonpos h hmin hq
   have key := hge (1 - 9 / 10 * (1 - b)) (by nlinarith [h.b_le])
   unfold genericEar at key
   have := P0q hsb.le h.b_le
   nlinarith
 
-/-- **Claim** (`UNBALANCED_ONE_UPPER_RADIAL:claim-DEZ`), equation (5). For `Z = Q, T`:
+/-- For `Z = Q, T`:
 `[DEZ] = qx < (9/10)(1 - s) = 513/640 < 13/16 < Ks` (`s = 7/64`), so neither `DEQ` nor `DET`
-contains two further actual points. `docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`, lines 106-122.
-Uses: UNBALANCED_ONE_UPPER_RADIAL:claim-q<9/10, CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_DEZ (h : Row123 l b P Q R S T)
+contains two further actual points. -/
+theorem atMostOneInside_DEQ_DET (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) :
     sarea ptD (ptE l) Q < 513 / 640 ∧ sarea ptD (ptE l) T < 513 / 640 ∧
@@ -220,11 +216,11 @@ theorem claim_DEZ (h : Row123 l b P Q R S T)
       AtMostOneInside (typeIIConfig l b P Q R S T) ptD (ptE l) Q ∧
       AtMostOneInside (typeIIConfig l b P Q R S T) ptD (ptE l) T := by
   have hm : (7 / 64 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by linarith
-  have hq9 := claim_q_lt_9_10 h hmin hq
+  have hq9 := q_lt_9_10 h hmin hq
   have hb := h.b_pos
   have hb1 : b < 1 := by linarith [h.b_le]
   have hl1 := h.l_lt
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h hq
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h hq
   have eSC : ∀ Z : Point, sarea S ptC Z = (1 - S.2) * (1 - Z.1) - (1 - S.1) * (1 - Z.2) := by
     intro Z; simp only [sarea, ptC]; ring
   have hx : ∀ Z : Point, Z ∈ unitSquare → 7 / 64 ≤ sarea S ptC Z → Z.1 ≤ 1 - 7 / 64 := by
@@ -254,13 +250,11 @@ theorem claim_DEZ (h : Row123 l b P Q R S T)
   · exact cap_one (by norm_num) hm 0 2 5 (show sarea ptD (ptE l) Q < Kc * (7 / 64) by linarith)
   · exact cap_one (by norm_num) hm 0 2 8 (show sarea ptD (ptE l) T < Kc * (7 / 64) by linarith)
 
-/-- **Claim** (`UNBALANCED_ONE_UPPER_RADIAL:claim-DRS`), equations (7)-(10). In cell II (either
+/-- In cell II (either
 cut), with `S = (k, 1 - z)`, `w = 1 - b`, `s = 7/64`:
 `J = [DRS] ≤ 1 - bz - 2swz²/((w + s)z - 2s) < 4/5 < Ks`; so `DRS` contains at most one further
-actual point. `docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`, lines 156-213.
-Uses: UNBALANCED_ONE_UPPER_RADIAL:claim-one-point-sector,
-CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_DRS (h : Row123 l b P Q R S T)
+actual point. -/
+theorem atMostOneInside_DRS (h : Row123 l b P Q R S T)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellII (ptB b) R S ptC T) :
     let s : ℝ := 7 / 64
@@ -275,7 +269,7 @@ theorem claim_DRS (h : Row123 l b P Q R S T)
   have hb := h.b_pos
   have hl := h.l_pos
   have hsb : 7 / 64 < b := by nlinarith [mul_pos hb hl]
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h hq
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h hq
   -- `a = [BRC]`, `a' = [BSC]`, both containing `T`
   have ha : 3 * (7 / 64) ≤ sarea (ptB b) R ptC := by
     obtain ⟨t1, t2, t3⟩ := hc.1
@@ -289,7 +283,7 @@ theorem claim_DRS (h : Row123 l b P Q R S T)
     simp only [sarea, ptB, ptC]; ring
   have ea' : sarea (ptB b) S ptC = S.1 - 1 + (1 - b) * (1 - S.2) := by
     simp only [sarea, ptB, ptC]; ring
-  -- the one-point sector inequality (6) in `C, B, R, S`
+  -- the one-point sector inequality in `C, B, R, S`
   have e1 : sarea ptC (ptB b) R = sarea (ptB b) R ptC := by unfold sarea; ring
   have e2 : sarea S ptC (ptB b) = sarea (ptB b) S ptC := by unfold sarea; ring
   have hq4 : ConvexQuad ptC (ptB b) R S :=
@@ -319,11 +313,12 @@ theorem claim_DRS (h : Row123 l b P Q R S T)
   refine ⟨by rw [eJ]; exact d1, by rw [eJ]; exact d2, by linarith, ?_⟩
   exact cap_one (by norm_num) hm 0 6 7 (show sarea ptD R S < Kc * (7 / 64) by rw [eJ]; linarith)
 
-/-! ### §§3-6. The radial assignment -/
+/-! ### The radial assignment -/
 
-/-- The common-sector pair inequality (11) for every line sign that leaves the two far vertices
-`C, D` on one side (`FOUR_INTERIOR_QUADRILATERALS.md` (4)-(5), weakened as in §4): with
-`a = [ABD]`, `b = [ABC]`, `W = [ABC] + [ACD]`, `ab - σ(a + b) > 0` and `4σabW ≤ (ab - σ(a+b))²`. -/
+/-- The common-sector pair inequality for every line sign that leaves the two far vertices
+`C, D` on one side (`UnbalancedChain.sector_same` and `UnbalancedChain.sector_iso`, weakened to a
+common form): with `a = [ABD]`, `b = [ABC]`, `W = [ABC] + [ACD]`, `ab - σ(a + b) > 0` and
+`4σabW ≤ (ab - σ(a+b))²`. -/
 theorem sector_eleven {A B C D X Y : Point} {σ : ℝ} (hσ : 0 < σ) (hq : ConvexQuad A B C D)
     (hX₁ : InTriangle X A B C) (hX₂ : InTriangle X A B D) (hY₁ : InTriangle Y A B C)
     (hY₂ : InTriangle Y A B D) (hmin : σ / 2 ≤ minTriangleArea ![A, B, C, D, X, Y])
@@ -342,7 +337,7 @@ theorem sector_eleven {A B C D X Y : Point} {σ : ℝ} (hσ : 0 < σ) (hq : Conv
   have hb : 0 < sarea A B C := by
     have := hX₁; obtain ⟨h1, h2, h3⟩ := this
     linarith [sarea_add_sarea_add_sarea A B C X]
-  -- a bracket `0 < Z ≤ X` with `4σabW ≤ Z²` gives (11)
+  -- a bracket `0 < Z ≤ X` with `4σabW ≤ Z²` gives the conclusion
   have red : ∀ Z, 0 < Z → Z ≤ sarea A B D * sarea A B C - σ * (sarea A B D + sarea A B C) →
       4 * σ * sarea A B D * sarea A B C * (sarea A B C + sarea A C D) ≤ Z ^ 2 →
       0 < sarea A B D * sarea A B C - σ * (sarea A B D + sarea A B C) ∧
@@ -356,7 +351,7 @@ theorem sector_eleven {A B C D X Y : Point} {σ : ℝ} (hσ : 0 < σ) (hq : Conv
   have sw : ∀ Z, sarea Y X Z = -sarea X Y Z := fun Z => by unfold sarea; ring
   have nC : sarea X Y C ≠ 0 := fun h0 => by rw [h0, zero_mul] at hCD; exact lt_irrefl _ hCD
   have nD : sarea X Y D ≠ 0 := fun h0 => by rw [h0, mul_zero] at hCD; exact lt_irrefl _ hCD
-  -- the conclusion of (5) for an oriented pair, reduced to (11)
+  -- `UnbalancedChain.sector_iso` for an oriented pair, reduced to the common conclusion
   have iso : ∀ {X' Y' : Point}, InTriangle X' A B C → InTriangle X' A B D → InTriangle Y' A B C →
       InTriangle Y' A B D → σ / 2 ≤ minTriangleArea ![A, B, C, D, X', Y'] →
       sarea X' Y' A < 0 → 0 < sarea X' Y' B → 0 < sarea X' Y' C * sarea X' Y' D →
@@ -433,7 +428,7 @@ theorem T_scalar {v g : ℝ} (hv : 13 / 16 ≤ v) (_hv1 : v ≤ 1) (hg3 : 3 * (7
 (below), a point of `BRC` likewise, and points of `DRC` are above `ER`. -/
 theorem central_DRC (h : Row123 l b P Q R S T) (hq : QuadHull (ptB b) R S ptC T) {X : Point}
     (hX : InTriangle X ptD (ptB b) ptC) (hD : 0 < sarea ptD R X) : InTriangle X ptD R ptC := by
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h hq
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h hq
   have hXy := (central_facts h.b_pos (by linarith [h.b_le]) hX).2.2.1
   refine ⟨hD, ?_, by simp only [sarea, ptC, ptD]; nlinarith⟩
   refine pos_of_inside hX ?_ ?_ (by unfold sarea; ring_nf; rfl) (Or.inl ?_)
@@ -443,7 +438,7 @@ theorem central_DRC (h : Row123 l b P Q R S T) (hq : QuadHull (ptB b) R S ptC T)
 
 theorem central_DBR (h : Row123 l b P Q R S T) (hq : QuadHull (ptB b) R S ptC T) {X : Point}
     (hX : InTriangle X ptD (ptB b) ptC) (hD : sarea ptD R X < 0) : InTriangle X ptD (ptB b) R := by
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h hq
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h hq
   have hDBR : 0 < sarea ptD (ptB b) R := by simp only [sarea, ptD, ptB]; nlinarith [h.b_pos]
   refine ⟨hX.1, ?_, by rw [sarea_swap₁₂]; linarith⟩
   refine pos_of_inside hX ?_ (by unfold sarea; ring_nf; rfl) h.R_right.le (Or.inl ?_)
@@ -458,7 +453,7 @@ theorem right_DRC (h : Row123 l b P Q R S T) {X : Point} (hX : InTriangle X (ptB
 
 theorem right_DBR (h : Row123 l b P Q R S T) (hq : QuadHull (ptB b) R S ptC T) {X : Point}
     (hX : InTriangle X (ptB b) R ptC) (hD : sarea ptD R X < 0) : InTriangle X ptD (ptB b) R := by
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h hq
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h hq
   have hDBR : 0 < sarea ptD (ptB b) R := by simp only [sarea, ptD, ptB]; nlinarith [h.b_pos]
   have hDBC : 0 < sarea ptD (ptB b) ptC := by simp only [sarea, ptD, ptB, ptC]; norm_num
   refine ⟨?_, hX.1, by rw [sarea_swap₁₂]; linarith⟩
@@ -474,11 +469,9 @@ theorem DRC_ER (h : Row123 l b P Q R S T) {X : Point} (hX : InTriangle X ptD R p
   refine pos_of_inside hX ?_ (by unfold sarea; ring_nf; rfl) hERC.le (Or.inr (Or.inr hERC))
   simp only [sarea, ptE, ptD]; nlinarith [h.l_lt]
 
-/-- **Claim** (`UNBALANCED_ONE_UPPER_RADIAL:claim-one-below`). Exactly one of `P, Q, T` is on the
-`B`-side of `DR` (`[DRX] < 0`); the other two are on its `C`-side.
-`docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`, lines 215-222.
-Uses: UNBALANCED_ONE_UPPER_RADIAL:claim-DBR, THREE_INTERIOR_TRIANGLES:Corollary5. -/
-theorem claim_one_below (h : OneUpperSetting l b P Q R S T) :
+/-- Exactly one of `P, Q, T` is on the
+`B`-side of `DR` (`[DRX] < 0`); the other two are on its `C`-side. -/
+theorem exactly_one_below_DR (h : OneUpperSetting l b P Q R S T) :
     (sarea ptD R P < 0 ∧ 0 < sarea ptD R Q ∧ 0 < sarea ptD R T) ∨
       (0 < sarea ptD R P ∧ sarea ptD R Q < 0 ∧ 0 < sarea ptD R T) ∨
       (0 < sarea ptD R P ∧ 0 < sarea ptD R Q ∧ sarea ptD R T < 0) := by
@@ -491,12 +484,12 @@ theorem claim_one_below (h : OneUpperSetting l b P Q R S T) :
   have nP : sarea ptD R P ≠ 0 := sarea_ne_zero_of_min_pos hpos 0 6 4
   have nQ : sarea ptD R Q ≠ 0 := sarea_ne_zero_of_min_pos hpos 0 6 5
   have nT : sarea ptD R T ≠ 0 := sarea_ne_zero_of_min_pos hpos 0 6 8
-  have cap1 := (claim_DBR h.row hmin7 h.quad).2.2.2
+  have cap1 := (atMostOneInside_DBR h.row hmin7 h.quad).2.2.2
   have hu1 := (right_facts hb (by linarith) h.row.R_mem h.row.R_right).2.2.1
   have hDRC : 0 < sarea ptD R ptC := by simp only [sarea, ptD, ptC]; nlinarith
   have hPm := central_mem hb (by linarith) h.row.P_central
   have hQm := central_mem hb (by linarith) h.row.Q_central
-  have cap2 := ThreeInteriorTriangles.corollary4 hl hl1 hb hb2 hPm hQm h.row.R_mem h.row.S_mem
+  have cap2 := ThreeInteriorTriangles.typeIIConfig_triangleCapacityTwo hl hl1 hb hb2 hPm hQm h.row.R_mem h.row.S_mem
     h.row.T_mem h.min 0 6 1 hDRC
   have three : InTriangle P ptD R ptC → InTriangle Q ptD R ptC → InTriangle T ptD R ptC →
       False := by
@@ -542,11 +535,11 @@ theorem P_below_common (h : OneUpperSetting l b P Q R S T) (hPb : sarea ptD R P 
   have hmin7 := s7_le_A₀.trans h.min
   have hm : (7 / 64 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by linarith
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := lt_of_lt_of_le A₀_pos h.min
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h.row h.quad
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
   have hDEB := TypeII.s_le_DEB (row_data h.row) hm
   -- `Q, T` above `DR`
   have hQa : 0 < sarea ptD R Q ∧ 0 < sarea ptD R T := by
-    rcases claim_one_below h with ⟨-, q, t⟩ | ⟨p, -, -⟩ | ⟨p, -, -⟩
+    rcases exactly_one_below_DR h with ⟨-, q, t⟩ | ⟨p, -, -⟩ | ⟨p, -, -⟩
     · exact ⟨q, t⟩
     · linarith
     · linarith
@@ -565,11 +558,11 @@ theorem P_below_common (h : OneUpperSetting l b P Q R S T) (hPb : sarea ptD R P 
   -- `P` in `DEC`, above `ER`
   obtain ⟨hPx, hPy, hPy1, -, -⟩ := central_facts hb hb1 h.row.P_central
   have hPDEC : InTriangle P ptD (ptE l) ptC :=
-    ((TypeII.claim_central_cut hb hb1 hl hl1 h.row.P_central).1).2 h.P_above
+    ((TypeII.central_inTriangle_iff hb hb1 hl hl1 h.row.P_central).1).2 h.P_above
   have hERP : 0 < sarea (ptE l) R P := by
     refine pos_of_inside hPDEC ?_ (by unfold sarea; ring_nf; rfl) hERC.le (Or.inr (Or.inr hERC))
     simp only [sarea, ptE, ptD]; nlinarith
-  -- `P ∈ DEZ` for `Z` in the sector at `RC` (the ray argument of §5)
+  -- `P ∈ DEZ` for `Z` in the sector at `RC` (a ray argument)
   have inDEZ : ∀ Z, InTriangle Z ptD R ptC → 0 < sarea ptC (ptE l) Z →
       InTriangle P ptD (ptE l) Z := by
     intro Z hZ hZc
@@ -590,7 +583,8 @@ theorem P_below_common (h : OneUpperSetting l b P Q R S T) (hPb : sarea ptD R P 
       rw [show sarea Z ptD P = sarea ptD P Z by unfold sarea; ring]; exact this
   exact ⟨hQ, hT, hCEQ, hCET, hERC, inDEZ⟩
 
-/-- §5 of the note: the line `QT` separates `D, E`; then `DEQ` or `DET` contains two points. -/
+/-- With `P` below `DR`, the line `QT` cannot separate `D, E`: then `DEQ` or `DET` would
+contain two points. -/
 theorem P_sec5 (h : OneUpperSetting l b P Q R S T) :
     sarea ptD R P < 0 → sarea Q T ptD * sarea Q T (ptE l) < 0 → False := by
   intro hPb hDE
@@ -601,13 +595,13 @@ theorem P_sec5 (h : OneUpperSetting l b P Q R S T) :
   have hmin7 := s7_le_A₀.trans h.min
   have hm : (7 / 64 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by linarith
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := lt_of_lt_of_le A₀_pos h.min
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h.row h.quad
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
   have hDEB := TypeII.s_le_DEB (row_data h.row) hm
   obtain ⟨hQ, hT, hCEQ, hCET, hERC, inDEZ⟩ := P_below_common h hPb
   have hQER := DRC_ER h.row hQ
   have hTER := DRC_ER h.row hT
   obtain ⟨hPx, hPy, hPy1, -, -⟩ := central_facts hb hb1 h.row.P_central
-  obtain ⟨-, -, -, -, capQ, capT⟩ := claim_DEZ h.row hmin7 h.quad
+  obtain ⟨-, -, -, -, capQ, capT⟩ := atMostOneInside_DEQ_DET h.row hmin7 h.quad
   have nD : sarea Q T ptD ≠ 0 := sarea_ne_zero_of_min_pos hpos 5 8 0
   have nE : sarea Q T (ptE l) ≠ 0 := sarea_ne_zero_of_min_pos hpos 5 8 2
   have nR : sarea Q T R ≠ 0 := sarea_ne_zero_of_min_pos hpos 5 8 6
@@ -632,7 +626,8 @@ theorem P_sec5 (h : OneUpperSetting l b P Q R S T) :
       by rw [show sarea T ptD Q = sarea Q T ptD by unfold sarea; ring]; exact hD⟩
     exact absurd (capT 4 5 (inDEZ T hT hCET) hQin) (by decide)
 
-/-- §4 of the note: `QT` leaves `D, E` on one side; then `q < 2/5` and (13)-(15). -/
+/-- With `P` below `DR`, the line `QT` cannot leave `D, E` on one side: then `q ≤ 177/448`
+(`sector_eleven`, `q_small`), against the area bounds on `DBP`, `RDP` and `ECP` (`P_scalar`). -/
 theorem P_sec4 (h : OneUpperSetting l b P Q R S T) :
     sarea ptD R P < 0 → 0 < sarea Q T ptD * sarea Q T (ptE l) → False := by
   intro hPb hDE'
@@ -643,13 +638,13 @@ theorem P_sec4 (h : OneUpperSetting l b P Q R S T) :
   have hmin7 := s7_le_A₀.trans h.min
   have hm : (7 / 64 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by linarith
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := lt_of_lt_of_le A₀_pos h.min
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h.row h.quad
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
   have hDEB := TypeII.s_le_DEB (row_data h.row) hm
   obtain ⟨hQ, hT, hCEQ, hCET, hERC, inDEZ⟩ := P_below_common h hPb
   have hQER := DRC_ER h.row hQ
   have hTER := DRC_ER h.row hT
   obtain ⟨hPx, hPy, hPy1, -, -⟩ := central_facts hb hb1 h.row.P_central
-  obtain ⟨-, -, -, -, capQ, capT⟩ := claim_DEZ h.row hmin7 h.quad
+  obtain ⟨-, -, -, -, capQ, capT⟩ := atMostOneInside_DEQ_DET h.row hmin7 h.quad
   have nD : sarea Q T ptD ≠ 0 := sarea_ne_zero_of_min_pos hpos 5 8 0
   have nE : sarea Q T (ptE l) ≠ 0 := sarea_ne_zero_of_min_pos hpos 5 8 2
   have nR : sarea Q T R ≠ 0 := sarea_ne_zero_of_min_pos hpos 5 8 6
@@ -689,7 +684,7 @@ theorem P_sec4 (h : OneUpperSetting l b P Q R S T) :
     refine q_small hα0 (by nlinarith) (by linarith) (by linarith) (by linarith) hX ?_
     have e : (1 - R.2) - (1 - l) * (1 - R.1) + (1 - l) = (1 - R.2) + (1 - l) * R.1 := by ring
     rw [e]; linarith
-  -- (13)-(15)
+  -- the area bounds `[DBP], [RDP], [ECP] ≥ s`
   have a1 : 7 / 64 ≤ sarea ptD (ptB b) P := ge_of_pos (abs_ge hm 0 3 4) h.row.P_central.1
   have hRDP : 0 < sarea R ptD P := by rw [sarea_swap₁₂]; linarith
   have a2 : 7 / 64 ≤ sarea R ptD P := ge_of_pos (abs_ge hm 6 0 4) hRDP
@@ -703,12 +698,8 @@ theorem P_sec4 (h : OneUpperSetting l b P Q R S T) :
   exact P_scalar hDEB hq177 (by linarith) (by linarith [h.row.R_mem.2.1]) (by linarith) hPx.le
     hPm.2.1 (by linarith) a1 a2 a3
 
-/-- **Claim** (`UNBALANCED_ONE_UPPER_RADIAL:claim-P-not-below`). `P` is not below `DR`.
-`docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`, lines 224-326.
-Uses: UNBALANCED_ONE_UPPER_RADIAL:claim-one-below, FOUR_INTERIOR_QUADRILATERALS:claim-(4),
-FOUR_INTERIOR_QUADRILATERALS:claim-(5), UNBALANCED_ONE_UPPER_RADIAL:claim-DEZ,
-CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_P_not_below (h : OneUpperSetting l b P Q R S T) :
+/-- `P` is not below `DR`. -/
+theorem P_not_below_DR (h : OneUpperSetting l b P Q R S T) :
     ¬ sarea ptD R P < 0 := by
   intro hPb
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := lt_of_lt_of_le A₀_pos h.min
@@ -718,7 +709,7 @@ theorem claim_P_not_below (h : OneUpperSetting l b P Q R S T) :
   · exact P_sec5 h hPb hDE
   · exact P_sec4 h hPb hDE
 
-/-- The placement of §6: with `T` below `DR`, `P, Q` are in `DBC ∩ DRC`, `T` in `BRC ∩ DBR`, and
+/-- With `T` below `DR`: `P, Q` are in `DBC ∩ DRC`, `T` in `BRC ∩ DBR`, and
 `v = [DRC] ≥ Ks`. -/
 theorem T_below_common (h : OneUpperSetting l b P Q R S T) (hTb : sarea ptD R T < 0) :
     InTriangle P ptD R ptC ∧ InTriangle Q ptD R ptC ∧ InTriangle T ptD (ptB b) R ∧
@@ -727,9 +718,9 @@ theorem T_below_common (h : OneUpperSetting l b P Q R S T) (hTb : sarea ptD R T 
     linarith [s7_le_A₀.trans h.min]
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := lt_of_lt_of_le A₀_pos h.min
   have nP : sarea ptD R P ≠ 0 := sarea_ne_zero_of_min_pos hpos 0 6 4
-  have hPa : 0 < sarea ptD R P := (lt_or_gt_of_ne nP).resolve_left (claim_P_not_below h)
+  have hPa : 0 < sarea ptD R P := (lt_or_gt_of_ne nP).resolve_left (P_not_below_DR h)
   have hQa : 0 < sarea ptD R Q := by
-    rcases claim_one_below h with ⟨p, -, -⟩ | ⟨-, -, t⟩ | ⟨-, q, -⟩
+    rcases exactly_one_below_DR h with ⟨p, -, -⟩ | ⟨-, -, t⟩ | ⟨-, q, -⟩
     · linarith
     · linarith
     · exact q
@@ -741,16 +732,16 @@ theorem T_below_common (h : OneUpperSetting l b P Q R S T) (hTb : sarea ptD R T 
   rw [e] at hK
   exact ⟨hP, hQ, right_DBR h.row h.quad h.cell.1 hTb, hK⟩
 
-/-- §6, first case: `PQ` separates `B, R`; then `BRP` or `BRQ` contains two points although its
-doubled area is at most `[DBR] < Ks`. -/
+/-- With `T` below `DR`, when `PQ` separates `B, R`: `BRP` or `BRQ` contains two points
+although its doubled area is at most `[DBR] < Ks`. -/
 theorem T_sec_cap (h : OneUpperSetting l b P Q R S T) (hTb : sarea ptD R T < 0)
     (hBR : sarea P Q (ptB b) * sarea P Q R < 0) : False := by
   have hm : (7 / 64 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by
     linarith [s7_le_A₀.trans h.min]
   have hmin7 := s7_le_A₀.trans h.min
   obtain ⟨hP, hQ, hTDBR, -⟩ := T_below_common h hTb
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h.row h.quad
-  obtain ⟨hDBR, h2, h3, -⟩ := claim_DBR h.row hmin7 h.quad
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
+  obtain ⟨hDBR, h2, h3, -⟩ := atMostOneInside_DBR h.row hmin7 h.quad
   have hDBR' : sarea ptD (ptB b) R < Kc * (7 / 64) := by linarith
   -- `T ∈ BRZ` for `Z` in the sector at `DC`
   have inBRZ : ∀ Z, InTriangle Z ptD (ptB b) ptC → InTriangle Z ptD R ptC →
@@ -824,15 +815,16 @@ theorem T_sec_cap (h : OneUpperSetting l b P Q R S T) (hTb : sarea ptD R T < 0)
       two_inside (by norm_num) hm 3 6 5 4 8 (by decide) hPin (inBRZ Q h.row.Q_central hQ)
     linarith [hBRZ Q h.row.Q_central]
 
-/-- §6, the other line signs: (16) gives `g ≤ 177/448`, against the one-point inequality (17) for
-`T` in the `BR` sector. -/
+/-- With `T` below `DR`, when `PQ` leaves `B, R` on one side: the common-sector pair inequality
+gives `g = [BRC] ≤ 177/448` (`g_small`), against the one-point inequality for `T` in the `BR`
+sector (`T_scalar`). -/
 theorem T_sec4 (h : OneUpperSetting l b P Q R S T) (hTb : sarea ptD R T < 0)
     (hBR : 0 < sarea P Q (ptB b) * sarea P Q R) : False := by
   have hm : (7 / 64 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by
     linarith [s7_le_A₀.trans h.min]
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := lt_of_lt_of_le A₀_pos h.min
   obtain ⟨hP, hQ, hTDBR, hKv⟩ := T_below_common h hTb
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h.row h.quad
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
   have hK := Kc_s7_gt
   have hb := h.row.b_pos
   -- the sector at `CD` of `C, D, B, R`
@@ -860,7 +852,7 @@ theorem T_sec4 (h : OneUpperSetting l b P Q R S T) (hTb : sarea ptD R T < 0)
   rw [eCDR, eCDB, eCBR] at h16
   have hg177 : R.1 - b - (1 - b) * R.2 ≤ 177 / 448 :=
     g_small (v := 1 - R.2) (by linarith) (by linarith) hg0.le hX h16
-  -- the one-point inequality (17) for `T` in the sector at `BR` of `B, R, C, D`
+  -- the one-point inequality for `T` in the sector at `BR` of `B, R, C, D`
   have hq4' : ConvexQuad (ptB b) R ptC ptD := ⟨h.row.R_right, q4, q1, q2⟩
   have hsub' : (7 / 64 : ℝ) / 2 ≤ minTriangleArea ![ptB b, R, ptC, ptD, T] :=
     hm.trans (TypeII.min_le_min_reindex (by norm_num) _ _ ![3, 6, 1, 0, 8] (by decide)
@@ -878,12 +870,8 @@ theorem T_sec4 (h : OneUpperSetting l b P Q R S T) (hTb : sarea ptD R T < 0)
   rw [e] at h17
   exact T_scalar (v := 1 - R.2) (by linarith) (by linarith) hg3 hg177 h17
 
-/-- **Claim** (`UNBALANCED_ONE_UPPER_RADIAL:claim-T-not-below`). `T` is not below `DR`.
-`docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`, lines 328-396.
-Uses: UNBALANCED_ONE_UPPER_RADIAL:claim-one-below, UNBALANCED_ONE_UPPER_RADIAL:claim-DBR,
-UNBALANCED_ONE_UPPER_RADIAL:claim-one-point-sector, FOUR_INTERIOR_QUADRILATERALS:claim-(4),
-FOUR_INTERIOR_QUADRILATERALS:claim-(5), CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_T_not_below (h : OneUpperSetting l b P Q R S T) :
+/-- `T` is not below `DR`. -/
+theorem T_not_below_DR (h : OneUpperSetting l b P Q R S T) :
     ¬ sarea ptD R T < 0 := by
   intro hTb
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := lt_of_lt_of_le A₀_pos h.min
@@ -893,23 +881,21 @@ theorem claim_T_not_below (h : OneUpperSetting l b P Q R S T) :
   · exact T_sec_cap h hTb hBR
   · exact T_sec4 h hTb hBR
 
-/-- **Theorem 1** (`UNBALANCED_ONE_UPPER_RADIAL:Theorem1`). `P, T` are above `DR` and `Q` is
+/-- `P, T` are above `DR` and `Q` is
 below it. Furthermore `DRS` contains at most one further actual point, so at least one of `P, T`
-is above `DS`. `docs/proof/nine/UNBALANCED_ONE_UPPER_RADIAL.md`, lines 22-33, 396-398.
-Uses: UNBALANCED_ONE_UPPER_RADIAL:claim-one-below, UNBALANCED_ONE_UPPER_RADIAL:claim-P-not-below,
-UNBALANCED_ONE_UPPER_RADIAL:claim-T-not-below, UNBALANCED_ONE_UPPER_RADIAL:claim-DRS. -/
-theorem theorem1 (h : OneUpperSetting l b P Q R S T) :
+is above `DS`. -/
+theorem P_T_above_DR_Q_below (h : OneUpperSetting l b P Q R S T) :
     0 < sarea ptD R P ∧ 0 < sarea ptD R T ∧ sarea ptD R Q < 0 ∧
       AtMostOneInside (typeIIConfig l b P Q R S T) ptD R S ∧
       (0 < sarea ptD S P ∨ 0 < sarea ptD S T) := by
-  have hP := claim_P_not_below h
-  have hT := claim_T_not_below h
+  have hP := P_not_below_DR h
+  have hT := T_not_below_DR h
   have hmin7 := s7_le_A₀.trans h.min
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := lt_of_lt_of_le A₀_pos h.min
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h.row h.quad
-  rcases claim_one_below h with ⟨p, -, -⟩ | ⟨p, q, t⟩ | ⟨-, -, t⟩
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
+  rcases exactly_one_below_DR h with ⟨p, -, -⟩ | ⟨p, q, t⟩ | ⟨-, -, t⟩
   · exact absurd p hP
-  · have cap := (claim_DRS h.row hmin7 h.quad h.cell).2.2.2
+  · have cap := (atMostOneInside_DRS h.row hmin7 h.quad h.cell).2.2.2
     refine ⟨p, t, q, cap, ?_⟩
     by_contra hc; push Not at hc
     have nP : sarea ptD S P ≠ 0 := sarea_ne_zero_of_min_pos hpos 0 7 4

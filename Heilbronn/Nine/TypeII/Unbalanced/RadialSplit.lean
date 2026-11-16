@@ -5,31 +5,32 @@ public import Heilbronn.Nine.TypeII.Unbalanced.CellI
 public import Heilbronn.Nine.TypeII.TypeIICompletion.Unbalanced
 public import Heilbronn.Nine.Hulls.FourInteriorQuadrilaterals
 
-/-! # The radial split in the unbalanced upper cut (`docs/proof/nine/UNBALANCED_RADIAL_SPLIT.md`)
+/-! # The radial split in the unbalanced upper cut
 
-**Role.** Primary route. `UNBALANCED_UPPER_CELL_II` (lines 49-52) cites Theorem 1 for the radial
-labelling of the two-point upper cut in cell II. Lemma 2 (the lower support triangle `DRW` has
-doubled area `Λ < 1`) and Corollary 3 hold for every quadrilateral right hull.
+`radialConclusion_of_cellII` gives the radial labelling of the two-point upper cut in cell II used by
+`UnbalancedUpperCellII`. `radialLambda_lt_one` (the lower support triangle `DRW` has doubled area `Λ < 1`)
+and `atMostOne_inDBRandDER` hold for every quadrilateral right hull.
 
-**Setting** (lines 5-23): `Row123 l b P Q R S T` with minimum area at least
+**Setting**: `Row123 l b P Q R S T` with minimum area at least
 `A₀ = (9√65 - 55)/320` (so every actual doubled area exceeds `s = 7/64` and the global capacity
-theorem `THREE_INTERIOR_TRIANGLES:Corollary5` applies), the right hull is the quadrilateral
-`B, R, S, C` with `T` inside (`QuadHull`). For Theorem 1 also: both central points above `CE`,
-support cell II, and `PQ` separating `{D, C}` from `{E, B}` (`UNBALANCED_RIGHT_HULL`
-Theorems 2-4). Write `R = (r, u)`, `q = 1 - λ`, `w = 1 - b`, `W = DE ∩ BR = (0, -bu/(r-b))`
-(`radialW`) and `Λ = 2·area(DRW) = r + rbu/(r-b)` (`radialLambda`, equation (1)).
+bound `ThreeInteriorTriangles.triangleCapacityTwo_of_A₀_le` applies), the right hull is the quadrilateral
+`B, R, S, C` with `T` inside (`QuadHull`). For `radialConclusion_of_cellII` also: both central points above `CE`,
+support cell II, and `PQ` separating `{D, C}` from `{E, B}` (`UnbalancedRightHull.not_cellI_or_cellIII`,
+`UnbalancedRightHull.not_lineIsolates4_C`, `UnbalancedRightHull.lineSeparates_DC_EB`). Write `R = (r, u)`,
+`q = 1 - λ`, `w = 1 - b`, `W = DE ∩ BR = (0, -bu/(r-b))` (`radialW`) and
+`Λ = 2·area(DRW) = r + rbu/(r-b)` (`radialLambda`).
 
 **Results.**
-* `lemma2`: `Λ < 1` as soon as all doubled areas on `B, R, S, C` are at least `s`.
-* `corollary3`: at most one further actual point is strictly inside both `DBR` and `DER`.
-* `claim_empty_ear` (4): in the two-point upper cut `[EBR] < 43/160 < 3s`, `EBR` is empty, the
+* `radialLambda_lt_one`: `Λ < 1` as soon as all doubled areas on `B, R, S, C` are at least `s`.
+* `atMostOne_inDBRandDER`: at most one further actual point is strictly inside both `DBR` and `DER`.
+* `noPointInside_EBR_of_upper_cut`: in the two-point upper cut `[EBR] < 43/160 < 3s`, `EBR` is empty, the
   right points are below `CE`, and `D, E, R, C` is strictly convex.
-* `claim_not_both_C_side`: `P, Q` are not both on the `C`-side of `DR`.
-* `theorem1`: after interchanging `P, Q`, `P` and `T` are on the `C`-side of `DR`, `Q` on its
+* `not_both_C_side_DR`: `P, Q` are not both on the `C`-side of `DR`.
+* `radialConclusion_of_cellII`: after interchanging `P, Q`, `P` and `T` are on the `C`-side of `DR`, `Q` on its
   `B`-side, `R, S, T` are below `CE`, `EBR` is empty and `u < 3/16` (`RadialConclusion`).
 
-Implicit in the manuscript: Corollary 3 is stated in the note's standing setting (quadrilateral
-right hull, minimum area `≥ A₀`), which its proof (Lemma 2) needs; it does not use the cut.
+`atMostOne_inDBRandDER` uses the standing setting (quadrilateral right hull, minimum area `≥ A₀`), which
+`radialLambda_lt_one` needs; it does not use the cut.
 -/
 
 @[expose] public section
@@ -45,7 +46,7 @@ section Helpers
 
 open TypeII
 
-/-- The scalar core of Lemma 2: the ear `sw ≤ (r - b - wu)(1 - r)` (`m = n = 1`) gives
+/-- The scalar core of `radialLambda_lt_one`: the ear `sw ≤ (r - b - wu)(1 - r)` (`m = n = 1`) gives
 `Λ = r + rbu/(r-b) < 1`. -/
 theorem lambda_alg {b r u : ℝ} (hb : 0 < b) (hbr : b < r) (hr1 : r < 1)
     (hear : 7 / 64 * (1 - b) ≤ (r - b - (1 - b) * u) * (1 - r)) :
@@ -99,11 +100,13 @@ theorem lambda_alg {b r u : ℝ} (hb : 0 < b) (hbr : b < r) (hr1 : r < 1)
   have := mul_le_mul_of_nonneg_left hcon k5.le
   nlinarith
 
-/-- The same-side sector inequality (4) of `FOUR_INTERIOR_QUADRILATERALS.md` for an arbitrary
-counterclockwise convex quadrilateral `ABCD`, transported from the normal form (`claim_1`,
-`claim_4`) by the affine map of determinant `1/W`, `W = 2·area`. (A copy of
-`FourInteriorQuadrilaterals.claim4_general`, built on the baseline statements.) -/
-theorem claim4_transport {A B C D P Q : Point} {σ : ℝ} (hq : ConvexQuad A B C D) (hσ : 0 < σ)
+/-- The same-side sector inequality for an arbitrary counterclockwise convex quadrilateral
+`ABCD`: if `P, Q` lie in both `ABC` and `ABD`, `A, B` are on the same side of `PQ`, and all
+doubled areas on the six points are at least `σ`, then with `W = 2·area(ABCD)`, `a = [ABD]/W`,
+`b = [ABC]/W`, `s = σ/W`: `ab - s(a + b) > 0` and `2√(sab) ≤ ab - s(a + b)`. Transported from the
+normal form (`FourInteriorQuadrilaterals.convexQuad_normal_form`, `FourInteriorQuadrilaterals.two_sqrt_le_of_same_side`) by the
+affine map of determinant `1/W` (as in `FourInteriorQuadrilaterals.two_sqrt_le_of_same_side_general`). -/
+theorem sector_same_transport {A B C D P Q : Point} {σ : ℝ} (hq : ConvexQuad A B C D) (hσ : 0 < σ)
     (hP : InTriangle P A B C ∧ InTriangle P A B D) (hQ : InTriangle Q A B C ∧ InTriangle Q A B D)
     (hmin : σ / 2 ≤ minTriangleArea ![A, B, C, D, P, Q])
     (hsame : 0 < sarea P Q A * sarea P Q B) :
@@ -122,7 +125,7 @@ theorem claim4_transport {A B C D P Q : Point} {σ : ℝ} (hq : ConvexQuad A B C
             sarea A B C / (2 * QuadrilateralHull.quadArea A B C D)) := by
   have hq' : QuadrilateralHull.ConvexQuad A B C D := hq
   obtain ⟨ha0, ha1, hb0, hb1, -, -, α, β, γ, δ, ε, ζ, hdet, eA, eB, eD, eC⟩ :=
-    FourInteriorQuadrilaterals.claim_1 hq'
+    FourInteriorQuadrilaterals.convexQuad_normal_form hq'
   have hW : 0 < 2 * QuadrilateralHull.quadArea A B C D := by
     unfold QuadrilateralHull.quadArea
     obtain ⟨q1, -, q3, -⟩ := hq
@@ -145,7 +148,7 @@ theorem claim4_transport {A B C D P Q : Point} {σ : ℝ} (hq : ConvexQuad A B C
   have e : ![(0, 0), (1, 0), ((1 - b) / a, b), (0, a), affineMap α β γ δ ε ζ P,
       affineMap α β γ δ ε ζ Q] = affineMap α β γ δ ε ζ ∘ ![A, B, C, D, P, Q] := by
     funext i; fin_cases i <;> simp [eA, eB, eC, eD]
-  refine FourInteriorQuadrilaterals.claim_4 ha0 ha1 hb0 hb1 (by positivity) hP' hQ' ?_ ?_
+  refine FourInteriorQuadrilaterals.two_sqrt_le_of_same_side ha0 ha1 hb0 hb1 (by positivity) hP' hQ' ?_ ?_
   · rw [e, minTriangleArea_affineMap, abs_of_pos hdp, hdet]
     have := mul_le_mul_of_nonneg_left hmin (by positivity : (0 : ℝ) ≤ 1 / W)
     calc σ / W / 2 = 1 / W * (σ / 2) := by ring
@@ -155,8 +158,8 @@ theorem claim4_transport {A B C D P Q : Point} {σ : ℝ} (hq : ConvexQuad A B C
         (α * δ - β * γ) ^ 2 * (sarea P Q A * sarea P Q B) := by ring
     rw [this]; positivity
 
-/-- The scalar consequence of (4) in the sector `DCE ∩ DCR` of `D, E, R, C`
-(`UNBALANCED_RADIAL_SPLIT.md` §3): with `a = v/W`, `b = q/W`, `s = σ/W`, `W = qr + v`,
+/-- The scalar consequence of the same-side sector inequality (`sector_same_transport`) in the sector
+`DCE ∩ DCR` of `D, E, R, C`: with `a = v/W`, `b = q/W`, `s = σ/W`, `W = qr + v`,
 `4σ(r + 1) ≤ (1 - 2σ)²`. -/
 theorem sector_alg {v q r σ W : ℝ} (hv : 0 < v) (hv1 : v ≤ 1) (hq : 0 < q) (hq1 : q ≤ 1)
     (hσ : 0 < σ) (hr : 0 ≤ r) (hW : W = q * r + v)
@@ -207,10 +210,10 @@ open TypeII UnbalancedCellI
 
 variable {l b : ℝ} {P Q R S T : Point}
 
-/-- The point `W = DE ∩ BR = (0, -bu/(r - b))` of (1). -/
+/-- The point `W = DE ∩ BR = (0, -bu/(r - b))`. -/
 def radialW (b : ℝ) (R : Point) : Point := (0, -(b * R.2) / (R.1 - b))
 
-/-- `Λ = 2·area(DRW) = r + rbu/(r - b)`, equation (1). -/
+/-- `Λ = 2·area(DRW) = r + rbu/(r - b)`. -/
 def radialLambda (b : ℝ) (R : Point) : ℝ := R.1 + R.1 * b * R.2 / (R.1 - b)
 
 /-- `X` lies strictly inside both `DBR` and `DER` (counterclockwise orders `D, B, R` and
@@ -218,7 +221,7 @@ def radialLambda (b : ℝ) (R : Point) : ℝ := R.1 + R.1 * b * R.2 / (R.1 - b)
 def InDBRandDER (l b : ℝ) (R X : Point) : Prop :=
   InTriangle X ptD (ptB b) R ∧ InTriangle X ptD (ptE l) R
 
-/-- The conclusion of Theorem 1 for the labelling `P, Q`: `P, T` on the `C`-side of `DR`, `Q` on
+/-- The conclusion of `radialConclusion_of_cellII` for the labelling `P, Q`: `P, T` on the `C`-side of `DR`, `Q` on
 its `B`-side; `R, S, T` below `CE`; `EBR` contains no further actual point; `u < 3/16`, indeed
 `1 - u = [DRC] ≥ Ks` (`s = 7/64`). -/
 def RadialConclusion (l b : ℝ) (P Q R S T : Point) : Prop :=
@@ -240,8 +243,7 @@ theorem central_DRC {b : ℝ} {R X : Point} (hX : InTriangle X ptD (ptB b) ptC)
       show sarea R ptC (ptB b) = sarea (ptB b) R ptC by unfold sarea; ring,
       show sarea R ptC ptC = 0 by unfold sarea; ring]; linarith
 
-/-- A central point above `CE` on the `B`-side of `DR` lies inside both `DBR` and `DER`
-(`UNBALANCED_RADIAL_SPLIT.md` §4). -/
+/-- A central point above `CE` on the `B`-side of `DR` lies inside both `DBR` and `DER`. -/
 theorem central_DBR_DER {l b : ℝ} {R X : Point} (hb : 0 < b) (hl1 : l < 1)
     (hX : InTriangle X ptD (ptB b) ptC) (hXE : InTriangle X ptD (ptE l) ptC)
     (hDR : sarea ptD R X < 0) (hbr : b < R.1) (hu : 0 ≤ R.2) (hBRC : 0 < sarea (ptB b) R ptC)
@@ -266,13 +268,11 @@ theorem central_DBR_DER {l b : ℝ} {R X : Point} (hb : 0 < b) (hl1 : l < 1)
     · rw [show sarea (ptE l) R ptD = sarea ptD (ptE l) R by unfold sarea; ring,
         show sarea (ptE l) R (ptE l) = 0 by unfold sarea; ring]; linarith
 
-/-- **Lemma 2** (`UNBALANCED_RADIAL_SPLIT:Lemma2`). Let `B = (b, 0)` with `0 < b ≤ 1/2`,
+/-- Let `B = (b, 0)` with `0 < b ≤ 1/2`,
 `C = (1, 1)`, and `R, S` points of the square with `B, R, S, C` a strictly convex
 counterclockwise quadrilateral. If all actual doubled areas on `B, R, S, C` are at least
-`s = 7/64`, then `Λ = r + rbu/(r - b) < 1`. (Any cell, any cut.)
-`docs/proof/nine/UNBALANCED_RADIAL_SPLIT.md`, lines 44-102.
-Uses: UNBALANCED_RIGHT_HULL:claim-lower-vertex. -/
-theorem lemma2 {b : ℝ} {R S : Point} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hR : R ∈ unitSquare)
+`s = 7/64`, then `Λ = r + rbu/(r - b) < 1`. (Any cell, any cut.) -/
+theorem radialLambda_lt_one {b : ℝ} {R S : Point} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hR : R ∈ unitSquare)
     (hS : S ∈ unitSquare) (hquad : ConvexQuad (ptB b) R S ptC)
     (hmin : 7 / 128 ≤ minTriangleArea ![ptB b, R, S, ptC]) :
     radialLambda b R < 1 := by
@@ -303,10 +303,9 @@ theorem inj_six {i j : Fin 9} (hij : i ≠ j) (hi0 : i ≠ 0) (hi6 : i ≠ 6) (h
   intro x y hxy
   fin_cases x <;> fin_cases y <;> simp_all [eq_comm]
 
-/-- **Corollary 3** (`UNBALANCED_RADIAL_SPLIT:Corollary3`). At most one further actual point is
-strictly inside both `DBR` and `DER`. `docs/proof/nine/UNBALANCED_RADIAL_SPLIT.md`, lines 104-122.
-Uses: UNBALANCED_RADIAL_SPLIT:Lemma2, TYPE_II_COMPLETION:Theorem13. -/
-theorem corollary3 (h : Row123 l b P Q R S T)
+/-- At most one further actual point is
+strictly inside both `DBR` and `DER`. -/
+theorem atMostOne_inDBRandDER (h : Row123 l b P Q R S T)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) :
     AtMostOne (typeIIConfig l b P Q R S T) (InDBRandDER l b R) := by
@@ -325,7 +324,7 @@ theorem corollary3 (h : Row123 l b P Q R S T)
   have hm4 : 7 / 128 ≤ minTriangleArea ![ptB b, R, S, ptC] :=
     hmin7.trans (min_le_min_reindex (by norm_num) _ _ ![3, 6, 7, 1] (by decide)
       (by funext x; fin_cases x <;> rfl))
-  have hΛ := lemma2 hb hb2 h.R_mem h.S_mem hq.1 hm4
+  have hΛ := radialLambda_lt_one hb hb2 h.R_mem h.S_mem hq.1 hm4
   have hrb : 0 < R.1 - b := by linarith
   have hr0 : 0 < R.1 := by linarith
   have hΛ0 : 0 < radialLambda b R := by
@@ -388,7 +387,7 @@ theorem corollary3 (h : Row123 l b P Q R S T)
   have hf1 : ff < 1 := by rw [hff, div_lt_one hr0]; exact hbr
   obtain ⟨hiB, hiE⟩ := hi
   obtain ⟨hjB, hjE⟩ := hj
-  have h13 := TypeIICompletion.theorem13 hh0 hh1 hf0 hf1 (tH _ hiE) (tF _ hiB) (tH _ hjE)
+  have h13 := TypeIICompletion.minTriangleArea_lt_of_two_in_cellII hh0 hh1 hf0 hf1 (tH _ hiE) (tF _ hiB) (tH _ hjE)
     (tF _ hjB)
   set X := typeIIConfig l b P Q R S T with hX
   have hcomp : ![hsA, hsE, hsH hh, hsF ff, m (X i), m (X j)] =
@@ -416,16 +415,15 @@ theorem corollary3 (h : Row123 l b P Q R S T)
     rw [inv_mul_lt_iff₀ hΛ0] at h13; linarith
   nlinarith
 
-/-- **Claim** (`UNBALANCED_RADIAL_SPLIT:claim-empty-ear`), equation (4). In the two-point upper
+/-- In the two-point upper
 cut, with `c = 1 - wq`, `s = 7/64`:
 `δ = [EBR] ≤ c - 2b√s < 13/80 + (17/80)b ≤ 43/160 < 3s`, so `EBR` contains no further actual
 point; the three right points are below `CE`; and `D, E, R, C` is a strictly convex
-(counterclockwise) quadrilateral. `docs/proof/nine/UNBALANCED_RADIAL_SPLIT.md`, lines 124-160.
-Uses: UNBALANCED_RIGHT_HULL:claim-q67/80, UNBALANCED_RIGHT_HULL:claim-generic-ear.
+(counterclockwise) quadrilateral.
+
 The right points are below `CE` by the direct argument (`UnbalancedCellI.below_CE_of_right`: the
-container is below `BC`, which is below `CE` for `x < 1`) instead of
-THREE_INTERIOR_TRIANGLES:Corollary5. -/
-theorem claim_empty_ear (h : Row123 l b P Q R S T)
+container is below `BC`, which is below `CE` for `x < 1`), without the global capacity bound. -/
+theorem noPointInside_EBR_of_upper_cut (h : Row123 l b P Q R S T)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T)
     (hP : 0 < sarea (ptE l) ptC P) (hQ : 0 < sarea (ptE l) ptC Q) :
@@ -445,7 +443,7 @@ theorem claim_empty_ear (h : Row123 l b P Q R S T)
   have hw : 0 < 1 - b := by linarith
   have hmin7 : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T) :=
     le_trans (le_of_lt A₀_bounds.1) hmin
-  obtain ⟨-, -, -, hq67, -, -⟩ := claim_q67_80 h hmin7 hP hQ
+  obtain ⟨-, -, -, hq67, -, -⟩ := q_gt_67_80 h hmin7 hP hQ
   obtain ⟨hx0, hx1, hu, hux, ha, hgen, -, -⟩ := quad_ears h hmin7 hq
   have hδ := ear_generic hb hl hb1 hx1 ha.le hgen
   have e : sarea (ptE l) (ptB b) R = b * R.2 + l * ((1 - b) * ((R.1 - b) / (1 - b))) := by
@@ -490,11 +488,10 @@ theorem claim_empty_ear (h : Row123 l b P Q R S T)
     · simp only [sarea, ptD, ptC]; linarith
     · simp only [sarea, ptD, ptE, ptC]; linarith
 
-/-- **Claim** (`UNBALANCED_RADIAL_SPLIT:claim-not-both-C-side`). In the setting of Theorem 1,
+/-- In the setting of `radialConclusion_of_cellII`,
 `P` and `Q` are not both on the `C`-side of `DR` (that would force `r ≤ 177/448`, against
-`r ≥ b + 3s > 7/16`). `docs/proof/nine/UNBALANCED_RADIAL_SPLIT.md`, lines 162-205.
-Uses: FOUR_INTERIOR_QUADRILATERALS:claim-(4), UNBALANCED_RADIAL_SPLIT:claim-empty-ear. -/
-theorem claim_not_both_C_side (h : Row123 l b P Q R S T)
+`r ≥ b + 3s > 7/16`). -/
+theorem not_both_C_side_DR (h : Row123 l b P Q R S T)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellII (ptB b) R S ptC T)
     (hP : 0 < sarea (ptE l) ptC P) (hQ : 0 < sarea (ptE l) ptC Q)
@@ -508,7 +505,7 @@ theorem claim_not_both_C_side (h : Row123 l b P Q R S T)
   have hmin7 : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T) :=
     le_trans (le_of_lt A₀_bounds.1) hmin
   obtain ⟨hPE, hQE, hm6, hBE, hDEB⟩ := upper_pair h hmin7 hP hQ
-  obtain ⟨-, -, -, -, -, hR, -, -, hcq⟩ := claim_empty_ear h hmin hq hP hQ
+  obtain ⟨-, -, -, -, -, hR, -, -, hcq⟩ := noPointInside_EBR_of_upper_cut h hmin hq hP hQ
   obtain ⟨hur, hbr, hrk, hk1, hu, -, -⟩ := quad_order hb hb1 h.R_mem h.S_mem hq.1
   have hu1 : R.2 < 1 := by have := h.R_right; simp only [sarea, ptB, ptC] at this; nlinarith
   have hPR := central_DRC h.P_central hDP h.R_right hu1
@@ -523,7 +520,7 @@ theorem claim_not_both_C_side (h : Row123 l b P Q R S T)
     linarith
   have hsame : 0 < sarea P Q ptC * sarea P Q ptD := by
     rcases hsep with ⟨a1, a2, -, -⟩ | ⟨a1, a2, -, -⟩ <;> nlinarith
-  obtain ⟨k1, k2⟩ := claim4_transport hquad (σ := 7 / 64) (by norm_num) ⟨rot hPE, rot hPR⟩
+  obtain ⟨k1, k2⟩ := sector_same_transport hquad (σ := 7 / 64) (by norm_num) ⟨rot hPE, rot hPR⟩
     ⟨rot hQE, rot hQR⟩ hm6' hsame
   have eW : 2 * QuadrilateralHull.quadArea ptC ptD (ptE l) R = (1 - l) * R.1 + (1 - R.2) := by
     simp only [QuadrilateralHull.quadArea, sarea, ptC, ptD, ptE]; ring
@@ -559,7 +556,7 @@ theorem noPointInside_swapPQ {l b : ℝ} {P Q R S T A B C : Point}
   · exact h 8 hi
 
 /-- With `EBR` empty, `T ∈ BCR` on the `B`-side of `DR` lies inside both `DBR` and `DER`
-(`UNBALANCED_RADIAL_SPLIT.md` §4: the diagonal `ER` of `D, E, B, R`). -/
+(through the diagonal `ER` of `D, E, B, R`). -/
 theorem T_DBR_DER (h : Row123 l b P Q R S T) (hc : CellII (ptB b) R S ptC T) (hbr : b < R.1)
     (hu : 0 ≤ R.2) (hpos : 0 < minTriangleArea ![ptD, ptC, ptE l, ptB b, P, Q, R, S, T])
     (hEBR : NoPointInside (typeIIConfig l b P Q R S T) (ptE l) (ptB b) R) :
@@ -609,14 +606,11 @@ theorem T_DBR_DER (h : Row123 l b P Q R S T) (hc : CellII (ptB b) R S ptC T) (hb
     · exact hpos'
   exact ⟨hT1, ⟨hDET, hERT, hRD⟩⟩
 
-/-- **Theorem 1** (`UNBALANCED_RADIAL_SPLIT:Theorem1`). In the two-point upper cut, cell II,
+/-- In the two-point upper cut, cell II,
 with `PQ` separating `{D, C}` from `{E, B}`: after interchanging `P, Q` if needed,
 (1) `P` is on the `C`-side of `DR` and `Q` on its `B`-side; (2) `T` is on the `C`-side of `DR`;
-(3) `R, S, T` are below `CE`, `EBR` contains no further actual point, and `u < 3/16`.
-`docs/proof/nine/UNBALANCED_RADIAL_SPLIT.md`, lines 25-42, 162-236.
-Uses: UNBALANCED_RADIAL_SPLIT:claim-not-both-C-side, UNBALANCED_RADIAL_SPLIT:Corollary3,
-UNBALANCED_RADIAL_SPLIT:claim-empty-ear, CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem theorem1 (h : Row123 l b P Q R S T)
+(3) `R, S, T` are below `CE`, `EBR` contains no further actual point, and `u < 3/16`. -/
+theorem radialConclusion_of_cellII (h : Row123 l b P Q R S T)
     (hmin : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T))
     (hq : QuadHull (ptB b) R S ptC T) (hc : CellII (ptB b) R S ptC T)
     (hP : 0 < sarea (ptE l) ptC P) (hQ : 0 < sarea (ptE l) ptC Q)
@@ -629,11 +623,11 @@ theorem theorem1 (h : Row123 l b P Q R S T)
   have hmin7 : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T) :=
     le_trans (le_of_lt A₀_bounds.1) hmin
   obtain ⟨hPE, hQE, -, -, -⟩ := upper_pair h hmin7 hP hQ
-  obtain ⟨-, -, -, -, hEBR, hR, hS, hT, hcq⟩ := claim_empty_ear h hmin hq hP hQ
+  obtain ⟨-, -, -, -, hEBR, hR, hS, hT, hcq⟩ := noPointInside_EBR_of_upper_cut h hmin hq hP hQ
   obtain ⟨hur, hbr, hrk, hk1, hu, -, -⟩ := quad_order hb hb1 h.R_mem h.S_mem hq.1
   have hu1 : R.2 < 1 := by have := h.R_right; simp only [sarea, ptB, ptC] at this; nlinarith
-  have hcor := corollary3 h hmin hq
-  have hnotC := claim_not_both_C_side h hmin hq hc hP hQ hsep
+  have hcor := atMostOne_inDBRandDER h hmin hq
+  have hnotC := not_both_C_side_DR h hmin hq hc hP hQ hsep
   have hERC : 0 < sarea (ptE l) R ptC := by
     rw [show sarea (ptE l) R ptC = -sarea (ptE l) ptC R by unfold sarea; ring]; linarith
   have hmin7' := hmin7

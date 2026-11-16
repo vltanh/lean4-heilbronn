@@ -4,55 +4,39 @@ public import Heilbronn.Nine.Global.GlobalCompletion
 public import Heilbronn.Nine.Hulls.QuadrilateralHull
 public import Heilbronn.Nine.TypeII.TypeII.CentralTriple
 
-/-! # A global restriction on triangles containing three points (`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`)
+/-! # A global restriction on triangles containing three points
 
-**Role.** A component on the primary route.
-* Corollary 2 (capacity two in family N) is used by `SIX_BOUNDARY_HULL.md` (lines 707-709).
-* Theorem 1 is used by `ONE_CORNER.md` §6 (lines 354-356, capacity two in C1).
-* Corollary 5 (global capacity two) is used by `TYPE_II_COMPLETION.md` (lines 23-27),
-  `UNBALANCED_RADIAL_SPLIT.md` (lines 14-16) and `FOUR_INTERIOR_QUADRILATERALS.md` Theorem 1.
-
-**Setting.** Nine points in the unit square with least triangle area `t ≥ A₀`, `s₀ = 2A₀`,
+Nine points in the unit square with least triangle area `t ≥ A₀`, `s₀ = 2A₀`,
 `Γ = (11 + 3√5)/2`. "Contains" means strictly inside (`InTriangle`, for a counterclockwise
 triangle). A point on an edge gives zero area. For a counterclockwise triangle `ABC`, the
 barycentric coordinates of `X` are `sarea(B,C,X)`, `sarea(C,A,X)`, `sarea(A,B,X)` divided by
 `sarea(A,B,C)`. The exterior region beyond the edge `BC` is where the first is negative and the
-other two are positive (`BeyondEdge X A B C`, lines 44-49). `Exterior X A B C r`, for `r = 0, 1, 2`,
-is the region beyond `BC`, `CA`, `AB` respectively.
+other two are positive (`BeyondEdge X A B C`). `Exterior X A B C r`, for `r = 0, 1, 2`, is the
+region beyond `BC`, `CA`, `AB` respectively.
 
-**Definitions.**
+## Main definitions
+
 * `BeyondEdge`, `Exterior`: the three exterior regions.
 * `RobustBeyond`, `RobustExterior`: an exterior point whose negative coordinate `-p` satisfies
-  `p ≥ (11/20)α` and `p ≥ (11/20)q` for its two positive coordinates `α, q` ((1), (10)).
+  `p ≥ (11/20)α` and `p ≥ (11/20)q` for its two positive coordinates `α, q`.
 * `TriangleCapacityTwo P`: every actual triangle of `P` contains at most two further points of
   `P` (for any number of points).
-* `IsTypeIIHalf`: the Type-II form with `b ≤ 1/2` (13). This is the output of the shear
-  normalization of `TYPE_II.md` §2.
+* `IsTypeIIHalf`: the Type-II form with `b ≤ 1/2`, the output of the shear normalization.
 
-**Results.**
-* `lemma3`: two robust exterior points in different regions force `sarea A B C ≤ 29/31`.
-* `claim_8_9`, `eq10`: the consequences (8)-(10) for a triangle containing three points.
-* `theorem1`: a triangle containing three points is an ear of the full hull with exactly three
-  interior and three exterior points, all beyond one edge; the hull has at most six vertices.
-* `corollary2`: capacity two in family N.
-* `corollary4`, `claim_min_enclosing_parallelogram`, `claim_normalization`, `corollary5` (same
-  namespace) are in `Heilbronn.Nine.Hulls.GlobalCapacity`: they use `ONE_CORNER.md`, whose C1
-  capacity uses Theorem 1 here, so keeping them in this module would create an import cycle.
+## Main results
 
-**Implicit in the manuscript.**
-* Theorem 1: "contains three further configuration points" is read as "at least three". The
-  conclusion includes "exactly three" (four are excluded by the seven-point bound, lines
-  259-261).
-* Lemma 3 is stated for any two different exterior regions. The proof relabels them as "beyond
-  `BC`" and "beyond `AC`" (line 70).
-* Corollary 5's normalization (lines 472-497) uses the minimum-area enclosing parallelogram
-  instead of maximality. It is stated as `claim_normalization`. The Type-II step there cites
-  "Section 3 of `TYPE_II.md`" (line 495), but the shear normalization is `TYPE_II.md` §2
-  (citation error).
-* Corollary 2 (lines 283-286): "the only possible other point on that side is its already
-  specified partner" is inaccurate for the right and top sides, where an arbitrary point may also
-  lie. The conclusion still holds, since each side holds at most two points and every anchor is
-  still a hull vertex. This is a wording gap in a proof, not in the statement.
+* `sarea_le_of_robustExterior_pair`: two robust points in two different exterior regions force `sarea A B C ≤ 29/31`.
+* `sarea_gt_and_exterior_of_three_inside`, `robustExterior_of_three_inside`: a triangle containing three points has doubled area above `29/30`, and
+  every other point is inside it or in exactly one exterior region, with the robust proportions.
+* `three_inside_is_ear`: a triangle containing at least three points contains exactly three (four are
+  excluded by the seven-point bound `ncard_inside_le_three`), is an ear of the full hull, and has
+  its three exterior points all beyond one edge; the hull has at most six vertices.
+* `nConfig_triangleCapacityTwo`: capacity two in family N.
+
+`typeIIConfig_triangleCapacityTwo`, `exists_min_enclosing_parallelogram`, `exists_affine_family_normal_form` and `triangleCapacityTwo_of_A₀_le` (same
+namespace) are in `Heilbronn.Nine.Hulls.GlobalCapacity`: they use
+`Heilbronn.Nine.Corners.OneCorner`, whose C1 capacity uses `three_inside_is_ear` here, so keeping them in this
+module would create an import cycle.
 -/
 
 @[expose] public section
@@ -74,7 +58,7 @@ beyond `CA` (`r = 1`), beyond `AB` (`r = 2`). -/
 def Exterior (X A B C : Point) : Fin 3 → Prop :=
   ![BeyondEdge X A B C, BeyondEdge X B C A, BeyondEdge X C A B]
 
-/-- `X` lies beyond the edge `BC` with the robust proportions (1): writing its barycentric
+/-- `X` lies beyond the edge `BC` with the robust proportions: writing its barycentric
 coordinates as `(-p, α, q)`, `p ≥ (11/20)α` and `p ≥ (11/20)q` (multiplied by `sarea A B C > 0`). -/
 def RobustBeyond (X A B C : Point) : Prop :=
   BeyondEdge X A B C ∧ 11 / 20 * sarea C A X ≤ -sarea B C X ∧
@@ -89,14 +73,6 @@ def RobustExterior (X A B C : Point) : Fin 3 → Prop :=
 def TriangleCapacityTwo {n : ℕ} (P : Fin n → Point) : Prop :=
   ∀ i j k : Fin n, 0 < sarea (P i) (P j) (P k) →
     Set.ncard {m | InTriangle (P m) (P i) (P j) (P k)} ≤ 2
-
-theorem InTriangle.affine {X A B C : Point} {α β γ δ ε ζ : ℝ} (hdet : 0 < α * δ - β * γ)
-    (h : InTriangle X A B C) :
-    InTriangle (affineMap α β γ δ ε ζ X) (affineMap α β γ δ ε ζ A) (affineMap α β γ δ ε ζ B)
-      (affineMap α β γ δ ε ζ C) := by
-  obtain ⟨h1, h2, h3⟩ := h
-  simp only [InTriangle, sarea_affineMap]
-  exact ⟨mul_pos hdet h1, mul_pos hdet h2, mul_pos hdet h3⟩
 
 /-- Triangle capacity two passes to sub-configurations. -/
 theorem TriangleCapacityTwo.comp {n m : ℕ} {P : Fin n → Point} (hcap : TriangleCapacityTwo P)
@@ -135,16 +111,16 @@ theorem TriangleCapacityTwo.of_affine {n : ℕ} {P : Fin n → Point} {α β γ 
     intro m hm
     exact InTriangle.affine hpos' hm
 
-/-- The normalized Type-II form (13) of Corollary 4: `D=(0,1), C=(1,1), E=(0,λ), B=(b,0)` with
+/-- The normalized Type-II form used by `typeIIConfig_triangleCapacityTwo`: `D=(0,1), C=(1,1), E=(0,λ), B=(b,0)` with
 `0<λ<1`, `0<b≤1/2`, and five further points in the square. -/
 def IsTypeIIHalf (P : Fin 9 → Point) : Prop :=
   ∃ (l b : ℝ) (V W X Y Z : Point), 0 < b ∧ b ≤ 1 / 2 ∧ 0 < l ∧ l < 1 ∧
     V ∈ unitSquare ∧ W ∈ unitSquare ∧ X ∈ unitSquare ∧ Y ∈ unitSquare ∧ Z ∈ unitSquare ∧
     P = typeIIConfig l b V W X Y Z
 
-/-! ### §1. Two canonical exterior points force extra enclosing area -/
+/-! ### Two canonical exterior points force extra enclosing area -/
 
-/-- The fixed point `E* = (-11A + 20B + 20C)/29` of `(3)`, barycentrics `(-11/29, 20/29, 20/29)`. -/
+/-- The fixed point `E* = (-11A + 20B + 20C)/29`, with barycentrics `(-11/29, 20/29, 20/29)`. -/
 def starPt (A B C : Point) : Point :=
   ((-11 * A.1 + 20 * B.1 + 20 * C.1) / 29, (-11 * A.2 + 20 * B.2 + 20 * C.2) / 29)
 
@@ -190,8 +166,8 @@ theorem starPt_mem {A B C E : Point} (hA : A ∈ unitSquare) (hB : B ∈ unitSqu
   obtain ⟨y0, y1⟩ := bnd iy b3 b4 c3 c4 e3 e4
   exact ⟨x0, x1, y0, y1⟩
 
-/-- The polar table of Lemma 3: on the region `(5)` (nonnegative parts) the expression
-`U₁V₂ + V₁U₂` is at most `29/31`. -/
+/-- The polar table of `sarea_le_of_robustExterior_pair`: if `0 ≤ Uᵢ ≤ 29/31`, `30Uᵢ + 20Vᵢ ≤ 29` and `Uᵢ/2 + Vᵢ ≤ 1`
+for `i = 1, 2`, then `U₁V₂ + V₁U₂ ≤ 29/31`. -/
 theorem polar_bound {U1 V1 U2 V2 : ℝ} (hU1 : 0 ≤ U1) (hU2 : 0 ≤ U2)
     (a1 : U1 ≤ 29 / 31) (b1 : 30 * U1 + 20 * V1 ≤ 29) (c1 : U1 / 2 + V1 ≤ 1)
     (a2 : U2 ≤ 29 / 31) (b2 : 30 * U2 + 20 * V2 ≤ 29) (c2 : U2 / 2 + V2 ≤ 1) :
@@ -204,7 +180,8 @@ theorem polar_bound {U1 V1 U2 V2 : ℝ} (hU1 : 0 ≤ U1) (hU2 : 0 ≤ U2)
   · nlinarith [mul_nonneg (sub_nonneg.2 a2) (sub_nonneg.2 l1), mul_nonneg (sub_nonneg.2 h) (sub_nonneg.2 l2),
       mul_nonneg hU1 (by linarith : (0 : ℝ) ≤ (29 - 30 * U2) / 20 - V2)]
 
-/-- The width formula `(4)` turned into the row constraints `(5)`. -/
+/-- The width bounds `|31u| ≤ 29`, `|30u ± 20v| ≤ 29`, `|u/2 ± v| ≤ 1` turned into the row
+constraints of `polar_bound` for `(|u|, |v|)`. -/
 theorem width_row {u v : ℝ} (h1 : |31 * u| ≤ 29) (h2 : |30 * u + 20 * v| ≤ 29)
     (h3 : |30 * u - 20 * v| ≤ 29) (h4 : |u / 2 + v| ≤ 1) (h5 : |v - u / 2| ≤ 1) :
     |u| ≤ 29 / 31 ∧ 30 * |u| + 20 * |v| ≤ 29 ∧ |u| / 2 + |v| ≤ 1 := by
@@ -214,8 +191,8 @@ theorem width_row {u v : ℝ} (h1 : |31 * u| ≤ 29) (h2 : |30 * u + 20 * v| ≤
     refine ⟨by linarith [h1.1, h1.2], by linarith [h2.1, h2.2, h3.1, h3.2],
       by linarith [h4.1, h4.2, h5.1, h5.2]⟩
 
-/-- Lemma 3 for `E` beyond `BC` and `F` beyond `CA`. -/
-theorem lemma3_core {A B C E F : Point} (hA : A ∈ unitSquare) (hB : B ∈ unitSquare)
+/-- `sarea_le_of_robustExterior_pair` for `E` beyond `BC` and `F` beyond `CA`. -/
+theorem sarea_le_of_robustBeyond_pair {A B C E F : Point} (hA : A ∈ unitSquare) (hB : B ∈ unitSquare)
     (hC : C ∈ unitSquare) (hE : E ∈ unitSquare) (hF : F ∈ unitSquare)
     (hD : 0 < sarea A B C) (hEr : RobustBeyond E A B C) (hFr : RobustBeyond F B C A) :
     sarea A B C ≤ 29 / 31 := by
@@ -251,14 +228,13 @@ theorem lemma3_core {A B C E F : Point} (hA : A ∈ unitSquare) (hB : B ∈ unit
   rw [abs_mul] at t1 t2
   linarith
 
-/-- **Lemma 3** (`THREE_INTERIOR_TRIANGLES:Lemma3`). Let `A, B, C, E, F` lie in the unit square,
-with `ABC` of positive doubled area `D`. If `E` and `F` lie in two different exterior regions of
-`ABC`, each with the robust proportions (1), then `D ≤ 29/31`. The fixed points `E*`, `F*` with
-barycentrics `(-11/29, 20/29, 20/29)` span with `A, B, C` an affine image of a fixed pentagon `K`
-in the square, and every such image has determinant at most `29/31` (width-polar vertices
-`T, U, V`, six-entry table).
-`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`, lines 51-194. -/
-theorem lemma3 {A B C E F : Point} (hA : A ∈ unitSquare) (hB : B ∈ unitSquare)
+/-- Let `A, B, C, E, F` lie in the unit square, with `ABC` of positive doubled area `D`. If `E`
+and `F` lie in two different exterior regions of `ABC`, each with the robust proportions
+(`RobustExterior`), then `D ≤ 29/31`. The fixed points `E*`, `F*` (`starPt`) with barycentrics
+`(-11/29, 20/29, 20/29)` span with `A, B, C` an affine image of a fixed pentagon `K` in the
+square, and every such image has determinant at most `29/31` (width-polar vertices `T, U, V`,
+`polar_bound`). -/
+theorem sarea_le_of_robustExterior_pair {A B C E F : Point} (hA : A ∈ unitSquare) (hB : B ∈ unitSquare)
     (hC : C ∈ unitSquare) (hE : E ∈ unitSquare) (hF : F ∈ unitSquare)
     (hD : 0 < sarea A B C) {r₁ r₂ : Fin 3} (hr : r₁ ≠ r₂) (hEr : RobustExterior E A B C r₁)
     (hFr : RobustExterior F A B C r₂) : sarea A B C ≤ 29 / 31 := by
@@ -267,16 +243,16 @@ theorem lemma3 {A B C E F : Point} (hA : A ∈ unitSquare) (hB : B ∈ unitSquar
   fin_cases r₁ <;> fin_cases r₂ <;> simp only [RobustExterior] at hEr hFr
   all_goals first
     | exact absurd rfl hr
-    | exact lemma3_core hA hB hC hE hF hD hEr hFr
-    | exact lemma3_core hA hB hC hF hE hD hFr hEr
-    | (rw [← c1]; exact lemma3_core hB hC hA hE hF (by rw [c1]; exact hD) hEr hFr)
-    | (rw [← c1]; exact lemma3_core hB hC hA hF hE (by rw [c1]; exact hD) hFr hEr)
-    | (rw [← c2]; exact lemma3_core hC hA hB hE hF (by rw [c2]; exact hD) hEr hFr)
-    | (rw [← c2]; exact lemma3_core hC hA hB hF hE (by rw [c2]; exact hD) hFr hEr)
+    | exact sarea_le_of_robustBeyond_pair hA hB hC hE hF hD hEr hFr
+    | exact sarea_le_of_robustBeyond_pair hA hB hC hF hE hD hFr hEr
+    | (rw [← c1]; exact sarea_le_of_robustBeyond_pair hB hC hA hE hF (by rw [c1]; exact hD) hEr hFr)
+    | (rw [← c1]; exact sarea_le_of_robustBeyond_pair hB hC hA hF hE (by rw [c1]; exact hD) hFr hEr)
+    | (rw [← c2]; exact sarea_le_of_robustBeyond_pair hC hA hB hE hF (by rw [c2]; exact hD) hEr hFr)
+    | (rw [← c2]; exact sarea_le_of_robustBeyond_pair hC hA hB hF hE (by rw [c2]; exact hD) hFr hEr)
 
-/-! ### §2. Every exterior point is robust; Theorem 1 -/
+/-! ### Every exterior point is robust; three-interior triangles are ears -/
 
-/-! ### Helpers for §2 -/
+/-! ### Helpers -/
 
 theorem inTriangle_ne {P : Fin 9 → Point} {i j k m : Fin 9}
     (h : InTriangle (P m) (P i) (P j) (P k)) : m ≠ i ∧ m ≠ j ∧ m ≠ k := by
@@ -323,17 +299,17 @@ theorem InTriangle.mem_hull {X A B C : Point} (hD : 0 < sarea A B C) (h : InTria
 
 theorem abs_sarea_le_one {P Q R : Point} (hP : P ∈ unitSquare) (hQ : Q ∈ unitSquare)
     (hR : R ∈ unitSquare) : |sarea P Q R| ≤ 1 := by
-  have := CornerFamilies.claim_area_le_half P Q R hP hQ hR
+  have := CornerFamilies.triangleArea_le_half_of_mem_unitSquare P Q R hP hQ hR
   rw [triangleArea_eq] at this; linarith
 
-/-- `(Γ + 1)`-free form of `(8)`: `(11 + 3√5)A₀ > 29/30`. -/
+/-- `(11 + 3√5)A₀ > 29/30`, the numerical bound behind `D_gt`. -/
 theorem gamma_A₀ : (29 / 30 : ℝ) < (11 + 3 * Real.sqrt 5) * A₀ := by
   have h5 : (67 / 30 : ℝ) < Real.sqrt 5 := by rw [Real.lt_sqrt (by norm_num)]; norm_num
   have := A₀_bounds.2.2.1
   nlinarith
 
-/-- `(8)`: a counterclockwise actual triangle containing three distinct actual points has doubled
-area above `29/30`. -/
+/-- A counterclockwise actual triangle containing three distinct actual points has doubled area
+above `29/30`. -/
 theorem D_gt {P : Fin 9 → Point} (hA : A₀ ≤ minTriangleArea P) {i j k m₁ m₂ m₃ : Fin 9}
     (hccw : 0 < sarea (P i) (P j) (P k)) (h1 : InTriangle (P m₁) (P i) (P j) (P k))
     (h2 : InTriangle (P m₂) (P i) (P j) (P k)) (h3 : InTriangle (P m₃) (P i) (P j) (P k))
@@ -350,7 +326,8 @@ theorem D_gt {P : Fin 9 → Point} (hA : A₀ ≤ minTriangleArea P) {i j k m₁
   rw [triangleArea_of_pos hccw] at k6
   linarith [gamma_A₀]
 
-/-- `(7)` in doubled form: `(11 + 3√5)A₀ ≤ [ABC]` for a triangle containing three actual points. -/
+/-- `(11 + 3√5)A₀ ≤ [ABC]` (doubled area) for a triangle containing three actual points, by
+`CornerFamilies.sixPointTriangularHullTheorem`. -/
 theorem D_ge {P : Fin 9 → Point} (hA : A₀ ≤ minTriangleArea P) {i j k m₁ m₂ m₃ : Fin 9}
     (hccw : 0 < sarea (P i) (P j) (P k)) (h1 : InTriangle (P m₁) (P i) (P j) (P k))
     (h2 : InTriangle (P m₂) (P i) (P j) (P k)) (h3 : InTriangle (P m₃) (P i) (P j) (P k))
@@ -368,13 +345,11 @@ theorem D_ge {P : Fin 9 → Point} (hA : A₀ ≤ minTriangleArea P) {i j k m₁
   rw [triangleArea_of_pos hccw] at k6
   linarith
 
-/-- **Claim** (`THREE_INTERIOR_TRIANGLES:claim-(8)(9)`). Let an actual counterclockwise triangle
-of a nine-point configuration in the square with least area `t ≥ A₀` contain three further points.
-Then its doubled area exceeds `29/30` (8), since `2S ≥ Γs₀`. Every other point is inside it or
-lies in exactly one exterior region: no point has a zero or two negative barycentric coordinates.
-`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`, lines 196-245.
-Uses: CORNER_FAMILIES:SixPointTriangularHullTheorem -/
-theorem claim_8_9 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
+/-- Let an actual counterclockwise triangle of a nine-point configuration in the square with least
+area `t ≥ A₀` contain three further points. Then its doubled area exceeds `29/30`, since
+`2S ≥ Γs₀`. Every other point is inside it or lies in exactly one exterior region: no point has a
+zero or two negative barycentric coordinates. -/
+theorem sarea_gt_and_exterior_of_three_inside {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (hA : A₀ ≤ minTriangleArea P) {i j k : Fin 9} (hccw : 0 < sarea (P i) (P j) (P k))
     (h3 : 3 ≤ Set.ncard {m | InTriangle (P m) (P i) (P j) (P k)}) :
     29 / 30 < sarea (P i) (P j) (P k) ∧
@@ -413,7 +388,7 @@ theorem claim_8_9 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
   · exact Or.inr ⟨2, ⟨zs, xs, ys⟩⟩
   · exact Or.inl ⟨zs, xs, ys⟩
 
-/-- `(10)` for a point beyond `BC`, given three distinct inside points. -/
+/-- `robustExterior_of_three_inside` for a point beyond `BC`, given three distinct inside points. -/
 theorem robust_core {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (hA : A₀ ≤ minTriangleArea P) {i j k m₁ m₂ m₃ m : Fin 9}
     (hccw : 0 < sarea (P i) (P j) (P k)) (h1 : InTriangle (P m₁) (P i) (P j) (P k))
@@ -442,7 +417,7 @@ theorem robust_core {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
   have hyl : y ≤ 1 := (abs_le.1 (abs_sarea_le_one (hP k) (hP i) (hP m))).2
   have hzl : z ≤ 1 := (abs_le.1 (abs_sarea_le_one (hP i) (hP j) (hP m))).2
   have hS : triangleArea (P i) (P j) (P k) = D / 2 := triangleArea_of_pos hccw
-  have hS2 : D / 2 ≤ 1 / 2 := hS ▸ CornerFamilies.claim_area_le_half _ _ _ (hP i) (hP j) (hP k)
+  have hS2 : D / 2 ≤ 1 / 2 := hS ▸ CornerFamilies.triangleArea_le_half_of_mem_unitSquare _ _ _ (hP i) (hP j) (hP k)
   have hD0 : 0 < D := hccw
   -- the corollary in a relabelled triangle `A' B' C'` with `C' = A`
   refine ⟨⟨hx, hy, hz⟩, ?_, ?_⟩
@@ -491,13 +466,12 @@ theorem robust_core {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
       (fun a => by fin_cases a <;> rfl) hA
     linarith
 
-/-- **Claim** (`THREE_INTERIOR_TRIANGLES:eq10`). In the same situation every exterior point has
-the robust proportions (10): `p > (11/20)q` and `p > (11/20)α`. The normalized minimum satisfies
-`σ ≥ s₀ max(1, q)` with `0 < q < 30/29` (9), which are the hypotheses of the coupled affine
-corollary of `TYPE_II.md` §10.
-`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`, lines 234-253.
-Uses: THREE_INTERIOR_TRIANGLES:claim-(8)(9), TYPE_II:CoupledAffineCorollary -/
-theorem eq10 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare) (hA : A₀ ≤ minTriangleArea P)
+/-- Let an actual counterclockwise triangle of a nine-point configuration in the square with least
+area at least `A₀` contain three further points. Then every exterior point has the robust
+proportions (`RobustExterior`): `p ≥ (11/20)q` and `p ≥ (11/20)α`. The normalized minimum satisfies
+`σ ≥ s₀ max(1, q)` with `0 < q < 30/29`, which are the hypotheses of
+`TypeII.coupledAffineCorollary_geometric`. -/
+theorem robustExterior_of_three_inside {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare) (hA : A₀ ≤ minTriangleArea P)
     {i j k : Fin 9} (hccw : 0 < sarea (P i) (P j) (P k))
     (h3 : 3 ≤ Set.ncard {m | InTriangle (P m) (P i) (P j) (P k)}) (m : Fin 9) (r : Fin 3)
     (hm : Exterior (P m) (P i) (P j) (P k) r) : RobustExterior (P m) (P i) (P j) (P k) r := by
@@ -543,8 +517,8 @@ theorem ncard_compl_of_three {s : Set (Fin 9)} (h : s.ncard = 3) : sᶜ.ncard = 
   rw [Nat.card_eq_fintype_card, Fintype.card_fin] at this
   omega
 
-/-- The conclusions of Theorem 1 once all exterior points lie beyond `BC`. -/
-theorem theorem1_core {P : Fin 9 → Point} {i j k : Fin 9} (hccw : 0 < sarea (P i) (P j) (P k))
+/-- The conclusions of `three_inside_is_ear` once all exterior points lie beyond `BC`. -/
+theorem ear_of_forall_beyondEdge {P : Fin 9 → Point} {i j k : Fin 9} (hccw : 0 < sarea (P i) (P j) (P k))
     (h3 : Set.ncard {m | InTriangle (P m) (P i) (P j) (P k)} = 3)
     (hext : ∀ m, m ≠ i → m ≠ j → m ≠ k → ¬ InTriangle (P m) (P i) (P j) (P k) →
       BeyondEdge (P m) (P i) (P j) (P k)) :
@@ -580,18 +554,14 @@ theorem theorem1_core {P : Fin 9 → Point} {i j k : Fin 9} (hccw : 0 < sarea (P
     rw [ncard_compl_of_three h3] at this
     exact this
 
-/-- **Theorem 1** (`THREE_INTERIOR_TRIANGLES:Theorem1`). Three-interior triangles are hull ears.
-In a nine-point configuration in the unit square with least area at least `A₀`, suppose an actual
-counterclockwise triangle contains (at least) three further points. After a cyclic relabelling
-`A, B, C` of its vertices: exactly three points are inside; the three remaining points all lie
-beyond the edge `BC` and between the extensions of the other two edges; `AB` and `CA` are edges of
-the full convex hull (every other point lies strictly on their inner side), so `B, A, C` are
-consecutive hull vertices; and the full hull has at most six vertices.
-`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`, lines 12-19 (proof 196-269).
-Uses: THREE_INTERIOR_TRIANGLES:claim-(8)(9), THREE_INTERIOR_TRIANGLES:eq10,
-THREE_INTERIOR_TRIANGLES:Lemma3, CORNER_FAMILIES:SixPointTriangularHullTheorem,
-CORNER_FAMILIES:TriangularHullLemma -/
-theorem theorem1 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
+/-- Three-interior triangles are hull ears. In a nine-point configuration in the unit square with
+least area at least `A₀`, suppose an actual counterclockwise triangle contains (at least) three
+further points. After a cyclic relabelling `A, B, C` of its vertices: exactly three points are
+inside; the three remaining points all lie beyond the edge `BC` and between the extensions of the
+other two edges; `AB` and `CA` are edges of the full convex hull (every other point lies strictly
+on their inner side), so `B, A, C` are consecutive hull vertices; and the full hull has at most
+six vertices. -/
+theorem three_inside_is_ear {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (hA : A₀ ≤ minTriangleArea P) {i j k : Fin 9} (hccw : 0 < sarea (P i) (P j) (P k))
     (h3 : 3 ≤ Set.ncard {m | InTriangle (P m) (P i) (P j) (P k)}) :
     ∃ A B C : Fin 9,
@@ -602,7 +572,7 @@ theorem theorem1 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
       (∀ m, m ≠ A → m ≠ B → 0 < sarea (P A) (P B) (P m)) ∧
       (∀ m, m ≠ C → m ≠ A → 0 < sarea (P C) (P A) (P m)) ∧
       Set.ncard {m | IsHullVertex P m} ≤ 6 := by
-  obtain ⟨hD, hcls⟩ := claim_8_9 hP hA hccw h3
+  obtain ⟨hD, hcls⟩ := sarea_gt_and_exterior_of_three_inside hP hA hccw h3
   have h3eq : Set.ncard {m | InTriangle (P m) (P i) (P j) (P k)} = 3 :=
     le_antisymm (ncard_inside_le_three hP hA hccw) h3
   obtain ⟨d1, d2, d3⟩ := ne_of_sarea_pos (P := P) hccw
@@ -611,8 +581,8 @@ theorem theorem1 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
   have same {m m' : Fin 9} {r r' : Fin 3} (hm : Exterior (P m) (P i) (P j) (P k) r)
       (hm' : Exterior (P m') (P i) (P j) (P k) r') : r = r' := by
     by_contra hne
-    exact absurd (lemma3 (hP i) (hP j) (hP k) (hP m) (hP m') hccw hne
-      (eq10 hP hA hccw h3 m r hm) (eq10 hP hA hccw h3 m' r' hm')) (by linarith)
+    exact absurd (sarea_le_of_robustExterior_pair (hP i) (hP j) (hP k) (hP m) (hP m') hccw hne
+      (robustExterior_of_three_inside hP hA hccw h3 m r hm) (robustExterior_of_three_inside hP hA hccw h3 m' r' hm')) (by linarith)
   -- an exterior point exists
   obtain ⟨m₀, hm₀⟩ : ∃ m, m ≠ i ∧ m ≠ j ∧ m ≠ k ∧ ¬ InTriangle (P m) (P i) (P j) (P k) := by
     by_contra hc
@@ -641,20 +611,20 @@ theorem theorem1 {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
   fin_cases r₀
   · have hext : ∀ m, m ≠ i → m ≠ j → m ≠ k → ¬ InTriangle (P m) (P i) (P j) (P k) →
         BeyondEdge (P m) (P i) (P j) (P k) := fun m hi hj hk hin => ext_r hi hj hk hin
-    obtain ⟨e1, e2, e3⟩ := theorem1_core hccw h3eq hext
+    obtain ⟨e1, e2, e3⟩ := ear_of_forall_beyondEdge hccw h3eq hext
     exact ⟨i, j, k, Or.inl ⟨rfl, rfl, rfl⟩, h3eq, hext, e1, e2, e3⟩
   · have hext : ∀ m, m ≠ j → m ≠ k → m ≠ i → ¬ InTriangle (P m) (P j) (P k) (P i) →
         BeyondEdge (P m) (P j) (P k) (P i) := fun m hj hk hi hin =>
       ext_r hi hj hk (fun h => hin (inTriangle_rotate.1 h))
-    obtain ⟨e1, e2, e3⟩ := theorem1_core (by rw [c1]; exact hccw) (by rw [setrot]; exact h3eq) hext
+    obtain ⟨e1, e2, e3⟩ := ear_of_forall_beyondEdge (by rw [c1]; exact hccw) (by rw [setrot]; exact h3eq) hext
     exact ⟨j, k, i, Or.inr (Or.inl ⟨rfl, rfl, rfl⟩), by rw [setrot]; exact h3eq, hext, e1, e2, e3⟩
   · have hext : ∀ m, m ≠ k → m ≠ i → m ≠ j → ¬ InTriangle (P m) (P k) (P i) (P j) →
         BeyondEdge (P m) (P k) (P i) (P j) := fun m hk hi hj hin =>
       ext_r hi hj hk (fun h => hin (inTriangle_rotate.2 h))
-    obtain ⟨e1, e2, e3⟩ := theorem1_core (by rw [c2]; exact hccw) (by rw [setrot2]; exact h3eq) hext
+    obtain ⟨e1, e2, e3⟩ := ear_of_forall_beyondEdge (by rw [c2]; exact hccw) (by rw [setrot2]; exact h3eq) hext
     exact ⟨k, i, j, Or.inr (Or.inr ⟨rfl, rfl, rfl⟩), by rw [setrot2]; exact h3eq, hext, e1, e2, e3⟩
 
-/-! ### §3. The complete normalized family N -/
+/-! ### The complete normalized family N -/
 
 /-- A point on a side of the square is not strictly inside a triangle with vertices in the square. -/
 theorem not_inTriangle_of_x0 {X A B C : Point} (hA : A ∈ unitSquare) (hB : B ∈ unitSquare)
@@ -713,9 +683,9 @@ theorem not_inTriangle_of_y1 {X A B C : Point} (hA : A ∈ unitSquare) (hB : B �
   have : sarea A B C = 0 := by unfold sarea; rw [a1, a2, a3]; ring
   linarith
 
-/-- Corollary 2, apex `0`: the supporting edges force the ear at anchor `0`, whose doubled area
-is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
-theorem cor2_apex0 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- The case of `nConfig_triangleCapacityTwo` with apex `0`: the supporting edges force the ear at anchor `0`,
+whose doubled area is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
+theorem nConfig_no_large_ear_apex0 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hA : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) {B' C' : Fin 9} (hB6 : B'.val < 6)
     (hC6 : C'.val < 6) (hAB : (0 : Fin 9) ≠ B') (hBC : B' ≠ C') (hAC : (0 : Fin 9) ≠ C')
     (sup1 : ∀ m, m ≠ 0 → m ≠ B' → 0 < sarea (nConfig a h b c d f X Y Z 0)
@@ -811,9 +781,9 @@ theorem cor2_apex0 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d 
     rw [sarea_swap₂₃] at this
     linarith [e05]
 
-/-- Corollary 2, apex `2`: the supporting edges force the ear at anchor `2`, whose doubled area
-is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
-theorem cor2_apex2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- The case of `nConfig_triangleCapacityTwo` with apex `2`: the supporting edges force the ear at anchor `2`,
+whose doubled area is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
+theorem nConfig_no_large_ear_apex2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hA : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) {B' C' : Fin 9} (hB6 : B'.val < 6)
     (hC6 : C'.val < 6) (hAB : (2 : Fin 9) ≠ B') (hBC : B' ≠ C') (hAC : (2 : Fin 9) ≠ C')
     (sup1 : ∀ m, m ≠ 2 → m ≠ B' → 0 < sarea (nConfig a h b c d f X Y Z 2)
@@ -909,9 +879,9 @@ theorem cor2_apex2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d 
     rw [sarea_swap₂₃] at this
     linarith [e25]
 
-/-- Corollary 2, apex `3`: the supporting edges force the ear at anchor `3`, whose doubled area
-is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
-theorem cor2_apex3 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- The case of `nConfig_triangleCapacityTwo` with apex `3`: the supporting edges force the ear at anchor `3`,
+whose doubled area is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
+theorem nConfig_no_large_ear_apex3 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hA : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) {B' C' : Fin 9} (hB6 : B'.val < 6)
     (hC6 : C'.val < 6) (hAB : (3 : Fin 9) ≠ B') (hBC : B' ≠ C') (hAC : (3 : Fin 9) ≠ C')
     (sup1 : ∀ m, m ≠ 3 → m ≠ B' → 0 < sarea (nConfig a h b c d f X Y Z 3)
@@ -1007,9 +977,9 @@ theorem cor2_apex3 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d 
     rw [sarea_swap₂₃] at this
     linarith [e35]
 
-/-- Corollary 2, apex `4`: the supporting edges force the ear at anchor `4`, whose doubled area
-is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
-theorem cor2_apex4 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- The case of `nConfig_triangleCapacityTwo` with apex `4`: the supporting edges force the ear at anchor `4`,
+whose doubled area is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
+theorem nConfig_no_large_ear_apex4 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hA : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) {B' C' : Fin 9} (hB6 : B'.val < 6)
     (hC6 : C'.val < 6) (hAB : (4 : Fin 9) ≠ B') (hBC : B' ≠ C') (hAC : (4 : Fin 9) ≠ C')
     (sup1 : ∀ m, m ≠ 4 → m ≠ B' → 0 < sarea (nConfig a h b c d f X Y Z 4)
@@ -1105,9 +1075,9 @@ theorem cor2_apex4 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d 
     · exact absurd rfl hAC
     · exact absurd rfl hBC
 
-/-- Corollary 2, apex `5`: the supporting edges force the ear at anchor `5`, whose doubled area
-is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
-theorem cor2_apex5 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- The case of `nConfig_triangleCapacityTwo` with apex `5`: the supporting edges force the ear at anchor `5`,
+whose doubled area is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
+theorem nConfig_no_large_ear_apex5 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hA : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) {B' C' : Fin 9} (hB6 : B'.val < 6)
     (hC6 : C'.val < 6) (hAB : (5 : Fin 9) ≠ B') (hBC : B' ≠ C') (hAC : (5 : Fin 9) ≠ C')
     (sup1 : ∀ m, m ≠ 5 → m ≠ B' → 0 < sarea (nConfig a h b c d f X Y Z 5)
@@ -1203,9 +1173,9 @@ theorem cor2_apex5 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d 
     linarith [e54]
   · exact absurd rfl hAB
 
-/-- Corollary 2, apex `1`: the supporting edges force the ear at anchor `1`, whose doubled area
-is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
-theorem cor2_apex1 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- The case of `nConfig_triangleCapacityTwo` with apex `1`: the supporting edges force the ear at anchor `1`,
+whose doubled area is at most `1 - 2A₀ < (11 + 3√5)A₀`. -/
+theorem nConfig_no_large_ear_apex1 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hA : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) {B' C' : Fin 9} (hB6 : B'.val < 6)
     (hC6 : C'.val < 6) (hAB : (1 : Fin 9) ≠ B') (hBC : B' ≠ C') (hAC : (1 : Fin 9) ≠ C')
     (sup1 : ∀ m, m ≠ 1 → m ≠ B' → 0 < sarea (nConfig a h b c d f X Y Z 1)
@@ -1301,14 +1271,12 @@ theorem cor2_apex1 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d 
     rw [sarea_swap₂₃] at this
     linarith [e15]
 
-/-- **Corollary 2** (`THREE_INTERIOR_TRIANGLES:Corollary2`). The entire family N has triangle
-capacity two. In family N (11) with least area at least `A₀`, every actual triangle contains at
-most two further points, whether or not the three free points add square-boundary contacts or
-hull vertices. By Theorem 1 the triangle would be an ear of the anchor hexagon `ABCDFH`, of doubled
-area at most `1 - s` (table, lines 306-313), against `Γs`, and `(Γ+1)s₀ > 1` (12).
-`docs/proof/nine/THREE_INTERIOR_TRIANGLES.md`, lines 21-25 (proof 271-329).
-Uses: THREE_INTERIOR_TRIANGLES:Theorem1, CORNER_FAMILIES:SixPointTriangularHullTheorem -/
-theorem corollary2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+/-- The entire family N has triangle capacity two. In family N with least area at least `A₀`,
+every actual triangle contains at most two further points, whether or not the three free points
+add square-boundary contacts or hull vertices. By `three_inside_is_ear` the triangle would be an ear of the
+anchor hexagon `ABCDFH`, of doubled area at most `1 - s` (`nConfig_no_large_ear_apex0`, …, `nConfig_no_large_ear_apex5`), against
+`Γs` (`D_ge`), and `(Γ+1)s₀ > 1`. -/
+theorem nConfig_triangleCapacityTwo {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hA : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     TriangleCapacityTwo (nConfig a h b c d f X Y Z) := by
@@ -1337,7 +1305,7 @@ theorem corollary2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d 
     · exact hX
     · exact hY
     · exact hZ
-  obtain ⟨A', B', C', hrot, h3, -, sup1, sup2, -⟩ := theorem1 hP hA hccw (by omega)
+  obtain ⟨A', B', C', hrot, h3, -, sup1, sup2, -⟩ := three_inside_is_ear hP hA hccw (by omega)
   have hccw' : 0 < sarea (P A') (P B') (P C') := by
     rcases hrot with ⟨h1, h2, h3⟩ | ⟨h1, h2, h3⟩ | ⟨h1, h2, h3⟩ <;> rw [h1, h2, h3] <;>
       (unfold sarea at hccw ⊢; linarith)
@@ -1390,11 +1358,11 @@ theorem corollary2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d 
   clear_value P
   subst hPdef
   rcases six A' hA6 with rfl | rfl | rfl | rfl | rfl | rfl
-  · exact cor2_apex0 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
-  · exact cor2_apex1 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
-  · exact cor2_apex2 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
-  · exact cor2_apex3 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
-  · exact cor2_apex4 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
-  · exact cor2_apex5 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
+  · exact nConfig_no_large_ear_apex0 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
+  · exact nConfig_no_large_ear_apex1 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
+  · exact nConfig_no_large_ear_apex2 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
+  · exact nConfig_no_large_ear_apex3 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
+  · exact nConfig_no_large_ear_apex4 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
+  · exact nConfig_no_large_ear_apex5 hN' hA hB6 hC6 hAB hBC hAC sup1 sup2 hD
 
 end Heilbronn.Nine.ThreeInteriorTriangles

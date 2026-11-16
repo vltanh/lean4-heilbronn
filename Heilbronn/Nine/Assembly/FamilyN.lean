@@ -2,27 +2,27 @@ module
 
 public import Heilbronn.Nine.Assembly.SixContacts
 public import Heilbronn.Nine.Assembly.FamilyC1
-public import Heilbronn.Nine.EightBoundary.Theorem13
+public import Heilbronn.Nine.EightBoundary.Completion
 public import Heilbronn.Nine.SevenBoundary.MixedAboveCompletion
 
 /-!
 # Assembly: the family N
 
-`docs/proof/nine/UNRESTRICTED.md`, Section 4. A configuration `nConfig a h b c d f X Y Z` of family N with
-least area at least `A₀` is optimal. The six anchors are on the boundary of the square; split on
+A configuration `nConfig a h b c d f X Y Z` of family N with least area at least `A₀` is
+optimal. The six anchors are on the boundary of the square; split on
 the free points.
 
 * A free point at a corner: at `(0,0)`, `(0,1)` it is collinear with `A, H`, at `(1,0)` with
   `B, C`, so the least area is `0`. At `(1,1)` the configuration is, after the half-turn
   `(x, y) ↦ (1 - x, 1 - y)` and a relabelling, a C1 configuration (corner `(0,0)`, anchors
   `F, H, C, D` with parameters `(1-d, 1-f, 1-h, 1-c)`, free points the images of `A, B` and of the
-  two other free points), excluded by `c1_exclusion` (`n_corner11_false`). The manuscript's
-  normalization puts such a configuration in C1 from the start; the family predicate `IsN` of
-  `GlobalStructure.theorem3` does not exclude it, so the assembly does it here.
+  two other free points), excluded by `c1_exclusion` (`n_corner11_false`). The family predicate
+  `IsN` of `GlobalStructure.normalize` allows such a configuration, so the assembly excludes it
+  here.
 * No free point at a corner, at least two on a side: at least eight boundary points,
-  `EightBoundary.theorem13`.
+  `EightBoundary.minTriangleArea_le_A₀_of_eight_boundary`.
 * Exactly one on a side: exactly seven contacts, none at a corner,
-  `SevenBoundaryMixedAboveCompletion.theorem2_nConfig` (least area below `A₀`).
+  `SevenBoundaryMixedAboveCompletion.minTriangleArea_nConfig_lt_A₀` (least area below `A₀`).
 * None: exactly six contacts, `six_contacts`.
 -/
 
@@ -117,7 +117,7 @@ theorem n_corner_false (hN : NAnchors a h b c d f) {W Y Z : Point} (hY : Y ∈ u
 /-- A point of the square that is not a corner is in the open square or on a side. -/
 theorem open_or_side {W : Point} (hW : W ∈ unitSquare)
     (hc : ¬ ((W.1 = 0 ∨ W.1 = 1) ∧ (W.2 = 0 ∨ W.2 = 1))) :
-    SixBoundary.InOpenSquare W ∨ SevenBoundaryMixedAboveCompletion.OnSideNotCorner W := by
+    InOpenSquare W ∨ SevenBoundaryMixedAboveCompletion.OnSideNotCorner W := by
   by_cases ho : 0 < W.1 ∧ W.1 < 1 ∧ 0 < W.2 ∧ W.2 < 1
   · exact Or.inl ho
   · right
@@ -128,8 +128,8 @@ theorem open_or_side {W : Point} (hW : W ∈ unitSquare)
     exact ho ⟨lt_of_le_of_ne h1 (Ne.symm hne.1), lt_of_le_of_ne h2 hne.2.1,
       lt_of_le_of_ne h3 (Ne.symm hne.2.2.1), lt_of_le_of_ne h4 hne.2.2.2⟩
 
-/-- **Family N** (`docs/proof/nine/UNRESTRICTED.md`, Section 4): a configuration of family N in the square
-with least area at least `A₀` is optimal. -/
+/-- **Family N**: a configuration of family N in the square with least area at least `A₀` is
+optimal. -/
 theorem n_family (hN : NAnchors a h b c d f) {X Y Z : Point} (hX : X ∈ unitSquare)
     (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
@@ -142,11 +142,11 @@ theorem n_family (hN : NAnchors a h b c d f) {X Y Z : Point} (hX : X ∈ unitSqu
   -- at least eight boundary points
   have eight : 8 ≤ {i | OnSquareBoundary (nConfig a h b c d f X Y Z i)}.ncard →
       IsOptimal (nConfig a h b c d f X Y Z) := fun h8 => by
-    have h := EightBoundary.theorem13 _ (nConfig_mem hN hX hY hZ) h8
+    have h := EightBoundary.minTriangleArea_le_A₀_of_eight_boundary _ (nConfig_mem hN hX hY hZ) h8
     exact h.2 (le_antisymm h.1 hmin)
   -- exactly seven contacts
   have seven : SevenBoundaryMixedAboveCompletion.ExactlySevenContacts X Y Z → False :=
-    fun h7 => absurd hmin (not_le.2 (SevenBoundaryMixedAboveCompletion.theorem2_nConfig hN h7))
+    fun h7 => absurd hmin (not_le.2 (SevenBoundaryMixedAboveCompletion.minTriangleArea_nConfig_lt_A₀ hN h7))
   rcases open_or_side hX cX with oX | sX <;> rcases open_or_side hY cY with oY | sY <;>
     rcases open_or_side hZ cZ with oZ | sZ
   · exact six_contacts hN hX hY hZ ⟨oX, oY, oZ⟩ hmin

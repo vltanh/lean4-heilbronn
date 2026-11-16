@@ -4,35 +4,34 @@ public import Heilbronn.Nine.TypeII.Unbalanced.RightHull
 public import Heilbronn.Nine.TypeII.Unbalanced.FinalNegativeLine
 public import Heilbronn.Nine.TypeII.Unbalanced.ChainSector
 
-/-! # The final Type-II pair cannot both lie above ES (`docs/proof/nine/UNBALANCED_FINAL_UPPER_PAIR.md`)
+/-! # The final Type-II pair cannot both lie above ES
 
-**Role.** Primary route: step 4 of `UNBALANCED_FINAL_LOWER_WEDGE:claim-chain` (§5, line 280).
-Its §1 conclusion `T ∈ int CQS` and the pair-line signs are inputs of the final placement of
-`UNBALANCED_FINAL_LOWER_WEDGE:Theorem1`.
+In the final placement of the unbalanced row `(1,2,3)`, the central point `Q` lies below `ES`
+(`Q_inside_ERS`), and `T ∈ int CQS` with the pair-line signs (`T_inside_CQS`); both are used by
+`UnbalancedFinalLowerWedge.false_of_oneUpperSetting`.
 
-**Setting** (lines 5-20, `UpperPairSetting`): `Row123 l b P Q R S T`, all actual doubled areas at
+**Setting** (`UpperPairSetting`): `Row123 l b P Q R S T`, all actual doubled areas at
 least `s = 8/73` (`4/73 ≤ minTriangleArea (typeIIConfig …)`), the right hull the quadrilateral
 `B, R, S, C` with `T` inside, in support cell II; `Q` (central) above `ER` and below `DR` and
-`CE`; `T` above `DR` and below `CE`; and `[QTE] > 0`
-(`UNBALANCED_FINAL_NEGATIVE_LINE:Theorem1`). Write `R = (r, u)`, `S = (k, t)`, `q = 1 - λ`,
+`CE`; `T` above `DR` and below `CE`; and `[QTE] > 0`. Write `R = (r, u)`, `S = (k, t)`, `q = 1 - λ`,
 `L = 1 - r`, `z = 1 - t`, `A = [ERC]`, `B₁ = [ESC]`, `J = 2·area(ERSC) = A + [RSC]`,
 `ρ = 13/16`. "Above `ES`" is `0 < [ESX]`.
 
-Explicit functions: `fFn s A B = [AB - s(A + B)]² - 4s(A + s)AB` (`F` of (3)) and
-`aBar s z = 1 - s²(1 - z)/(z(1 - z) - s)` (`Ā` of (6)).
+Explicit functions: `fFn s A B = [AB - s(A + B)]² - 4s(A + s)AB` (`F`) and
+`aBar s z = 1 - s²(1 - z)/(z(1 - z) - s)` (`Ā`).
 
 **Results.**
-* `claim_EBS` (1): `b < 4/11` and `[EBS] ≤ [EBC] < 207/256 < 13/16 < Ks`; `EBS` has capacity
+* `atMostOneInside_EBS`: `b < 4/11` and `[EBS] ≤ [EBC] < 207/256 < 13/16 < Ks`; `EBS` has capacity
   one.
-* `claim_CQS`: `L(X) = [QTX]` has `L(E), L(C) > 0`, `L(B), L(S) < 0`, so `T ∈ int CQS`.
-* `claim_sector` (2)-(3): if `Q` is above `ES`, then `Q, T` lie in the `EC`-sector of `ERSC`,
+* `T_inside_CQS`: `L(X) = [QTX]` has `L(E), L(C) > 0`, `L(B), L(S) < 0`, so `T ∈ int CQS`.
+* `fFn_nonneg_of_Q_above_ES`: if `Q` is above `ES`, then `Q, T` lie in the `EC`-sector of `ERSC`,
   `A, B₁ ≥ Ks`, and `F(A, B₁) ≥ 0`.
-* `claim_z` (4)-(6): then `ρ < z < 6/7`, `A ≤ Ā(z)`, `B₁ ≤ z`, and `(A, B₁)` lies in one of
+* `z_bounds_of_Q_above_ES`: then `ρ < z < 6/7`, `A ≤ Ā(z)`, `B₁ ≤ z`, and `(A, B₁)` lies in one of
   the two rectangles `≤ (19/20, 5/6)`, `≤ (15/16, 6/7)`.
-* `theorem1`: `Q` is not above `ES`; hence `Q ∈ int ERS`.
+* `Q_inside_ERS`: `Q` is not above `ES`; hence `Q ∈ int ERS`.
 
-Implicit in the manuscript: the placement of `P` plays no role and is not assumed;
-`claim_EBS` uses only the standing row and the area bound.
+The placement of `P` plays no role and is not assumed; `atMostOneInside_EBS` uses only the standing row
+and the area bound.
 -/
 
 @[expose] public section
@@ -44,7 +43,9 @@ open UnbalancedRightHull UnbalancedChain
 
 variable {l b : ℝ} {P Q R S T : Point}
 
-/-- The standing placement of the note (every actual doubled area at least `8/73`). -/
+/-- The standing placement: the row `(1,2,3)` with every actual doubled area at least `8/73`, a
+quadrilateral right hull `BRSC` containing `T` in support cell II, `Q` above `ER` and below `DR`
+and `CE`, `T` above `DR` and below `CE`, and `[QTE] > 0`. -/
 structure UpperPairSetting (l b : ℝ) (P Q R S T : Point) : Prop where
   row : Row123 l b P Q R S T
   min : 4 / 73 ≤ minTriangleArea (typeIIConfig l b P Q R S T)
@@ -57,17 +58,16 @@ structure UpperPairSetting (l b : ℝ) (P Q R S T : Point) : Prop where
   T_below_CE : sarea (ptE l) ptC T < 0
   QTE_pos : 0 < sarea Q T (ptE l)
 
-/-- `F(A, B) = [AB - s(A + B)]² - 4s(A + s)AB`, (3). -/
+/-- `F(A, B) = [AB - s(A + B)]² - 4s(A + s)AB`. -/
 def fFn (s A B : ℝ) : ℝ := (A * B - s * (A + B)) ^ 2 - 4 * s * (A + s) * A * B
 
-/-- `Ā(z) = 1 - s²(1 - z)/(z(1 - z) - s)`, (6). -/
+/-- `Ā(z) = 1 - s²(1 - z)/(z(1 - z) - s)`. -/
 def aBar (s z : ℝ) : ℝ := 1 - s ^ 2 * (1 - z) / (z * (1 - z) - s)
 
-/-- **Claim** (`UNBALANCED_FINAL_UPPER_PAIR:claim-EBS`), equation (1). `b < 4/11` and
+/-- `b < 4/11` and
 `[EBS] ≤ [EBC] = 1 - (1 - b)q < 207/256 < 13/16 < Ks` (`s = 8/73`), so `EBS` contains at most
-one further actual point. `docs/proof/nine/UNBALANCED_FINAL_UPPER_PAIR.md`, lines 31-54.
-Uses: TYPE_II:EndpointTriangleTheorem, CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_EBS (h : Row123 l b P Q R S T)
+one further actual point. -/
+theorem atMostOneInside_EBS (h : Row123 l b P Q R S T)
     (hmin : 4 / 73 ≤ minTriangleArea (typeIIConfig l b P Q R S T)) :
     b < 4 / 11 ∧ sarea (ptE l) (ptB b) S ≤ sarea (ptE l) (ptB b) ptC ∧
       sarea (ptE l) (ptB b) ptC < 207 / 256 ∧ (207 / 256 : ℝ) < 13 / 16 ∧
@@ -93,11 +93,9 @@ theorem claim_EBS (h : Row123 l b P Q R S T)
   refine ⟨hb411, h1, h2, by norm_num, hK, ?_⟩
   exact cap_one (by norm_num) hm 2 3 7 (show sarea (ptE l) (ptB b) S < Kc * (8 / 73) by linarith)
 
-/-- **Claim** (`UNBALANCED_FINAL_UPPER_PAIR:claim-CQS`). With `L(X) = [QTX]`: `L(E), L(C) > 0`,
-`L(B) < 0` and `L(S) < 0`; hence `T` is strictly inside `CQS` (counterclockwise `C, Q, S`).
-`docs/proof/nine/UNBALANCED_FINAL_UPPER_PAIR.md`, lines 56-69.
-Uses: UNBALANCED_FINAL_UPPER_PAIR:claim-EBS. -/
-theorem claim_CQS (h : UpperPairSetting l b P Q R S T) :
+/-- With `L(X) = [QTX]`: `L(E), L(C) > 0`,
+`L(B) < 0` and `L(S) < 0`; hence `T` is strictly inside `CQS` (counterclockwise `C, Q, S`). -/
+theorem T_inside_CQS (h : UpperPairSetting l b P Q R S T) :
     0 < sarea Q T (ptE l) ∧ 0 < sarea Q T ptC ∧ sarea Q T (ptB b) < 0 ∧ sarea Q T S < 0 ∧
       InTriangle T ptC Q S := by
   have hb := h.row.b_pos
@@ -166,7 +164,7 @@ theorem claim_CQS (h : UpperPairSetting l b P Q R S T) :
         linarith
     have h2 : Kc * (8 / 73) ≤ sarea (ptE l) (ptB b) S :=
       two_inside (by norm_num) hm 2 3 7 5 8 (by decide) hQS hTS
-    obtain ⟨-, h3, h4, -, -, -⟩ := claim_EBS h.row h.min
+    obtain ⟨-, h3, h4, -, -, -⟩ := atMostOneInside_EBS h.row h.min
     have : (13 / 16 : ℝ) < Kc * (8 / 73) := Kc_s_gt
     linarith
   refine ⟨h.QTE_pos, hLC, hLB, hLS, ?_, ?_, h.cell.2.2.1⟩
@@ -176,13 +174,14 @@ theorem claim_CQS (h : UpperPairSetting l b P Q R S T) :
 /-- `E` is on the inner side of the hull edge `RS`: `[RSE] = [RSB] + (k - r)λ + (t - u)b > 0`. -/
 theorem RSE_pos (h : Row123 l b P Q R S T) (hq : QuadHull (ptB b) R S ptC T) :
     0 < sarea R S (ptE l) := by
-  obtain ⟨-, -, hrk, -, hu0, hut, -⟩ := UnbalancedCellI.claim_order h hq
+  obtain ⟨-, -, hrk, -, hu0, hut, -⟩ := UnbalancedCellI.coord_order_of_quadHull h hq
   have e : sarea R S (ptE l) = sarea (ptB b) R S + (S.1 - R.1) * l + (S.2 - R.2) * b := by
     simp only [sarea, ptE, ptB]; ring
   rw [e]
   nlinarith [hq.1.1, mul_pos (sub_pos.2 hrk) h.l_pos, mul_pos (sub_pos.2 hut) h.b_pos]
 
-/-- The inner facts of the upper-pair placement used by §§1-4. -/
+/-- Sign facts of the upper-pair placement: `Q` is inside `EBC`, and
+`[ERC], [ESC], [RCQ], [SCQ], [CEQ], [CET], [ERT] > 0`. -/
 theorem upper_facts (h : UpperPairSetting l b P Q R S T) :
     InTriangle Q (ptE l) (ptB b) ptC ∧ 0 < sarea (ptE l) R ptC ∧ 0 < sarea (ptE l) S ptC ∧
       0 < sarea R ptC Q ∧ 0 < sarea S ptC Q ∧ 0 < sarea ptC (ptE l) Q ∧
@@ -221,14 +220,11 @@ theorem upper_facts (h : UpperPairSetting l b P Q R S T) :
     simp only [sarea, ptE, ptD]; nlinarith
   exact ⟨hQ, hERC, hESC, hRCQ, hSCQ, hCEQ, hCET, hERT⟩
 
-/-- **Claim** (`UNBALANCED_FINAL_UPPER_PAIR:claim-sector`), equations (2)-(3). If `Q` is above
+/-- If `Q` is above
 `ES`, then `T` is above `ES` too, `Q, T` are inside both `ECR` and `ECS` (the `EC`-sector of
 `ERSC`; counterclockwise `E, R, C` and `E, S, C`), `A, B₁ ≥ Ks > 13/16`, `J ≥ A + s`,
-`AB₁ - s(A + B₁) > 0`, `[AB₁ - s(A + B₁)]² ≥ 4sJAB₁`, and so `F(A, B₁) ≥ 0` (`s = 8/73`).
-`docs/proof/nine/UNBALANCED_FINAL_UPPER_PAIR.md`, lines 71-108.
-Uses: UNBALANCED_FINAL_UPPER_PAIR:claim-CQS, FOUR_INTERIOR_QUADRILATERALS:claim-(4),
-CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_sector (h : UpperPairSetting l b P Q R S T) (hQ : 0 < sarea (ptE l) S Q) :
+`AB₁ - s(A + B₁) > 0`, `[AB₁ - s(A + B₁)]² ≥ 4sJAB₁`, and so `F(A, B₁) ≥ 0` (`s = 8/73`). -/
+theorem fFn_nonneg_of_Q_above_ES (h : UpperPairSetting l b P Q R S T) (hQ : 0 < sarea (ptE l) S Q) :
     let s : ℝ := 8 / 73
     let A := sarea (ptE l) R ptC
     let B₁ := sarea (ptE l) S ptC
@@ -240,7 +236,7 @@ theorem claim_sector (h : UpperPairSetting l b P Q R S T) (hQ : 0 < sarea (ptE l
       0 ≤ fFn s A B₁ := by
   intro s A B₁ J
   obtain ⟨hQ', hERC, hESC, hRCQ, hSCQ, hCEQ, hCET, hERT⟩ := upper_facts h
-  obtain ⟨hLE, hLC, -, -, hTCQS⟩ := claim_CQS h
+  obtain ⟨hLE, hLC, -, -, hTCQS⟩ := T_inside_CQS h
   have hm : (8 / 73 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by
     linarith [h.min]
   have hEST : 0 < sarea (ptE l) S T :=
@@ -255,7 +251,7 @@ theorem claim_sector (h : UpperPairSetting l b P Q R S T) (hQ : 0 < sarea (ptE l
     two_inside (by norm_num) hm 2 7 1 5 8 (by decide) hQESC hTESC
   have hK := Kc_s_gt
   have hRSC : 8 / 73 ≤ sarea R S ptC := ge_of_pos (abs_ge hm 6 7 1) h.quad.1.2.1
-  -- the sector inequality (4) in the quadrilateral `C, E, R, S`
+  -- the two-point sector inequality in the quadrilateral `C, E, R, S`
   have eCER : sarea ptC (ptE l) R = sarea (ptE l) R ptC := by unfold sarea; ring
   have eCES : sarea ptC (ptE l) S = sarea (ptE l) S ptC := by unfold sarea; ring
   have eCRS : sarea ptC R S = sarea R S ptC := by unfold sarea; ring
@@ -284,8 +280,8 @@ theorem claim_sector (h : UpperPairSetting l b P Q R S T) (hQ : 0 < sarea (ptE l
     sarea (ptE l) R ptC + sarea R S ptC by linarith) (by positivity :
       (0 : ℝ) ≤ 4 * (8 / 73) * (sarea (ptE l) R ptC * sarea (ptE l) S ptC))]
 
-/-- The scalar part of §3 (part of UNBALANCED_FINAL_UPPER_PAIR:claim-z), with `z = 1 - t`,
-`s = 8/73`: from `bq ≥ s`, `[CRS] ≥ s`, `[BRS] ≥ s` and `B₁ = 1 - t - q(1-k) > 13/16`. -/
+/-- The key scalar inequality behind `z_bounds_of_Q_above_ES`, with `z = 1 - t`, `s = 8/73`: from `bq ≥ s`,
+`(1 - r)z ≥ s` and `(r - b)(1 - z) ≥ s`, `s·z(1 - z) ≤ q(z(1 - z) - s)`. -/
 theorem z_key {q b r z : ℝ} (hq0 : 0 < q) (hbq : 8 / 73 ≤ b * q) (hz0 : 0 < z) (hz1 : z < 1)
     (hLz : 8 / 73 ≤ (1 - r) * z) (hrb : 8 / 73 ≤ (r - b) * (1 - z)) :
     8 / 73 * (z * (1 - z)) ≤ q * (z * (1 - z) - 8 / 73) := by
@@ -318,7 +314,7 @@ theorem z_abar {q r u z : ℝ} (hq0 : 0 < q) (hz0 : 0 < z) (hu : 0 ≤ u)
   have h2 := le_of_mul_le_mul_left h1 hz0
   nlinarith [mul_nonneg hu hD.le]
 
-/-- The scalar part of §3 (part of UNBALANCED_FINAL_UPPER_PAIR:claim-z), with `z = 1 - t`,
+/-- The scalar part of `z_bounds_of_Q_above_ES`, with `z = 1 - t`,
 `s = 8/73`: from `bq ≥ s`, `[CRS] ≥ s`, `[BRS] ≥ s` and `B₁ = 1 - t - q(1-k) > 13/16`. -/
 theorem z_scalar {q b r u k t : ℝ} (hq0 : 0 < q) (hq1 : q < 1) (hbq : 8 / 73 ≤ b * q)
     (hRSC : 8 / 73 ≤ (1 - r) * (1 - t) - (1 - k) * (1 - u))
@@ -360,12 +356,10 @@ theorem z_scalar {q b r u k t : ℝ} (hq0 : 0 < q) (hq1 : q < 1) (hbq : 8 / 73 �
     by_contra hA; push Not at hA
     nlinarith [mul_le_mul_of_nonneg_right (by linarith : 1 - A ≤ 1 / 16) hD.le]
 
-/-- **Claim** (`UNBALANCED_FINAL_UPPER_PAIR:claim-z`), equations (4)-(6). If `Q` is above `ES`,
+/-- If `Q` is above `ES`,
 then with `z = 1 - t`, `ρ = 13/16`, `s = 8/73`: `ρ < z < 6/7`, `A ≤ Ā(z)`, `B₁ ≤ z`, and either
-`z ≤ 5/6`, `A < 19/20`, `B₁ ≤ 5/6`, or `z ≥ 5/6`, `A < 15/16`, `B₁ < 6/7`.
-`docs/proof/nine/UNBALANCED_FINAL_UPPER_PAIR.md`, lines 110-179.
-Uses: UNBALANCED_FINAL_UPPER_PAIR:claim-sector. -/
-theorem claim_z (h : UpperPairSetting l b P Q R S T) (hQ : 0 < sarea (ptE l) S Q) :
+`z ≤ 5/6`, `A < 19/20`, `B₁ ≤ 5/6`, or `z ≥ 5/6`, `A < 15/16`, `B₁ < 6/7`. -/
+theorem z_bounds_of_Q_above_ES (h : UpperPairSetting l b P Q R S T) (hQ : 0 < sarea (ptE l) S Q) :
     let s : ℝ := 8 / 73
     let z := 1 - S.2
     let A := sarea (ptE l) R ptC
@@ -373,11 +367,11 @@ theorem claim_z (h : UpperPairSetting l b P Q R S T) (hQ : 0 < sarea (ptE l) S Q
     13 / 16 < z ∧ z < 6 / 7 ∧ A ≤ aBar s z ∧ B₁ ≤ z ∧
       ((z ≤ 5 / 6 ∧ A < 19 / 20 ∧ B₁ ≤ 5 / 6) ∨ (5 / 6 ≤ z ∧ A < 15 / 16 ∧ B₁ < 6 / 7)) := by
   intro s z A B₁
-  obtain ⟨-, -, -, -, -, -, hKB, hK, -, -, -, -⟩ := claim_sector h hQ
+  obtain ⟨-, -, -, -, -, -, hKB, hK, -, -, -, -⟩ := fFn_nonneg_of_Q_above_ES h hQ
   have hm : (8 / 73 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by
     linarith [h.min]
   have hDEB := TypeII.s_le_DEB (row_data h.row) hm
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h.row h.quad
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
   have hRSC : 8 / 73 ≤ sarea R S ptC := ge_of_pos (abs_ge hm 6 7 1) h.quad.1.2.1
   have hBRS : 8 / 73 ≤ sarea (ptB b) R S := ge_of_pos (abs_ge hm 3 6 7) h.quad.1.1
   have eRSC : sarea R S ptC = (1 - R.1) * (1 - S.2) - (1 - S.1) * (1 - R.2) := by
@@ -410,8 +404,8 @@ theorem quad_mono {c d e x₀ x x' : ℝ} (hc : 0 ≤ c) (h0 : c * x₀ ^ 2 + d 
   have k2 : 0 < c * (x + x₀) + d := pos_of_mul_pos_right k (by linarith)
   nlinarith [mul_nonneg (sub_nonneg.2 hx') (by nlinarith : (0 : ℝ) ≤ c * (x' + x) + d)]
 
-/-- The two rectangles of §4 contradict (3) (part of UNBALANCED_FINAL_UPPER_PAIR:Theorem1):
-increase `B₁`, then `A`, to the corner, where `F < 0` (7). -/
+/-- The two rectangles of `z_bounds_of_Q_above_ES` contradict `F(A, B₁) ≥ 0`: increase `B₁`, then `A`, to the
+corner, where `F < 0`. -/
 theorem final_rect {A B : ℝ} (hA : 13 / 16 < A) (hB : 13 / 16 < B)
     (hX : 0 < A * B - 8 / 73 * (A + B)) (hF : 0 ≤ fFn (8 / 73) A B)
     (hr : (A < 19 / 20 ∧ B ≤ 5 / 6) ∨ (A < 15 / 16 ∧ B < 6 / 7)) : False := by
@@ -463,11 +457,9 @@ theorem final_rect {A B : ℝ} (hA : 13 / 16 < A) (hB : 13 / 16 < B)
   · exact key (19 / 20) (5 / 6) h1 h2 (by rw [hs]; unfold fFn; norm_num) (by rw [hs]; norm_num)
   · exact key (15 / 16) (6 / 7) h1 h2.le (by rw [hs]; unfold fFn; norm_num) (by rw [hs]; norm_num)
 
-/-- **Theorem 1** (`UNBALANCED_FINAL_UPPER_PAIR:Theorem1`). The point `Q` cannot be above `ES`.
-Thus `Q` is below `ES` and strictly inside `ERS` (counterclockwise `E, R, S`).
-`docs/proof/nine/UNBALANCED_FINAL_UPPER_PAIR.md`, lines 22-27, 181-213.
-Uses: UNBALANCED_FINAL_UPPER_PAIR:claim-sector, UNBALANCED_FINAL_UPPER_PAIR:claim-z. -/
-theorem theorem1 (h : UpperPairSetting l b P Q R S T) :
+/-- The point `Q` cannot be above `ES`.
+Thus `Q` is below `ES` and strictly inside `ERS` (counterclockwise `E, R, S`). -/
+theorem Q_inside_ERS (h : UpperPairSetting l b P Q R S T) :
     sarea (ptE l) S Q < 0 ∧ InTriangle Q (ptE l) R S := by
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := by linarith [h.min]
   obtain ⟨hQ', -, -, -, -, -, -, -⟩ := upper_facts h
@@ -476,8 +468,8 @@ theorem theorem1 (h : UpperPairSetting l b P Q R S T) :
     rcases lt_or_gt_of_ne nESQ with hh | hh
     · exact hh
     exfalso
-    obtain ⟨-, -, -, -, -, hKA, hKB, hK, -, hX, -, hF⟩ := claim_sector h hh
-    obtain ⟨-, -, -, -, hrect⟩ := claim_z h hh
+    obtain ⟨-, -, -, -, -, hKA, hKB, hK, -, hX, -, hF⟩ := fFn_nonneg_of_Q_above_ES h hh
+    obtain ⟨-, -, -, -, hrect⟩ := z_bounds_of_Q_above_ES h hh
     exact final_rect (by linarith) (by linarith) hX hF (by
       rcases hrect with ⟨-, h1, h2⟩ | ⟨-, h1, h2⟩
       · exact Or.inl ⟨h1, h2⟩

@@ -1,75 +1,63 @@
 module
 
 public import Heilbronn.Nine.Normalization.BoundaryReduction
-public import Heilbronn.Nine.Local.HandProof
+public import Heilbronn.Nine.Local.Chamber
 public import Heilbronn.Nine.Construction
 
-/-! # The global boundary normalization (`docs/proof/nine/GLOBAL_STRUCTURE.md`)
+/-! # The global boundary normalization
 
-**Role.** Primary route. `UNRESTRICTED.md` §2 (lines 56-60) uses Lemma 1, Corollary 2 and
-Theorem 3 to bring a maximizer into one of the five families N, C1, C2, Type II, Type III, and §5
-(line 212) uses Lemma 4 to transfer the equality case back through the normalizing shears.
-`THREE_INTERIOR_TRIANGLES.md` Corollary 5 reruns the same normalization: Lemma 1, Corollary 2
-and the exhaustiveness are proved under `BoundaryReduction.NoExpand` (`lemma1_of_noExpand`,
-`corollary2_of_noExpand`, `exists_family_of_noExpand`), and the maximizer statements are
-corollaries.
+A maximizer of nine points with positive least area is brought, by feasible shears, square
+symmetries and relabellings, into one of the five families N, C1, C2, Type II, Type III
+(`Setup/Families.lean`), and optimality transfers back along the normalization. The normalization
+is proved under `BoundaryReduction.NoExpand` (`exists_contact_shear_of_noExpand`, `exists_twoContacts_of_noExpand`,
+`exists_family_of_noExpand`), so that it also applies to configurations that are not maximizers
+(`Heilbronn/Nine/Hulls/GlobalCapacity.lean`); the maximizer statements are corollaries.
 
-**Setting.** A maximizer `P` of nine points with positive least area. From
-`BOUNDARY_REDUCTION.md` it has every side contacted and the projection-overlap property
-(`BoundaryReduction.claim_side_contact`, `BoundaryReduction.claim_overlap`). Positive least area
-gives at most two points on each side (`claim_two_per_side`).
+**Setting.** A configuration `P` of nine points with positive least area and no feasible
+expansion, for instance a maximizer. It has every side contacted and the projection-overlap
+property (`BoundaryReduction.side_contacts_of_noExpand`,
+`BoundaryReduction.contactOverlap_of_noExpand`).
 
 **Definitions.**
 * `Side`: the four sides of the square. `Side.Contains S p` means `p` lies on side `S`.
 * `incidences P`: the boundary incidences, the pairs `(i, S)` with `P i` on side `S`. A corner
-  point has two (lines 67-69).
+  point has two.
 * `TwoContacts P S`: side `S` carries two distinct points of `P`.
 
 **Results.**
-* `claim_two_per_side`: at most two points on each side (line 27).
-* `lemma1`: with exactly one point on each of the left and right sides (respectively bottom and
+* `exists_contact_shear`: with exactly one point on each of the left and right sides (respectively bottom and
   top), a feasible determinant-one shear keeps every incidence and creates a new left or right
   (respectively bottom or top) incidence.
-* `corollary2`: after at most two such shears, each pair of opposite sides has a side with two
+* `exists_twoContacts`: after at most two such shears, each pair of opposite sides has a side with two
   contacts.
-* `claim_N_selection`, `claim_C1_selection`, `claim_C2_selection`: with no, one or two opposite
+* `exists_isN_of_no_corner`, `exists_isC1_of_one_corner`, `exists_isC2_of_opposite_corners`: with no, one or two opposite
   occupied corners, a square symmetry and a relabelling put the configuration in family N, C1 or
   C2 (`Setup/Families.lean`).
-* `lemma4` (equality transfer): if a maximizer normalizes to an optimal configuration, it is
+* `isOptimal_of_normalizes` (equality transfer): if a configuration normalizes to an optimal configuration, it is
   itself optimal.
-* `theorem3`: every positive-area maximizer normalizes to a maximizer `Q` with the same least area,
+* `normalize`: every positive-area maximizer normalizes to a maximizer `Q` with the same least area,
   the overlap property, and `Q` in N, C1, C2, Type II or Type III; moreover `Q` optimal implies `P`
   optimal.
 
-**Not formalized.** The parameter count and the seven incidence patterns (lines 180-202) are a
-remark that nothing relies on. The closing remarks of §4 (lines 230-248) describe the assembly.
+**Hypotheses.**
+* The selections use only the overlap property and, for N, positive least area (distinct points)
+  and the two-contact sides. They are stated under exactly these hypotheses (C1 and C2 do not need
+  positive least area).
+* `normalize` states the existence of the normalized maximizer `Q`, with the normalization recorded
+  (`Normalizes P Q`). It includes the equality transfer (`IsOptimal Q → IsOptimal P`, from
+  `isOptimal_of_normalizes`), so that the assembly can use `normalize` directly, and `ContactOverlap Q` for all five
+  families (it holds for every positive-area maximizer, `BoundaryReduction.contactOverlap_of_isMaximizer`).
+* `isOptimal_of_normalizes` uses only that every shear of the normalization is feasible, which `NormStep` records,
+  and that an optimal configuration has least area `A₀`. `P` need not be a maximizer.
 
-**Implicit in the manuscript.**
-* The selection claims (§2) are proved for the maximizer of Corollary 2, but their proofs use only
-  the overlap property and, for N, positive least area (distinct points) and the two-contact
-  sides. They are stated under exactly these hypotheses (C1 and C2 do not need positive least
-  area). That is also how `THREE_INTERIOR_TRIANGLES.md` Corollary 5 uses them for
-  non-maximizers.
-* Theorem 3 is phrased as "an upper bound proved on the five families holds for all
-  configurations". It is stated as the existence of the normalized maximizer `Q` that this
-  sentence means, with the normalization recorded (`Normalizes P Q`). The equality transfer
-  (`IsOptimal Q → IsOptimal P`) is the content of Lemma 4, which uses `HAND_PROOF.md` Theorem 2.
-  It is included so that the assembly can use Theorem 3 directly. `ContactOverlap Q` is included
-  for all five families (it holds for every positive-area maximizer). The family theorems need it
-  for N: the seven-boundary row of `UNRESTRICTED.md` (lines 132-137) rotates the singleton side to
-  the top and uses the overlap order.
-* Lemma 4's argument uses only that every shear of the normalization is feasible, which
-  `NormStep` records, and that an optimal configuration has least area `A₀`. The manuscript's
-  hypothesis that `P` is a maximizer is not needed and is dropped.
-
-**Proof notes.** Theorem 3 follows the manuscript: Corollary 2 (at most two shears of Lemma 1),
-then by the occupied corners either the adjacent-corner shear (after the square symmetry that
-moves the adjacent pair to the top) or the selections N, C1, C2 (after the square symmetry that
-moves the occupied corners to `(0,0)` and `(1,1)`). Lemma 4 runs backwards along `Normalizes`:
-relabellings and square symmetries keep optimality (`isOptimal_of_perm`, `isOptimal_of_symm`),
-and a feasible shear `P ↦ P + v` with optimal image is trivial (`isOptimal_of_segment`): the
-configurations `P + s v`, `0 ≤ s ≤ 1`, stay in the square with least area `A₀`, so the strict local
-optimality `HandProof.theorem2` forces `P + s v = P + v` for `s < 1` close to `1`.
+**Proof notes.** `normalize` applies `exists_twoContacts` (at most two shears of `exists_contact_shear`), then, by the
+occupied corners, either the adjacent-corner shear (after the square symmetry that moves the
+adjacent pair to the top) or the selections N, C1, C2 (after the square symmetry that moves the
+occupied corners to `(0,0)` and `(1,1)`). `isOptimal_of_normalizes` runs backwards along `Normalizes`: relabellings
+and square symmetries keep optimality (`isOptimal_of_perm`, `isOptimal_of_symm`), and a feasible
+shear `P ↦ P + v` with optimal image is trivial (`isOptimal_of_segment`): the configurations
+`P + s v`, `0 ≤ s ≤ 1`, stay in the square with least area `A₀`, so the strict local optimality
+`Chamber.strict_local_max` forces `P + s v = P + v` for `s < 1` close to `1`.
 -/
 
 @[expose] public section
@@ -96,9 +84,8 @@ def Side.Contains : Side → Point → Prop
   | .right, p => p.1 = 1
   | .top, p => p.2 = 1
 
-/-- The boundary incidences of `P` (`GLOBAL_STRUCTURE:def-incidence`, lines 67-69): the pairs
-`(i, S)` with `P i` on side `S`. A corner point gives two incidences, so there are at most eight
-for a configuration of positive least area. -/
+/-- The boundary incidences of `P`: the pairs `(i, S)` with `P i` on side `S`. A corner point
+gives two incidences, so there are at most eight for a configuration of positive least area. -/
 def incidences (P : Fin 9 → Point) : Set (Fin 9 × Side) := {x | x.2.Contains (P x.1)}
 
 /-- Side `S` carries two distinct points of `P`. -/
@@ -116,9 +103,9 @@ theorem injective_of_min_pos {P : Fin 9 → Point} (hpos : 0 < minTriangleArea P
   apply sarea_ne_zero_of_min_pos hpos i j k hij (Ne.symm hkj) (Ne.symm hki)
   simp only [sarea, h]; ring
 
-/-! ### §1. The contact-increasing shear -/
+/-! ### The contact-increasing shear -/
 
-/-- The one-dimensional core of Lemma 1. Coordinates `x k ∈ [0,1]` are moved to
+/-- The one-dimensional core of `exists_contact_shear_of_noExpand`. Coordinates `x k ∈ [0,1]` are moved to
 `x k + t (y k - ℓ)`; the points with `x k ∈ {0, 1}` have `y k = ℓ` and do not move, and some
 `y k ≠ ℓ`. The largest feasible `t > 0` keeps every coordinate in `[0,1]` and sends some
 `x k ∉ {0, 1}` to `0` or `1`. -/
@@ -162,16 +149,15 @@ theorem shear_core (x y : Fin 9 → ℝ) (ℓ : ℝ) (hx : ∀ k, 0 ≤ x k ∧ 
       have e : y k₀ - ℓ = -(ℓ - y k₀) := by ring
       rw [e, mul_neg, div_mul_cancel₀ _ (ne_of_gt (sub_pos.2 h'))]; ring
 
-/-- **Lemma 1** (`GLOBAL_STRUCTURE:Lemma1`). Let `P` be a positive-area maximizer.
+/-- **The contact-increasing shear.** Let `P` be a configuration of positive least area with no
+feasible expansion.
 * If `P` has exactly one point `L = (0, ℓ)` on the left side and exactly one point `R = (1, r)` on
   the right side (so `r = ℓ` by overlap), the shear `F_t(x, y) = (x + t(y - ℓ), y)` at the finite
   positive endpoint `t₊` of its feasible interval keeps every point in the square and every
-  boundary incidence, creates a new left or right incidence, and gives a maximizer.
+  boundary incidence, and creates a new left or right incidence.
 * The analogous assertion holds for the bottom and top sides, with the transposed shear
-  `(x, y) ↦ (x, y + t(x - ℓ))`.
-`docs/proof/nine/GLOBAL_STRUCTURE.md`, lines 31-65.
-Uses: BOUNDARY_REDUCTION:claim-overlap -/
-theorem lemma1_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P) (hpos : 0 < minTriangleArea P) :
+  `(x, y) ↦ (x, y + t(x - ℓ))`. -/
+theorem exists_contact_shear_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P) (hpos : 0 < minTriangleArea P) :
     ((∃! i, (P i).1 = 0) → (∃! i, (P i).1 = 1) →
       ∃ t ℓ : ℝ, (∀ i, shearX t ℓ (P i) ∈ unitSquare) ∧
         incidences P ⊆ incidences (shearX t ℓ ∘ P) ∧
@@ -182,7 +168,7 @@ theorem lemma1_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P) (hpos : 0 < m
         incidences P ⊆ incidences (shearY t ℓ ∘ P) ∧
         ∃ i, (P i).2 ≠ 0 ∧ (P i).2 ≠ 1 ∧
           ((shearY t ℓ (P i)).2 = 0 ∨ (shearY t ℓ (P i)).2 = 1)) := by
-  obtain ⟨hov1, hov2, hov3, hov4⟩ := claim_overlap_of_noExpand hP hpos
+  obtain ⟨hov1, hov2, hov3, hov4⟩ := contactOverlap_of_noExpand hP hpos
   refine ⟨fun hL hR => ?_, fun hB hT => ?_⟩
   · obtain ⟨iL, hiL, huL⟩ := hL
     obtain ⟨iR, hiR, huR⟩ := hR
@@ -233,8 +219,9 @@ theorem lemma1_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P) (hpos : 0 < m
     · exact hi
     · rw [hb i (Or.inr hi), sub_self, mul_zero, add_zero, hi]
 
-/-- **Lemma 1** (`GLOBAL_STRUCTURE:Lemma1`) for a maximizer (see `lemma1_of_noExpand`). -/
-theorem lemma1 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
+/-- The contact-increasing shear (`exists_contact_shear_of_noExpand`) for a maximizer of positive least area;
+the sheared configuration is again a maximizer. -/
+theorem exists_contact_shear {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
     ((∃! i, (P i).1 = 0) → (∃! i, (P i).1 = 1) →
       ∃ t ℓ : ℝ, (∀ i, shearX t ℓ (P i) ∈ unitSquare) ∧ IsMaximizer (shearX t ℓ ∘ P) ∧
         incidences P ⊆ incidences (shearX t ℓ ∘ P) ∧
@@ -245,7 +232,7 @@ theorem lemma1 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangl
         incidences P ⊆ incidences (shearY t ℓ ∘ P) ∧
         ∃ i, (P i).2 ≠ 0 ∧ (P i).2 ≠ 1 ∧
           ((shearY t ℓ (P i)).2 = 0 ∨ (shearY t ℓ (P i)).2 = 1)) := by
-  obtain ⟨h1, h2⟩ := lemma1_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
+  obtain ⟨h1, h2⟩ := exists_contact_shear_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
   refine ⟨fun hL hR => ?_, fun hB hT => ?_⟩
   · obtain ⟨t, ℓ, hf, hinc, k, hk⟩ := h1 hL hR
     exact ⟨t, ℓ, hf, isMaximizer_shearX hP hf, hinc, k, hk⟩
@@ -259,23 +246,21 @@ theorem twoContacts_of_not_unique {P : Fin 9 → Point} {S : Side} (h : ∃ i, S
   by_contra hc
   exact hu ⟨i, hi, fun j hj => by_contra fun hji => hc ⟨j, i, hji, hj, hi⟩⟩
 
-/-- **Corollary 2** (`GLOBAL_STRUCTURE:Corollary2`). From a positive-area maximizer `P`, at most
-two applications of Lemma 1 (first left/right, then bottom/top; the second shear keeps every
-`x`-coordinate and so the first pair's incidences) give a maximizer `Q` with the same least area in
-which each pair of opposite sides has a side with two contacts.
-`docs/proof/nine/GLOBAL_STRUCTURE.md`, lines 71-82.
-Uses: GLOBAL_STRUCTURE:Lemma1, BOUNDARY_REDUCTION:claim-side-contact,
-GLOBAL_STRUCTURE:claim-two-per-side -/
-theorem corollary2_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
+/-- **Two contacts in each pair of opposite sides.** From a configuration `P` of positive least
+area with no feasible expansion, at most two contact-increasing shears (`exists_contact_shear_of_noExpand`;
+first left/right, then bottom/top; the second shear keeps every `x`-coordinate and so the first
+pair's incidences) give a normalization `Q` in which each pair of opposite sides has a side with
+two contacts. -/
+theorem exists_twoContacts_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
     (hpos : 0 < minTriangleArea P) :
     ∃ Q : Fin 9 → Point, Normalizes P Q ∧
       (TwoContacts Q .left ∨ TwoContacts Q .right) ∧
       (TwoContacts Q .bottom ∨ TwoContacts Q .top) := by
   obtain ⟨P₁, hPP₁, hLR⟩ : ∃ P₁, Normalizes P P₁ ∧
       (TwoContacts P₁ .left ∨ TwoContacts P₁ .right) := by
-    obtain ⟨hl, -, hr, -⟩ := claim_side_contact_of_noExpand hP hpos
+    obtain ⟨hl, -, hr, -⟩ := side_contacts_of_noExpand hP hpos
     by_cases hu : (∃! i, (P i).1 = 0) ∧ (∃! i, (P i).1 = 1)
-    · obtain ⟨t, ℓ, hfeas, hinc, k, hk0, hk1, hk⟩ := (lemma1_of_noExpand hP hpos).1 hu.1 hu.2
+    · obtain ⟨t, ℓ, hfeas, hinc, k, hk0, hk1, hk⟩ := (exists_contact_shear_of_noExpand hP hpos).1 hu.1 hu.2
       refine ⟨shearX t ℓ ∘ P, .single (.xShear t ℓ hP.1 hfeas), ?_⟩
       obtain ⟨iL, hiL, -⟩ := hu.1
       obtain ⟨iR, hiR, -⟩ := hu.2
@@ -293,9 +278,9 @@ theorem corollary2_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
       · exact Or.inr (twoContacts_of_not_unique hr hu)
   have hP₁ := noExpand_of_normalizes hP hPP₁
   have hpos₁ : 0 < minTriangleArea P₁ := by rw [minTriangleArea_of_normalizes hPP₁]; exact hpos
-  obtain ⟨-, hb, -, ht⟩ := claim_side_contact_of_noExpand hP₁ hpos₁
+  obtain ⟨-, hb, -, ht⟩ := side_contacts_of_noExpand hP₁ hpos₁
   by_cases hu : (∃! i, (P₁ i).2 = 0) ∧ (∃! i, (P₁ i).2 = 1)
-  · obtain ⟨t, ℓ, hfeas, hinc, k, hk0, hk1, hk⟩ := (lemma1_of_noExpand hP₁ hpos₁).2 hu.1 hu.2
+  · obtain ⟨t, ℓ, hfeas, hinc, k, hk0, hk1, hk⟩ := (exists_contact_shear_of_noExpand hP₁ hpos₁).2 hu.1 hu.2
     refine ⟨shearY t ℓ ∘ P₁, hPP₁.tail (.yShear t ℓ hP₁.1 hfeas), ?_, ?_⟩
     · rcases hLR with ⟨i, j, hij, hi, hj⟩ | ⟨i, j, hij, hi, hj⟩
       · exact Or.inl ⟨i, j, hij, hi, hj⟩
@@ -315,17 +300,17 @@ theorem corollary2_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
     · exact Or.inl (twoContacts_of_not_unique hb hu)
     · exact Or.inr (twoContacts_of_not_unique ht hu)
 
-/-- **Corollary 2** (`GLOBAL_STRUCTURE:Corollary2`) for a maximizer (see
-`corollary2_of_noExpand`). -/
-theorem corollary2 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
+/-- `exists_twoContacts_of_noExpand` for a maximizer of positive least area: the normalized `Q` is again
+a maximizer, with the same least area. -/
+theorem exists_twoContacts {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
     ∃ Q : Fin 9 → Point, Normalizes P Q ∧ IsMaximizer Q ∧
       minTriangleArea Q = minTriangleArea P ∧
       (TwoContacts Q .left ∨ TwoContacts Q .right) ∧
       (TwoContacts Q .bottom ∨ TwoContacts Q .top) := by
-  obtain ⟨Q, hPQ, h1, h2⟩ := corollary2_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
+  obtain ⟨Q, hPQ, h1, h2⟩ := exists_twoContacts_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
   exact ⟨Q, hPQ, isMaximizer_of_normalizes hP hPQ, minTriangleArea_of_normalizes hPQ, h1, h2⟩
 
-/-! ### §2. The three forms without adjacent occupied corners -/
+/-! ### The three forms without adjacent occupied corners -/
 
 /-- Interval selection for a pair of opposite sides. The contacts of the two sides are the
 indices with `A i`, respectively `B i`, at positions `u i` along the sides. If the two contact
@@ -417,15 +402,12 @@ theorem isN_of_indices {Q : Fin 9 → Point} (hQ : ∀ i, Q i ∈ unitSquare) (h
   funext i
   fin_cases i <;> simp [nConfig, s0, s1, s2, s3, s4, s5] <;> ext <;> simp [hA, hH, hB, hC, hD, hF]
 
-/-- **Claim** (`GLOBAL_STRUCTURE:claim-N-selection`). No occupied corner. If the configuration has
+/-- **Selection of family N.** No corner is occupied. If the configuration has
 positive least area and the overlap property, and each pair of opposite sides has a side with two
 contacts, then after a square symmetry (the reflections putting the double sides on the left and
 at the bottom) and a relabelling it is in family N: `A=(0,a), H=(0,h), B=(b,0), C=(c,0), D=(1,d),
-F=(f,1)` with `0<a<h<1, 0<b<c<1, a≤d≤h, b≤f≤c` and three arbitrary points.
-`docs/proof/nine/GLOBAL_STRUCTURE.md`, lines 91-122.
-Uses: GLOBAL_STRUCTURE:Corollary2, BOUNDARY_REDUCTION:claim-overlap,
-GLOBAL_STRUCTURE:claim-two-per-side -/
-theorem claim_N_selection {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
+F=(f,1)` with `0<a<h<1, 0<b<c<1, a≤d≤h, b≤f≤c` and three arbitrary points. -/
+theorem exists_isN_of_no_corner {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (hpos : 0 < minTriangleArea P) (hov : ContactOverlap P)
     (hcorner : ¬ Occupied P (0, 0) ∧ ¬ Occupied P (1, 0) ∧ ¬ Occupied P (0, 1) ∧
       ¬ Occupied P (1, 1))
@@ -495,13 +477,11 @@ theorem claim_N_selection {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
       simp only [Function.comp_apply, SquareSymmetry.apply, Bool.false_eq_true, ↓reduceIte] <;>
       linarith
 
-/-- **Claim** (`GLOBAL_STRUCTURE:claim-C1-selection`). Exactly one occupied corner, `(0,0)`.
+/-- **Selection of family C1.** Exactly one occupied corner, `(0,0)`.
 By overlap both incident sides carry a second contact `C = (c,0)`, `H = (0,h)`. With `f` the least
 top `x`-coordinate and `d` the least right `y`-coordinate, a relabelling puts the configuration in
-family C1: `O=(0,0), C, D=(1,d), F=(f,1), H` with `0<d≤h<1, 0<f≤c<1` and four arbitrary points.
-`docs/proof/nine/GLOBAL_STRUCTURE.md`, lines 124-146.
-Uses: BOUNDARY_REDUCTION:claim-overlap, GLOBAL_STRUCTURE:claim-two-per-side -/
-theorem claim_C1_selection {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
+family C1: `O=(0,0), C, D=(1,d), F=(f,1), H` with `0<d≤h<1, 0<f≤c<1` and four arbitrary points. -/
+theorem exists_isC1_of_one_corner {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (hov : ContactOverlap P) (h00 : Occupied P (0, 0))
     (hcorner : ¬ Occupied P (1, 0) ∧ ¬ Occupied P (0, 1) ∧ ¬ Occupied P (1, 1)) :
     ∃ σ : Equiv.Perm (Fin 9), IsC1 (P ∘ σ) := by
@@ -524,14 +504,12 @@ theorem claim_C1_selection {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare
   funext i
   fin_cases i <;> simp [c1Config, s0, s1, s2, s3, s4, hiO] <;> ext <;> simp [hC, hD, hF, hH]
 
-/-- **Claim** (`GLOBAL_STRUCTURE:claim-C2-selection`). Exactly the two opposite corners `(0,0)` and
+/-- **Selection of family C2.** Exactly the two opposite corners `(0,0)` and
 `(1,1)` are occupied. By overlap every side carries a second contact, and intersecting the
 intervals `[0,h], [d,1]` and `[0,c], [f,1]` gives `0<d≤h<1, 0<f≤c<1`. A relabelling puts the
 configuration in family C2: `A=(0,0), E=(1,1), H=(0,h), C=(c,0), D=(1,d), F=(f,1)` and three
-arbitrary points.
-`docs/proof/nine/GLOBAL_STRUCTURE.md`, lines 148-161.
-Uses: BOUNDARY_REDUCTION:claim-overlap, GLOBAL_STRUCTURE:claim-two-per-side -/
-theorem claim_C2_selection {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
+arbitrary points. -/
+theorem exists_isC2_of_opposite_corners {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (hov : ContactOverlap P) (h00 : Occupied P (0, 0))
     (h11 : Occupied P (1, 1)) (hcorner : ¬ Occupied P (1, 0) ∧ ¬ Occupied P (0, 1)) :
     ∃ σ : Equiv.Perm (Fin 9), IsC2 (P ∘ σ) := by
@@ -560,7 +538,7 @@ theorem claim_C2_selection {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare
   fin_cases i <;> simp [c2Config, s0, s1, s2, s3, s4, s5, hiA, hiE] <;> ext <;>
     simp [hC, hD, hF, hH]
 
-/-! ### §4. Equality transfer -/
+/-! ### Equality transfer -/
 
 /-- The inverse of a square symmetry. -/
 def symInv (g : SquareSymmetry) : SquareSymmetry :=
@@ -613,14 +591,14 @@ theorem minTriangleArea_of_isOptimal {P : Fin 9 → Point} (h : IsOptimal P) :
 /-- The core of the equality transfer. Let `P` lie in the square and let the configurations
 `P + s v`, `s ∈ ℝ`, all have the least area of `P`. If `P + v` lies in the square and is optimal,
 then so is `P`. Indeed `P + s v` lies in the square for `0 ≤ s ≤ 1` and has least area `A₀`, so
-the strict local optimality (`HandProof.theorem2`) forces `P + s v = P + v` for `s < 1` close to
+the strict local optimality (`Chamber.strict_local_max`) forces `P + s v = P + v` for `s < 1` close to
 `1`, hence `v = 0`. -/
 theorem isOptimal_of_segment {P : Fin 9 → Point} (hP : ∀ i, P i ∈ unitSquare)
     (v : Fin 9 → Point) (hv : ∀ i, P i + v i ∈ unitSquare)
     (harea : ∀ s : ℝ, minTriangleArea (fun i => P i + s • v i) = minTriangleArea P)
     (hopt : IsOptimal (fun i => P i + v i)) : IsOptimal P := by
   obtain ⟨g, σ, hσ⟩ := hopt
-  obtain ⟨ε, hε, c, hc, hloc⟩ := HandProof.theorem2
+  obtain ⟨ε, hε, c, hc, hloc⟩ := Chamber.strict_local_max
   have hA : minTriangleArea P = A₀ := by
     rw [← harea 1]
     simpa only [one_smul] using minTriangleArea_of_isOptimal ⟨g, σ, hσ⟩
@@ -719,22 +697,20 @@ theorem isOptimal_of_normStep {P P' : Fin 9 → Point} (h : NormStep P P') (hopt
   | symmetry g => exact isOptimal_of_symm g hopt
   | relabel σ => exact isOptimal_of_perm σ hopt
 
-/-- **Lemma 4** (`GLOBAL_STRUCTURE:Lemma4`). Equality transfer. If a configuration `P` is
-transformed into an optimal configuration (a relabelled symmetric image of the construction) by
-finitely many square symmetries, relabellings and feasible shears, then `P` is itself optimal. For
-the last shear `F_T` that moves a point, the configurations `F_t(P')`, `t` between `0` and `T`,
-stay in the square (the feasible parameters form an interval), keep every triangle area, and tend
-to the optimal configuration; this contradicts the strict local optimality of `HAND_PROOF.md`
-Theorem 2. `docs/proof/nine/GLOBAL_STRUCTURE.md`, lines 212-228; `docs/proof/nine/UNRESTRICTED.md`, lines 204-226.
-The manuscript assumes `P` is a maximizer; this is not needed.
-Uses: HAND_PROOF:Theorem2 -/
-theorem lemma4 {P Q : Fin 9 → Point} (hPQ : Normalizes P Q) (hQ : IsOptimal Q) :
+/-- **Equality transfer.** If a configuration `P` is transformed into an optimal configuration
+(a relabelled symmetric image of the construction) by finitely many square symmetries,
+relabellings and feasible shears, then `P` is itself optimal. For the last shear `F_T` that moves
+a point, the configurations `F_t(P')`, `t` between `0` and `T`, stay in the square (the feasible
+parameters form an interval), keep every triangle area, and tend to the optimal configuration;
+this contradicts the strict local optimality `Chamber.strict_local_max`. `P` need not be a
+maximizer. -/
+theorem isOptimal_of_normalizes {P Q : Fin 9 → Point} (hPQ : Normalizes P Q) (hQ : IsOptimal Q) :
     IsOptimal P := by
   induction hPQ using Relation.ReflTransGen.head_induction_on with
   | refl => exact hQ
   | head hstep _ ih => exact isOptimal_of_normStep hstep ih
 
-/-! ### §3. Exhaustiveness -/
+/-! ### Exhaustiveness -/
 
 /-- The five normalized families. -/
 def InFamily (Q : Fin 9 → Point) : Prop :=
@@ -768,28 +744,29 @@ theorem reachesF_of_perm {M : Fin 9 → Point} (σ : Equiv.Perm (Fin 9))
     (h : InFamily (M ∘ σ)) : ∃ Q, ReachesF M Q :=
   ⟨M ∘ σ, .single (.relabel M σ), h⟩
 
-/-- Every configuration of positive least area with no feasible expansion normalizes to a maximizer of the same least area in one of the
-five families: Corollary 2, then the adjacent-corner shear or the selections N, C1, C2 after a
-square symmetry. -/
+/-- Every configuration of positive least area with no feasible expansion normalizes to a
+configuration in one of the five families: `exists_twoContacts_of_noExpand`, then the adjacent-corner
+shear (`BoundaryReduction.exists_typeII_or_typeIII_of_noExpand`) or the selections
+`exists_isN_of_no_corner`, `exists_isC1_of_one_corner`, `exists_isC2_of_opposite_corners` after a square symmetry. -/
 theorem exists_family_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
     (hpos : 0 < minTriangleArea P) : ∃ Q, ReachesF P Q := by
-  obtain ⟨M, hPM, hLR, hBT⟩ := corollary2_of_noExpand hP hpos
+  obtain ⟨M, hPM, hLR, hBT⟩ := exists_twoContacts_of_noExpand hP hpos
   have hM := noExpand_of_normalizes hP hPM
   have hposM : 0 < minTriangleArea M := by rw [minTriangleArea_of_normalizes hPM]; exact hpos
   suffices h : ∃ Q, ReachesF M Q by
     obtain ⟨Q, h1, h4⟩ := h
     exact ⟨Q, hPM.trans h1, h4⟩
-  have hov := claim_overlap_of_noExpand hM hposM
+  have hov := contactOverlap_of_noExpand hM hposM
   have hMg : ∀ g : SquareSymmetry, NoExpand (g.apply ∘ M) := hM.symm
   have hposg : ∀ g : SquareSymmetry, 0 < minTriangleArea (g.apply ∘ M) := fun g => by
     rw [SquareSymmetry.minTriangleArea_comp]; exact hposM
   have hovg : ∀ g : SquareSymmetry, ContactOverlap (g.apply ∘ M) := fun g =>
-    claim_overlap_of_noExpand (hMg g) (hposg g)
+    contactOverlap_of_noExpand (hMg g) (hposg g)
   have adj : ∀ (g : SquareSymmetry) (c c' : Point), g.apply c = (0, 1) → g.apply c' = (1, 1) →
       Occupied M c → Occupied M c' → ∃ Q, ReachesF M Q := by
     intro g c c' hc hc' h h'
     apply reachesF_of_symm g
-    obtain ⟨Q, hQ1, hQ4⟩ := claim_adjacent_shear_of_noExpand (hMg g) (hposg g)
+    obtain ⟨Q, hQ1, hQ4⟩ := exists_typeII_or_typeIII_of_noExpand (hMg g) (hposg g)
       (occupied_symm g hc h) (occupied_symm g hc' h')
     exact ⟨Q, hQ1, Or.inr (Or.inr (Or.inr hQ4))⟩
   have c1via : ∀ (g : SquareSymmetry) (c : Point), g.apply c = (0, 0) → Occupied M c →
@@ -797,7 +774,7 @@ theorem exists_family_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
       ¬ Occupied (g.apply ∘ M) (1, 1) → ∃ Q, ReachesF M Q := by
     intro g c hc h h1 h2 h3
     apply reachesF_of_symm g
-    obtain ⟨σ, hσ⟩ := claim_C1_selection (hMg g).1 (hovg g) (occupied_symm g hc h) ⟨h1, h2, h3⟩
+    obtain ⟨σ, hσ⟩ := exists_isC1_of_one_corner (hMg g).1 (hovg g) (occupied_symm g hc h) ⟨h1, h2, h3⟩
     exact reachesF_of_perm σ (Or.inr (Or.inl hσ))
   by_cases hT : Occupied M (0, 1) ∧ Occupied M (1, 1)
   · exact adj ⟨false, false, false⟩ (0, 1) (1, 1) (by norm_num [SquareSymmetry.apply])
@@ -815,12 +792,12 @@ theorem exists_family_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
   · -- two opposite corners `(0,0)`, `(1,1)`: family C2
     have c10 : ¬ Occupied M (1, 0) := fun h => hBo ⟨c00, h⟩
     have c01 : ¬ Occupied M (0, 1) := fun h => hLe ⟨c00, h⟩
-    obtain ⟨σ, hσ⟩ := claim_C2_selection hM.1 hov c00 c11 ⟨c10, c01⟩
+    obtain ⟨σ, hσ⟩ := exists_isC2_of_opposite_corners hM.1 hov c00 c11 ⟨c10, c01⟩
     exact reachesF_of_perm σ (Or.inr (Or.inr (Or.inl hσ)))
   · -- the single corner `(0,0)`: family C1
     have c10 : ¬ Occupied M (1, 0) := fun h => hBo ⟨c00, h⟩
     have c01 : ¬ Occupied M (0, 1) := fun h => hLe ⟨c00, h⟩
-    obtain ⟨σ, hσ⟩ := claim_C1_selection hM.1 hov c00 ⟨c10, c01, c11⟩
+    obtain ⟨σ, hσ⟩ := exists_isC1_of_one_corner hM.1 hov c00 ⟨c10, c01, c11⟩
     exact reachesF_of_perm σ (Or.inr (Or.inl hσ))
   · -- the single corner `(1,1)`: the half-turn and family C1
     have c10 : ¬ Occupied M (1, 0) := fun h => hRi ⟨h, c11⟩
@@ -832,7 +809,7 @@ theorem exists_family_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
   · by_cases c10 : Occupied M (1, 0) <;> by_cases c01 : Occupied M (0, 1)
     · -- two opposite corners `(1,0)`, `(0,1)`: the reflection `x ↦ 1 - x` and family C2
       apply reachesF_of_symm ⟨false, true, false⟩
-      obtain ⟨σ, hσ⟩ := claim_C2_selection (hMg ⟨false, true, false⟩).1 (hovg _)
+      obtain ⟨σ, hσ⟩ := exists_isC2_of_opposite_corners (hMg ⟨false, true, false⟩).1 (hovg _)
         (occupied_symm _ (by norm_num [SquareSymmetry.apply]) c10)
         (occupied_symm _ (by norm_num [SquareSymmetry.apply]) c01)
         ⟨not_occupied_symm _ (by norm_num [SquareSymmetry.apply]) c00,
@@ -849,7 +826,7 @@ theorem exists_family_of_noExpand {P : Fin 9 → Point} (hP : NoExpand P)
         (not_occupied_symm _ (by norm_num [SquareSymmetry.apply]) c00)
         (not_occupied_symm _ (by norm_num [SquareSymmetry.apply]) c10)
     · -- no occupied corner: family N
-      obtain ⟨g, σ, hσ⟩ := claim_N_selection hM.1 hposM hov ⟨c00, c10, c01, c11⟩ hLR hBT
+      obtain ⟨g, σ, hσ⟩ := exists_isN_of_no_corner hM.1 hposM hov ⟨c00, c10, c01, c11⟩ hLR hBT
       exact reachesF_of_symm g (reachesF_of_perm σ (Or.inl hσ))
 
 /-- Every positive-area maximizer normalizes to a maximizer of the same least area in one of the
@@ -859,21 +836,17 @@ theorem exists_reaches {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < mi
   obtain ⟨Q, hPQ, hfam⟩ := exists_family_of_noExpand (noExpand_of_isMaximizer hP hpos) hpos
   exact ⟨Q, hPQ, isMaximizer_of_normalizes hP hPQ, minTriangleArea_of_normalizes hPQ, hfam⟩
 
-/-- **Theorem 3** (`GLOBAL_STRUCTURE:Theorem3`). Every positive-area maximizer `P` normalizes (by
+/-- **Normalization of a maximizer.** Every positive-area maximizer `P` normalizes (by
 feasible shears, square symmetries and relabellings) to a maximizer `Q` with the same least area
 and the overlap property, lying in one of the five families N, C1, C2, Type II, Type III. Moreover
-`Q` optimal implies `P` optimal (Lemma 4). Hence an upper bound proved on the five families holds
-for all configurations.
-`docs/proof/nine/GLOBAL_STRUCTURE.md`, lines 163-178.
-Uses: GLOBAL_STRUCTURE:Corollary2, BOUNDARY_REDUCTION:claim-adjacent-shear,
-GLOBAL_STRUCTURE:claim-N-selection, GLOBAL_STRUCTURE:claim-C1-selection,
-GLOBAL_STRUCTURE:claim-C2-selection, BOUNDARY_REDUCTION:claim-overlap, GLOBAL_STRUCTURE:Lemma4 -/
-theorem theorem3 {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
+`Q` optimal implies `P` optimal (`isOptimal_of_normalizes`). Hence an upper bound proved on the five families holds
+for all configurations. -/
+theorem normalize {P : Fin 9 → Point} (hP : IsMaximizer P) (hpos : 0 < minTriangleArea P) :
     ∃ Q : Fin 9 → Point, Normalizes P Q ∧ (∀ i, Q i ∈ unitSquare) ∧ IsMaximizer Q ∧
       minTriangleArea Q = minTriangleArea P ∧ (IsOptimal Q → IsOptimal P) ∧
       ContactOverlap Q ∧
       (IsN Q ∨ IsC1 Q ∨ IsC2 Q ∨ IsTypeII Q ∨ IsTypeIII Q) := by
   obtain ⟨Q, hPQ, hQ, hmin, hfam⟩ := exists_reaches hP hpos
-  exact ⟨Q, hPQ, hQ.1, hQ, hmin, lemma4 hPQ, claim_overlap hQ (by rw [hmin]; exact hpos), hfam⟩
+  exact ⟨Q, hPQ, hQ.1, hQ, hmin, isOptimal_of_normalizes hPQ, contactOverlap_of_isMaximizer hQ (by rw [hmin]; exact hpos), hfam⟩
 
 end Heilbronn.Nine.GlobalStructure

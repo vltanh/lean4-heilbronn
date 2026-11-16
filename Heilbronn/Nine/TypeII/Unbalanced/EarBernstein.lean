@@ -3,16 +3,15 @@ module
 public import Heilbronn.Common.Bernstein
 public import Heilbronn.Common.CertNotation
 
-/-! # The Bernstein certificate of `docs/proof/nine/UNBALANCED_OCCUPIED_LOWER_EAR.md` §6
+/-! # A Bernstein certificate for the occupied lower ear
 
-The polynomials `H₁ = Lb²K₁ + (3/1024)E₀` and `H₂ = Lb²K₂` of (18) in the physical variables
-`b = var 0`, `r = var 1`, `u = var 2`, with the endpoint `q₀ = s/b` (branch `-`) or `q₀ = 3s`
-(branch `+`), `s = 8/73`, written structurally with the denominators `b`, `L = 1 - r` cleared:
-`bδ = b·δ`, `bc = b·c`, `LM = L·M = gL - sw`, and `b²F_B, b²F_R, b²F_C` from (15). The eleven rows
-of the table of §6 are the eleven boxes below (`y ∈ [y₀, y₁]` is `r ∈ [7/10 + y₀/5, 7/10 + y₁/5]`,
-`z ∈ [z₀, z₁]` is `u ∈ [3z₀/16, 3z₁/16]`), each checked by `bernsteinBoxCheck` at the degrees of
-the table after (19) with the bound `1/N` of its row (`scripts/nine/unbalanced_ear/bern_check.py`
-recomputes all 1540 coefficients).
+The polynomials `H₁ = Lb²K₁ + (3/1024)E₀` and `H₂ = Lb²K₂` in the variables `b = var 0`,
+`r = var 1`, `u = var 2`, with the endpoint `q₀ = s/b` (branch `-`) or `q₀ = 3s` (branch `+`),
+`s = 8/73`, written structurally with the denominators `b`, `L = 1 - r` cleared: `bδ = b·δ`,
+`bc = b·c`, `LM = L·M = gL - sw`, and `b²F_B, b²F_R, b²F_C`. The eleven theorems `row1`–`row11`
+check by `bernsteinBoxCheck` that `-H₁` or `-H₂` is positive on a box of `(b, r, u)`; on each
+branch the boxes cover `r ∈ [7/10, 9/10]`, `u ∈ [0, 3/16]`, with `b ∈ [1/5, 1/3]` on branch `-`
+and `b ∈ [1/3, 4/11]` on branch `+`.
 -/
 
 @[expose] public section

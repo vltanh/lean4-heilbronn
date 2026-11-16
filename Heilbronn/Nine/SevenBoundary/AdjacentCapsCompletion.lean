@@ -3,30 +3,27 @@ module
 public import Heilbronn.Nine.Setup.Families
 public import Heilbronn.Nine.SevenBoundary.AdjacentCaps
 
-/-! # Completion of all four exterior adjacent-cap words (`docs/proof/nine/SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md`)
+/-! # Completion of all four exterior adjacent-cap words
 
-**Role.** Primary-route component: it closes the two exterior R1 words centred on the bottom and
-top paired positions (blocks `(1,6)` and `(6,1)`) and assembles all four R1 words for
-`SEVEN_BOUNDARY_EXTERIOR_COMPLETION:Theorem1` (lines 32–33, 302).
+The other two exterior radial words of class `R1` (blocks `(1,6)` and `(6,1)`, centred on the
+bottom and top paired positions), and the assembly of all four `R1` words.
 
-**Setting (Theorem 1).** The sharp octagon labels of `SEVEN_BOUNDARY_ADJACENT_CAPS.md` with a side
+**Setting of `minTriangleArea_lt_displaced_side`.** The sharp octagon labels of `SevenBoundaryAdjacentCaps` with a side
 vertex displaced horizontally: `A=(0,a), B=(b,0), C=(c,0), D=(1,d), E=(1,e), F=(f,1), G=(g,1),
-H=(0,h)` with the usual strict side orders (`EightBoundary.EightAnchors a b c d e f g h`), and
-either `H = (t,h)` with `0 ≤ t ≤ b`, `a ≤ 1/2` (family 1, `displacedH`), or `D = (1-t,d)` with
-`t ≥ 0`, `e ≥ 1/2` (family 2, `displacedD`); the cyclic hull order is `A, …, H`. The ninth point
-`O` satisfies `AdjacentCapsHyp` (inside the convex octagon, outside its four side quadrilaterals,
-inside `BDE ∩ DEG`). All doubled areas at least `s = 7/64`.
+H=(0,h)` with the strict side orders (`EightBoundary.EightAnchors a b c d e f g h`), and either
+`H = (t,h)` with `0 ≤ t ≤ b`, `a ≤ 1/2` (family 1, `displacedH`), or `D = (1-t,d)` with `t ≥ 0`,
+`e ≥ 1/2` (family 2, `displacedD`); the cyclic hull order is `A, …, H`. The ninth point `O`
+satisfies `AdjacentCapsHyp` (inside the convex octagon, outside its four side quadrilaterals,
+inside `BDE ∩ DEG`). All doubled areas are at least `s = 7/64`.
 
-**Results.**
-* `claim_R_lt_5_7` (§1, (2)): the scalar bound `R < 5/7`;
-* `theorem1`: both displaced families are impossible (some area `< 7/128`);
-* `claim_four_R1_words` (§4): every exterior word of class R1 gives some area `< 7/128`
+## Main results
+
+* `gap_lt_five_sevenths_of_sum_le`: the scalar bound `R < 5/7`;
+* `minTriangleArea_lt_displaced_side`: both displaced families are impossible (some area `< 7/128`);
+* `minTriangleArea_lt_of_inClass_R1`: every exterior word of class `R1` gives some area `< 7/128`
   (`(3,2,5,4,5,4,3,2)` by `(x,y) ↦ (1-y,x)` with labels `V_{i+6}`, `H' = (1-k,g)`;
   `(5,4,3,2,3,2,5,4)` by `(x,y) ↦ (y,1-x)` with labels `V_{i+2}`, `D' = (k,1-g)`; the other two
-  by `SEVEN_BOUNDARY_ADJACENT_CAPS:claim-two-R1-words`).
-
-Implicit in the manuscript: as in `SEVEN_BOUNDARY_ADJACENT_CAPS.md`, the octagon is strictly
-convex in the stated cyclic order and `O` is inside it ("the interior point `O`", line 11).
+  by `SevenBoundaryAdjacentCaps.minTriangleArea_lt_of_two_R1_words`).
 -/
 
 @[expose] public section
@@ -46,12 +43,9 @@ def displacedH (a b c d e f g h t : ℝ) : Fin 8 → Point :=
 def displacedD (a b c d e f g h t : ℝ) : Fin 8 → Point :=
   ![(0, a), (b, 0), (c, 0), (1 - t, d), (1, e), (f, 1), (g, 1), (0, h)]
 
-/-- **Claim** (`SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION:claim-R<5/7`). With `s = 7/64` and
-`u = s/L`: if `0 < L < 1`, `0 < R < 1`, `B, T > 0`, `R + s/B + s/T ≤ 1` and
-`B + T ≤ 2K₀` with `K₀ = 1 - u - s/R`, then `R < 5/7`.
-`docs/proof/nine/SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md`, lines 28–57.
-Uses: standard fact (harmonic-mean inequality). -/
-theorem claim_R_lt_5_7 {L R B T : ℝ} (hL : 0 < L) (hL1 : L < 1) (hR : 0 < R) (hR1 : R < 1)
+/-- With `s = 7/64` and `u = s/L`: if `0 < L < 1`, `0 < R < 1`, `B, T > 0`,
+`R + s/B + s/T ≤ 1` and `B + T ≤ 2K₀` with `K₀ = 1 - u - s/R`, then `R < 5/7`. -/
+theorem gap_lt_five_sevenths_of_sum_le {L R B T : ℝ} (hL : 0 < L) (hL1 : L < 1) (hR : 0 < R) (hR1 : R < 1)
     (hB : 0 < B) (hT : 0 < T) (hbud : R + 7 / 64 / B + 7 / 64 / T ≤ 1)
     (hBT : B + T ≤ 2 * (1 - 7 / 64 / L - 7 / 64 / R)) :
     R < 5 / 7 := by
@@ -74,14 +68,14 @@ theorem claim_R_lt_5_7 {L R B T : ℝ} (hL : 0 < L) (hL1 : L < 1) (hR : 0 < R) (
   by_contra hc; push Not at hc
   nlinarith
 
-/-! ### The scalar cores of Theorem 1 -/
+/-! ### The scalar cores of `minTriangleArea_lt_displaced_side` -/
 
-/-- The common final contradiction (3): `s + 4sR + 2sR² ≤ R²` is impossible for `0 < R < 5/7`. -/
+/-- The common final contradiction: `s + 4sR + 2sR² ≤ R²` is impossible for `0 < R < 5/7`. -/
 theorem r57_final {R : ℝ} (hR : 0 < R) (hR57 : R < 5 / 7)
     (h : 7 / 64 + 4 * (7 / 64) * R + 2 * (7 / 64) * R ^ 2 ≤ R ^ 2) : False := by
   nlinarith [mul_pos hR (show (0 : ℝ) < 5 / 7 - R by linarith)]
 
-/-- (1)–(2) for family 1 (`H = (t,h)` moves horizontally): `R < 5/7`. -/
+/-- Family 1 (`H = (t,h)` moves horizontally): `R < 5/7` (by `gap_lt_five_sevenths_of_sum_le`). -/
 theorem famH_front {a b c d e f g h t : ℝ} (hA : EightBoundary.EightAnchors a b c d e f g h)
     (ht0 : 0 ≤ t) (ha2 : a ≤ 1 / 2)
     (hABH : 7 / 64 ≤ b * (h - a) + a * t) (hAGH : 7 / 64 ≤ g * (h - a) - (1 - a) * t)
@@ -100,9 +94,9 @@ theorem famH_front {a b c d e f g h t : ℝ} (hA : EightBoundary.EightAnchors a 
   have hat : 0 ≤ (1 - 2 * a) * t := mul_nonneg (by linarith) ht0
   have e5 : 2 * (7 / 64) / (h - a) ≤ b + g := by rw [div_le_iff₀ hL]; linarith
   have e6 : 2 * (7 / 64) / (h - a) = 7 / 64 / (h - a) + 7 / 64 / (h - a) := by ring
-  exact claim_R_lt_5_7 hL (by linarith) hR (by linarith) hB hT (by linarith) (by linarith)
+  exact gap_lt_five_sevenths_of_sum_le hL (by linarith) hR (by linarith) hB hT (by linarith) (by linarith)
 
-/-- The scalar part of family 1 (`H = (t,h)` moves horizontally), §2. -/
+/-- The scalar part of family 1 (`H = (t,h)` moves horizontally). -/
 theorem famH_core {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnchors a b c d e f g h)
     (ht0 : 0 ≤ t) (htb : t ≤ b) (ha2 : a ≤ 1 / 2) (hdy : d < y) (hye : y < e)
     (hABH : 7 / 64 ≤ b * (h - a) + a * t) (hAGH : 7 / 64 ≤ g * (h - a) - (1 - a) * t)
@@ -121,7 +115,7 @@ theorem famH_core {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnchors
   have hgs : 7 / 64 ≤ g := by
     linarith [mul_nonneg (show (0 : ℝ) ≤ 1 - a by linarith) ht0,
       mul_nonneg hg.le (show (0 : ℝ) ≤ 1 - (h - a) by linarith)]
-  -- (4) and (5)
+  -- the lower bound on `(1 + R)x` and the upper bound on `Rx`
   have hW : 7 / 64 * (e - d) ≤ b * (e - y) + g * (y - d) := by
     linarith [mul_le_mul_of_nonneg_right hbs (show (0 : ℝ) ≤ e - y by linarith),
       mul_le_mul_of_nonneg_right hgs (show (0 : ℝ) ≤ y - d by linarith)]
@@ -136,7 +130,7 @@ theorem famH_core {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnchors
   linarith [mul_le_mul_of_nonneg_left h3 hR.le,
     mul_le_mul_of_nonneg_left h4 (show (0 : ℝ) ≤ 1 + (e - d) by linarith)]
 
-/-- The first half of family 2 (`D = (1-t,d)` moves horizontally): (1)–(2), `R < 5/7`. -/
+/-- Family 2 (`D = (1-t,d)` moves horizontally): `R < 5/7` (by `gap_lt_five_sevenths_of_sum_le`). -/
 theorem famD_front {a b c d e f g h t : ℝ} (hA : EightBoundary.EightAnchors a b c d e f g h)
     (ht0 : 0 ≤ t) (he2 : 1 / 2 ≤ e)
     (hABH : 7 / 64 ≤ b * (h - a)) (hAGH : 7 / 64 ≤ g * (h - a))
@@ -155,10 +149,10 @@ theorem famD_front {a b c d e f g h t : ℝ} (hA : EightBoundary.EightAnchors a 
   have e5 : 2 * (7 / 64) / (h - a) ≤ b + g := by rw [div_le_iff₀ hL]; linarith
   have e6 : 2 * (7 / 64) / (h - a) = 7 / 64 / (h - a) + 7 / 64 / (h - a) := by ring
   have e7 : 2 * (7 / 64) / (e - d) = 7 / 64 / (e - d) + 7 / 64 / (e - d) := by ring
-  exact claim_R_lt_5_7 hL (by linarith) hR (by linarith) hB hT (by linarith) (by linarith)
+  exact gap_lt_five_sevenths_of_sum_le hL (by linarith) hR (by linarith) hB hT (by linarith) (by linarith)
 
-/-- (6)–(8) of family 2: with `X = 1 - x`, `z = e - y`, the CF test gives
-`RX ≥ s(1+R) + tz`, then BOE gives `(1-b)z > s(2+R)` and the displacement sign `z > R(1-e)`. -/
+/-- Family 2: with `X = 1 - x`, `z = e - y`, the `CF` test gives `RX ≥ s(1+R) + tz`, then `BOE`
+gives `(1-b)z > s(2+R)` and the displacement sign `z > R(1-e)`. -/
 theorem famD_sign {b c d e f t x y : ℝ} (hb : 7 / 64 < b) (hb1 : b < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
     (ht0 : 0 ≤ t) (hye : y < e) (hy0 : 0 < y)
     (hCDE : 7 / 64 ≤ (1 - c) * (e - d) - e * t)
@@ -175,7 +169,7 @@ theorem famD_sign {b c d e f t x y : ℝ} (hb : 7 / 64 < b) (hb1 : b < 1) (hd : 
       mul_le_mul_of_nonneg_right hfR (show (0 : ℝ) ≤ y by linarith)]
   have htz : 0 ≤ t * (e - y) := mul_nonneg ht0 (by linarith)
   refine ⟨h6, ?_⟩
-  -- (7): `(1-b) z > s(2+R)`
+  -- `(1-b) z > s(2+R)`
   have h7 : 7 / 64 * (2 + (e - d)) < (1 - b) * (e - y) := by
     have k1 : (e - d) * (7 / 64) ≤ (e - d) * ((1 - b) * (e - y) - e * (1 - x)) :=
       mul_le_mul_of_nonneg_left (by linarith) hR.le
@@ -186,7 +180,7 @@ theorem famD_sign {b c d e f t x y : ℝ} (hb : 7 / 64 < b) (hb1 : b < 1) (hd : 
     have k4 : (e - d) * (7 / 64 * (2 + (e - d))) < (e - d) * ((1 - b) * (e - y)) := by
       linarith
     exact lt_of_mul_lt_mul_left k4 hR.le
-  -- (8): `z > R(1-e)`
+  -- `z > R(1-e)`
   by_contra hc'; push Not at hc'
   have k1 : (1 - b) * (e - y) ≤ (1 - b) * ((e - d) * (1 - e)) :=
     mul_le_mul_of_nonneg_left hc' (by linarith)
@@ -195,7 +189,7 @@ theorem famD_sign {b c d e f t x y : ℝ} (hb : 7 / 64 < b) (hb1 : b < 1) (hd : 
     exact mul_le_mul_of_nonneg_left (by linarith) hR.le
   nlinarith [sq_nonneg (e - d - 25 / 57)]
 
-/-- The scalar part of family 2 (`D = (1-t,d)` moves horizontally), §3. -/
+/-- The scalar part of family 2 (`D = (1-t,d)` moves horizontally). -/
 theorem famD_core {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnchors a b c d e f g h)
     (ht0 : 0 ≤ t) (he2 : 1 / 2 ≤ e) (hdy : d < y) (hye : y < e)
     (hABH : 7 / 64 ≤ b * (h - a)) (hAGH : 7 / 64 ≤ g * (h - a))
@@ -222,7 +216,7 @@ theorem famD_core {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnchors
     mul_le_mul_of_nonneg_left h6 (show (0 : ℝ) ≤ 1 + (e - d) by linarith),
     mul_lt_mul_of_pos_left hWs hR]
 
-/-! ### Theorem 1 -/
+/-! ### The two displaced families -/
 
 /-- A point strictly inside a counterclockwise triangle `pqr` whose vertex `p` is strictly lowest
 is strictly above `p`. -/
@@ -269,7 +263,7 @@ theorem tri_right {p q r O : Point} (h1 : 0 < sarea p q O) (h2 : 0 < sarea q r O
     mul_nonpos_of_nonneg_of_nonpos (by linarith) (by linarith)
   nlinarith [mul_pos h3 (sub_pos.2 hq), mul_pos h1 (sub_pos.2 hr)]
 
-theorem theorem1_famH {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnchors a b c d e f g h)
+theorem minTriangleArea_lt_displacedH {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnchors a b c d e f g h)
     (ht0 : 0 ≤ t) (htb : t ≤ b) (ha2 : a ≤ 1 / 2)
     (hH : AdjacentCapsHyp (displacedH a b c d e f g h t) (x, y)) :
     minTriangleArea (octConfig (displacedH a b c d e f g h t) (x, y)) < 7 / 128 := by
@@ -296,7 +290,7 @@ theorem theorem1_famH {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnc
   exact famH_core (x := x) hA ht0 htb ha2 hdy hye (by linarith) (by linarith) (by linarith)
     (by linarith) (by linarith) (by linarith) (by linarith) (by linarith) (by linarith)
 
-theorem theorem1_famD {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnchors a b c d e f g h)
+theorem minTriangleArea_lt_displacedD {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnchors a b c d e f g h)
     (ht0 : 0 ≤ t) (he2 : 1 / 2 ≤ e)
     (hH : AdjacentCapsHyp (displacedD a b c d e f g h t) (x, y)) :
     minTriangleArea (octConfig (displacedD a b c d e f g h t) (x, y)) < 7 / 128 := by
@@ -323,24 +317,22 @@ theorem theorem1_famD {a b c d e f g h t x y : ℝ} (hA : EightBoundary.EightAnc
   exact famD_core (x := x) hA ht0 he2 hdy hye (by linarith) (by linarith) (by linarith)
     (by linarith) (by linarith) (by linarith) (by linarith) (by linarith) (by linarith)
 
-/-- **Theorem 1** (`SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION:Theorem1`). With the usual strict side
-orders and `O` as in `AdjacentCapsHyp`, some triangle has area less than `7/128` in each family:
-(1) `H = (t,h)` with `0 ≤ t ≤ b` and `a ≤ 1/2`; (2) `D = (1-t,d)` with `t ≥ 0` and `e ≥ 1/2`.
-`docs/proof/nine/SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md`, lines 16–206.
-Uses: SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION:claim-R<5/7. -/
-theorem theorem1 {a b c d e f g h t : ℝ} (hA : EightBoundary.EightAnchors a b c d e f g h)
+/-- With the strict side orders and `O` as in `AdjacentCapsHyp`, some triangle has area less than
+`7/128` in each family: `H = (t,h)` with `0 ≤ t ≤ b` and `a ≤ 1/2`; and `D = (1-t,d)` with
+`t ≥ 0` and `e ≥ 1/2`. -/
+theorem minTriangleArea_lt_displaced_side {a b c d e f g h t : ℝ} (hA : EightBoundary.EightAnchors a b c d e f g h)
     {O : Point} :
     (0 ≤ t → t ≤ b → a ≤ 1 / 2 → AdjacentCapsHyp (displacedH a b c d e f g h t) O →
         minTriangleArea (octConfig (displacedH a b c d e f g h t) O) < 7 / 128) ∧
       (0 ≤ t → 1 / 2 ≤ e → AdjacentCapsHyp (displacedD a b c d e f g h t) O →
         minTriangleArea (octConfig (displacedD a b c d e f g h t) O) < 7 / 128) := by
   obtain ⟨x, y⟩ := O
-  exact ⟨fun ht0 htb ha2 hH => theorem1_famH hA ht0 htb ha2 hH,
-    fun ht0 he2 hH => theorem1_famD hA ht0 he2 hH⟩
+  exact ⟨fun ht0 htb ha2 hH => minTriangleArea_lt_displacedH hA ht0 htb ha2 hH,
+    fun ht0 he2 hH => minTriangleArea_lt_displacedD hA ht0 he2 hH⟩
 
-/-! ### §4. The four exterior R1 words -/
+/-! ### The four exterior `R1` words -/
 
-/-- The four words of class R1. -/
+/-- The four words of class `R1`. -/
 theorem r1_words {w : Word} (hc : InClass .R1 w) :
     w = ![3, 2, 3, 2, 5, 4, 5, 4] ∨ w = ![5, 4, 5, 4, 3, 2, 3, 2] ∨
       w = ![3, 2, 5, 4, 5, 4, 3, 2] ∨ w = ![5, 4, 3, 2, 3, 2, 5, 4] := by
@@ -355,7 +347,7 @@ variable {a h b c d e f g k x y : ℝ}
 theorem four_R1_wordH (hN : SevenNormal a h b c d e f) (hX : FarCapPoint e f (g, k))
     (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) (x, y) ![3, 2, 5, 4, 5, 4, 3, 2])
     (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y))) : False := by
-  have hkh := SevenBoundaryTopCapRight.claim_k_gt_h hN hX (hmin.trans SevenBoundaryCaps.min₁_left)
+  have hkh := SevenBoundaryTopCapRight.h_lt_k hN hX (hmin.trans SevenBoundaryCaps.min₁_left)
   have H := SevenBoundaryTopCapRadial.convHyp hN hX hkh
   have f1 := SevenBoundaryTopCapRadial.cvx_XFH H
   have f2 := SevenBoundaryTopCapRadial.cvx_EXF H
@@ -408,7 +400,7 @@ theorem four_R1_wordH (hN : SevenNormal a h b c d e f) (hX : FarCapPoint e f (g,
 theorem four_R1_wordD (hN : SevenNormal a h b c d e f) (hX : FarCapPoint e f (g, k))
     (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) (x, y) ![5, 4, 3, 2, 3, 2, 5, 4])
     (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y))) : False := by
-  have hkh := SevenBoundaryTopCapRight.claim_k_gt_h hN hX (hmin.trans SevenBoundaryCaps.min₁_left)
+  have hkh := SevenBoundaryTopCapRight.h_lt_k hN hX (hmin.trans SevenBoundaryCaps.min₁_left)
   have H := SevenBoundaryTopCapRadial.convHyp hN hX hkh
   have f1 := SevenBoundaryTopCapRadial.cvx_BCD H
   have f2 := SevenBoundaryTopCapRadial.cvx_ABC H
@@ -459,21 +451,15 @@ theorem four_R1_wordD (hN : SevenNormal a h b c d e f) (hX : FarCapPoint e f (g,
 
 end Exterior
 
-/-- **Claim** (`SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION:claim-four-R1-words`). In the
-seven-boundary exterior case (octagon `A, B, C, D, E, X, F, H`), every radial word of `P` in class
-R1 gives some triangle of area less than `7/128`.
-`docs/proof/nine/SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION.md`, lines 208–233.
-Uses: SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION:Theorem1,
-SEVEN_BOUNDARY_ADJACENT_CAPS:claim-two-R1-words, SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-k-gt-h,
-SEVEN_BOUNDARY_TOP_CAP_RADIAL:claim-octagon-cover, RADIAL_CATALOGUE:claim-symmetry-action,
-RADIAL_CATALOGUE:claim-eight-classes. -/
-theorem claim_four_R1_words {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the seven-boundary exterior case (octagon `A, B, C, D, E, X, F, H`), every radial word of
+`P` in class `R1` gives some triangle of area less than `7/128`. -/
+theorem minTriangleArea_lt_of_inClass_R1 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P) {w : Word}
     (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) P w) (hc : InClass .R1 w) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) P) < 7 / 128 := by
   rcases r1_words hc with h1 | h1 | h1 | h1
-  · exact claim_two_R1_words hN hX hP hw (Or.inl h1)
-  · exact claim_two_R1_words hN hX hP hw (Or.inr h1)
+  · exact minTriangleArea_lt_of_two_R1_words hN hX hP hw (Or.inl h1)
+  · exact minTriangleArea_lt_of_two_R1_words hN hX hP hw (Or.inr h1)
   · by_contra hcon; push Not at hcon
     obtain ⟨x, y⟩ := P
     subst h1

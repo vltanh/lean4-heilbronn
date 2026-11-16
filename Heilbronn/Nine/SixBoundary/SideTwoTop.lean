@@ -3,36 +3,32 @@ module
 public import Heilbronn.Nine.SixBoundary.SideTwoTopModel
 public import Heilbronn.Nine.SixBoundary.SideTwoTopHull
 
-/-! # One side-cap point and two opposite-cap points in N (`docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`)
+/-! # One side-cap point and two opposite-cap points in N
 
-**Role.** Primary route: closes the six-boundary occupancy N6-07 `(n_L,n_T,n_R;n_I) = (0,2,1;0)`
-of `docs/proof/nine/UNRESTRICTED.md`, Section 4 (strict bound; its transpose `(1,2,0;0)` by
-`theorem1_transposed`).
+The six-boundary case with one free point in the side cap `R` and two in the opposite cap `T`
+(strict bound; the transposed placement, with the left cap, by `sideTwoTop_lt_transposed`).
 
-**Setting.** The N anchors (`NAnchors`, (1)); one free point `X = (x,y)` in the side cap
+**Setting.** The N anchors (`NAnchors`); one free point `X = (x,y)` in the side cap
 `R = CD(1,0)` (`InCapR`) and the two others in the opposite cap `T = DF(1,1)` (`InCapT`); the
 cap corners are virtual, square-side contacts allowed. Contradiction hypothesis: every actual
 doubled area is at least `s = 8/73` (`4/73 ≤ minTriangleArea`). Notation `L = h-a`, `M = c-b`,
-`δ = (1-d)(1-f)`. Section 1 shows that the hull of `D, F` and the two cap points is a triangle
-`DEF` with outer vertex `E = (e_x,e_y)` and inner point `O = (o_x,o_y) ∈ int(DEF)`; the later
-claims are stated for the configuration `nConfig a h b c d f X E O` with this naming. The full
-hull is then the octagon `(V₀,…,V₇) = (A,B,C,X,D,E,F,H)` (`octagon`) with `O` inside.
+`δ = (1-d)(1-f)`. `exists_triangular_cap` shows that the hull of `D, F` and the two cap points is
+a triangle `DEF` with outer vertex `E = (e_x,e_y)` and inner point `O = (o_x,o_y) ∈ int(DEF)`;
+the later results are stated for the configuration `nConfig a h b c d f X E O` with this naming.
+The full hull is then the octagon `(V₀,…,V₇) = (A,B,C,X,D,E,F,H)` (`octagon`) with `O` inside.
 
 **Results.**
-* `theorem1`: `minTriangleArea < 4/73 < A₀` throughout the occupancy (both cap hulls, square-side
-  contacts included); `theorem1_transposed`: the left-cap placement.
-* `claim_anchor` (2), `claim_side` (3)–(4), `claim_delta` (5).
-* `claim_triangular_cap` (6): the cap hull is a triangle `DEF` with `O` inside, `[DEF] ≥ 3s`,
-  `δ ≥ 3s`.
-* `claim_hull` (7): the octagon is strictly convex with `O` inside.
-* `claim_bounds` (8)–(12): the bounds behind the 27 affine factors (13).
-* `claim_words` (16): exactly six words with `r₄ = 1`.
-* `claim_certificate`: each of the six words is impossible (six fixed cubics, 515 terms).
+* `sideTwoTop_lt`: `minTriangleArea < 4/73 < A₀` throughout this placement (both cap hulls,
+  square-side contacts included); `sideTwoTop_lt_transposed`: the left-cap placement.
+* `side_bounds`, `delta_lt`: the anchor and side-point bounds, and `δ < 7/16 < 4s`.
+* `exists_triangular_cap`: the cap hull is a triangle `DEF` with `O` inside, `[DEF] ≥ 3s`,
+  `δ ≥ 3s` (this includes that `D` and `F` are vertices of the four-point cap hull).
+* `octagon_hull`: the octagon is strictly convex with `O` inside.
+* `fam_bounds` (with `cap_bounds`, `inner_bounds`): the bounds behind the 27 affine factors.
+* `exists_capWord`: the word of `O` is one of six words, all with `r₄ = 1`.
+* `not_hasRadialWord_capWords`: each of the six words is impossible (six fixed cubics, 515 terms).
 
-Implicit in the manuscript: the claims are stated under `4/73 ≤ minTriangleArea`. Naming the
-triangular cap hull `DEF` presumes that `D` and `F` are vertices of the four-point cap hull
-(lines 89-99); this is argued in `SIX_BOUNDARY_TWO_TOP_COMPLETION.md` (lines 26-30) and is part of
-`claim_triangular_cap` here.
+All claims are stated under `4/73 ≤ minTriangleArea`.
 -/
 
 @[expose] public section
@@ -42,17 +38,17 @@ namespace Heilbronn.Nine.SixBoundarySideTwoTop
 
 open Heilbronn.Nine.SixBoundary SixRadial Cover Cert Cert.Expr
 
-/-- The full hull (7): the octagon `(V₀, …, V₇) = (A, B, C, X, D, E, F, H)`. -/
+/-- The full hull: the octagon `(V₀, …, V₇) = (A, B, C, X, D, E, F, H)`. -/
 def octagon (a h b c d f : ℝ) (X E : Point) : Fin 8 → Point :=
   ![ptA a, ptB b, ptC c, X, ptD d, E, ptF f, ptH h]
 
-/-- The occupancy N6-07 after Section 1: N anchors, `X` in the side cap `CD(1,0)`, `E, O` in the
-opposite cap `DF(1,1)` with `O` strictly inside the triangle `DEF`. -/
+/-- The side-two-top placement after naming the cap points: N anchors, `X` in the side cap
+`CD(1,0)`, `E, O` in the opposite cap `DF(1,1)` with `O` strictly inside the triangle `DEF`. -/
 def SideTwoTopFamily (a h b c d f : ℝ) (X E O : Point) : Prop :=
   NAnchors a h b c d f ∧ InCapR c d X ∧ InCapT d f E ∧ InCapT d f O ∧
     InTriangle O (ptD d) E (ptF f)
 
-/-- The six words (16) of `O`. -/
+/-- The six possible radial words of `O`. -/
 def capWords : Finset (Fin 8 → Fin 8) :=
   {![4, 3, 2, 1, 1, 6, 6, 5], ![4, 3, 2, 2, 1, 5, 6, 5], ![4, 3, 3, 2, 1, 4, 6, 5],
     ![4, 4, 3, 2, 1, 3, 6, 5], ![5, 4, 3, 2, 1, 1, 6, 6], ![5, 4, 3, 2, 1, 2, 6, 5]}
@@ -251,7 +247,7 @@ theorem fam_bounds (hfam : SideTwoTopFamily a h b c d f X E O)
 and another one. -/
 theorem fam_hull (hfam : SideTwoTopFamily a h b c d f X E O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X E O)) :
-    IsConvexCCW (octagon a h b c d f X E) ∧ InPolygon (octagon a h b c d f X E) O ∧
+    IsConvexPolygon (octagon a h b c d f X E) ∧ InPolygon (octagon a h b c d f X E) O ∧
       ∀ i j : Fin 8, i ≠ j →
         sarea (octagon a h b c d f X E i) (octagon a h b c d f X E j) O ≠ 0 := by
   obtain ⟨S, C, I, hABC, hABH, hBCX, hCXD, hDEF⟩ := fam_bounds hfam hmin
@@ -262,7 +258,7 @@ theorem fam_hull (hfam : SideTwoTopFamily a h b c d f X E O)
     by linarith [S.2.2.2.2.2.2.2.1], by linarith, y0, by linarith [S.2.2.2.2.2.2.2.2.2.1],
     by linarith, by linarith [C.2.2.2.1], by linarith, by linarith [C.2.2.2.2], by linarith,
     by linarith⟩
-  have hconv : IsConvexCCW (octagon a h b c d f X E) := by
+  have hconv : IsConvexPolygon (octagon a h b c d f X E) := by
     have := H.convex (fun i j k hij hjk => by
       rw [octV_eq (O := O), octV_eq (O := O), octV_eq (O := O)]
       exact cfg_area hmin (by omega) (by omega) (by omega) (fun e => by
@@ -387,9 +383,8 @@ section Claims
 variable {a h b c d f : ℝ} {X Y Z : Point}
 
 set_option linter.unusedVariables false in
-/-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-delta`). Equation (5): `δ = (1-d)(1-f) < 7/16 < 4s`
-(`f ≥ b > 1/8`, `d > 1/2`). `docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 83-87. -/
-theorem claim_delta (hN : NAnchors a h b c d f)
+/-- `δ = (1-d)(1-f) < 7/16 < 4s` (`f ≥ b > 1/8`, `d > 1/2`). -/
+theorem delta_lt (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapT d f Y) (hZ : InCapT d f Z)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     (1 - d) * (1 - f) < 7 / 16 ∧ (7 / 16 : ℝ) < 4 * (8 / 73) := by
@@ -404,17 +399,16 @@ theorem claim_delta (hN : NAnchors a h b c d f)
   have := mul_lt_mul_of_pos_right (show 1 - d < 1 / 2 by linarith) (show (0 : ℝ) < 7 / 8 by norm_num)
   linarith
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-triangular-cap`). Equation (6): the hull of `D, F`
-and the two cap points is a triangle (a quadrilateral hull would force `δ ≥ 4s` by the four-point
-endpoint lemma, contrary to (5)): naming its outer vertex `E` and inner point `O`,
-`O ∈ int(DEF)`, `[DEF] ≥ 3s` and `δ ≥ 3s`. `docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 89-99.
-Uses: TYPE_II:FourPointEndpointLemma, SIX_BOUNDARY_SIDE_TWO_TOP:claim-delta -/
-theorem claim_triangular_cap (hN : NAnchors a h b c d f)
+/-- The hull of `D, F` and the two cap points is a triangle (a quadrilateral hull would force
+`δ ≥ 4s` by the four-point endpoint lemma `TypeII.fourPointEndpointLemma`, contrary to
+`delta_lt`): naming its outer vertex `E` and inner point `O`, `O ∈ int(DEF)`, `[DEF] ≥ 3s`
+and `δ ≥ 3s`. -/
+theorem exists_triangular_cap (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapT d f Y) (hZ : InCapT d f Z)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     ∃ E O : Point, ((E = Y ∧ O = Z) ∨ (E = Z ∧ O = Y)) ∧ InTriangle O (ptD d) E (ptF f) ∧
       3 * (8 / 73) ≤ sarea (ptD d) E (ptF f) ∧ 3 * (8 / 73) ≤ (1 - d) * (1 - f) := by
-  have hdel := (claim_delta hN hX hY hZ hmin).1
+  have hdel := (delta_lt hN hX hY hZ hmin).1
   have hN' := hN
   obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN'
   have hd1 : d < 1 := by linarith
@@ -501,26 +495,23 @@ theorem claim_triangular_cap (hN : NAnchors a h b c d f)
       funext m; fin_cases m <;> rfl
     exact TypeII.triangularHull_comp_perm _ _ (by rw [e]; exact ht)
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-hull`). The full hull is the strictly convex
-octagon `(A, B, C, X, D, E, F, H)` (7), and `O` is its sole interior point.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 101-112. -/
-theorem claim_hull {X E O : Point} (hfam : SideTwoTopFamily a h b c d f X E O)
+/-- The full hull is the strictly convex octagon `(A, B, C, X, D, E, F, H)` (`octagon`), and `O`
+is its sole interior point. -/
+theorem octagon_hull {X E O : Point} (hfam : SideTwoTopFamily a h b c d f X E O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X E O)) :
-    IsConvexCCW (octagon a h b c d f X E) ∧ InPolygon (octagon a h b c d f X E) O :=
+    IsConvexPolygon (octagon a h b c d f X E) ∧ InPolygon (octagon a h b c d f X E) O :=
   ⟨(fam_hull hfam hmin).1, (fam_hull hfam hmin).2.1⟩
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-words`), restated. The radial word of `O` on the
-octagon (14)–(15), with `r₄ = 1` (`O` inside `DEF`), is one of the six words (16). (The manuscript
-also states that these are all the solutions; here the enumeration `Model.enumTree`, checked by
-the kernel, shows that every word of `O` is one of them, which is what the proof uses.)
-`docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 181-213. -/
-theorem claim_words :
+/-- The radial word of `O` on the octagon, with `r₄ = 1` (`O` inside `DEF`), is one of the six
+words of `capWords`. (The enumeration `Model.enumTree`, checked by the kernel, shows that every
+word of `O` is one of them; that these six are all the solutions is not used.) -/
+theorem exists_capWord :
     ∀ {a h b c d f : ℝ} {X E O : Point}, SideTwoTopFamily a h b c d f X E O →
       4 / 73 ≤ minTriangleArea (nConfig a h b c d f X E O) →
       ∃ r ∈ capWords, HasRadialWord (octagon a h b c d f X E) O (fun i => (r i : ℕ)) := by
   intro a h b c d f X E O hfam hmin
   obtain ⟨hconv, hpoly, hgen⟩ := fam_hull hfam hmin
-  obtain ⟨r, hr, hrw⟩ := claim_radial_word _ O (by norm_num) hconv hpoly hgen
+  obtain ⟨r, hr, hrw⟩ := exists_radialWord _ O (by norm_num) hconv hpoly hgen
   have H := fam_hyp hfam hmin hr hrw
   obtain ⟨w, hw, hwr⟩ := enum_sound H Model.enum_ok (by decide) hr
     (fun i => by have := (hrw.1 i).2; simp only [Model.pkg]; omega)
@@ -536,18 +527,12 @@ theorem claim_words :
   · exact ⟨![5, 4, 3, 2, 1, 1, 6, 6], by decide, (key ![5, 4, 3, 2, 1, 1, 6, 6] (by decide)) ▸ hr⟩
   · exact ⟨![5, 4, 3, 2, 1, 2, 6, 5], by decide, (key ![5, 4, 3, 2, 1, 2, 6, 5] (by decide)) ▸ hr⟩
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-certificate`). The certificate package
-(`docs/proof/nine/six_boundary_side_two_top_certificates.json`, verified by
-`docs/proof/nine/check_six_boundary_side_two_top.py`): each of the six words (16) is impossible. In the
-manuscript each word has one fixed rational cubic (scale 4096; 515 positive terms in total) in
-the 27 affine factors (13) and the 85 quadratic costs (the 84 signed areas minus `s` or `3s`, and
-`δ - 3s`), nonnegative on its word, with cube bound below `-3/4` (greatest
-`-11150846883847/11243126587392`). Here the six certificates are checked by the kernel on the
-atoms of `Model.pkg` (`Model.ok0`, …, `Model.ok5`). `docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`,
-lines 210-254.
-Uses: SIX_BOUNDARY_SIDE_TWO_TOP:claim-anchor, SIX_BOUNDARY_SIDE_TWO_TOP:claim-side,
-SIX_BOUNDARY_SIDE_TWO_TOP:claim-triangular-cap, SIX_BOUNDARY_SIDE_TWO_TOP:claim-bounds -/
-theorem claim_certificate {X E O : Point}
+/-- Each of the six words of `capWords` is impossible. Each word is excluded by one fixed
+rational cubic (scale 4096; 515 positive terms in total) in the 27 affine factors and the 85
+quadratic costs (the 84 signed areas minus `s` or `3s`, and `δ - 3s`), nonnegative on its word,
+with cube bound below `-3/4` (greatest `-11150846883847/11243126587392`). The six certificates
+are checked by the kernel on the atoms of `Model.pkg` (`Model.ok0`, …, `Model.ok5`). -/
+theorem not_hasRadialWord_capWords {X E O : Point}
     (hfam : SideTwoTopFamily a h b c d f X E O)
     (hmin : 4 / 73 ≤ minTriangleArea (nConfig a h b c d f X E O)) :
     ∀ r ∈ capWords, ¬ HasRadialWord (octagon a h b c d f X E) O (fun i => (r i : ℕ)) := by
@@ -567,22 +552,16 @@ theorem claim_certificate {X E O : Point}
   · exact leaf_false hfam hmin hrad (by decide) (w := [5, 4, 3, 2, 1, 2, 6, 5]) (by decide)
       (by intro i hi; interval_cases i <;> rfl)
 
-/-- **Theorem 1** (`SIX_BOUNDARY_SIDE_TWO_TOP:Theorem1`). Every configuration of N6-07 (N
-anchors, one free point in the side cap `CD(1,0)`, two free points in the opposite cap
-`DF(1,1)`; square-side contacts and both possible hulls of the four opposite-cap points included)
-has minimum ordinary triangle area strictly below `4/73 < A₀`.
-`docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 21-31, 252-254.
-Uses: SIX_BOUNDARY_SIDE_TWO_TOP:claim-anchor, SIX_BOUNDARY_SIDE_TWO_TOP:claim-side,
-SIX_BOUNDARY_SIDE_TWO_TOP:claim-delta, SIX_BOUNDARY_SIDE_TWO_TOP:claim-triangular-cap,
-SIX_BOUNDARY_SIDE_TWO_TOP:claim-hull, SIX_BOUNDARY_SIDE_TWO_TOP:claim-bounds,
-SIX_BOUNDARY_SIDE_TWO_TOP:claim-words, SIX_BOUNDARY_SIDE_TWO_TOP:claim-certificate -/
-theorem theorem1 (hN : NAnchors a h b c d f)
+/-- Every configuration with N anchors, one free point in the side cap `CD(1,0)` and two free
+points in the opposite cap `DF(1,1)` (square-side contacts and both possible hulls of the four
+opposite-cap points included) has minimum ordinary triangle area strictly below `4/73 < A₀`. -/
+theorem sideTwoTop_lt (hN : NAnchors a h b c d f)
     (hX : InCapR c d X) (hY : InCapT d f Y) (hZ : InCapT d f Z) :
     minTriangleArea (nConfig a h b c d f X Y Z) < 4 / 73 ∧ (4 / 73 : ℝ) < A₀ := by
   refine ⟨?_, by linarith [A₀_bounds.2.1]⟩
   by_contra hge
   push Not at hge
-  obtain ⟨E, O, hEO, hin, -, -⟩ := claim_triangular_cap hN hX hY hZ hge
+  obtain ⟨E, O, hEO, hin, -, -⟩ := exists_triangular_cap hN hX hY hZ hge
   have key : SideTwoTopFamily a h b c d f X E O ∧
       4 / 73 ≤ minTriangleArea (nConfig a h b c d f X E O) := by
     rcases hEO with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
@@ -591,20 +570,17 @@ theorem theorem1 (hN : NAnchors a h b c d f)
       rw [show nConfig a h b c d f X E O = nConfig a h b c d f X O E ∘ Equiv.swap 7 8 by
         funext i; fin_cases i <;> rfl, minTriangleArea_comp_perm]
       exact hge
-  obtain ⟨r, hr, hrad⟩ := claim_words key.1 key.2
-  exact claim_certificate key.1 key.2 r hr hrad
+  obtain ⟨r, hr, hrad⟩ := exists_capWord key.1 key.2
+  exact not_hasRadialWord_capWords key.1 key.2 r hr hrad
 
-/-- **Claim** (`SIX_BOUNDARY_SIDE_TWO_TOP:claim-transposed`). Theorem 1 for the transposed
-placement (lines 14-17, "transposing the square if necessary"): the side point in the left cap
-`FH(0,1)`. `docs/proof/nine/SIX_BOUNDARY_SIDE_TWO_TOP.md`, lines 14-17.
-Uses: SIX_BOUNDARY_SIDE_TWO_TOP:Theorem1, SIX_BOUNDARY_HULL:claim-transposition -/
-theorem theorem1_transposed (hN : NAnchors a h b c d f)
+/-- `sideTwoTop_lt` for the transposed placement: the side point in the left cap `FH(0,1)`. -/
+theorem sideTwoTop_lt_transposed (hN : NAnchors a h b c d f)
     (hX : InCapL f h X) (hY : InCapT d f Y) (hZ : InCapT d f Z) :
     minTriangleArea (nConfig a h b c d f X Y Z) < 4 / 73 := by
-  have T := claim_transposition a h b c d f X Y Z
-  have k := theorem1 (T.1.1 hN) (T.2.2.2.2.2.2.1.1 hX)
-    ((claim_transposition a h b c d f Y X Z).2.2.2.2.2.2.2.1.1 hY)
-    ((claim_transposition a h b c d f Z X Y).2.2.2.2.2.2.2.1.1 hZ)
+  have T := transpose_invariant a h b c d f X Y Z
+  have k := sideTwoTop_lt (T.1.1 hN) (T.2.2.2.2.2.2.1.1 hX)
+    ((transpose_invariant a h b c d f Y X Z).2.2.2.2.2.2.2.1.1 hY)
+    ((transpose_invariant a h b c d f Z X Y).2.2.2.2.2.2.2.1.1 hZ)
   rw [T.2.2.1] at k
   exact k.1
 

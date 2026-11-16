@@ -2,13 +2,13 @@ module
 
 public import Heilbronn.Nine.C1.TwoLower.Bern
 
-/-! # The Bernstein certificate of `docs/proof/nine/C1_TOP_CAP_CONVEX_PAIR.md` §4
+/-! # The Bernstein certificate of the C1 top-cap convex pair
 
-In the reduced parameters `(h, u, v)` = `var 0, 1, 2` of (9) (`hc = ρ = 49/60`, `u = hf`,
+In the reduced parameters `(h, u, v)` = `var 0, 1, 2` (`hc = ρ = 49/60`, `u = hf`,
 `v = cd`): `hA`, `U`, `hΔ` and the polynomials `P = hB` (degree `(2,2,2)`) and
-`Q = h²G` (degree `(4,4,4)`). On the box (10) `ρ ≤ h ≤ 113/125`, `s ≤ u, v ≤ ρ`, a labelled
-subdivision tree (36 leaves, depth 9, found by `scripts/nine/c1_two_lower/convex_pair.py`) shows that
-`-P > 0` or `-Q > 0` at every point. -/
+`Q = h²G` (degree `(4,4,4)`). On the box `ρ ≤ h ≤ 113/125`, `s ≤ u, v ≤ ρ`, a labelled
+subdivision tree (36 leaves, depth 9) shows that `-P > 0` or `-Q > 0` at every point.
+Used by `C1TopCapConvexPair.not_bracketB_pos_and_discrG_nonneg`. -/
 
 @[expose] public section
 

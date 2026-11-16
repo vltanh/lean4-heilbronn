@@ -8,27 +8,27 @@ public import Heilbronn.Nine.C1.TopCapTriangularPair
 public import Heilbronn.Nine.C1.TopCapCommonCell
 public import Heilbronn.Nine.C1.TopCapContainmentPair
 
-/-! # Completion of the C1 family with two lower points (`docs/proof/nine/C1_TWO_LOWER_COMPLETION.md`)
+/-! # Completion of the C1 family with two lower points
 
-Role: on the primary route, `docs/proof/nine/UNRESTRICTED.md` row `n₀ = 2` (line 98) is closed by
-**Theorem 2** (`theorem2`): every C1 configuration with exactly two of its four free points
-inside `OHC` has an actual triangle of area below `A₀`. Theorem 1 (the final same-side one-cap
-placement) is the last component of its assembly.
+`lowerCount_eq_two_false`: every C1 configuration with exactly two of its four free points inside `OHC` has an
+actual triangle of area below `A₀` (used by `Assembly.c1_exclusion`). `commonCellSetting_OC_HF_false` (the final
+same-side one-cap placement) is the last component of its proof.
 
-Setting (lines 3-16): the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`,
+Setting: the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`,
 `0 < f ≤ c ≤ 1`; least area at least `A₀`; `s = 8/73 < 2A₀`, `K = 4 + 2√3`, `ρ = 49/60 < Ks`.
-Theorem 1 works in the common-cell placement `CommonCellSetting` (`L, M ∈ OHC ∩ OCF`, top-cap
-`X = (x, Y)`, `P` in the pentagon above `HC`, `L ∈ OHX`, `M, P ∈ OCX`; (1)) with the pair-line
-case putting `O, C` on one side of `LM` and `H, F` on the other (2).
+`commonCellSetting_OC_HF_false` works in the common-cell placement `CommonCellSetting` (`L, M ∈ OHC ∩ OCF`, top-cap
+`X = (x, Y)`, `P` in the pentagon above `HC`, `L ∈ OHX`, `M, P ∈ OCX`) with the line `LM`
+putting `O, C` on one side and `H, F` on the other.
 
-Definitions: `xStar` (9), `capG0` (7), `capG1` (8), and the polynomial `quadP` of (10).
+Definitions: `xStar`, `capG0`, `capG1`, and the polynomial `quadP`.
 
 Results:
-* `claim_CXL`: the orientation (2), `M, P` strictly inside `CXL`, and `[CXL] ≥ Ks` (4);
-* `eq7_9`: `G₀, G₁ ≥ 0`, `x ≤ x*`, and both still hold at `x = x*`;
-* `eq11`: `P(h, c, Y) < 0` on `[ρ, 1]³` (27 Bernstein coefficients);
-* `theorem1` (**Theorem 1**): the final one-cap placement is impossible;
-* `theorem2` (**Theorem 2**): the two-lower C1 class is excluded.
+* `kσ_le_sarea_CXL`: the orientation `[LMO], [LMC] < 0 < [LMH], [LMF]`, `M, P` strictly inside `CXL`,
+  and `[CXL] ≥ Ks`;
+* `capG_nonneg_xStar`: `G₀, G₁ ≥ 0`, `x ≤ x*`, and both still hold at `x = x*`;
+* `quadP_neg`: `P(h, c, Y) < 0` on `[ρ, 1]³` (27 Bernstein coefficients);
+* `commonCellSetting_OC_HF_false`: the final one-cap placement is impossible;
+* `lowerCount_eq_two_false`: the two-lower C1 class is excluded.
 -/
 
 @[expose] public section
@@ -38,19 +38,19 @@ namespace Heilbronn.Nine.C1TwoLowerCompletion
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1TopCapOfSplit Heilbronn.Nine.C1TwoLower Heilbronn.Nine.C1TopCapConvexPair
 
-/-- `x* = c + ((1 - c)Y - s)/h` of (9), `s = 8/73`. -/
+/-- `x* = c + ((1 - c)Y - s)/h`, `s = 8/73`. -/
 def xStar (h c Y : ℝ) : ℝ := c + ((1 - c) * Y - 8 / 73) / h
 
-/-- `G₀ = aT - sc(1 + Y)` of (7), with `a = x - fY`, `T = cY + s - ρ`. -/
+/-- `G₀ = aT - sc(1 + Y)`, with `a = x - fY`, `T = cY + s - ρ`. -/
 def capG0 (c f x Y : ℝ) : ℝ := (x - f * Y) * (c * Y + 8 / 73 - 49 / 60) - 8 / 73 * c * (1 + Y)
 
-/-- `G₁ = aU - s(1 + Y){(1 - h)(c - x) + fY}` of (8), with `a = x - fY`,
+/-- `G₁ = aU - s(1 + Y){(1 - h)(c - x) + fY}`, with `a = x - fY`,
 `U = (1 - h)(cY - ρ) + Y(hf - s)`. -/
 def capG1 (h c f x Y : ℝ) : ℝ :=
   (x - f * Y) * ((1 - h) * (c * Y - 49 / 60) + Y * (h * f - 8 / 73)) -
     8 / 73 * (1 + Y) * ((1 - h) * (c - x) + f * Y)
 
-/-- The polynomial `P = B² + 4hC₀` of (10), the maximum over `f` of `4h(G₁ + (5/4)G₀)` at
+/-- The polynomial `P = B² + 4hC₀`, the maximum over `f` of `4h(G₁ + (5/4)G₀)` at
 `x = x*`, where `U₀ = (1 - h)(cY - ρ) - sY`, `T = cY + s - ρ`,
 `B = hx* - U₀ - s(1 + Y) - (5/4)T`,
 `C₀ = x*(U₀ + (5/4)T) - s(1 + Y){(1 - h)(c - x*) + (5/4)c}`. -/
@@ -62,13 +62,11 @@ def quadP (h c Y : ℝ) : ℝ :=
   let C₀ := x * (U₀ + 5 / 4 * T) - 8 / 73 * (1 + Y) * ((1 - h) * (c - x) + 5 / 4 * c)
   B ^ 2 + 4 * h * C₀
 
-/-- **Claim** (`C1_TWO_LOWER_COMPLETION:claim-CXL`, made-up id). In the common-cell placement with
-`O, C` on one side of `LM` and `H, F` on the other: the orientation (2)
-`[LMO], [LMC] < 0 < [LMH], [LMF]` holds; `M` and `P` are strictly inside the actual triangle
-`CXL` (counterclockwise `C, X, L`); hence `[CXL] = (c - ℓ)Y - (c - x)y ≥ Ks > ρ` (4), with
-`L = (ℓ, y)`, `X = (x, Y)`. `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md`, lines 52-89.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, C1_TOP_CAP_OF_SPLIT:claim-x-lt-c. -/
-theorem claim_CXL {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
+/-- In the common-cell placement with `O, C` on one side of `LM` and `H, F` on the other: the
+orientation `[LMO], [LMC] < 0 < [LMH], [LMF]` holds; `M` and `P` are strictly inside the actual
+triangle `CXL` (counterclockwise `C, X, L`); hence, by the two-interior-point lemma (`two_in`),
+`[CXL] = (c - ℓ)Y - (c - x)y ≥ Ks > ρ`, with `L = (ℓ, y)`, `X = (x, Y)`. -/
+theorem kσ_le_sarea_CXL {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
     (hOC : SameSide L M ptO (ptC c)) (hHF : SameSide L M (ptH h) (ptF f))
     (hOH : OppSide L M ptO (ptH h)) :
     (sarea L M ptO < 0 ∧ sarea L M (ptC c) < 0 ∧ 0 < sarea L M (ptH h) ∧
@@ -145,7 +143,8 @@ theorem claim_CXL {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c 
   exact ⟨⟨hO, hC, hH, hF⟩, hinM, hinP, by simp only [sarea, ptC]; ring, hK⟩
 
 set_option linter.unusedVariables false in
-/-- (5)–(9) in scalar form. -/
+/-- The scalar content of `capG_nonneg_xStar`: from `[OFL], [HFL], [OXL], [CDX] ≥ s` and `[CXL] ≥ ρ`, the
+bounds `G₀, G₁ ≥ 0`, `U > 0` and `x ≤ x*`, and `G₀, G₁ ≥ 0` at `x = x*`. -/
 theorem scal_7_9 {h c d f x Y l y : ℝ} (h0 : 0 < h) (hh : h ≤ 1) (c0 : 0 < c) (hdh : d ≤ h)
     (hxc : x < c) (hY0 : 0 < Y) (ha : 0 < x - f * Y) (hT : 0 < c * Y + 8 / 73 - 49 / 60)
     (hOFL : 8 / 73 ≤ l - f * y) (hHFL : 8 / 73 ≤ h * f + (1 - h) * l - f * y)
@@ -202,13 +201,12 @@ theorem scal_7_9 {h c d f x Y l y : ℝ} (h0 : 0 < h) (hh : h ≤ 1) (c0 : 0 < c
         linarith) (show (0 : ℝ) ≤ xStar h c Y - x by linarith)
     linarith
 
-/-- **Claim** (`C1_TWO_LOWER_COMPLETION:eq7-9`). In the setting of `claim_CXL`, with
-`X = (x, Y)`: the areas `OFL, HFL, OXL` give (5); `a = x - fY > 0`, `T = cY + s - ρ > 0`;
-`G₀ ≥ 0` (7) and `G₁ ≥ 0` (8), with `U = (1 - h)(cY - ρ) + Y(hf - s) > 0`; `x ≤ x*` (9); and
-since `∂G₀/∂x = T > 0` and `∂G₁/∂x = U + s(1 + Y)(1 - h) > 0`, both inequalities still hold at
-`x = x*`. `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md`, lines 91-160.
-Uses: C1_TWO_LOWER_COMPLETION:claim-CXL. -/
-theorem eq7_9 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
+/-- In the setting of `kσ_le_sarea_CXL`, with `L = (ℓ, y)`, `X = (x, Y)`: the doubled areas
+`[OFL] = ℓ - fy`, `[HFL] = hf + (1 - h)ℓ - fy` and `[OXL] = xy - Yℓ` are at least `s`;
+`a = x - fY > 0`, `T = cY + s - ρ > 0`; `G₀ ≥ 0` and `G₁ ≥ 0`, with
+`U = (1 - h)(cY - ρ) + Y(hf - s) > 0`; `x ≤ x*`; and since `∂G₀/∂x = T > 0` and
+`∂G₁/∂x = U + s(1 + Y)(1 - h) > 0`, both inequalities still hold at `x = x*`. -/
+theorem capG_nonneg_xStar {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
     (hOC : SameSide L M ptO (ptC c)) (hHF : SameSide L M (ptH h) (ptF f))
     (hOH : OppSide L M ptO (ptH h)) :
     8 / 73 ≤ L.1 - f * L.2 ∧ 8 / 73 ≤ h * f + (1 - h) * L.1 - f * L.2 ∧
@@ -218,7 +216,7 @@ theorem eq7_9 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f 
       0 < (1 - h) * (c * X.2 - 49 / 60) + X.2 * (h * f - 8 / 73) ∧
       X.1 ≤ xStar h c X.2 ∧
       0 ≤ capG0 c f (xStar h c X.2) X.2 ∧ 0 ≤ capG1 h c f (xStar h c X.2) X.2 := by
-  obtain ⟨-, hinM, -, eCXL, hK⟩ := claim_CXL hS hOC hHF hOH
+  obtain ⟨-, hinM, -, eCXL, hK⟩ := kσ_le_sarea_CXL hS hOC hHF hOH
   obtain ⟨hk, hkY, hhf, hfx, hxc, hfcs, -, k2, kgt⟩ := C1TopCapCommonCell.cc_facts hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have h0 : 0 < h := by nlinarith
@@ -253,7 +251,8 @@ theorem eq7_9 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f 
 section cert
 open Cert Cert.Expr
 
-/-- `P(h, c, Y)` of (10) as an expression in `var 0, 1, 2 = h, c, Y` (`h x*` is a polynomial). -/
+/-- `P(h, c, Y)` (`quadP`) as an expression in `var 0, 1, 2 = h, c, Y`; this first piece is the
+polynomial `h x*`. -/
 def eXh : Expr := v 0 * v 1 + (1 - v 1) * v 2 - k (8 / 73)
 def eU0 : Expr := (1 - v 0) * (v 1 * v 2 - k (49 / 60)) - k (8 / 73) * v 2
 def eTT : Expr := v 1 * v 2 + k (8 / 73) - k (49 / 60)
@@ -262,25 +261,24 @@ def eC4 : Expr := k 4 * eXh * (eU0 + k (5 / 4) * eTT) -
   k (32 / 73) * (1 + v 2) * ((1 - v 0) * (v 0 * v 1 - eXh) + k (5 / 4) * v 0 * v 1)
 def eQP : Expr := eBB * eBB + eC4
 
-theorem eq11_check :
+theorem quadP_check :
     bernsteinBoxCheck (0 - eQP) [(49 / 60, 1), (49 / 60, 1), (49 / 60, 1)] [2, 2, 2] 99 = true := by
   decide +kernel
 
 end cert
 
-/-- **Claim** (`C1_TWO_LOWER_COMPLETION:eq11`, made-up id). `P(h, c, Y) < 0` for
-`ρ ≤ h, c, Y ≤ 1`: all 27 degree-`(2,2,2)` tensor Bernstein coefficients on the cube have maximum
-`-124631/12278016` (11); checked by `docs/proof/nine/check_c1_two_lower_completion.py`. Since
-`G₁ + (5/4)G₀ = -hY²f² + YBf + C₀` at `x = x*`, its maximum over `f` is `P/(4h) < 0`.
-`docs/proof/nine/C1_TWO_LOWER_COMPLETION.md`, lines 162-234. -/
-theorem eq11 (h c Y : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 1) (hc : 49 / 60 ≤ c) (hc' : c ≤ 1)
+/-- `P(h, c, Y) < 0` for `ρ ≤ h, c, Y ≤ 1`: all 27 degree-`(2,2,2)` tensor Bernstein
+coefficients on the cube are negative (maximum `-124631/12278016`), checked by the kernel in
+`quadP_check`. Since `G₁ + (5/4)G₀ = -hY²f² + YBf + C₀` at `x = x*`, its maximum over `f` is
+`P/(4h) < 0`. -/
+theorem quadP_neg (h c Y : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 1) (hc : 49 / 60 ≤ c) (hc' : c ≤ 1)
     (hY : 49 / 60 ≤ Y) (hY' : Y ≤ 1) :
     quadP h c Y < 0 := by
   have hx := pointOf_box3 (x := h) (y := c) (z := Y) (p := ((49 / 60 : ℚ), (1 : ℚ)))
     (q := ((49 / 60 : ℚ), (1 : ℚ))) (r := ((49 / 60 : ℚ), (1 : ℚ)))
     ⟨by push_cast; linarith, by push_cast; linarith⟩ ⟨by push_cast; linarith, by push_cast; linarith⟩
     ⟨by push_cast; linarith, by push_cast; linarith⟩
-  have := Cert.bernsteinBoxCheck_sound eq11_check _ hx
+  have := Cert.bernsteinBoxCheck_sound quadP_check _ hx
   have h0 : h ≠ 0 := by intro h0; rw [h0] at hh; norm_num at hh
   have e : eQP.eval (pointOf [h, c, Y]) = quadP h c Y := by
     simp only [eQP, eBB, eC4, eXh, eU0, eTT, Cert.Expr.eval_plus, Cert.Expr.eval_minus,
@@ -292,21 +290,18 @@ theorem eq11 (h c Y : ℝ) (hh : 49 / 60 ≤ h) (hh' : h ≤ 1) (hc : 49 / 60 �
   simp only [Cert.Expr.eval_minus, Cert.Expr.eval_zero, e] at this
   linarith
 
-/-- **Theorem 1** (`C1_TWO_LOWER_COMPLETION:Theorem1`). The final one-cap placement with two
-lower points is impossible: the common-cell placement with `O, C` on one side of `LM` and
-`H, F` on the other. `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md`, lines 18-19 and 29-234.
-Uses: C1_TWO_LOWER_COMPLETION:claim-CXL, C1_TWO_LOWER_COMPLETION:eq7-9,
-C1_TWO_LOWER_COMPLETION:eq11. -/
-theorem theorem1 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
+/-- The final one-cap placement with two lower points is impossible: the common-cell placement
+with `O, C` on one side of `LM` and `H, F` on the other. -/
+theorem commonCellSetting_OC_HF_false {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P)
     (hOC : SameSide L M ptO (ptC c)) (hHF : SameSide L M (ptH h) (ptF f))
     (hOH : OppSide L M ptO (ptH h)) : False := by
-  obtain ⟨-, -, -, -, -, -, -, -, -, g0, g1⟩ := eq7_9 hS hOC hHF hOH
+  obtain ⟨-, -, -, -, -, -, -, -, -, g0, g1⟩ := capG_nonneg_xStar hS hOC hHF hOH
   obtain ⟨hk, hkY, hhf, hfx, hxc, hfcs, -, -, kgt⟩ := C1TopCapCommonCell.cc_facts hS
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
   have h0 : 0 < h := by nlinarith
   have c0 : 0 < c := by nlinarith
   have y1 := hS.memX.2.2.2
-  have hP := eq11 h c X.2 (by nlinarith) hh (by nlinarith) hc (by nlinarith) y1
+  have hP := quadP_neg h c X.2 (by nlinarith) hh (by nlinarith) hc (by nlinarith) y1
   have e : 4 * h * (capG1 h c f (xStar h c X.2) X.2 + 5 / 4 * capG0 c f (xStar h c X.2) X.2) =
       quadP h c X.2 - (2 * h * X.2 * f - (h * xStar h c X.2 -
         ((1 - h) * (c * X.2 - 49 / 60) - 8 / 73 * X.2) - 8 / 73 * (1 + X.2) -
@@ -319,7 +314,7 @@ theorem theorem1 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d
     ((1 - h) * (c * X.2 - 49 / 60) - 8 / 73 * X.2) - 8 / 73 * (1 + X.2) -
       5 / 4 * (c * X.2 + 8 / 73 - 49 / 60)))]
 
-/-! ### The assembly (§4) -/
+/-! ### The assembly -/
 
 /-- A line through a point strictly inside a counterclockwise triangle cannot leave the three
 vertices strictly on one side. -/
@@ -335,8 +330,11 @@ theorem not_all_neg {L M A B C : Point} (hL : InTriangle L A B C) (hA : sarea L 
   have := mul_neg_of_neg_of_pos hC l1
   linarith
 
-/-- **Step 5**: every pair-line case of the common-cell placement is excluded. -/
-theorem step5 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P) : False := by
+/-- Every position of the line `LM` in the common-cell placement is excluded: `O, C` against
+`H, F` by `commonCellSetting_OC_HF_false`, `C` isolated by `C1TopCapCommonCell.theorem_C`, `O` isolated by
+`C1TopCapCommonCell.theorem_O`, `O, H` against `C, F` by `C1TopCapContainmentPair.theorem_main`,
+and `O, F` against `C, H` by a sign identity. -/
+theorem commonCellSetting_false {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f L M X P) : False := by
   have hO := C1TopCapCommonCell.cc_LMO hS
   have nC : sarea L M (ptC c) ≠ 0 := ar_ne (by norm_num) (ar hS.competitive 5 6 1)
   have nH : sarea L M (ptH h) ≠ 0 := ar_ne (by norm_num) (ar hS.competitive 5 6 4)
@@ -351,7 +349,7 @@ theorem step5 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f 
       rcases lt_or_gt_of_ne nF with dF | dF
       · exact (not_all_neg hS.L_OCF hO dC dF).elim
       · exact dF
-    exact theorem1 hS (mul_pos_of_neg_of_neg hO dC) (mul_pos dH dF) (mul_neg_of_neg_of_pos hO dH)
+    exact commonCellSetting_OC_HF_false hS (mul_pos_of_neg_of_neg hO dC) (mul_pos dH dF) (mul_neg_of_neg_of_pos hO dH)
   · rcases lt_or_gt_of_ne nH with dH | dH <;> rcases lt_or_gt_of_ne nF with dF | dF
     · -- `C` isolated
       exact C1TopCapCommonCell.theorem_C hS ⟨mul_neg_of_pos_of_neg dC hO,
@@ -375,40 +373,42 @@ theorem step5 {h c d f : ℝ} {L M X P : Point} (hS : CommonCellSetting h c d f 
       exact C1TopCapCommonCell.theorem_O hS ⟨mul_neg_of_neg_of_pos hO dC, mul_pos dC dH,
         mul_pos dC dF⟩
 
-/-- The two lower points and the cap point `X`: the side-ear consequences, with `P ∈ OCX`, give
-the reduced one-cap placement, then the common cell (OF split), then step 5. -/
-theorem step4_core {h c d f : ℝ} {L M X P : Point} (hA : C1Anchors h c d f)
+/-- Two lower points, a top-cap point `X` and an upper point `P ∈ OCX` are impossible: the
+side-ear consequences (`C1TopCapSideEars.upperQuad_radial_split`) give the one-cap placement, the split
+along `OF` (`C1TopCapOfSplit.theorem_main`) gives the common cell, and `commonCellSetting_false` excludes it. -/
+theorem topCap_upperQuad_OCX_false {h c d f : ℝ} {L M X P : Point} (hA : C1Anchors h c d f)
     (hL : L ∈ unitSquare) (hM : M ∈ unitSquare) (hX : X ∈ unitSquare) (hP : P ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f L M X P))
     (hLl : InLower h c L) (hMl : InLower h c M) (hXc : InTopCap d f X)
     (hPu : InUpperQuad h c d f P) (hPin : InTriangle P ptO (ptC c) X) : False := by
   have hAw := c1Anchors_weak hA
   obtain ⟨-, hsplit, -, -, -, -⟩ :=
-    C1TopCapSideEars.claim_consequence hAw hL hM hX hP hmin hLl hMl hXc hPu
+    C1TopCapSideEars.upperQuad_radial_split hAw hL hM hX hP hmin hLl hMl hXc hPu
   rcases hsplit with ⟨hLH, hMC⟩ | ⟨hMH, hLC⟩
   · have hS : OneCapSetting h c d f L M X P :=
       ⟨hAw, hL, hM, hX, hP, hmin, hLl, hMl, hXc, hPu, hPin, hMC, hLH, hA.2.2.1⟩
     obtain ⟨-, h1, h2⟩ := theorem_main hS
-    exact step5 ⟨hS, h1, h2⟩
+    exact commonCellSetting_false ⟨hS, h1, h2⟩
   · have hmin' : A₀ ≤ minTriangleArea (c1Config h c d f M L X P) := by
       rw [min_c1_swap12]; exact hmin
     have hS : OneCapSetting h c d f M L X P :=
       ⟨hAw, hM, hL, hX, hP, hmin', hMl, hLl, hXc, hPu, hPin, hLC, hMH, hA.2.2.1⟩
     obtain ⟨-, h1, h2⟩ := theorem_main hS
-    exact step5 ⟨hS, h1, h2⟩
+    exact commonCellSetting_false ⟨hS, h1, h2⟩
 
-/-- **Step 4**: one top-cap point `X` and one upper point `P` (transposition handles `P ∈ OXH`). -/
-theorem step4 {h c d f : ℝ} {L M X P : Point} (hA : C1Anchors h c d f)
+/-- Two lower points, one top-cap point `X` and one point `P` of the upper quadrilateral are
+impossible (transposition reduces `P ∈ OXH` to `P ∈ OCX`, `topCap_upperQuad_OCX_false`). -/
+theorem topCap_upperQuad_false {h c d f : ℝ} {L M X P : Point} (hA : C1Anchors h c d f)
     (hL : L ∈ unitSquare) (hM : M ∈ unitSquare) (hX : X ∈ unitSquare) (hP : P ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f L M X P))
     (hLl : InLower h c L) (hMl : InLower h c M) (hXc : InTopCap d f X)
     (hPu : InUpperQuad h c d f P) : False := by
   obtain ⟨-, -, hPin, -, -, -⟩ :=
-    C1TopCapSideEars.claim_consequence (c1Anchors_weak hA) hL hM hX hP hmin hLl hMl hXc hPu
+    C1TopCapSideEars.upperQuad_radial_split (c1Anchors_weak hA) hL hM hX hP hmin hLl hMl hXc hPu
   rcases hPin with hPin | hPin
-  · exact step4_core hA hL hM hX hP hmin hLl hMl hXc hPu hPin
+  · exact topCap_upperQuad_OCX_false hA hL hM hX hP hmin hLl hMl hXc hPu hPin
   · obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hA
-    refine step4_core (h := c) (c := h) (d := f) (f := d) (L := tp L) (M := tp M) (X := tp X)
+    refine topCap_upperQuad_OCX_false (h := c) (c := h) (d := f) (f := d) (L := tp L) (M := tp M) (X := tp X)
       (P := tp P) ⟨hf, hfc, hc, hd, hdh, hh⟩ (tp_mem hL) (tp_mem hM) (tp_mem hX) (tp_mem hP)
       (by rw [min_c1_tp]; exact hmin) (inLower_tp hLl) (inLower_tp hMl) ?_ ?_ ?_
     · unfold InTopCap at hXc ⊢
@@ -443,7 +443,7 @@ theorem upper_pt {h c : ℝ} {U : Point} (h0 : 0 < h) (c0 : 0 < c) (hU : U ∈ u
   refine ⟨a1, a3, ?_⟩
   have := sarea_swap₁₂ (ptH h) (ptC c) U; linarith
 
-/-- The core of Theorem 2 with the lower points first. -/
+/-- The core of `lowerCount_eq_two_false`, with the two lower points first. -/
 theorem core {h c d f : ℝ} {L M U V : Point} (hA : C1Anchors h c d f)
     (hL : L ∈ unitSquare) (hM : M ∈ unitSquare) (hU : U ∈ unitSquare) (hV : V ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f L M U V))
@@ -475,9 +475,9 @@ theorem core {h c d f : ℝ} {L M U V : Point} (hA : C1Anchors h c d f)
   have nV : sarea (ptD d) (ptF f) V ≠ 0 := ar_ne (by norm_num) (ar hmin 2 3 8)
   rcases lt_or_gt_of_ne nU with uDF | uDF <;> rcases lt_or_gt_of_ne nV with vDF | vDF
   · exact C1TopCapTriangularPair.theorem_main hAw hL hM hU hV hmin hLl hMl uDF.le vDF.le
-  · exact step4 ⟨hd, hdh, hh, hf, hfc, hc⟩ hL hM hU hV hmin hLl hMl uDF ⟨vHC, vCD, vDF, vFH⟩
-  · exact step4 ⟨hd, hdh, hh, hf, hfc, hc⟩ hL hM hV hU hmin' hLl hMl vDF ⟨uHC, uCD, uDF, uFH⟩
-  · exact C1MixedPentagon.claim_pentagon_excluded ⟨hd, hdh, hh, hf, hfc, hc⟩ hL hM hU hV hmin hLl
+  · exact topCap_upperQuad_false ⟨hd, hdh, hh, hf, hfc, hc⟩ hL hM hU hV hmin hLl hMl uDF ⟨vHC, vCD, vDF, vFH⟩
+  · exact topCap_upperQuad_false ⟨hd, hdh, hh, hf, hfc, hc⟩ hL hM hV hU hmin' hLl hMl vDF ⟨uHC, uCD, uDF, uFH⟩
+  · exact C1MixedPentagon.two_lower_two_upperQuad_false ⟨hd, hdh, hh, hf, hfc, hc⟩ hL hM hU hV hmin hLl
       hMl ⟨uHC, uCD, uDF, uFH⟩ ⟨vHC, vCD, vDF, vFH⟩
 
 /-- The free points of `c1Config` at the indices `5, …, 8`. -/
@@ -536,25 +536,14 @@ theorem two_lower {h c : ℝ} {W X Y Z : Point} (h2 : lowerCount h c W X Y Z = 2
   · exact hi h
   · exact hj h
 
-/-- **Theorem 2** (`C1_TWO_LOWER_COMPLETION:Theorem2`). Every C1 configuration (`C1Anchors`)
-with exactly two of its four free points strictly inside `OHC` has an actual
-triangle of area strictly below `A₀`, whatever its hull. `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md`,
-lines 21-23 and 236-275.
-Uses: C1_TWO_LOWER_SIDE_CAP:Theorem, C1_MIXED_PENTAGON:claim-pentagon-excluded,
-C1_TOP_CAP_CONVEX_PAIR:Theorem, C1_TOP_CAP_TRIANGULAR_PAIR:Theorem, C1_TOP_CAP_SIDE_EARS:Theorem,
-C1_TOP_CAP_SIDE_EARS:claim-consequence, C1_TOP_CAP_RADIAL_SPLIT:Theorem,
-C1_TOP_CAP_OF_SPLIT:Theorem, ONE_CORNER_COMPLETION:claim-general-identities,
-C1_TOP_CAP_COMMON_CELL:Theorem-C, C1_TOP_CAP_COMMON_CELL:Theorem-O,
-C1_TOP_CAP_CONTAINMENT_PAIR:Theorem, C1_TWO_LOWER_COMPLETION:Theorem1. -/
--- Implicit in the manuscript (line 44 vs lines 262-264): in step 5, "`O, C` on the same side"
--- of `LM` forces `H, F` on the other side, since `L, M` are strictly inside both `OCH` and `OCF`
--- (a line through two interior points of a triangle splits its vertices 1 | 2); Theorem 1 is
--- stated with the full split. Step 2 applies C1_MIXED_PENTAGON at its threshold `7/64 < 2A₀`;
--- steps 4–5 use the transposition (`(h, c, d, f) ↦ (c, h, f, d)`) to reach `P ∈ OCX`.
--- Statement change: the anchors are `C1Anchors` (strict `h, c < 1`) instead of `C1AnchorsWeak`;
--- ONE_CORNER's pentagon claims and the general-threshold Lemma 7 (`1 - h > 0`) need `h, c < 1`,
--- and the assembly (`Assembly/FamilyC1.lean`) has `C1Anchors` at hand.
-theorem theorem2 {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
+/-- Every C1 configuration (`C1Anchors`) with exactly two of its four free points strictly inside
+`OHC` has an actual triangle of area strictly below `A₀`, whatever its hull.
+
+The two other free points are not in a side cap (`C1TwoLowerSideCap.theorem_main`); two top-cap
+points are excluded by `C1TopCapTriangularPair.theorem_main`, one top-cap and one upper point by
+`topCap_upperQuad_false`, and two upper points by `C1MixedPentagon.two_lower_two_upperQuad_false`. The anchors are
+strict (`h, c < 1`), as the pentagon and one-cap cases need. -/
+theorem lowerCount_eq_two_false {h c d f : ℝ} {W X Y Z : Point} (hA : C1Anchors h c d f)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
     (h2 : lowerCount h c W X Y Z = 2)
     (hmin : A₀ ≤ minTriangleArea (c1Config h c d f W X Y Z)) : False := by

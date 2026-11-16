@@ -2,25 +2,24 @@ module
 
 public import Heilbronn.Nine.TypeII.TypeIICompletion.Balanced
 
-/-! # Excluding the right mixed cell in balanced Type II (`docs/proof/nine/BALANCED_RIGHT_MIXED.md`)
+/-! # Excluding the right mixed cell in balanced Type II
 
-Closes the "below `ES`, on the `C` side of `LR`" cell of the final balanced placement of
-`TYPE_II_COMPLETION.md` §§5–8 (`FinalPlacement l b L P Q R S`: `L` at `DE`, `P` at `CD`, `Q` at
-`ER`, `S` at `RC` in the quadrilateral `D, E, R, C`), cited by `TYPE_II_COMPLETION.md` §9.3 and
-Theorem 11. Doubled threshold `s = 7/64`, `K = 4 + 2√3`, `Ks > 13/16`.
+Closes the cell "below `ES`, on the `C` side of `LR`" of the final balanced placement
+(`FinalPlacement l b L P Q R S`: `L` at `DE`, `P` at `CD`, `Q` at `ER`, `S` at `RC` in the
+quadrilateral `D, E, R, C`). Doubled threshold `s = 7/64`, `K = 4 + 2√3`, `Ks > 13/16`.
 
-Notation of the note: `R = (r,u)`, `q = 1 - λ`, `v = 1 - u`, `L = (l,h)`, `S = (x,z)`,
-`Q = (a,y)` (here `L.1, L.2`, `S.1, S.2`, `Q.1, Q.2`). The cell is
-`sarea (ptE l) S Q < 0` (`Q` below `ES`) and `0 < sarea L R Q` (`Q` on the `C` side of `LR`).
+Notation: `R = (r,u)`, `q = 1 - λ`, `v = 1 - u`, `L = (l,h)`, `S = (x,z)`, `Q = (a,y)` (here
+`L.1, L.2`, `S.1, S.2`, `Q.1, Q.2`). The cell is `sarea (ptE l) S Q < 0` (`Q` below `ES`) and
+`0 < sarea L R Q` (`Q` on the `C` side of `LR`).
 
 Results:
 
-* `claim_containments` ((1)): `Q ∈ int(EBS)` with `A = [EBS] ≥ 3s`; `S, Q ∈ int(CLR)`;
+* `cell_containments`: `Q ∈ int(EBS)` with `A = [EBS] ≥ 3s`; `S, Q ∈ int(CLR)`;
   `L, Q ∈ int(DER)`; hence `qr ≥ Ks` and `v(1-l) - (1-r)(1-h) ≥ Ks`;
-* `claim_anchor_bounds` ((2)): `s < λ < 3/16`, `v > 1 - s`, `q < 57/64`, `r > 52/57`,
+* `anchor_bounds`: `s < λ < 3/16`, `v > 1 - s`, `q < 57/64`, `r > 52/57`,
   `l > 7/57`, `h > 3s`;
-* `claim_height_bound` ((3), (7)): `x ≤ 1 - s`, `z ≤ 1 - 2s/(1-b)`, `z - u ≥ 2s`, `y < 47/160`;
-* `mainTheorem` (**Theorem**): the right mixed cell is impossible (`ΔLRQ < 10597/97280 < s`).
+* `height_bound`: `x ≤ 1 - s`, `z ≤ 1 - 2s/(1-b)`, `z - u ≥ 2s`, `y < 47/160`;
+* `minTriangleArea_lt_of_cell`: the right mixed cell is impossible (`ΔLRQ < 10597/97280 < s`).
 
 The point `P` enters only through the placement hypotheses.
 -/
@@ -37,7 +36,7 @@ open Heilbronn.Nine.TypeII Heilbronn.Nine.TypeIICompletion
 theorem ge_of_abs_pos' {s t : ℝ} (hp : 0 < t) (h : s ≤ |t|) : s ≤ t := by
   rwa [abs_of_pos hp] at h
 
-/-- The sign facts of the final placement used in this note, read off from the sectors: the
+/-- The sign facts of the final placement used here, read off from the sectors: the
 quadrilateral `D, E, R, C` is convex at `R` (`[ERC] > 0`) and `[CLR] > 0`. -/
 theorem placement_signs {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L P Q R S) :
     0 < Q.1 ∧ 0 < Q.2 ∧ b < R.1 ∧ R.2 < 1 ∧ 0 < sarea (ptE l) R ptC ∧
@@ -69,17 +68,14 @@ theorem placement_signs {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l 
     pos_of_mul_pos_left (by rw [T3]; positivity) (by positivity)
   exact ⟨hQ1, hQ2, hRb, hRy, hERC, hCLR⟩
 
-/-- **Claim** (`BALANCED_RIGHT_MIXED:claim-containments`). In the right mixed cell, at doubled
-threshold `s = 7/64`: `Q` is strictly inside `EBS`, so `A = [EBS] = bz + λ(x - b) ≥ 3s`; `S` and
-`Q` are strictly inside `CLR` (counterclockwise `C, L, R`); `L` and `Q` are strictly inside `DER`;
-and the two-interior bounds give `qr ≥ Ks` and `v(1-l) - (1-r)(1-h) ≥ Ks` (1).
-`docs/proof/nine/BALANCED_RIGHT_MIXED.md`, lines 46–95.
+/-- In the right mixed cell, at doubled threshold `s = 7/64`: `Q` is strictly inside `EBS`, so
+`A = [EBS] = bz + λ(x - b) ≥ 3s`; `S` and `Q` are strictly inside `CLR` (counterclockwise
+`C, L, R`); `L` and `Q` are strictly inside `DER`; and the two-interior bounds give `qr ≥ Ks` and
+`v(1-l) - (1-r)(1-h) ≥ Ks`.
 
-Proof note: the manuscript's diagonal affine coordinates are replaced by explicit signed-area
-identities expressing each edge test as a positive combination of the sector tests.
-
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_containments {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L P Q R S)
+Each edge test is proved by an explicit signed-area identity expressing it as a positive
+combination of the sector tests. -/
+theorem cell_containments {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L P Q R S)
     (hcell : sarea (ptE l) S Q < 0 ∧ 0 < sarea L R Q)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     InTriangle Q (ptE l) (ptB b) S ∧ 3 * (7 / 64) ≤ sarea (ptE l) (ptB b) S ∧
@@ -159,17 +155,14 @@ theorem claim_containments {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement
     simp only [sarea, ptC]; ring] at k2
   exact ⟨⟨a1, a2, a3⟩, hA, hSCLR, hQCLR, hLDER, hQDER, k1, k2⟩
 
-/-- **Claim** (`BALANCED_RIGHT_MIXED:claim-anchor-bounds`). In the right mixed cell, at doubled
-threshold `s = 7/64`: `0 < λ < 3/16`, `v > 1 - s` (`u < s`), `λ > s`, `q < 57/64`, and (2)
-`r > 52/57`, `l > 7/57`, `h > 3s`. `docs/proof/nine/BALANCED_RIGHT_MIXED.md`, lines 97–135.
-
-Uses: BALANCED_RIGHT_MIXED:claim-containments. -/
-theorem claim_anchor_bounds {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L P Q R S)
+/-- In the right mixed cell, at doubled threshold `s = 7/64`: `0 < λ < 3/16`, `v > 1 - s`
+(`u < s`), `λ > s`, `q < 57/64`, `r > 52/57`, `l > 7/57` and `h > 3s`. -/
+theorem anchor_bounds {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L P Q R S)
     (hcell : sarea (ptE l) S Q < 0 ∧ 0 < sarea L R Q)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     0 < l ∧ l < 3 / 16 ∧ 1 - 7 / 64 < 1 - R.2 ∧ 7 / 64 < l ∧ 1 - l < 57 / 64 ∧
       52 / 57 < R.1 ∧ 7 / 57 < L.1 ∧ 3 * (7 / 64) < L.2 := by
-  obtain ⟨-, -, -, -, -, -, k1, k2⟩ := claim_containments hfp hcell hmin
+  obtain ⟨-, -, -, -, -, -, k1, k2⟩ := cell_containments hfp hcell hmin
   obtain ⟨-, -, hRb, -, -, -⟩ := placement_signs hfp
   obtain ⟨⟨⟨hb, hb1, hl, hl1, hLs, -, -, hRs, -⟩, -, -, -, -, -, -, -, -, -⟩, -,
     ⟨L1, L2, -⟩, -, -, -⟩ := hfp
@@ -216,15 +209,15 @@ theorem claim_anchor_bounds {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacemen
     nlinarith [mul_le_mul hq57.le hc (by linarith) (by norm_num)]
   · nlinarith [mul_pos hq (show 0 < L.1 by linarith)]
 
-/-- The cubic of (6): `94016w³ - 135291w² + 60417w - 7840 > 0` on `1/2 ≤ w ≤ 1`. -/
+/-- The cubic `94016w³ - 135291w² + 60417w - 7840` is positive on `1/2 ≤ w ≤ 1`. -/
 theorem cubic_pos {w : ℝ} (hw : 1 / 2 ≤ w) (_hw1 : w ≤ 1) :
     0 < 94016 * w ^ 3 - 135291 * w ^ 2 + 60417 * w - 7840 := by
   nlinarith [mul_nonneg (sub_nonneg.2 hw) (sq_nonneg (w - 3 / 5)),
     sq_nonneg (w - 3 / 5)]
 
-/-- The scalar core of §3: from `A y ≤ A z - s(2z - λ)` ((4), `A = bz + λ(x-b) ≥ 3s`), the
-monotone replacement of `λ, x, z` by `3/16, 1 - s, 1 - 2s/(1-b)` ((5)) and the cubic (6) give
-`y < 47/160` (7). -/
+/-- The scalar core of the height bound: from `A y ≤ A z - s(2z - λ)` (with
+`A = bz + λ(x-b) ≥ 3s`), the monotone replacement of `λ, x, z` by `3/16, 1 - s, 1 - 2s/(1-b)`
+and the positivity of the cubic (`cubic_pos`) give `y < 47/160`. -/
 theorem height_scalar {b lam x z y : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hl0 : 0 < lam)
     (hl3 : lam < 3 / 16) (hxb : b ≤ x) (hx : x ≤ 1 - 7 / 64) (_hz2 : 2 * (7 / 64) ≤ z)
     (hzw : (1 - b) * z ≤ 1 - b - 2 * (7 / 64)) (hA : 3 * (7 / 64) ≤ b * z + lam * (x - b))
@@ -267,19 +260,16 @@ theorem height_scalar {b lam x z y : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hl0 
   have hc := cubic_pos (w := 1 - b) (by linarith) (by linarith)
   nlinarith [mul_nonneg (sq_nonneg (1 - b)) hG3]
 
-/-- **Claim** (`BALANCED_RIGHT_MIXED:claim-height-bound`). In the right mixed cell, at doubled
-threshold `s = 7/64`, with `S = (x,z)`, `Q = (a,y)`: `x ≤ 1 - s`, `z ≤ 1 - 2s/(1-b)` (3),
-`z - u ≥ 2s` (so `z > λ`), and the uniform height bound `y < 47/160` (7) (from the barycentric
-bound (4) and the cubic (6)). `docs/proof/nine/BALANCED_RIGHT_MIXED.md`, lines 137–239.
-
-Uses: BALANCED_RIGHT_MIXED:claim-containments, BALANCED_RIGHT_MIXED:claim-anchor-bounds. -/
-theorem claim_height_bound {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L P Q R S)
+/-- In the right mixed cell, at doubled threshold `s = 7/64`, with `S = (x,z)`, `Q = (a,y)`:
+`x ≤ 1 - s`, `z ≤ 1 - 2s/(1-b)`, `z - u ≥ 2s` (so `z > λ`), and the uniform height bound
+`y < 47/160` (from the barycentric bound `A y ≤ A z - s(2z - λ)` and `height_scalar`). -/
+theorem height_bound {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L P Q R S)
     (hcell : sarea (ptE l) S Q < 0 ∧ 0 < sarea L R Q)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     S.1 ≤ 1 - 7 / 64 ∧ S.2 ≤ 1 - 2 * (7 / 64) / (1 - b) ∧ 2 * (7 / 64) ≤ S.2 - R.2 ∧
       l < S.2 ∧ Q.2 < 47 / 160 := by
-  obtain ⟨⟨a1, a2, a3⟩, hA, -⟩ := claim_containments hfp hcell hmin
-  obtain ⟨hl0, hl3, -, -, -⟩ := claim_anchor_bounds hfp hcell hmin
+  obtain ⟨⟨a1, a2, a3⟩, hA, -⟩ := cell_containments hfp hcell hmin
+  obtain ⟨hl0, hl3, -, -, -⟩ := anchor_bounds hfp hcell hmin
   obtain ⟨-, -, hRb, hRy, -, -⟩ := placement_signs hfp
   obtain ⟨⟨⟨hb, hb1, hl, hl1, -, -, -, hRs, hSs⟩, hb2, -, -, -, -, -, -, -, hS⟩, ⟨t1, t2, t3⟩,
     -, -, -, ⟨-, -, S3⟩⟩ := hfp
@@ -308,7 +298,7 @@ theorem claim_height_bound {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement
     rw [le_sub_iff_add_le, ← le_sub_iff_add_le', div_le_iff₀ hw]; linarith
   have hzu : 2 * (7 / 64) ≤ S.2 - R.2 := by linarith
   refine ⟨hx, hz, hzu, by linarith, ?_⟩
-  -- (4): the barycentric bound
+  -- the barycentric identity `[EBS] y = [BSQ] λ + [EBQ] z` gives `A y ≤ A z - s(2z - λ)`
   have hbary : sarea (ptE l) (ptB b) S * Q.2 =
       sarea (ptB b) S Q * l + sarea (ptE l) (ptB b) Q * S.2 := by
     simp only [sarea, ptE, ptB]; ring
@@ -327,21 +317,17 @@ theorem claim_height_bound {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement
   rw [dEBS] at hA
   exact height_scalar hb hb2 hl0 hl3 hxb hx (by linarith) hzw hA hy
 
-/-- **Theorem** (`BALANCED_RIGHT_MIXED:Theorem`). The right mixed cell — `Q` below `ES` and on the
-`C` side of `LR` in the final balanced placement — is impossible at doubled threshold `7/64`:
-some triangle has area less than `7/128` (`ΔLRQ < 10597/97280 = s - 43/97280`).
-`docs/proof/nine/BALANCED_RIGHT_MIXED.md`, lines 241–289.
-
-Uses: BALANCED_RIGHT_MIXED:claim-anchor-bounds, BALANCED_RIGHT_MIXED:claim-height-bound,
-BALANCED_RIGHT_MIXED:claim-containments. -/
-theorem mainTheorem {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L P Q R S)
+/-- The right mixed cell — `Q` below `ES` and on the `C` side of `LR` in the final balanced
+placement — is impossible at doubled threshold `7/64`: some triangle has area less than `7/128`
+(`ΔLRQ < 10597/97280 = s - 43/97280`). -/
+theorem minTriangleArea_lt_of_cell {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L P Q R S)
     (hcell : sarea (ptE l) S Q < 0 ∧ 0 < sarea L R Q) :
     minTriangleArea (typeIIConfig l b L P Q R S) < 7 / 128 := by
   by_contra hcon
   push Not at hcon
   have hL := hfp.1.2.2.1
-  obtain ⟨-, -, -, -, -, hr, hlx, hh⟩ := claim_anchor_bounds hfp hcell hcon
-  obtain ⟨-, -, -, -, hy⟩ := claim_height_bound hfp hcell hcon
+  obtain ⟨-, -, -, -, -, hr, hlx, hh⟩ := anchor_bounds hfp hcell hcon
+  obtain ⟨-, -, -, -, hy⟩ := height_bound hfp hcell hcon
   obtain ⟨⟨⟨hb, hb1, hl, hl1, -, -, -, hRs, -⟩, hb2, -, -, -, -, hQc, -, -, -⟩, -, -, -, -, -⟩ :=
     hfp
   obtain ⟨-, -, Ry0, -⟩ := hRs
@@ -354,7 +340,7 @@ theorem mainTheorem {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L 
   have eLRQ := ge_of_abs_pos' hcell.2 (le_abs_sarea_of_le_min hm 4 7 6)
   simp only [sarea, ptB, ptC, ptD] at eBCQ eDBQ eLRQ
   have hQ2 : 0 < Q.2 := by nlinarith
-  -- (8)
+  -- `a ≤ 1/2 + y/2 - s`, from `[BCQ] ≥ s` and `b ≤ 1/2`
   have ha : Q.1 ≤ 1 / 2 + Q.2 / 2 - 7 / 64 := by
     nlinarith [mul_le_mul_of_nonneg_right hb2 (show 0 ≤ 1 - Q.2 by nlinarith)]
   -- `l ≤ b(1-h) - s`: the left point `L` is left of `DB`

@@ -1,28 +1,28 @@
 module
 
-public import Heilbronn.Common.Cover
+public import Heilbronn.Common.SignTable
 
-/-! # The certificate model of the opposite-cap package
-(`docs/proof/nine/SIX_BOUNDARY_OPPOSITE_CAP_COMPLETION.md`)
+/-! # The certificate model of the opposite-cap cover
 
-Computable mirror of `docs/proof/nine/check_six_boundary_opposite_cap.py`, for the kernel check of the
-cover (`Heilbronn.Common.Cover`):
+A computable model of the opposite-cap certificates, for the kernel check of the cover
+(`Heilbronn.Common.Cover`, sign tables from `Heilbronn.Common.SignTable`):
 
 * points `0, …, 8` are `A, B, C, D, E, G, F, H, O` (the hull octagon `V₀, …, V₇` and the interior
   point `O`); the twelve variables `0, …, 11` are `a, h, b, c, d, f, e_x, e_y, g_x, g_y, o_x, o_y`
   (`pt`);
-* `factors`: the 29 affine factors of the checker; `delta`: the cost `(1-d)(1-f) - 7/11`;
+* `factors`: the 29 affine factors; `delta`: the cost `(1-d)(1-f) - 7/11`;
 * the facts are signed triangles; `base` holds the 56 hull triangles (positive) and the three tests
-  `[D G O] > 0`, `[D F O] < 0`, `[E F O] > 0` of (1) `O ∈ DEF ∩ DGF`; a split `vertex i` has one
+  `[D G O] > 0`, `[D F O] < 0`, `[E F O] > 0` of `O ∈ DEF ∩ DGF`; a split `vertex i` has one
   branch per value `v ∈ {1, …, 6}` of the radial word entry of `O` at `V_i` consistent with the
-  known facts (`branchFacts i v`: the signs of `[V_i V_{i+j} O]`, positive iff `j ≤ v`);
+  known facts (`branchFacts i v`, the shared `Cover.branchFacts 8 8 i v`: the signs of
+  `[V_i V_{i+j} O]`, positive iff `j ≤ v`);
 * `atoms fs`: the factors, `delta`, then for each of the 84 increasing triples (lexicographic) its
   cost strengthened by the certified inside count of `O` (`3s` if `O` is certified inside, else
   `s`; an unknown sign gives the atom `0`);
 * `closedOK fs 1` (`sharpTest`): the sharp word `(4,3,3,2,3,4,5,4)` is fully known.
 
-The certificate weights are exported by `scripts/nine/six_opposite_cap/export.py` into
-`data/nine/six_opposite_cap/`; the tree and its kernel checks are in `Heilbronn.Nine.SixBoundary.OppositeCapTrees`.
+The certificate weights are in `Heilbronn/Nine/Data/six_opposite_cap/`; the tree and its kernel
+checks are in `Heilbronn.Nine.SixBoundary.OppositeCapTrees`.
 -/
 
 @[expose] public section
@@ -44,7 +44,7 @@ def pt : ℕ → Expr × Expr
   | 8 => (v 10, v 11)
   | _ => (0, 0)
 
-/-- The 29 affine factors of the checker (`FACTORS`). -/
+/-- The 29 affine factors. -/
 def factors : List Expr :=
   [v 0 - k (7 / 64), v 2 - k (7 / 64), v 1 - k (7 / 16), v 3 - k (7 / 16), 1 - v 1, 1 - v 3,
     v 4 - v 0, v 1 - v 4, v 5 - v 2, v 3 - v 5, v 4 - v 5, v 1 - v 0 - k (7 / 64),
@@ -53,52 +53,26 @@ def factors : List Expr :=
     v 9 - v 4 - k (7 / 64), v 10 - v 5 - k (7 / 64), v 11 - v 4 - k (7 / 64), v 6 - v 8,
     v 9 - v 7, k (179 / 627) - v 4, k (13 / 64) - v 5]
 
-/-- The cost `q₈₄ = (1 - d)(1 - f) - 7/11` of the virtual cap. -/
+/-- The cost `(1 - d)(1 - f) - 7/11` of the virtual cap. -/
 def delta : Expr := (1 - v 4) * (1 - v 5) - k (7 / 11)
 
 /-- The occupancy bounds: `s` for no certified inside point, `3s` for one. -/
 def bnd (n : ℕ) : ℚ := if n = 0 then 7 / 64 else 21 / 64
 
-/-- The increasing index triples of `0, …, 8`, in lexicographic order. -/
-def lexTriples : List (ℕ × ℕ × ℕ) :=
-  (List.range 9).flatMap fun a => (List.range 9).flatMap fun b => (List.range 9).filterMap
-    fun c => if a < b ∧ b < c then some (a, b, c) else none
-
 /-- The initial facts: the hull triangles of the octagon and the three tests of `O ∈ DEF ∩ DGF`:
 `[D G O] > 0`, `[D F O] < 0`, `[E F O] > 0`. -/
 def base : List SFact :=
-  lexTriples.filterMap (fun t => if t.2.2 < 8 then some (t, true) else none) ++
+  (lexTriples 9).filterMap (fun t => if t.2.2 < 8 then some (t, true) else none) ++
     [((3, 5, 8), true), ((3, 6, 8), false), ((4, 6, 8), true)]
 
-/-- The strengthened costs of the 84 triples (the atom `0` for an unknown sign). -/
-def costs (tb : List SFact) : List Expr :=
-  lexTriples.map fun t => match lookup tb t with
-    | some sg => costAtom pt bnd (t, sg) (insideList tb [8] (t, sg)).length
-    | none => k 0
-
-/-- The atoms of the case with the extra facts `fs`. -/
+/-- The atoms of the case with the extra facts `fs`: the factors, `delta` and the strengthened
+costs of the 84 triples (`lookupCosts`; the atom `0` for an unknown sign). -/
 def atoms (fs : List SFact) : List Expr :=
-  factors ++ [delta] ++ costs (base ++ fs)
+  factors ++ [delta] ++ lookupCosts 9 pt bnd [8] (base ++ fs)
 
-/-- The signed triangle of the ordered triple `(a, b, c)` with orientation `sg`, stored on the
-sorted triple (flipped for an odd permutation). -/
-def orient (a b c : ℕ) (sg : Bool) : SFact :=
-  if a < b ∧ b < c then ((a, b, c), sg)
-  else if b < c ∧ c < a then ((b, c, a), sg)
-  else if c < a ∧ a < b then ((c, a, b), sg)
-  else if b < a ∧ a < c then ((b, a, c), !sg)
-  else if a < c ∧ c < b then ((a, c, b), !sg)
-  else ((c, b, a), !sg)
-
-/-- The signs at `V_i` of the word entry `val`: `[V_i V_{i+j} O] > 0` iff `j ≤ val`. -/
-def branchFacts (i val : ℕ) : List SFact :=
-  (List.range 7).map fun j => orient i ((i + (j + 1)) % 8) 8 (decide (j + 1 ≤ val))
-
-/-- The facts `b` agree with the table `tb` wherever both know a sign. -/
-def consistent (tb b : List SFact) : Bool :=
-  b.all fun f => match lookup tb f.1 with
-    | some sg => sg == f.2
-    | none => true
+/-- The signs at `V_i` of the word entry `val` of `O`: `[V_i V_{i+j} O] > 0` iff `j ≤ val`
+(`Cover.branchFacts` on the octagon; the name is the one of the sharp certificates). -/
+def branchFacts (i val : ℕ) : List SFact := Cover.branchFacts 8 8 i val
 
 /-- The split labels: the word entry of `O` at the vertex `V_i`. -/
 inductive Split where

@@ -4,41 +4,38 @@ public import Heilbronn.Nine.TypeII.TypeII
 public import Heilbronn.Nine.Corners.OneCorner
 
 /-! # The balanced adjacent-corner case: the left hull must be triangular
-(`docs/proof/nine/TYPE_II_BALANCED.md`)
 
-The balanced count row `(2,2,2)` of Type II (`TYPE_II.md` §8), with `0 < b ≤ 1/2`: the left pair
-is `E, L`, the central pair `P, Q`, the right pair `R, S`. The free points are passed to
-`typeIIConfig l b L P Q R S` in this order (`BalancedRow`).
+The balanced count row `(2,2,2)` of Type II, with `0 < b ≤ 1/2`: the left pair is `E, L`, the
+central pair `P, Q`, the right pair `R, S`. The free points are passed to
+`typeIIConfig l b L P Q R S` in this order (`BalancedRow`). When the right hull vertex adjacent
+to `B` matters, it is whichever of `R, S` it is.
 
-Naming: the manuscript calls the right pair `Q, R` in §§1–4 and the central pair `P, Q` in §6;
-here the right pair is always `R, S` and the central pair always `P, Q` (the names of
-`TYPE_II_COMPLETION.md`). In §3 the right hull vertex adjacent to `B` (the manuscript's `Q`) is
-whichever of `R, S` it is.
-
-Thresholds: §§1–5 work at doubled threshold `s = 7/64` (area `7/128`), §6 at the stronger
-`s = 79/720 < 2A₀` (area `79/1440`), and the final placement uses `σ = 7/64` again.
+Thresholds: most results work at doubled threshold `s = 7/64` (area `7/128`);
+`not_both_central_in_DEC` uses the stronger `s = 79/720 < 2A₀` (area `79/1440`), and the final
+placement uses `σ = 7/64` again.
 
 Results:
 
-* `claim_lower_vertex_ineq` (§1, (2)–(3)): the lower-vertex inequality of a four-point endpoint
-  quadrilateral in the triangle `(0,0), (1,0), (1,1)`;
-* `claim_left_quad_bounds` (§2, (4)–(6)): a quadrilateral left hull forces a low point;
-* `claim_both_quad_excluded` (§3): both side hulls cannot be quadrilaterals (stated as: the right
+* `lower_vertex_bounds`: the lower-vertex inequality of a four-point endpoint quadrilateral
+  in the triangle `(0,0), (1,0), (1,1)`;
+* `left_quad_bounds`: a quadrilateral left hull forces a low point;
+* `right_hull_triangular_of_left_quad`: both side hulls cannot be quadrilaterals (stated as: the right
   hull is triangular, one right point strictly inside the triangle `B, C` and the other);
-* `claim_leftquad_righttri_excluded` (§4): left quadrilateral with right triangle is impossible;
-* `mainTheorem` (**Theorem**): `L` lies strictly inside `DBE`;
-* `claim_not_both_below_CE`, `claim_both_above_L_below` (§5);
-* `claim_not_both_above_CE` (§6, at `79/720`);
-* `claim_L_above_CE` (§6, (23)) and the summary `claim_balanced_placement`, with the
-  definition `BalancedPlacement` of the resulting placement used by `TYPE_II_COMPLETION.md`.
+* `false_of_left_quad_of_right_tri`: left quadrilateral with right triangle is impossible;
+* `left_hull_triangular`: `L` lies strictly inside `DBE`;
+* `not_both_central_in_EBC`, `left_in_EBC_of_central_in_DEC`: restrictions on the two central points
+  relative to the cut `CE`;
+* `not_both_central_in_DEC` (at `79/720`);
+* `left_above_CE` and the summary `balancedPlacement_or_swap`, with the definition
+  `BalancedPlacement` of the resulting placement.
 
-Proof notes. The hull alternatives of the four-point sets are written as sign conditions: the
+Implementation notes. The hull alternatives of the four-point sets are written as sign conditions: the
 left set `D, B, E, L` is triangular exactly when `L` is inside `DBE`; for the right set
 `B, C, R, S` (both right points on one side of `BC`) the signs of `[BRS]` and `[RCS]` decide
 between `S` inside `BRC`, `R` inside `BSC` and the two convex quadrilaterals `B, R, S, C`,
-`B, S, R, C`. The one-variable calculus of §6 ((19)–(22)) is replaced by the polynomial form
-of the same bound: for `z = bq` the expression `z(1 - q + z) - s(1 + z)` increases with `z`, and
-at the largest `z` allowed by the table row it is a quartic in `q`, negative on `[6s, 1]`.
+`B, S, R, C`. The bound on `[EBL]` in `not_both_central_in_DEC` is proved in polynomial form:
+for `z = bq` the expression `z(1 - q + z) - s(1 + z)` increases with `z`, and at the largest `z`
+allowed by the line table it is a quartic in `q`, negative on `[6s, 1]`.
 -/
 
 @[expose] public section
@@ -48,17 +45,15 @@ namespace Heilbronn.Nine.TypeIIBalanced
 
 open Heilbronn.Nine.TypeII
 
-/-- The balanced row `(2,2,2)` with labelled points: (5) with `0 < b ≤ 1/2`, the free points in
-the square, `L` a left point, `P, Q` central points and `R, S` right points
-(`TYPE_II_BALANCED.md` lines 5–17). -/
+/-- The balanced row `(2,2,2)` with labelled points: the Type-II data with `0 < b ≤ 1/2`, the
+free points in the square, `L` a left point, `P, Q` central points and `R, S` right points. -/
 def BalancedRow (l b : ℝ) (L P Q R S : Point) : Prop :=
   TypeIIData l b L P Q R S ∧ b ≤ 1 / 2 ∧ IsLeft b L ∧ IsCentral b P ∧ IsCentral b Q ∧
     IsRight b R ∧ IsRight b S
 
-/-- The final balanced placement of `TYPE_II_BALANCED.md` lines 401–405, the starting point of
-`TYPE_II_COMPLETION.md` §4: (5) with `0 < b ≤ 1/2`, the free points in the square, `L` strictly
-inside `DBE` and above `CE`, the central point `P` above `CE`, the central point `Q` below `CE`,
-and `R, S` right points. -/
+/-- The final balanced placement: the Type-II data with `0 < b ≤ 1/2`, the free points in the
+square, `L` strictly inside `DBE` and above `CE`, the central point `P` above `CE`, the central
+point `Q` below `CE`, and `R, S` right points. -/
 def BalancedPlacement (l b : ℝ) (L P Q R S : Point) : Prop :=
   TypeIIData l b L P Q R S ∧ b ≤ 1 / 2 ∧
     InTriangle L ptD (ptE l) (ptB b) ∧ 0 < sarea (ptE l) ptC L ∧
@@ -81,7 +76,7 @@ theorem Ktwo_s_gt : 13 / 16 < Ktwo * (7 / 64) := by unfold Ktwo; nlinarith [sqrt
 theorem two_interior_sarea {A B C X Y : Point} (hX : InTriangle X A B C)
     (hY : InTriangle Y A B C) (hmin : 7 / 128 ≤ minTriangleArea ![A, B, C, X, Y]) :
     Ktwo * (7 / 64) ≤ sarea A B C := by
-  have h2 := CornerFamilies.twoInteriorPointLemma A B C X Y (Or.inl hX) (Or.inl hY) (7 / 128)
+  have h2 := twoInteriorPointLemma A B C X Y (Or.inl hX) (Or.inl hY) (7 / 128)
     (by norm_num) hmin
   have hpos : 0 < sarea A B C := by
     have := sarea_add_sarea_add_sarea A B C X
@@ -119,17 +114,15 @@ theorem balancedRow_swapPQ {l b : ℝ} {L P Q R S : Point} (h : BalancedRow l b 
   obtain ⟨⟨h1, h2, h3, h4, h5, h6, h7, h8, h9⟩, h10, h11, h12, h13, h14, h15⟩ := h
   exact ⟨⟨h1, h2, h3, h4, h5, h7, h6, h8, h9⟩, h10, h11, h13, h12, h14, h15⟩
 
-/-! ### §1. The lower vertex of an endpoint quadrilateral -/
+/-! ### The lower vertex of an endpoint quadrilateral -/
 
-/-- **Claim** (`TYPE_II_BALANCED:claim-lower-vertex-ineq`). Let `B₀ = (0,0)`, `C₀ = (1,1)`,
-`Q₀ = (x,y)`, `R₀ = (z,w)`, with `Q₀, R₀` in the closed triangle `(0,0), (1,0), (1,1)` and
-`B₀, Q₀, R₀, C₀` the vertices of a convex quadrilateral in this cyclic order, and let every
-doubled triangle area of the four points be at least `a > 0`. Then `x > y ≥ 0`, `x < 1`,
-`(x-y)(1-x) ≥ a` (2) and `y ≤ 1 - 2√a` (3). `docs/proof/nine/TYPE_II_BALANCED.md`, lines 32–79.
+/-- Let `B₀ = (0,0)`, `C₀ = (1,1)`, `Q₀ = (x,y)`, `R₀ = (z,w)`, with `Q₀, R₀` in the closed
+triangle `(0,0), (1,0), (1,1)` and `B₀, Q₀, R₀, C₀` the vertices of a convex quadrilateral in this
+cyclic order, and let every doubled triangle area of the four points be at least `a > 0`. Then
+`x > y ≥ 0`, `x < 1`, `(x-y)(1-x) ≥ a` and `y ≤ 1 - 2√a`.
 
-Implicit in the manuscript: the cyclic order is counterclockwise (forced, as `Q₀, R₀` lie below
-the diagonal `B₀C₀`). -/
-theorem claim_lower_vertex_ineq {a : ℝ} {Q₀ R₀ : Point} (ha : 0 < a)
+The cyclic order is counterclockwise (forced, as `Q₀, R₀` lie below the diagonal `B₀C₀`). -/
+theorem lower_vertex_bounds {a : ℝ} {Q₀ R₀ : Point} (ha : 0 < a)
     (hQ : 0 ≤ Q₀.2 ∧ Q₀.2 ≤ Q₀.1 ∧ Q₀.1 ≤ 1) (hR : 0 ≤ R₀.2 ∧ R₀.2 ≤ R₀.1 ∧ R₀.1 ≤ 1)
     (hconv : ConvexQuad (0, 0) Q₀ R₀ (1, 1))
     (hmin : a / 2 ≤ minTriangleArea ![((0, 0) : Point), Q₀, R₀, (1, 1)]) :
@@ -155,14 +148,12 @@ theorem claim_lower_vertex_ineq {a : ℝ} {Q₀ R₀ : Point} (ha : 0 < a)
     Real.sqrt_le_iff.2 ⟨by linarith, by nlinarith [sq_nonneg (Q₀.1 - Q₀.2 - (1 - Q₀.1))]⟩
   linarith
 
-/-! ### §2. A quadrilateral left hull -/
+/-! ### A quadrilateral left hull -/
 
-/-- **Claim** (`TYPE_II_BALANCED:claim-left-quad-bounds`). In the balanced row at doubled
-threshold `s = 7/64`, if `L = (p, v)` is not inside `DBE` (the left hull is the quadrilateral
-`D, E, L, B`), then `(1-λ)p ≥ s` and `λ(b-p) - bv ≥ s` (4); `b ≥ s/(λ(1-λ)) ≥ 4s` and
-`1 - b ≤ 9/16` (5); `v ≤ 1 - √(7/8) < 1/15` (6); and `0 < p < b`.
-`docs/proof/nine/TYPE_II_BALANCED.md`, lines 81–115. -/
-theorem claim_left_quad_bounds {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b L P Q R S)
+/-- In the balanced row at doubled threshold `s = 7/64`, if `L = (p, v)` is not inside `DBE`
+(the left hull is the quadrilateral `D, E, L, B`), then `(1-λ)p ≥ s` and `λ(b-p) - bv ≥ s`;
+`b ≥ s/(λ(1-λ)) ≥ 4s` and `1 - b ≤ 9/16`; `v ≤ 1 - √(7/8) < 1/15`; and `0 < p < b`. -/
+theorem left_quad_bounds {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b L P Q R S)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S))
     (hquad : ¬ InTriangle L ptD (ptE l) (ptB b)) :
     7 / 64 ≤ (1 - l) * L.1 ∧ 7 / 64 ≤ l * (b - L.1) - b * L.2 ∧
@@ -220,11 +211,11 @@ theorem claim_left_quad_bounds {l b : ℝ} {L P Q R S : Point} (hrow : BalancedR
   push Not at hc
   nlinarith [mul_nonneg hb.le Ly0, mul_nonneg hl.le (sub_nonneg.2 hc)]
 
-/-! ### §3. Two quadrilateral side hulls -/
+/-! ### Two quadrilateral side hulls -/
 
-/-- The scalar core of §3: `X` a right hull vertex adjacent to `B` of the convex quadrilateral
-`B, X, Y, C`, with `[BXY], [XYC] ≥ s`, is low (`X_y < 1/8`, (8)), and then `[LBX] < 1/10`
-(9). -/
+/-- The scalar core of `right_hull_triangular_of_left_quad`: `X` a right hull vertex adjacent to `B` of the
+convex quadrilateral `B, X, Y, C`, with `[BXY], [XYC] ≥ s`, is low (`X_y < 1/8`), and then
+`[LBX] < 1/10 < s`. -/
 theorem both_quad_core {b : ℝ} {L X Y : Point} (hb : 0 < b) (hb1 : b < 1) (hb2 : b ≤ 1 / 2)
     (hb9 : 1 - b ≤ 9 / 16) (hp0 : 0 < L.1) (hpb : L.1 < b) (hv0 : 0 ≤ L.2) (hv15 : L.2 < 1 / 15)
     (hXs : X ∈ unitSquare) (hYs : Y ∈ unitSquare) (hXr : IsRight b X)
@@ -267,24 +258,20 @@ theorem both_quad_core {b : ℝ} {L X Y : Point} (hb : 0 < b) (hb1 : b < 1) (hb2
     mul_le_mul hv15.le (show X.1 - b ≤ 9 / 16 by linarith) hx1 (by norm_num),
     mul_nonneg (sub_nonneg.2 hpb.le) x2a]
 
-/-- **Claim** (`TYPE_II_BALANCED:claim-both-quad-excluded`). At doubled threshold `7/64`, if
-the left hull is a quadrilateral then the right four-point hull `B, C, R, S` is triangular:
-otherwise the lower-vertex inequality, after `(x,y) ↦ ((x-b)/(1-b), y)` with `a = s/(1-b) ≥ 7/36`,
-gives a right hull vertex `Q` with `Q_y < 1/8` (8), and `[LBQ] < 1/10 < s` (9).
-`docs/proof/nine/TYPE_II_BALANCED.md`, lines 117–155.
+/-- At doubled threshold `7/64`, if the left hull is a quadrilateral then the right four-point
+hull `B, C, R, S` is triangular: otherwise the lower-vertex inequality, after
+`(x,y) ↦ ((x-b)/(1-b), y)` with `a = s/(1-b) ≥ 7/36`, gives a right hull vertex `Q` with
+`Q_y < 1/8`, and `[LBQ] < 1/10 < s` (`both_quad_core`).
 
 Stated (strengthened) as the triangular alternative itself: one right point is strictly inside the
 triangle formed by `B, C` and the other (`B, C` are always hull vertices). `TriangularHull` of the
-four points follows (`triangularHull_of_inner`).
-
-Uses: TYPE_II_BALANCED:claim-lower-vertex-ineq (its scalar argument, `both_quad_core`),
-TYPE_II_BALANCED:claim-left-quad-bounds. -/
-theorem claim_both_quad_excluded {l b : ℝ} {L P Q R S : Point}
+four points follows. -/
+theorem right_hull_triangular_of_left_quad {l b : ℝ} {L P Q R S : Point}
     (hrow : BalancedRow l b L P Q R S)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S))
     (hquad : ¬ InTriangle L ptD (ptE l) (ptB b)) :
     InTriangle S (ptB b) R ptC ∨ InTriangle R (ptB b) S ptC := by
-  obtain ⟨-, -, -, h4s, hb9, -, hv15, hp0, hpb⟩ := claim_left_quad_bounds hrow hmin hquad
+  obtain ⟨-, -, -, h4s, hb9, -, hv15, hp0, hpb⟩ := left_quad_bounds hrow hmin hquad
   obtain ⟨⟨hb, hb1, -, -, hLs, -, -, hRs, hSs⟩, hb2, -, -, -, hR, hS⟩ := hrow
   obtain ⟨-, -, Ly0, -⟩ := hLs
   rw [typeIIConfig_eq] at hmin
@@ -322,7 +309,7 @@ theorem claim_both_quad_excluded {l b : ℝ} {L P Q R S : Point}
       (ge_of_abs_pos (by rw [c5]; linarith) eRSC) eLBR
   · exact Or.inl ⟨h1, h2, by rw [c1]; exact pBSC⟩
 
-/-! ### §4. A left quadrilateral with a triangular right hull -/
+/-! ### A left quadrilateral with a triangular right hull -/
 
 /-- A central point lies in `DBR` or in `DRC` according to the side of `DR`. -/
 theorem central_split {b : ℝ} {R X : Point} (hg : 0 < sarea (ptB b) R ptC)
@@ -360,13 +347,14 @@ theorem inner_split {b : ℝ} {R X : Point} (hDBR : 0 < sarea ptD (ptB b) R)
   · have : 0 < sarea ptC ptD X * sarea (ptB b) R ptC := by rw [i2]; positivity
     exact pos_of_mul_pos_left this hg.le
 
-/-- The scalar end of §4: (14) and the bound (15) on `[LBR]`. -/
+/-- The scalar end of `false_of_left_quad_of_right_tri`: `λ(1-λ) ≥ 2s` gives `1 - λ < 11/16`
+and `p > 7/44`, and then `[LBR] < 357/3520 < s`. -/
 theorem leftquad_final {l b : ℝ} {L R : Point} (_hb : 0 < b) (hb2 : b ≤ 1 / 2)
     (hb9 : 1 - b ≤ 9 / 16) (hl : 0 < l) (hl1 : l < 1) (hlb : 7 / 64 ≤ l * (1 - l) * b)
     (h4a : 7 / 64 ≤ (1 - l) * L.1) (hp0 : 0 < L.1) (hpb : L.1 < b) (Ly0 : 0 ≤ L.2)
     (hv15 : L.2 < 1 / 15) (Ry0 : 0 ≤ R.2) (Rx1 : R.1 ≤ 1) (hu : R.2 < 3 / 16) (hR : IsRight b R)
     (eLBR : 7 / 64 ≤ |sarea L (ptB b) R|) : False := by
-  -- (14)
+  -- `λ(1-λ) ≥ 2s`, hence `1 - λ < 11/16` and `p > 7/44`
   have hl2 : 7 / 32 ≤ l * (1 - l) := by
     have := mul_le_mul_of_nonneg_left hb2 (mul_nonneg hl.le (by linarith : (0:ℝ) ≤ 1 - l))
     nlinarith
@@ -375,7 +363,7 @@ theorem leftquad_final {l b : ℝ} {L R : Point} (_hb : 0 < b) (hb2 : b ≤ 1 / 
     by_contra hc
     push Not at hc
     nlinarith [mul_le_mul hl11.le hc hp0.le (by norm_num)]
-  -- (15)
+  -- `[LBR] = (b-p)u + v(r-b) < 357/3520`
   have dLBR : sarea L (ptB b) R = (b - L.1) * R.2 + L.2 * (R.1 - b) := by
     simp only [sarea, ptB]; ring
   have hrb : 0 ≤ R.1 - b := by
@@ -386,22 +374,19 @@ theorem leftquad_final {l b : ℝ} {L R : Point} (_hb : 0 < b) (hb2 : b ≤ 1 / 
   nlinarith [mul_le_mul (show b - L.1 ≤ 15 / 44 by linarith) hu.le Ry0 (by norm_num),
     mul_le_mul hv15.le (show R.1 - b ≤ 9 / 16 by linarith) hrb (by norm_num)]
 
-/-- **Claim** (`TYPE_II_BALANCED:claim-leftquad-righttri-excluded`). At doubled threshold `7/64`,
-a quadrilateral left hull and a triangular right hull are incompatible: with `R` the third right
-hull vertex (`S` strictly inside `BRC`), `g ≥ 3s` (10), `2 area(DBR) < 13/16` (11), the
-two-interior bound (12) puts two of the three points `P, Q, S` in `DCR`, `u < 3/16` (13), (14),
-and `[LBR] < 357/3520 < s` (15). `docs/proof/nine/TYPE_II_BALANCED.md`, lines 157–239.
+/-- At doubled threshold `7/64`, a quadrilateral left hull and a triangular right hull are
+incompatible: with `R` the third right hull vertex (`S` strictly inside `BRC`), `g = [BRC] ≥ 3s`,
+`2 area(DBR) < 13/16`, the two-interior bound puts two of the three points `P, Q, S` in `DCR`,
+so `u < 3/16`, and then `[LBR] < 357/3520 < s` (`leftquad_final`).
 
 Stated with the triangular alternative written out (`S` inside `BRC`); the other labelling is
-the same statement with `R, S` exchanged (`claim_both_quad_excluded`).
-
-Uses: TYPE_II_BALANCED:claim-left-quad-bounds, CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_leftquad_righttri_excluded {l b : ℝ} {L P Q R S : Point}
+the same statement with `R, S` exchanged (`right_hull_triangular_of_left_quad`). -/
+theorem false_of_left_quad_of_right_tri {l b : ℝ} {L P Q R S : Point}
     (hrow : BalancedRow l b L P Q R S)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S))
     (hquad : ¬ InTriangle L ptD (ptE l) (ptB b)) (htri : InTriangle S (ptB b) R ptC) :
     False := by
-  obtain ⟨h4a, -, hlb, h4s, hb9, -, hv15, hp0, hpb⟩ := claim_left_quad_bounds hrow hmin hquad
+  obtain ⟨h4a, -, hlb, h4s, hb9, -, hv15, hp0, hpb⟩ := left_quad_bounds hrow hmin hquad
   obtain ⟨⟨hb, hb1, hl, hl1, hLs, -, -, hRs, -⟩, hb2, -, hP, hQ, hR, -⟩ := hrow
   obtain ⟨-, -, Ly0, -⟩ := hLs
   obtain ⟨-, Rx1, Ry0, -⟩ := hRs
@@ -419,7 +404,7 @@ theorem claim_leftquad_righttri_excluded {l b : ℝ} {L P Q R S : Point}
   have dDBR : sarea ptD (ptB b) R = R.1 - b + b * R.2 := by simp only [sarea, ptB, ptD]; ring
   have dDRC : sarea ptD R ptC = 1 - R.2 := by simp only [sarea, ptC, ptD]; ring
   have hw : 0 < 1 - b := by linarith
-  -- (10)–(11)
+  -- `g ≥ 3s` and `2 area(DBR) < 13/16`
   have hu1 : (1 - b) * R.2 ≤ 1 - b - 3 * (7 / 64) := by linarith
   have pDBR : 0 < sarea ptD (ptB b) R := by rw [dDBR]; nlinarith
   have pDRC : 0 < sarea ptD R ptC := by rw [dDRC]; nlinarith
@@ -429,7 +414,7 @@ theorem claim_leftquad_righttri_excluded {l b : ℝ} {L P Q R S : Point}
       nlinarith [mul_le_mul_of_nonneg_left hu1 hb.le]
     nlinarith
   have hK := Ktwo_s_gt
-  -- (12)–(13): two of `P, Q, S` in `DRC`
+  -- two of `P, Q, S` in `DRC`, hence `u < 3/16`
   have nP := ne_of_le_abs (by norm_num) (le_abs_sarea_of_le_min hm 0 7 5)
   have nQ := ne_of_le_abs (by norm_num) (le_abs_sarea_of_le_min hm 0 7 6)
   have nS := ne_of_le_abs (by norm_num) (le_abs_sarea_of_le_min hm 0 7 8)
@@ -467,24 +452,20 @@ theorem claim_leftquad_righttri_excluded {l b : ℝ} {L P Q R S : Point}
   have eLBR : 7 / 64 ≤ |sarea L (ptB b) R| := le_abs_sarea_of_le_min hm 4 3 7
   exact leftquad_final hb hb2 hb9 hl hl1 hlb h4a hp0 hpb Ly0 hv15 Ry0 Rx1 hu hR eLBR
 
-/-- **Theorem** (`TYPE_II_BALANCED:Theorem`). In the balanced row, with every doubled triangle
-area at least `s = 7/64`, the four-point set `D, B, E, L` has triangular hull `DBE`: `L` lies
-strictly inside `DBE`. `docs/proof/nine/TYPE_II_BALANCED.md`, lines 19–20 (proof lines 81–239).
-
-Uses: TYPE_II_BALANCED:claim-both-quad-excluded,
-TYPE_II_BALANCED:claim-leftquad-righttri-excluded. -/
-theorem mainTheorem {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b L P Q R S)
+/-- In the balanced row, with every doubled triangle area at least `s = 7/64`, the four-point set
+`D, B, E, L` has triangular hull `DBE`: `L` lies strictly inside `DBE`. -/
+theorem left_hull_triangular {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b L P Q R S)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     InTriangle L ptD (ptE l) (ptB b) := by
   by_contra hquad
-  rcases claim_both_quad_excluded hrow hmin hquad with h | h
-  · exact claim_leftquad_righttri_excluded hrow hmin hquad h
-  · exact claim_leftquad_righttri_excluded (balancedRow_swapRS hrow)
+  rcases right_hull_triangular_of_left_quad hrow hmin hquad with h | h
+  · exact false_of_left_quad_of_right_tri hrow hmin hquad h
+  · exact false_of_left_quad_of_right_tri (balancedRow_swapRS hrow)
       (by rw [min_swapRS]; exact hmin) hquad h
 
-/-! ### §5. Cut restrictions in the triangular-left branch -/
+/-! ### Cut restrictions in the triangular-left branch -/
 
-/-- Subdivision of `DBE` at `L`: `b(1-λ) ≥ 3s` (16). -/
+/-- Subdivision of `DBE` at `L`: `b(1-λ) ≥ 3s`. -/
 theorem bq_ge {l b s : ℝ} {L P Q R S : Point}
     (hmin : s / 2 ≤ minTriangleArea (typeIIConfig l b L P Q R S))
     (hLin : InTriangle L ptD (ptE l) (ptB b)) : 3 * s ≤ b * (1 - l) := by
@@ -526,22 +507,19 @@ theorem EBC_two_false {l b : ℝ} {X Y : Point} (hb2 : b ≤ 1 / 2) (hl1 : l < 1
   unfold Ktwo at h2
   nlinarith [sqrt_three_gt]
 
-/-- **Claim** (`TYPE_II_BALANCED:claim-not-both-below-CE`). At doubled threshold `7/64`, the two
-central points are not both inside `EBC` (with `b(1-λ) ≥ 3s` (16) from `L ∈ DBE`, the
-two-interior bound would give `1 ≥ (7+2√3)s > 1`). `docs/proof/nine/TYPE_II_BALANCED.md`, lines 241–268.
-
-Uses: TYPE_II_BALANCED:Theorem, CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_not_both_below_CE {l b : ℝ} {L P Q R S : Point}
+/-- At doubled threshold `7/64`, the two central points are not both inside `EBC` (with
+`b(1-λ) ≥ 3s` from `L ∈ DBE`, the two-interior bound would give `1 ≥ (7+2√3)s > 1`). -/
+theorem not_both_central_in_EBC {l b : ℝ} {L P Q R S : Point}
     (hrow : BalancedRow l b L P Q R S)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     ¬ (InTriangle P (ptE l) (ptB b) ptC ∧ InTriangle Q (ptE l) (ptB b) ptC) := by
   rintro ⟨hPE, hQE⟩
-  have hbq := bq_ge (s := 7 / 64) (le_trans (le_of_eq (by norm_num)) hmin) (mainTheorem hrow hmin)
+  have hbq := bq_ge (s := 7 / 64) (le_trans (le_of_eq (by norm_num)) hmin) (left_hull_triangular hrow hmin)
   exact EBC_two_false hrow.2.1 hrow.1.2.2.2.1 hbq hPE hQE
     (row_sub (by norm_num) hmin ![2, 3, 1, 5, 6] (by decide) _ (by funext m; fin_cases m <;> rfl))
 
 /-- Three of the free points `L, P, Q` cannot all lie inside `DCE` at least area above `7/128`:
-the corner-triangle theorem of `ONE_CORNER.md`, after the reflection `y ↦ 1 - y` (which sends
+`OneCorner.cornerTriangleOccupancyTheorem`, after the reflection `y ↦ 1 - y` (which sends
 `D, E, C` to `(0,0), (0,1-λ), (1,0)`). -/
 theorem corner_three {l b : ℝ} {L P Q R S : Point} (hd : TypeIIData l b L P Q R S)
     (hmin : 7 / 128 < minTriangleArea (typeIIConfig l b L P Q R S))
@@ -558,13 +536,13 @@ theorem corner_three {l b : ℝ} {L P Q R S : Point} (hd : TypeIIData l b L P Q 
   have hl := hd.2.2.1
   have hl1 := hd.2.2.2.1
   have key : ∀ X : Point, InTriangle X ptD (ptE l) ptC →
-      CornerFamilies.InsideTriangle (affineMap 1 0 0 (-1) 0 1 X) (0, 0) (0, 1 - l) (1, 0) := by
+      InsideTriangle (affineMap 1 0 0 (-1) 0 1 X) (0, 0) (0, 1 - l) (1, 0) := by
     rintro X ⟨h1, h2, h3⟩
     right
     simp only [InTriangle, sarea, affineMap, ptD, ptE, ptC] at h1 h2 h3 ⊢
     refine ⟨by linarith, by linarith, by linarith⟩
-  have h3 : 3 ≤ {m : Fin 9 | CornerFamilies.InsideTriangle (Pr m) (0, 0) (0, 1 - l) (1, 0)}.ncard := by
-    have : 2 < {m : Fin 9 | CornerFamilies.InsideTriangle (Pr m) (0, 0) (0, 1 - l) (1, 0)}.ncard :=
+  have h3 : 3 ≤ {m : Fin 9 | InsideTriangle (Pr m) (0, 0) (0, 1 - l) (1, 0)}.ncard := by
+    have : 2 < {m : Fin 9 | InsideTriangle (Pr m) (0, 0) (0, 1 - l) (1, 0)}.ncard :=
       (Set.two_lt_ncard_iff).2 ⟨4, 5, 6, key L hL, key P hP, key Q hQ, by decide, by decide,
         by decide⟩
     omega
@@ -576,24 +554,19 @@ theorem corner_three {l b : ℝ} {L P Q R S : Point} (hd : TypeIIData l b L P Q 
   rw [hmr] at this
   linarith
 
--- FLAG: the manuscript works at "every doubled area at least `7/64`" (weak), but the cited
--- corner-triangle occupancy theorem (`ONE_CORNER.md` (1), proved by assuming `t > 7/128`) only
--- gives `t ≤ 7/128`, no contradiction at `t = 7/128`. The proof needs least area strictly above
--- `7/128`; it is stated so here (on the route `t ≥ A₀ > 7/128`).
-/-- **Claim** (`TYPE_II_BALANCED:claim-not-both-below-CE`, second part). If both central points
-are inside `DCE`, then `L` is below `CE`, inside `EBC`: the corner-triangle theorem of
-`ONE_CORNER.md` forbids three points inside `DCE`. `docs/proof/nine/TYPE_II_BALANCED.md`, lines 268–271.
+-- Threshold: the corner-triangle occupancy theorem (`OneCorner.cornerTriangleOccupancyTheorem`)
+-- only gives `t ≤ 7/128`, so there is no contradiction at `t = 7/128`. The proof needs least area
+-- strictly above `7/128`; it is stated so here (as used, with `t ≥ A₀ > 7/128`).
+/-- If both central points are inside `DCE`, then `L` is below `CE`, inside `EBC`: by
+`corner_three`, the triangle `DCE` cannot contain three of the free points.
 
-FLAG (threshold): stated at least area `> 7/128` rather than the manuscript's `≥ 7/128`, see the
-comment above.
-
-Uses: TYPE_II_BALANCED:Theorem, ONE_CORNER:CornerTriangleOccupancyTheorem. -/
-theorem claim_both_above_L_below {l b : ℝ} {L P Q R S : Point}
+Stated at least area `> 7/128` rather than `≥ 7/128`, see the comment above. -/
+theorem left_in_EBC_of_central_in_DEC {l b : ℝ} {L P Q R S : Point}
     (hrow : BalancedRow l b L P Q R S)
     (hmin : 7 / 128 < minTriangleArea (typeIIConfig l b L P Q R S))
     (hPE : InTriangle P ptD (ptE l) ptC) (hQE : InTriangle Q ptD (ptE l) ptC) :
     InTriangle L (ptE l) (ptB b) ptC := by
-  have hLin := mainTheorem hrow hmin.le
+  have hLin := left_hull_triangular hrow hmin.le
   obtain ⟨hb, -, hl, hl1, -⟩ := hrow.1
   obtain ⟨hCDL, hBCL⟩ := deb_facts hb hl hl1 hLin
   have hm : (7 / 64 : ℝ) / 2 ≤ minTriangleArea ![ptD, ptC, ptE l, ptB b, L, P, Q, R, S] := by
@@ -604,10 +577,10 @@ theorem claim_both_above_L_below {l b : ℝ} {L P Q R S : Point}
   · exact ⟨hLin.2.1, hBCL, by rw [c]; linarith⟩
   · exact (corner_three hrow.1 hmin ⟨hLin.1, h, hCDL⟩ hPE hQE).elim
 
-/-! ### §6. The two central points on opposite sides of `CE` -/
+/-! ### The two central points on opposite sides of `CE` -/
 
-/-- `B, E` are on the same side of `PQ` for two points inside `DCB ∩ DCE` (the chamber lemma in
-both orientations, `TYPE_II.md` §12). -/
+/-- `B, E` are on the same side of `PQ` for two points inside `DCB ∩ DCE` (`twoPointChamberLemma`
+in both orientations). -/
 theorem pq_BE_same_side {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤ 1 / 2)
     (hl : 0 < l) (hl1 : l < 1)
     (hPB : InTriangle P ptD (ptB b) ptC) (hPE : InTriangle P ptD (ptE l) ptC)
@@ -640,9 +613,9 @@ theorem pq_BE_same_side {l b : ℝ} {P Q : Point} (hb : 0 < b) (hb2 : b ≤ 1 / 
     linarith
   · exact mul_pos hB hE
 
-/-- The scalar end of §6 at `s = 79/720`: with `z = bq`, the area bound
-`(1+z)[EBL] ≤ z(1 - q + z)` from (18), the table row `A² ≥ 4sq(1+z)`, `A = q - s(q+1) > 0`
-(19), `3s ≤ z ≤ q/2` and `q ≤ 1` contradict `[EBL] ≥ s` ((20)–(22) in polynomial form). -/
+/-- The scalar end of `not_both_central_in_DEC` at `s = 79/720`: with `z = bq`, the area bound
+`(1+z)[EBL] ≤ z(1 - q + z)`, the line-table row `A² ≥ 4sq(1+z)`, `A = q - s(q+1) > 0`,
+`3s ≤ z ≤ q/2` and `q ≤ 1` contradict `[EBL] ≥ s`. -/
 theorem abovece_scalar {q z e : ℝ} (hq1 : q ≤ 1) (hz : 3 * (79 / 720) ≤ z) (hzq : z ≤ q / 2)
     (hA2 : 4 * (79 / 720) * q * (1 + z) ≤ (q - 79 / 720 * (q + 1)) ^ 2)
     (he : 79 / 720 ≤ e) (hez : (1 + z) * e ≤ z * (1 - q + z)) : False := by
@@ -668,16 +641,12 @@ theorem abovece_scalar {q z e : ℝ} (hq1 : q ≤ 1) (hz : 3 * (79 / 720) ≤ z)
       pow_nonneg a0 4]
   nlinarith [mul_nonneg (sq_nonneg (4 * (79 / 720) * q)) hh]
 
-/-- **Claim** (`TYPE_II_BALANCED:claim-not-both-above-CE`). At the stronger doubled threshold
-`s = 79/720 < 2A₀` (area `79/1440`), the two central points cannot both lie in `DCE`: then `L` is
-inside `EBT`, `T = DB ∩ CE` (18); `D, C` are on the same side of `PQ` by (36) since `b ≥ 3s > 2/7`;
-the same-side row of `TYPE_II.md` §12 gives `b ≤ B(q)` (19), and `2 area(EBL) ≤ F(1) < 49/450 < s`
-(20)–(22). Hence exactly one central point lies on each side of `CE`.
-`docs/proof/nine/TYPE_II_BALANCED.md`, lines 275–380.
-
-Uses: TYPE_II_BALANCED:Theorem, ONE_CORNER:CornerTriangleOccupancyTheorem,
-TYPE_II:claim-b-le-2/7, TYPE_II:claim-PQ-line-table, TYPE_II:TwoPointChamberLemma. -/
-theorem claim_not_both_above_CE {l b : ℝ} {L P Q R S : Point}
+/-- At the stronger doubled threshold `s = 79/720 < 2A₀` (area `79/1440`), the two central points
+cannot both lie in `DCE`: then `L` is inside `EBT`, `T = DB ∩ CE` (`left_in_EBC_of_central_in_DEC`);
+`D, C` are on the same side of `PQ` by `b_le_two_sevenths` since `b ≥ 3s > 2/7`; the
+same-side row of `pq_line_table` bounds `b` in terms of `q`, and then `2 area(EBL) < s`
+(`abovece_scalar`). Hence exactly one central point lies on each side of `CE`. -/
+theorem not_both_central_in_DEC {l b : ℝ} {L P Q R S : Point}
     (hrow : BalancedRow l b L P Q R S)
     (hmin : 79 / 1440 ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     ¬ (InTriangle P ptD (ptE l) ptC ∧ InTriangle Q ptD (ptE l) ptC) := by
@@ -686,8 +655,8 @@ theorem claim_not_both_above_CE {l b : ℝ} {L P Q R S : Point}
     le_trans (by norm_num) hmin
   have hmin7' : 7 / 128 < minTriangleArea (typeIIConfig l b L P Q R S) :=
     lt_of_lt_of_le (by norm_num) hmin
-  have hLin := mainTheorem hrow hmin7
-  have hLb := claim_both_above_L_below hrow hmin7' hPE hQE
+  have hLin := left_hull_triangular hrow hmin7
+  have hLb := left_in_EBC_of_central_in_DEC hrow hmin7' hPE hQE
   have hbq := bq_ge (s := 79 / 720) (le_trans (le_of_eq (by norm_num)) hmin) hLin
   obtain ⟨⟨hb, hb1, hl, hl1, -⟩, hb2, -, hP, hQ, -⟩ := hrow
   have h6 : 7 / 128 ≤ minTriangleArea ![ptD, ptC, ptE l, ptB b, P, Q] :=
@@ -704,10 +673,10 @@ theorem claim_not_both_above_CE {l b : ℝ} {L P Q R S : Point}
   have hDC : 0 < sarea P Q ptD * sarea P Q ptC := by
     rcases lt_or_gt_of_ne (mul_ne_zero nD nC) with h | h
     · exfalso
-      have := claim_b_le_two_sevenths hb hb2 hl hl1 hP hPE hQ hQE h6 h
+      have := b_le_two_sevenths hb hb2 hl hl1 hP hPE hQ hQE h6 h
       nlinarith
     · exact h
-  obtain ⟨htri, h1, -, -⟩ := claim_PQ_line_table (s := 79 / 720) (by norm_num) hb hb1 hl hl1 hP
+  obtain ⟨htri, h1, -, -⟩ := pq_line_table (s := 79 / 720) (by norm_num) hb hb1 hl hl1 hP
     hPE hQ hQE h6' hBE
   have row1 : 0 < sarea P Q ptD * sarea P Q ptC ∧ sarea P Q ptD * sarea P Q (ptB b) < 0 := by
     rcases htri with h | ⟨h2, h3⟩ | ⟨h2, h3⟩
@@ -738,17 +707,14 @@ theorem claim_not_both_above_CE {l b : ℝ} {L P Q R S : Point}
       mul_neg_of_pos_of_neg hz hECL]
   exact abovece_scalar (q := 1 - l) (by linarith) hbq (by nlinarith) hA2 he hez
 
-/-- **Claim** (`TYPE_II_BALANCED:claim-L-above-CE`). At doubled threshold `σ = 7/64`, if the
-central point `P` is above `CE` (inside `DCE`) and `Q` below it (inside `EBC`), then `L` is above
-`CE`, so `DCE` contains `L, P`, and `q = 1 - λ > 13/16`, `λ < 3/16` (23).
-`docs/proof/nine/TYPE_II_BALANCED.md`, lines 382–399.
-
-Uses: TYPE_II_BALANCED:Theorem, CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_L_above_CE {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b L P Q R S)
+/-- At doubled threshold `σ = 7/64`, if the central point `P` is above `CE` (inside `DCE`) and
+`Q` below it (inside `EBC`), then `L` is above `CE`, so `DCE` contains `L, P`, and
+`q = 1 - λ > 13/16`, `λ < 3/16`. -/
+theorem left_above_CE {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b L P Q R S)
     (hmin : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S))
     (hPE : InTriangle P ptD (ptE l) ptC) (hQE : InTriangle Q (ptE l) (ptB b) ptC) :
     0 < sarea (ptE l) ptC L ∧ InTriangle L ptD (ptE l) ptC ∧ 13 / 16 < 1 - l ∧ l < 3 / 16 := by
-  have hLin := mainTheorem hrow hmin
+  have hLin := left_hull_triangular hrow hmin
   have hbq := bq_ge (s := 7 / 64) (le_trans (le_of_eq (by norm_num)) hmin) hLin
   obtain ⟨⟨hb, hb1, hl, hl1, -⟩, hb2, -⟩ := hrow
   obtain ⟨hCDL, hBCL⟩ := deb_facts hb hl hl1 hLin
@@ -771,21 +737,16 @@ theorem claim_L_above_CE {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow l b
   have hK := Ktwo_s_gt
   exact ⟨hpos, hLE, by linarith, by linarith⟩
 
-/-- **Claim** (`TYPE_II_BALANCED:claim-balanced-placement`, made up). The resulting placement
-(lines 401–405): at doubled threshold `79/720`, after possibly exchanging the two central points,
-the balanced row is in the `BalancedPlacement`: `L` strictly inside `DBE` and above `CE`, one
-central point above `CE`, the other below. `docs/proof/nine/TYPE_II_BALANCED.md`, lines 379–405.
-
-Uses: TYPE_II_BALANCED:Theorem, TYPE_II_BALANCED:claim-not-both-below-CE,
-TYPE_II_BALANCED:claim-not-both-above-CE, TYPE_II_BALANCED:claim-L-above-CE,
-TYPE_II:claim-central-cut. -/
-theorem claim_balanced_placement {l b : ℝ} {L P Q R S : Point}
+/-- At doubled threshold `79/720`, after possibly exchanging the two central points, the balanced
+row is in the `BalancedPlacement`: `L` strictly inside `DBE` and above `CE`, one central point
+above `CE`, the other below. -/
+theorem balancedPlacement_or_swap {l b : ℝ} {L P Q R S : Point}
     (hrow : BalancedRow l b L P Q R S)
     (hmin : 79 / 1440 ≤ minTriangleArea (typeIIConfig l b L P Q R S)) :
     BalancedPlacement l b L P Q R S ∨ BalancedPlacement l b L Q P R S := by
   have hmin7 : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L P Q R S) :=
     le_trans (by norm_num) hmin
-  have hLin := mainTheorem hrow hmin7
+  have hLin := left_hull_triangular hrow hmin7
   have hrow' := balancedRow_swapPQ hrow
   have hmin7s : 7 / 128 ≤ minTriangleArea (typeIIConfig l b L Q P R S) := by
     rw [min_swapPQ]; exact hmin7
@@ -798,19 +759,19 @@ theorem claim_balanced_placement {l b : ℝ} {L P Q R S : Point}
     rw [← typeIIConfig_eq]; linarith
   have nP : sarea (ptE l) ptC P ≠ 0 := ne_of_le_abs (by norm_num) (le_abs_sarea_of_le_min hm 2 1 5)
   have nQ : sarea (ptE l) ptC Q ≠ 0 := ne_of_le_abs (by norm_num) (le_abs_sarea_of_le_min hm 2 1 6)
-  have cP := claim_central_cut hb hb1 hl hl1 hP
-  have cQ := claim_central_cut hb hb1 hl hl1 hQ
+  have cP := central_inTriangle_iff hb hb1 hl hl1 hP
+  have cQ := central_inTriangle_iff hb hb1 hl hl1 hQ
   rcases lt_or_gt_of_ne nP with sP | sP <;> rcases lt_or_gt_of_ne nQ with sQ | sQ
-  · exact (claim_not_both_below_CE ⟨hd, hb2, hrow'.2.2.1, hP, hQ, hR, hS⟩ hmin7
+  · exact (not_both_central_in_EBC ⟨hd, hb2, hrow'.2.2.1, hP, hQ, hR, hS⟩ hmin7
       ⟨cP.2.2 sP, cQ.2.2 sQ⟩).elim
   · right
-    obtain ⟨hL, -⟩ := claim_L_above_CE hrow' hmin7s (cQ.1.2 sQ) (cP.2.2 sP)
+    obtain ⟨hL, -⟩ := left_above_CE hrow' hmin7s (cQ.1.2 sQ) (cP.2.2 sP)
     exact ⟨hrow'.1, hb2, hLin, hL, hQ, sQ, hP, sP, hR, hS⟩
   · left
-    obtain ⟨hL, -⟩ := claim_L_above_CE ⟨hd, hb2, hrow'.2.2.1, hP, hQ, hR, hS⟩ hmin7 (cP.1.2 sP)
+    obtain ⟨hL, -⟩ := left_above_CE ⟨hd, hb2, hrow'.2.2.1, hP, hQ, hR, hS⟩ hmin7 (cP.1.2 sP)
       (cQ.2.2 sQ)
     exact ⟨hd, hb2, hLin, hL, hP, sP, hQ, sQ, hR, hS⟩
-  · exact (claim_not_both_above_CE ⟨hd, hb2, hrow'.2.2.1, hP, hQ, hR, hS⟩ hmin
+  · exact (not_both_central_in_DEC ⟨hd, hb2, hrow'.2.2.1, hP, hQ, hR, hS⟩ hmin
       ⟨cP.1.2 sP, cQ.1.2 sQ⟩).elim
 
 end Heilbronn.Nine.TypeIIBalanced

@@ -2,10 +2,9 @@ module
 
 public import Heilbronn.Nine.Setup.Families
 
-/-! # The eight-boundary normal form (`docs/proof/nine/EIGHT_BOUNDARY.md`, §1)
+/-! # The eight-boundary normal form
 
-Definitions shared by `Heilbronn/Nine/EightBoundary/*.lean`, `Heilbronn/Nine/EightBoundary/RadialCatalogue.lean`
-and `Heilbronn/Nine/EightBoundary/R6Bound.lean`: the coordinate form (`EIGHT_BOUNDARY.md` lines 33–50) of a
+Definitions shared by the files of `Heilbronn/Nine/EightBoundary/`: the coordinate form of a
 nondegenerate configuration with eight boundary points,
 
 `A = (0,a)`, `B = (b,0)`, `C = (c,0)`, `D = (1,d)`, `E = (1,e)`, `F = (f,1)`, `G = (g,1)`,
@@ -15,7 +14,7 @@ are counterclockwise starting from the lower left-side point; as octagon vertice
 `V₀, …, V₇ = A, …, H` (`octagon`). The nine points are `eightConfig`, in the order
 `A, B, C, D, E, F, G, H, O` of `optimalConfiguration`.
 
-Also the boundary of the square and its four open sides, used by `EIGHT_BOUNDARY:Lemma1`.
+Also the boundary of the square and its four open sides, used by `EightBoundary.two_on_each_side`.
 -/
 
 @[expose] public section
@@ -28,10 +27,6 @@ namespace Heilbronn.Nine.EightBoundary
 def EightAnchors (a b c d e f g h : ℝ) : Prop :=
   0 < a ∧ a < h ∧ h < 1 ∧ 0 < b ∧ b < c ∧ c < 1 ∧ 0 < d ∧ d < e ∧ e < 1 ∧
     0 < g ∧ g < f ∧ f < 1
-
-/-- `p` lies in the open square `(0,1)²`. -/
-def InOpenSquare (p : Point) : Prop :=
-  0 < p.1 ∧ p.1 < 1 ∧ 0 < p.2 ∧ p.2 < 1
 
 /-- The boundary octagon `V₀, …, V₇ = A, B, C, D, E, F, G, H` (counterclockwise). -/
 def octagon (a b c d e f g h : ℝ) : Fin 8 → Point :=

@@ -4,45 +4,38 @@ public import Heilbronn.Nine.Setup.Families
 public import Heilbronn.Nine.SevenBoundary.AdjacentCapsCompletion
 public import Heilbronn.Nine.SevenBoundary.ExteriorCerts
 
-/-! # Completion of the seven-boundary exterior case (`docs/proof/nine/SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md`)
+/-! # Completion of the seven-boundary exterior case
 
-**Role.** Primary route: `SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION:Theorem2` (lines 404–412) uses
-Theorem 1 for the exterior part of the seven-boundary theorem (`UNRESTRICTED.md` lines 132–140);
-`SIX_BOUNDARY_TWO_SIDE_COMPLETION` (line 413) applies it after a projection; its certificate format
-is reused by `SEVEN_BOUNDARY_MIXED_LOWER` (line 255).
+The exterior case: `SevenNormal a h b c d e f`, one free point `X = (g,k)` strictly beyond `EF`
+(`FarCapPoint e f (g, k)`), and the companion point `P = (x,y)` strictly inside the anchor
+heptagon; the nine points are `sevenConfig a h b c d e f (g, k) P`. At minimum area at least
+`7/128`, the results of `SevenBoundaryTopCap`, `SevenBoundaryTopCapRight` and
+`SevenBoundaryTopCapRadial` give `b > 3/20`, `k > e, h`, the convex hull octagon
+`A, B, C, D, E, X, F, H` and `P` outside its four side quadrilaterals. Doubled threshold
+`s = 7/64` for the 28 certificates, `A₀` for the class `R3`.
 
-**Setting.** The exterior case: `SevenNormal a h b c d e f`, one free point `X = (g,k)` strictly
-beyond `EF` (`FarCapPoint e f (g, k)`), the companion point `P = (x,y)` strictly inside the anchor
-heptagon; the nine points `sevenConfig a h b c d e f (g, k) P`. At minimum area at least `7/128`
-the preceding notes give `b > 3/20`, `k > e, h`, the convex hull octagon `A, B, C, D, E, X, F, H`
-and `P` outside its four side quadrilaterals. Doubled threshold `s = 7/64` for the 28
-certificates, `A₀` for R3.
+**Certificates.** The 28 radial words outside `R1 ∪ R3` are closed by polynomial certificates
+(`SevenBoundaryExteriorCerts`), indexed by their block pairs (`certificateBlocks`,
+`certificateWords`), in the variables `(a,h,b,c,d,e,f,g,k,x,y)`. Their terms are positive
+multiples of products of at most three of the 23 affine factors `l₀, …, l₂₂` (nonnegative by
+`common_bounds`) and of the area costs `q_t = ε_t [V_iV_jV_k] - s` (nonnegative by the
+convexity of the octagon and the radial word, `q_nonneg`).
 
-**Certificate package.** `docs/proof/nine/seven_boundary_exterior_certificates.json` (checker
-`docs/proof/nine/check_seven_boundary_exterior_certificates.py`): 28 records, one per radial word outside
-`R1 ∪ R3`, indexed by its block pair (`certificateBlocks`, `certificateWords`); variables
-`(a,h,b,c,d,e,f,g,k,x,y)`; terms are positive multiples (`w/4096`) of products of at most three
-of the 23 affine factors `l₀, …, l₂₂` of §2 (nonnegative by `claim_common_bounds`) and of the
-area costs `q_t = ε_t [V_iV_jV_k] - s` (nonnegative by convexity of the octagon and the radial
-word, (11)); each expansion has monomial bound `≤ -3/4` on `[0,1]^11` (4,113 terms in all). Here
-only the geometric conclusion is stated (`claim_certificates`).
+## Main results
 
-**Results.**
-* `claim_common_bounds` (§1, (2)–(10)): the rational bounds on the anchors, `X` and `P` shared by
-  every remaining word;
-* `claim_certificate_cover` (§4): the 36 catalogue words are the R1 words, the R3 words and the 28
-  certificate words;
-* `claim_certificates` (§3): each of the 28 certificate words gives some area `< 7/128`;
-* `theorem1`: every exterior configuration has minimum area at most `A₀`; equality forces `k = 1`
-  and the construction; every non-R3 radial word gives `< 7/128`.
+* `common_bounds`: the rational bounds on the anchors, `X` and `P` shared by every
+  remaining word;
+* `certificateWords_cover`: the 36 catalogue words are the `R1` words, the `R3` words and the
+  28 certificate words;
+* `minTriangleArea_lt_of_mem_certificateWords`: each of the 28 certificate words gives some area `< 7/128`;
+* `minTriangleArea_le_A₀_exterior`: every exterior configuration has minimum area at most `A₀`; equality forces `k = 1`
+  and the known configuration; every radial word outside `R3` gives `< 7/128`.
 
-FLAG (overstatement, line 298): "one of exactly 36 radial words" — the cover gives at most 36
-(realizability is not claimed); the statements here use only the cover.
-Implicit in the manuscript: Theorem 1's hypotheses are spread over five notes (lines 12–22); here
-Theorem 1 assumes only the exterior case (`SevenNormal`, `FarCapPoint`, `P` in the heptagon), the
-form in which `SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION:Theorem2` applies it after
-`SEVEN_BOUNDARY_CAPS:claim-exterior-reduction`; the derived conditions are proved in
-`SEVEN_BOUNDARY_TOP_CAP` and `SEVEN_BOUNDARY_TOP_CAP_RIGHT`.
+The statements use only the 36-word cover (`SevenBoundaryTopCapRadial.radialWord_mem_catalogue`);
+realizability of the words is not claimed. `minTriangleArea_le_A₀_exterior` assumes only the exterior case
+(`SevenNormal`, `FarCapPoint`, `P` in the heptagon), the form in which
+`SevenBoundaryMixedAboveCompletion.minTriangleArea_le_A₀` applies it after
+`SevenBoundaryCaps.farCapPoint_of_not_both_inHeptagon`.
 -/
 
 @[expose] public section
@@ -52,9 +45,8 @@ namespace Heilbronn.Nine.SevenBoundaryExteriorCompletion
 
 open SevenBoundary RadialCatalogue
 
-/-- The block pairs (1-based, first block `(k₀,k₁,k₄,k₅)`, second `(k₂,k₃,k₆,k₇)`) of the 28
-certificate records (`SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md` lines 263–278, the `blocks` fields of
-`docs/proof/nine/seven_boundary_exterior_certificates.json`). -/
+/-- The block pairs (1-based, first block `(k₀,k₁,k₄,k₅)`, second `(k₂,k₃,k₆,k₇)`, as in
+`RadialCatalogue.ofBlocks`) of the 28 radial words closed by certificates. -/
 def certificateBlocks : List (ℕ × ℕ) :=
   [(1, 2), (1, 4), (1, 5), (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (3, 1), (3, 2), (3, 3),
     (3, 4), (3, 5), (4, 2), (4, 3), (4, 4), (4, 5), (4, 6), (5, 1), (5, 2), (5, 3), (5, 4),
@@ -64,9 +56,9 @@ def certificateBlocks : List (ℕ × ℕ) :=
 def certificateWords : List Word :=
   certificateBlocks.map fun p => ofBlocks p.1 p.2
 
-/-! ### §1. Common bounds -/
+/-! ### Common bounds -/
 
-/-- (1)–(2): `R < 5/7` from `R + s/B₀ + s/T ≤ 1` and `B₀, T ≤ 1 - s - s/R`. -/
+/-- `R < 5/7` from `R + s/B₀ + s/T ≤ 1` and `B₀, T ≤ 1 - s - s/R`. -/
 theorem ec_R {R d e B T : ℝ} (hR : 0 < R) (hRde : R = e - d) (hd : 0 ≤ d) (he : e < 1)
     (hBR : B * R ≤ R * (1 - 7 / 64) - 7 / 64) (hTR : T * R ≤ R * (1 - 7 / 64) - 7 / 64)
     (hdB : 7 / 64 ≤ d * B) (heT : 7 / 64 ≤ (1 - e) * T) : R < 5 / 7 := by
@@ -93,7 +85,7 @@ theorem ec_low {a B m : ℝ} (hB : 0 < B) (hBm : B < m) (haB : 7 / 64 ≤ a * B)
   have hm : 0 < m := by linarith
   rw [div_lt_iff₀ hm]; nlinarith
 
-/-- (6), first half: `h ≥ s/(c-b) + s/b ≥ 4s/c > 33/64`. -/
+/-- `h ≥ s/(c-b) + s/b ≥ 4s/c > 33/64`. -/
 theorem ec_h {a h b c : ℝ} (hb : 0 < b) (hbc : b < c) (hc : c < 37 / 44)
     (hABH : 7 / 64 ≤ b * (h - a)) (hABC : 7 / 64 ≤ a * (c - b)) (hh0 : 0 < h) : 33 / 64 < h := by
   have hM : 0 < c - b := by linarith
@@ -105,7 +97,7 @@ theorem ec_h {a h b c : ℝ} (hb : 0 < b) (hbc : b < c) (hc : c < 37 / 44)
   have h3 : h * (b * (c - b)) ≤ h * (c ^ 2 / 4) := mul_le_mul_of_nonneg_left h2 hh0.le
   nlinarith
 
-/-- (6), second half: `e ≥ s/(c-b) + s/(1-c) ≥ 4s/(1-b) > 33/64`. -/
+/-- `e ≥ s/(c-b) + s/(1-c) ≥ 4s/(1-b) > 33/64`. -/
 theorem ec_e {b c d e : ℝ} (hb : 7 / 46 < b) (hbc : b < c) (hc : c < 1)
     (hBCD : 7 / 64 ≤ d * (c - b)) (hCDE : 7 / 64 ≤ (1 - c) * (e - d)) (he0 : 0 < e) :
     33 / 64 < e := by
@@ -118,8 +110,8 @@ theorem ec_e {b c d e : ℝ} (hb : 7 / 46 < b) (hbc : b < c) (hc : c < 1)
   have h3 : e * ((c - b) * (1 - c)) ≤ e * ((1 - b) ^ 2 / 4) := mul_le_mul_of_nonneg_left h2 he0.le
   nlinarith
 
-/-- The anchor and `X` bounds (2)–(7) of `SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md` from the area
-costs, `k > h` and `b > 3/20`. -/
+/-- The anchor and `X` bounds of `common_bounds`, from the area costs, `k > h` and
+`b > 3/20`. -/
 theorem common_bounds_core {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1)
     (hb : 0 < b) (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
     (hbf : b ≤ f) (hfc : f ≤ c) (hfg : f < g) (hg1 : g < 1) (hek : e < k) (hk1 : k ≤ 1)
@@ -142,7 +134,7 @@ theorem common_bounds_core {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) 
     have := mul_nonneg (show 0 ≤ 1 - f by linarith) (show 0 ≤ 1 - k by linarith)
     linarith
   have hgR : 7 / 64 ≤ (1 - g) * (e - d) := by linarith
-  -- (1)–(2)
+  -- `e - d < 5/7`, `c, g < 271/320`
   have hBR : (c - b) * (e - d) ≤ (e - d) * (1 - 7 / 64) - 7 / 64 := by
     have := mul_le_mul_of_nonneg_right hb3.le hR.le
     nlinarith
@@ -154,14 +146,14 @@ theorem common_bounds_core {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) 
     have := ec_c_of_R hR hR57 (by norm_num) hCDE; norm_num at this; linarith
   have hg271 : g < 271 / 320 := by
     have := ec_c_of_R hR hR57 (by norm_num) hgR; norm_num at this; linarith
-  -- (3)
+  -- `a, d > 5/32`, `e < 27/32`
   have ha532 : 5 / 32 < a := by
     have := ec_low hM (show c - b < 7 / 10 by linarith) hABC; norm_num at this; linarith
   have hd532 : 5 / 32 < d := by
     have := ec_low hM (show c - b < 7 / 10 by linarith) hBCD; norm_num at this; linarith
   have he2732 : e < 27 / 32 := by
     have := ec_low hT (show g - f < 7 / 10 by linarith) h1e; norm_num at this; linarith
-  -- (4)
+  -- `h < 237/272`
   have hh272 : h < 237 / 272 := by
     have h1 : 7 / 64 < g * (1 - h) := by
       have := mul_pos hf0 (sub_pos.2 hkh)
@@ -169,7 +161,7 @@ theorem common_bounds_core {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) 
     have h2 : g * (1 - h) < 271 / 320 * (1 - h) :=
       mul_lt_mul_of_pos_right hg271 (by linarith)
     linarith
-  -- (5)
+  -- `e - d < 11/16`, `c, g < 37/44`, `h - a < 23/32`, `b > 7/46`
   have hR1116 : e - d < 11 / 16 := by linarith
   have hc3744 : c < 37 / 44 := by
     have := ec_c_of_R hR hR1116 (by norm_num) hCDE; norm_num at this; linarith
@@ -179,10 +171,10 @@ theorem common_bounds_core {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) 
   have hb746 : 7 / 46 < b := by
     have := ec_low (by linarith : 0 < h - a) hL2332 (by linarith : 7 / 64 ≤ b * (h - a))
     norm_num at this; linarith
-  -- (6)
+  -- `h, e > 33/64`
   have hh3364 : 33 / 64 < h := ec_h hb hbc hc3744 hABH hABC (by linarith)
   have he3364 : 33 / 64 < e := ec_e hb746 hbc hc hBCD hCDE (by linarith)
-  -- (7)
+  -- `g - f > 9/40`, `k - e > 1/8`
   have hgf : 9 / 40 < g - f := by
     have : (1 - e) * (g - f) < 31 / 64 * (g - f) := mul_lt_mul_of_pos_right (by linarith) hT
     linarith
@@ -196,7 +188,8 @@ theorem common_bounds_core {a h b c d e f g k : ℝ} (ha : 0 < a) (hah : a < h) 
   exact ⟨⟨hR57, hc271, hg271⟩, ⟨ha532, hd532, he2732⟩, hh272,
     ⟨hR1116, hc3744, hg3744, hL2332, hb746⟩, ⟨hh3364, he3364⟩, ⟨hgf, hke⟩⟩
 
-/-- The bounds (9)–(10) on the interior point from the side tests (8). -/
+/-- The bounds `17/64 < y < 49/64`, `k - y > s`, `x - b ≥ s` and `x < 3/4` on the interior point
+`P = (x, y)`, from the side tests `AD`, `HE`, `BF`, `CX` and the anchor bounds. -/
 theorem ec_point {a h b c d e f g k x y : ℝ} (hbf : b ≤ f) (hek : e < k) (hkh : h < k) (hk1 : k ≤ 1)
     (ha532 : 5 / 32 < a) (hd532 : 5 / 32 < d) (he2732 : e < 27 / 32) (hh272 : h < 237 / 272)
     (hc3744 : c < 37 / 44) (hg3744 : g < 37 / 44) (hx0 : 0 < x) (hx1 : x < 1) (hy0 : 0 < y)
@@ -222,18 +215,13 @@ theorem ec_point {a h b c d e f g k x y : ℝ} (hbf : b ≤ f) (hek : e < k) (hk
     by_contra hcon; push Not at hcon
     nlinarith
 
-/-- **Claim** (`SEVEN_BOUNDARY_EXTERIOR_COMPLETION:claim-common-bounds`). In the exterior case at
-minimum area at least `7/128`, with `P = (x,y)` and `s = 7/64`:
-(2) `e - d < 5/7`, `c, g < 271/320`; (3) `a, d > 5/32`, `e < 27/32`; (4) `h < 237/272`;
-(5) `e - d < 11/16`, `c, g < 37/44`, `h - a < 23/32`, `b > 7/46`; (6) `h, e > 33/64`;
-(7) `g - f > 9/40`, `k - e > 1/8`; (8) the `AD`, `HE`, `BF`, `CX` side tests
-`y - a - (d-a)x ≥ s`, `h + (e-h)x - y ≥ s`, `x - b - (f-b)y ≥ s`, `k(c-x) + (g-c)y ≥ s`;
-(9) `17/64 < y < 49/64`, `k - y > s`; (10) `x - b ≥ s`, `x < 3/4`.
-`docs/proof/nine/SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md`, lines 41–162.
-Uses: SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-b-gt-3/20, SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-k-gt-h,
-SEVEN_BOUNDARY_TOP_CAP_RIGHT:Theorem, SEVEN_BOUNDARY_TOP_CAP:Theorem1,
-SEVEN_BOUNDARY_TOP_CAP:Theorem2, SEVEN_BOUNDARY_TOP_CAP:Theorem3. -/
-theorem claim_common_bounds {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case at minimum area at least `7/128`, with `P = (x,y)` and `s = 7/64`:
+`e - d < 5/7`, `c, g < 271/320`; `a, d > 5/32`, `e < 27/32`; `h < 237/272`; `e - d < 11/16`,
+`c, g < 37/44`, `h - a < 23/32`, `b > 7/46`; `h, e > 33/64`; `g - f > 9/40`, `k - e > 1/8`; the
+`AD`, `HE`, `BF`, `CX` side tests `y - a - (d-a)x ≥ s`, `h + (e-h)x - y ≥ s`,
+`x - b - (f-b)y ≥ s`, `k(c-x) + (g-c)y ≥ s`; `17/64 < y < 49/64`, `k - y > s`; `x - b ≥ s`,
+`x < 3/4`. -/
+theorem common_bounds {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P)
     (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f (g, k) P)) :
     (e - d < 5 / 7 ∧ c < 271 / 320 ∧ g < 271 / 320) ∧
@@ -247,10 +235,10 @@ theorem claim_common_bounds {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c 
       (17 / 64 < P.2 ∧ P.2 < 49 / 64 ∧ 7 / 64 < k - P.2) ∧
       (7 / 64 ≤ P.1 - b ∧ P.1 < 3 / 4) := by
   have hmin₁ := hmin.trans SevenBoundaryCaps.min₁_left
-  have hb3 := SevenBoundaryTopCapRight.claim_b_gt_3_20 hN hX hmin₁
-  have hkh := SevenBoundaryTopCapRight.claim_k_gt_h hN hX hmin₁
-  obtain ⟨sHE, sAD, sBF⟩ := SevenBoundaryTopCap.claim_partial_central hN hX hP hmin
-  have hcen := SevenBoundaryTopCapRight.claim_central_region hN hX hP hmin
+  have hb3 := SevenBoundaryTopCapRight.three_div_twenty_lt_b hN hX hmin₁
+  have hkh := SevenBoundaryTopCapRight.h_lt_k hN hX hmin₁
+  obtain ⟨sHE, sAD, sBF⟩ := SevenBoundaryTopCap.partial_central_signs hN hX hP hmin
+  have hcen := SevenBoundaryTopCapRight.inCentralRegion_exteriorOctagon hN hX hP hmin
   have sCX : 0 < sarea (c, 0) (g, k) P := by
     have := hcen.2 1
     simpa [exteriorOctagon, finRotate_apply] using this
@@ -302,7 +290,7 @@ theorem claim_common_bounds {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c 
   exact ⟨⟨tAD, tHE, tBF, tCX⟩, ec_point hbf hek hkh hk1 ha532 hd532 he2732 hh272 hc3744 hg3744
     hx0 hx1 hy0 tAD tHE tBF tCX⟩
 
-/-! ### §2–3. The certificates -/
+/-! ### The certificates -/
 
 section Certs
 open SevenBoundaryExteriorCerts
@@ -326,8 +314,8 @@ theorem octConfig_exterior (a h b c d e f g k : ℝ) (P : Point) :
       sevenConfig a h b c d e f (g, k) P ∘ ![0, 2, 3, 4, 5, 7, 6, 1, 8] := by
   funext i; fin_cases i <;> rfl
 
-/-- Every oriented cost (11) is nonnegative: convexity for the triangles of the octagon, the
-radial word for those containing `P`. -/
+/-- Every oriented cost is nonnegative: convexity for the triangles of the octagon, the radial word
+for those containing `P`. -/
 theorem q_nonneg {V : Fin 8 → Point} {P : Point} {w : Word} (hV : IsConvexPolygon V)
     (hw : IsRadialWord V P w) (hmin : 7 / 128 ≤ minTriangleArea (octConfig V P))
     (t : Fin 9 × Fin 9 × Fin 9) (ht : t.1 < t.2.1 ∧ t.2.1 < t.2.2) :
@@ -386,12 +374,10 @@ theorem q_nonneg {V : Fin 8 → Point} {P : Point} {w : Word} (hV : IsConvexPoly
 
 end Certs
 
-/-- **Claim** (`SEVEN_BOUNDARY_EXTERIOR_COMPLETION:claim-certificate-cover`). The 28 certificate
-words are exactly the catalogue words outside the orbits R1 and R3: every catalogue word is in R1,
-in R3, or a certificate word, and no certificate word is in R1 or R3 (`4 + 28 + 4 = 36`).
-`docs/proof/nine/SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md`, lines 260–278, 302–307.
-Uses: RADIAL_CATALOGUE:claim-eight-classes. -/
-theorem claim_certificate_cover :
+/-- The 28 certificate words are exactly the catalogue words outside the orbits `R1` and `R3`:
+every catalogue word is in `R1`, in `R3`, or a certificate word, and no certificate word is in
+`R1` or `R3` (`4 + 28 + 4 = 36`). -/
+theorem certificateWords_cover :
     (∀ w ∈ catalogue, InClass .R1 w ∨ InClass .R3 w ∨ w ∈ certificateWords) ∧
       (∀ w ∈ certificateWords, w ∈ catalogue ∧ ¬ InClass .R1 w ∧ ¬ InClass .R3 w) ∧
       certificateWords.length = 28 := by
@@ -403,25 +389,20 @@ theorem claim_certificate_cover :
     revert w
     decide +kernel
 
-/-- **Claim** (`SEVEN_BOUNDARY_EXTERIOR_COMPLETION:claim-certificates`). In the exterior case, if
-the radial word of `P` with respect to the octagon `A, B, C, D, E, X, F, H` is one of the 28
-certificate words, some triangle has area less than `7/128` (certificate package
-`docs/proof/nine/seven_boundary_exterior_certificates.json`).
-`docs/proof/nine/SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md`, lines 164–292.
-Uses: SEVEN_BOUNDARY_EXTERIOR_COMPLETION:claim-common-bounds,
-SEVEN_BOUNDARY_TOP_CAP_RADIAL:claim-octagon-cover, SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-b-gt-3/20,
-SEVEN_BOUNDARY_TOP_CAP_RIGHT:claim-k-gt-h, RADIAL_CATALOGUE:claim-encoding. -/
-theorem claim_certificates {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the exterior case, if the radial word of `P` with respect to the octagon
+`A, B, C, D, E, X, F, H` is one of the 28 certificate words, some triangle has area less than
+`7/128` (by the certificates of `SevenBoundaryExteriorCerts`). -/
+theorem minTriangleArea_lt_of_mem_certificateWords {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P) {w : Word}
     (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) P w) (hc : w ∈ certificateWords) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) P) < 7 / 128 := by
   by_contra hcon
   push Not at hcon
   have hmin₁ := hcon.trans SevenBoundaryCaps.min₁_left
-  have hb3 := SevenBoundaryTopCapRight.claim_b_gt_3_20 hN hX hmin₁
-  have hkh := SevenBoundaryTopCapRight.claim_k_gt_h hN hX hmin₁
-  obtain ⟨hV, -, -, -, -, -⟩ := SevenBoundaryTopCapRadial.claim_octagon_cover hN hX hP hcon
-  have hB := claim_common_bounds hN hX hP hcon
+  have hb3 := SevenBoundaryTopCapRight.three_div_twenty_lt_b hN hX hmin₁
+  have hkh := SevenBoundaryTopCapRight.h_lt_k hN hX hmin₁
+  obtain ⟨hV, -, -, -, -, -⟩ := SevenBoundaryTopCapRadial.radialWord_mem_catalogue hN hX hP hcon
+  have hB := common_bounds hN hX hP hcon
   have hmo : 7 / 128 ≤ minTriangleArea (octConfig (exteriorOctagon a h b c d e f (g, k)) P) := by
     rw [octConfig_exterior]
     exact hcon.trans (le_min_comp (by norm_num) _ (by decide))
@@ -502,17 +483,11 @@ theorem radial_unique {V : Fin 8 → Point} {P : Point} {w w₀ : Word} (hw : Is
 
 theorem catalogue_le_five : ∀ w ∈ catalogue, ∀ i, w i ≤ 5 := by decide +kernel
 
-/-- **Theorem 1** (`SEVEN_BOUNDARY_EXTERIOR_COMPLETION:Theorem1`). Every configuration of the
-seven-boundary exterior case has minimum triangle area at most `A₀ = (9√65 - 55)/320`; equality
-forces `k = 1` and the known eight-boundary configuration up to square symmetry and relabelling;
-and every radial word of `P` outside class R3 gives minimum area strictly below `7/128`.
-`docs/proof/nine/SEVEN_BOUNDARY_EXTERIOR_COMPLETION.md`, lines 24–39, 294–312.
-Uses: SEVEN_BOUNDARY_TOP_CAP_RADIAL:claim-octagon-cover,
-SEVEN_BOUNDARY_ADJACENT_CAPS_COMPLETION:claim-four-R1-words,
-SEVEN_BOUNDARY_EXTERIOR_COMPLETION:claim-certificate-cover,
-SEVEN_BOUNDARY_EXTERIOR_COMPLETION:claim-certificates, SEVEN_BOUNDARY_TOP_CAP_RADIAL:Theorem1,
-RADIAL_CATALOGUE:claim-eight-classes. -/
-theorem theorem1 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
+/-- Every configuration of the seven-boundary exterior case has minimum triangle area at most
+`A₀ = (9√65 - 55)/320`; equality forces `k = 1` and the known eight-boundary configuration up to
+square symmetry and relabelling; and every radial word of `P` outside class `R3` gives minimum
+area strictly below `7/128`. -/
+theorem minTriangleArea_le_A₀_exterior {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     (hX : FarCapPoint e f (g, k)) {P : Point} (hP : InHeptagon a h b c d e f P) :
     minTriangleArea (sevenConfig a h b c d e f (g, k) P) ≤ A₀ ∧
       (minTriangleArea (sevenConfig a h b c d e f (g, k) P) = A₀ →
@@ -526,29 +501,29 @@ theorem theorem1 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
     by_contra hcon
     push Not at hcon
     obtain ⟨hV, hO, hnd, hq, hk₀, hcat⟩ :=
-      SevenBoundaryTopCapRadial.claim_octagon_cover hN hX hP hcon
-    have hear := claim_ear_bounds _ P hV hO hnd hq hw
+      SevenBoundaryTopCapRadial.radialWord_mem_catalogue hN hX hP hcon
+    have hear := earBounds_of_outsideSideQuads _ P hV hO hnd hq hw
     have hweq := radial_unique hw hk₀ (fun i => by have := (hear i).2; omega)
       (fun i => by have := catalogue_le_five _ hcat i; omega)
     rw [← hweq] at hcat
-    rcases claim_certificate_cover.1 w hcat with h1 | h3 | hc
-    · have := SevenBoundaryAdjacentCapsCompletion.claim_four_R1_words hN hX hP hw h1
+    rcases certificateWords_cover.1 w hcat with h1 | h3 | hc
+    · have := SevenBoundaryAdjacentCapsCompletion.minTriangleArea_lt_of_inClass_R1 hN hX hP hw h1
       linarith
     · exact hR3 h3
-    · have := claim_certificates hN hX hP hw hc
+    · have := minTriangleArea_lt_of_mem_certificateWords hN hX hP hw hc
       linarith
   refine ⟨?_, ?_, part3⟩
   · rcases lt_or_ge (minTriangleArea (sevenConfig a h b c d e f (g, k) P)) (7 / 128) with hlt | hge
     · linarith
-    obtain ⟨-, -, -, -, hk₀, -⟩ := SevenBoundaryTopCapRadial.claim_octagon_cover hN hX hP hge
+    obtain ⟨-, -, -, -, hk₀, -⟩ := SevenBoundaryTopCapRadial.radialWord_mem_catalogue hN hX hP hge
     by_cases h3 : InClass .R3 (radialWord (exteriorOctagon a h b c d e f (g, k)) P)
-    · exact (SevenBoundaryTopCapRadial.theorem1 hN hX hP hk₀ h3).1
+    · exact (SevenBoundaryTopCapRadial.minTriangleArea_le_A₀_of_inClass_R3 hN hX hP hk₀ h3).1
     · have := part3 _ hk₀ h3; linarith
   · intro heq
     have hge : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f (g, k) P) := by linarith
-    obtain ⟨-, -, -, -, hk₀, -⟩ := SevenBoundaryTopCapRadial.claim_octagon_cover hN hX hP hge
+    obtain ⟨-, -, -, -, hk₀, -⟩ := SevenBoundaryTopCapRadial.radialWord_mem_catalogue hN hX hP hge
     by_cases h3 : InClass .R3 (radialWord (exteriorOctagon a h b c d e f (g, k)) P)
-    · exact (SevenBoundaryTopCapRadial.theorem1 hN hX hP hk₀ h3).2.1 heq
+    · exact (SevenBoundaryTopCapRadial.minTriangleArea_le_A₀_of_inClass_R3 hN hX hP hk₀ h3).2.1 heq
     · have := part3 _ hk₀ h3; linarith
 
 end Heilbronn.Nine.SevenBoundaryExteriorCompletion

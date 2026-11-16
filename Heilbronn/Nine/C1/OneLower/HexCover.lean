@@ -3,15 +3,15 @@ module
 public import Heilbronn.Nine.C1.OneLower.HexModel
 public import Heilbronn.Nine.C1.OneLower.HullWords
 
-/-! # Soundness of the one-lower hexagon packages (`docs/proof/nine/C1_ONE_LOWER_TOP_CAP.md`,
-`docs/proof/nine/C1_ONE_LOWER_SIDE_CAP.md`, Sections 3–5)
+/-! # Soundness of the one-lower hexagon packages
 
 Generic part of the certificate soundness for the two hexagons of
 `Heilbronn.Nine.C1OneLowerHex.Model`: the nine points `cfg9 V L P Q` (hexagon `V`, interior points
 `L, P, Q`), the cube point `zeta`, the initial table from radial words (`base_holds`: hull
 triples by convexity, two hull vertices and an interior point by the words, interior pairs by
-the ray order (14) and the upper-pair rule (15)), and the bridges from the words of
-`Heilbronn.Nine.C1OneLowerTopCap` (`HasHullWord`, `hullSign`) to the model's list words.
+the ray order `C1OneLowerTopCap.sarea_pos_of_hullWord_lt` and the upper-pair rule `C1OneLowerTopCap.upperPairSign_sound`), and the
+bridges from the words of `Heilbronn.Nine.C1OneLowerTopCap` (`HasHullWord`, `hullSign`) to the
+model's list words.
 -/
 
 @[expose] public section
@@ -19,8 +19,8 @@ the ray order (14) and the upper-pair rule (15)), and the bridges from the words
 noncomputable section
 namespace Heilbronn.Nine.C1OneLowerHex
 
-open Heilbronn.Nine.C1 Cover C1OneLower Model
-open C1OneLowerTopCap (ConvexPolygon HasHullWord HullWord hullSign)
+open Heilbronn.Nine.C1 Heilbronn.Nine.Package Cover C1OneLower Model
+open C1OneLowerTopCap (HasHullWord HullWord hullSign)
 
 /-- The nine points of a hexagon cell: the hexagon `V₀, …, V₅` and `L, P, Q`. -/
 def cfg9 (V : Fin 6 → Point) (L P Q : Point) (i : ℕ) : Point :=
@@ -82,15 +82,9 @@ theorem orient_of_iff {x : ℝ} {b : Bool} (hiff : 0 < x ↔ b = true) (hne : x 
   · exact lt_of_le_of_ne (not_lt.1 fun h => absurd (hiff.1 h) (by decide)) hne
   · exact hiff.2 trivial
 
-theorem area_ne_of {P : ℕ → Point} (H : AreaOK P) {a b e : ℕ} (ha : a < 9) (hb : b < 9)
-    (he : e < 9) (hab : a ≠ b) (hbe : b ≠ e) (hae : a ≠ e) : sarea (P a) (P b) (P e) ≠ 0 := by
-  intro h0
-  have := H a b e ha hb he hab hbe hae
-  rw [h0, abs_zero] at this; linarith [A₀_pos]
-
-/-- **The initial table** of a hexagon cell holds. -/
+/-- The initial table of a hexagon cell holds. -/
 theorem base_holds {side : Bool} {V : Fin 6 → Point} {L P Q : Point} (H : AreaOK (cfg9 V L P Q))
-    (hV : ConvexPolygon V) {ws : List (List ℕ)}
+    (hV : IsConvexPolygon V) {ws : List (List ℕ)}
     (hword : ∀ m : Fin 3, ∀ a b : ℕ, a < 6 → b < 6 → a ≠ b →
       (0 < sarea (cfg9 V L P Q a) (cfg9 V L P Q b) (inner L P Q m) ↔
         hsign (ws.getD m []) a b = true))
@@ -99,12 +93,12 @@ theorem base_holds {side : Bool} {V : Fin 6 → Point} {L P Q : Point} (H : Area
         0 < sarea (cfg9 V L P Q v) (inner L P Q m) (inner L P Q m'))
     (hup : ∀ v : ℕ, v < 6 → ∀ b, upperPair side (ws.getD 1 []) (ws.getD 2 []) v = some b →
       OrientHolds b (sarea (cfg9 V L P Q v) P Q)) :
-    AllHold (C1ZeroLower.FHolds (cfg9 V L P Q)) (baseSigns side ws) := by
+    AllHold (Cover.FHolds 9 (cfg9 V L P Q)) (baseSigns side ws) := by
   intro g hg
   simp only [baseSigns, List.mem_append, List.mem_filterMap, List.mem_flatMap,
     List.mem_range, Option.map_eq_some_iff] at hg
   rcases hg with ⟨t, ht, hsg⟩ | ⟨p, hp, v, hv, sg, hsg, rfl⟩
-  · obtain ⟨t1, t2, t3⟩ := C1ZeroLower.lexTriples_valid t ht
+  · obtain ⟨t1, t2, t3⟩ := Cover.mem_lexTriples ht
     split_ifs at hsg with a1 a2 <;> simp only [Option.some.injEq] at hsg <;>
       subst hsg
     · refine ⟨t1, t2, t3, ?_⟩
@@ -115,14 +109,14 @@ theorem base_holds {side : Bool} {V : Fin 6 → Point} {L P Q : Point} (H : Area
       have hm : t.2.2 - 6 < 3 := by omega
       have hc : cfg9 V L P Q t.2.2 = inner L P Q ⟨t.2.2 - 6, hm⟩ := by
         rw [← cfg9_inner]; congr 1; simp only; omega
-      have hne := area_ne_of H (a := t.1) (b := t.2.1) (e := t.2.2) (by omega) (by omega) t3
+      have hne := H.ne_zero (a := t.1) (b := t.2.1) (e := t.2.2) (by omega) (by omega) t3
         (by omega) (by omega) (by omega)
       simp only [SFact.Holds]
       rw [hc] at hne ⊢
       exact orient_of_iff (hword ⟨t.2.2 - 6, hm⟩ t.1 t.2.1 (by omega) a2 (by omega)) hne
   · simp only [pairs3, List.mem_cons, List.not_mem_nil, or_false] at hp
     have key : ∀ m m' : Fin 3, m < m' → p = (m.val, m'.val) →
-        C1ZeroLower.FHolds (cfg9 V L P Q) ((v, p.1 + 6, p.2 + 6), sg) := by
+        Cover.FHolds 9 (cfg9 V L P Q) ((v, p.1 + 6, p.2 + 6), sg) := by
       intro m m' hmm hpe
       subst hpe
       refine ⟨by simp only; omega, by simp only; omega, by simp only; omega, ?_⟩
@@ -158,8 +152,8 @@ theorem hword_of {V : Fin 6 → Point} {R : Point} {r : HullWord 6} {wl : List �
   rw [heq] at this
   exact this
 
-/-- The ray-order facts of the model from two radial words (`eq14`). -/
-theorem hray_of {V : Fin 6 → Point} (hV : ConvexPolygon V) {R S : Point} {r r' : HullWord 6}
+/-- The ray-order facts of the model from two radial words (`C1OneLowerTopCap.sarea_pos_of_hullWord_lt`). -/
+theorem hray_of {V : Fin 6 → Point} (hV : IsConvexPolygon V) {R S : Point} {r r' : HullWord 6}
     {wl wl' : List ℕ} (hR : HasHullWord V R r) (hS : HasHullWord V S r')
     (hb : ∀ i, 1 ≤ r i ∧ r i ≤ 4) (hb' : ∀ i, 1 ≤ r' i ∧ r' i ≤ 4)
     (he : ∀ v : Fin 6, wl.getD v 0 = r v) (he' : ∀ v : Fin 6, wl'.getD v 0 = r' v)
@@ -171,7 +165,7 @@ theorem hray_of {V : Fin 6 → Point} (hV : ConvexPolygon V) {R S : Point} {r r'
   have h2 := he' ⟨v, hv⟩
   simp only at h1 h2
   rw [h1, h2] at hlt
-  exact C1OneLowerTopCap.eq14 hV hR hS hb hb' hlt
+  exact C1OneLowerTopCap.sarea_pos_of_hullWord_lt hV hR hS hb hb' hlt
 
 /-- A cell of a hexagon package is impossible. -/
 theorem cell_false {side : Bool} {i j l : ℕ} {T : Cover.Tree C1ZeroLower.Model.Split}
@@ -179,7 +173,7 @@ theorem cell_false {side : Bool} {i j l : ℕ} {T : Cover.Tree C1ZeroLower.Model
     {V : Fin 6 → Point} {L P Q : Point}
     (hpt : ∀ n, n < 9 → ptEval z (pt side) n = cfg9 V L P Q n) (H : AreaOK (cfg9 V L P Q))
     (hfac : ∀ e ∈ factors side ++ [wCost], 0 ≤ e.eval z)
-    (hbase : AllHold (C1ZeroLower.FHolds (cfg9 V L P Q)) (baseSigns side (caseWords side i j l))) :
+    (hbase : AllHold (Cover.FHolds 9 (cfg9 V L P Q)) (baseSigns side (caseWords side i j l))) :
     False :=
   tableSpec_false hT hz hpt H (by decide) (by decide) hfac (by simp) hbase
 

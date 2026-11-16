@@ -2,14 +2,13 @@ module
 
 public import Heilbronn.Nine.EightBoundary.CertCommon
 
-/-! # Theorem 11 by a polynomial certificate
+/-! # A single corner cap by a polynomial certificate
 
-`EIGHT_BOUNDARY.md` Theorem 11 (class R2): `O` in the central region, in `ADE ∩ HDE`, in the corner
-cap `BCDE` and outside the cap `DEFG`. Instead of the scalar argument of §9 (upper and lower
-bounds for `1 - x`, four ranges of `R`), a degree-3 certificate on the eleven oriented
-`O`-triangles `HDO, EAO, EBO, CDO, CFO, DGO, ADO, EHO, GBO, BCO, FGO`, the budgets, the gap
-bounds of Lemma 7 and the overlaps `g ≤ c`, `b ≤ f` of Lemma 10 shows that not all of these
-doubled areas can be at least `7/64` (540 terms, `data/nine/eight/thm11_terms.txt`).
+`EightBoundary.minTriangleArea_lt_of_single_corner_cap` (class `R2`): `O` in the central region, in `ADE ∩ HDE`, in the corner
+cap `BCDE` and outside the cap `DEFG`. A degree-3 certificate (540 terms) on the eleven oriented
+`O`-triangles `HDO, EAO, EBO, CDO, CFO, DGO, ADO, EHO, GBO, BCO, FGO`, the budgets, the gap bounds
+of `EightBoundary.two_mul_minTriangleArea_le_maxGap` and the overlaps `g ≤ c`, `b ≤ f` of `EightBoundary.opposite_contacts_overlap` shows that
+not all of these doubled areas can be at least `7/64`.
 -/
 
 @[expose] public section
@@ -19,7 +18,7 @@ namespace Heilbronn.Nine.EightBoundary.CertModel
 
 open Heilbronn.Cert Heilbronn.Cert.Expr
 
-/-- The oriented `O`-triangles of Theorem 11 and the overlaps `c - g`, `f - b`. -/
+/-- The oriented `O`-triangles of `EightBoundary.minTriangleArea_lt_of_single_corner_cap` and the overlaps `c - g`, `f - b`. -/
 def case11 : List Expr :=
   [esarea pH pD pO - s, esarea pE pA pO - s, esarea pE pB pO - s, esarea pC pD pO - s,
    esarea pC pF pO - s, esarea pD pG pO - s, esarea pA pD pO - s, esarea pE pH pO - s,
@@ -30,7 +29,8 @@ theorem check11 :
       true := by
   decide +kernel
 
-/-- Theorem 11, the certificate: the eleven oriented doubled areas cannot all be `≥ 7/64`. -/
+/-- The certificate for `EightBoundary.minTriangleArea_lt_of_single_corner_cap`: the eleven oriented doubled areas cannot all be
+`≥ 7/64`. -/
 theorem cert11 {a b c d e f g h x y : ℝ} (H : Base a b c d e f g h x y)
     (oHD : 7 / 64 ≤ sarea (0, h) (1, d) (x, y)) (oEA : 7 / 64 ≤ sarea (1, e) (0, a) (x, y))
     (oEB : 7 / 64 ≤ sarea (1, e) (b, 0) (x, y)) (oCD : 7 / 64 ≤ sarea (c, 0) (1, d) (x, y))

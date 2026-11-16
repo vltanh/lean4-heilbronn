@@ -8,53 +8,35 @@ public import Heilbronn.Nine.Hulls.QuadrilateralHull
 public import Heilbronn.Nine.TypeII.TypeII.EndpointTriangle
 public import Heilbronn.Nine.Global.GlobalCompletion
 
-/-! # Continuous cap exclusions with seven boundary contacts (`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`)
+/-! # Continuous cap exclusions with seven boundary contacts
 
-**Role.** Primary-route component of `SEVEN_BOUNDARY_MIXED_ABOVE_COMPLETION:Theorem2`, the
-seven-boundary closer cited by `UNRESTRICTED.md` lines 132–140: the left pair uses Theorems 1, 2,
-4, 5, 6, Corollary 7 and the §4 separation (via `SEVEN_BOUNDARY_LEFT_PAIR:Theorem2`), the right
-pair Theorems 8–9 (via `SEVEN_BOUNDARY_RIGHT_PAIR`), the exterior part Theorems 10–11;
-`SEVEN_BOUNDARY_MIXED_PAIR` uses Theorems 1, 4 and 6. `SEVEN_BOUNDARY_TOP_CAP` and
-`SEVEN_BOUNDARY_TOP_CAP_RIGHT` use (37) of Theorem 9.
+Exclusions for the normalized seven-boundary form `SevenNormal a h b c d e f` of
+`Heilbronn/Nine/SevenBoundary/Setting.lean`: the anchors `A=(0,a), H=(0,h), B=(b,0), C=(c,0),
+D=(1,d), E=(1,e), F=(f,1)` and two free points `P, Q` anywhere in the closed square. The standing
+hypothesis is that every triangle has area at least `7/128` (doubled threshold `s = 7/64`);
+`K = 4 + 2√3` (`capK`) is the constant of `twoInteriorPointLemma`. Each exclusion
+"no free point in the region `W`" is stated as "a point in the closed region `W` gives a triangle
+of area `< 7/128`". When the argument uses only the seven anchors and that one point, the
+statement is for the eight-point configuration `sevenConfig₁ a h b c d e f X`, which applies to
+either free point by `le_min_comp`; bounds involving only anchor triangles are stated for
+`sevenAnchorConfig`.
 
-**Setting.** The normalized seven-boundary form (1)–(2) of `Heilbronn/Nine/SevenBoundary/Setting.lean`
-(`SevenNormal a h b c d e f`): `A=(0,a), H=(0,h), B=(b,0), C=(c,0), D=(1,d), E=(1,e), F=(f,1)`,
-the free points `P, Q` (also `X`, `Y` in the manuscript) arbitrary. Standing hypothesis: every
-triangle has area at least `7/128` (doubled threshold `s = 7/64`); `K = 4 + 2√3` (`capK`), the
-two-interior-point constant of `CORNER_FAMILIES.md`. Each exclusion "no free point in region `W`"
-is stated as "a point in the closed region `W` gives a triangle of area `< 7/128`". When the proof
-uses only the seven anchors and that one point (the manuscript says so for Theorem 1, line 140,
-and Theorem 10, line 969), the statement is for the eight-point sub-configuration
-`sevenConfig₁ a h b c d e f X`; it then applies to either free point by `le_min_comp`. Anchor-only
-bounds are stated for `sevenAnchorConfig`.
+## Main results
 
-**Results.**
-* `theorem1`: no free point in the ear `ABH`;
-* `theorem2`: `BCF`, `HCF`, `HBF` cannot contain both free points;
-* `theorem3`: `ABFH` cannot contain both free points;
-* `claim_left_pair_separation` (§4): both points on the `ABH` side of `CF` lie in `HBCF`, on
-  opposite sides of `BF` and of `HC`;
-* `theorem4`: no free point in the ear `ABC`;
-* `theorem5`: `[ACF] < 13/16 < Ks`, so `ACF` cannot contain both free points;
-* `claim_AF_separation`: in the §4 placement both points are in `ACFH`, separated by `AF`, `HC`,
-  `BF`;
-* `theorem6`: no free point in `AHF ∩ HCF`;
-* `corollary7`: in the §4 placement the only remaining sector assignment is one point in the `HB`
-  sector above `AF` and one in the `CF` sector;
-* `theorem8`: `[CDE] < 3s`, so no free point in `CDE`;
-* `theorem9`, `eq37`: `[CDF] < 13/16`, `[DEF] < 49/64`, so neither holds both free points; and
-  (37) `1/8 < b ≤ 1/2`, `c ≥ b²/(b-s)`, `b - s - b² > 0`;
-* `claim_right_pair_DF`: two free points in `CDEF` lie in `CEF ∩ DEF` and `CEF ∩ CDF`;
-* `theorem10`: the nearer upper cap `conv{H,F,(0,1)}` is empty;
-* `theorem11`: the far upper cap `conv{F,E,(1,1)}` cannot contain both free points;
-* `claim_exterior_reduction`: with the lower-cap exclusions, a configuration with a free point
-  outside the heptagon has exactly one free point beyond `EF` and the other inside the heptagon.
-
-Not formalized (unused downstream): the remark after Theorem 1 (lines 143–144, `CDE` when
-`f ≥ 1/2`) and the remark after Theorem 2 (lines 194–197, family N). Theorem 3 has no downstream
-citation. Stale scope text: lines 25–29, 254–259. Citation note (file outside this group):
-`SEVEN_BOUNDARY_MIXED_PAIR.md` line 598 cites "Theorem 7" of this note for `HCF ∩ AHF`; that result
-is Theorem 6 (`theorem6`).
+* `minTriangleArea_lt_of_mem_ABH`: no free point in the ear `ABH`;
+* `minTriangleArea_lt_of_pair_mem_BCF_HCF_HBF`: none of `BCF`, `HCF`, `HBF` contains both free points;
+* `minTriangleArea_lt_of_pair_mem_ABFH`: the quadrilateral `ABFH` does not contain both free points;
+* `minTriangleArea_lt_of_mem_ABC`: no free point in the ear `ABC`;
+* `minTriangleArea_lt_of_pair_mem_ACF`: `[ACF] < 13/16 < Ks`, so `ACF` does not contain both free points;
+* `minTriangleArea_lt_of_mem_AHF_HCF`: no free point in `AHF ∩ HCF`;
+* `minTriangleArea_lt_of_mem_CDE`: `[CDE] < 3s`, so no free point in `CDE`;
+* `b_bounds_of_anchor_min`: `1/8 < b ≤ 1/2`, `c ≥ b²/(b-s)` and `b - s - b² > 0`;
+* `minTriangleArea_lt_of_pair_mem_CDF_DEF`: `[CDF] < 13/16` and `[DEF] < 49/64`, so neither triangle contains both free points;
+* `minTriangleArea_lt_of_inNearUpperCap`: no free point in the nearer upper cap `conv{H, F, (0,1)}`;
+* `minTriangleArea_lt_of_pair_inFarUpperCap`: the far upper cap `conv{F, E, (1,1)}` does not contain both free points;
+* `farCapPoint_of_not_both_inHeptagon`: with the lower-cap exclusions of `GlobalCompletion.minTriangleArea_lt_of_lowerCap`, a
+  configuration with a free point outside the heptagon has exactly one free point beyond `EF`
+  and the other inside the heptagon.
 -/
 
 @[expose] public section
@@ -64,7 +46,7 @@ namespace Heilbronn.Nine.SevenBoundaryCaps
 
 open SevenBoundary RadialCatalogue
 
-/-- The two-interior-point constant `K = 4 + 2√3` (`CORNER_FAMILIES.md` §7). -/
+/-- The two-interior-point constant `K = 4 + 2√3` of `twoInteriorPointLemma`. -/
 def capK : ℝ := 4 + 2 * Real.sqrt 3
 
 /-! ### Helpers: area costs from the standing hypothesis -/
@@ -120,8 +102,9 @@ theorem minAnchor_of₁ {a h b c d e f : ℝ} {X : Point} :
   rw [sevenAnchorConfig_eq₁ a h b c d e f X]
   exact le_min_comp (by norm_num) _ (Fin.castSucc_injective _)
 
-/-- The anchor costs (3) of `SEVEN_BOUNDARY_CAPS.md` and the two upper anchor costs: `bL, aM, dM,
-(1-c)R, (1-f)R, (1-f)(1-h) + f(1-e), fL ≥ s`. -/
+/-- The anchor costs: the doubled areas `bL, aM, dM, (1-c)R, (1-f)R, (1-f)(1-h) + f(1-e), fL` of
+the anchor triangles `ABH, ABC, BCD, CDE, DEF, EFH, FHA` are at least `s` (`L = h - a`,
+`M = c - b`, `R = e - d`). -/
 structure AnchorCosts (a h b c d e f : ℝ) : Prop where
   ABH : 7 / 64 ≤ b * (h - a)
   ABC : 7 / 64 ≤ a * (c - b)
@@ -171,7 +154,7 @@ theorem min_five' {n : ℕ} (P : Fin n → Point) (i₁ i₂ i₃ i₄ i₅ : Fi
 
 /-- **Capacity one.** If two points of a configuration lie in a closed counterclockwise triangle of
 three other points whose doubled area is below `Ks`, the least area is below `7/128`
-(`CORNER_FAMILIES:TwoInteriorPointLemma`; a point on an edge gives a zero triangle). -/
+(`twoInteriorPointLemma`; a point on an edge gives a zero triangle). -/
 theorem capacity_one {n : ℕ} {P : Fin n → Point} (i₁ i₂ i₃ i₄ i₅ : Fin n)
     (hinj : Function.Injective ![i₁, i₂, i₃, i₄, i₅])
     (h4 : InClosedTriangle (P i₄) (P i₁) (P i₂) (P i₃))
@@ -195,7 +178,7 @@ theorem capacity_one {n : ℕ} {P : Fin n → Point} (i₁ i₂ i₃ i₄ i₅ :
   have hQ5 : InTriangle (P i₅) (P i₁) (P i₂) (P i₃) :=
     ⟨pos 0 1 4 (by decide) (by decide) (by decide) b1, pos 1 2 4 (by decide) (by decide)
       (by decide) b2, pos 2 0 4 (by decide) (by decide) (by decide) b3⟩
-  have key := CornerFamilies.twoInteriorPointLemma (P i₁) (P i₂) (P i₃) (P i₄) (P i₅)
+  have key := twoInteriorPointLemma (P i₁) (P i₂) (P i₃) (P i₄) (P i₅)
     (Or.inl hP) (Or.inl hQ5) (7 / 128) (by norm_num) hm
   have hpos : 0 < sarea (P i₁) (P i₂) (P i₃) := by
     have := sarea_add_sarea_add_sarea (P i₁) (P i₂) (P i₃) (P i₄)
@@ -204,7 +187,7 @@ theorem capacity_one {n : ℕ} {P : Fin n → Point} (i₁ i₂ i₃ i₄ i₅ :
   unfold capK at hT
   linarith
 
-/-! ### §1. The near-side lower ear -/
+/-! ### The near-side lower ear -/
 
 /-- `x + q/x ≥ 2r` when `r² ≤ q` (rational stand-in for `z + q/z ≥ 2√q`). -/
 theorem amgm_rat {x q r : ℝ} (hx : 0 < x) (_hr : 0 ≤ r) (hq : r ^ 2 ≤ q) : 2 * r ≤ x + q / x := by
@@ -215,7 +198,8 @@ theorem amgm_rat {x q r : ℝ} (hx : 0 < x) (_hr : 0 ≤ r) (hq : r ^ 2 ≤ q) :
     rw [this]; positivity
   linarith
 
-/-- (5) of `SEVEN_BOUNDARY_CAPS.md` in the weaker form `h > 1 - s`. -/
+/-- From `L ≥ 6s`, `ML ≤ (1-s)L - 3s` and `aM ≥ s`: `a + L > 1 - s` (that is, `h > 1 - s` for
+`L = h - a`). -/
 theorem thm1_h {a L M : ℝ} (ha : 0 < a) (hL6 : 6 * (7 / 64) ≤ L) (_hM : 0 < M)
     (hML : M * L ≤ (1 - 7 / 64) * L - 3 * (7 / 64)) (hABC : 7 / 64 ≤ a * M) :
     1 - 7 / 64 < a + L := by
@@ -231,8 +215,9 @@ theorem thm1_h {a L M : ℝ} (ha : 0 < a) (hL6 : 6 * (7 / 64) ≤ L) (_hM : 0 < 
   have := mul_le_mul_of_nonneg_right hc' hD.le
   nlinarith
 
-/-- The scalar part of Theorem 1 (`SEVEN_BOUNDARY_CAPS.md` (4)–(8)). -/
-theorem theorem1_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (_hh : h < 1) (hb : 0 < b)
+/-- The scalar part of `minTriangleArea_lt_of_mem_ABH`: the anchor orders, `f ≤ 1/2`, `b(h-a) ≥ 3s` and the costs of
+`ABC, BCD, CDE, EFH` are incompatible. -/
+theorem ear_ABH_scalar {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (_hh : h < 1) (hb : 0 < b)
     (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1) (hbf : b ≤ f)
     (hf : f ≤ 1 / 2) (hbL : 3 * (7 / 64) ≤ b * (h - a)) (hABC : 7 / 64 ≤ a * (c - b))
     (hBCD : 7 / 64 ≤ d * (c - b)) (hCDE : 7 / 64 ≤ (1 - c) * (e - d))
@@ -247,7 +232,7 @@ theorem theorem1_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (_hh : h 
   have hh57 : 1 - 7 / 64 < h := by
     have := thm1_h ha hL6 hM hML hABC
     linarith
-  -- (6): `α + β ≥ 2s`
+  -- `(1 - h) + (1 - e) ≥ 2s`
   have hf0 : 0 < f := by linarith
   have hab : 2 * (7 / 64) ≤ (1 - h) + (1 - e) := by
     have k1 : f * (2 * (7 / 64) - (1 - h)) ≤ f * (1 - e) := by
@@ -255,12 +240,12 @@ theorem theorem1_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (_hh : h 
         (show (0 : ℝ) ≤ 1 - 2 * f by linarith)]
     have := le_of_mul_le_mul_left k1 hf0
     linarith
-  -- (7)
+  -- lower bounds on `b`, `1 - c`, `a`, `d` from the costs
   have e1 : 3 * (7 / 64) / (h - a) ≤ b := by rw [div_le_iff₀ hL]; linarith
   have e2 : 7 / 64 / (e - d) ≤ 1 - c := by rw [div_le_iff₀ hR]; linarith
   have e3 : 7 / 64 / (c - b) ≤ a := by rw [div_le_iff₀ hM]; linarith
   have e4 : 7 / 64 / (c - b) ≤ d := by rw [div_le_iff₀ hM]; linarith
-  -- (8) with rational square roots
+  -- AM–GM with rational square roots
   have m1 := amgm_rat (x := c - b) (q := 7 / 64) (r := 3307 / 10000) hM (by norm_num) (by norm_num)
   have m2 := amgm_rat (x := h - a) (q := 6 * (7 / 64)) (r := 81 / 100) hL (by norm_num)
     (by norm_num)
@@ -270,12 +255,10 @@ theorem theorem1_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (_hh : h 
   have f3 : 2 * (7 / 64) / (e - d) = 2 * (7 / 64 / (e - d)) := by ring
   linarith
 
-/-- **Theorem 1** (`SEVEN_BOUNDARY_CAPS:Theorem1`). Under (1)–(2), if a free point lies in the
-closed triangle `ABH`, some triangle has area less than `7/128`. ("No location or property of the
-other free point has been used": stated for the seven anchors and that point.)
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 51–141.
-Uses: standard facts (`z + q/z ≥ 2√q`; `√7 > 21/8`, `√6 > 12/5`, `√2 > 7/5`). -/
-theorem theorem1 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
+/-- In the normalized seven-boundary form, a free point in the closed ear `ABH` gives a triangle
+of area less than `7/128`. The other free point plays no role: the statement is for the seven
+anchors and that point. -/
+theorem minTriangleArea_lt_of_mem_ABH {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
     (hX : InClosedTriangle X (0, a) (b, 0) (0, h)) :
     minTriangleArea (sevenConfig₁ a h b c d e f X) < 7 / 128 := by
   by_contra hcon
@@ -293,15 +276,13 @@ theorem theorem1 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Poi
     change 7 / 64 ≤ sarea (0, h) (0, a) X at c3
     linarith
   obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
-  exact theorem1_core ha hah hh hb hbc hc hd hde he hbf hf hsum H.ABC H.BCD H.CDE H.EFH
+  exact ear_ABH_scalar ha hah hh hb hbc hc hd hde he hbf hf hsum H.ABC H.BCD H.CDE H.EFH
 
-/-! ### §2. Three triangles of capacity one -/
+/-! ### Three triangles of capacity one -/
 
-/-- **Theorem 2** (`SEVEN_BOUNDARY_CAPS:Theorem2`). Under (1)–(2), none of the closed triangles
-`BCF`, `HCF`, `HBF` contains both free points at minimum area at least `7/128`.
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 148–192.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem theorem2 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : Point} :
+/-- In the normalized seven-boundary form, none of the closed triangles `BCF`, `HCF`, `HBF`
+contains both free points at minimum area at least `7/128`: each has doubled area below `Ks`. -/
+theorem minTriangleArea_lt_of_pair_mem_BCF_HCF_HBF {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : Point} :
     (InClosedTriangle P (b, 0) (c, 0) (f, 1) → InClosedTriangle Q (b, 0) (c, 0) (f, 1) →
         minTriangleArea (sevenConfig a h b c d e f P Q) < 7 / 128) ∧
       (InClosedTriangle P (0, h) (c, 0) (f, 1) → InClosedTriangle Q (0, h) (c, 0) (f, 1) →
@@ -348,14 +329,12 @@ theorem theorem2 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : P
     exact capacity_one (P := sevenConfig a h b c d e f P Q) 1 2 6 7 8 (by decide) hP hQ
       (by show sarea (0, h) (b, 0) (f, 1) < _; linarith)
 
-/-! ### §3. The smaller side quadrilateral -/
+/-! ### The smaller side quadrilateral -/
 
-/-- **Theorem 3** (`SEVEN_BOUNDARY_CAPS:Theorem3`). Under (1)–(2), the closed quadrilateral
-`ABFH` does not contain both free points at minimum area at least `7/128` (its doubled area is
-`J = b(1-a) + fh ≤ 43/50 < 8s`). No downstream citation.
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 201–236.
-Uses: QUADRILATERAL_HULL:Theorem1. -/
-theorem theorem3 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : Point}
+/-- In the normalized seven-boundary form, the closed quadrilateral `ABFH` does not contain both
+free points at minimum area at least `7/128`: its doubled area `J = b(1-a) + fh` is at most
+`43/50 < 8s`. -/
+theorem minTriangleArea_lt_of_pair_mem_ABFH {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : Point}
     (hP : InClosedPolygon ![(0, a), (b, 0), (f, 1), (0, h)] P)
     (hQ : InClosedPolygon ![(0, a), (b, 0), (f, 1), (0, h)] Q) :
     minTriangleArea (sevenConfig a h b c d e f P Q) < 7 / 128 := by
@@ -373,7 +352,7 @@ theorem theorem3 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : P
     have h0 := hX 0; have h1 := hX 1; have h2 := hX 2; have h3 := hX 3
     simp [finRotate_apply] at h0 h1 h2 h3
     exact ⟨h0, h1, h2, h3⟩
-  have key := (QuadrilateralHull.theorem1 hconv (cq P hP) (cq Q hQ)).1
+  have key := (QuadrilateralHull.minTriangleArea_six_le_quadArea_div_eight hconv (cq P hP) (cq Q hQ)).1
   have hsub : minTriangleArea (sevenConfig a h b c d e f P Q) ≤
       minTriangleArea ![(0, a), (b, 0), (f, 1), (0, h), P, Q] := by
     have e : (![(0, a), (b, 0), (f, 1), (0, h), P, Q] : Fin 6 → Point) =
@@ -395,11 +374,9 @@ theorem theorem3 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : P
     nlinarith [mul_le_mul_of_nonneg_left (show h ≤ 1 by linarith) (show (0 : ℝ) ≤ f by linarith)]
   linarith
 
-/-! ### §4. The left-hand pair -/
+/-! ### The adjacent bottom ear -/
 
-/-! ### §5. The adjacent bottom ear -/
-
-/-- The scalar end of Theorem 4 ((15)–(18)): no positive `M, L, R` satisfy
+/-- The scalar end of `minTriangleArea_lt_of_mem_ABC`: no positive `M, L, R` satisfy
 `M + s/L + s/R ≤ 1`, `L + R + 4s/M ≤ 2 - 2s` and `L ≤ 1 - 3s/M`. -/
 theorem thm4_scalar {M L R : ℝ} (hM : 0 < M) (hL : 0 < L) (hR : 0 < R)
     (h1 : M + 7 / 64 / L + 7 / 64 / R ≤ 1) (h2 : L + R + 4 * (7 / 64) / M ≤ 2 - 2 * (7 / 64))
@@ -447,8 +424,9 @@ theorem thm4_scalar {M L R : ℝ} (hM : 0 < M) (hL : 0 < L) (hR : 0 < R)
     nlinarith [mul_nonneg (sq_nonneg (M - 21 / 40)) (show (0 : ℝ) ≤ M - 27 / 160 by linarith)]
   linarith
 
-/-- The scalar part of Theorem 4 (`SEVEN_BOUNDARY_CAPS.md` (12)–(15)). -/
-theorem theorem4_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
+/-- The scalar part of `minTriangleArea_lt_of_mem_ABC`: the anchor orders, `f ≤ 1/2`, `a(c-b) ≥ 3s` and the costs of
+`ABH, BCD, CDE, EFH` are incompatible. -/
+theorem ear_ABC_scalar {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
     (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
     (hf : f ≤ 1 / 2) (hf0 : 0 < f) (h12 : 3 * (7 / 64) ≤ a * (c - b)) (hABH : 7 / 64 ≤ b * (h - a))
     (hBCD : 7 / 64 ≤ d * (c - b)) (hCDE : 7 / 64 ≤ (1 - c) * (e - d))
@@ -470,14 +448,14 @@ theorem theorem4_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h <
   have hh1 : 1 - 7 / 64 < h := by
     by_contra hc'; push Not at hc'
     nlinarith [mul_le_mul_of_nonneg_right hc' (show (0 : ℝ) ≤ c by linarith)]
-  -- (14): `α + β ≥ 2s`
+  -- `(1 - h) + (1 - e) ≥ 2s`
   have hab : 2 * (7 / 64) ≤ (1 - h) + (1 - e) := by
     have k1 : f * (2 * (7 / 64) - (1 - h)) ≤ f * (1 - e) := by
       nlinarith [mul_nonneg (show (0 : ℝ) ≤ 7 / 64 - (1 - h) by linarith)
         (show (0 : ℝ) ≤ 1 - 2 * f by linarith)]
     have := le_of_mul_le_mul_left k1 hf0
     linarith
-  -- (15)
+  -- lower bounds on `b`, `1 - c`, `a`, `d` from the costs
   have e1 : 7 / 64 / (h - a) ≤ b := by rw [div_le_iff₀ hL]; linarith
   have e2 : 7 / 64 / (e - d) ≤ 1 - c := by rw [div_le_iff₀ hR]; linarith
   have e3 : 3 * (7 / 64) / (c - b) ≤ a := by rw [div_le_iff₀ hM]; linarith
@@ -485,12 +463,9 @@ theorem theorem4_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h <
   have e5 : 4 * (7 / 64) / (c - b) = 3 * (7 / 64) / (c - b) + 7 / 64 / (c - b) := by ring
   exact thm4_scalar hM hL hR (by linarith) (by linarith) (by linarith)
 
-/-- **Theorem 4** (`SEVEN_BOUNDARY_CAPS:Theorem4`). Under (1)–(2), a free point in the closed
-triangle `ABC` gives a triangle of area less than `7/128` (stated for the seven anchors and that
-point; the proof uses no other point).
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 263–378.
-Uses: standard facts (`(√p + √q)² ≤ (a+L)(b+M)`, `√3 > 5/3`). -/
-theorem theorem4 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
+/-- In the normalized seven-boundary form, a free point in the closed ear `ABC` gives a triangle
+of area less than `7/128` (stated for the seven anchors and that point). -/
+theorem minTriangleArea_lt_of_mem_ABC {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
     (hX : InClosedTriangle X (0, a) (b, 0) (c, 0)) :
     minTriangleArea (sevenConfig₁ a h b c d e f X) < 7 / 128 := by
   by_contra hcon
@@ -508,13 +483,13 @@ theorem theorem4 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Poi
     change 7 / 64 ≤ sarea (c, 0) (0, a) X at c3
     linarith
   obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
-  exact theorem4_core ha hah hh hb hbc hc hd hde he hf (by linarith) hsum H.ABH H.BCD H.CDE H.EFH
+  exact ear_ABC_scalar ha hah hh hb hbc hc hd hde he hf (by linarith) hsum H.ABH H.BCD H.CDE H.EFH
 
-/-! ### §6. The diagonal triangle `ACF` -/
+/-! ### The diagonal triangle `ACF` -/
 
-/-- The concave quadratic `Ñ(α,w) = (1-α)² N(α, w/(1-α))` of (24) (`w = (1-α)v`), positive on
-`0 < α < 5/32`, `s ≤ w ≤ 3/16 - α/2`: its endpoint values (the two printed polynomials in
-`t = 5/32 - α`) are positive and it is concave in `w`. -/
+/-- The quadratic in `w` of the statement is positive for `0 < α < 5/32` and
+`s ≤ w ≤ 3/16 - α/2`: it is concave in `w`, and its values at the two endpoints, polynomials in
+`t = 5/32 - α`, are positive. -/
 theorem thm5_N {α w : ℝ} (hα0 : 0 < α) (hα : α < 5 / 32) (hw : 7 / 64 ≤ w)
     (hw' : w ≤ 3 / 16 - α / 2) :
     0 < (-(α * (64 * α ^ 2 - 71 * α + 14)) / 64) * w ^ 2 + ((1 - α) * (4096 * α ^ 3 - 4992 * α ^ 2 + 1064 * α - 49) / 4096) * w + (7 * (α - 1) ^ 2 * (16 * α - 3) * (64 * α - 7) / 65536) := by
@@ -545,10 +520,9 @@ theorem thm5_N {α w : ℝ} (hα0 : 0 < α) (hα : α < 5 / 32) (hw : 7 / 64 ≤
   by_contra hc; push Not at hc
   nlinarith [mul_nonpos_of_nonpos_of_nonneg hc hd.le]
 
-/-- The scalar heart of Theorem 5 (`SEVEN_BOUNDARY_CAPS.md` (20)–(24)) in the variables
-`α = s/(c-b)`, `u = b`, `v = 1 - c`: from `α(u+v) = α - s`, (21) in product form
-`αuv + (1-f)sv + fsu ≤ (1-s)uv`, `(1-α)v > s`, `f ≤ 1/2` and `αf ≥ v + α - αv - 3/16`
-(`G ≥ 13/16`), a contradiction. -/
+/-- The scalar heart of `minTriangleArea_lt_of_pair_mem_ACF`, in the variables `α = s/(c-b)`, `u = b`, `v = 1 - c`: the
+conditions `α(u+v) = α - s`, `αuv + (1-f)sv + fsu ≤ (1-s)uv`, `(1-α)v > s`, `f ≤ 1/2` and
+`αf ≥ v + α - αv - 3/16` (that is, `[ACF] ≥ 13/16`) are incompatible. -/
 theorem thm5_scalar {α u v f : ℝ} (hα0 : 0 < α) (hu : 0 < u) (hv : 0 < v) (_hf0 : 0 ≤ f)
     (hf : f ≤ 1 / 2) (hsum : α * (u + v) = α - 7 / 64)
     (h21 : α * u * v + (1 - f) * (7 / 64) * v + f * (7 / 64) * u ≤ (1 - 7 / 64) * u * v)
@@ -556,7 +530,7 @@ theorem thm5_scalar {α u v f : ℝ} (hα0 : 0 < α) (hu : 0 < u) (hv : 0 < v) (
   have hwhi : (1 - α) * v ≤ 3 / 16 - α / 2 := by nlinarith
   have hα : α < 5 / 32 := by linarith
   rcases le_or_gt u v with huv | huv
-  · -- `v ≥ u`: (23)
+  · -- `v ≥ u`
     have k1 : (u + v) / 2 ≤ (1 - f) * v + f * u := by
       nlinarith [mul_nonneg (show (0 : ℝ) ≤ 1 / 2 - f by linarith) (sub_nonneg.2 huv)]
     have k2 : 7 / 64 * ((u + v) / 2) ≤ (1 - 7 / 64 - α) * (u * v) := by nlinarith
@@ -575,7 +549,7 @@ theorem thm5_scalar {α u v f : ℝ} (hα0 : 0 < α) (hu : 0 < u) (hv : 0 < v) (
     have hα47 : α ≤ 7 / 47 := by nlinarith
     nlinarith [mul_nonneg (show (0 : ℝ) ≤ 7 / 47 - α by linarith)
       (show (0 : ℝ) ≤ 1 - 2 * (7 / 64) - α - 7 / 47 by linarith)]
-  · -- `v < u`: raise `f` to `f₀`, then `Ñ ≤ 0`
+  · -- `v < u`: replace `αf` by its lower bound; the quadratic of `thm5_N` becomes `≤ 0`
     have k1 : α * (α * u * v) + 7 / 64 * α * v + (α * f) * (7 / 64) * (u - v) ≤
         (1 - 7 / 64) * α * u * v := by nlinarith
     have k2 : (v + α - α * v - 3 / 16) * (7 / 64) * (u - v) ≤ (α * f) * (7 / 64) * (u - v) :=
@@ -593,7 +567,7 @@ theorem thm5_scalar {α u v f : ℝ} (hα0 : 0 < α) (hu : 0 < u) (hv : 0 < v) (
     rw [e] at hN
     nlinarith [mul_nonpos_of_nonneg_of_nonpos (sq_nonneg (1 - α)) hPhi]
 
-/-- The bound (19) of Theorem 5: `[ACF] = c(1-a) + af < 13/16`. -/
+/-- The bound of `minTriangleArea_lt_of_pair_mem_ACF`: the anchor costs give `[ACF] = c(1-a) + af < 13/16`. -/
 theorem thm5_bound {a h b c d e f : ℝ} (_ha : 0 < a) (_hah : a < h) (hb : 0 < b) (hbc : b < c)
     (hc : c < 1) (_hd : 0 < d) (_hde : d < e) (he : e < 1) (hbf : b ≤ f) (hfc : f ≤ c)
     (hf : f ≤ 1 / 2) (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
@@ -627,13 +601,11 @@ theorem thm5_bound {a h b c d e f : ℝ} (_ha : 0 < a) (_hah : a < h) (hb : 0 < 
     nlinarith [mul_le_mul_of_nonneg_right ha' (show (0 : ℝ) ≤ c - f by linarith)]
   exact thm5_scalar hα0 hb hv hf0 hf hsum h21 hw hG'
 
-/-- **Theorem 5** (`SEVEN_BOUNDARY_CAPS:Theorem5`). Under (1)–(2): if every anchor triangle has
-area at least `7/128` (the proof uses only `ABC, BCD, ABH, CDE, HEF`), then the doubled area
-`[ACF] = c(1-a) + af` is less than `13/16 < Ks`; consequently the closed triangle `ACF` does not
-contain both free points at minimum area at least `7/128`.
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 392–544.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem theorem5 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
+/-- In the normalized seven-boundary form: if every anchor triangle has area at least `7/128` (the
+argument uses only `ABC, BCD, ABH, CDE, HEF`), then the doubled area `[ACF] = c(1-a) + af` is less
+than `13/16 < Ks`; consequently the closed triangle `ACF` does not contain both free points at
+minimum area at least `7/128`. -/
+theorem minTriangleArea_lt_of_pair_mem_ACF {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
     (7 / 128 ≤ minTriangleArea (sevenAnchorConfig a h b c d e f) →
         sarea (0, a) (c, 0) (f, 1) < 13 / 16) ∧
       13 / 16 < capK * (7 / 64) ∧
@@ -656,10 +628,10 @@ theorem theorem5 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
     (by show sarea (0, a) (c, 0) (f, 1) < _; linarith)
   linarith
 
-/-! ### §7. The upper left overlap -/
+/-! ### The upper left overlap -/
 
-/-- (29) of Theorem 6: `D(a,L) = (a - 7/32)L² + (a/8 + 49/1024)L + 49a/512 > 0` for `a > 1/7`,
-`0 < L ≤ 1 - a`. -/
+/-- A step of `overlap_AHF_HCF_scalar`: `D(a,L) = (a - 7/32)L² + (a/8 + 49/1024)L + 49a/512 > 0` for
+`a > 1/7`, `0 < L ≤ 1 - a`. -/
 theorem thm6_D {a L : ℝ} (ha : 1 / 7 < a) (hL : 0 < L) (hLa : L ≤ 1 - a) :
     0 < (a - 7 / 32) * L ^ 2 + (a / 8 + 49 / 1024) * L + 49 * a / 512 := by
   rcases le_total (7 / 32) a with h | h
@@ -673,8 +645,8 @@ theorem thm6_D {a L : ℝ} (ha : 1 / 7 < a) (hL : 0 < L) (hLa : L ≤ 1 - a) :
         (show (0 : ℝ) < 175 / 1024 / (1 / 7) + 1 - a by linarith)]
     nlinarith [mul_pos hL k2]
 
-/-- (28)–(30) of Theorem 6, multiplied by `4aL`: with `h = a + L` and
-`C = L((1-h)/2 - s) - 2s(1-h)`, `K = Lh/4 - sh - sL/2`, the value `Csh + aLK` is negative. -/
+/-- A step of `overlap_AHF_HCF_scalar`, multiplied by `4aL`: with `h = a + L`,
+`C = L((1-h)/2 - s) - 2s(1-h)` and `K = Lh/4 - sh - sL/2`, the value `Csh + aLK` is negative. -/
 theorem thm6_T {a L : ℝ} (ha : 1 / 7 < a) (hL : 0 < L) (hLa : L ≤ 1 - a) :
     (L * ((1 - (a + L)) / 2 - 7 / 64) - 2 * (7 / 64) * (1 - (a + L))) * (7 / 64) * (a + L) +
       a * L * (L * (a + L) / 4 - 7 / 64 * (a + L) - 7 / 64 * L / 2) < 0 := by
@@ -688,7 +660,7 @@ theorem thm6_T {a L : ℝ} (ha : 1 / 7 < a) (hL : 0 < L) (hLa : L ≤ 1 - a) :
     ring
   nlinarith [mul_pos hL hQ, mul_nonneg (show (0 : ℝ) ≤ 1 - (a + L) by linarith) hD.le]
 
-/-- (26) of Theorem 6: `aLc ≥ sh`, `c < 1 - s` and `L ≤ 1 - a` force `a > 1/7`. -/
+/-- A step of `overlap_AHF_HCF_scalar`: `aLc ≥ sh`, `c < 1 - s` and `L ≤ 1 - a` force `a > 1/7`. -/
 theorem thm6_a {a h c : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hc1 : c < 1 - 7 / 64)
     (hc0 : 7 / 64 * h ≤ a * (h - a) * c) : 1 / 7 < a := by
   have hL : 0 < h - a := by linarith
@@ -703,7 +675,7 @@ theorem thm6_a {a h c : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hc1 : c < 
   by_contra hc'; push Not at hc'
   nlinarith [mul_le_mul_of_nonneg_left hc' (show (0 : ℝ) ≤ 6 / 7 - a by linarith)]
 
-/-- (27) of Theorem 6: `C = L((1-h)/2 - s) - 2s(1-h) ≤ 0`. -/
+/-- A step of `overlap_AHF_HCF_scalar`: `C = L((1-h)/2 - s) - 2s(1-h) ≤ 0`. -/
 theorem thm6_C {a h : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) :
     (h - a) * ((1 - h) / 2 - 7 / 64) - 2 * (7 / 64) * (1 - h) ≤ 0 := by
   have hL : 0 < h - a := by linarith
@@ -711,7 +683,8 @@ theorem thm6_C {a h : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) :
   · nlinarith [mul_nonpos_of_nonneg_of_nonpos hL.le hX]
   · nlinarith [mul_le_mul_of_nonneg_right (show h - a ≤ h by linarith) hX, sq_nonneg (h - 39 / 64)]
 
-/-- (25) of Theorem 6 and the replacement `f ↦ 1/2`: `Ψ ≥ 0` and `Ψ ≤ Cc + K`. -/
+/-- A step of `overlap_AHF_HCF_scalar`: the costs of `AFQ, FHQ, HCQ` give `Ψ ≥ 0`, and replacing `f` by
+`1/2` gives `Ψ ≤ Cc + K`; hence `Cc + K ≥ 0`. -/
 theorem thm6_psi {a h c f x y : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hc : 0 < c)
     (hf0 : 0 < f) (hf : f ≤ 1 / 2)
     (hAFQ : 7 / 64 ≤ f * (y - a) - (1 - a) * x) (hFHQ : 7 / 64 ≤ -f * (y - 1) + (1 - h) * (x - f))
@@ -741,9 +714,9 @@ theorem thm6_psi {a h c f x y : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hc
         7 / 64 * (2 * h + (h - a))) := by ring
   linarith [mul_nonneg (show (0 : ℝ) ≤ 1 / 2 - f by linarith) hB]
 
-/-- The scalar part of Theorem 6 (`SEVEN_BOUNDARY_CAPS.md` (25)–(30)), with `Q = (x,y)` and the
-costs of `AFQ, FHQ, HCQ, HAQ, ABH, ABC` and `c ≤ 1 - s`. -/
-theorem theorem6_core {a h b c f x y : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
+/-- The scalar part of `minTriangleArea_lt_of_mem_AHF_HCF`, with `Q = (x,y)`: the costs of `AFQ, FHQ, HCQ, HAQ, ABH, ABC`
+and `c < 1 - s` are incompatible. -/
+theorem overlap_AHF_HCF_scalar {a h b c f x y : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
     (hbc : b < c) (hc1 : c < 1 - 7 / 64) (hbf : b ≤ f) (hf : f ≤ 1 / 2)
     (hABH : 7 / 64 ≤ b * (h - a)) (hABC : 7 / 64 ≤ a * (c - b))
     (hAFQ : 7 / 64 ≤ f * (y - a) - (1 - a) * x) (hFHQ : 7 / 64 ≤ -f * (y - 1) + (1 - h) * (x - f))
@@ -767,12 +740,10 @@ theorem theorem6_core {a h b c f x y : ℝ} (ha : 0 < a) (hah : a < h) (hh : h <
   have := mul_nonneg hpos.le hPsi
   linarith
 
-/-- **Theorem 6** (`SEVEN_BOUNDARY_CAPS:Theorem6`). Under (1)–(2), a point in both closed
-triangles `AHF` and `HCF` gives a triangle of area less than `7/128` (stated for the seven anchors
-and that point; the proof uses `[AFQ], [FHQ], [HCQ]` and the anchors `ABH, ABC, CDE`).
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 558–691.
-Uses: none (weighted determinant identity and monotone replacements). -/
-theorem theorem6 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
+/-- In the normalized seven-boundary form, a point in both closed triangles `AHF` and `HCF` gives a
+triangle of area less than `7/128` (stated for the seven anchors and that point; the argument
+uses `[AFQ], [FHQ], [HCQ]` and the anchors `ABH, ABC, CDE`). -/
+theorem minTriangleArea_lt_of_mem_AHF_HCF {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
     (hAHF : InClosedTriangle X (0, a) (f, 1) (0, h))
     (hHCF : InClosedTriangle X (0, h) (c, 0) (f, 1)) :
     minTriangleArea (sevenConfig₁ a h b c d e f X) < 7 / 128 := by
@@ -791,13 +762,13 @@ theorem theorem6 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Poi
   have c3 := cost hcon 1 0 7 rfl h3
   have c4 := cost hcon 1 3 7 rfl g1
   simp only [sevenConfig₁, Matrix.cons_val, sarea] at c1 c2 c3 c4
-  exact theorem6_core (x := x) (y := y) ha hah hh hb hbc hc1 hbf hf H.ABH H.ABC (by linarith)
+  exact overlap_AHF_HCF_scalar (x := x) (y := y) ha hah hh hb hbc hc1 hbf hf H.ABH H.ABC (by linarith)
     (by linarith) (by linarith) (by linarith)
 
-/-! ### §8. The bottom-right ear -/
+/-! ### The bottom-right ear -/
 
-/-- The monotonicity step of Theorem 8: with `b + w = b₀ + w₀ = S ≤ 1`, `w ≥ w₀ > 2b₀`, the
-function `s/b + 3sb/w` is at least its value at `(b₀, w₀)`. -/
+/-- The monotonicity step of `ear_CDE_scalar`: with `b + w = b₀ + w₀ = S ≤ 1`, `w ≥ w₀ > 2b₀`,
+the function `s/b + 3sb/w` is at least its value at `(b₀, w₀)`. -/
 theorem thm8_mono {S b w b₀ w₀ : ℝ} (hS1 : S ≤ 1) (hb : 0 < b) (hw : 0 < w) (hb0 : 0 < b₀)
     (hw0 : 0 < w₀) (hsum : b + w = S) (hsum0 : b₀ + w₀ = S) (hww : w₀ ≤ w) (h2 : 2 * b₀ < w₀) :
     7 / 64 / b₀ + 3 * (7 / 64) * b₀ / w₀ ≤ 7 / 64 / b + 3 * (7 / 64) * b / w := by
@@ -816,7 +787,7 @@ theorem thm8_mono {S b w b₀ w₀ : ℝ} (hS1 : S ≤ 1) (hb : 0 < b) (hw : 0 <
     rw [show b = S - w by linarith, show b₀ = S - w₀ by linarith]; ring
   nlinarith [mul_nonneg (show (0 : ℝ) ≤ w - w₀ by linarith) (sub_nonneg.2 key)]
 
-/-- The final comparison (35) of Theorem 8: with `w₀(M - s) = 3sM` and `b₀ + w₀ = 1 - M`,
+/-- The final comparison of `ear_CDE_scalar`: with `w₀(M - s) = 3sM` and `b₀ + w₀ = 1 - M`,
 `s/M + s/b₀ + 3sb₀/w₀ > 1`, because `P(M) = 4096M³ - 2304M² + 196M + 49 > 0`. -/
 theorem thm8_final {M b₀ w₀ : ℝ} (hMs : 7 / 64 < M) (hb0 : 0 < b₀) (hw0 : 0 < w₀)
     (hw0e : w₀ * (M - 7 / 64) = 3 * (7 / 64) * M) (hsum0 : b₀ + w₀ = 1 - M) :
@@ -844,7 +815,7 @@ theorem thm8_final {M b₀ w₀ : ℝ} (hMs : 7 / 64 < M) (hb0 : 0 < b₀) (hw0 
     lt_div_iff₀ (mul_pos hM hb0)]
   linarith
 
-/-- The case `e > h` of Theorem 8 in the variables `M = c - b`, `b`, `w = 1 - c`:
+/-- The case `e > h` of `ear_CDE_scalar`, in the variables `M = c - b`, `b`, `w = 1 - c`:
 `s/M + s/b < 1`, `s/M + 3s/w < 1` and `s/M + s/b + 3sb/w ≤ 1` are incompatible. -/
 theorem thm8_case2 {M b w : ℝ} (hM : 0 < M) (hb : 0 < b) (hw : 0 < w) (hsum : b + M + w = 1)
     (h1 : 7 / 64 / M + 7 / 64 / b < 1) (h2 : 7 / 64 / M + 3 * (7 / 64) / w < 1)
@@ -877,8 +848,9 @@ theorem thm8_case2 {M b w : ℝ} (hM : 0 < M) (hb : 0 < b) (hw : 0 < w) (hsum : 
   have hfin := thm8_final hMs hb0 hw0 hw0e (by linarith)
   linarith
 
-/-- The scalar part of Theorem 8 (`SEVEN_BOUNDARY_CAPS.md` (31)–(35)). -/
-theorem theorem8_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
+/-- The scalar part of `minTriangleArea_lt_of_mem_CDE`: the anchor orders, `f ≤ 1/2`, the costs of `ABC, BCD, ABH, EFH`
+and `(1-c)(e-d) ≥ 3s` are incompatible. -/
+theorem ear_CDE_scalar {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
     (hbc : b < c) (hc : c < 1) (_hd : 0 < d) (hde : d < e) (he : e < 1) (hbf : b ≤ f)
     (hf : f ≤ 1 / 2) (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
     (hABH : 7 / 64 ≤ b * (h - a)) (hEFH : 7 / 64 ≤ (1 - f) * (1 - h) + f * (1 - e))
@@ -917,13 +889,11 @@ theorem theorem8_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h <
     have k4 : b * (3 * (7 / 64) / (1 - c)) = 3 * (7 / 64) * b / (1 - c) := by ring
     exact thm8_case2 hM hb hw (by ring) (by linarith) (by linarith) (by nlinarith)
 
-/-- **Theorem 8** (`SEVEN_BOUNDARY_CAPS:Theorem8`). Under (1)–(2): if every anchor triangle has
-area at least `7/128`, the doubled area `[CDE] = (1-c)(e-d)` is less than `3s = 21/64`;
-consequently a free point in the closed triangle `CDE` gives a triangle of area less than `7/128`
-(stated for the seven anchors and that point).
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 719–844.
-Uses: standard facts (Cauchy–Schwarz; `√2 > 7/5`, `√3 > 5/3`). -/
-theorem theorem8 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
+/-- In the normalized seven-boundary form: if every anchor triangle has area at least `7/128`, the
+doubled area `[CDE] = (1-c)(e-d)` is less than `3s = 21/64`; consequently a free point in the
+closed triangle `CDE` gives a triangle of area less than `7/128` (stated for the seven anchors and
+that point). -/
+theorem minTriangleArea_lt_of_mem_CDE {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
     (7 / 128 ≤ minTriangleArea (sevenAnchorConfig a h b c d e f) →
         sarea (c, 0) (1, d) (1, e) < 3 * (7 / 64)) ∧
       ∀ X : Point, InClosedTriangle X (c, 0) (1, d) (1, e) →
@@ -936,7 +906,7 @@ theorem theorem8 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
     rw [e]
     by_contra hc'; push Not at hc'
     obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
-    exact theorem8_core ha hah hh hb hbc hc hd hde he hbf hf H.ABC H.BCD H.ABH H.EFH hc'
+    exact ear_CDE_scalar ha hah hh hb hbc hc hd hde he hbf hf H.ABC H.BCD H.ABH H.EFH hc'
   refine ⟨part1, fun X hX => ?_⟩
   by_contra hcon
   push Not at hcon
@@ -951,15 +921,12 @@ theorem theorem8 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
   change 7 / 64 ≤ sarea (1, e) (c, 0) X at c3
   linarith
 
-/-! ### §9. Two right-hand triangles of capacity one -/
+/-! ### Two right-hand triangles of capacity one -/
 
-/-- **Equation (37)** (`SEVEN_BOUNDARY_CAPS:eq37`), proved at the start of the proof of
-Theorem 9 and used by Theorem 11, `SEVEN_BOUNDARY_TOP_CAP_RIGHT` and the exterior notes: under
-(1)–(2), if every anchor triangle has area at least `7/128`, then `1/8 < b ≤ 1/2`,
-`c ≥ b²/(b-s)` and `b - s - b² > 0`, `s = 7/64`.
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 861–879.
-Uses: none. -/
-theorem eq37 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the normalized seven-boundary form, if every anchor triangle has area at least `7/128`, then
+`1/8 < b ≤ 1/2`, `c ≥ b²/(b-s)` and `b - s - b² > 0` (`s = 7/64`). Used by `minTriangleArea_lt_of_pair_mem_CDF_DEF`,
+`minTriangleArea_lt_of_pair_inFarUpperCap` and the exterior case. -/
+theorem b_bounds_of_anchor_min {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f)
     (hmin : 7 / 128 ≤ minTriangleArea (sevenAnchorConfig a h b c d e f)) :
     1 / 8 < b ∧ b ≤ 1 / 2 ∧ b ^ 2 / (b - 7 / 64) ≤ c ∧ 0 < b - 7 / 64 - b ^ 2 := by
   have H := anchorCosts hN.1 hmin
@@ -976,7 +943,7 @@ theorem eq37 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f)
   refine ⟨by nlinarith, by linarith, ?_, h3⟩
   rw [div_le_iff₀ (by linarith)]; linarith
 
-/-- The bound `[CDF] < 13/16` of (36), (38)–(39). -/
+/-- The bound `[CDF] < 13/16` of `minTriangleArea_lt_of_pair_mem_CDF_DEF`. -/
 theorem thm9_CDF {b c d e f : ℝ} (hb8 : 1 / 8 < b) (hb2 : b ≤ 1 / 2) (hbc : b < c) (hc : c < 1)
     (hbf : b ≤ f) (hfc : f ≤ c) (hd : 0 < d) (_hde : d < e) (he : e < 1)
     (hCDE : 7 / 64 ≤ (1 - c) * (e - d))
@@ -1009,7 +976,7 @@ theorem thm9_CDF {b c d e f : ℝ} (hb8 : 1 / 8 < b) (hb2 : b ≤ 1 / 2) (hbc : 
   have := mul_le_mul_of_nonneg_left hc' (show (0 : ℝ) ≤ 1 - c by linarith)
   nlinarith
 
-/-- The bound `[DEF] < 49/64` of (36). -/
+/-- The bound `[DEF] < 49/64` of `minTriangleArea_lt_of_pair_mem_CDF_DEF`. -/
 theorem thm9_DEF {b c d e f : ℝ} (hb8 : 1 / 8 < b) (hbc : b < c) (hc : c < 1) (hd : 0 < d)
     (hde : d < e) (he : e < 1) (hbf : b ≤ f) (hBCD : 7 / 64 ≤ d * (c - b)) :
     (1 - f) * (e - d) < 49 / 64 := by
@@ -1021,14 +988,11 @@ theorem thm9_DEF {b c d e f : ℝ} (hb8 : 1 / 8 < b) (hbc : b < c) (hc : c < 1) 
     nlinarith
   nlinarith
 
-/-- **Theorem 9** (`SEVEN_BOUNDARY_CAPS:Theorem9`). Under (1)–(2): if every anchor triangle has
-area at least `7/128`, the doubled areas satisfy `[CDF] < 13/16` and `[DEF] < 49/64`, both below
-`Ks`; consequently neither the closed triangle `CDF` nor the closed triangle `DEF` contains both
-free points at minimum area at least `7/128`.
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 852–930.
-Uses: SEVEN_BOUNDARY_CAPS:eq37, SEVEN_BOUNDARY_CAPS:Theorem5 (`Ks > 13/16`),
-CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem theorem9 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
+/-- In the normalized seven-boundary form: if every anchor triangle has area at least `7/128`, the
+doubled areas satisfy `[CDF] < 13/16` and `[DEF] < 49/64`, both below `Ks`; consequently neither
+the closed triangle `CDF` nor the closed triangle `DEF` contains both free points at minimum area
+at least `7/128`. -/
+theorem minTriangleArea_lt_of_pair_mem_CDF_DEF {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
     (7 / 128 ≤ minTriangleArea (sevenAnchorConfig a h b c d e f) →
         sarea (c, 0) (1, d) (f, 1) < 13 / 16 ∧ sarea (1, d) (1, e) (f, 1) < 49 / 64) ∧
       ∀ P Q : Point,
@@ -1039,7 +1003,7 @@ theorem theorem9 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
   have part1 : 7 / 128 ≤ minTriangleArea (sevenAnchorConfig a h b c d e f) →
       sarea (c, 0) (1, d) (f, 1) < 13 / 16 ∧ sarea (1, d) (1, e) (f, 1) < 49 / 64 := by
     intro hmin
-    obtain ⟨hb8, hb2, h37, h37'⟩ := eq37 hN hmin
+    obtain ⟨hb8, hb2, h37, h37'⟩ := b_bounds_of_anchor_min hN hmin
     have H := anchorCosts hN.1 hmin
     obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
     have hbs : 0 < b - 7 / 64 := by linarith
@@ -1064,14 +1028,11 @@ theorem theorem9 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
       (by show sarea (1, d) (1, e) (f, 1) < _; linarith)
     linarith
 
-/-! ### §10–11. The two upper exterior caps -/
+/-! ### The two upper exterior caps -/
 
-/-- **Theorem 10** (`SEVEN_BOUNDARY_CAPS:Theorem10`). Under (1)–(2), a point in the nearer upper
-exterior cap `conv{H, F, (0,1)}` gives a triangle of area less than `7/128` ("independently of the
-position of the other free point": stated for the seven anchors and that point).
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 942–972.
-Uses: standard fact (two-term reciprocal Cauchy inequality). -/
-theorem theorem10_core {a h b c f x : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1)
+/-- The scalar part of `minTriangleArea_lt_of_inNearUpperCap`: for `X = (x, y)` in the nearer upper cap, the cost of `ABC`,
+`x(h-a) ≥ s` (triangle `AHX`) and `(1-h)(f-x) ≥ s` are incompatible. -/
+theorem near_upper_cap_scalar {a h b c f x : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1)
     (hf : f ≤ 1 / 2) (hABC : 7 / 64 ≤ a * (c - b)) (hM : c - b ≤ 1 - 2 * (7 / 64))
     (hAHX : 7 / 64 ≤ x * (h - a)) (hq : 7 / 64 ≤ (1 - h) * (f - x)) (hx0 : 0 ≤ x) : False := by
   have hL : 0 < h - a := by linarith
@@ -1092,7 +1053,10 @@ theorem theorem10_core {a h b c f x : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 
   have ha8 : a ≤ 1 / 8 := by nlinarith
   nlinarith
 
-theorem theorem10 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
+/-- In the normalized seven-boundary form, a point in the nearer upper exterior cap
+`conv{H, F, (0,1)}` gives a triangle of area less than `7/128`, whatever the other free point
+(stated for the seven anchors and that point). -/
+theorem minTriangleArea_lt_of_inNearUpperCap {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
     (hX : InNearUpperCap h f X) :
     minTriangleArea (sevenConfig₁ a h b c d e f X) < 7 / 128 := by
   by_contra hcon
@@ -1115,19 +1079,20 @@ theorem theorem10 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Po
     cost hcon 1 6 7 (by sa_eval) (by linarith)
   have hq : 7 / 64 ≤ (1 - h) * (f - x) := by
     nlinarith [mul_nonneg (show (0 : ℝ) ≤ f by linarith) (sub_nonneg.2 hy1)]
-  exact theorem10_core ha hah hh hf hABC hM hAHX hq hx0
+  exact near_upper_cap_scalar ha hah hh hf hABC hM hAHX hq hx0
 
-/-- **Support-cell bound** (`TYPE_II.md` §1, cells I, IV, V). For a counterclockwise support
-triangle `UVW` with contacts `H ∈ (U, W)`, `F ∈ (V, W)` and fifth point `X` with `[UFX] > 0` (so
-`X` is in none of the cells II, III), if the five points have least area at least `t > 0`, then
-`[UVW] ≥ 2Kt` with `K = 4 + 2√3`: the normalized doubled minimum is at most `1/K` in cell I,
-`1/12` in cell IV and `(5√5-11)/2 < 1/10` in cell V. -/
+/-- **Support-cell bound.** For a counterclockwise support triangle `UVW` with contacts
+`H ∈ (U, W)`, `F ∈ (V, W)` and fifth point `X` with `[UFX] > 0` (`TypeII.IsSupportTriangle`), if
+the five points have least area at least `t > 0`, then `[UVW] ≥ 2Kt` with `K = 4 + 2√3`. The cell
+analysis of `TypeII.hsNormal_five_cells` (the condition `[UFX] > 0` rules out cells II and III)
+bounds the normalized doubled minimum by `1/K` in cell I, `1/12` in cell IV and
+`(5√5-11)/2 < 1/10` in cell V. -/
 theorem support_bound {U V W H F X : Point} (hS : TypeII.IsSupportTriangle U V W H F X)
     (hL : 0 < sarea U F X) {t : ℝ} (ht : 0 < t)
     (hmin : t ≤ minTriangleArea ![U, V, H, F, X]) :
     2 * TypeII.Ktwo * t ≤ sarea U V W := by
   obtain ⟨m1, m2, m3, m4, e1, e2, h₀, f₀, hdet, hA', hE', -, hH', hF', hN⟩ :=
-    TypeII.claim_support_affine hS
+    TypeII.exists_affineMap_hsNormal hS
   have hS0 : 0 < sarea U V W := hS.1
   have hdet0 : 0 < m1 * m4 - m2 * m3 := by rw [hdet]; positivity
   set φ := affineMap m1 m2 m3 m4 e1 e2
@@ -1143,7 +1108,7 @@ theorem support_bound {U V W H F X : Point} (hS : TypeII.IsSupportTriangle U V W
     rw [hcfg, minTriangleArea_affineMap, abs_of_pos hdet0]
     nlinarith
   have hs : 0 < 2 * t * (m1 * m4 - m2 * m3) := by positivity
-  have five := TypeII.claim_five_cells hN hs hmin'
+  have five := TypeII.hsNormal_five_cells hN hs hmin'
   have hL' : 0 < sarea TypeII.hsA (TypeII.hsF f₀) (φ X) := by
     rw [← hA', ← hF', sarea_affineMap]; exact mul_pos hdet0 hL
   have hK7 : TypeII.Ktwo < 15 / 2 := by unfold TypeII.Ktwo; linarith [TypeII.sqrt_three_lt]
@@ -1153,18 +1118,18 @@ theorem support_bound {U V W H F X : Point} (hS : TypeII.IsSupportTriangle U V W
     rw [div_le_div_iff₀ (by norm_num) TypeII.Ktwo_pos]; linarith
   have hσ : 2 * t * (m1 * m4 - m2 * m3) ≤ 1 / TypeII.Ktwo := by
     rcases five.1 with hI | hII | hIII | hIV | hV
-    · exact (TypeII.claim_cell_I_bound hN hs hmin' hI).2
+    · exact (TypeII.inCellI_bound hN hs hmin' hI).2
     · exact absurd hII.1 (not_lt.2 hL'.le)
     · exact absurd hIII.1 (not_lt.2 hL'.le)
-    · exact (TypeII.claim_cell_IV_bound hN hs hmin' hIV).trans h12
-    · obtain ⟨-, h1, h2⟩ := TypeII.eq3 hN hs hmin' hV
+    · exact (TypeII.inCellIV_bound hN hs hmin' hIV).trans h12
+    · obtain ⟨-, h1, h2⟩ := TypeII.inCellV_bound hN hs hmin' hV
       linarith
   rw [hdet, le_div_iff₀ TypeII.Ktwo_pos] at hσ
   have e : 2 * t * (1 / sarea U V W) * TypeII.Ktwo = 2 * TypeII.Ktwo * t / sarea U V W := by ring
   rw [e, div_le_one hS0] at hσ
   exact hσ
 
-/-- The support triangle of Theorem 11: for `X = (x₁,x₂)`, `Y = (y₁,y₂)` beyond `EF` with `Y`
+/-- The support triangle of `minTriangleArea_lt_of_pair_inFarUpperCap`: for `X = (x₁,x₂)`, `Y = (y₁,y₂)` beyond `EF` with `Y`
 weakly below the line `FX` (`(1-x₂)(y₁-f) ≤ (1-y₂)(x₁-f)`), the triangle `F, D, K'` with
 `K' = (1,k)` the right-side intercept of `FX` (`e < k ≤ 1`) is a support triangle with contacts
 `X ∈ (F, K')`, `E ∈ (D, K')` and fifth point `Y`. -/
@@ -1201,7 +1166,7 @@ theorem far_support {d e f x₁ x₂ y₁ y₂ : ℝ} (hf : f < 1) (_hd : 0 < d)
   · ext
     · simp only [Prod.fst_add, Prod.smul_fst, smul_eq_mul]; field_simp; ring
     · simp only [Prod.snd_add, Prod.smul_snd, smul_eq_mul]; field_simp; ring
-  · apply TypeII.mem_convexHull_of_sarea
+  · apply mem_convexHull_of_sarea
     · simp only [sarea]; nlinarith [mul_pos hf1 hkd]
     · simp only [sarea]; nlinarith [mul_pos hkd (show (0 : ℝ) < 1 - y₁ by linarith)]
     · -- `[K'FY] = (1-f)(1-y₂) - (1-k)(y₁-f) ≥ 0`
@@ -1216,8 +1181,9 @@ theorem far_support {d e f x₁ x₂ y₁ y₂ : ℝ} (hf : f < 1) (_hd : 0 < d)
       nlinarith [mul_le_mul_of_nonneg_right (show 1 - e ≤ 1 - d by linarith)
         (show (0 : ℝ) ≤ y₁ - f by linarith)]
 
-/-- The core of Theorem 11: with the support triangle `F, D, K'` of `far_support`, since
-`[FEY] > 0` the cells give `Ω = (1-f)(k-d) ≥ Ks > 13/16`, while `Ω ≤ (1-b)(1-d) < 49/64`. -/
+/-- The core of `minTriangleArea_lt_of_pair_inFarUpperCap`: with the support triangle `F, D, K'` of `far_support`, since
+`[FEY] > 0` the bound `support_bound` gives `Ω = (1-f)(k-d) ≥ Ks > 13/16`, while
+`Ω ≤ (1-b)(1-d) < 49/64`. -/
 theorem far_cap_core {b c d e f x₁ x₂ y₁ y₂ : ℝ} (hb8 : 1 / 8 < b) (hbf : b ≤ f) (hf : f ≤ 1 / 2)
     (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
     (hBCD : 7 / 64 ≤ d * (c - b))
@@ -1241,20 +1207,16 @@ theorem far_cap_core {b c d e f x₁ x₂ y₁ y₂ : ℝ} (hb8 : 1 / 8 < b) (hb
     linarith
   linarith
 
-/-- **Theorem 11** (`SEVEN_BOUNDARY_CAPS:Theorem11`). Under (1)–(2), the far upper exterior cap
-`conv{F, E, (1,1)}` does not contain both free points at minimum area at least `7/128` (support
-triangle `DFK'` and the cells III–V of `TYPE_II.md` §1 give `Ω ≥ Ks > 13/16`, while
-`Ω < 49/64`).
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 979–1036.
-Uses: TYPE_II:claim-support-normalization, TYPE_II:EndpointTriangleTheorem,
-SEVEN_BOUNDARY_CAPS:eq37. -/
-theorem theorem11 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : Point}
+/-- In the normalized seven-boundary form, the far upper exterior cap `conv{F, E, (1,1)}` does not
+contain both free points at minimum area at least `7/128`: the support triangle of `far_support`
+has doubled area `Ω ≥ Ks > 13/16` by `support_bound`, while `Ω < 49/64`. -/
+theorem minTriangleArea_lt_of_pair_inFarUpperCap {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : Point}
     (hP : InFarUpperCap e f P) (hQ : InFarUpperCap e f Q) :
     minTriangleArea (sevenConfig a h b c d e f P Q) < 7 / 128 := by
   by_contra hcon
   push Not at hcon
   have hA := hcon.trans (min₁_left.trans minAnchor_of₁)
-  obtain ⟨hb8, -, -, -⟩ := eq37 hN hA
+  obtain ⟨hb8, -, -, -⟩ := b_bounds_of_anchor_min hN hA
   have H := anchorCosts hN.1 hA
   obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
   obtain ⟨p₁, p₂⟩ := P
@@ -1286,9 +1248,9 @@ theorem theorem11 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : 
     exact far_cap_core hb8 hbf hf hbc hc hd hde he H.BCD hqf hq1 hq2 hpf hp1
       (by linarith) (by linarith) hXY (hcon.trans hm)
 
-/-- A point of the square outside the open anchor heptagon lies in one of the two lower caps
-(written as in `GLOBAL_COMPLETION:Theorem2`) or is a far-cap point; the nearer upper cap is empty
-(Theorem 10) and a point on a side line of the heptagon gives a zero area. -/
+/-- A point of the square outside the open anchor heptagon lies in one of the two lower caps (in the
+form used by `GlobalCompletion.minTriangleArea_lt_of_lowerCap`) or is a far-cap point: the nearer upper cap is empty by
+`minTriangleArea_lt_of_inNearUpperCap`, and a point on a side line of the heptagon gives a zero area. -/
 theorem outside_cases {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {Z : Point}
     (hZ : Z ∈ unitSquare) (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f Z))
     (hout : ¬ InHeptagon a h b c d e f Z) :
@@ -1329,7 +1291,7 @@ theorem outside_cases {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {Z 
   · exfalso
     have hX : InNearUpperCap h f (z₁, z₂) := by
       refine ⟨by rw [sarea_swap₁₂]; linarith, ?_, ?_⟩ <;> simp only [sarea] <;> nlinarith
-    have := theorem10 hN hX
+    have := minTriangleArea_lt_of_inNearUpperCap hN hX
     linarith
   · exfalso
     simp only [sarea] at h1
@@ -1344,13 +1306,11 @@ theorem farCapPoint_mem {e f : ℝ} {Z : Point} (he : e < 1) (hf : f < 1) (hZ : 
   simp only at h1 h2 h3 h4
   refine ⟨h5.le, ?_, ?_⟩ <;> simp only [sarea] <;> nlinarith
 
-/-- **Claim** (`SEVEN_BOUNDARY_CAPS:claim-exterior-reduction`). Under (1)–(2), with both free
-points in the square and minimum area at least `7/128`, if the free points are not both strictly
-inside the anchor heptagon, then exactly one of them lies strictly beyond `EF` in the far upper
-cap (`FarCapPoint`) and the other strictly inside the heptagon.
-`docs/proof/nine/SEVEN_BOUNDARY_CAPS.md`, lines 974–977 and 1038–1041.
-Uses: SEVEN_BOUNDARY_CAPS:Theorem10, SEVEN_BOUNDARY_CAPS:Theorem11, GLOBAL_COMPLETION:Theorem2. -/
-theorem claim_exterior_reduction {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f)
+/-- In the normalized seven-boundary form, with both free points in the square and minimum area at
+least `7/128`, if the free points are not both strictly inside the anchor heptagon, then exactly
+one of them lies strictly beyond `EF` in the far upper cap (`FarCapPoint`) and the other strictly
+inside the heptagon. -/
+theorem farCapPoint_of_not_both_inHeptagon {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f)
     {P Q : Point} (hPs : P ∈ unitSquare) (hQs : Q ∈ unitSquare)
     (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f P Q))
     (hout : ¬ (InHeptagon a h b c d e f P ∧ InHeptagon a h b c d e f Q)) :
@@ -1361,7 +1321,7 @@ theorem claim_exterior_reduction {a h b c d e f : ℝ} (hN : SevenNormal a h b c
   have lower : ∀ (hcap : GlobalCompletion.InLowerLeftCap a b P ∨
       GlobalCompletion.InLowerRightCap c d P ∨ GlobalCompletion.InLowerLeftCap a b Q ∨
       GlobalCompletion.InLowerRightCap c d Q), False := fun hcap =>
-    absurd hmin (not_le.2 (GlobalCompletion.theorem2 ha hah hh hb hbc hc hd hde he (by linarith)
+    absurd hmin (not_le.2 (GlobalCompletion.minTriangleArea_lt_of_lowerCap ha hah hh hb hbc hc hd hde he (by linarith)
       (by linarith) hPs hQs hcap))
   by_cases hPin : InHeptagon a h b c d e f P
   · have hQin : ¬ InHeptagon a h b c d e f Q := fun hQ => hout ⟨hPin, hQ⟩
@@ -1377,7 +1337,7 @@ theorem claim_exterior_reduction {a h b c d e f : ℝ} (hN : SevenNormal a h b c
       · rcases outside_cases hN hQs (hmin.trans min₁_right) hQin with hq | hq | hq
         · exact (lower (Or.inr (Or.inr (Or.inl hq)))).elim
         · exact (lower (Or.inr (Or.inr (Or.inr hq)))).elim
-        · exact absurd hmin (not_le.2 (theorem11 hN (farCapPoint_mem he (by linarith) hp)
+        · exact absurd hmin (not_le.2 (minTriangleArea_lt_of_pair_inFarUpperCap hN (farCapPoint_mem he (by linarith) hp)
             (farCapPoint_mem he (by linarith) hq)))
 
 end Heilbronn.Nine.SevenBoundaryCaps

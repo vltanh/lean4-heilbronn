@@ -2,59 +2,54 @@ module
 
 public import Heilbronn.Nine.Setup.Families
 public import Heilbronn.Nine.Corners.CornerFamilies.SixPoint
-public import Mathlib.Analysis.Convex.Join
+public import Heilbronn.Common.Plane
 
-/-! # Five points in a triangle with two prescribed vertices (`docs/proof/nine/TYPE_II.md`, Section 1)
+/-! # Five points in a triangle with two prescribed vertices
 
-The general-form endpoint-triangle results of `TYPE_II.md` §1 (lines 32–185). They involve no
-Type-II anchor: a triangle `UVW` (of area `S`) contains the points, and `U, V` are two of them.
-Many other notes use them in this general form (the N, C1, six- and seven-boundary notes, the
-unbalanced Type-II notes), including the intermediate per-cell bounds and containments of the
-support normalization; these are therefore stated separately.
+General-form endpoint-triangle results. They involve no Type-II anchor: a triangle `UVW` (of
+area `S`) contains the points, and `U, V` are two of them. Many other files use them in this
+general form, including the intermediate per-cell bounds and containments of the support
+normalization; these are therefore stated separately.
 
 Definitions:
 
-* the constants `kEnd = 3 - 2√2` (`k` of (1)), `Ktwo = 4 + 2√3` (the two-interior-point
-  constant `K` of `CORNER_FAMILIES.md` §7), `Γsix = (11 + 3√5)/2` (`Γ` of `CORNER_FAMILIES.md`
-  §8);
+* the constants `kEnd = 3 - 2√2` (the endpoint constant `k`), `Ktwo = 4 + 2√3` (the
+  two-interior-point constant `K`), `Γsix = (11 + 3√5)/2` (the six-point triangular-hull constant
+  `Γ`);
 * `TriangularHull P`: the convex hull of the points `P` is the closed triangle of three of them;
 * `IsSupportTriangle U V W H F X`: `UVW` is a counterclockwise support triangle over the base
   `UV` of the five points `U, V, H, F, X`, with the contact `H` in the open leg `UW`, the contact
-  `F` in the open leg `VW`, and `X` in the closed triangle (`TYPE_II.md` lines 58–66, from
-  `CORNER_FAMILIES.md` §6);
+  `F` in the open leg `VW`, and `X` in the closed triangle;
 * the half-square normal form `A = (0,0)`, `E = (1,1)`, `H = (0,h)`, `F = (f,1)`, `X`
-  (`hsA`, `hsE`, `hsH`, `hsF`, `hsConfig`, `halfSquare`, `HSNormal`; lines 68–78);
+  (`hsA`, `hsE`, `hsH`, `hsF`, `hsConfig`, `halfSquare`, `HSNormal`);
 * the five support cells `InCellI`, …, `InCellV` of the fifth point, by the signs of
-  `L = [UFX]`, `K = [VHX]`, `N = [HFX]` (lines 80–113). In the normal form `U = A`, `V = E` these
-  are the `L = fw - βx`, `K = h(1-x) - w`, `N = fw + (h-β)x - fh` of the manuscript, with
-  `X = (x, x+w)` and `β = 1 - f`; since the normalization has positive determinant, the same
-  signs can be read in the original coordinates.
+  `L = [UFX]`, `K = [VHX]`, `N = [HFX]`. In the normal form `U = A`, `V = E` these are
+  `L = fw - βx`, `K = h(1-x) - w`, `N = fw + (h-β)x - fh`, with `X = (x, x+w)` and `β = 1 - f`;
+  since the normalization has positive determinant, the same signs can be read in the original
+  coordinates.
 * `hsMap U V W`: the affine map sending `U, V, W` to `(0,0), (1,1), (0,1)`.
 
 Results:
 
-* `endpointTriangleTheorem` (**Endpoint-triangle theorem**, (1)): five points in a triangle of
-  area `S` with two of its vertices among them have a triangle of area at most `(3 - 2√2) S`;
-* `fourPointEndpointLemma` (**Four-point endpoint lemma**): four such points have a triangle of
+* `endpointTriangleTheorem` (the endpoint-triangle theorem): five points in a triangle of area
+  `S` with two of its vertices among them have a triangle of area at most `(3 - 2√2) S`;
+* `fourPointEndpointLemma` (the four-point endpoint lemma): four such points have a triangle of
   area at most `S/3`, and at most `S/4` when their hull is not a triangle;
-* `claim_support_normalization`, `claim_support_affine`: the support triangle and the affine map
+* `exists_isSupportTriangle`, `exists_affineMap_hsNormal`: the support triangle and the affine map
   to the half-square normal form; `support_apex` is the sign-based construction of the support
   apex behind them;
-* `eq2`: the area inequalities and identities (2) of the normal form;
-* `claim_five_cells`, `claim_five_cells_reflection`: exactly five sign cells, their strict
-  containments, and the reflection `(x,y) ↦ (1-y, 1-x)` exchanging cells I and III;
-* the per-cell bounds on the normalized doubled minimum `s`: `claim_cell_I_bound`,
-  `claim_cell_III_bound` (`s ≤ 1/(4+2√3)`), `claim_cell_IV_bound` (`s ≤ 1/12`), `eq3` (cell V,
-  `s ≤ (5√5-11)/2 < 1/10`), `eq4` (cell II, `s ≤ β(1-β)/(2-β) ≤ k` when `h ≥ β`), and their
+* `hsNormal_area_bounds`: the area inequalities and identities of the normal form;
+* `hsNormal_five_cells`: exactly five sign cells and their strict containments;
+* the per-cell bounds on the normalized doubled minimum `s`: `inCellI_bound`,
+  `inCellIII_bound` (`s ≤ 1/(4+2√3)`), `inCellIV_bound` (`s ≤ 1/12`), `inCellV_bound` (cell V,
+  `s ≤ (5√5-11)/2 < 1/10`), `inCellII_bound` (cell II, `s ≤ β(1-β)/(2-β) ≤ k` when `h ≥ β`), and their
   combination `hs_le_kEnd` (`s ≤ k` in the normal form).
 
 Throughout, "doubled area at least `s`" is `s / 2 ≤ minTriangleArea` of the points concerned.
 
-Helper results (general, reusable): `exists_bary_of_mem_convexHull`, `mem_convexHull_of_bary`,
-`mem_convexHull_of_sarea`, `sarea_of_mem_convexHull`, `sarea_nonneg_of_mem_convexHull` (closed
-triangles by barycentric coordinates and by signs), `le_abs_sarea_of_le_min`,
-`exists_extreme_left`, `exists_extreme_right` (the extreme points seen from a base vertex),
-`triangularHull_comp_perm`.
+Helper results (general, reusable): `le_abs_sarea_of_le_min`, `exists_extreme_left`,
+`exists_extreme_right` (the extreme points seen from a base vertex), `triangularHull_comp_perm`.
+Closed triangles, by barycentric coordinates and by signs, are in `Heilbronn/Common/Plane.lean`.
 -/
 
 @[expose] public section
@@ -64,14 +59,15 @@ namespace Heilbronn.Nine.TypeII
 
 /-! ### Constants -/
 
-/-- `k = 3 - 2√2`, the five-point endpoint constant of `TYPE_II.md` (1). -/
+/-- `k = 3 - 2√2`, the five-point endpoint constant of `endpointTriangleTheorem`. -/
 def kEnd : ℝ := 3 - 2 * Real.sqrt 2
 
 /-- `K = 4 + 2√3`: an actual triangle containing two further configuration points has doubled
-area at least `K s` (`CORNER_FAMILIES.md` §7, the two-interior-point lemma). -/
+area at least `K s` (the two-interior-point lemma `twoInteriorPointLemma`). -/
 def Ktwo : ℝ := 4 + 2 * Real.sqrt 3
 
-/-- `Γ = (11 + 3√5)/2`, the six-point triangular-hull constant of `CORNER_FAMILIES.md` §8. -/
+/-- `Γ = (11 + 3√5)/2`, the six-point triangular-hull constant
+(`CornerFamilies.sixPointTriangularHullTheorem`). -/
 def Γsix : ℝ := (11 + 3 * Real.sqrt 5) / 2
 
 theorem sqrt_two_lt : Real.sqrt 2 < 17 / 12 := by
@@ -103,81 +99,6 @@ theorem Ktwo_pos : 0 < Ktwo := by linarith [Ktwo_gt]
 
 theorem one_le_Ktwo_mul_kEnd : 1 ≤ Ktwo * kEnd := by
   nlinarith [Ktwo_gt, kEnd_gt]
-
-/-! ### Closed triangles: barycentric coordinates and signs -/
-
-/-- A point of the closed triangle `ABC` has barycentric coordinates. -/
-theorem exists_bary_of_mem_convexHull {A B C p : Point}
-    (hp : p ∈ convexHull ℝ ({A, B, C} : Set Point)) :
-    ∃ a b c : ℝ, 0 ≤ a ∧ 0 ≤ b ∧ 0 ≤ c ∧ a + b + c = 1 ∧
-      p = (a * A.1 + b * B.1 + c * C.1, a * A.2 + b * B.2 + c * C.2) := by
-  rw [← convexJoin_singleton_segment, mem_convexJoin] at hp
-  obtain ⟨a', ha', q, hq, hpq⟩ := hp
-  rw [Set.mem_singleton_iff] at ha'
-  subst ha'
-  obtain ⟨α, β, hα, hβ, hαβ, rfl⟩ := hpq
-  obtain ⟨γ, δ, hγ, hδ, hγδ, rfl⟩ := hq
-  refine ⟨α, β * γ, β * δ, hα, mul_nonneg hβ hγ, mul_nonneg hβ hδ,
-    by linear_combination β * hγδ + hαβ, ?_⟩
-  ext <;> simp <;> ring
-
-/-- A convex combination of `A, B, C` lies in the closed triangle. -/
-theorem mem_convexHull_of_bary {A B C : Point} {a b c : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b)
-    (hc : 0 ≤ c) (habc : a + b + c = 1) :
-    ((a * A.1 + b * B.1 + c * C.1, a * A.2 + b * B.2 + c * C.2) : Point) ∈
-      convexHull ℝ ({A, B, C} : Set Point) := by
-  rw [← convexJoin_singleton_segment, mem_convexJoin]
-  rcases eq_or_lt_of_le (add_nonneg hb hc) with hbc | hbc
-  · have hb0 : b = 0 := by linarith
-    have hc0 : c = 0 := by linarith
-    have ha1 : a = 1 := by linarith
-    subst hb0 hc0 ha1
-    refine ⟨A, Set.mem_singleton _, B, left_mem_segment ℝ B C, ?_⟩
-    convert left_mem_segment ℝ A B using 1
-    ext <;> simp
-  · have hne : b + c ≠ 0 := hbc.ne'
-    refine ⟨A, Set.mem_singleton _,
-      ((b / (b + c)) * B.1 + (c / (b + c)) * C.1, (b / (b + c)) * B.2 + (c / (b + c)) * C.2),
-      ⟨b / (b + c), c / (b + c), by positivity, by positivity, by field_simp,
-        by ext <;> simp⟩, ⟨a, b + c, ha, hbc.le, by linarith, ?_⟩⟩
-    ext <;> simp <;> field_simp <;> ring
-
-/-- A point on the nonnegative side of the three edges of a counterclockwise triangle lies in
-the closed triangle. -/
-theorem mem_convexHull_of_sarea {A B C p : Point} (hΔ : 0 < sarea A B C)
-    (h1 : 0 ≤ sarea B C p) (h2 : 0 ≤ sarea C A p) (h3 : 0 ≤ sarea A B p) :
-    p ∈ convexHull ℝ ({A, B, C} : Set Point) := by
-  have hne : sarea A B C ≠ 0 := hΔ.ne'
-  have key := mem_convexHull_of_bary (A := A) (B := B) (C := C)
-    (div_nonneg h1 hΔ.le) (div_nonneg h2 hΔ.le) (div_nonneg h3 hΔ.le)
-    (by rw [← add_div, ← add_div, div_eq_one_iff_eq hne]; unfold sarea; ring)
-  convert key using 1
-  ext
-  · simp only; field_simp; unfold sarea; ring
-  · simp only; field_simp; unfold sarea; ring
-
-/-- The signed areas of a point of the closed triangle `ABC` are its barycentric coordinates
-times `[ABC]`. -/
-theorem sarea_of_mem_convexHull {A B C p : Point}
-    (hp : p ∈ convexHull ℝ ({A, B, C} : Set Point)) :
-    ∃ a b c : ℝ, 0 ≤ a ∧ 0 ≤ b ∧ 0 ≤ c ∧ a + b + c = 1 ∧
-      sarea B C p = a * sarea A B C ∧ sarea C A p = b * sarea A B C ∧
-      sarea A B p = c * sarea A B C := by
-  obtain ⟨a, b, c, ha, hb, hc, habc, rfl⟩ := exists_bary_of_mem_convexHull hp
-  obtain rfl : a = 1 - b - c := by linarith
-  exact ⟨1 - b - c, b, c, ha, hb, hc, habc, by unfold sarea; ring, by unfold sarea; ring,
-    by unfold sarea; ring⟩
-
-/-- A point of a closed counterclockwise triangle `ABC` is on the nonnegative side of its edges,
-and `[ABp] ≤ [ABC]`. -/
-theorem sarea_nonneg_of_mem_convexHull {A B C p : Point} (hΔ : 0 ≤ sarea A B C)
-    (hp : p ∈ convexHull ℝ ({A, B, C} : Set Point)) :
-    0 ≤ sarea B C p ∧ 0 ≤ sarea C A p ∧ 0 ≤ sarea A B p ∧ sarea A B p ≤ sarea A B C := by
-  obtain ⟨a, b, c, ha, hb, hc, habc, h1, h2, h3⟩ := sarea_of_mem_convexHull hp
-  refine ⟨by rw [h1]; positivity, by rw [h2]; positivity, by rw [h3]; positivity, ?_⟩
-  rw [h3]
-  have : c ≤ 1 := by linarith
-  nlinarith
 
 /-! ### Least areas -/
 
@@ -261,8 +182,8 @@ theorem exists_extreme_right {n : ℕ} [NeZero n] (U V : Point) (P : Fin n → P
 /-! ### Hulls and support triangles -/
 
 /-- The convex hull of the points `P 0, …, P (n-1)` is the closed triangle spanned by three of
-them. For four or five points containing two prescribed extreme vertices this is the
-"triangular hull" alternative of the manuscripts; its negation is "nontriangular hull". -/
+them. For four or five points containing two prescribed extreme vertices this is the "triangular
+hull" alternative; its negation is "nontriangular hull". -/
 def TriangularHull {n : ℕ} (P : Fin n → Point) : Prop :=
   ∃ i j k : Fin n, ∀ m, P m ∈ convexHull ℝ ({P i, P j, P k} : Set Point)
 
@@ -274,10 +195,9 @@ theorem triangularHull_comp_perm {n : ℕ} (P : Fin n → Point) (σ : Equiv.Per
   have := hm (σ.symm m)
   simpa using this
 
-/-- `UVW` is a support triangle over the base `UV` for the five points `U, V, H, F, X`
-(`TYPE_II.md` lines 58–66): it is counterclockwise, the contact `H` lies in the relative
-interior of the leg `UW`, the contact `F` in the relative interior of the leg `VW`, and the
-fifth point `X` lies in the closed triangle. -/
+/-- `UVW` is a support triangle over the base `UV` for the five points `U, V, H, F, X`: it is
+counterclockwise, the contact `H` lies in the relative interior of the leg `UW`, the contact `F`
+in the relative interior of the leg `VW`, and the fifth point `X` lies in the closed triangle. -/
 def IsSupportTriangle (U V W H F X : Point) : Prop :=
   0 < sarea U V W ∧ H ∈ openSegment ℝ U W ∧ F ∈ openSegment ℝ V W ∧
     X ∈ convexHull ℝ ({U, V, W} : Set Point)
@@ -299,7 +219,7 @@ def hsF (f : ℝ) : Point := (f, 1)
 /-- The closed half-square `0 ≤ x ≤ y ≤ 1`, the triangle `(0,0), (1,1), (0,1)` of area `1/2`. -/
 def halfSquare : Set Point := {p | 0 ≤ p.1 ∧ p.1 ≤ p.2 ∧ p.2 ≤ 1}
 
-/-- The five points `A, E, H, F, X` of the half-square normal form (`TYPE_II.md` (lines 71–74)). -/
+/-- The five points `A, E, H, F, X` of the half-square normal form. -/
 def hsConfig (h f : ℝ) (X : Point) : Fin 5 → Point := ![hsA, hsE, hsH h, hsF f, X]
 
 /-- The parameter conditions of the normal form: `0 < h, f < 1` and `X` in the half-square. -/
@@ -308,24 +228,24 @@ def HSNormal (h f : ℝ) (X : Point) : Prop :=
 
 /-! ### The five support cells -/
 
-/-- Cell I, signs `(L, K, N) = (+, +, -)` with `L = [UFX]`, `K = [VHX]`, `N = [HFX]`
-(`TYPE_II.md` line 105): `X ∈ AHF ∩ AEH`. -/
+/-- Cell I, signs `(L, K, N) = (+, +, -)` with `L = [UFX]`, `K = [VHX]`, `N = [HFX]`:
+`X ∈ AHF ∩ AEH`. -/
 def InCellI (U V H F X : Point) : Prop :=
   0 < sarea U F X ∧ 0 < sarea V H X ∧ sarea H F X < 0
 
-/-- Cell II, signs `(-, +, -)` (line 106): `X ∈ AEF ∩ AEH`. -/
+/-- Cell II, signs `(-, +, -)`: `X ∈ AEF ∩ AEH`. -/
 def InCellII (U V H F X : Point) : Prop :=
   sarea U F X < 0 ∧ 0 < sarea V H X ∧ sarea H F X < 0
 
-/-- Cell III, signs `(-, -, -)` (line 107): `X ∈ EHF ∩ AEF`. -/
+/-- Cell III, signs `(-, -, -)`: `X ∈ EHF ∩ AEF`. -/
 def InCellIII (U V H F X : Point) : Prop :=
   sarea U F X < 0 ∧ sarea V H X < 0 ∧ sarea H F X < 0
 
-/-- Cell IV, signs `(+, -, -)` (line 108): `X ∈ AHF ∩ EHF`. -/
+/-- Cell IV, signs `(+, -, -)`: `X ∈ AHF ∩ EHF`. -/
 def InCellIV (U V H F X : Point) : Prop :=
   0 < sarea U F X ∧ sarea V H X < 0 ∧ sarea H F X < 0
 
-/-- Cell V, signs `(+, -, +)` (line 109): `X` lies above `HF`. -/
+/-- Cell V, signs `(+, -, +)`: `X` lies above `HF`. -/
 def InCellV (U V H F X : Point) : Prop :=
   0 < sarea U F X ∧ sarea V H X < 0 ∧ 0 < sarea H F X
 
@@ -395,14 +315,11 @@ section NormalForm2
 
 variable {h f s : ℝ} {X : Point}
 
-/-- **Equation (2)** (`TYPE_II:eq2`). In the half-square normal form with every doubled area at
-least `s > 0`, writing `X = (x, x + w)`, `α = 1 - h`, `β = 1 - f`,
-`L = fw - βx`, `K = h(1-x) - w`, `N = fw + (h-β)x - fh`:
-`w, hx, β(1-x-w) ≥ s`, `|L|, |K|, |N| ≥ s`, `hf, αβ ≥ s`, `√(hf) + √(αβ) ≤ 1`, and
-`N = -fK - αβx = αL - hf(1-x-w)`. `docs/proof/nine/TYPE_II.md`, lines 80–99.
-
-Uses: OPPOSITE_CORNERS:eq2, OPPOSITE_CORNERS:eq5, OPPOSITE_CORNERS:eq6, OPPOSITE_CORNERS:eq7. -/
-theorem eq2 (hN : HSNormal h f X) (_hs : 0 < s)
+/-- In the half-square normal form with every doubled area at least `s > 0`, writing
+`X = (x, x + w)`, `α = 1 - h`, `β = 1 - f`, `L = fw - βx`, `K = h(1-x) - w`,
+`N = fw + (h-β)x - fh`: `w, hx, β(1-x-w) ≥ s`, `|L|, |K|, |N| ≥ s`, `hf, αβ ≥ s`,
+`√(hf) + √(αβ) ≤ 1`, and `N = -fK - αβx = αL - hf(1-x-w)`. -/
+theorem hsNormal_area_bounds (hN : HSNormal h f X) (_hs : 0 < s)
     (hmin : s / 2 ≤ minTriangleArea (hsConfig h f X)) :
     s ≤ X.2 - X.1 ∧ s ≤ h * X.1 ∧ s ≤ (1 - f) * (1 - X.2) ∧
       s ≤ |f * (X.2 - X.1) - (1 - f) * X.1| ∧ s ≤ |h * (1 - X.1) - (X.2 - X.1)| ∧
@@ -433,15 +350,12 @@ theorem eq2 (hN : HSNormal h f X) (_hs : 0 < s)
   exact ⟨e1, e2, e5, e3, e4, e6, e7, e8,
     sqrt_add_sqrt_le_one hh0.le hh1.le hf0.le hf1.le, by ring, by ring⟩
 
-/-- **Claim** (`TYPE_II:claim-five-cells`). In the half-square normal form with positive
-doubled areas, the fifth point lies in exactly one of the five sign cells I–V (the identities (2)
-exclude the other three sign patterns), with the strict containments of the table: I in
-`AHF ∩ AEH`, II in `AEF ∩ AEH`, III in `EHF ∩ AEF`, IV in `AHF ∩ EHF`, V above `HF`.
-(The counterclockwise orders are `A F H`, `A E H`, `A E F`, `E F H`.) `docs/proof/nine/TYPE_II.md`,
-lines 101–113.
-
-Uses: TYPE_II:eq2. -/
-theorem claim_five_cells (hN : HSNormal h f X) (hs : 0 < s)
+/-- In the half-square normal form with positive doubled areas, the fifth point lies in exactly
+one of the five sign cells I–V (the identities of `hsNormal_area_bounds` exclude the other three sign patterns),
+with the strict containments: I in `AHF ∩ AEH`, II in `AEF ∩ AEH`, III in `EHF ∩ AEF`, IV in
+`AHF ∩ EHF`, V above `HF`. (The counterclockwise orders are `A F H`, `A E H`, `A E F`,
+`E F H`.) -/
+theorem hsNormal_five_cells (hN : HSNormal h f X) (hs : 0 < s)
     (hmin : s / 2 ≤ minTriangleArea (hsConfig h f X)) :
     (InCellI hsA hsE (hsH h) (hsF f) X ∨ InCellII hsA hsE (hsH h) (hsF f) X ∨
       InCellIII hsA hsE (hsH h) (hsF f) X ∨ InCellIV hsA hsE (hsH h) (hsF f) X ∨
@@ -455,7 +369,7 @@ theorem claim_five_cells (hN : HSNormal h f X) (hs : 0 < s)
     (InCellIV hsA hsE (hsH h) (hsF f) X →
       InTriangle X hsA (hsF f) (hsH h) ∧ InTriangle X hsE (hsF f) (hsH h)) ∧
     (InCellV hsA hsE (hsH h) (hsF f) X → 0 < sarea (hsH h) (hsF f) X) := by
-  obtain ⟨hw, hhx, hβy, hL, hK, hNN, -, -, -, hid1, hid2⟩ := eq2 hN hs hmin
+  obtain ⟨hw, hhx, hβy, hL, hK, hNN, -, -, -, hid1, hid2⟩ := hsNormal_area_bounds hN hs hmin
   obtain ⟨hh0, hh1, hf0, hf1, hx0, hxy, hy1⟩ := hN
   simp only [InCellI, InCellII, InCellIII, InCellIV, InCellV, InTriangle, sarea_AFX, sarea_EHX,
     sarea_HFX, sarea_AEX, sarea_FHX, sarea_HAX, sarea_FAX, sarea_HEX, sarea_EFX]
@@ -492,16 +406,13 @@ section Cells
 
 variable {h f s : ℝ} {X : Point}
 
-/-- **Claim** (`TYPE_II:claim-cell-I-bound`, made up). In cell I, subdivision of `AHF` gives
-`hf ≥ 3s`, and with `αβ ≥ s`, (2) gives `s ≤ 1/(√3+1)² = 1/(4+2√3) < k`.
-`docs/proof/nine/TYPE_II.md`, lines 115–120.
-
-Uses: TYPE_II:claim-five-cells, TYPE_II:eq2. -/
-theorem claim_cell_I_bound (hN : HSNormal h f X) (hs : 0 < s)
+/-- In cell I, subdivision of `AHF` gives `hf ≥ 3s`, and with `αβ ≥ s` the bound
+`√(hf) + √(αβ) ≤ 1` of `hsNormal_area_bounds` gives `s ≤ 1/(√3+1)² = 1/(4+2√3) < k`. -/
+theorem inCellI_bound (hN : HSNormal h f X) (hs : 0 < s)
     (hmin : s / 2 ≤ minTriangleArea (hsConfig h f X))
     (hX : InCellI hsA hsE (hsH h) (hsF f) X) :
     3 * s ≤ h * f ∧ s ≤ 1 / Ktwo := by
-  obtain ⟨hw, hhx, hβy, hL, hK, hNN, hhf, hab, -, -, -⟩ := eq2 hN hs hmin
+  obtain ⟨hw, hhx, hβy, hL, hK, hNN, hhf, hab, -, -, -⟩ := hsNormal_area_bounds hN hs hmin
   obtain ⟨hh0, hh1, hf0, hf1, hx0, hxy, hy1⟩ := hN
   obtain ⟨hL', hK', hN'⟩ := hX
   rw [sarea_AFX] at hL'
@@ -518,15 +429,13 @@ theorem claim_cell_I_bound (hN : HSNormal h f X) (hs : 0 < s)
   unfold Ktwo
   linarith
 
-/-- **Claim** (`TYPE_II:claim-cell-III-bound`, made up). Cell III is the reflected case of cell
-I: `αβ ≥ 3s` and `s ≤ 1/(4+2√3)`. `docs/proof/nine/TYPE_II.md`, line 122.
-
-Uses: TYPE_II:claim-five-cells (reflection), TYPE_II:claim-cell-I-bound. -/
-theorem claim_cell_III_bound (hN : HSNormal h f X) (hs : 0 < s)
+/-- Cell III is the reflected case of cell I (under `(x,y) ↦ (1-y, 1-x)`): `αβ ≥ 3s` and
+`s ≤ 1/(4+2√3)`. -/
+theorem inCellIII_bound (hN : HSNormal h f X) (hs : 0 < s)
     (hmin : s / 2 ≤ minTriangleArea (hsConfig h f X))
     (hX : InCellIII hsA hsE (hsH h) (hsF f) X) :
     3 * s ≤ (1 - h) * (1 - f) ∧ s ≤ 1 / Ktwo := by
-  obtain ⟨hw, hhx, hβy, hL, hK, hNN, hhf, hab, -, -, -⟩ := eq2 hN hs hmin
+  obtain ⟨hw, hhx, hβy, hL, hK, hNN, hhf, hab, -, -, -⟩ := hsNormal_area_bounds hN hs hmin
   obtain ⟨hh0, hh1, hf0, hf1, hx0, hxy, hy1⟩ := hN
   obtain ⟨hL', hK', hN'⟩ := hX
   rw [sarea_EHX] at hK'
@@ -543,15 +452,12 @@ theorem claim_cell_III_bound (hN : HSNormal h f X) (hs : 0 < s)
   unfold Ktwo
   linarith
 
-/-- **Claim** (`TYPE_II:claim-cell-IV-bound`, made up). In cell IV both products `hf, αβ` are at
-least `3s`, giving `s ≤ 1/12`. `docs/proof/nine/TYPE_II.md`, lines 122–123.
-
-Uses: TYPE_II:claim-five-cells, TYPE_II:eq2. -/
-theorem claim_cell_IV_bound (hN : HSNormal h f X) (hs : 0 < s)
+/-- In cell IV both products `hf, αβ` are at least `3s`, giving `s ≤ 1/12`. -/
+theorem inCellIV_bound (hN : HSNormal h f X) (hs : 0 < s)
     (hmin : s / 2 ≤ minTriangleArea (hsConfig h f X))
     (hX : InCellIV hsA hsE (hsH h) (hsF f) X) :
     s ≤ 1 / 12 := by
-  obtain ⟨hw, hhx, hβy, hL, hK, hNN, hhf, hab, -, -, -⟩ := eq2 hN hs hmin
+  obtain ⟨hw, hhx, hβy, hL, hK, hNN, hhf, hab, -, -, -⟩ := hsNormal_area_bounds hN hs hmin
   obtain ⟨hh0, hh1, hf0, hf1, hx0, hxy, hy1⟩ := hN
   obtain ⟨hL', hK', hN'⟩ := hX
   rw [sarea_AFX] at hL'
@@ -567,9 +473,9 @@ theorem claim_cell_IV_bound (hN : HSNormal h f X) (hs : 0 < s)
   rw [hsq] at hb
   linarith
 
-/-- The scalar maximum behind (3): if `s(h+β-hβ) ≤ hβ(1-h)(1-β)` with `h, β ∈ (0,1)`, then
+/-- The scalar maximum behind `inCellV_bound`: if `s(h+β-hβ) ≤ hβ(1-h)(1-β)` with `h, β ∈ (0,1)`, then
 `s ≤ (5√5-11)/2` (with `r = √(hβ)`, `h + β ≥ 2r` and `r(1-r)²/(2-r) ≤ (5√5-11)/2`). -/
-theorem eq3_scalar {h β s : ℝ} (hh0 : 0 < h) (hh1 : h < 1) (hβ0 : 0 < β) (hβ1 : β < 1)
+theorem inCellV_bound_scalar {h β s : ℝ} (hh0 : 0 < h) (hh1 : h < 1) (hβ0 : 0 < β) (hβ1 : β < 1)
     (key : s * (h + β - h * β) ≤ h * β * ((1 - h) * (1 - β))) :
     s ≤ (5 * Real.sqrt 5 - 11) / 2 := by
   have h5 : Real.sqrt 5 ^ 2 = 5 := Real.sq_sqrt (by norm_num)
@@ -601,16 +507,13 @@ theorem eq3_scalar {h β s : ℝ} (hh0 : 0 < h) (hh1 : h < 1) (hβ0 : 0 < β) (h
   have st3 : 2 * r * (c + r ^ 2) < r ^ 2 * (1 + r ^ 2 + c) := by nlinarith only [st1', st2]
   nlinarith only [mul_nonneg hr0.le hgnn, st3]
 
-/-- **Equation (3)** (`TYPE_II:eq3`). In cell V, with `β = 1 - f`,
-`s ≤ hβ(1-h)(1-β)/(h+β-hβ) ≤ (5√5 - 11)/2 < 1/10`. `docs/proof/nine/TYPE_II.md`, lines 125–139.
-
-Uses: OPPOSITE_CORNERS:eq8, TYPE_II:eq2. -/
-theorem eq3 (hN : HSNormal h f X) (hs : 0 < s)
+/-- In cell V, with `β = 1 - f`, `s ≤ hβ(1-h)(1-β)/(h+β-hβ) ≤ (5√5 - 11)/2 < 1/10`. -/
+theorem inCellV_bound (hN : HSNormal h f X) (hs : 0 < s)
     (hmin : s / 2 ≤ minTriangleArea (hsConfig h f X))
     (hX : InCellV hsA hsE (hsH h) (hsF f) X) :
     s ≤ h * (1 - f) * (1 - h) * f / (h + (1 - f) - h * (1 - f)) ∧
       s ≤ (5 * Real.sqrt 5 - 11) / 2 ∧ (5 * Real.sqrt 5 - 11) / 2 < 1 / 10 := by
-  obtain ⟨hw, hhx, hβy, hL, hK, hNN, hhf, hab, -, -, -⟩ := eq2 hN hs hmin
+  obtain ⟨hw, hhx, hβy, hL, hK, hNN, hhf, hab, -, -, -⟩ := hsNormal_area_bounds hN hs hmin
   obtain ⟨hh0, hh1, hf0, hf1, hx0, hxy, hy1⟩ := hN
   obtain ⟨-, -, hN'⟩ := hX
   rw [sarea_HFX] at hN'
@@ -624,20 +527,17 @@ theorem eq3 (hN : HSNormal h f X) (hs : 0 < s)
       mul_nonneg (mul_nonneg hf0.le hh0.le) (by linarith : (0:ℝ) ≤ (1 - f) * (1 - X.2) - s)]
   have h5lt : Real.sqrt 5 < 56 / 25 := by rw [Real.sqrt_lt' (by norm_num)]; norm_num
   refine ⟨by rw [le_div_iff₀ hden]; linarith, ?_, by linarith⟩
-  exact eq3_scalar (β := 1 - f) hh0 hh1 (by linarith) (by linarith) (by
+  exact inCellV_bound_scalar (β := 1 - f) hh0 hh1 (by linarith) (by linarith) (by
     have : h * (1 - f) * ((1 - h) * (1 - (1 - f))) = h * (1 - f) * (1 - h) * f := by ring
     rw [this]; exact key)
 
-/-- **Equation (4)** (`TYPE_II:eq4`). In cell II, if `h ≥ β = 1 - f` then
-`s ≤ β(1-β)/(2-β)`; in every case (reflecting if necessary) `s ≤ k = 3 - 2√2`.
-`docs/proof/nine/TYPE_II.md`, lines 141–171.
-
-Uses: TYPE_II:eq2, TYPE_II:claim-five-cells (reflection). -/
-theorem eq4 (hN : HSNormal h f X) (hs : 0 < s)
+/-- In cell II, if `h ≥ β = 1 - f` then `s ≤ β(1-β)/(2-β)`; in every case (reflecting if
+necessary) `s ≤ k = 3 - 2√2`. -/
+theorem inCellII_bound (hN : HSNormal h f X) (hs : 0 < s)
     (hmin : s / 2 ≤ minTriangleArea (hsConfig h f X))
     (hX : InCellII hsA hsE (hsH h) (hsF f) X) :
     (1 - f ≤ h → s ≤ (1 - f) * f / (1 + f)) ∧ s ≤ kEnd := by
-  obtain ⟨hw, hhx, hβy, hL, hK, hNN, hhf, hab, -, -, -⟩ := eq2 hN hs hmin
+  obtain ⟨hw, hhx, hβy, hL, hK, hNN, hhf, hab, -, -, -⟩ := hsNormal_area_bounds hN hs hmin
   obtain ⟨hh0, hh1, hf0, hf1, hx0, hxy, hy1⟩ := hN
   obtain ⟨hL', hK', hN'⟩ := hX
   rw [sarea_AFX] at hL'
@@ -682,19 +582,19 @@ theorem eq4 (hN : HSNormal h f X) (hs : 0 < s)
     nlinarith
 
 /-- The normalized doubled minimum of the half-square normal form is at most `k`: the five cells
-together (`TYPE_II.md` lines 101–173). -/
+together. -/
 theorem hs_le_kEnd (hN : HSNormal h f X) (hs : 0 < s)
     (hmin : s / 2 ≤ minTriangleArea (hsConfig h f X)) : s ≤ kEnd := by
   have hk := kEnd_gt
   have hK := Ktwo_gt
   have hK' : 1 / Ktwo < 1 / 6 := by
     rw [div_lt_div_iff₀ Ktwo_pos (by norm_num)]; linarith
-  rcases (claim_five_cells hN hs hmin).1 with hc | hc | hc | hc | hc
-  · linarith [(claim_cell_I_bound hN hs hmin hc).2]
-  · exact (eq4 hN hs hmin hc).2
-  · linarith [(claim_cell_III_bound hN hs hmin hc).2]
-  · linarith [claim_cell_IV_bound hN hs hmin hc]
-  · obtain ⟨-, h1, h2⟩ := eq3 hN hs hmin hc
+  rcases (hsNormal_five_cells hN hs hmin).1 with hc | hc | hc | hc | hc
+  · linarith [(inCellI_bound hN hs hmin hc).2]
+  · exact (inCellII_bound hN hs hmin hc).2
+  · linarith [(inCellIII_bound hN hs hmin hc).2]
+  · linarith [inCellIV_bound hN hs hmin hc]
+  · obtain ⟨-, h1, h2⟩ := inCellV_bound hN hs hmin hc
     linarith
 
 end Cells
@@ -741,13 +641,12 @@ theorem hsMap_W {U V W : Point} (hΔ : sarea U V W ≠ 0) : hsMap U V W W = (0, 
   simp only [one_mul, zero_mul, add_zero, zero_add] at this
   rw [this]
 
-/-- **Claim** (`TYPE_II:claim-support-affine`). For a support triangle `UVW'` with contacts
-`H, F` and fifth point `X`, the affine map sending `U, V, W'` to `(0,0), (1,1), (0,1)` has
-determinant `1 / [UVW']` (so it divides every doubled area by `[UVW']`), and sends the five points
-to the half-square normal form `A, E, (0,h), (f,1), X'` with `0 < h, f < 1` and `X'` in the
-half-square. Hence the original minimum area is `s S'`, `s` the normalized doubled minimum and
-`S'` the area of `UVW'`. `docs/proof/nine/TYPE_II.md`, lines 68–78. -/
-theorem claim_support_affine {U V W H F X : Point} (hS : IsSupportTriangle U V W H F X) :
+/-- For a support triangle `UVW'` with contacts `H, F` and fifth point `X`, the affine map sending
+`U, V, W'` to `(0,0), (1,1), (0,1)` has determinant `1 / [UVW']` (so it divides every doubled
+area by `[UVW']`), and sends the five points to the half-square normal form
+`A, E, (0,h), (f,1), X'` with `0 < h, f < 1` and `X'` in the half-square. Hence the original
+minimum area is `s S'`, `s` the normalized doubled minimum and `S'` the area of `UVW'`. -/
+theorem exists_affineMap_hsNormal {U V W H F X : Point} (hS : IsSupportTriangle U V W H F X) :
     ∃ (a b c d e g h₀ f₀ : ℝ), a * d - b * c = 1 / sarea U V W ∧
       affineMap a b c d e g U = hsA ∧ affineMap a b c d e g V = hsE ∧
       affineMap a b c d e g W = (0, 1) ∧ affineMap a b c d e g H = hsH h₀ ∧
@@ -770,13 +669,12 @@ theorem claim_support_affine {U V W H F X : Point} (hS : IsSupportTriangle U V W
 
 /-! ### The support triangle -/
 
-/-- The support apex (`CORNER_FAMILIES.md` §6, as used in `TYPE_II.md` lines 58–66), from signs.
-Let `UVW` be counterclockwise, let `H, F` be strictly left of `UV` and in the closed triangle
-(only the edges `WU` for `H` and `VW` for `F` are needed), with `F` strictly right of the ray
-`U → H` and `H` strictly left of the ray `V → F`. Then the lines `UH` and `VF` meet at a point
-`W'` of the closed triangle `UVW` with `0 < [UVW'] ≤ [UVW]`, `H` inside the leg `UW'`, `F` inside
-the leg `VW'`; and every point `X` left of `UV`, right of `U → H` and left of `V → F` lies in the
-closed triangle `UVW'`. -/
+/-- The support apex, from signs. Let `UVW` be counterclockwise, let `H, F` be strictly left of
+`UV` and in the closed triangle (only the edges `WU` for `H` and `VW` for `F` are needed), with
+`F` strictly right of the ray `U → H` and `H` strictly left of the ray `V → F`. Then the lines
+`UH` and `VF` meet at a point `W'` of the closed triangle `UVW` with `0 < [UVW'] ≤ [UVW]`, `H`
+inside the leg `UW'`, `F` inside the leg `VW'`; and every point `X` left of `UV`, right of
+`U → H` and left of `V → F` lies in the closed triangle `UVW'`. -/
 theorem support_apex {U V W H F : Point} (hΔ : 0 < sarea U V W)
     (hH : 0 < sarea U V H) (hHW : 0 ≤ sarea W U H)
     (hF : 0 < sarea U V F) (hFW : 0 ≤ sarea V W F)
@@ -849,30 +747,20 @@ theorem support_of_extremes {U V W H F X : Point} (hΔ : 0 < sarea U V W)
   obtain ⟨W', h1, h2, h3, h4, h5, -⟩ := support_apex hΔ hH hHW hF hFW hUHF hVFH
   exact ⟨W', ⟨h1, h3, h4, h5 X hX hUHX hVFX⟩, h2⟩
 
-/-- A point strictly inside a triangle lies in its closed hull. -/
-theorem mem_convexHull_of_inTriangle {A B C Q : Point} (hQ : InTriangle Q A B C) :
-    Q ∈ convexHull ℝ ({A, B, C} : Set Point) := by
-  obtain ⟨h1, h2, h3⟩ := hQ
-  have := sarea_add_sarea_add_sarea A B C Q
-  exact mem_convexHull_of_sarea (by linarith) h2.le h3.le h1.le
-
 /-- `Q` strictly left of `UV`, right of `U → P` and left of `V → P` is inside `UVP`. -/
 theorem inTriangle_of_extreme {U V P Q : Point} (h1 : 0 < sarea U V Q) (h2 : sarea U P Q < 0)
     (h3 : 0 < sarea V P Q) : InTriangle Q U V P :=
   ⟨h1, h3, by rw [show sarea P U Q = -sarea U P Q by unfold sarea; ring]; linarith⟩
 
-/-- **Claim** (`TYPE_II:claim-support-normalization`). Five points `U, V, X₁, X₂, X₃` in a
-counterclockwise triangle `UVW`, with positive minimum area and nontriangular hull, have a support
-triangle `UVW'` over the base `UV` of doubled area at most that of `UVW`, whose two leg contacts
-are two of the `Xᵢ` and whose remaining point is the third (`TYPE_II.md` lines 58–66: the
-construction of `CORNER_FAMILIES.md` §6 with the two prescribed vertices as base endpoints; it
-needs no sixth point). `docs/proof/nine/TYPE_II.md`, lines 58–66.
+/-- Five points `U, V, X₁, X₂, X₃` in a counterclockwise triangle `UVW`, with positive minimum
+area and nontriangular hull, have a support triangle `UVW'` over the base `UV` of doubled area
+at most that of `UVW`, whose two leg contacts are two of the `Xᵢ` and whose remaining point is
+the third. The construction takes the two prescribed vertices as base endpoints and needs no
+sixth point.
 
-Implicit in the manuscript: the container is oriented counterclockwise (swap `U, V` otherwise);
-the support triangle lies inside the container, so its area is at most `S`.
-
-Uses: CORNER_FAMILIES:NontriangularHullLemma (its §6 support-triangle construction). -/
-theorem claim_support_normalization {U V W X₁ X₂ X₃ : Point} (hUVW : 0 < sarea U V W)
+The container is oriented counterclockwise (swap `U, V` otherwise); the support triangle lies
+inside the container, so its area is at most `S`. -/
+theorem exists_isSupportTriangle {U V W X₁ X₂ X₃ : Point} (hUVW : 0 < sarea U V W)
     (h₁ : X₁ ∈ convexHull ℝ ({U, V, W} : Set Point))
     (h₂ : X₂ ∈ convexHull ℝ ({U, V, W} : Set Point))
     (h₃ : X₃ ∈ convexHull ℝ ({U, V, W} : Set Point))
@@ -966,7 +854,7 @@ theorem min_le_of_support {U V W' H F X : Point} (hS : IsSupportTriangle U V W' 
     (hpos : 0 < minTriangleArea ![U, V, H, F, X]) :
     minTriangleArea ![U, V, H, F, X] ≤ kEnd * (sarea U V W' / 2) := by
   have hΔ' := hS.1
-  obtain ⟨a, b, c, d, e, g, h₀, f₀, hdet, hU, hV, -, hH', hF', hN⟩ := claim_support_affine hS
+  obtain ⟨a, b, c, d, e, g, h₀, f₀, hdet, hU, hV, -, hH', hF', hN⟩ := exists_affineMap_hsNormal hS
   have hcomp : affineMap a b c d e g ∘ ![U, V, H, F, X] =
       hsConfig h₀ f₀ (affineMap a b c d e g X) := by
     funext i; fin_cases i <;> simp [hsConfig, hU, hV, hH', hF']
@@ -999,7 +887,7 @@ theorem endpoint_tri_case {U V W P Q R : Point} (hPle : sarea U V P ≤ sarea U 
     (hpos : 0 < minTriangleArea ![U, V, P, Q, R])
     (hQ : InTriangle Q U V P) (hR : InTriangle R U V P) :
     minTriangleArea ![U, V, P, Q, R] ≤ kEnd * triangleArea U V W := by
-  have h2 := CornerFamilies.twoInteriorPointLemma U V P Q R (Or.inl hQ) (Or.inl hR) _ hpos le_rfl
+  have h2 := twoInteriorPointLemma U V P Q R (Or.inl hQ) (Or.inl hR) _ hpos le_rfl
   have hP : 0 < sarea U V P := by
     have := sarea_add_sarea_add_sarea U V P Q
     obtain ⟨a, b, c⟩ := hQ
@@ -1094,14 +982,14 @@ theorem convexHull_swap_UV (U V W : Point) :
     convexHull ℝ ({V, U, W} : Set Point) = convexHull ℝ ({U, V, W} : Set Point) := by
   rw [Set.insert_comm]
 
-/-- **Endpoint-triangle theorem** (`TYPE_II:EndpointTriangleTheorem`). If five points lie in a
-closed triangle `UVW` and two vertices `U, V` of the triangle are among them, some triangle
-spanned by the five points has area at most `k S = (3 - 2√2) · area(UVW)`, equation (1).
-`docs/proof/nine/TYPE_II.md`, lines 34–173.
+/-- The endpoint-triangle theorem. If five points lie in a closed triangle `UVW` and two vertices
+`U, V` of the triangle are among them, some triangle spanned by the five points has area at most
+`k S = (3 - 2√2) · area(UVW)`.
 
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma, TYPE_II:claim-support-normalization,
-TYPE_II:claim-support-affine, TYPE_II:eq2, TYPE_II:claim-five-cells, TYPE_II:claim-cell-I-bound,
-TYPE_II:claim-cell-III-bound, TYPE_II:claim-cell-IV-bound, TYPE_II:eq3, TYPE_II:eq4. -/
+A triangular hull is handled by `twoInteriorPointLemma`; otherwise the support
+triangle of the extreme points (`support_of_extremes`) and the affine map of
+`exists_affineMap_hsNormal` reduce to the half-square normal form, where `hs_le_kEnd` applies
+(`min_le_of_support`). -/
 theorem endpointTriangleTheorem (U V W X Y Z : Point)
     (hX : X ∈ convexHull ℝ ({U, V, W} : Set Point)) (hY : Y ∈ convexHull ℝ ({U, V, W} : Set Point))
     (hZ : Z ∈ convexHull ℝ ({U, V, W} : Set Point)) :
@@ -1134,7 +1022,7 @@ theorem fourPoint_support_case {U V W H F : Point} (hΔ : 0 < sarea U V W)
   obtain ⟨W', hS, hle⟩ := support_of_extremes hΔ hH hHW hF hFW hH.le hUHF
     (by rw [show sarea U H H = 0 by unfold sarea; ring]) hVFH hVFH.le
   have hΔ' := hS.1
-  obtain ⟨a, b, c, d, e, g, h₀, f₀, hdet, hU, hV, -, hH', hF', hN⟩ := claim_support_affine hS
+  obtain ⟨a, b, c, d, e, g, h₀, f₀, hdet, hU, hV, -, hH', hF', hN⟩ := exists_affineMap_hsNormal hS
   obtain ⟨hh0, hh1, hf0, hf1, -⟩ := hN
   have hcomp : affineMap a b c d e g ∘ ![U, V, H, F] = ![hsA, hsE, hsH h₀, hsF f₀] := by
     funext i; fin_cases i <;> simp [hU, hV, hH', hF']
@@ -1231,11 +1119,9 @@ theorem fourPoint_pos {U V W X Y : Point} (hΔ : 0 < sarea U V W)
       (by rw [hm']; exact hpos) hm'
     exact ⟨by linarith, fun _ => hp⟩
 
-/-- **Four-point endpoint lemma** (`TYPE_II:FourPointEndpointLemma`). Four points in a closed
-triangle `UVW` of area `S`, including the two vertices `U, V`, have minimum triangle area at most
-`S/3`; if their hull is not a triangle, at most `S/4`. `docs/proof/nine/TYPE_II.md`, lines 175–185.
-
-Uses: TYPE_II:claim-support-affine, TYPE_II:eq2. -/
+/-- The four-point endpoint lemma. Four points in a closed triangle `UVW` of area `S`, including
+the two vertices `U, V`, have minimum triangle area at most `S/3`; if their hull is not a
+triangle, at most `S/4`. -/
 theorem fourPointEndpointLemma (U V W X Y : Point)
     (hX : X ∈ convexHull ℝ ({U, V, W} : Set Point))
     (hY : Y ∈ convexHull ℝ ({U, V, W} : Set Point)) :
@@ -1294,8 +1180,8 @@ theorem hsMap_of_openSegment_VW {U V W F : Point} (hΔ : 0 < sarea U V W)
   rw [e, hsMap_bary hΔ.ne' (by linarith)]; simp [hsF, hab₂]
 
 /-- Six points, support case: `H` extreme at `U`, `F` extreme at `V`, two further points `X, Y`.
-The support normalization and `OPPOSITE_CORNERS.md` Theorem 1 give a triangle of area at most
-`(7/64) · area(UVW)` (`CORNER_FAMILIES.md` §6 with the two prescribed vertices). -/
+The support normalization and `OppositeCorners.minTriangleArea_halfSquareConfig_le` give a triangle of area at most
+`(7/64) · area(UVW)`. -/
 theorem sixPoint_support_case {U V W H F X Y : Point} (hΔ : 0 < sarea U V W)
     (hH : 0 < sarea U V H) (hHW : 0 ≤ sarea W U H) (hF : 0 < sarea U V F)
     (hFW : 0 ≤ sarea V W F) (hX : 0 < sarea U V X) (hY : 0 < sarea U V Y)
@@ -1313,7 +1199,7 @@ theorem sixPoint_support_case {U V W H F X Y : Point} (hΔ : 0 < sarea U V W)
     funext i
     fin_cases i <;> simp [OppositeCorners.halfSquareConfig, hmap, hsMap_U hΔ'.ne',
       hsMap_V hΔ'.ne', hH', hF', hsA, hsE, hsH, hsF]
-  have h7 := OppositeCorners.theorem1 h₀ f₀ hh0 hh1 hf0 hf1 _ _ hX' hY'
+  have h7 := OppositeCorners.minTriangleArea_halfSquareConfig_le h₀ f₀ hh0 hh1 hf0 hf1 _ _ hX' hY'
   have hmin := minTriangleArea_affineMap a b c d e g ![U, V, H, F, X, Y]
   rw [hcomp, hdet, abs_of_pos (by positivity)] at hmin
   rw [hmin] at h7
@@ -1341,10 +1227,9 @@ theorem sixPoint_tri_case {U V W P Q R S : Point} (hPle : sarea U V P ≤ sarea 
 
 theorem Γsix_pos : 0 < Γsix := by unfold Γsix; positivity
 
-/-- **Six points with two prescribed vertices** (`CORNER_FAMILIES.md` §§6, 8 in the affine form
-used by `TYPE_II.md` §3): four points in a counterclockwise closed triangle `UVW` together with
-`U, V` either have a triangle of area at most `(7/64) · area(UVW)` (nontriangular hull), or
-`Γ · min ≤ area(UVW)` (triangular hull). -/
+/-- Six points with two prescribed vertices: four points in a counterclockwise closed triangle
+`UVW` together with `U, V` either have a triangle of area at most `(7/64) · area(UVW)`
+(nontriangular hull), or `Γ · min ≤ area(UVW)` (triangular hull). -/
 theorem sixPoint_pos {U V W X0 X1 X2 X3 : Point} (hΔ : 0 < sarea U V W)
     (h0 : X0 ∈ convexHull ℝ ({U, V, W} : Set Point))
     (h1 : X1 ∈ convexHull ℝ ({U, V, W} : Set Point))

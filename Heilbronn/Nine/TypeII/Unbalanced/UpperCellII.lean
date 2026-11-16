@@ -6,48 +6,47 @@ public import Heilbronn.Nine.TypeII.Unbalanced.RadialSplit
 public import Heilbronn.Nine.TypeII.Unbalanced.UpperCellIICert
 
 /-! # Complete exclusion of the unbalanced upper cut in support cell II
-(`docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`)
 
-**Role.** Primary route. `UNBALANCED_FINAL_LOWER_WEDGE:Theorem2` (lines 312-313) cites Theorem 1
-for the two-point upper cut in cell II; with `UNBALANCED_RIGHT_HULL:Theorem2` it excludes the
-whole two-point upper cut of the nontriangular branch. The proof ends with a 960-coefficient
-Bernstein certificate.
+`false_of_upperSetting` excludes the two-point upper cut in cell II; with `UnbalancedRightHull.not_cellI_or_cellIII` it
+excludes the whole two-point upper cut of the nontriangular branch, as used by the assembly in
+`UnbalancedFinalLowerWedge`. The proof ends with a 960-coefficient Bernstein certificate.
 
-**Setting** (lines 5-35, `UpperSetting`): `Row123 l b P Q R S T`, minimum area at least `A₀`,
+**Setting** (`UpperSetting`): `Row123 l b P Q R S T`, minimum area at least `A₀`,
 both central points above `CE`, the right hull the quadrilateral `B, R, S, C` with `T` inside,
 in support cell II (`T ∈ int BCR ∩ int BCS`). Two doubled thresholds are used: `s₀ = 7/64` and
 `s = 8/73 < 2A₀`, so every actual doubled area is at least `s`. After the radial labelling of
-`claim_setup` (`UpperLabelled`): `Q` below `DR`, `P, T` above `DR`.
+`upper_cellII_setup` (`UpperLabelled`): `Q` below `DR`, `P, T` above `DR`.
 
-Coordinates (lines 65-78): `R = (r, 1 - v_R)`, `S = (k, 1 - v_S)`, `T = (X, 1 - v)`,
+Coordinates: `R = (r, 1 - v_R)`, `S = (k, 1 - v_S)`, `T = (X, 1 - v)`,
 `Q = (l, 1 - z)`, `P = (p, 1 - y)`, `q = 1 - λ`, `w = 1 - b`, `c = 1 - wq`, `a = k - r`,
 `β = v_R - v_S`, `J_D = [DRS]`, `ℓ = p - l`, `d = [DQP] = zp - ly`, `d_C = [QPC] = d + y - z`,
-`A_E = [EPQ] = qℓ - d`, `L_Q = az + βl`, `L_P = ay + βp`. In Lean the manuscript's `l` (the
-abscissa of `Q`) is `lQ = Q.1`, since `l` is the height `λ` of `E`.
+`A_E = [EPQ] = qℓ - d`, `L_Q = az + βl`, `L_P = ay + βp`. In the polynomial definitions the
+abscissa `l` of `Q` is the argument `lQ`, since in Lean `l` is the height `λ` of `E`.
 
-The polynomials of §§4-7 are defined explicitly, generic in the threshold `s`: `gammaFn`
-(`γ`, (19)), `kappaFn` (`κ`), `yStar`, `pStar`, `dStar` ((23)), `nFn` (`N`, (24)), `f0Fn`
-(`F₀`), `lZero` (`l₀`), `sZero` (`S₀`), `fZeroZero` (`F₀₀`), and `hPoly b q z` (`H` of (26) at
-`s = 8/73`); `bOf`, `qOf`, `zOf` are the affine substitution (30) and `hUnit u v t` is `H` in the
-unit coordinates.
+The polynomials of the eliminations are defined explicitly, generic in the threshold `s`:
+`gammaFn` (`γ`), `kappaFn` (`κ`), `yStar`, `pStar`, `dStar`, `nFn` (`N`), `f0Fn` (`F₀`),
+`lZero` (`l₀`), `sZero` (`S₀`), `fZeroZero` (`F₀₀`), and `hPoly b q z` (`H` at `s = 8/73`);
+`bOf`, `qOf`, `zOf` are the affine substitution of the unit cube onto the parameter box and
+`hUnit u v t` is `H` in the unit coordinates.
 
 **Results.**
-* `claim_setup` (1)-(2): the separation of `{D, C}` from `{E, B}`, `q > 67/80`, the radial
+* `upper_cellII_setup`: the separation of `{D, C}` from `{E, B}`, `q > 67/80`, the radial
   labelling, `v_R ≥ Ks₀ > 13/16`, and the convex order.
-* `claim_qupper` (3)-(4): `q < 119/128`.
-* `claim_line_caps` (5)-(7): caps for two points in a triangle of doubled area `< 17s/2`.
-* `claim_DEC` (8)-(9), `claim_signs` (10)-(12), `claim_stress` (13)-(15): the central-line caps,
-  the cross-triangle signs and the positive stress identity.
-* `claim_G` (16)-(19), `claim_N` (20)-(24), `claim_l` (25): the monotone eliminations of
-  `R, S, T`, of `p, y`, and of `l`.
-* `claim_H_nonneg` (26)-(29): `H(b, q, z) ≥ 0` on the box (27).
-* `bernstein_row1` … `bernstein_row12`: the twelve rows of the certificate table of §7, each the
-  sign `H < 0` on its box (kernel checks in `UpperCellIICert.lean`); `claim_bernstein` (30)-(32): `H < 0` on (27).
-* `theorem1`: the configuration does not exist.
+* `q_lt_119_128`: `q < 119/128`.
+* `line_caps`: caps for two points in a triangle of doubled area `< 17s/2`.
+* `DEC_caps`, `QP_line_signs`, `stress_identity`: the central-line caps, the cross-triangle signs
+  and the positive stress identity.
+* `G_nonneg`, `nFn_nonneg`, `nFn_le_nFn_lZero`: the monotone eliminations of `R, S, T`, of `p, y`, and of
+  `l`.
+* `hPoly_nonneg`: `H(b, q, z) ≥ 0` on the box
+  `[8/73, 1/2] × [67/80, 119/128] × [14/73, 3/4]`.
+* `bernstein_row1` … `bernstein_row12`: the twelve boxes of the certificate, each the sign
+  `H < 0` on its box (kernel checks in `UpperCellIICert.lean`); `hPoly_neg`: `H < 0` on the
+  whole box.
+* `false_of_upperSetting`: the configuration does not exist.
 
-FLAG (wording, line 145-147): (7) says each opposite subtriangle is "greater than
-`s + 3s²/A`"; the argument (`≥ Hs/(A+s) ≥ s + 3s²/A`) gives only `≥`. `claim_line_caps` states
-`≥`; the strict consequence `> 7s/4` is unaffected.
+In `line_caps` the opposite subtriangles are bounded by `≥ Hs/(A+s) ≥ s + 3s²/A`, a
+non-strict bound; the strict consequence `> 7s/4` is what is used.
 -/
 
 @[expose] public section
@@ -61,8 +60,8 @@ variable {l b : ℝ} {P Q R S T : Point}
 
 /-! ### The setting -/
 
-/-- The standing setting of the note: the two-point upper cut in support cell II with minimum
-area at least `A₀`. -/
+/-- The standing setting: the two-point upper cut (`P, Q` above `CE`) with a quadrilateral right
+hull in support cell II, minimum area at least `A₀`. -/
 structure UpperSetting (l b : ℝ) (P Q R S T : Point) : Prop where
   row : Row123 l b P Q R S T
   min : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T)
@@ -71,7 +70,7 @@ structure UpperSetting (l b : ℝ) (P Q R S T : Point) : Prop where
   quad : QuadHull (ptB b) R S ptC T
   cell : CellII (ptB b) R S ptC T
 
-/-- The setting after the radial labelling of `claim_setup`: `Q` below `DR`, `P` and `T` above
+/-- The setting after the radial labelling of `upper_cellII_setup`: `Q` below `DR`, `P` and `T` above
 it. -/
 structure UpperLabelled (l b : ℝ) (P Q R S T : Point) : Prop
     extends UpperSetting l b P Q R S T where
@@ -79,67 +78,68 @@ structure UpperLabelled (l b : ℝ) (P Q R S T : Point) : Prop
   P_above_DR : 0 < sarea ptD R P
   T_above_DR : 0 < sarea ptD R T
 
-/-! ### The polynomials of §§4-7 -/
+/-! ### The polynomials of the eliminations -/
 
 /-- `c = 1 - wq = 1 - (1 - b)q`, the doubled area `[EBC]`. -/
 def cFn (b q : ℝ) : ℝ := 1 - (1 - b) * q
 
-/-- `γ = (c - s)² - 4sb(1 - q)`, (19). -/
+/-- `γ = (c - s)² - 4sb(1 - q)`. -/
 def gammaFn (s b q : ℝ) : ℝ := (cFn b q - s) ^ 2 - 4 * s * b * (1 - q)
 
-/-- `κ = q(1 - l) - z`, (22) (`lQ` is the manuscript's `l`). -/
+/-- `κ = q(1 - l) - z` (`lQ` is the abscissa `l` of `Q`). -/
 def kappaFn (q z lQ : ℝ) : ℝ := q * (1 - lQ) - z
 
-/-- `Y_* = s(q + z)`, (23). -/
+/-- `Y_* = s(q + z)`. -/
 def yStar (s q z : ℝ) : ℝ := s * (q + z)
 
-/-- `P_* = κ - s(2 - l)`, (23). -/
+/-- `P_* = κ - s(2 - l)`. -/
 def pStar (s q z lQ : ℝ) : ℝ := kappaFn q z lQ - s * (2 - lQ)
 
-/-- `D_* = (z + s)κ - s(q + z)`, (23). -/
+/-- `D_* = (z + s)κ - s(q + z)`. -/
 def dStar (s q z lQ : ℝ) : ℝ := (z + s) * kappaFn q z lQ - s * (q + z)
 
-/-- `N(b, q, z, l) = γ{D_*(1 - l) - sP_*} - 4sb²(D_* z + sY_*)`, (24). -/
+/-- `N(b, q, z, l) = γ{D_*(1 - l) - sP_*} - 4sb²(D_* z + sY_*)`. -/
 def nFn (s b q z lQ : ℝ) : ℝ :=
   gammaFn s b q * (dStar s q z lQ * (1 - lQ) - s * pStar s q z lQ) -
     4 * s * b ^ 2 * (dStar s q z lQ * z + s * yStar s q z)
 
-/-- `F₀(b, q, z, l) = zκ - s(q + z)`, (24). -/
+/-- `F₀(b, q, z, l) = zκ - s(q + z)`. -/
 def f0Fn (s q z lQ : ℝ) : ℝ := z * kappaFn q z lQ - s * (q + z)
 
-/-- `l₀ = s + bz`, (25). -/
+/-- `l₀ = s + bz`, the lower bound for `l` from `[DBQ] ≥ s`. -/
 def lZero (s b z : ℝ) : ℝ := s + b * z
 
-/-- `S₀ = b(1 - z) - s`, (25). -/
+/-- `S₀ = b(1 - z) - s`. -/
 def sZero (s b z : ℝ) : ℝ := b * (1 - z) - s
 
-/-- `F₀₀ = q{z(1 - s - bz) - s} - z(z + s)`, (25). -/
+/-- `F₀₀ = q{z(1 - s - bz) - s} - z(z + s)`. -/
 def fZeroZero (s b q z : ℝ) : ℝ := q * (z * (1 - s - b * z) - s) - z * (z + s)
 
-/-- The certificate polynomial `H(b, q, z) = N₀ + αF₀₀ + ηS₀` of (26), with `s = 8/73`,
+/-- The certificate polynomial `H(b, q, z) = N₀ + αF₀₀ + ηS₀`, with `s = 8/73`,
 `N₀ = N(b, q, z, l₀)`, `α = 9/512`, `η = 7/2048`; of degree `(4, 3, 3)` in `(b, q, z)`. -/
 def hPoly (b q z : ℝ) : ℝ :=
   nFn (8 / 73) b q z (lZero (8 / 73) b z) + 9 / 512 * fZeroZero (8 / 73) b q z +
     7 / 2048 * sZero (8 / 73) b z
 
-/-- The affine substitution (30) for `b`: `b = 8/73 + (1/2 - 8/73)u`. -/
+/-- The affine substitution for `b`: `b = 8/73 + (1/2 - 8/73)u`. -/
 def bOf (u : ℝ) : ℝ := 8 / 73 + (1 / 2 - 8 / 73) * u
 
-/-- The affine substitution (30) for `q`: `q = 67/80 + (119/128 - 67/80)v`. -/
+/-- The affine substitution for `q`: `q = 67/80 + (119/128 - 67/80)v`. -/
 def qOf (v : ℝ) : ℝ := 67 / 80 + (119 / 128 - 67 / 80) * v
 
-/-- The affine substitution (30) for `z`: `z = 14/73 + (3/4 - 14/73)t`. -/
+/-- The affine substitution for `z`: `z = 14/73 + (3/4 - 14/73)t`. -/
 def zOf (t : ℝ) : ℝ := 14 / 73 + (3 / 4 - 14 / 73) * t
 
-/-- `H` in the unit coordinates `(u, v, t) ∈ [0, 1]³` of (30). -/
+/-- `H` in the unit coordinates `(u, v, t) ∈ [0, 1]³`. -/
 def hUnit (u v t : ℝ) : ℝ := hPoly (bOf u) (qOf v) (zOf t)
 
 /-! ### Scalar helpers -/
 
 section Helpers
 
-/-- (16)-(19): eliminating `S`, `R`, `T`. With `A = dz + sy`, `B* = dl + sp`, from (14), (15),
-`[CRS] ≥ s`, `[EBR] ≥ s` and the convex order, `γ > 0` and `G ≥ 0`. -/
+/-- The algebra of `G_nonneg`: eliminating `S`, `R`, `T`. With `A = dz + sy`, `B* = dl + sp`, from
+the stress bounds `h14`, `h15` (`stress_identity`), `[CRS] ≥ s`, `[EBR] ≥ s` and the convex order,
+`γ > 0` and `G ≥ 0`. -/
 theorem G_alg {s b q d l p y z r k vR vS : ℝ} (hs : 0 < s) (hb : 0 < b) (hq1 : q < 1)
     (hd : 0 < d) (hy : 0 < y) (hz : 0 < z) (hr1 : r < 1) (hrk : r < k)
     (hk1 : k ≤ 1) (hvR0 : 0 < vR)
@@ -160,14 +160,14 @@ theorem G_alg {s b q d l p y z r k vR vS : ℝ} (hs : 0 < s) (hb : 0 < b) (hq1 :
   have hF : 0 ≤ d * (k * vR - r * vS) - (k - r) * A - (vR - vS) * Bs - s * d := by
     rw [hA, hBs]; linarith
   have h15' : Bs ≤ r * d := by rw [hBs]; linarith
-  -- step 1: lower `v_S` to `(s + (1-k)v_R)/(1-r)`
+  -- lower `v_S` to `(s + (1-k)v_R)/(1-r)`
   have hZF1 : 0 ≤ Z * (d * k * vR - (k - r) * A - vR * Bs - s * d) +
       (Bs - r * d) * (s + (1 - k) * vR) := by
     have k1 := mul_le_mul_of_nonneg_left hF hZ0.le
     have k2 : 0 ≤ (r * d - Bs) * (Z * vS - s - (1 - k) * vR) :=
       mul_nonneg (by linarith) (by rw [hZ]; linarith)
     linarith
-  -- step 2: the expression is affine in `k`, negative at `k = r`; raise `k` to `1`
+  -- the expression is affine in `k`, negative at `k = r`; raise `k` to `1`
   set α1 := Z * (d * vR - A) + (r * d - Bs) * vR with hα1
   have hk : Z * (d * k * vR - (k - r) * A - vR * Bs - s * d) +
       (Bs - r * d) * (s + (1 - k) * vR) =
@@ -186,7 +186,7 @@ theorem G_alg {s b q d l p y z r k vR vS : ℝ} (hs : 0 < s) (hb : 0 < b) (hq1 :
         (-(Z * s * d) + (Bs - r * d) * s) + α1 * (k - r) + α1 * (1 - k) := by
       rw [hα1, hK0, hZ]; ring
     rw [e]; linarith
-  -- step 3: `K₀ > 0`, then raise `v_R` to `(c - s - λZ)/b`
+  -- `K₀ > 0`, then raise `v_R` to `(c - s - λZ)/b`
   have hK0pos : 0 < K0 := by
     have k1 : 0 ≤ s * (r * d - Bs) := mul_nonneg hs.le (by linarith)
     have k2 : 0 < Z ^ 2 * A + Z * s * d := by positivity
@@ -200,7 +200,7 @@ theorem G_alg {s b q d l p y z r k vR vS : ℝ} (hs : 0 < s) (hb : 0 < b) (hq1 :
     have e : r * d - Bs = K0 - Z * d := by rw [hK0, hZ]; ring
     rw [e] at k1
     linarith
-  -- step 4: the quadratic in `Z` has a nonnegative value, so its discriminant is `≥ 0`
+  -- the quadratic in `Z` has a nonnegative value, so its discriminant is `≥ 0`
   set M := (1 - q) * K0 + b * A with hM
   have hM0 : 0 < M := by rw [hM]; have : 0 ≤ (1 - q) * K0 := by nlinarith
                          have : 0 < b * A := mul_pos hb hA0; linarith
@@ -222,7 +222,7 @@ theorem G_alg {s b q d l p y z r k vR vS : ℝ} (hs : 0 < s) (hb : 0 < b) (hq1 :
     linarith
   exact (pos_iff_pos_of_mul_pos this).2 hK0pos
 
-/-- (20)-(24): eliminating `p` and `y`. -/
+/-- The algebra of `nFn_nonneg`: eliminating `p` and `y`. -/
 theorem N_alg {s b q d l p y z g : ℝ} (hs : 0 < s) (hq : 0 < q) (hl : 0 < l) (hz : 0 < z)
     (hy : 0 < y) (hp : 0 < p) (hg : 0 < g) (hdd : d = z * p - l * y) (hd : s ≤ d)
     (hG : 0 ≤ g * (d * (1 - l) - s * p) - 4 * s * b ^ 2 * (d * z + s * y))
@@ -291,7 +291,7 @@ def nDeriv (s b q z l : ℝ) : ℝ :=
       (-(z + s) * q * (1 - l) - ((z + s) * (q * (1 - l) - z) - s * (q + z)) - s * (s - q)) +
     4 * s * b ^ 2 * z * (z + s) * q
 
-/-- The monotonicity of `UNBALANCED_UPPER_CELL_II.md` lines 373-380, proved: `N` is a convex
+/-- Monotonicity of `N` in `l`: `N` is a convex
 quadratic in `l` (leading coefficient `qγ(z + s) > 0`) whose derivative at the actual `l` is
 negative (`κN' = -qN - κ(Y*Z_c + γD*) - Y*(zZ_c - sγ) - qY*(lZ_c + 4s²b²)`), so lowering `l` to
 `l₀` raises `N`. -/
@@ -341,7 +341,7 @@ theorem radial_pos {R X Y : Point} (hX : sarea ptD R X < 0) (hY : 0 < sarea ptD 
   have := mul_nonneg_of_nonpos_of_nonpos hcon (by linarith : R.2 - 1 ≤ 0)
   linarith
 
-/-- (10): `L(R) < 0` from `qL(R) = q(1-r)d + qr·d_C - v_R(A_E + d)`. -/
+/-- `L(R) < 0` (`QP_line_signs`) from `qL(R) = q(1-r)d + qr·d_C - v_R(A_E + d)`. -/
 theorem LR_alg {q r vR d dC AE LR s : ℝ} (hs : 0 < s) (hq0 : 0 < q) (hq1 : q ≤ 1) (hr0 : 0 < r)
     (hr1 : r < 1) (hd : d < 3 * s / 2) (hdC : dC < 3 * s / 2) (hvR : 13 / 16 ≤ vR)
     (hAd : 2 * s ≤ AE + d)
@@ -356,7 +356,7 @@ theorem LR_alg {q r vR d dC AE LR s : ℝ} (hs : 0 < s) (hq0 : 0 < q) (hq1 : q �
   by_contra hcon; push Not at hcon
   have := mul_nonneg hq0.le hcon; linarith
 
-/-- (11): `L(T) < s` from the barycentric weights of `T` in `BRC`. -/
+/-- `L(T) < s` (`QP_line_signs`) from the barycentric weights of `T` in `BRC`. -/
 theorem LT_alg {g w1 w2 w3 LT LB LR LC s : ℝ} (hs10 : 1 / 10 < s) (hw1 : s ≤ w1) (hw2 : s ≤ w2)
     (hw3 : s ≤ w3) (hsum : w1 + w2 + w3 = g) (hg1 : g ≤ 1) (hLB : LB ≤ -s) (hLR : LR ≤ -s)
     (hLC : LC < 3 * s / 2) (hid : g * LT = w1 * LB + w2 * LR + w3 * LC) : LT < s := by
@@ -371,7 +371,8 @@ theorem LT_alg {g w1 w2 w3 LT LB LR LC s : ℝ} (hs10 : 1 / 10 < s) (hw1 : s ≤
   have := mul_le_mul_of_nonneg_left hcon hg0.le
   linarith
 
-/-- (12): `L_P - L_Q = a(y - z) + βℓ > 0` from `[BRS] ≥ s` and the slope bound (9). -/
+/-- `L_P - L_Q = a(y - z) + βℓ > 0` (`QP_line_signs`) from `[BRS] ≥ s` and the slope bound of
+`DEC_caps`. -/
 theorem LQP_alg {a β ell y z r b vR q s : ℝ} (ha : 0 < a) (hell : 0 < ell) (hs : 1 / 16 < s)
     (hq1 : q ≤ 1) (hslope : |z - y| < q * ell / 4)
     (hU : s ≤ (r - b) * β - (1 - vR) * a) (hvR1 : vR ≤ 1) (hab : a ≤ 1 - r) (hrb : 0 < r - b)
@@ -399,7 +400,8 @@ theorem LQP_alg {a β ell y z r b vR q s : ℝ} (ha : 0 < a) (hell : 0 < ell) (h
     linarith
   linarith
 
-/-- (28)-(29): the single rational dual handles both lower-bound branches of `l`. -/
+/-- The final step of `hPoly_nonneg`: a single rational combination handles both lower-bound
+branches of `l`. -/
 theorem H_alg {N N₀ F₀ F₀₀ S₀ Δ q z : ℝ} (hq0 : 67 / 80 ≤ q) (hq1 : q < 1) (hz : 14 / 73 ≤ z)
     (hN : 0 ≤ N) (hF0 : 0 ≤ F₀) (hNl : N ≤ N₀) (hF : F₀ = F₀₀ - q * z * Δ) (hΔ0 : 0 ≤ Δ)
     (hΔ1 : -(q * S₀) ≤ (1 - q) * Δ) : 0 ≤ N₀ + 9 / 512 * F₀₀ + 7 / 2048 * S₀ := by
@@ -438,15 +440,11 @@ open TypeII UnbalancedCellI UnbalancedRadialSplit
 
 /-! ### Geometric and parameter bounds -/
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-setup`), equations (1)-(2). `PQ` puts `D, C` on
+/-- `PQ` puts `D, C` on
 one side and `E, B` on the other; `q > 67/80`; `v_R = 1 - R_y ≥ Ks₀ > 13/16`; the convex order
 `b < r < k ≤ 1`, `0 < v_S < v_R ≤ 1`; and, after interchanging `P, Q` if needed, `Q` is below
-`DR`, `P, T` are above `DR` and `P, T ∈ int DCR` (counterclockwise `D, R, C`).
-`docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, lines 49-78.
-Uses: UNBALANCED_RIGHT_HULL:Theorem3, UNBALANCED_RIGHT_HULL:Theorem4,
-UNBALANCED_RIGHT_HULL:claim-q67/80, UNBALANCED_RADIAL_SPLIT:Theorem1,
-UNBALANCED_CELL_I:claim-order. -/
-theorem claim_setup (h : UpperSetting l b P Q R S T) :
+`DR`, `P, T` are above `DR` and `P, T ∈ int DCR` (counterclockwise `D, R, C`). -/
+theorem upper_cellII_setup (h : UpperSetting l b P Q R S T) :
     LineSeparates P Q ptD ptC (ptE l) (ptB b) ∧ 67 / 80 < 1 - l ∧
       Kc * (7 / 64) ≤ 1 - R.2 ∧ 13 / 16 < Kc * (7 / 64) ∧
       (b < R.1 ∧ R.1 < S.1 ∧ S.1 ≤ 1 ∧ 0 < 1 - S.2 ∧ 1 - S.2 < 1 - R.2 ∧ 1 - R.2 ≤ 1) ∧
@@ -462,9 +460,9 @@ theorem claim_setup (h : UpperSetting l b P Q R S T) :
   have hl := h.row.l_pos
   have hl1 := h.row.l_lt
   have hb1 : b < 1 := by linarith [h.row.b_le]
-  obtain ⟨-, hsep⟩ := theorem4 h.row hmin7 h.P_above h.Q_above h.quad
-  obtain ⟨-, -, -, hq67, -, -⟩ := claim_q67_80 h.row hmin7 h.P_above h.Q_above
-  have hrad := UnbalancedRadialSplit.theorem1 h.row h.min h.quad h.cell h.P_above h.Q_above hsep
+  obtain ⟨-, hsep⟩ := lineSeparates_DC_EB h.row hmin7 h.P_above h.Q_above h.quad
+  obtain ⟨-, -, -, hq67, -, -⟩ := q_gt_67_80 h.row hmin7 h.P_above h.Q_above
+  have hrad := UnbalancedRadialSplit.radialConclusion_of_cellII h.row h.min h.quad h.cell h.P_above h.Q_above hsep
   obtain ⟨hur, hbr, hrk, hk1, hu, hut, ht1⟩ := quad_order hb hb1 h.row.R_mem h.row.S_mem h.quad.1
   have hu1 : R.2 < 1 := by linarith
   have hTC : 0 < sarea ptD R T → InTriangle T ptD R ptC := fun hDT => ⟨hDT, h.cell.1.2.1, by
@@ -481,10 +479,8 @@ theorem claim_setup (h : UpperSetting l b P Q R S T) :
   · exact ⟨hsep, hq67, aK, Kc_s0_gt, hord,
       Or.inr ⟨a2, a1, a3, central_DRC h.row.Q_central a1 h.row.R_right hu1, hTC a3⟩⟩
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-qupper`), equations (3)-(4).
-`q < 119/128 = 17s₀/2 < 17s/2`. `docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, lines 80-118.
-Uses: UNBALANCED_RIGHT_HULL:claim-generic-ear. -/
-theorem claim_qupper (h : UpperSetting l b P Q R S T) :
+/-- `q < 119/128 = 17s₀/2 < 17s/2`. -/
+theorem q_lt_119_128 (h : UpperSetting l b P Q R S T) :
     1 - l < 119 / 128 ∧ (119 / 128 : ℝ) = 17 * (7 / 64) / 2 ∧
       (17 * (7 / 64) / 2 : ℝ) < 17 * (8 / 73) / 2 := by
   have hmin7 : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T) :=
@@ -496,7 +492,7 @@ theorem claim_qupper (h : UpperSetting l b P Q R S T) :
   have hl1 := h.row.l_lt
   have hb1 : b < 1 := by linarith [h.row.b_le]
   have hDEB := DEB_ge h.row hmin7
-  have hgen := (claim_generic_ear h.row hmin7 h.quad).2
+  have hgen := (genericEar_nonpos h.row hmin7 h.quad).2
   refine ⟨?_, by norm_num, by norm_num⟩
   by_contra hcon
   push Not at hcon
@@ -509,14 +505,12 @@ theorem claim_qupper (h : UpperSetting l b P Q R S T) :
     nlinarith [mul_nonneg (pow_nonneg h0 0) (pow_nonneg h1 4), mul_nonneg (pow_nonneg h0 1) (pow_nonneg h1 3), mul_nonneg (pow_nonneg h0 2) (pow_nonneg h1 2), mul_nonneg (pow_nonneg h0 3) (pow_nonneg h1 1), mul_nonneg (pow_nonneg h0 4) (pow_nonneg h1 0)]
   linarith
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-line-caps`), equations (5)-(7). Let `X, Y` lie
+/-- Let `X, Y` lie
 strictly inside the counterclockwise triangle `VAB` of doubled area `H < 17s/2`, every doubled
 triangle on the five points be at least `s > 0`, and `XY` isolate `V`; put `A = |[VXY]|`,
 `C₁ = |[AXY]|`, `C₂ = |[BXY]|`. Then `C₁, C₂ < 3s/2`, `A < 4s`, and both opposite subtriangles
-`[ABX], [ABY]` are at least `s + 3s²/A > 7s/4`.
-`docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, lines 120-150.
-Uses: UNBALANCED_CELL_I:Lemma2 (its equation (10)). -/
-theorem claim_line_caps {s : ℝ} {V A B X Y : Point} (hs : 0 < s) (hX : InTriangle X V A B)
+`[ABX], [ABY]` are at least `s + 3s²/A > 7s/4`. -/
+theorem line_caps {s : ℝ} {V A B X Y : Point} (hs : 0 < s) (hX : InTriangle X V A B)
     (hY : InTriangle Y V A B) (hmin : s / 2 ≤ minTriangleArea ![V, A, B, X, Y])
     (hiso : LineIsolates X Y V A B) (hH : sarea V A B < 17 * s / 2) :
     let a := |sarea X Y V|
@@ -524,7 +518,7 @@ theorem claim_line_caps {s : ℝ} {V A B X Y : Point} (hs : 0 < s) (hX : InTrian
       s + 3 * s ^ 2 / a ≤ sarea A B X ∧ s + 3 * s ^ 2 / a ≤ sarea A B Y ∧
       7 * s / 4 < s + 3 * s ^ 2 / a := by
   intro a
-  obtain ⟨k1, k2, k3, k4⟩ := UnbalancedCellI.eq10 hs hX hY hmin hiso
+  obtain ⟨k1, k2, k3, k4⟩ := UnbalancedCellI.area_ge_of_lineIsolates hs hX hY hmin hiso
   have hpos : 0 < minTriangleArea ![V, A, B, X, Y] := by linarith
   have nV : sarea X Y V ≠ 0 := sarea_ne_zero_of_min_pos hpos 3 4 0
   have ha : 0 < a := abs_pos.2 nV
@@ -564,13 +558,11 @@ theorem claim_line_caps {s : ℝ} {V A B X Y : Point} (hs : 0 < s) (hX : InTrian
     rw [lt_div_iff₀ ha]; nlinarith
   linarith
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-DEC`), equations (8)-(9). Applied to the actual
+/-- `line_caps` applied to the actual
 triangle `DEC` (doubled area `q < 17s/2`, `E` isolated by `PQ`), with `s = 8/73`:
 `s ≤ d, d_C < 3s/2`, `s ≤ A_E < 4s`, `y, z > 7s/4`, `qℓ = A_E + d ≥ 2s`, `ℓ > 0`, and the slope
-of `PQ` satisfies `|(z - y)/ℓ| < q/4 < 1/4`. `docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, lines 152-174.
-Uses: UNBALANCED_UPPER_CELL_II:claim-line-caps, UNBALANCED_UPPER_CELL_II:claim-qupper,
-UNBALANCED_UPPER_CELL_II:claim-setup. -/
-theorem claim_DEC (h : UpperLabelled l b P Q R S T) :
+of `PQ` satisfies `|(z - y)/ℓ| < q/4 < 1/4`. -/
+theorem DEC_caps (h : UpperLabelled l b P Q R S T) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     let y := 1 - P.2
@@ -592,8 +584,8 @@ theorem claim_DEC (h : UpperLabelled l b P Q R S T) :
   have hl1 := h.row.l_lt
   have hb1 : b < 1 := by linarith [h.row.b_le]
   obtain ⟨hsep, hq67, hK, hK13, ⟨hbr, hrk, hk1, hvS, hvSR, hvR1⟩, -⟩ :=
-    claim_setup h.toUpperSetting
-  obtain ⟨hq119, -, h17⟩ := claim_qupper h.toUpperSetting
+    upper_cellII_setup h.toUpperSetting
+  obtain ⟨hq119, -, h17⟩ := q_lt_119_128 h.toUpperSetting
   have hpos : 0 < minTriangleArea ![ptD, ptC, ptE l, ptB b, P, Q, R, S, T] := by linarith
   have hP2 : P.2 < 1 := by
     have := h.row.P_central.2.2; simp only [sarea, ptC, ptD] at this; linarith
@@ -607,8 +599,8 @@ theorem claim_DEC (h : UpperLabelled l b P Q R S T) :
     rcases hsep with ⟨a1, -, -, -⟩ | ⟨-, a2, a3, a4⟩
     · exact absurd a1 (not_lt.2 hσD.le)
     · exact ⟨a2, a3, a4⟩
-  have hPE := (claim_central_cut hb hb1 hl hl1 h.row.P_central).1.2 h.P_above
-  have hQE := (claim_central_cut hb hb1 hl hl1 h.row.Q_central).1.2 h.Q_above
+  have hPE := (central_inTriangle_iff hb hb1 hl hl1 h.row.P_central).1.2 h.P_above
+  have hQE := (central_inTriangle_iff hb hb1 hl hl1 h.row.Q_central).1.2 h.Q_above
   have rot : ∀ {X A B C : Point}, InTriangle X A B C → InTriangle X B C A :=
     fun ⟨a1, a2, a3⟩ => ⟨a2, a3, a1⟩
   have hm5 : (8 / 73 : ℝ) / 2 ≤ minTriangleArea ![ptE l, ptC, ptD, P, Q] :=
@@ -616,7 +608,7 @@ theorem claim_DEC (h : UpperLabelled l b P Q R S T) :
       (by funext x; fin_cases x <;> rfl))
   have hH : sarea (ptE l) ptC ptD < 17 * (8 / 73) / 2 := by
     rw [show sarea (ptE l) ptC ptD = 1 - l by simp only [sarea, ptE, ptC, ptD]; ring]; linarith
-  obtain ⟨c1, c2, ca, o1, o2, o3⟩ := claim_line_caps (s := 8 / 73) (by norm_num) (rot hPE)
+  obtain ⟨c1, c2, ca, o1, o2, o3⟩ := line_caps (s := 8 / 73) (by norm_num) (rot hPE)
     (rot hQE) hm5 (Or.inl ⟨hσE, hσC, hσD⟩) hH
   have ed : sarea ptD Q P = |sarea P Q ptD| := by rw [abs_of_neg hσD]; unfold sarea; ring
   have edC : sarea Q P ptC = |sarea P Q ptC| := by rw [abs_of_neg hσC]; unfold sarea; ring
@@ -640,12 +632,10 @@ theorem claim_DEC (h : UpperLabelled l b P Q R S T) :
   have : |(1 - Q.2) - (1 - P.2)| < 8 / 73 / 2 := by rw [abs_lt]; constructor <;> linarith
   linarith
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-signs`), equations (10)-(12). With
+/-- With
 `L(Z) = [QPZ]` and `s = 8/73`: `L(R) ≤ -s` and `L(T) ≤ -s`; the ordered areas `[DQT], [QTP],
-[RST]` are at least `s`; and `L_Q = az + βl`, `L_P = ay + βp` satisfy `0 < L_Q < L_P`.
-`docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, lines 176-224.
-Uses: UNBALANCED_UPPER_CELL_II:claim-DEC, UNBALANCED_UPPER_CELL_II:claim-setup. -/
-theorem claim_signs (h : UpperLabelled l b P Q R S T) :
+[RST]` are at least `s`; and `L_Q = az + βl`, `L_P = ay + βp` satisfy `0 < L_Q < L_P`. -/
+theorem QP_line_signs (h : UpperLabelled l b P Q R S T) :
     let s : ℝ := 8 / 73
     let y := 1 - P.2
     let z := 1 - Q.2
@@ -655,7 +645,7 @@ theorem claim_signs (h : UpperLabelled l b P Q R S T) :
     let LP := a * y + β * P.1
     sarea Q P R ≤ -s ∧ sarea Q P T ≤ -s ∧ s ≤ sarea ptD Q T ∧ s ≤ sarea Q T P ∧
       s ≤ sarea R S T ∧ 0 < LQ ∧ LQ < LP := by
-  have hDEC := claim_DEC h
+  have hDEC := DEC_caps h
   dsimp only at hDEC ⊢
   obtain ⟨d1, d2, dC1, dC2, AE1, AE2, hy, hz, hqℓ, hell, hslope, -⟩ := hDEC
   have hmin7 : 7 / 128 ≤ minTriangleArea (typeIIConfig l b P Q R S T) :=
@@ -667,8 +657,8 @@ theorem claim_signs (h : UpperLabelled l b P Q R S T) :
   have hl1 := h.row.l_lt
   have hb1 : b < 1 := by linarith [h.row.b_le]
   obtain ⟨hsep, hq67, hK, hK13, ⟨hbr, hrk, hk1, hvS, hvSR, hvR1⟩, -⟩ :=
-    claim_setup h.toUpperSetting
-  obtain ⟨hq119, -, h17⟩ := claim_qupper h.toUpperSetting
+    upper_cellII_setup h.toUpperSetting
+  obtain ⟨hq119, -, h17⟩ := q_lt_119_128 h.toUpperSetting
   have hpos : 0 < minTriangleArea ![ptD, ptC, ptE l, ptB b, P, Q, R, S, T] := by linarith
   have hP2 : P.2 < 1 := by
     have := h.row.P_central.2.2; simp only [sarea, ptC, ptD] at this; linarith
@@ -743,12 +733,10 @@ theorem claim_signs (h : UpperLabelled l b P Q R S T) :
   have := mul_pos (by linarith : (0:ℝ) < (1 - R.2) - (1 - S.2)) hQ1
   linarith
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-stress`), equations (13)-(15). The exact identity
-`(L_P - L_Q)[DQT] + L_Q[QTP] + d[RST] = d(J_D - L_Q)` (13), the consequence
-`d(J_D - L_Q) ≥ s(d + L_P)` (14), and `d(r - l) = ℓ[RDQ] + l[RPQ] ≥ sp` (15), with
-`s = 8/73`. `docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, lines 226-246.
-Uses: UNBALANCED_UPPER_CELL_II:claim-signs. -/
-theorem claim_stress (h : UpperLabelled l b P Q R S T) :
+/-- The exact identity
+`(L_P - L_Q)[DQT] + L_Q[QTP] + d[RST] = d(J_D - L_Q)`, the consequence
+`d(J_D - L_Q) ≥ s(d + L_P)`, and `d(r - l) = ℓ[RDQ] + l[RPQ] ≥ sp`, with `s = 8/73`. -/
+theorem stress_identity (h : UpperLabelled l b P Q R S T) :
     let s : ℝ := 8 / 73
     let y := 1 - P.2
     let z := 1 - Q.2
@@ -763,8 +751,8 @@ theorem claim_stress (h : UpperLabelled l b P Q R S T) :
       s * (d + LP) ≤ d * (JD - LQ) ∧
       d * (R.1 - Q.1) = ell * sarea R ptD Q + Q.1 * sarea R P Q ∧
       s * P.1 ≤ d * (R.1 - Q.1) := by
-  have hsg := claim_signs h
-  have hDEC := claim_DEC h
+  have hsg := QP_line_signs h
+  have hDEC := DEC_caps h
   dsimp only at hsg hDEC ⊢
   obtain ⟨hLR, hLT, hDQT, hQTP, hRST, hLQ, hLQP⟩ := hsg
   obtain ⟨d1, -, -, -, -, -, -, -, -, hell, -, -⟩ := hDEC
@@ -798,12 +786,10 @@ theorem claim_stress (h : UpperLabelled l b P Q R S T) :
 
 /-! ### The monotone eliminations -/
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-G`), equations (16)-(19). Eliminating `S`, `R`
+/-- Eliminating `S`, `R`
 and `T`: `γ = (c - s)² - 4sb(1 - q) > 0` and
-`G = γ{d(1 - l) - sp} - 4sb²(dz + sy) ≥ 0` (`s = 8/73`).
-`docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, lines 248-305.
-Uses: UNBALANCED_UPPER_CELL_II:claim-stress. -/
-theorem claim_G (h : UpperLabelled l b P Q R S T) :
+`G = γ{d(1 - l) - sp} - 4sb²(dz + sy) ≥ 0` (`s = 8/73`). -/
+theorem G_nonneg (h : UpperLabelled l b P Q R S T) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     let y := 1 - P.2
@@ -811,8 +797,8 @@ theorem claim_G (h : UpperLabelled l b P Q R S T) :
     let d := sarea ptD Q P
     0 < gammaFn s b q ∧
       0 ≤ gammaFn s b q * (d * (1 - Q.1) - s * P.1) - 4 * s * b ^ 2 * (d * z + s * y) := by
-  have hst := claim_stress h
-  have hDEC := claim_DEC h
+  have hst := stress_identity h
+  have hDEC := DEC_caps h
   dsimp only at hst hDEC ⊢
   obtain ⟨-, h14, -, h15⟩ := hst
   obtain ⟨d1, -, -, -, -, -, hy, hz, -, hell, -, -⟩ := hDEC
@@ -824,7 +810,7 @@ theorem claim_G (h : UpperLabelled l b P Q R S T) :
   have hl := h.row.l_pos
   have hl1 := h.row.l_lt
   have hb1 : b < 1 := by linarith [h.row.b_le]
-  obtain ⟨-, hq67, hK, hK13, ⟨hbr, hrk, hk1, hvS, hvSR, hvR1⟩, -⟩ := claim_setup h.toUpperSetting
+  obtain ⟨-, hq67, hK, hK13, ⟨hbr, hrk, hk1, hvS, hvSR, hvR1⟩, -⟩ := upper_cellII_setup h.toUpperSetting
   have hJD : sarea ptD R S = S.1 * (1 - R.2) - R.1 * (1 - S.2) := by
     simp only [sarea, ptD]; ring
   rw [hJD] at h14
@@ -849,21 +835,19 @@ theorem claim_G (h : UpperLabelled l b P Q R S T) :
   simp only [gammaFn, cFn]
   exact hg
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-N`), equations (20)-(24). Eliminating `p` and `y`
+/-- Eliminating `p` and `y`
 (`[ECP], [QPC] ≥ s`): `κ = q(1 - l) - z > 0`, `N(b, q, z, l) ≥ 0` and
 `F₀(b, q, z, l) = zκ - s(q + z) ≥ 0` (`s = 8/73`); strengthened by the signs `Z_c = γ(1-l) -
-4sb²z > 0` and `zZ_c - sγ > 0` of (21), which `claim_l` uses.
-`docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, lines 307-371.
-Uses: UNBALANCED_UPPER_CELL_II:claim-G. -/
-theorem claim_N (h : UpperLabelled l b P Q R S T) :
+4sb²z > 0` and `zZ_c - sγ > 0`, which `nFn_le_nFn_lZero` uses. -/
+theorem nFn_nonneg (h : UpperLabelled l b P Q R S T) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     let z := 1 - Q.2
     0 < kappaFn q z Q.1 ∧ 0 ≤ nFn s b q z Q.1 ∧ 0 ≤ f0Fn s q z Q.1 ∧
       0 < gammaFn s b q * (1 - Q.1) - 4 * s * b ^ 2 * z ∧
       0 < z * (gammaFn s b q * (1 - Q.1) - 4 * s * b ^ 2 * z) - s * gammaFn s b q := by
-  have hG2 := claim_G h
-  have hDEC := claim_DEC h
+  have hG2 := G_nonneg h
+  have hDEC := DEC_caps h
   dsimp only at hG2 hDEC ⊢
   obtain ⟨hg, hG⟩ := hG2
   obtain ⟨d1, -, dC1, -, -, -, hy, hz, -, -, -, -⟩ := hDEC
@@ -894,15 +878,12 @@ theorem claim_N (h : UpperLabelled l b P Q R S T) :
   · simp only [gammaFn, cFn]; exact k4
   · simp only [gammaFn, cFn]; exact k5
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-l`), equation (25). From `[DBQ], [EBQ] ≥ s`:
+/-- From `[DBQ], [EBQ] ≥ s`:
 `l ≥ l₀ = s + bz` and `l ≥ (s - b(q - z))/(1 - q)`; with `Δ = l - l₀`,
 `Δ ≥ max(0, -qS₀/(1 - q))`, `N(b, q, z, l) ≤ N₀ = N(b, q, z, l₀)` and `F₀ = F₀₀ - qzΔ`
-(`s = 8/73`). The monotonicity `N(l) ≤ N(l₀)` is argued informally in the manuscript
-(lines 373-380; see `notes/findings.md`); here it is proved by `l_alg`: `N` is a convex quadratic
-in `l` whose derivative at the actual `l` is negative. `docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`,
-lines 373-404.
-Uses: UNBALANCED_UPPER_CELL_II:claim-N. -/
-theorem claim_l (h : UpperLabelled l b P Q R S T) :
+(`s = 8/73`). The monotonicity `N(l) ≤ N(l₀)` is `l_alg`: `N` is a convex quadratic
+in `l` whose derivative at the actual `l` is negative. -/
+theorem nFn_le_nFn_lZero (h : UpperLabelled l b P Q R S T) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     let z := 1 - Q.2
@@ -910,8 +891,8 @@ theorem claim_l (h : UpperLabelled l b P Q R S T) :
       max 0 (-(q * sZero s b z) / (1 - q)) ≤ Q.1 - lZero s b z ∧
       nFn s b q z Q.1 ≤ nFn s b q z (lZero s b z) ∧
       f0Fn s q z Q.1 = fZeroZero s b q z - q * z * (Q.1 - lZero s b z) := by
-  have hN3 := claim_N h
-  have hG2 := claim_G h
+  have hN3 := nFn_nonneg h
+  have hG2 := G_nonneg h
   dsimp only at hN3 hG2 ⊢
   obtain ⟨hκ, hN, hF0, hZc, hzZ⟩ := hN3
   obtain ⟨hg, -⟩ := hG2
@@ -927,7 +908,7 @@ theorem claim_l (h : UpperLabelled l b P Q R S T) :
   rw [abs_of_pos h.row.Q_central.1] at hDBQ
   have eDBQ : sarea ptD (ptB b) Q = Q.1 - b * (1 - Q.2) := by simp only [sarea, ptD, ptB]; ring
   rw [eDBQ] at hDBQ
-  have hQE := (claim_central_cut hb hb1 hl hl1 h.row.Q_central).1.2 h.Q_above
+  have hQE := (central_inTriangle_iff hb hb1 hl hl1 h.row.Q_central).1.2 h.Q_above
   have hEBQ : 8 / 73 ≤ |sarea (ptE l) (ptB b) Q| := le_abs_sarea_of_le_min hm8 2 3 5
   have eEBQ : sarea (ptE l) (ptB b) Q = b * ((1 - l) - (1 - Q.2)) + (1 - (1 - l)) * Q.1 := by
     simp only [sarea, ptE, ptB]; ring
@@ -953,20 +934,17 @@ theorem claim_l (h : UpperLabelled l b P Q R S T) :
     exact l_alg (by norm_num) (by linarith) hz hQ1 hl0 hg hκ hN hF0 hZc hzZ
   · simp only [f0Fn, fZeroZero, kappaFn, lZero]; ring
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-H≥0`), equations (26)-(29). The actual parameters
-`(b, q, z)` lie in the box (27): `8/73 ≤ b ≤ 1/2`, `67/80 ≤ q ≤ 119/128`, `14/73 ≤ z ≤ 3/4`, and
-satisfy `H(b, q, z) ≥ 0`. `docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, lines 406-455.
-Uses: UNBALANCED_UPPER_CELL_II:claim-N, UNBALANCED_UPPER_CELL_II:claim-l,
-UNBALANCED_UPPER_CELL_II:claim-setup, UNBALANCED_UPPER_CELL_II:claim-qupper,
-UNBALANCED_UPPER_CELL_II:claim-DEC. -/
-theorem claim_H_nonneg (h : UpperLabelled l b P Q R S T) :
+/-- The actual parameters
+`(b, q, z)` lie in the box `8/73 ≤ b ≤ 1/2`, `67/80 ≤ q ≤ 119/128`, `14/73 ≤ z ≤ 3/4`, and
+satisfy `H(b, q, z) ≥ 0`. -/
+theorem hPoly_nonneg (h : UpperLabelled l b P Q R S T) :
     let q := 1 - l
     let z := 1 - Q.2
     8 / 73 ≤ b ∧ b ≤ 1 / 2 ∧ 67 / 80 ≤ q ∧ q ≤ 119 / 128 ∧ 14 / 73 ≤ z ∧ z ≤ 3 / 4 ∧
       0 ≤ hPoly b q z := by
-  have hN3 := claim_N h
-  have hL5 := claim_l h
-  have hDEC := claim_DEC h
+  have hN3 := nFn_nonneg h
+  have hL5 := nFn_le_nFn_lZero h
+  have hDEC := DEC_caps h
   dsimp only at hN3 hL5 hDEC ⊢
   obtain ⟨hκ, hN, hF0, -, -⟩ := hN3
   obtain ⟨hl0, -, hΔ, hNl, hF0e⟩ := hL5
@@ -979,12 +957,12 @@ theorem claim_H_nonneg (h : UpperLabelled l b P Q R S T) :
   have hl := h.row.l_pos
   have hl1 := h.row.l_lt
   have hb1 : b < 1 := by linarith [h.row.b_le]
-  obtain ⟨-, hq67, -, -, -, -⟩ := claim_setup h.toUpperSetting
-  obtain ⟨hq119, -, -⟩ := claim_qupper h.toUpperSetting
+  obtain ⟨-, hq67, -, -, -, -⟩ := upper_cellII_setup h.toUpperSetting
+  obtain ⟨hq119, -, -⟩ := q_lt_119_128 h.toUpperSetting
   have hDEB : 8 / 73 ≤ |sarea ptD (ptE l) (ptB b)| := le_abs_sarea_of_le_min hm8 0 2 3
   have eDEB : sarea ptD (ptE l) (ptB b) = b * (1 - l) := by simp only [sarea, ptD, ptE, ptB]; ring
   rw [eDEB, abs_of_pos (by nlinarith)] at hDEB
-  have hQE := (claim_central_cut hb hb1 hl hl1 h.row.Q_central).1.2 h.Q_above
+  have hQE := (central_inTriangle_iff hb hb1 hl hl1 h.row.Q_central).1.2 h.Q_above
   have hDEQ : 8 / 73 ≤ |sarea ptD (ptE l) Q| := le_abs_sarea_of_le_min hm8 0 2 5
   rw [abs_of_pos hQE.1] at hDEQ
   have hECQ : 8 / 73 ≤ |sarea (ptE l) ptC Q| := le_abs_sarea_of_le_min hm8 2 1 5
@@ -1003,13 +981,13 @@ theorem claim_H_nonneg (h : UpperLabelled l b P Q R S T) :
   exact H_alg hq67.le (by linarith) (by linarith) hN hF0 hNl hF0e
     (le_trans (le_max_left _ _) hΔ) hΔ1
 
-/-! ### The Bernstein certificate (§7): the twelve rows of the table
+/-! ### The Bernstein certificate: twelve boxes
 
-Each row states that on its box in the unit coordinates `(u, v, t)` of (30), `H < 0`: the kernel
-check `Cert.rowNN` (`Heilbronn/Nine/TypeII/Unbalanced/UpperCellIICert.lean`, `bernsteinBoxCheck` at
-degree `(4, 3, 3)`) certifies that all tensor Bernstein coefficients of `-H` on the box are
-positive. (Restated: the baseline statements claimed the table's bounds `H < -1/N`; only the sign
-is used, and only the sign is certified.) -/
+Each box states that on its part of the unit cube, in the coordinates `(u, v, t)`, `H < 0`: the
+kernel check `Cert.rowNN` (`Heilbronn/Nine/TypeII/Unbalanced/UpperCellIICert.lean`,
+`bernsteinBoxCheck` at degree `(4, 3, 3)`) certifies that all tensor Bernstein coefficients of
+`-H` on the box are positive. Only the sign is used, and only the sign is certified; the bound
+`-1/N` recorded for each box is the parameter `N` of its check. -/
 
 /-- `H` agrees with the real function of the certificate module. -/
 theorem hPoly_eq (b q z : ℝ) : hPoly b q z = Cert.hReal b q z := by
@@ -1017,8 +995,7 @@ theorem hPoly_eq (b q z : ℝ) : hPoly b q z = Cert.hReal b q z := by
     Cert.hReal]
   ring
 
-/-- Row 1 of the table of §7 (part of UNBALANCED_UPPER_CELL_II:claim-Bernstein):
-`u ∈ [0, 1/4]`, `v ∈ [0, 1]`, `t ∈ [0, 1/8]`, bound `-1/201292`. -/
+/-- Box 1: `u ∈ [0, 1/4]`, `v ∈ [0, 1]`, `t ∈ [0, 1/8]`, bound `-1/201292`. -/
 theorem bernstein_row1 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (1 / 4))
     (hv : v ∈ Set.Icc (0 : ℝ) 1) (ht : t ∈ Set.Icc (0 : ℝ) (1 / 8)) :
     hUnit u v t < 0 := by
@@ -1026,7 +1003,7 @@ theorem bernstein_row1 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (1 / 4))
   exact Cert.hReal_neg Cert.row01 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 2: `u ∈ [1/4, 1/2]`, `v ∈ [0, 1]`, `t ∈ [0, 1/8]`, bound `-1/28701`. -/
+/-- Box 2: `u ∈ [1/4, 1/2]`, `v ∈ [0, 1]`, `t ∈ [0, 1/8]`, bound `-1/28701`. -/
 theorem bernstein_row2 (u v t : ℝ) (hu : u ∈ Set.Icc (1 / 4 : ℝ) (1 / 2))
     (hv : v ∈ Set.Icc (0 : ℝ) 1) (ht : t ∈ Set.Icc (0 : ℝ) (1 / 8)) :
     hUnit u v t < 0 := by
@@ -1034,7 +1011,7 @@ theorem bernstein_row2 (u v t : ℝ) (hu : u ∈ Set.Icc (1 / 4 : ℝ) (1 / 2))
   exact Cert.hReal_neg Cert.row02 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 3: `u ∈ [0, 1/8]`, `v ∈ [0, 1/2]`, `t ∈ [1/8, 3/16]`, bound `-1/673376`. -/
+/-- Box 3: `u ∈ [0, 1/8]`, `v ∈ [0, 1/2]`, `t ∈ [1/8, 3/16]`, bound `-1/673376`. -/
 theorem bernstein_row3 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (1 / 8))
     (hv : v ∈ Set.Icc (0 : ℝ) (1 / 2)) (ht : t ∈ Set.Icc (1 / 8 : ℝ) (3 / 16)) :
     hUnit u v t < 0 := by
@@ -1042,7 +1019,7 @@ theorem bernstein_row3 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (1 / 8))
   exact Cert.hReal_neg Cert.row03 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 4: `u ∈ [0, 1/8]`, `v ∈ [1/2, 1]`, `t ∈ [1/8, 3/16]`, bound `-1/85605`. -/
+/-- Box 4: `u ∈ [0, 1/8]`, `v ∈ [1/2, 1]`, `t ∈ [1/8, 3/16]`, bound `-1/85605`. -/
 theorem bernstein_row4 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (1 / 8))
     (hv : v ∈ Set.Icc (1 / 2 : ℝ) 1) (ht : t ∈ Set.Icc (1 / 8 : ℝ) (3 / 16)) :
     hUnit u v t < 0 := by
@@ -1050,7 +1027,7 @@ theorem bernstein_row4 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (1 / 8))
   exact Cert.hReal_neg Cert.row04 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 5: `u ∈ [1/8, 1/4]`, `v ∈ [0, 1/2]`, `t ∈ [1/8, 3/16]`, bound `-1/264312`. -/
+/-- Box 5: `u ∈ [1/8, 1/4]`, `v ∈ [0, 1/2]`, `t ∈ [1/8, 3/16]`, bound `-1/264312`. -/
 theorem bernstein_row5 (u v t : ℝ) (hu : u ∈ Set.Icc (1 / 8 : ℝ) (1 / 4))
     (hv : v ∈ Set.Icc (0 : ℝ) (1 / 2)) (ht : t ∈ Set.Icc (1 / 8 : ℝ) (3 / 16)) :
     hUnit u v t < 0 := by
@@ -1058,7 +1035,7 @@ theorem bernstein_row5 (u v t : ℝ) (hu : u ∈ Set.Icc (1 / 8 : ℝ) (1 / 4))
   exact Cert.hReal_neg Cert.row05 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 6: `u ∈ [1/8, 1/4]`, `v ∈ [1/2, 1]`, `t ∈ [1/8, 3/16]`, bound `-1/87739`. -/
+/-- Box 6: `u ∈ [1/8, 1/4]`, `v ∈ [1/2, 1]`, `t ∈ [1/8, 3/16]`, bound `-1/87739`. -/
 theorem bernstein_row6 (u v t : ℝ) (hu : u ∈ Set.Icc (1 / 8 : ℝ) (1 / 4))
     (hv : v ∈ Set.Icc (1 / 2 : ℝ) 1) (ht : t ∈ Set.Icc (1 / 8 : ℝ) (3 / 16)) :
     hUnit u v t < 0 := by
@@ -1066,7 +1043,7 @@ theorem bernstein_row6 (u v t : ℝ) (hu : u ∈ Set.Icc (1 / 8 : ℝ) (1 / 4))
   exact Cert.hReal_neg Cert.row06 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 7: `u ∈ [0, 1/4]`, `v ∈ [0, 1/2]`, `t ∈ [3/16, 1/4]`, bound `-1/141939`. -/
+/-- Box 7: `u ∈ [0, 1/4]`, `v ∈ [0, 1/2]`, `t ∈ [3/16, 1/4]`, bound `-1/141939`. -/
 theorem bernstein_row7 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (1 / 4))
     (hv : v ∈ Set.Icc (0 : ℝ) (1 / 2)) (ht : t ∈ Set.Icc (3 / 16 : ℝ) (1 / 4)) :
     hUnit u v t < 0 := by
@@ -1074,7 +1051,7 @@ theorem bernstein_row7 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (1 / 4))
   exact Cert.hReal_neg Cert.row07 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 8: `u ∈ [0, 1/4]`, `v ∈ [1/2, 1]`, `t ∈ [3/16, 1/4]`, bound `-1/94199`. -/
+/-- Box 8: `u ∈ [0, 1/4]`, `v ∈ [1/2, 1]`, `t ∈ [3/16, 1/4]`, bound `-1/94199`. -/
 theorem bernstein_row8 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (1 / 4))
     (hv : v ∈ Set.Icc (1 / 2 : ℝ) 1) (ht : t ∈ Set.Icc (3 / 16 : ℝ) (1 / 4)) :
     hUnit u v t < 0 := by
@@ -1082,7 +1059,7 @@ theorem bernstein_row8 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) (1 / 4))
   exact Cert.hReal_neg Cert.row08 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 9: `u ∈ [1/4, 1/2]`, `v ∈ [0, 1]`, `t ∈ [1/8, 1/4]`, bound `-1/68199`. -/
+/-- Box 9: `u ∈ [1/4, 1/2]`, `v ∈ [0, 1]`, `t ∈ [1/8, 1/4]`, bound `-1/68199`. -/
 theorem bernstein_row9 (u v t : ℝ) (hu : u ∈ Set.Icc (1 / 4 : ℝ) (1 / 2))
     (hv : v ∈ Set.Icc (0 : ℝ) 1) (ht : t ∈ Set.Icc (1 / 8 : ℝ) (1 / 4)) :
     hUnit u v t < 0 := by
@@ -1090,7 +1067,7 @@ theorem bernstein_row9 (u v t : ℝ) (hu : u ∈ Set.Icc (1 / 4 : ℝ) (1 / 2))
   exact Cert.hReal_neg Cert.row09 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 10: `u ∈ [1/2, 1]`, `v ∈ [0, 1]`, `t ∈ [0, 1/4]`, bound `-1/6165`. -/
+/-- Box 10: `u ∈ [1/2, 1]`, `v ∈ [0, 1]`, `t ∈ [0, 1/4]`, bound `-1/6165`. -/
 theorem bernstein_row10 (u v t : ℝ) (hu : u ∈ Set.Icc (1 / 2 : ℝ) 1)
     (hv : v ∈ Set.Icc (0 : ℝ) 1) (ht : t ∈ Set.Icc (0 : ℝ) (1 / 4)) :
     hUnit u v t < 0 := by
@@ -1098,7 +1075,7 @@ theorem bernstein_row10 (u v t : ℝ) (hu : u ∈ Set.Icc (1 / 2 : ℝ) 1)
   exact Cert.hReal_neg Cert.row10 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 11: `u ∈ [0, 1]`, `v ∈ [0, 1]`, `t ∈ [1/4, 1/2]`, bound `-1/29261`. -/
+/-- Box 11: `u ∈ [0, 1]`, `v ∈ [0, 1]`, `t ∈ [1/4, 1/2]`, bound `-1/29261`. -/
 theorem bernstein_row11 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) 1)
     (hv : v ∈ Set.Icc (0 : ℝ) 1) (ht : t ∈ Set.Icc (1 / 4 : ℝ) (1 / 2)) :
     hUnit u v t < 0 := by
@@ -1106,7 +1083,7 @@ theorem bernstein_row11 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) 1)
   exact Cert.hReal_neg Cert.row11 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- Row 12: `u ∈ [0, 1]`, `v ∈ [0, 1]`, `t ∈ [1/2, 1]`, bound `-1/2153`. -/
+/-- Box 12: `u ∈ [0, 1]`, `v ∈ [0, 1]`, `t ∈ [1/2, 1]`, bound `-1/2153`. -/
 theorem bernstein_row12 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) 1)
     (hv : v ∈ Set.Icc (0 : ℝ) 1) (ht : t ∈ Set.Icc (1 / 2 : ℝ) 1) :
     hUnit u v t < 0 := by
@@ -1114,10 +1091,10 @@ theorem bernstein_row12 (u v t : ℝ) (hu : u ∈ Set.Icc (0 : ℝ) 1)
   exact Cert.hReal_neg Cert.row12 (by push_cast; exact hu) (by push_cast; exact hv)
     (by push_cast; exact ht)
 
-/-- **Claim** (`UNBALANCED_UPPER_CELL_II:claim-Bernstein`), equations (30)-(32). `H(b, q, z) < 0`
-throughout the box (27). The twelve rows cover `[0, 1]³` with disjoint interiors (960 strict
-coefficient comparisons in all). `docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`, lines 457-525. -/
-theorem claim_bernstein (b q z : ℝ) (hb : b ∈ Set.Icc (8 / 73 : ℝ) (1 / 2))
+/-- `H(b, q, z) < 0`
+throughout the box `[8/73, 1/2] × [67/80, 119/128] × [14/73, 3/4]`. The twelve boxes cover
+`[0, 1]³` with disjoint interiors (960 strict coefficient comparisons in all). -/
+theorem hPoly_neg (b q z : ℝ) (hb : b ∈ Set.Icc (8 / 73 : ℝ) (1 / 2))
     (hq : q ∈ Set.Icc (67 / 80 : ℝ) (119 / 128)) (hz : z ∈ Set.Icc (14 / 73 : ℝ) (3 / 4)) :
     hPoly b q z < 0 := by
   obtain ⟨hb0, hb1⟩ := hb
@@ -1159,17 +1136,14 @@ theorem claim_bernstein (b q z : ℝ) (hb : b ∈ Set.Icc (8 / 73 : ℝ) (1 / 2)
     · exact bernstein_row7 u v t ⟨u0, hu4⟩ ⟨v0, hv2⟩ ⟨ht16, ht4⟩
     · exact bernstein_row8 u v t ⟨u0, hu4⟩ ⟨hv2, v1⟩ ⟨ht16, ht4⟩
 
-/-- **Theorem 1** (`UNBALANCED_UPPER_CELL_II:Theorem1`). The two-point upper cut in support cell
-II does not exist (with minimum area at least `A₀`). `docs/proof/nine/UNBALANCED_UPPER_CELL_II.md`,
-lines 37-47, 525.
-Uses: UNBALANCED_UPPER_CELL_II:claim-setup, UNBALANCED_UPPER_CELL_II:claim-H≥0,
-UNBALANCED_UPPER_CELL_II:claim-Bernstein. -/
-theorem theorem1 (h : UpperSetting l b P Q R S T) : False := by
-  obtain ⟨-, -, -, -, -, hlab⟩ := claim_setup h
+/-- The two-point upper cut in support cell
+II does not exist (with minimum area at least `A₀`). -/
+theorem false_of_upperSetting (h : UpperSetting l b P Q R S T) : False := by
+  obtain ⟨-, -, -, -, -, hlab⟩ := upper_cellII_setup h
   have fin : ∀ {P' Q' : Point}, UpperLabelled l b P' Q' R S T → False := by
     intro P' Q' hL
-    obtain ⟨hb1, hb2, hq1, hq2, hz1, hz2, hH⟩ := claim_H_nonneg hL
-    have := claim_bernstein _ _ _ ⟨hb1, hb2⟩ ⟨hq1, hq2⟩ ⟨hz1, hz2⟩
+    obtain ⟨hb1, hb2, hq1, hq2, hz1, hz2, hH⟩ := hPoly_nonneg hL
+    have := hPoly_neg _ _ _ ⟨hb1, hb2⟩ ⟨hq1, hq2⟩ ⟨hz1, hz2⟩
     linarith
   rcases hlab with ⟨a1, a2, a3, -, -⟩ | ⟨a1, a2, a3, -, -⟩
   · exact fin { h with Q_below_DR := a1, P_above_DR := a2, T_above_DR := a3 }

@@ -5,38 +5,36 @@ public import Heilbronn.Nine.TypeII.Unbalanced.OneUpperRadial
 public import Heilbronn.Nine.TypeII.Unbalanced.OccupiedLowerEar
 public import Heilbronn.Nine.TypeII.Unbalanced.ChainBasic
 
-/-! # A complete line-sign exclusion in the final unbalanced Type-II case
-(`docs/proof/nine/UNBALANCED_FINAL_NEGATIVE_LINE.md`)
+/-! # A line-sign exclusion in the final unbalanced Type-II case
 
-**Role.** Primary route: step 3 of `UNBALANCED_FINAL_LOWER_WEDGE:claim-chain` (§5, line 278).
+`sarea_QTE_pos` shows `[QTE] > 0` in the placement `NegSetting`; it is one step of
+`UnbalancedFinalLowerWedge.false_of_oneUpperSetting`.
 
-**Setting** (lines 5-31, `NegSetting`): `Row123 l b P Q R S T`, minimum area at least `A₀`
+**Setting** (`NegSetting`): `Row123 l b P Q R S T`, minimum area at least `A₀`
 (doubled threshold `s = 8/73 < 2A₀`), the right hull the quadrilateral `B, R, S, C` with `T`
-inside, in support cell II; `Q` (central) below `CE` and `DR` and above `ER`
-(`UNBALANCED_OCCUPIED_LOWER_EAR:Theorem1`); `T` above `DR` and below `CE`; `P` above `CE` and
+inside, in support cell II; `Q` (central) below `CE` and `DR` and above `ER` (as given by
+`UnbalancedOccupiedLowerEar.Q_not_inside_EBR`); `T` above `DR` and below `CE`; `P` above `CE` and
 `DR`. Write `R = (r, u)`, `S = (k, t)`, `q = 1 - λ`, `L = 1 - r`, `v = 1 - u`,
 `α = [ERC] = v - qL`, `T = (x, y)`, `H = [CET] = 1 - y - q(1 - x)`, `d = [DRT] = vx - r(1 - y)`.
 
-The closed forms (8) of the stress at the auxiliary points `T₀`, `T₁` are defined explicitly
+The closed forms of the stress `F` at the auxiliary points `T₀`, `T₁` are defined explicitly
 (generic in `s`): `alphaFn` (`α`), `jFn` (`J = v - rs/L`), `h0Fn, h1Fn` (`H₀, H₁`),
-`f0Fn, f1Fn` (`F₀, F₁`); `n0Fn, n1Fn` are `N₀ = LJ·F₀`, `N₁ = L·F₁` at `v = 1` (10), and
-`p0Poly, p1Poly` the discriminant numerators (12).
+`f0Fn, f1Fn` (`F₀, F₁`); `n0Fn, n1Fn` are `N₀ = LJ·F₀`, `N₁ = L·F₁` at `v = 1`, and
+`p0Poly, p1Poly` the numerators of their discriminants in `q`.
 
 **Results.**
-* `claim_QinECT`: `[CQT] > 0`; if `[QTE] < 0` then `Q ∈ int ECT`.
-* `claim_F` (1): if `[QTE] < 0`, `F = (qr - s)H - s(2qr + v + d) ≥ 0`.
-* `claim_params` (2)-(3): `α ≥ Ks > 13/16`, `qr ≥ 3s`, `qL < 3/16`, `128/201 < r < 65/73`,
+* `Q_inTriangle_ECT`: `[CQT] > 0`; if `[QTE] < 0` then `Q ∈ int ECT`.
+* `F_nonneg`: if `[QTE] < 0`, `F = (qr - s)H - s(2qr + v + d) ≥ 0`.
+* `param_bounds`: `α ≥ Ks > 13/16`, `qr ≥ 3s`, `qL < 3/16`, `128/201 < r < 65/73`,
   `vL > s`.
-* `claim_two_lines` (4)-(7): `F ≤ max(F₀, F₁)`.
-* `claim_v1` (8)-(9): `F₀, F₁` increase with `v`, so it suffices to treat `v = 1`.
-* `claim_disc` (10)-(15): `P₀, P₁ < 0` on `[1/2, 65/73]`, so `N₀, N₁ < 0` for every real `q`
+* `F_le_max`: `F ≤ max(F₀, F₁)`.
+* `f0Fn_f1Fn_le_at_one`: `F₀, F₁` increase with `v`, so it suffices to treat `v = 1`.
+* `f0Fn_f1Fn_neg`: `P₀, P₁ < 0` on `[1/2, 65/73]`, so `N₀, N₁ < 0` for every real `q`
   and `F₀(q, r, 1), F₁(q, r, 1) < 0`.
-* `theorem1`: `[QTE] < 0` is impossible, so `[QTE] > 0`.
+* `sarea_QTE_pos`: `[QTE] < 0` is impossible, so `[QTE] > 0`.
 
-Implicit in the manuscript: `claim_params` does not use `[QTE] < 0` and is stated without it;
-it is reused by `UNBALANCED_FINAL_LOWER_WEDGE` (`r > 128/201`). Theorem 1 keeps the placement of
-`P` as hypotheses, as stated ("in this placement"), although its proof uses only the other eight
-points.
+`param_bounds` does not use `[QTE] < 0` and is stated without it. `sarea_QTE_pos` keeps the
+placement of `P` as hypotheses, although its proof uses only the other eight points.
 -/
 
 @[expose] public section
@@ -48,7 +46,9 @@ open UnbalancedRightHull UnbalancedChain
 
 variable {l b : ℝ} {P Q R S T : Point}
 
-/-- The standing placement of the note (minimum area at least `A₀`). -/
+/-- The placement of the line-sign exclusion (minimum area at least `A₀`): the unbalanced row
+with a quadrilateral right hull in support cell II, `Q` below `CE` and `DR` and above `ER`,
+`T` above `DR` and below `CE`, and `P` above `CE` and `DR`. -/
 structure NegSetting (l b : ℝ) (P Q R S T : Point) : Prop where
   row : Row123 l b P Q R S T
   min : A₀ ≤ minTriangleArea (typeIIConfig l b P Q R S T)
@@ -62,7 +62,7 @@ structure NegSetting (l b : ℝ) (P Q R S T : Point) : Prop where
   P_above_CE : 0 < sarea (ptE l) ptC P
   P_above_DR : 0 < sarea ptD R P
 
-/-! ### The closed forms (8), (10), (12) -/
+/-! ### Closed forms of the stress and of its discriminants -/
 
 /-- `α = v - q(1 - r)`. -/
 def alphaFn (q r v : ℝ) : ℝ := v - q * (1 - r)
@@ -70,41 +70,41 @@ def alphaFn (q r v : ℝ) : ℝ := v - q * (1 - r)
 /-- `J = v - rs/L`, `L = 1 - r`. -/
 def jFn (s r v : ℝ) : ℝ := v - r * s / (1 - r)
 
-/-- `H₀ = α - s(2α + q - s/L)/J`, (8). -/
+/-- `H₀ = α - s(2α + q - s/L)/J`, the value of `H = [CET]` at `T₀`. -/
 def h0Fn (s q r v : ℝ) : ℝ :=
   alphaFn q r v - s * (2 * alphaFn q r v + q - s / (1 - r)) / jFn s r v
 
-/-- `H₁ = α - s/L`, (8). -/
+/-- `H₁ = α - s/L`, the value of `H = [CET]` at `T₁ = (r, u + s/L)`. -/
 def h1Fn (s q r v : ℝ) : ℝ := alphaFn q r v - s / (1 - r)
 
-/-- `F₀ = (qr - s)H₀ - s(2qr + v + d₀)` with `d₀ = s`, (8). -/
+/-- `F₀ = (qr - s)H₀ - s(2qr + v + d₀)` with `d₀ = s`: the stress at `T₀`. -/
 def f0Fn (s q r v : ℝ) : ℝ := (q * r - s) * h0Fn s q r v - s * (2 * q * r + v + s)
 
-/-- `F₁ = (qr - s)H₁ - s(2qr + v + d₁)` with `d₁ = rs/L`, (8). -/
+/-- `F₁ = (qr - s)H₁ - s(2qr + v + d₁)` with `d₁ = rs/L`: the stress at `T₁`. -/
 def f1Fn (s q r v : ℝ) : ℝ :=
   (q * r - s) * h1Fn s q r v - s * (2 * q * r + v + r * s / (1 - r))
 
-/-- `N₀ = LJ·F₀` at `v = 1`, (10). -/
+/-- `N₀ = LJ·F₀` at `v = 1` (`n_eq`). -/
 def n0Fn (s q r : ℝ) : ℝ :=
   ((1 - r) - r * s) * ((q * r - s) * (1 - q * (1 - r)) - s * (2 * q * r + 1 + s)) -
     s * (q * r - s) * (2 * (1 - q * (1 - r)) * (1 - r) + q * (1 - r) - s)
 
-/-- `N₁ = L·F₁` at `v = 1`, (10). -/
+/-- `N₁ = L·F₁` at `v = 1` (`n_eq`). -/
 def n1Fn (s q r : ℝ) : ℝ :=
   (1 - r) * ((q * r - s) * (1 - q * (1 - r)) - s * (2 * q * r + 1)) - s * q * r +
     s ^ 2 * (1 - r)
 
-/-- `P₀(r)`, with `disc_q N₀ = P₀(r)/28398241` at `s = 8/73`, (11)-(12). -/
+/-- `P₀(r)`, with `disc_q N₀ = P₀(r)/28398241` at `s = 8/73`. -/
 def p0Poly (r : ℝ) : ℝ :=
   32095521 * r ^ 4 - 79935586 * r ^ 3 + 66712689 * r ^ 2 - 18989360 * r + 270400
 
-/-- `P₁(r)`, with `disc_q N₁ = P₁(r)/5329` at `s = 8/73`, (11)-(12). -/
+/-- `P₁(r)`, with `disc_q N₁ = P₁(r)/5329` at `s = 8/73`. -/
 def p1Poly (r : ℝ) : ℝ := 6817 * r ^ 4 - 16482 * r ^ 3 + 13553 * r ^ 2 - 3888 * r + 64
 
 /-! ### The results -/
 
-/-- The inner facts of the placement: `Q ∈ EBC`, `Q, T ∈ ECR`, `T ∈ DRC`, and the actual areas
-used by §1. -/
+/-- The inner facts of the placement: `Q ∈ EBC`, `Q, T ∈ ECR`, `T ∈ DRC`, and the positive
+areas `[CQT]`, `[DEQ]`, `[RDQ]`. -/
 theorem neg_facts (h : NegSetting l b P Q R S T) :
     InTriangle Q (ptE l) (ptB b) ptC ∧ InTriangle Q (ptE l) R ptC ∧
       InTriangle T (ptE l) R ptC ∧ InTriangle T ptD R ptC ∧ 0 < sarea ptC Q T ∧
@@ -144,21 +144,18 @@ theorem neg_facts (h : NegSetting l b P Q R S T) :
   have hRDQ : 0 < sarea R ptD Q := by rw [sarea_swap₁₂]; linarith [h.Q_below_DR]
   exact ⟨hQ, ⟨h.Q_above_ER, hRCQ, hCEQ⟩, ⟨hERT, h.cell.1.2.1, hCET⟩, hTDRC, hCQT, hDEQ, hRDQ⟩
 
-/-- **Claim** (`UNBALANCED_FINAL_NEGATIVE_LINE:claim-QinECT`). `[CQT] > 0`; and if `[QTE] < 0`,
-then `Q` is strictly inside `ECT` (counterclockwise `E, T, C`).
-`docs/proof/nine/UNBALANCED_FINAL_NEGATIVE_LINE.md`, lines 42-50. -/
-theorem claim_QinECT (h : NegSetting l b P Q R S T) :
+/-- `[CQT] > 0`; and if `[QTE] < 0`, then `Q` is strictly inside `ECT` (counterclockwise
+`E, T, C`). -/
+theorem Q_inTriangle_ECT (h : NegSetting l b P Q R S T) :
     0 < sarea ptC Q T ∧ (sarea Q T (ptE l) < 0 → InTriangle Q (ptE l) T ptC) := by
   obtain ⟨-, hQERC, -, -, hCQT, -, -⟩ := neg_facts h
   refine ⟨hCQT, fun hneg => ⟨?_, ?_, hQERC.2.2⟩⟩
   · rw [show sarea (ptE l) T Q = -sarea Q T (ptE l) by unfold sarea; ring]; linarith
   · rw [show sarea T ptC Q = sarea ptC Q T from (sarea_cycle _ _ _).symm]; exact hCQT
 
-/-- **Claim** (`UNBALANCED_FINAL_NEGATIVE_LINE:claim-F`), equation (1). If `[QTE] < 0`, then
-`H = [CET] > 0`, `d = [DRT] > 0` and `F = (qr - s)H - s(2qr + v + d) ≥ 0` (`s = 8/73`).
-`docs/proof/nine/UNBALANCED_FINAL_NEGATIVE_LINE.md`, lines 51-82.
-Uses: UNBALANCED_FINAL_NEGATIVE_LINE:claim-QinECT. -/
-theorem claim_F (h : NegSetting l b P Q R S T) (hneg : sarea Q T (ptE l) < 0) :
+/-- If `[QTE] < 0`, then `H = [CET] > 0`, `d = [DRT] > 0` and
+`F = (qr - s)H - s(2qr + v + d) ≥ 0` (`s = 8/73`). -/
+theorem F_nonneg (h : NegSetting l b P Q R S T) (hneg : sarea Q T (ptE l) < 0) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     let r := R.1
@@ -170,7 +167,7 @@ theorem claim_F (h : NegSetting l b P Q R S T) (hneg : sarea Q T (ptE l) < 0) :
   have hm : (8 / 73 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by
     linarith [s_le_A₀.trans h.min]
   obtain ⟨-, -, hTERC, -, -, -, hRDQ⟩ := neg_facts h
-  obtain ⟨-, hEQT⟩ := claim_QinECT h
+  obtain ⟨-, hEQT⟩ := Q_inTriangle_ECT h
   obtain ⟨w1, w2, w3⟩ := hEQT hneg
   have a1 : 8 / 73 ≤ sarea (ptE l) T Q := ge_of_pos (abs_ge hm 2 8 5) w1
   have a2 : 8 / 73 ≤ sarea T ptC Q := ge_of_pos (abs_ge hm 8 1 5) w2
@@ -197,12 +194,9 @@ theorem claim_F (h : NegSetting l b P Q R S T) (hneg : sarea Q T (ptE l) < 0) :
     mul_le_mul_of_nonneg_right a1 hv.le, mul_le_mul_of_nonneg_right a3 hqr.le,
     mul_le_mul_of_nonneg_right a1 hqr.le]
 
-/-- **Claim** (`UNBALANCED_FINAL_NEGATIVE_LINE:claim-params`), equations (2)-(3). `α = [ERC] ≥ Ks
-> 13/16` (`Q, T ∈ ECR`), `qr ≥ 3s` (`Q ∈ DER`), `qL < 3/16`, `r > 128/201 > 1/2`,
-`r < 1 - s = 65/73` and `vL > s` (`s = 8/73`). `docs/proof/nine/UNBALANCED_FINAL_NEGATIVE_LINE.md`,
-lines 84-103.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem claim_params (h : NegSetting l b P Q R S T) :
+/-- `α = [ERC] ≥ Ks > 13/16` (`Q, T ∈ ECR`), `qr ≥ 3s` (`Q ∈ DER`), `qL < 3/16`,
+`r > 128/201 > 1/2`, `r < 1 - s = 65/73` and `vL > s` (`s = 8/73`). -/
+theorem param_bounds (h : NegSetting l b P Q R S T) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     let r := R.1
@@ -220,7 +214,7 @@ theorem claim_params (h : NegSetting l b P Q R S T) :
     rw [← e]
     exact one_inside (ge_of_pos (abs_ge hm 0 2 5) hDEQ) (ge_of_pos (abs_ge hm 2 6 5) h.Q_above_ER)
       (ge_of_pos (abs_ge hm 6 0 5) hRDQ)
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h.row h.quad
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
   have eA : sarea (ptE l) R ptC = 1 - R.2 - (1 - l) * (1 - R.1) := by
     simp only [sarea, ptE, ptC]; ring
   have hqL : (1 - l) * (1 - R.1) < 3 / 16 := by linarith
@@ -240,17 +234,19 @@ theorem claim_params (h : NegSetting l b P Q R S T) :
       mul_pos (by linarith : (0 : ℝ) < 1 - R.1) (sub_pos.2 hut)]
   exact ⟨hK, hK', hDER, hqL, hr128, by norm_num, hr65, hvL⟩
 
-/-- The stress `F` of (1) at `T = (x, y)`, in coordinates. -/
+/-- The stress `F = (qr - s)H - s(2qr + v + d)` of `F_nonneg` at `T = (x, y)`, in
+coordinates. -/
 def fxy (s q r v x y : ℝ) : ℝ :=
   (q * r - s) * (1 - y - q * (1 - x)) - s * (2 * q * r + v + (v * x - r * (1 - y)))
 
-/-- The abscissa of `T₀ = (5) ∩ (6)`. -/
+/-- The abscissa of `T₀`, the meet of the lines `y5Fn` and `y6Fn`. -/
 def x0Fn (s r v : ℝ) : ℝ := (r ^ 2 * s - r ^ 2 * v - 3 * r * s + r * v + s) / (v * (1 - r) - r * s)
 
-/-- The line (5). -/
+/-- The line through `T₁ = (r, u + s/L)` with slope `(vL - s)/L²`; for `x ≤ r` the bounds
+`[RST] ≥ s` and `[RSC] ≥ s` keep `T` on or above it. -/
 def y5Fn (s r v z : ℝ) : ℝ := (1 - v) + s / (1 - r) + (v / (1 - r) - s / (1 - r) ^ 2) * (z - r)
 
-/-- The line (6). -/
+/-- The line `[DRT] = s`, i.e. `vx - r(1 - y) = s`. -/
 def y6Fn (s r v z : ℝ) : ℝ := 1 + (s - v * z) / r
 
 theorem fxy_y (s q r v x y y' : ℝ) :
@@ -287,7 +283,7 @@ theorem aff6 {s q r v : ℝ} (hr : r ≠ 0) (x x0 : ℝ) :
       (q * r - s) * (q * r + v) / r * (x - x0) := by
   simp only [fxy, y6Fn]; field_simp; ring
 
-/-- The case `x ≥ r` of §2: `F ≤ F₁` along the line (4). -/
+/-- The case `x ≥ r` of `F_le_max`: `[RCT] ≥ s` gives `F ≤ F₁`. -/
 theorem tl_right {s q r v x y : ℝ} (hs : 0 < s) (hqr : 3 * s ≤ q * r) (hr2 : r < 1)
     (hα : 0 < v - q * (1 - r)) (hq : 0 < q) (hx : r ≤ x)
     (h4 : s ≤ (1 - r) * (y - (1 - v)) - v * (x - r)) :
@@ -306,7 +302,8 @@ theorem tl_right {s q r v x y : ℝ} (hs : 0 < s) (hqr : 3 * s ≤ q * r) (hr2 :
       mul_nonneg hdy.le (sub_nonneg.2 h4)]
   by_contra hc; push Not at hc; nlinarith [mul_pos hL (sub_pos.2 hc)]
 
-/-- The case `x ≤ r` of §2: `F ≤ max(F₀, F₁)` along the lines (5), (6). -/
+/-- The case `x ≤ r` of `F_le_max`: on or above the line `y5Fn` and with `[DRT] ≥ s`,
+`F ≤ max(F₀, F₁)`. -/
 theorem tl_left {s q r v x y : ℝ} (hs : 0 < s) (hqr : 3 * s ≤ q * r) (hr1 : 1 / 2 < r)
     (hr2 : r < 1) (hvL : s < v * (1 - r)) (_hq : 0 < q) (hx : x ≤ r)
     (h5 : s * (1 - r) ≤ (1 - r) ^ 2 * (y - (1 - v)) - (v * (1 - r) - s) * (x - r))
@@ -359,12 +356,10 @@ theorem tl_left {s q r v x y : ℝ} (hs : 0 < s) (hqr : 3 * s ≤ q * r) (hr1 : 
         mul_le_mul_of_nonneg_left hM1 (sub_nonneg.2 hxx)]
     exact hle5.trans (le_of_mul_le_mul_left this (by linarith))
 
-/-- **Claim** (`UNBALANCED_FINAL_NEGATIVE_LINE:claim-two-lines`), equations (4)-(7). If
-`[QTE] < 0`, the stress `F` of (1) satisfies `F ≤ max(F₀, F₁)`, the closed forms (8) of its
-values at the auxiliary points `T₀` (meet of the lines (5), (6)) and `T₁ = (r, u + s/L)`.
-`docs/proof/nine/UNBALANCED_FINAL_NEGATIVE_LINE.md`, lines 105-184, 186-200.
-Uses: UNBALANCED_FINAL_NEGATIVE_LINE:claim-F, UNBALANCED_FINAL_NEGATIVE_LINE:claim-params. -/
-theorem claim_two_lines (h : NegSetting l b P Q R S T) (_hneg : sarea Q T (ptE l) < 0) :
+/-- If `[QTE] < 0`, the stress `F = (qr - s)H - s(2qr + v + d)` satisfies `F ≤ max(F₀, F₁)`,
+its values at the auxiliary points `T₀` (meet of the lines `y5Fn` and `y6Fn`) and
+`T₁ = (r, u + s/L)`. -/
+theorem F_le_max (h : NegSetting l b P Q R S T) (_hneg : sarea Q T (ptE l) < 0) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     let r := R.1
@@ -374,8 +369,8 @@ theorem claim_two_lines (h : NegSetting l b P Q R S T) (_hneg : sarea Q T (ptE l
   intro s q r v
   have hm : (8 / 73 : ℝ) / 2 ≤ minTriangleArea (typeIIConfig l b P Q R S T) := by
     linarith [s_le_A₀.trans h.min]
-  obtain ⟨hK, hK', hqr, hqL, hr128, -, hr65, hvL⟩ := claim_params h
-  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.claim_order h.row h.quad
+  obtain ⟨hK, hK', hqr, hqL, hr128, -, hr65, hvL⟩ := param_bounds h
+  obtain ⟨hur, hbr, hrk, hk1, hu0, hut, ht1⟩ := UnbalancedCellI.coord_order_of_quadHull h.row h.quad
   have eH : sarea ptC (ptE l) T = 1 - T.2 - (1 - l) * (1 - T.1) := by
     simp only [sarea, ptC, ptE]; ring
   have ed : sarea ptD R T = (1 - R.2) * T.1 - R.1 * (1 - T.2) := by
@@ -417,7 +412,7 @@ theorem claim_two_lines (h : NegSetting l b P Q R S T) (_hneg : sarea Q T (ptE l
     exact tl_left (by norm_num) hqr (by linarith) (by linarith) hvL hq hx h5 h6
 
 /-- `H₀ = v - qL - 2s - s(2r - 1)(qL + s)/(vL - rs)`, the form used for the monotonicity in `v`
-(part of UNBALANCED_FINAL_NEGATIVE_LINE:claim-v1). -/
+in `f0Fn_f1Fn_le_at_one`. -/
 theorem h0_eq {s q r w : ℝ} (hL : 1 - r ≠ 0) (hK : w * (1 - r) - r * s ≠ 0) :
     h0Fn s q r w = w - q * (1 - r) - 2 * s - s * (2 * r - 1) * (q * (1 - r) + s) /
       (w * (1 - r) - r * s) := by
@@ -425,7 +420,7 @@ theorem h0_eq {s q r w : ℝ} (hL : 1 - r ≠ 0) (hK : w * (1 - r) - r * s ≠ 0
   unfold h0Fn alphaFn jFn
   rw [hJ]; field_simp; ring
 
-/-- `N₀ = LJ·F₀` and `N₁ = L·F₁` at `v = 1` (part of UNBALANCED_FINAL_NEGATIVE_LINE:claim-disc). -/
+/-- `N₀ = LJ·F₀` and `N₁ = L·F₁` at `v = 1`. -/
 theorem n_eq {s q r : ℝ} (hL : 1 - r ≠ 0) (hK : (1 - r) - r * s ≠ 0) :
     n0Fn s q r = (1 - r) * jFn s r 1 * f0Fn s q r 1 ∧ n1Fn s q r = (1 - r) * f1Fn s q r 1 := by
   have hJ : (1 : ℝ) - r * s / (1 - r) = ((1 - r) - r * s) / (1 - r) := by field_simp
@@ -434,13 +429,10 @@ theorem n_eq {s q r : ℝ} (hL : 1 - r ≠ 0) (hK : (1 - r) - r * s ≠ 0) :
     rw [hJ]; field_simp; ring
   · unfold n1Fn f1Fn h1Fn alphaFn; field_simp; ring
 
-/-- **Claim** (`UNBALANCED_FINAL_NEGATIVE_LINE:claim-v1`), equations (8)-(9). Under the parameter
-bounds of (2)-(3) (`qr ≥ 3s`, `1/2 < r < 65/73`, `vL > s`) and `v ≤ 1`, both `F₀` and `F₁`
-increase with `v` (`J > s > 0` throughout), so `F₀(q, r, v) ≤ F₀(q, r, 1)` and
-`F₁(q, r, v) ≤ F₁(q, r, 1)` (`s = 8/73`). `docs/proof/nine/UNBALANCED_FINAL_NEGATIVE_LINE.md`,
-lines 186-225.
-Uses: UNBALANCED_FINAL_NEGATIVE_LINE:claim-params. -/
-theorem claim_v1 {q r v : ℝ} (hqr : 3 * (8 / 73) ≤ q * r) (hr₁ : 1 / 2 < r) (hr₂ : r < 65 / 73)
+/-- Under the parameter bounds `qr ≥ 3s`, `1/2 < r < 65/73`, `vL > s` of `param_bounds` and
+`v ≤ 1`, both `F₀` and `F₁` increase with `v` (`J > s > 0` throughout), so
+`F₀(q, r, v) ≤ F₀(q, r, 1)` and `F₁(q, r, v) ≤ F₁(q, r, 1)` (`s = 8/73`). -/
+theorem f0Fn_f1Fn_le_at_one {q r v : ℝ} (hqr : 3 * (8 / 73) ≤ q * r) (hr₁ : 1 / 2 < r) (hr₂ : r < 65 / 73)
     (hvL : 8 / 73 < v * (1 - r)) (hv : v ≤ 1) :
     f0Fn (8 / 73) q r v ≤ f0Fn (8 / 73) q r 1 ∧ f1Fn (8 / 73) q r v ≤ f1Fn (8 / 73) q r 1 := by
   have hL : 0 < 1 - r := by linarith
@@ -465,12 +457,10 @@ theorem claim_v1 {q r v : ℝ} (hqr : 3 * (8 / 73) ≤ q * r) (hr₁ : 1 / 2 < r
   · unfold f1Fn h1Fn alphaFn
     nlinarith [mul_nonneg (by linarith : (0 : ℝ) ≤ q * r - 2 * (8 / 73)) (sub_nonneg.2 hv)]
 
-/-- **Claim** (`UNBALANCED_FINAL_NEGATIVE_LINE:claim-disc`), equations (10)-(15). For
-`1/2 ≤ r ≤ 65/73`: `P₀(r) < 0` and `P₁(r) < 0`; the quadratics `N₀, N₁` in `q` (leading
+/-- For `1/2 ≤ r ≤ 65/73`: `P₀(r) < 0` and `P₁(r) < 0`; the quadratics `N₀, N₁` in `q` (leading
 coefficients `-rL²(1 - s)`, `-rL²`) are negative for every real `q`; hence `F₀(q, r, 1) < 0`
-and `F₁(q, r, 1) < 0` for every real `q` (`s = 8/73`).
-`docs/proof/nine/UNBALANCED_FINAL_NEGATIVE_LINE.md`, lines 227-321. -/
-theorem claim_disc {r : ℝ} (hr₁ : 1 / 2 ≤ r) (hr₂ : r ≤ 65 / 73) :
+and `F₁(q, r, 1) < 0` for every real `q` (`s = 8/73`). -/
+theorem f0Fn_f1Fn_neg {r : ℝ} (hr₁ : 1 / 2 ≤ r) (hr₂ : r ≤ 65 / 73) :
     p0Poly r < 0 ∧ p1Poly r < 0 ∧
       ∀ q : ℝ, n0Fn (8 / 73) q r < 0 ∧ n1Fn (8 / 73) q r < 0 ∧
         f0Fn (8 / 73) q r 1 < 0 ∧ f1Fn (8 / 73) q r 1 < 0 := by
@@ -537,23 +527,18 @@ theorem claim_disc {r : ℝ} (hr₁ : 1 / 2 ≤ r) (hr₂ : r ≤ 65 / 73) :
     have := mul_nonneg hL.le hc
     linarith
 
-/-- **Theorem 1** (`UNBALANCED_FINAL_NEGATIVE_LINE:Theorem1`). In this placement `[QTE] < 0` is
-impossible; thus every surviving configuration has `[QTE] > 0`.
-`docs/proof/nine/UNBALANCED_FINAL_NEGATIVE_LINE.md`, lines 33-38, 318-321.
-Uses: UNBALANCED_FINAL_NEGATIVE_LINE:claim-F, UNBALANCED_FINAL_NEGATIVE_LINE:claim-two-lines,
-UNBALANCED_FINAL_NEGATIVE_LINE:claim-v1, UNBALANCED_FINAL_NEGATIVE_LINE:claim-disc,
-UNBALANCED_FINAL_NEGATIVE_LINE:claim-params. -/
-theorem theorem1 (h : NegSetting l b P Q R S T) : 0 < sarea Q T (ptE l) := by
+/-- In the placement `NegSetting`, `[QTE] < 0` is impossible; thus `[QTE] > 0`. -/
+theorem sarea_QTE_pos (h : NegSetting l b P Q R S T) : 0 < sarea Q T (ptE l) := by
   have hpos : 0 < minTriangleArea (typeIIConfig l b P Q R S T) := lt_of_lt_of_le A₀_pos h.min
   have n : sarea Q T (ptE l) ≠ 0 := sarea_ne_zero_of_min_pos hpos 5 8 2
   rcases lt_or_gt_of_ne n with hneg | hpos'
   · exfalso
-    obtain ⟨-, -, hF⟩ := claim_F h hneg
-    have h2 := claim_two_lines h hneg
-    obtain ⟨-, -, hqr, -, hr1, -, hr2, hvL⟩ := claim_params h
-    have hu0 := (UnbalancedCellI.claim_order h.row h.quad).2.2.2.2.1
-    obtain ⟨v0, v1⟩ := claim_v1 hqr (by linarith) hr2 hvL (by linarith)
-    obtain ⟨-, -, hd⟩ := claim_disc (by linarith) hr2.le
+    obtain ⟨-, -, hF⟩ := F_nonneg h hneg
+    have h2 := F_le_max h hneg
+    obtain ⟨-, -, hqr, -, hr1, -, hr2, hvL⟩ := param_bounds h
+    have hu0 := (UnbalancedCellI.coord_order_of_quadHull h.row h.quad).2.2.2.2.1
+    obtain ⟨v0, v1⟩ := f0Fn_f1Fn_le_at_one hqr (by linarith) hr2 hvL (by linarith)
+    obtain ⟨-, -, hd⟩ := f0Fn_f1Fn_neg (by linarith) hr2.le
     obtain ⟨-, -, f0, f1⟩ := hd (1 - l)
     have := max_lt (v0.trans_lt f0) (v1.trans_lt f1)
     have h3 := h2.trans (max_le_max v0 v1)

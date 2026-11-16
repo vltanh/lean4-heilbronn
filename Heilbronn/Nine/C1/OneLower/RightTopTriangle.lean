@@ -4,32 +4,31 @@ public import Heilbronn.Nine.C1.OneLower.ConvexTop
 public import Heilbronn.Nine.C1.OneLower.CompB
 public import Heilbronn.Nine.C1.OneLower.RightTopTriangleTrees
 
-/-! # One right-cap point and a triangular two-top hull in C1 (`docs/proof/nine/C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`)
+/-! # One right-cap point and a triangular two-top hull in C1
 
-**Role.** A component of the one-lower C1 class: `C1_ONE_LOWER_MIXED_CAPS:Theorem2` uses the
-Theorem for the occupancy row `(U, R, T, L_cap) = (0, 1, 2, 0)` when the hull of the two top-cap
-points with `D, F` is triangular; the convex alternative is an eight-vertex hull
-(`C1_ONE_LOWER_EIGHT_HULL:Theorem`).
+There is no competitive C1 configuration with one lower point, one right-cap point and two
+top-cap points whose hull with `D, F` is triangular. `C1OneLowerMixedCaps.lowerCount_eq_one_false` uses this for
+the occupancy row `(U, R, T, L_cap) = (0, 1, 2, 0)`; the convex alternative is an eight-vertex
+hull (`C1OneLowerEightHull.hullVertexCount_ne_eight`).
 
 **Setting.** The C1 anchors with `0 < d ≤ h < 1`, `0 < f ≤ c < 1` and, after transposition,
-`f ≤ d` (line 8: part of the setting, kept as a hypothesis); minimum triangle area at least `A₀`.
-Free points: `L ∈ OHC`, `R = (r_x, r_y)` in the right cap `CD(1,0) \ CD`, the outer top-cap point
-`X` and the interior top-cap point `P ∈ DXF`; configuration `c1Config h c d f R X L P`. The full
-hull is the heptagon `O, C, R, D, X, F, H` (1) with interior points `L, P`. Threshold `s = 8/73`.
+`f ≤ d` (kept as a hypothesis); minimum triangle area at least `A₀`. Free points: `L ∈ OHC`,
+`R = (r_x, r_y)` in the right cap `CD(1,0) \ CD`, the outer top-cap point `X` and the interior
+top-cap point `P ∈ DXF`; configuration `c1Config h c d f R X L P`. The full hull is the heptagon
+`O, C, R, D, X, F, H` with interior points `L, P`. Threshold `s = 8/73`.
 
 **Proof.** The nine points in the order `O, C, R, D, X, F, H, L, P` are `pts` (`idx` maps this
-order to the order of `c1Config`). The bounds of Section 1 are `params`, `cap_bounds`,
-`right_bounds`, `lower_bounds`, `inner_bounds` (with the doubled area `2A₀ > s` in place of `s`);
-they make the 28 affine factors (12) and the cost `(1-d)(1-f) - 3s` nonnegative
+order to the order of `c1Config`). The bounds from the occupied regions are `params`,
+`cap_bounds`, `right_bounds`, `lower_bounds`, `inner_bounds` (with the doubled area `2A₀ > s` in
+place of `s`); they make the 28 affine factors and the cost `(1-d)(1-f) - 3s` nonnegative
 (`factors_nonneg`). The heptagon is convex (`convex_heptagon`, from the five-anchor cap words of
-`R, X` and the radial rule of `C1_ZERO_LOWER.md`); `L, P` have radial words (`claim_cover`: one
-of the five lower words (9) and one of the five cap words (10), by a pruned enumeration of the
-words satisfying (9)); the 25 cells are excluded by the kernel-checked certificates of
-`Heilbronn.Nine.C1.OneLower.RightTopTriangleTrees` (`eq13`).
+`R, X` and the radial rule, `comp_capTable_holds`); `L, P` have radial words (`exists_rightTopTriangle_words`: one
+of the five lower words and one of the five cap words, by a pruned enumeration of the words
+satisfying `HullAntisymm`); the 25 cells are excluded by the kernel-checked certificates of
+`Heilbronn.Nine.C1.OneLower.RightTopTriangleTrees` (`rightTopTriangle_cell_false`).
 
-**Results.** `mainTheorem` (`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:Theorem`); `params`–`inner_bounds`
-(Section 1); `convex_heptagon`; `claim_cover` (the 25 word pairs); `eq13` (the certificate
-package).
+**Results.** `rightTopTriangle_excluded`; `params`–`inner_bounds`; `convex_heptagon`; `exists_rightTopTriangle_words` (the 25
+word pairs); `rightTopTriangle_cell_false` (the certificate package).
 -/
 
 @[expose] public section
@@ -38,12 +37,13 @@ noncomputable section
 namespace Heilbronn.Nine.C1OneLowerRightTopTriangle
 
 open Heilbronn.Nine.C1 Heilbronn.Nine.C1ZeroLower Heilbronn.Nine.C1OneLowerB Cover Cert Cert.Expr
-open Heilbronn.Nine.C1OneLowerTopCap (HullWord HasHullWord ConvexPolygon)
+open Heilbronn.Nine.Package Heilbronn.Nine.C1OneLower
+open Heilbronn.Nine.C1OneLowerTopCap (HullWord HasHullWord)
 
 /-- `s = 8/73`. -/
 local notation "s" => (8 / 73 : ℝ)
 
-/-- The placement of the Theorem: C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1` with `f ≤ d`;
+/-- The placement of `rightTopTriangle_excluded`: C1 anchors `0 < d ≤ h < 1`, `0 < f ≤ c < 1` with `f ≤ d`;
 minimum triangle area at least `A₀` for `c1Config h c d f R X L P`; `L` strictly inside `OHC`; `R`
 in the right cap and `X` in the top cap (each possibly on a side of the square); `P` strictly
 inside the actual triangle `DXF` (so the hull of the two top-cap points with `D, F` is the triangle
@@ -59,16 +59,15 @@ structure Placement (h c d f : ℝ) (R X L P : Point) : Prop where
   topSq : X ∈ unitSquare
   inner : InTriangle P (ptD d) X (ptF f)
 
-/-- The hull heptagon (1), `V₀, …, V₆ = O, C, R, D, X, F, H`. -/
+/-- The hull heptagon `V₀, …, V₆ = O, C, R, D, X, F, H`. -/
 def heptagon (h c d f : ℝ) (R X : Point) : Fin 7 → Point :=
   ![ptO, ptC c, R, ptD d, X, ptF f, ptH h]
 
-/-! ### Section 1: bounds from the occupied regions -/
+/-! ### Bounds from the occupied regions -/
 
-/-- **Claims** (`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:(2)-(4)`), with an actual-area bound `t > s`:
-`hc ≥ 3t`, `hf ≥ t` and the right-cap and cap-triangle areas give `h ≥ 27s/7`, `c ≥ 3s`,
-`c < 7/9`, `d ≥ 4s`, `d ≤ 41/65`, `f ≥ s`, `(1-d)(1-f) ≥ 3s` (via `dc(1-c) ≥ t`, `[DXF] ≥ 3t`).
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`, lines 34-50. -/
+/-- With an actual-area bound `t > s`: `hc ≥ 3t`, `hf ≥ t` and the right-cap and cap-triangle
+areas give `h ≥ 27s/7`, `c ≥ 3s`, `c < 7/9`, `d ≥ 4s`, `d ≤ 41/65`, `f ≥ s`, `(1-d)(1-f) ≥ 3s`
+(via `dc(1-c) ≥ t`, `[DXF] ≥ 3t`). -/
 theorem params {t h c d f rx ry xx xy : ℝ} (ht : 8 / 73 < t)
     (hd : 0 < d) (hh : h < 1) (hf : 0 < f) (hf1 : f < 1) (hc : c < 1) (hc0 : 0 < c)
     (rx1 : rx ≤ 1) (xx1 : xx ≤ 1) (xy1 : xy ≤ 1) (hd1 : d < 1)
@@ -103,9 +102,8 @@ theorem params {t h c d f rx ry xx xy : ℝ} (ht : 8 / 73 < t)
     linarith
   exact ⟨h1, by linarith, c79, d4.le, d41, by linarith, by linarith⟩
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:(5)`). The two cap-area expressions of `[DXF] ≥ 3t`
-give `x_x - f ≥ 24/41`, `x_y - d ≥ 24/65`, `f ≤ 17/41`.
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`, lines 52-61. -/
+/-- The two cap-area expressions of `[DXF] ≥ 3t` give `x_x - f ≥ 24/41`, `x_y - d ≥ 24/65`,
+`f ≤ 17/41`. -/
 theorem cap_bounds {t d f xx xy : ℝ} (ht : 8 / 73 < t) (hd4 : 32 / 73 ≤ d) (hf : 8 / 73 ≤ f)
     (xx1 : xx ≤ 1) (xy1 : xy ≤ 1) (hd1 : d < 1) (hf1 : f < 1)
     (hDXF : 3 * t ≤ (1 - d) * (xx - f) - (1 - f) * (1 - xy)) :
@@ -117,9 +115,8 @@ theorem cap_bounds {t d f xx xy : ℝ} (ht : 8 / 73 < t) (hd4 : 32 / 73 ≤ d) (
     (show 1 - f ≤ 65 / 73 by linarith)
   refine ⟨by linarith, by linarith, by linarith⟩
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:(6)`). From `-[CDR] = d(r_x-c) - (1-c)r_y =
-(1-c)(d-r_y) - d(1-r_x) ≥ t` and `c r_y ≥ t`: `r_x - c ≥ 65s/41`, `r_y ≥ 9s/7`, `d - r_y ≥ 8/49`.
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`, lines 63-71. -/
+/-- From `-[CDR] = d(r_x-c) - (1-c)r_y = (1-c)(d-r_y) - d(1-r_x) ≥ t` and `c r_y ≥ t`:
+`r_x - c ≥ 65s/41`, `r_y ≥ 9s/7`, `d - r_y ≥ 8/49`. -/
 theorem right_bounds {t c d rx ry : ℝ} (ht : 8 / 73 < t) (hd : 0 < d) (hd41 : d ≤ 41 / 65)
     (hc3 : 24 / 73 ≤ c) (hc : c < 7 / 9) (rx1 : rx ≤ 1) (ry0 : 0 ≤ ry)
     (aR1 : t ≤ d * (rx - c) - (1 - c) * ry) (aR2 : t ≤ c * ry) :
@@ -131,9 +128,8 @@ theorem right_bounds {t c d rx ry : ℝ} (ht : 8 / 73 < t) (hd : 0 < d) (hd41 : 
     (show 1 - c ≤ 49 / 73 by linarith)
   refine ⟨by linarith, by linarith, by linarith⟩
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:(7)`). Lower-triangle subdivision with `c < 7/9`:
-`ℓ_x ≥ s`, `ℓ_y ≥ 9s/7`, `c - ℓ_x ≥ 2s`, `h - ℓ_y ≥ 18s/7`, `ℓ_x + ℓ_y ≤ 1 - s`.
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`, lines 72-78. -/
+/-- Lower-triangle subdivision with `c < 7/9`: `ℓ_x ≥ s`, `ℓ_y ≥ 9s/7`, `c - ℓ_x ≥ 2s`,
+`h - ℓ_y ≥ 18s/7`, `ℓ_x + ℓ_y ≤ 1 - s`. -/
 theorem lower_bounds {t h c lx ly : ℝ} (ht : 8 / 73 < t) (hh : h < 1) (hc : c < 7 / 9)
     (hh0 : 0 < h) (hc0 : 0 < c) (lx0 : 0 ≤ lx) (ly0 : 0 ≤ ly)
     (aL1 : t ≤ c * ly) (aL2 : t ≤ h * lx) (aL3 : t ≤ h * c - h * lx - c * ly) :
@@ -152,10 +148,9 @@ theorem lower_bounds {t h c lx ly : ℝ} (ht : 8 / 73 < t) (hh : h < 1) (hc : c 
     (by positivity) (show h * c ≤ 1 by nlinarith)
   refine ⟨by linarith, by linarith, by linarith, by linarith, by linarith⟩
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:(8)`). The subdivision areas of `DXF` at `P`
-(`[FDP] = (1-d)(p_x-f) - (1-f)(1-p_y)`, `[DXP] = (x_y-d)(1-p_x) - (1-x_x)(p_y-d)`,
-`[XFP] = (x_x-f)(1-p_y) - (1-x_y)(p_x-f)`, each at least `t`) give `p_x - f ≥ 8/41`,
-`p_y - d ≥ 8/65`, `p_x, p_y ≤ 1 - s`. `docs/proof/nine/C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`, lines 80-93. -/
+/-- The subdivision areas of `DXF` at `P` (`[FDP] = (1-d)(p_x-f) - (1-f)(1-p_y)`,
+`[DXP] = (x_y-d)(1-p_x) - (1-x_x)(p_y-d)`, `[XFP] = (x_x-f)(1-p_y) - (1-x_y)(p_x-f)`, each at
+least `t`) give `p_x - f ≥ 8/41`, `p_y - d ≥ 8/65`, `p_x, p_y ≤ 1 - s`. -/
 theorem inner_bounds {t d f xx xy px py : ℝ} (ht : 8 / 73 < t) (hd4 : 32 / 73 ≤ d) (hd1 : d < 1)
     (hf : 8 / 73 ≤ f) (hf1 : f < 1) (xx1 : xx ≤ 1) (xy1 : xy ≤ 1) (xf : 0 ≤ xx - f)
     (xd : 0 ≤ xy - d) (px1 : px ≤ 1) (py1 : py ≤ 1)
@@ -242,7 +237,7 @@ theorem Placement.comp (hS : Placement h c d f R X L P) : Comp h c d f (freeQ R 
     exacts [hS.rightSq, hS.topSq, hS.sqL, hS.sqP], hS.min⟩
 
 theorem Placement.areaOK (hS : Placement h c d f R X L P) : AreaOK (pts h c d f R X L P) :=
-  (comp_areaOK hS.comp).comp idx idx_lt idx_inj
+  hS.comp.areaOK.comp idx idx_lt idx_inj
 
 /-- The table of anchor and cap signs (cap words `0` of `R`, `3` of `X`) gives every increasing
 triple of the heptagon positive. -/
@@ -250,10 +245,9 @@ theorem heptagon_table : ∀ i j k : Fin 7, i < j → j < k →
     orientedLookup (capTable [(5, 0), (6, 3)]) (idx i) (idx j) (idx k) = some true := by
   decide +kernel
 
-/-- Helper (implicit in the manuscript: "The full cyclic hull is `O, C, R, D, X, F, H`", lines
-16-20): the hull heptagon is convex (counterclockwise). -/
+/-- The hull heptagon `O, C, R, D, X, F, H` is convex (counterclockwise). -/
 theorem convex_heptagon (hS : Placement h c d f R X L P) :
-    ConvexPolygon (heptagon h c d f R X) := by
+    IsConvexPolygon (heptagon h c d f R X) := by
   have H := hS.comp
   have tb := comp_capTable_holds H (ms := [(5, 0), (6, 3)]) (by
     intro p hp
@@ -280,7 +274,8 @@ theorem pts_6 : pts h c d f R X L P 6 = (0, h) := rfl
 theorem pts_7 : pts h c d f R X L P 7 = L := rfl
 theorem pts_8 : pts h c d f R X L P 8 = P := rfl
 
-/-- The actual areas used by the bounds of Section 1, each at least `t = 2A₀`. -/
+/-- The actual areas used by the region bounds (`params`–`inner_bounds`), each at least
+`t = 2A₀`. -/
 theorem Placement.areas (hS : Placement h c d f R X L P) :
     2 * A₀ ≤ c * L.2 ∧ 2 * A₀ ≤ h * L.1 ∧ 2 * A₀ ≤ h * c - h * L.1 - c * L.2 ∧
       2 * A₀ ≤ h * f ∧ 2 * A₀ ≤ d * (R.1 - c) - (1 - c) * R.2 ∧ 2 * A₀ ≤ c * R.2 ∧
@@ -338,8 +333,8 @@ theorem Placement.areas (hS : Placement h c d f R X L P) :
   · convert aP2 using 1; unfold sarea; ring
   · convert aP3 using 1; unfold sarea; ring
 
-/-- **The atoms of Section 3 are nonnegative**: the 28 affine factors (12) and `(1-d)(1-f) - 3s`,
-from the bounds of Section 1. -/
+/-- The atoms of the certificate package are nonnegative: the 28 affine factors and
+`(1-d)(1-f) - 3s`, from the region bounds (`params`–`inner_bounds`). -/
 theorem factors_nonneg (hS : Placement h c d f R X L P) :
     ∀ e ∈ Model.factors ++ [Model.q0], 0 ≤ e.eval (zeta h c d f R X L P) := by
   obtain ⟨aL1, aL2, aL3, aHF, aR1, aR2, aP1, aP2, aP3⟩ := hS.areas
@@ -375,25 +370,23 @@ theorem factors_nonneg (hS : Placement h c d f R X L P) :
 
 end
 
-/-! ### Section 2: the complete 25-case cover -/
+/-! ### The complete 25-case cover -/
 
-/-- The enumeration of the words (9) inside `OCH`: the five lower words. -/
+/-- The enumeration of the radial words inside `OCH`: the five lower words. -/
 theorem enum_lower :
     enumW 7 5 (fun w => !(hinside 7 w 0 1 6) || decide (w ∈ Model.lowerW)) 7 [] = true := by
   decide +kernel
 
-/-- The enumeration of the words (9) inside `DXF`: the five cap words (10). -/
+/-- The enumeration of the radial words inside `DXF`: the five cap words. -/
 theorem enum_cap :
     enumW 7 5 (fun w => !(hinside 7 w 3 4 5) || decide (w ∈ Model.capW)) 7 [] = true := by
   decide +kernel
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:claim-cover`). The words of `L, P` for the heptagon
-`O, C, R, D, X, F, H` (`1 ≤ rᵢ ≤ 5`, complement relation (9); 57 words) are one of the five lower
-words (9) and one of the five cap words (10); all 25 pairs are retained, with no further sign split
-(ray order (11) fixes the pair signs where the words differ).
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`, lines 95-124.
-Uses: C1_ONE_LOWER_TOP_CAP:(12)-(13). -/
-theorem claim_cover {h c d f : ℝ} {R X L P : Point} (hS : Placement h c d f R X L P) :
+/-- The radial words of `L, P` for the heptagon `O, C, R, D, X, F, H` (`1 ≤ rᵢ ≤ 5`, complement
+relation `HullAntisymm`; 57 words) are one of the five lower words and one of the five cap words;
+all 25 pairs are retained, with no further sign split (the ray-order rule `C1OneLowerTopCap.sarea_pos_of_hullWord_lt`
+fixes the pair signs where the words differ). -/
+theorem exists_rightTopTriangle_words {h c d f : ℝ} {R X L P : Point} (hS : Placement h c d f R X L P) :
     ∃ i j, i < 5 ∧ j < 5 ∧
       HasHullWord (heptagon h c d f R X) L (fun v => (Model.lowerW.getD i []).getD v.val 0) ∧
       HasHullWord (heptagon h c d f R X) P (fun v => (Model.capW.getD j []).getD v.val 0) ∧
@@ -420,19 +413,14 @@ theorem claim_cover {h c d f : ℝ} {R X L P : Point} (hS : Placement h c d f R 
   obtain ⟨j, hj, rfl⟩ := exists_getD_of_mem hp'
   exact ⟨i, j, hi, hj, hw, hw', hb, hb'⟩
 
-/-! ### Section 3: the certificate package -/
+/-! ### The certificate package -/
 
-/-- **Claim** (`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:(13)`). The certificate package: no placement has
-any of the 25 word pairs. Each cell is excluded by a fixed positive combination (one of the 15
-certificates of the note, converted to the atoms of the cell) of products of the 28 affine factors
-(12), the cost `(1-d)(1-f) - 3s` and the signed actual triangles with at most one interior point
-and the ray-order triangles `(v, L, P)` minus `s, 3s, ρ` by certified occupancy, whose unit-cube
-bound is negative (kernel check `Model.allCases_ok`).
-`docs/proof/nine/C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`, lines 126-173 (data
-`c1_one_lower_right_top_triangle_certificates.json`, checker
-`check_c1_one_lower_right_top_triangle.py`).
-Uses: C1_ONE_LOWER_TOP_CAP:(14), CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem eq13 {h c d f : ℝ} {R X L P : Point} (hS : Placement h c d f R X L P) {i j : ℕ}
+/-- The certificate package: no placement has any of the 25 word pairs. Each cell is excluded by
+a fixed positive combination (one of 15 certificates, converted to the atoms of the cell) of
+products of the 28 affine factors, the cost `(1-d)(1-f) - 3s` and the signed actual triangles
+with at most one interior point and the ray-order triangles `(v, L, P)` minus `s, 3s, ρ` by
+certified occupancy, whose unit-cube bound is negative (kernel check `Model.allCases_ok`). -/
+theorem rightTopTriangle_cell_false {h c d f : ℝ} {R X L P : Point} (hS : Placement h c d f R X L P) {i j : ℕ}
     (hi : i < 5) (hj : j < 5)
     (hL : HasHullWord (heptagon h c d f R X) L (fun v => (Model.lowerW.getD i []).getD v.val 0))
     (hP : HasHullWord (heptagon h c d f R X) P (fun v => (Model.capW.getD j []).getD v.val 0))
@@ -468,14 +456,11 @@ theorem eq13 {h c d f : ℝ} {R X L P : Point} (hS : Placement h c d f R X L P) 
   rcases v with _ | _ | _ | _ | _ | _ | _ | _ | _ | _ | _ | _ | v <;> simp only [zeta] <;>
     constructor <;> linarith
 
-/-- **Theorem** (`C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:Theorem`). There is no competitive C1
-configuration (with `f ≤ d`) with one lower point `L ∈ OHC`, one right-cap point
-`R ∈ CD(1,0) \ CD`, and two top-cap points whose hull with `D, F` is triangular (named: the outer
-point `X` and the interior point `P ∈ DXF`). `docs/proof/nine/C1_ONE_LOWER_RIGHT_TOP_TRIANGLE.md`, lines
-3-25 and 167-173.
-Uses: C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:claim-cover, C1_ONE_LOWER_RIGHT_TOP_TRIANGLE:(13). -/
-theorem mainTheorem {h c d f : ℝ} {R X L P : Point} (hS : Placement h c d f R X L P) : False := by
-  obtain ⟨i, j, hi, hj, hL, hP, bL, bP⟩ := claim_cover hS
-  exact eq13 hS hi hj hL hP bL bP
+/-- There is no competitive C1 configuration (with `f ≤ d`) with one lower point `L ∈ OHC`, one
+right-cap point `R ∈ CD(1,0) \ CD`, and two top-cap points whose hull with `D, F` is triangular
+(named: the outer point `X` and the interior point `P ∈ DXF`). -/
+theorem rightTopTriangle_excluded {h c d f : ℝ} {R X L P : Point} (hS : Placement h c d f R X L P) : False := by
+  obtain ⟨i, j, hi, hj, hL, hP, bL, bP⟩ := exists_rightTopTriangle_words hS
+  exact rightTopTriangle_cell_false hS hi hj hL hP bL bP
 
 end Heilbronn.Nine.C1OneLowerRightTopTriangle

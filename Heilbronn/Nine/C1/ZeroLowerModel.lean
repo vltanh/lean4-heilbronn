@@ -1,30 +1,30 @@
 module
 
-public import Heilbronn.Common.Cover
+public import Heilbronn.Nine.Setup.Package
 
-/-! # The certificate model of the zero-lower C1 package (`docs/proof/nine/C1_ZERO_LOWER.md` §§5–6)
+/-! # The certificate model of the zero-lower C1 package
 
-Computable mirror of `docs/proof/nine/check_c1_zero_lower_certificates.py`, for the kernel check of the
-cover (`Heilbronn.Common.Cover`). Everything is indexed by natural numbers:
+Computable model of the zero-lower cover, for its kernel check (`Heilbronn.Common.Cover`); the
+soundness is in `Heilbronn.Nine.C1.ZeroLowerCover`. Everything is indexed by natural numbers:
 
 * points `0, …, 8` are `O, C, D, F, H, X₀, …, X₃`; the twelve variables `0, …, 11` are
   `h, c, d, f, x₀, y₀, …, x₃, y₃` (`pt`);
 * a *case* `ks` is the list of the four word indices of `X₀, …, X₃` (indices into `words`, the
-  eleven zero-lower words of the §5 table), with regions `cat` (`0` = `HCDF`, `1` = `𝓡`,
-  `2` = `𝓣`, `3` = `𝓛`) and region counts `cnt ks r`;
-* `baseSigns ks`: the initial signed triangles of the case (checker `base_signs`, same order):
-  anchor triples, two anchors and a free point (from the word), an anchor and two free points
-  (`pairSign`: the radial rule (14), the equal-word rules, the upper pair rule `upperPair`);
-* `seedRaw ks i`, `seed ks i`: the seeds (17) of the three-top-cap cases with inner point `i`
-  (checker `top_three_seed`);
-* `factors ks` (checker `factors`), `qcosts ks` and the strengthened triangle costs (checker
-  `costs`), `cubics ks` (checker `cubic_costs`); `atoms ks fs` is their concatenation for the
-  extra signed triangles `fs` (the path of the case in its sign tree);
-* `spec ks`: the cover package of the case; its splits are `Split.tri a b c` (the orientation of
-  the triangle `abc`) and `Split.three` (the inner point of a three-top-cap case).
+  eleven zero-lower words), with regions `cat` (`0` = `HCDF`, `1` = `𝓡`, `2` = `𝓣`, `3` = `𝓛`)
+  and region counts `cnt ks r`;
+* `baseSigns ks`: the initial signed triangles of the case: anchor triples, two anchors and a
+  free point (from the word), an anchor and two free points (`pairSign`: the radial rule, the
+  equal-word rules, the upper pair rule `upperPair`);
+* `seedRaw ks i`, `seed ks i`: the seeds of the three-top-cap cases with inner point `i`;
+* `factors ks`, `qcosts ks` and `cubics ks`, the affine factors, quadratic and cubic costs;
+* `spec ks`: the cover package of the case (`Cover.tableSpec`): its atoms with the extra signed
+  triangles `fs` (the path of the case in its sign tree) are `factors ks ++ qcosts ks`, the
+  strengthened triangle costs of `baseSigns ks ++ fs` (`Package.bnd`) and `cubics ks`; its
+  splits are `Split.tri a b c` (the orientation of the triangle `abc`) and `Split.three` (the
+  inner point of a three-top-cap case); `triBranches` keeps the triangle splits alone.
 
-The certificate weights are exported by `scripts/nine/c1_zero_lower/export.py` into
-`data/nine/c1_zero_lower/`; the trees and their kernel checks are in `Heilbronn.Nine.C1.ZeroLowerTrees*`.
+The certificate weights are read from `Heilbronn/Nine/Data/c1_zero_lower/`; the trees and their
+kernel checks are in `Heilbronn.Nine.C1.ZeroLowerTrees*`.
 -/
 
 @[expose] public section
@@ -33,20 +33,22 @@ namespace Heilbronn.Nine.C1ZeroLower.Model
 
 open Cert Cert.Expr Cover
 
-/-- The eleven zero-lower words of `C1_ZERO_LOWER.md` §5, in the order of its table. -/
+/-- The eleven zero-lower words. The entry `r` of a point `X` at the anchor `V_v` (`O, C, D, F, H`)
+records that `[V_v V_{v+j} X] > 0` exactly for `1 ≤ j ≤ r` (indices mod 5; see `wsign`). -/
 def words : List (List ℕ) :=
   [[1, 0, 4, 3, 2], [1, 1, 3, 3, 2], [1, 2, 3, 2, 2], [2, 1, 0, 4, 3], [2, 1, 1, 3, 3],
     [2, 1, 2, 3, 2], [2, 2, 1, 2, 3], [2, 2, 2, 2, 2], [3, 2, 1, 0, 4], [3, 2, 1, 1, 3],
     [3, 2, 2, 1, 2]]
 
 /-- The region of a word: `0` upper quadrilateral `HCDF`, `1` right cap, `2` top cap, `3` left
-cap (the checker's `CATS`, with `-1 ↦ 0`). -/
+cap. -/
 def cat (w : ℕ) : ℕ := if w = 0 then 1 else if w = 3 then 2 else if w = 8 then 3 else 0
 
 /-- The entry `i` of the word `w`. -/
 def wordAt (w i : ℕ) : ℕ := (words.getD w []).getD i 0
 
-/-- The checker's `sign(word, i, j)`: `(j - i) mod 5 ≤ word[i]`, i.e. `[VᵢVⱼX] > 0`. -/
+/-- The sign of `[VᵢVⱼX]` for a point `X` with word `w`: `[VᵢVⱼX] > 0` iff
+`(j - i) mod 5 ≤ wᵢ`. -/
 def wsign (w i j : ℕ) : Bool := ((j + 5 - i) % 5).ble (wordAt w i)
 
 /-- The word index of the free point `a` (`0, …, 3`) of the case. -/
@@ -74,7 +76,8 @@ def pt : ℕ → Expr × Expr
 /-- `s = 8/73`. -/
 def sQ : ℚ := 8 / 73
 
-/-- The region row of §4 for the free point `i` with word `w`, after `x - s, y - s`. -/
+/-- The region row (`Comp.upper_row`, `Comp.right_row`, `Comp.top_row`, `Comp.left_row`) of the
+free point `i` with word `w`, after `x - s, y - s`. -/
 def pointFactors (w i : ℕ) : List Expr :=
   let x := v (4 + 2 * i)
   let y := v (5 + 2 * i)
@@ -84,7 +87,8 @@ def pointFactors (w i : ℕ) : List Expr :=
     else if cat w = 3 then [v 3 - x - k (8 / 41), 1 - y, y - v 0 - k (8 / 65), x - k (28 / 219)]
     else [k (65 / 73) - x, k (65 / 73) - y])
 
-/-- The affine factors of §6 (checker `factors`). -/
+/-- The affine factors: the anchor bounds, the bounds on `f, d` forced by the top-cap count, the
+right- and left-cap consequences, and the region rows of the free points. -/
 def factors (ks : List ℕ) : List Expr :=
   [v 0 - k sQ, v 1 - k sQ, 1 - v 0, 1 - v 1, v 2 - k sQ, k (65 / 73) - v 2, v 3 - k sQ,
     k (65 / 73) - v 3, v 0 - v 2, v 1 - v 3, v 2 - v 3] ++
@@ -97,37 +101,29 @@ def factors (ks : List ℕ) : List Expr :=
   (pointFactors (kw ks 0) 0 ++ pointFactors (kw ks 1) 1 ++ pointFactors (kw ks 2) 2 ++
     pointFactors (kw ks 3) 3)
 
-/-- The quadratic costs (19), placed before the triangle costs. -/
+/-- The quadratic costs (two upper, two right-cap or at least two top-cap points), placed before
+the triangle costs. -/
 def qcosts (ks : List ℕ) : List Expr :=
   (if cnt ks 0 = 2 then [1 - (v 0 - v 2) * (v 1 - v 3) - k (64 / 73)] else []) ++
   (if cnt ks 1 = 2 then [v 2 * (1 - v 1) - k (24 / 73)] else []) ++
   (if cnt ks 2 = 2 then [(1 - v 2) * (1 - v 3) - k (24 / 73)]
     else if 3 ≤ cnt ks 2 then [(1 - v 2) * (1 - v 3) - k (7 / 11)] else [])
 
-/-- The cubic costs (20). -/
+/-- The cubic costs `dc(1 - c) - s` (a right-cap point) and `fh(1 - h) - s` (a left-cap point). -/
 def cubics (ks : List ℕ) : List Expr :=
   (if 1 ≤ cnt ks 1 then [v 2 * v 1 * (1 - v 1) - k sQ] else []) ++
   (if 1 ≤ cnt ks 3 then [v 3 * v 0 * (1 - v 0) - k sQ] else [])
 
-/-- The occupancy bounds (18): `s, 3s, ρ` for `0, 1, ≥ 2` certified inside points. -/
-def bnd (n : ℕ) : ℚ := if n = 0 then 8 / 73 else if n = 1 then 24 / 73 else 49 / 60
-
 /-! ### Initial signs -/
 
-/-- The increasing index triples of `0, …, 8`, in lexicographic order. -/
-def lexTriples : List (ℕ × ℕ × ℕ) :=
-  (List.range 9).flatMap fun a => (List.range 9).flatMap fun b => (List.range 9).filterMap
-    fun c => if a < b ∧ b < c then some (a, b, c) else none
-
-/-- The sign of an increasing triple with at least two anchors (checker `base_signs`, first
-loop). -/
+/-- The sign of an increasing triple with at least two anchors. -/
 def anchorSign (ks : List ℕ) (t : ℕ × ℕ × ℕ) : Option Bool :=
   if t.2.2 < 5 then some true
   else if t.2.1 < 5 then some (wsign (kw ks (t.2.2 - 5)) t.1 t.2.1)
   else none
 
-/-- The checker's `upper_pair_signs(P, Q)` for two points of `HCDF` with words `p, q` in
-different diagonal sectors: the sign of `[V_v P Q]` at `v ∈ {1, 2, 3, 4}`. -/
+/-- The upper pair rule for two points `P, Q` of `HCDF` with words `p, q` in different diagonal
+sectors: the sign of `[V_v P Q]` at `v ∈ {1, 2, 3, 4}`. -/
 def upperPair (p q v : ℕ) : Option Bool :=
   let pHD := wsign p 4 2
   let qHD := wsign q 4 2
@@ -145,8 +141,9 @@ def upperPair (p q v : ℕ) : Option Bool :=
     let side := if iso = 4 then !pHD else pHD
     some (if v = iso then side else !side)
 
-/-- The initial sign of `[V_v X_a X_b]` (`a < b`): the radial rule (14), the equal-word rules
-(`[O X_a X_b] > 0`; for a right-cap pair also (15)), the upper pair rule. -/
+/-- The initial sign of `[V_v X_a X_b]` (`a < b`): the radial rule (`Comp.radial_pair`), the
+equal-word rules (`[O X_a X_b] > 0`; for a right-cap pair also the signs of `Comp.right_pair_signs`), the
+upper pair rule. -/
 def pairSign (ks : List ℕ) (a b v : ℕ) : Option Bool :=
   let wa := kw ks a
   let wb := kw ks b
@@ -162,28 +159,19 @@ def pairSign (ks : List ℕ) (a b v : ℕ) : Option Bool :=
 /-- The free index pairs `a < b`, in lexicographic order. -/
 def freePairs : List (ℕ × ℕ) := [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
 
-/-- The initial signed triangles of the case (checker `base_signs`, in its order). -/
+/-- The initial signed triangles of the case. -/
 def baseSigns (ks : List ℕ) : List SFact :=
-  lexTriples.filterMap (fun t => (anchorSign ks t).map fun sg => (t, sg)) ++
+  (lexTriples 9).filterMap (fun t => (anchorSign ks t).map fun sg => (t, sg)) ++
   freePairs.flatMap fun p => (List.range 5).filterMap fun v =>
     (pairSign ks p.1 p.2 v).map fun sg => ((v, p.1 + 5, p.2 + 5), sg)
-
-/-- The signed triangle of the ordered triple `(a, b, c)` with orientation `sg`, stored on the
-sorted triple (flipped for an odd permutation). -/
-def orient (a b c : ℕ) (sg : Bool) : SFact :=
-  if a < b ∧ b < c then ((a, b, c), sg)
-  else if b < c ∧ c < a then ((b, c, a), sg)
-  else if c < a ∧ a < b then ((c, a, b), sg)
-  else if b < a ∧ a < c then ((b, a, c), !sg)
-  else if a < c ∧ c < b then ((a, c, b), !sg)
-  else ((c, b, a), !sg)
 
 /-- The three top-cap free points of the case (as point indices `5, …, 8`). -/
 def caps (ks : List ℕ) : List ℕ :=
   ((List.range 4).filter fun i => cat (kw ks i) = 2).map (· + 5)
 
-/-- The seeds (17) of a three-top-cap case with inner cap point `T = caps[i]` and outer points
-`R, U` (checker `top_three_seed`, before removing the triangles already in `baseSigns`). -/
+/-- The seeds of a three-top-cap case with inner cap point `T = caps[i]` and outer points `R, U`
+(before removing the triangles already in `baseSigns`): every anchor and every other free point
+lies on the positive side of `RU`, and `[DRT], [DUT] > 0 > [FRT], [FUT]`. -/
 def seedRaw (ks : List ℕ) (i : ℕ) : List SFact :=
   let T := (caps ks).getD i 0
   let RU := (caps ks).filter (· ≠ T)
@@ -193,19 +181,12 @@ def seedRaw (ks : List ℕ) (i : ℕ) : List SFact :=
   (((List.range 4).map (· + 5)).filter (fun w => w ≠ R ∧ w ≠ U)).map (fun w => orient R U w true) ++
   [orient 2 R T true, orient 3 R T false, orient 2 U T true, orient 3 U T false]
 
-/-- The seeds not already in the initial signs (checker `top_three_seed`). -/
+/-- The seeds not already in the initial signs. -/
 def seed (ks : List ℕ) (i : ℕ) : List SFact :=
   (seedRaw ks i).filter fun f => (lookup (baseSigns ks) f.1).isNone
 
-/-- The four three-top-cap cases (16). -/
+/-- The four three-top-cap cases. -/
 def topThreeCases : List (List ℕ) := [[3, 3, 3, 4], [3, 3, 3, 5], [3, 3, 3, 6], [3, 3, 3, 7]]
-
-/-- All the atoms of the case `ks` with the extra signed triangles `fs`: factors, quadratic
-costs, triangle costs (strengthened by the certified inside counts), cubic costs. -/
-def atoms (ks : List ℕ) (fs : List SFact) : List Expr :=
-  let tb := baseSigns ks ++ fs
-  factors ks ++ qcosts ks ++
-    tb.map (fun f => costAtom pt bnd f (insideList tb [5, 6, 7, 8] f).length) ++ cubics ks
 
 /-! ### The cover package -/
 
@@ -220,9 +201,17 @@ def branches (ks : List ℕ) : List SFact → Split → List (List SFact)
   | _, .tri a b c => if a < b ∧ b < c ∧ c < 9 then signBranches (a, b, c) else [[]]
   | _, .three => if ks ∈ topThreeCases then [seed ks 0, seed ks 1, seed ks 2] else [[]]
 
-/-- The cover package of the case `ks`. -/
-def spec (ks : List ℕ) : Spec SFact Split where
-  atoms := atoms ks
-  branches := branches ks
+/-- The triangle splits alone (the orientation of `abc`, negative first); the other labels are
+invalid. -/
+def triBranches : List SFact → Split → List (List SFact)
+  | _, .tri a b c => if a < b ∧ b < c ∧ c < 9 then signBranches (a, b, c) else [[]]
+  | _, .three => [[]]
+
+/-- The cover package of the case `ks`: its atoms with the extra signed triangles `fs` are the
+factors, the quadratic costs, the triangle costs of the table `baseSigns ks ++ fs` (strengthened by
+the certified inside counts among the free points) and the cubic costs. -/
+def spec (ks : List ℕ) : Spec SFact Split :=
+  tableSpec pt Package.bnd [5, 6, 7, 8] (factors ks ++ qcosts ks) (cubics ks) (baseSigns ks)
+    (branches ks)
 
 end Heilbronn.Nine.C1ZeroLower.Model

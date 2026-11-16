@@ -3,28 +3,26 @@ module
 public import Heilbronn.Nine.C1.TopCapConvexPair
 public import Heilbronn.Nine.Corners.OneCornerCompletion
 
-/-! # A top-cap point separates the two lower C1 rays (`docs/proof/nine/C1_TOP_CAP_RADIAL_SPLIT.md`)
+/-! # A top-cap point separates the two lower C1 rays
 
-Role: a component on the primary route: `docs/proof/nine/C1_TWO_LOWER_COMPLETION.md` Theorem 2, step 4
-(lines 258-259), and `docs/proof/nine/ONE_CORNER_COMPLETION.md` §4.
-
-Setting (lines 3-37): the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`;
+Setting (`Setting`): the C1 anchors with the weak conditions `0 < d ≤ h ≤ 1`, `0 < f ≤ c ≤ 1`;
 two actual points `L, M` strictly inside `OHC`; an actual point `X = (x, Y)` beyond `DF`, in the
 closed top cap `conv{D, F, (1,1)}`. The configuration is competitive; the proof uses only these
-eight points, so competitiveness is stated for `![O, C, D, F, H, L, M, X]` (`Setting`). Doubled
-areas are compared with `σ = 8/73 < 2A₀`; `K = 4 + 2√3`, `k = Kσ`, `ρ = 49/60 < k`. After a
-transposition, §§1–4 assume both lower points on the `C`-side of `OX` (`[ORX] > 0`).
+eight points, so competitiveness is stated for `![O, C, D, F, H, L, M, X]`. Doubled areas are
+compared with `σ = 8/73 < 2A₀`; `K = 4 + 2√3`, `k = Kσ`, `ρ = 49/60 < k`. After a
+transposition, the intermediate results assume both lower points on the `C`-side of `OX`
+(`[ORX] > 0`).
 
 Results:
-* `eq1_3`: the cap signs (1), both lower points in `OHC ∩ OCX ∩ OCF` (2), `hc, cY ≥ k`, `h, Y ≥ k`
-  (3);
-* `eq4`: `x < c`;
-* `eq6_7`: `W = cY + hx ≥ M(1 + σ/(1 - m))` (6), and only the middle pair-line case (separating
-  `O | C` and `H | X`) survives (7);
-* `claim_scalar_OF`: the scalar exclusion of §3 (middle case with `O, F` together), stated for
-  a seven-point configuration so that it also applies after the map `Ψ` of §4;
-* `claim_Psi`: the middle case with `F` on the `C`-side is impossible (via `Ψ`);
-* `theorem_main` (**Theorem**): the two lower points lie on opposite sides of `OX`.
+* `sameSide_cap_signs_and_bounds`: the signs of `X` against the anchor lines, both lower points in
+  `OHC ∩ OCX ∩ OCF`, `hc, cY ≥ k`, `h, Y ≥ k`;
+* `x_lt_c_of_sameSide`: `x < c`;
+* `lowerLine_separates_of_sameSide`: `W = cY + hx ≥ M(1 + σ/(1 - m))`, and only the middle pair-line case (separating
+  `O | C` and `H | X`) survives;
+* `pairLine_sep_OF_C_false`: the scalar exclusion of the middle case with `O, F` together, stated for
+  a seven-point configuration so that it also applies after the map `Ψ` of `psi_data`;
+* `middle_sameSide_CF_false`: the middle case with `F` on the `C`-side is impossible (via `Ψ`);
+* `theorem_main`: the two lower points lie on opposite sides of `OX`.
 -/
 
 @[expose] public section
@@ -156,12 +154,11 @@ theorem rs_low {h c f : ℝ} {X R : Point} (hh : 0 < h) (hc : 0 < c) (hf : 0 < f
     have : 0 < (R.1 - f * R.2) * X.1 := by rw [key]; linarith
     exact pos_of_mul_pos_left this hx0.le
 
-/-- **Claim** (`C1_TOP_CAP_RADIAL_SPLIT:eq1-3`). In the setting, with both lower points on the
-`C`-side of `OX`: `x > f`, `Y > d`, `[HFX] < 0`, `[CFX] < 0`, `[CDX] > 0`, and `X` is above `HC`
-(1); both lower points lie in `OHC ∩ OCX ∩ OCF` (2); `hc, cY ≥ k` and `h, Y ≥ k > ρ` (3), where
-`k = (4 + 2√3)·(8/73)`, `ρ = 49/60`. `docs/proof/nine/C1_TOP_CAP_RADIAL_SPLIT.md`, lines 39-72.
-Uses: CORNER_FAMILIES:TwoInteriorPointLemma. -/
-theorem eq1_3 {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
+/-- In the setting, with both lower points on the `C`-side of `OX`: `x > f`, `Y > d`,
+`[HFX] < 0`, `[CFX] < 0`, `[CDX] > 0`, and `X` is above `HC`; both lower points lie in
+`OHC ∩ OCX ∩ OCF`; `hc, cY ≥ k` and `h, Y ≥ k > ρ`, where `k = (4 + 2√3)·(8/73)`,
+`ρ = 49/60`. -/
+theorem sameSide_cap_signs_and_bounds {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
     (hLs : 0 < sarea ptO L X) (hMs : 0 < sarea ptO M X) :
     f < X.1 ∧ d < X.2 ∧ sarea (ptH h) (ptF f) X < 0 ∧ sarea (ptC c) (ptF f) X < 0 ∧
       0 < sarea (ptC c) (ptD d) X ∧ 0 < sarea (ptH h) (ptC c) X ∧
@@ -199,7 +196,7 @@ theorem eq1_3 {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
   · have := mul_le_mul_of_nonneg_right hc y0; linarith
 
 set_option linter.unusedVariables false in
-/-- (4) in scalar form: `x < c` (if `x ≥ c` then `c ≤ 1 - σ`, so `h, Y > 1 - σ`, and
+/-- `x < c` in scalar form (if `x ≥ c` then `c ≤ 1 - σ`, so `h, Y > 1 - σ`, and
 `|[HFX]| ≤ 1 - min(h, Y) < σ`). -/
 theorem x_lt_c {h c d f x Y : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh : h ≤ 1) (hf : 0 < f)
     (hfc : f ≤ c) (hc : c ≤ 1) (x0 : 0 ≤ x) (x1 : x ≤ 1) (y0 : 0 ≤ Y) (y1 : Y ≤ 1) (hfx : f < x)
@@ -229,18 +226,17 @@ theorem x_lt_c {h c d f x Y : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh : h ≤ 1) (
     have := mul_le_mul_of_nonneg_right x1 (show (0 : ℝ) ≤ 1 - Y by linarith)
     nlinarith
 
-/-- **Claim** (`C1_TOP_CAP_RADIAL_SPLIT:eq4`). In the setting, with both lower points on the
-`C`-side of `OX`: `x < c`. `docs/proof/nine/C1_TOP_CAP_RADIAL_SPLIT.md`, lines 74-99.
-Uses: C1_TOP_CAP_RADIAL_SPLIT:eq1-3. -/
-theorem eq4 {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
+/-- In the setting, with both lower points on the `C`-side of `OX`: `x < c`. -/
+theorem x_lt_c_of_sameSide {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
     (hLs : 0 < sarea ptO L X) (hMs : 0 < sarea ptO M X) :
     X.1 < c := by
-  obtain ⟨-, -, -, -, -, -, -, hk, hkY, -, -, -⟩ := eq1_3 hS hLs hMs
+  obtain ⟨-, -, -, -, -, -, -, hk, hkY, -, -, -⟩ := sameSide_cap_signs_and_bounds hS hLs hMs
   obtain ⟨hd1, hf1, hfx, hdy, k1, kCF, k2, k3, hHC, hhf, -⟩ := rs_cap hS
   obtain ⟨⟨hd, hdh, hh, hf, hfc, hc⟩, hL, hM, ⟨x0, x1, y0, y1⟩, hmin, hLl, hMl, hXc⟩ := hS
   exact x_lt_c hd hdh hh hf hfc hc x0 x1 y0 y1 hfx hk hkY k1 k2
 
-/-- (6) in scalar form, with `1 - min(a, b) > 0`. -/
+/-- The bound `W = cY + hx ≥ M(1 + σ/(1 - m))` in scalar form (`m = min(hc, cY)`,
+`M = max(hc, cY)`), with `1 - m > 0`. -/
 theorem six {h c f x Y : ℝ} (hh : 0 < h) (hh1 : h ≤ 1) (hc : 0 < c) (hc1 : c ≤ 1) (hf : 0 < f)
     (hfx : f < x) (x1 : x ≤ 1) (y0 : 0 ≤ Y) (y1 : Y ≤ 1) (hhf : 8 / 73 ≤ h * f)
     (k1 : 8 / 73 ≤ (1 - h) * x - f * (Y - h)) (kCF : 8 / 73 ≤ x - f * Y - c * (1 - Y)) :
@@ -290,7 +286,9 @@ theorem six {h c f x Y : ℝ} (hh : 0 < h) (hh1 : h ≤ 1) (hc : 0 < c) (hc1 : c
     have q3 := mul_le_mul_of_nonneg_right q2 q1
     nlinarith
 
-/-- The contradiction of §2: (6) and (7) are incompatible for `k ≤ a, b ≤ 1`. -/
+/-- The bound `W ≥ M(1 + σ/(1 - m))` and the pair-line inequality
+`4σW·ab ≤ (ab - σ(a + b))²` (with `ab > σ(a + b)`) are incompatible for `4/5 ≤ a, b ≤ 1`
+(`m = min(a, b)`, `M = max(a, b)`). -/
 theorem rs_scalar {a b W : ℝ} (ha : 4 / 5 ≤ a) (ha1 : a ≤ 1) (hb : 4 / 5 ≤ b) (hb1 : b ≤ 1)
     (hm : 0 < 1 - min a b) (h6 : max a b * (1 + 8 / 73 / (1 - min a b)) ≤ W)
     (h7 : 0 < a * b - 8 / 73 * (a + b) ∧ 4 * (8 / 73) * W * (a * b) ≤ (a * b - 8 / 73 * (a + b)) ^ 2) :
@@ -335,14 +333,16 @@ theorem rs_scalar {a b W : ℝ} (ha : 4 / 5 ≤ a) (ha1 : a ≤ 1) (hb : 4 / 5 �
     have e2 : b + a = a + b := add_comm b a
     rw [e1, e2]; exact hsq
 
-/-- Enlarging the bracket of the endpoint inequality to the bracket of (7). -/
+/-- Enlarging the bracket of an endpoint inequality to `ab - σ(a + b)`. -/
 theorem bracket_up {a b W u : ℝ} (hu : u ≤ a * b - 8 / 73 * (a + b))
     (h : 0 < u ∧ 4 * (8 / 73) * W * (a * b) ≤ u ^ 2) :
     0 < a * b - 8 / 73 * (a + b) ∧
       4 * (8 / 73) * W * (a * b) ≤ (a * b - 8 / 73 * (a + b)) ^ 2 :=
   ⟨by linarith [h.1], le_trans h.2 (pow_le_pow_left₀ h.1.le hu 2)⟩
 
-/-- The data of §2 for an ordered lower pair `P, Q` (both on the `C`-side of `OX`). -/
+/-- The pair-line data for an ordered lower pair `P, Q` (both on the `C`-side of `OX`): `OCXH` is
+a convex quadrilateral with central pair `P, Q`, positive overlap `J` and areas `a = hc`,
+`b = cY`, `W = cY + hx`, and its six points satisfy the area bound. -/
 theorem rs_data {h c d f : ℝ} {L M X P Q : Point} (hS : Setting h c d f L M X)
     (hLs : 0 < sarea ptO L X) (hMs : 0 < sarea ptO M X)
     (hPQ : (P = L ∧ Q = M) ∨ (P = M ∧ Q = L)) :
@@ -355,8 +355,8 @@ theorem rs_data {h c d f : ℝ} {L M X P Q : Point} (hS : Setting h c d f L M X)
       OneCornerCompletion.areaB ptO (ptC c) X (ptH h) = c * X.2 ∧
       OneCornerCompletion.areaW ptO (ptC c) X (ptH h) = c * X.2 + h * X.1 ∧
       0 < sarea (ptC c) (ptH h) P ∧ 0 < sarea X (ptH h) P ∧ 0 < sarea (ptC c) X P := by
-  obtain ⟨hfx, hdy, hHFX, hCFX, hCDX, hHC, tri, hk, hkY, hk1, hkY1, kgt⟩ := eq1_3 hS hLs hMs
-  have hxc := eq4 hS hLs hMs
+  obtain ⟨hfx, hdy, hHFX, hCFX, hCDX, hHC, tri, hk, hkY, hk1, hkY1, kgt⟩ := sameSide_cap_signs_and_bounds hS hLs hMs
+  have hxc := x_lt_c_of_sameSide hS hLs hMs
   obtain ⟨⟨hd, hdh, hh, hf, hfc, hc⟩, hL, hM, ⟨x0, x1, y0, y1⟩, hmin, hLl, hMl, hXc⟩ := hS
   have h0 : 0 < h := by linarith
   have c0 : 0 < c := by nlinarith
@@ -369,10 +369,10 @@ theorem rs_data {h c d f : ℝ} {L M X P Q : Point} (hS : Setting h c d f L M X)
     have hA : A₀ ≤ minTriangleArea (OneCornerCompletion.quadConfig ptO (ptC c) X (ptH h) P Q) ∧
         sarea P Q (ptH h) ≠ 0 ∧ sarea P Q X ≠ 0 := by
       rcases hPQ with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
-      · exact ⟨CornerFamilies.min_sub hmin _ ![0, 1, 7, 4, 5, 6] (by norm_num) (by decide)
+      · exact ⟨min_sub hmin _ ![0, 1, 7, 4, 5, 6] (by norm_num) (by decide)
           (by intro i; fin_cases i <;> rfl), ar_ne (by norm_num) (ar hmin 5 6 4),
           ar_ne (by norm_num) (ar hmin 5 6 7)⟩
-      · exact ⟨CornerFamilies.min_sub hmin _ ![0, 1, 7, 4, 6, 5] (by norm_num) (by decide)
+      · exact ⟨min_sub hmin _ ![0, 1, 7, 4, 6, 5] (by norm_num) (by decide)
           (by intro i; fin_cases i <;> rfl), ar_ne (by norm_num) (ar hmin 6 5 4),
           ar_ne (by norm_num) (ar hmin 6 5 7)⟩
     exact ⟨hA.2.1, hA.2.2, by linarith [σ_lt, hA.1]⟩
@@ -404,7 +404,8 @@ theorem rs_data {h c d f : ℝ} {L M X P Q : Point} (hS : Setting h c d f L M X)
     hPl.2.1, tP1, tP2⟩
 
 set_option linter.unusedVariables false in
-/-- (6) for the setting. -/
+/-- The bound `W = cY + hx ≥ M(1 + σ/(1 - m))` for the setting (`m = min(hc, cY)`,
+`M = max(hc, cY)`). -/
 theorem rs_six {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
     (hLs : 0 < sarea ptO L X) (hMs : 0 < sarea ptO M X) :
     0 < 1 - min (h * c) (c * X.2) ∧
@@ -421,15 +422,15 @@ theorem rs_six {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
   rw [e1] at k1; rw [e2] at kCF
   exact six h0 hh c0 hc hf hfx x1 y0 y1 hhf k1 kCF
 
-/-- The pair-line cases of §2 for an oriented pair with `[PQO] < 0 < [PQC]`: only the middle
-case survives. -/
+/-- The pair-line cases for an oriented lower pair with `[PQO] < 0 < [PQC]`: only the middle
+case (`H` and `X` separated) survives. -/
 theorem mid_core {h c d f : ℝ} {L M X P Q : Point} (hS : Setting h c d f L M X)
     (hLs : 0 < sarea ptO L X) (hMs : 0 < sarea ptO M X)
     (hPQ : (P = L ∧ Q = M) ∨ (P = M ∧ Q = L)) (hO : sarea P Q ptO < 0)
     (hC : 0 < sarea P Q (ptC c)) : sarea P Q (ptH h) < 0 ∧ 0 < sarea P Q X := by
   obtain ⟨neH, neX, hq, hcp, hmin6, hJ, ea, eb, eW, hCHP, tP1, tP2⟩ := rs_data hS hLs hMs hPQ
   obtain ⟨hm, h6⟩ := rs_six hS hLs hMs
-  obtain ⟨-, -, -, -, -, -, -, hk, hkY, hk1, hkY1, kgt⟩ := eq1_3 hS hLs hMs
+  obtain ⟨-, -, -, -, -, -, -, hk, hkY, hk1, hkY1, kgt⟩ := sameSide_cap_signs_and_bounds hS hLs hMs
   have hc1 := hS.anchors.2.2.2.2.2
   have hh1 := hS.anchors.2.2.1
   have y1 := hS.memX.2.2.2
@@ -456,7 +457,7 @@ theorem mid_core {h c d f : ℝ} {L M X P Q : Point} (hS : Setting h c d f L M X
     · exfalso
       have hiso : OneCornerCompletion.Isolates P Q (ptC c) ptO X (ptH h) :=
         ⟨mul_neg_of_pos_of_neg hC hO, mul_neg_of_pos_of_neg hC dX, mul_neg_of_pos_of_neg hC dH⟩
-      have := OneCornerCompletion.eq6_B _ _ _ _ P Q (8 / 73) (by norm_num) hq hcp hmin6 hJ hiso
+      have := OneCornerCompletion.discr_of_isolates_B _ _ _ _ P Q (8 / 73) (by norm_num) hq hcp hmin6 hJ hiso
       rw [ea, eb, eW] at this
       exact rs_scalar (by linarith) ha1 (by linarith) hb1 hm h6
         (bracket_up (by nlinarith) this)
@@ -470,19 +471,15 @@ theorem mid_core {h c d f : ℝ} {L M X P Q : Point} (hS : Setting h c d f L M X
       exact pos_of_mul_pos_right h2 hCHP.le
     have hiso : OneCornerCompletion.Isolates P Q ptO (ptC c) X (ptH h) :=
       ⟨mul_neg_of_neg_of_pos hO hC, mul_neg_of_neg_of_pos hO dX, mul_neg_of_neg_of_pos hO dH⟩
-    have := OneCornerCompletion.eq6 _ _ _ _ P Q (8 / 73) (by norm_num) hq hcp hmin6 hJ hiso
+    have := OneCornerCompletion.discr_of_isolates_A _ _ _ _ P Q (8 / 73) (by norm_num) hq hcp hmin6 hJ hiso
     rw [ea, eb, eW] at this
     exact rs_scalar (by linarith) ha1 (by linarith) hb1 hm h6 (bracket_up (by nlinarith) this)
 
-/-- **Claim** (`C1_TOP_CAP_RADIAL_SPLIT:eq6-7`). In the setting, with both lower points on the
-`C`-side of `OX`, put `a = hc`, `b = cY`, `W = cY + hx`, `m = min(a, b)`, `M = max(a, b)`. Then
-`W ≥ M(1 + σ/(1 - m))` (6); and the line `LM` separates `O` from `C` and `H` from `X` (the
-middle case): the same-side case and both separating endpoint cases give (7), contradicting (6).
-`docs/proof/nine/C1_TOP_CAP_RADIAL_SPLIT.md`, lines 101-184.
-Uses: C1_TOP_CAP_RADIAL_SPLIT:eq1-3, C1_TOP_CAP_RADIAL_SPLIT:eq4, ONE_CORNER_COMPLETION:claim-general-identities. -/
--- Note (line 113): only `a + b - W > 0` is checked for the canonical normalization; `W > a`,
--- `W > b` are also needed (true: `W - a = c(Y - h) + hx`, `W - b = hx`, and (6)).
-theorem eq6_7 {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
+/-- In the setting, with both lower points on the `C`-side of `OX`, put `a = hc`, `b = cY`,
+`W = cY + hx`, `m = min(a, b)`, `M = max(a, b)`. Then `W ≥ M(1 + σ/(1 - m))`; and the line `LM`
+separates `O` from `C` and `H` from `X` (the middle case): the same-side case and both
+separating endpoint cases give `4σW·ab ≤ (ab - σ(a + b))²`, contradicting the first bound. -/
+theorem lowerLine_separates_of_sameSide {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
     (hLs : 0 < sarea ptO L X) (hMs : 0 < sarea ptO M X) :
     max (h * c) (c * X.2) * (1 + 8 / 73 / (1 - min (h * c) (c * X.2))) ≤ c * X.2 + h * X.1 ∧
       OppSide L M ptO (ptC c) ∧ OppSide L M (ptH h) X := by
@@ -508,19 +505,19 @@ theorem eq6_7 {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
   · exfalso
     obtain ⟨neH, neX, hq, hcp, hmin6, hJ, ea, eb, eW, -, -, -⟩ :=
       rs_data hS hLs hMs (P := L) (Q := M) (Or.inl ⟨rfl, rfl⟩)
-    obtain ⟨-, -, -, -, -, -, -, hk, hkY, hk1, hkY1, kgt⟩ := eq1_3 hS hLs hMs
+    obtain ⟨-, -, -, -, -, -, -, hk, hkY, hk1, hkY1, kgt⟩ := sameSide_cap_signs_and_bounds hS hLs hMs
     have hc1 := hS.anchors.2.2.2.2.2
     have hh1 := hS.anchors.2.2.1
     have y1 := hS.memX.2.2.2
     have kgt' := kσ_gt'
-    have := OneCornerCompletion.eq9 _ _ _ _ L M (8 / 73) (by norm_num) hq hcp hmin6 hJ hss
+    have := OneCornerCompletion.discr_of_same_side _ _ _ _ L M (8 / 73) (by norm_num) hq hcp hmin6 hJ hss
     simp only at this
     rw [ea, eb, eW] at this
     exact rs_scalar (by linarith) (by nlinarith) (by linarith) (by nlinarith) hm h6
       ⟨this.2.2.1, this.2.2.2⟩
 
-/-- The pair inequality (9) multiplied by `h`: `E(h, u, y) = (h - σ - (1 + u)y)(y - σ) - σh`, with
-`u = hf`. -/
+/-- The pair inequality for the upper lower point `P = (p, y)`, multiplied by `h`:
+`E(h, u, y) = (h - σ - (1 + u)y)(y - σ) - σh`, with `u = hf`. -/
 def rsE (h u y : ℝ) : ℝ := (h - 8 / 73 - (1 + u) * y) * (y - 8 / 73) - 8 / 73 * h
 
 theorem rsE_u {h u u0 y : ℝ} (hu : u0 ≤ u) (hy : 8 / 73 ≤ y) : rsE h u y ≤ rsE h u0 y := by
@@ -569,7 +566,7 @@ theorem rsE_neg4 {y : ℝ} (hy : y < 11 / 32) : rsE (23 / 25) (8 / 73) y < 0 := 
     ring
   rw [e]; nlinarith [sq_nonneg (y - 11 / 32)]
 
-/-- The coarse bounds (11) from `E(h, hf, y) ≥ 0`. -/
+/-- The coarse bounds `71/80 < h < 23/25`, `f < 1/5` from `E(h, hf, y) ≥ 0`. -/
 theorem rs_11 {h f y x Y : ℝ} (hh0 : 0 < h) (hh1 : h ≤ 1) (hf : 0 < f) (hhf : 8 / 73 ≤ h * f)
     (hy : 8 / 73 ≤ y) (hE : 0 ≤ rsE h (h * f) y) (x1 : x ≤ 1) (hYρ : 49 / 60 ≤ Y)
     (hcap : 8 / 73 ≤ (1 - h) * x - f * (Y - h)) :
@@ -597,7 +594,7 @@ theorem rs_11 {h f y x Y : ℝ} (hh0 : 0 < h) (hh1 : h ≤ 1) (hf : 0 < f) (hhf 
   have k3 := rsE_neg3 y
   nlinarith
 
-/-- (13): the upper lower point has height below `11/32`. -/
+/-- The upper lower point has height below `11/32`. -/
 theorem rs_13 {h f y x Y : ℝ} (h71 : 71 / 80 < h) (h23 : h < 23 / 25) (hf : 0 < f)
     (hf5 : f < 1 / 5) (hhf : 8 / 73 ≤ h * f) (x0 : 0 ≤ x) (x1 : x ≤ 1) (hYρ : 49 / 60 ≤ Y)
     (hcap : 8 / 73 ≤ (1 - h) * x - f * (Y - h))
@@ -661,7 +658,9 @@ theorem ar4 {n : ℕ} {P : Fin n → Point} (hP : 4 / 73 ≤ minTriangleArea P) 
   linarith
 
 set_option linter.unusedVariables false in
-/-- The data of §3. -/
+/-- The data for `pairLine_sep_OF_C_false`: `E(h, hf, y) ≥ 0` for the height `y` of `P`, `y ≥ σ`, the cap
+bound `(1 - h)x - f(Y - h) ≥ σ`, `hf ≥ σ`, `Y(h - y - σ) ≥ hxy + hσ`, and the coordinate bounds
+of `X`. -/
 theorem scalOF_data {h c f : ℝ} {X P Q : Point}
     (hf : 0 < f) (hfc : f < c) (hc : c ≤ 1) (hX : X ∈ unitSquare) (hx0 : 0 < X.1)
     (hxc : X.1 < c) (hHFX : sarea (ptH h) (ptF f) X < 0)
@@ -729,7 +728,7 @@ theorem scalOF_data {h c f : ℝ} {X P Q : Point}
     have e : 8 / 73 ≤ |sarea ptO (ptF f) (ptH h)| := ar4 hmin 0 2 3
     have q : sarea ptO (ptF f) (ptH h) = h * f := by simp only [sarea, ptO, ptF, ptH]; ring
     rw [q] at e; exact ar_pos e (mul_pos h0 hf).le
-  -- (12)
+  -- `Y(h - y - σ) ≥ hxy + hσ`, from `[OPX] ≥ σ`
   have hOPX : 8 / 73 ≤ P.1 * X.2 - P.2 * X.1 := by
     have e : 8 / 73 ≤ |sarea ptO P X| := ar4 hmin 0 5 4
     have q : sarea ptO P X = P.1 * X.2 - P.2 * X.1 := by simp only [sarea, ptO]; ring
@@ -741,17 +740,14 @@ theorem scalOF_data {h c f : ℝ} {X P Q : Point}
     linarith
   exact ⟨h0, hE, hys, hcap, hhf, h12, x0, x1, by linarith⟩
 
-/-- **Claim** (`C1_TOP_CAP_RADIAL_SPLIT:claim-scalar-OF`, made-up id; the "slightly more general
-statement" of §3). Let `O = (0,0)`, `C = (c,0)`, `H = (0,h)`, `F = (f,1)`, `X = (x,Y)` with
-`0 < f < c ≤ 1`, `0 < x < c`, `X` in the square and `[HFX] < 0`; let `P, Q` be strictly inside both
-`OHC` and `OCX`, with `k ≤ h ≤ 1` and `Y ≥ k`, `k = (4 + 2√3)σ`; let every doubled area of these seven points be at
-least `σ = 8/73`. Then the directed line `PQ` cannot put `O, F` on its negative side and `C` on
-its positive side. `docs/proof/nine/C1_TOP_CAP_RADIAL_SPLIT.md`, lines 186-362 (identity (8), the bound (9),
-the coarse bounds (11), `y < 11/32` (13), and the final `-50377/125508608`). -/
--- Implicit in the manuscript: the hypotheses of §3 are the ones re-verified in §4 (lines 385-411):
--- the coordinate bounds, the two containments, `|[OHF]| ≥ σ`, `[HFX] ≤ -σ`, `h, Y ≥ k`; the
--- competitive bound is taken for the seven points `O, C, F, H, X, P, Q` (preserved by `Ψ`).
-theorem claim_scalar_OF {h c f : ℝ} {X P Q : Point}
+/-- Let `O = (0,0)`, `C = (c,0)`, `H = (0,h)`, `F = (f,1)`, `X = (x,Y)` with `0 < f < c ≤ 1`,
+`0 < x < c`, `X` in the square and `[HFX] < 0`; let `P, Q` be strictly inside both `OHC` and
+`OCX`, with `k ≤ h ≤ 1` and `Y ≥ k`, `k = (4 + 2√3)σ`; let every doubled area of these seven
+points be at least `σ = 8/73`. Then the directed line `PQ` cannot put `O, F` on its negative side
+and `C` on its positive side. The hypotheses are exactly those preserved by the map `Ψ` of
+`psi_data`. The proof combines `E(h, hf, y) ≥ 0`, the coarse bounds `rs_11`, `y < 11/32`
+(`rs_13`) and `E(23/25, σ, y) < 0` for `y < 11/32`. -/
+theorem pairLine_sep_OF_C_false {h c f : ℝ} {X P Q : Point}
     (hf : 0 < f) (hfc : f < c) (hc : c ≤ 1) (hX : X ∈ unitSquare) (hx0 : 0 < X.1)
     (hxc : X.1 < c) (hHFX : sarea (ptH h) (ptF f) X < 0)
     (hh : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ h) (hh1 : h ≤ 1) (hY : (4 + 2 * Real.sqrt 3) * (8 / 73) ≤ X.2)
@@ -787,8 +783,8 @@ theorem rs_OF {h c d f : ℝ} {L M X P Q : Point} (hS : Setting h c d f L M X)
     (hLs : 0 < sarea ptO L X) (hMs : 0 < sarea ptO M X)
     (hPQ : (P = L ∧ Q = M) ∨ (P = M ∧ Q = L)) (hO : sarea P Q ptO < 0)
     (hF : sarea P Q (ptF f) < 0) (hC : 0 < sarea P Q (ptC c)) : False := by
-  obtain ⟨hfx, hdy, hHFX, hCFX, hCDX, hHC, tri, hk, hkY, hk1, hkY1, kgt⟩ := eq1_3 hS hLs hMs
-  have hxc := eq4 hS hLs hMs
+  obtain ⟨hfx, hdy, hHFX, hCFX, hCDX, hHC, tri, hk, hkY, hk1, hkY1, kgt⟩ := sameSide_cap_signs_and_bounds hS hLs hMs
+  have hxc := x_lt_c_of_sameSide hS hLs hMs
   have hPm : P = L ∨ P = M := by rcases hPQ with ⟨h1, -⟩ | ⟨h1, -⟩ <;> tauto
   have hQm : Q = L ∨ Q = M := by rcases hPQ with ⟨-, h1⟩ | ⟨-, h1⟩ <;> tauto
   obtain ⟨hPl, hPX, -⟩ := tri P hPm
@@ -796,17 +792,17 @@ theorem rs_OF {h c d f : ℝ} {L M X P Q : Point} (hS : Setting h c d f L M X)
   have hmin7 : 4 / 73 ≤ minTriangleArea ![ptO, ptC c, ptF f, ptH h, X, P, Q] := by
     have hA : A₀ ≤ minTriangleArea ![ptO, ptC c, ptF f, ptH h, X, P, Q] := by
       rcases hPQ with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
-      · exact CornerFamilies.min_sub hS.competitive _ ![0, 1, 3, 4, 7, 5, 6] (by norm_num)
+      · exact min_sub hS.competitive _ ![0, 1, 3, 4, 7, 5, 6] (by norm_num)
           (by decide) (by intro i; fin_cases i <;> rfl)
-      · exact CornerFamilies.min_sub hS.competitive _ ![0, 1, 3, 4, 7, 6, 5] (by norm_num)
+      · exact min_sub hS.competitive _ ![0, 1, 3, 4, 7, 6, 5] (by norm_num)
           (by decide) (by intro i; fin_cases i <;> rfl)
     linarith [A₀_bounds.2.1]
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := hS.anchors
-  exact claim_scalar_OF hf (by linarith) hc hS.memX (by linarith) hxc hHFX hk1 hh hkY1 hPl hPX
+  exact pairLine_sep_OF_C_false hf (by linarith) hc hS.memX (by linarith) hxc hHFX hk1 hh hkY1 hPl hPX
     hQl hQX hmin7 hO hF hC
 
-/-- The data of §4: the image of the setting under `Ψ` satisfies the hypotheses of
-`claim_scalar_OF`. -/
+/-- The image of the setting under `Ψ(u, v) = (c - u - ((c - x)/Y) v, v)` satisfies the
+hypotheses of `pairLine_sep_OF_C_false`. -/
 theorem psi_data {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
     (hLs : 0 < sarea ptO L X) (hMs : 0 < sarea ptO M X) :
     ∃ f' x' : ℝ, ∃ L' M' : Point, 0 < f' ∧ f' < c ∧ c ≤ 1 ∧ ((x', h) : Point) ∈ unitSquare ∧
@@ -818,8 +814,8 @@ theorem psi_data {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
       4 / 73 ≤ minTriangleArea ![ptO, ptC c, ptF f', ptH X.2, (x', h), M', L'] ∧
       sarea L' M' ptO = -sarea L M (ptC c) ∧ sarea L' M' (ptF f') = -sarea L M (ptF f) ∧
       sarea L' M' (ptC c) = -sarea L M ptO := by
-  obtain ⟨hfx, hdy, hHFX, hCFX, hCDX, hHC, tri, hk, hkY, hk1, hkY1, kgt⟩ := eq1_3 hS hLs hMs
-  have hxc := eq4 hS hLs hMs
+  obtain ⟨hfx, hdy, hHFX, hCFX, hCDX, hHC, tri, hk, hkY, hk1, hkY1, kgt⟩ := sameSide_cap_signs_and_bounds hS hLs hMs
+  have hxc := x_lt_c_of_sameSide hS hLs hMs
   obtain ⟨hd1, hf1, -, -, k1, kCF, k2, k3, -, hhf, -⟩ := rs_cap hS
   obtain ⟨⟨hd, hdh, hh, hf, hfc, hc⟩, hL, hM, ⟨x0, x1, y0, y1⟩, hmin, hLl, hMl, hXc⟩ := hS
   have hY0 : 0 < X.2 := by nlinarith
@@ -876,9 +872,9 @@ theorem psi_data {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
     intro P Q hPQ
     have hA : A₀ ≤ minTriangleArea ![ptC c, ptO, ptF f, X, ptH h, P, Q] := by
       rcases hPQ with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
-      · exact CornerFamilies.min_sub hmin _ ![1, 0, 3, 7, 4, 5, 6] (by norm_num) (by decide)
+      · exact min_sub hmin _ ![1, 0, 3, 7, 4, 5, 6] (by norm_num) (by decide)
           (by intro i; fin_cases i <;> rfl)
-      · exact CornerFamilies.min_sub hmin _ ![1, 0, 3, 7, 4, 6, 5] (by norm_num) (by decide)
+      · exact min_sub hmin _ ![1, 0, 3, 7, 4, 6, 5] (by norm_num) (by decide)
           (by intro i; fin_cases i <;> rfl)
     have e : ![ptO, ptC c, ptF f', ptH X.2, (x', h), Ψ P, Ψ Q] =
         Ψ ∘ ![ptC c, ptO, ptF f, X, ptH h, P, Q] := by
@@ -903,15 +899,11 @@ theorem psi_data {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
   · rw [← eC, sg]
 
 set_option linter.unusedVariables false in
-/-- **Claim** (`C1_TOP_CAP_RADIAL_SPLIT:claim-Psi`, made-up id). In the setting, with both lower
-points on the `C`-side of `OX`, the middle case in which `F` is on the `C`-side of the pair line
-(`O` alone on the other side among `O, C, F`) is impossible: the affine map
-`Ψ(u, v) = (c - u - ((c - x)/Y) v, v)` of determinant `-1` sends `C, O, X, F, H` to
-`O', C', H', F', X'` satisfying the hypotheses of `claim_scalar_OF`.
-`docs/proof/nine/C1_TOP_CAP_RADIAL_SPLIT.md`, lines 364-411.
-Uses: C1_TOP_CAP_RADIAL_SPLIT:claim-scalar-OF, C1_TOP_CAP_RADIAL_SPLIT:eq1-3,
-C1_TOP_CAP_RADIAL_SPLIT:eq4. -/
-theorem claim_Psi {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
+/-- In the setting, with both lower points on the `C`-side of `OX`, the middle case in which `F`
+is on the `C`-side of the pair line (`O` alone on the other side among `O, C, F`) is impossible:
+the affine map `Ψ(u, v) = (c - u - ((c - x)/Y) v, v)` of determinant `-1` sends `C, O, X, F, H`
+to `O', C', H', F', X'` satisfying the hypotheses of `pairLine_sep_OF_C_false`. -/
+theorem middle_sameSide_CF_false {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
     (hLs : 0 < sarea ptO L X) (hMs : 0 < sarea ptO M X)
     (hOC : OppSide L M ptO (ptC c)) (hHX : OppSide L M (ptH h) X)
     (hCF : SameSide L M (ptC c) (ptF f)) : False := by
@@ -925,7 +917,7 @@ theorem claim_Psi {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
       by_contra hn; push Not at hn; nlinarith
     have hOp : 0 < sarea L M ptO := by
       by_contra hn; push Not at hn; nlinarith
-    refine claim_scalar_OF (X := (x', h)) (P := M') (Q := L') hf'0 hf'c hc hX' hx'0 hx'c hHFX'
+    refine pairLine_sep_OF_C_false (X := (x', h)) (P := M') (Q := L') hf'0 hf'c hc hX' hx'0 hx'c hHFX'
       hkY1 y1 hk1 iM1 iM2 iL1 iL2 m2 ?_ ?_ ?_
     · rw [sarea_swap₁₂, sO]; linarith
     · rw [sarea_swap₁₂, sF]; linarith
@@ -934,24 +926,21 @@ theorem claim_Psi {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X)
       by_contra hn; push Not at hn; nlinarith
     have hOn : sarea L M ptO < 0 := by
       by_contra hn; push Not at hn; nlinarith
-    refine claim_scalar_OF (X := (x', h)) (P := L') (Q := M') hf'0 hf'c hc hX' hx'0 hx'c hHFX'
+    refine pairLine_sep_OF_C_false (X := (x', h)) (P := L') (Q := M') hf'0 hf'c hc hX' hx'0 hx'c hHFX'
       hkY1 y1 hk1 iL1 iL2 iM1 iM2 m1 ?_ ?_ ?_
     · rw [sO]; linarith
     · rw [sF]; linarith
     · rw [sC]; linarith
 
-/-- **Theorem** (`C1_TOP_CAP_RADIAL_SPLIT:Theorem`). If the C1 anchors (weak conditions), two
-points `L, M` strictly inside `OHC` and a point `X` of the closed top cap `conv{D, F, (1,1)}`
-form a configuration of least area at least `A₀`, then `L, M` lie on opposite sides of `OX`.
-`docs/proof/nine/C1_TOP_CAP_RADIAL_SPLIT.md`, lines 29-33 and 413-419.
-Uses: C1_TOP_CAP_RADIAL_SPLIT:eq1-3, C1_TOP_CAP_RADIAL_SPLIT:eq4, C1_TOP_CAP_RADIAL_SPLIT:eq6-7,
-C1_TOP_CAP_RADIAL_SPLIT:claim-scalar-OF, C1_TOP_CAP_RADIAL_SPLIT:claim-Psi. -/
+/-- If the C1 anchors (weak conditions), two points `L, M` strictly inside `OHC` and a point `X`
+of the closed top cap `conv{D, F, (1,1)}` form a configuration of least area at least `A₀`, then
+`L, M` lie on opposite sides of `OX`. -/
 theorem theorem_main {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X) :
     OppSide ptO X L M := by
   have core : ∀ {h c d f : ℝ} {L M X : Point}, Setting h c d f L M X → 0 < sarea ptO L X →
       0 < sarea ptO M X → False := by
     intro h c d f L M X hS hLs hMs
-    obtain ⟨-, hOC, hHX⟩ := eq6_7 hS hLs hMs
+    obtain ⟨-, hOC, hHX⟩ := lowerLine_separates_of_sameSide hS hLs hMs
     unfold OppSide at hOC
     have hF0 : sarea L M (ptF f) ≠ 0 := ar_ne (by norm_num) (ar hS.competitive 5 6 3)
     have hO0 : sarea L M ptO ≠ 0 := by intro h0; rw [h0, zero_mul] at hOC; exact lt_irrefl _ hOC
@@ -959,10 +948,10 @@ theorem theorem_main {h c d f : ℝ} {L M X : Point} (hS : Setting h c d f L M X
     · have hC : 0 < sarea L M (ptC c) := by by_contra hn; push Not at hn; nlinarith
       rcases lt_or_gt_of_ne hF0 with hF | hF
       · exact rs_OF hS hLs hMs (Or.inl ⟨rfl, rfl⟩) hO hF hC
-      · exact claim_Psi hS hLs hMs hOC hHX (mul_pos hC hF)
+      · exact middle_sameSide_CF_false hS hLs hMs hOC hHX (mul_pos hC hF)
     · have hC : sarea L M (ptC c) < 0 := by by_contra hn; push Not at hn; nlinarith
       rcases lt_or_gt_of_ne hF0 with hF | hF
-      · exact claim_Psi hS hLs hMs hOC hHX (mul_pos_of_neg_of_neg hC hF)
+      · exact middle_sameSide_CF_false hS hLs hMs hOC hHX (mul_pos_of_neg_of_neg hC hF)
       · refine rs_OF hS hLs hMs (P := M) (Q := L) (Or.inr ⟨rfl, rfl⟩) ?_ ?_ ?_ <;>
           rw [sarea_swap₁₂] <;> linarith
   unfold OppSide

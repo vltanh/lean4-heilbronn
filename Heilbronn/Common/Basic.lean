@@ -13,7 +13,8 @@ The basic tools shared by every part of the proof:
 * `minTriangleArea`: it is at most the area of every triangle of distinct indices, at least `t`
   exactly when every such triangle has area at least `t`, attained, invariant under relabelling,
   and continuous;
-* the symmetries of the square keep the square and every triangle area;
+* the symmetries of the square keep the square, the open square (`InOpenSquare`) and every
+  triangle area;
 * a configuration maximizing the least triangle area exists (`exists_maximizer`).
 -/
 
@@ -41,6 +42,13 @@ theorem sarea_swap₂₃ (p q r : Point) : sarea p r q = -sarea p q r := by
 
 theorem sarea_swap₁₃ (p q r : Point) : sarea r q p = -sarea p q r := by
   unfold sarea; ring
+
+/-- A triangle with a repeated vertex has signed area zero. -/
+theorem sarea_self₁₂ (p r : Point) : sarea p p r = 0 := by unfold sarea; ring
+
+theorem sarea_self₁₃ (p q : Point) : sarea p q p = 0 := by unfold sarea; ring
+
+theorem sarea_self₂₃ (p q : Point) : sarea p q q = 0 := by unfold sarea; ring
 
 theorem triangleArea_nonneg (p q r : Point) : 0 ≤ triangleArea p q r := by
   rw [triangleArea_eq]; positivity
@@ -252,5 +260,20 @@ theorem minTriangleArea_comp {n : ℕ} (g : SquareSymmetry) (P : Fin n → Point
   minTriangleArea_comp_of_area P g.apply g.triangleArea_apply
 
 end SquareSymmetry
+
+/-- `X` lies in the open unit square `(0, 1)²`, off its boundary. -/
+def InOpenSquare (X : Point) : Prop :=
+  0 < X.1 ∧ X.1 < 1 ∧ 0 < X.2 ∧ X.2 < 1
+
+theorem InOpenSquare.mem {X : Point} (h : InOpenSquare X) : X ∈ unitSquare :=
+  ⟨h.1.le, h.2.1.le, h.2.2.1.le, h.2.2.2.le⟩
+
+/-- The symmetries of the square keep the open square. -/
+theorem InOpenSquare.apply {X : Point} (g : SquareSymmetry) (h : InOpenSquare X) :
+    InOpenSquare (g.apply X) := by
+  obtain ⟨h1, h2, h3, h4⟩ := h
+  rcases g with ⟨_ | _, _ | _, _ | _⟩ <;>
+    simp only [SquareSymmetry.apply, InOpenSquare, Bool.false_eq_true, ↓reduceIte] <;>
+    refine ⟨?_, ?_, ?_, ?_⟩ <;> linarith
 
 end Heilbronn

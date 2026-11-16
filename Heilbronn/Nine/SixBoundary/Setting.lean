@@ -4,8 +4,8 @@ public import Heilbronn.Nine.Setup.Families
 
 /-! # The six-boundary setting of family N
 
-Shared definitions for the six-boundary manuscripts `docs/proof/nine/SIX_BOUNDARY_*.md` (Section 4 of
-`docs/proof/nine/UNRESTRICTED.md`). The configuration is `nConfig a h b c d f X Y Z`, whose six anchors are
+Shared definitions for the six-boundary cases. The configuration is `nConfig a h b c d f X Y Z`,
+whose six anchors are
 
 `A = (0,a), H = (0,h), B = (b,0), C = (c,0), D = (1,d), F = (f,1)`,
 `0 < a < h < 1, 0 < b < c < 1, a ≤ d ≤ h, b ≤ f ≤ c` (`NAnchors a h b c d f`),
@@ -37,18 +37,16 @@ one free point (capacity one). `anchorPts`: the six anchors in the order of `nCo
 
 `(x, y) ↦ (y, x)` with the relabelling `(A, H, B, C, D, F) ↦ (B, C, A, H, F, D)` maps the
 setting with parameters `(a, h, b, c, d, f)` to the one with `(b, c, a, h, f, d)`, keeps all
-areas, and exchanges `L` and `R` (`claim_transposition`, `docs/proof/nine/SIX_BOUNDARY_HULL.md`,
-lines 127-135).
+areas, and exchanges `L` and `R` (`transpose_invariant`).
 
 ## Radial words
 
 For a strictly convex polygon `V₀, …, V_{n-1}` (counterclockwise) and a point `R` strictly
 inside it, the radial word `r(R)` is defined by `[V_i V_{i+j} R] > 0 ⇔ j ≤ r_i`
-(`docs/proof/nine/SIX_BOUNDARY_SINGLE_SIDE.md` (14)); it satisfies the complement relation (15)
-(`claim_radial_word`), and two interior points with different entries at `V_i` have
-`sgn [V_i P Q] = sgn (r_i(Q) - r_i(P))` (`claim_pair_line_sign`, (17)). These are used by every
-six-boundary certificate cover (single side, two side upper, opposite cap, single top, side
-opposite, two top).
+(`HasRadialWord`); it satisfies the complement relation `IsRadialWord` (`exists_radialWord`), and
+two interior points with different entries at `V_i` have `sgn [V_i P Q] = sgn (r_i(Q) - r_i(P))`
+(`sarea_sign_of_radialWord`). These are used by every six-boundary certificate cover (single side,
+two side upper, opposite cap, single top, side opposite, two top).
 -/
 
 @[expose] public section
@@ -139,10 +137,6 @@ def InSectorFHJ (h c d f : ℝ) (X : Point) : Prop :=
   InTriangle X (ptH h) (ptD d) (ptF f) ∧ InTriangle X (ptH h) (ptC c) (ptF f)
 
 /-! ### Boundary contacts -/
-
-/-- `X` lies in the open unit square, so it is not a boundary contact. -/
-def InOpenSquare (X : Point) : Prop :=
-  0 < X.1 ∧ X.1 < 1 ∧ 0 < X.2 ∧ X.2 < 1
 
 /-- The configuration `nConfig a h b c d f X Y Z` has exactly six boundary contacts (its six
 anchors): no free point lies on the boundary of the square. -/
@@ -277,13 +271,12 @@ theorem minTriangleArea_transpose (a h b c d f : ℝ) (X Y Z : Point) :
   rw [nConfig_transpose, minTriangleArea_comp_of_area _ _ triangleArea_transpose,
     minTriangleArea_comp_perm]
 
-/-- **Claim** (`SIX_BOUNDARY_HULL:claim-transposition`). The transposition `(x,y) ↦ (y,x)` with
-the relabelling `(A, H, B, C, D, F) ↦ (B, C, A, H, F, D)` preserves the N normalization, sending
-the parameters `(a, h, b, c, d, f)` to `(b, c, a, h, f, d)`; it keeps the square, the least area
-and optimality, keeps exactly six contacts, and maps the regions as follows: `R ↔ L`, `T ↔ T`,
-`(0,0)AB ↔ (0,0)BA`, the hexagon, `HABC`, `HCDF` and `T₀` to their transposed copies.
-`docs/proof/nine/SIX_BOUNDARY_HULL.md`, lines 127-135. -/
-theorem claim_transposition (a h b c d f : ℝ) (X Y Z : Point) :
+/-- The transposition `(x,y) ↦ (y,x)` with the relabelling `(A, H, B, C, D, F) ↦ (B, C, A, H, F, D)`
+preserves the N normalization, sending the parameters `(a, h, b, c, d, f)` to
+`(b, c, a, h, f, d)`; it keeps the square, the least area and optimality, keeps exactly six
+contacts, and maps the regions as follows: `R ↔ L`, `T ↔ T`, `(0,0)AB ↔ (0,0)BA`, the hexagon,
+`HABC`, `HCDF` and `T₀` to their transposed copies. -/
+theorem transpose_invariant (a h b c d f : ℝ) (X Y Z : Point) :
     (NAnchors a h b c d f ↔ NAnchors b c a h f d) ∧
     (X ∈ unitSquare ↔ transpose X ∈ unitSquare) ∧
     minTriangleArea (nConfig b c a h f d (transpose X) (transpose Y) (transpose Z)) =
@@ -316,25 +309,18 @@ theorem claim_transposition (a h b c d f : ℝ) (X Y Z : Point) :
 def cyc {n : ℕ} (i : Fin n) (j : ℕ) : Fin n :=
   ⟨(i.val + j) % n, Nat.mod_lt _ i.pos⟩
 
-/-- `V₀, …, V_{n-1}` are the vertices of a strictly convex polygon in counterclockwise order:
-every triple in increasing index order is positively oriented. -/
-def IsConvexCCW {n : ℕ} (V : Fin n → Point) : Prop :=
-  ∀ i j k : Fin n, i < j → j < k → 0 < sarea (V i) (V j) (V k)
-
 /-- `R` lies strictly inside the counterclockwise polygon `V`: strictly on the inner side of
 every edge `V_i V_{i+1}`. -/
 def InPolygon {n : ℕ} (V : Fin n → Point) (R : Point) : Prop :=
   ∀ i : Fin n, 0 < sarea (V i) (V (cyc i 1)) R
 
-/-- `R` has radial word `r` with respect to the polygon `V`
-(`docs/proof/nine/SIX_BOUNDARY_SINGLE_SIDE.md` (14)): for every vertex `V_i` and `1 ≤ j ≤ n-1`,
-`[V_i V_{i+j} R] > 0` exactly when `j ≤ r_i`. -/
+/-- `R` has radial word `r` with respect to the polygon `V`: for every vertex `V_i` and
+`1 ≤ j ≤ n-1`, `[V_i V_{i+j} R] > 0` exactly when `j ≤ r_i`. -/
 def HasRadialWord {n : ℕ} (V : Fin n → Point) (R : Point) (r : Fin n → ℕ) : Prop :=
   ∀ i : Fin n, ∀ j : ℕ, 1 ≤ j → j < n → (0 < sarea (V i) (V (cyc i j)) R ↔ j ≤ r i)
 
-/-- The complement relation (`docs/proof/nine/SIX_BOUNDARY_SINGLE_SIDE.md` (15)) of a word `r` on an
-`n`-gon: `j ≤ r_i ⇔ n - j > r_{i+j}` for every `i` and `1 ≤ j ≤ n-1`, together with the range
-`1 ≤ r_i ≤ n - 2`. -/
+/-- The complement relation of a word `r` on an `n`-gon: `j ≤ r_i ⇔ n - j > r_{i+j}` for every
+`i` and `1 ≤ j ≤ n-1`, together with the range `1 ≤ r_i ≤ n - 2`. -/
 def IsRadialWord {n : ℕ} (r : Fin n → ℕ) : Prop :=
   (∀ i : Fin n, 1 ≤ r i ∧ r i + 2 ≤ n) ∧
     ∀ i j : Fin n, 0 < j.val → (j.val ≤ r i ↔ r (cyc i j.val) + j.val < n)
@@ -343,8 +329,8 @@ instance {n : ℕ} (r : Fin n → ℕ) : Decidable (IsRadialWord r) := by
   unfold IsRadialWord; infer_instance
 
 /-- The finite set of words `r ∈ {0, …, n-1}ⁿ` satisfying the range and complement relations,
-the set enumerated by the certificate covers (for example the 57 heptagon words of
-`docs/proof/nine/SIX_BOUNDARY_SINGLE_SIDE.md`, Section 3). -/
+the set enumerated by the certificate covers (for example the 57 heptagon words of the
+single-side case). -/
 def radialWords (n : ℕ) : Finset (Fin n → Fin n) :=
   Finset.univ.filter fun r => IsRadialWord fun i => (r i : ℕ)
 
@@ -352,7 +338,7 @@ theorem cyc_val {n : ℕ} (i : Fin n) (j : ℕ) : (cyc i j).val = (i.val + j) % 
 
 /-- Three vertices of a convex counterclockwise polygon in cyclic order from `V i` are
 positively oriented. -/
-theorem convex_cyc {n : ℕ} {V : Fin n → Point} (hV : IsConvexCCW V) (i : Fin n) {p q : ℕ}
+theorem convex_cyc {n : ℕ} {V : Fin n → Point} (hV : IsConvexPolygon V) (i : Fin n) {p q : ℕ}
     (hp : 0 < p) (hpq : p < q) (hq : q < n) :
     0 < sarea (V i) (V (cyc i p)) (V (cyc i q)) := by
   have hi := i.isLt
@@ -412,7 +398,7 @@ theorem neg_pred {n : ℕ} {V : Fin n → Point} {R : Point} (hR : InPolygon V R
   rw [sarea_cycle]; exact this
 
 /-- **Prefix property.** If `[V_i V_{i+j} R] > 0` then `[V_i V_{i+j'} R] > 0` for `1 ≤ j' ≤ j`. -/
-theorem radial_prefix {n : ℕ} {V : Fin n → Point} {R : Point} (hV : IsConvexCCW V)
+theorem radial_prefix {n : ℕ} {V : Fin n → Point} {R : Point} (hV : IsConvexPolygon V)
     (hR : InPolygon V R) (i : Fin n) {j j' : ℕ} (hj' : 1 ≤ j') (hjj : j' ≤ j) (hj : j < n)
     (hpos : 0 < sarea (V i) (V (cyc i j)) R) : 0 < sarea (V i) (V (cyc i j')) R := by
   rcases eq_or_lt_of_le hjj with rfl | hlt
@@ -432,14 +418,13 @@ theorem radial_prefix {n : ℕ} {V : Fin n → Point} {R : Point} (hV : IsConvex
     have := sarea_swap₂₃ (V i) R (V (cyc i (n - 1)))
     linarith
 
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_SIDE:claim-radial-word`). A point strictly inside a strictly
-convex counterclockwise polygon, collinear with no two of its vertices, has a radial word: the
-positive signs `[V_i V_{i+j} R] > 0` form an initial segment `j ≤ r_i` ("convexity makes the
-positive signs consecutive"), with `1 ≤ r_i ≤ n-2`, and the word satisfies the complement
-relation (15) ("reversing a directed chord"). `docs/proof/nine/SIX_BOUNDARY_SINGLE_SIDE.md`, lines 206-222.
+/-- A point strictly inside a strictly convex counterclockwise polygon, collinear with no two of
+its vertices, has a radial word: the positive signs `[V_i V_{i+j} R] > 0` form an initial segment
+`j ≤ r_i` (convexity makes the positive signs consecutive), with `1 ≤ r_i ≤ n-2`, and the word
+satisfies the complement relation `IsRadialWord` (reversing a directed chord).
 -/
-theorem claim_radial_word {n : ℕ} (V : Fin n → Point) (R : Point) (hn : 3 ≤ n)
-    (hV : IsConvexCCW V) (hR : InPolygon V R)
+theorem exists_radialWord {n : ℕ} (V : Fin n → Point) (R : Point) (hn : 3 ≤ n)
+    (hV : IsConvexPolygon V) (hR : InPolygon V R)
     (hgen : ∀ i j : Fin n, i ≠ j → sarea (V i) (V j) R ≠ 0) :
     ∃ r : Fin n → ℕ, HasRadialWord V R r ∧ IsRadialWord r := by
   classical
@@ -481,12 +466,11 @@ theorem claim_radial_word {n : ℕ} (V : Fin n → Point) (R : Point) (hn : 3 �
       have := e2.1 (by linarith)
       omega
 
-/-- **Claim** (`SIX_BOUNDARY_SINGLE_SIDE:claim-pair-line-sign`). Two interior points `P, Q` of a
-strictly convex counterclockwise polygon with radial words `p, q`: if `p_i < q_i` then
-`[V_i P Q] > 0`, and if `p_i > q_i` then `[V_i P Q] < 0` (`docs/proof/nine/SIX_BOUNDARY_SINGLE_SIDE.md`
-(17): the order of the two rays inside the convex angle at `V_i`). Lines 236-244. -/
-theorem claim_pair_line_sign {n : ℕ} (V : Fin n → Point) (P Q : Point) (hn : 3 ≤ n)
-    (hV : IsConvexCCW V) (hP : InPolygon V P) (hQ : InPolygon V Q) (p q : Fin n → ℕ)
+/-- Two interior points `P, Q` of a strictly convex counterclockwise polygon with radial words
+`p, q`: if `p_i < q_i` then `[V_i P Q] > 0`, and if `p_i > q_i` then `[V_i P Q] < 0` (the order of
+the two rays inside the convex angle at `V_i`). -/
+theorem sarea_sign_of_radialWord {n : ℕ} (V : Fin n → Point) (P Q : Point) (hn : 3 ≤ n)
+    (hV : IsConvexPolygon V) (hP : InPolygon V P) (hQ : InPolygon V Q) (p q : Fin n → ℕ)
     (hp : HasRadialWord V P p) (hq : HasRadialWord V Q q) (i : Fin n) :
     (p i < q i → 0 < sarea (V i) P Q) ∧ (q i < p i → sarea (V i) P Q < 0) := by
   have key : ∀ (P Q : Point) (p q : Fin n → ℕ), InPolygon V P → InPolygon V Q →
