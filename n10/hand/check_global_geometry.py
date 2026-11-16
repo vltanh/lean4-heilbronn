@@ -2,8 +2,9 @@
 """Exact transcription checks for the new n=10 hand geometry.
 
 This script checks polynomial identities and rational comparisons printed in
-TRIANGLE_OCCUPANCY.md, THREE_CORNERS.md, CLUSTERED_TRIANGLE.md and
-SYMMETRIC_CHAMBER.md, ASYMMETRIC_SIGN_CHAMBER.md, plus the opposite-corner notes.
+TRIANGLE_OCCUPANCY.md, THREE_CORNERS.md, CLUSTERED_TRIANGLE.md,
+SIX_POINT_ENDPOINT.md, TYPE_II.md, SYMMETRIC_CHAMBER.md,
+ASYMMETRIC_SIGN_CHAMBER.md, plus the opposite-corner notes.
 It does not enumerate configurations
 or prove geometric coverage. The written arguments supply those deductions.
 Run locally with: python3 n10/hand/check_global_geometry.py
@@ -379,6 +380,27 @@ def opposite_mixed_complete():
     print("PASS: opposite-mixed containment identity, both orientations, final cubic contradiction")
 
 
+def n8_line_caps():
+    a, b, r, z, X, Y, T, s = sp.symbols("a b r z X Y T s")
+    zero(1+a/(1-a)+b/(1-b)-(1-a*b)/((1-a)*(1-b)))
+    cap = r*r*(1-r)/(1+r)
+    zero(sp.diff(cap,r)+2*r*(r*r+r-1)/(1+r)**2)
+    zero(cap.subs(r,(sp.sqrt(5)-1)/2)-(5*sp.sqrt(5)-11)/2)
+    W=(1-X-s/T)*(1-s/X)+(1-Y-s/T)*(1-s/Y)
+    zero((W-(1+T-X-Y+s-s/T)).subs(T,1-s/X-s/Y))
+    Wbound=1+T+s-s/T-4*s/(1-T)
+    polynomial=T**3-7*s*T*T+(10*s-1)*T+s
+    zero((8*s-Wbound)*T*(1-T)-polynomial)
+    sigma=sp.Rational(93,1000)
+    expansion=z**3+sp.Rational(849,1000)*z*z+sp.Rational(29,1000)*z+sp.Rational(81,4000)
+    zero(polynomial.subs({T:z+sp.Rational(1,2),s:sigma})-expansion)
+    assert Q(29,1000)**2-4*Q(349,1000)*Q(81,4000)==-Q(6857,250000)
+    zero(sp.Rational(1,8)-z*z/(4*(1+z))-(1-z)*(2*z+1)/(8*(1+z)))
+    assert 5*55**2<123**2
+    assert 7*Q(93,1000)>Q(157,250)
+    print("PASS: N8 octagon containment, both small-arc kinds, quadrilateral capacity")
+
+
 def asymmetric_sign_chamber():
     a1, a2, a3, a4, b1, b2, b3, b4 = sp.symbols("a1 a2 a3 a4 b1 b2 b3 b4")
     x, y, U, V, s, M, m, k, t = sp.symbols("x y U V s M m k t")
@@ -421,6 +443,108 @@ def asymmetric_sign_chamber():
     print("PASS: asymmetric twelve-triangle formulas, reciprocal bounds, sharp scalar envelope")
 
 
+def six_point_endpoint():
+    q = sp.Rational
+    h, beta, p, x, w, v, t, r, U, J = sp.symbols("h beta p x w v t r U J")
+    rho, eta = sp.symbols("rho eta")
+    rx, ry = (1-eta)/(1-rho*eta), rho*(1-eta)/(1-rho*eta)
+    zero(ry-rho*rx)
+    zero(rx-(1-eta+eta*ry))
+
+    # The mixed-cell obstruction is valid at its own threshold 1/9.
+    mixed = 9*h*h-11*h+3
+    zero(9*h*(1-h)*(1/(3*h)+1/(9*(1-h))-1)-mixed)
+    assert mixed.subs(h, q(13,16)) == q(1,256) > 0
+    assert q(149,180) > q(13,16)
+    assert q(69,40)**2 < 3
+    assert q(1,9)-q(7,64) == q(1,576) > 0
+    assert 7*q(7,64) > q(2,3)
+
+    # Both same-side bounds and the opposite-side weighted identity.
+    c0, a0 = 1/h+1/beta-1, 1-t*(1/h+1/beta)
+    ell = lambda z: (t+(1-beta)*z)/beta
+    upper = lambda z: 1-(t+z)/h
+    zero(w*upper(v)-ell(w)*v-w+v
+         -(v*(1-t/beta)-t*w/h-c0*w*v))
+    zero(w*upper(v)-ell(w)*v
+         -(w*(1-t/h)-t*v/beta-c0*w*v))
+    P, X = sp.Matrix([p,p+w]), sp.Matrix([x,x+v])
+    H, E = sp.Matrix([0,h]), sp.Matrix([1,1])
+    dH, dE = 2*area(P,X,H), 2*area(P,X,E)
+    K = h*(1-p)-w
+    zero(w*dH+(h-w)*dE-K*(w-v))
+    zero(K.subs(p,ell(w))/h-(1-t/beta-c0*w))
+    A0 = 1-t/beta-c0*t
+    zero(a0-A0-t*(1/beta-1))
+    # Rearrangement of the mixed H/F sign branch.
+    hf_bound = h*(1-beta)-t*(h-beta)*(2-beta)/beta-(1-beta)*t-3*t
+    zero(hf_bound-(h*beta*(1-beta)-t*(2*h+2*beta-h*beta))/beta)
+    scalar = beta*(1-beta)/(2+beta)
+    assert scalar.subs(beta,q(2,3)) == q(1,12) < q(7,64)
+
+    Phi = (U-t*J)**2-4*t*U*(J-U)
+    zero(sp.diff(Phi,J)-2*t*(t*J-3*U))
+    quad = (1+4*t)*r*r-12*t*r+4*t*t
+    zero(Phi.subs({U:r*r,J:2*r})-r*r*quad)
+    zero(1024*quad.subs(t,q(7,64))-(8*r-7)*(184*r-7))
+    assert q(7,32) > q(7,184)
+    assert q(7,8)*(1-q(7,8)) == q(7,64)
+    assert q(7,3)**2 > 5
+    assert 5*250**2-559**2 == 19 > 0
+    sigma = q(93,1000)
+    assert q(4427,500)*sigma-(1-sigma)**2 == q(773,1000000) > 0
+    print("PASS: endpoint-six mixed obstruction, complete pair algebra, rational threshold")
+
+
+def adjacent_corners():
+    q = sp.Rational
+    sigma, k = q(93,1000), 3-2*sp.sqrt(2)
+    beta, h, b, x, z, a, r, y, t, w, v, rho = sp.symbols("beta h b x z a r y t w v rho")
+    zero(k*(2-beta)-beta*(1-beta)-(beta-(2-sp.sqrt(2)))**2)
+    zero(t+(1-beta)*t+(h-beta)*t*(2-beta)/beta-t*h*(2-beta)/beta)
+    assert q(141,100)**2 < 2
+    assert q(9,50) < q(3,16)
+    assert (q(149,20)+4)*sigma-1 == q(1297,20000) > 0
+    assert 1-9*sigma == q(163,1000)
+
+    # The quadrilateral-left branch: exact denominator clearing and
+    # the two positive bounds in its translated quartic.
+    G = (2*x**4-q(907,1000)*x**3-q(93,250)*x*x
+         +q(42036,312500)*x+q(8649,500000))
+    cleared = (q(29,5)*sigma*sigma/(x*x-sigma)
+               +2*x-2*sigma/x-(1-sigma))*x*(x*x-sigma)
+    zero(cleared-G)
+    expansion = (z*z*(2*z*z+q(2893,1000)*z+q(41721,40000))
+                 +q(982583,40000000)*z+q(2989777,1600000000))
+    zero(G.subs(x,z+q(19,40))-expansion)
+    assert q(41721,40000)-q(2893,1000)*q(9,200) == q(22821,25000) > 0
+    assert q(2989777,1600000000)-q(982583,40000000)*q(9,200) == q(3052819,4000000000) > 0
+    assert 2*sigma > q(43,100)**2
+    assert q(3,1)+2*q(7,5) == q(29,5)
+
+    # The triangular-right and noncentral support cases use one exact cap.
+    assert 1-q(69,100)/(1-3*sigma) == q(31,721)
+    assert q(31,100)*q(31,721)+q(1,10)*(1-3*sigma) == q(615941,7210000)
+    assert sigma-q(615941,7210000) == q(54589,7210000) > 0
+    assert 11*sigma-1 == q(23,1000) > 0
+
+    # Both quadrilateral side hulls: the right lower-point cap, the
+    # actual cross-triangle formula, and the final scalar rearrangement.
+    second = x*v-t*w+w-v-x+t
+    zero(second.subs(v,(rho+t*w)/x).subs(w,1)
+         -(1-x)*(x-t-rho)/x)
+    B = sp.Matrix([b,0])
+    P, R = sp.Matrix([b*a,y]), sp.Matrix([b+(1-b)*(1-r),t])
+    cross = b*(1-a)*t+(1-b)*(1-r)*y
+    zero(-2*area(B,P,R)-cross)
+    bounded = cross.subs({t:1-r-sigma/((1-b)*r),y:1-a-sigma/(b*a)})
+    zero(bounded-((1-a)*(1-r)
+         -sigma*(b*(1-a)/((1-b)*r)+(1-b)*(1-r)/(b*a))))
+    zero(((1-z)**2-2*sigma*(1-z)/z-sigma)*z
+         -(z*(1-z)**2-sigma*(2-z)))
+    print("PASS: adjacent-corner endpoint constants, side-hull quartic, cross-triangle bound")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -435,3 +559,6 @@ if __name__ == "__main__":
     opposite_mixed_complete()
     symmetric_opposite_orientation()
     asymmetric_sign_chamber()
+    six_point_endpoint()
+    adjacent_corners()
+    n8_line_caps()

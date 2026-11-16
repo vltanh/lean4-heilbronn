@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 8 — November 15, 2026.
+Checkpoint 9 — November 16, 2026.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -87,7 +87,16 @@ orientation restriction is now discharged by a complete two-case inequality.
           triangle. The universal six-point theorem gives m<93/2000<A*,
           with all four lower points unrestricted. Proof: CLUSTERED_TRIANGLE.md.
     - [ ] U3-DISTRIBUTED. At every upper point, the other two occupy
-          different fan triangles. This is the remaining U3 alternative.
+          different fan triangles. Choose Y with least B-barycentric
+          coordinate, as specified in U3_FOUR_ONE_SIDE.md, and split the
+          four lower points by BY. This is the remaining U3 alternative.
+      - [x] U3-DISTRIBUTED-4/0 and 0/4. All four lower points on one fan
+            side: the lower hull is reduced to six pentagon orders, each
+            excluded by a fully printed cubic inequality. The six tables
+            have 269 small-integer entries in total.
+            Proof: U3_FOUR_ONE_SIDE.md.
+      - [ ] U3-DISTRIBUTED-3/1 and 1/3. The unbalanced mixed fan splits.
+      - [ ] U3-DISTRIBUTED-2/2. The balanced mixed fan split.
   - [x] III-3C-U4. Exactly three corners: 4 upper and 3 lower free points.
         Proof: TRIANGLE_OCCUPANCY.md. In fact any triangle containing
         four further points forces m<=1/(15+3 sqrt(5))<A*.
@@ -125,6 +134,16 @@ Only the distributed alternative of U3 remains unresolved in this family.
         the other forces two opposed polynomial inequalities that cannot
         both hold. Proof: C2_OPPOSITE_MIXED.md and C2_OPPOSITE_REVERSE.md.
 - [ ] HP11-II. Exclude normalized maximizers with two adjacent corners.
+  - [x] II-REDUCTION. Reduce to four occupancy rows; exclude the left
+        quadrilateral hull and the right triangular/noncentral hull
+        alternatives in (2,2,3), and the two-quadrilateral-side alternative
+        in (2,3,2). Proof: TYPE_II.md. No whole row is claimed closed.
+  - [ ] II-(1,2,4). The endpoint-six theorem gives b<=1-Gamma3*sigma.
+  - [ ] II-(1,3,3). Its central triple must be distributed.
+  - [ ] II-(2,2,3). Triangular left hull; nontriangular right hull whose
+        support-normalized additional point is in cell II.
+  - [ ] II-(2,3,2). At least one triangular side hull; distributed central
+        triple.
 - [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
       points and four strictly interior points.
@@ -134,13 +153,25 @@ Only the distributed alternative of U3 remains unresolved in this family.
       for the COMPLETE asymmetric eight-boundary domain, including every
       orientation of the two interior points. Its remaining issue is global
       orientation coverage, not an assumed averaging step.
+  - [x] N8-OCTAGON. Both interior points lie strictly inside the boundary
+        octagon. A point in any empty corner triangle forces a smaller area.
+        Proof: N8_OP_LINE_CAPS.md, Section 1.
+  - [x] N8-SMALL-ARCS. The line OP cannot leave just one or two boundary
+        vertices on one side, including both geometric kinds of adjacent
+        pair. Proof: N8_OP_LINE_CAPS.md, using SIX_POINT_ENDPOINT.md.
   - [x] N8-CANDIDATE-SIGNS. Full asymmetric sharp bound and unique equality
         under the eight signs ADO+,BGO-,CFP+,EHP+,AOP+,BOP-,EOP-,FOP+,
         with O,P coordinatewise ordered. Twelve actual triangle inequalities
         give a scalar envelope; equality forces all candidate symmetries.
         Proof: ASYMMETRIC_SIGN_CHAMBER.md. No symmetry hypothesis is used.
-  - [ ] N8-OTHER-SIGNS. Establish an exhaustive orientation reduction and
-        bound every alternative not covered by the preceding theorem.
+  - [x] N8-OP-CATALOGUE. The remaining line patterns are one 3/5 class
+        and two 4/4 classes, up to square symmetry. In the corner-edge
+        4/4 class, projection overlap supplies the coordinatewise ordering
+        needed by N8-CANDIDATE-SIGNS. Proof: N8_OP_LINE_CAPS.md.
+  - [ ] N8-3/5. The remaining three-versus-five boundary arc class.
+  - [ ] N8-4/4-SIDE. The line crosses opposite same-side boundary edges.
+  - [ ] N8-4/4-CORNER-OBLIQUE. The line crosses opposite corner edges,
+        but at least one of ADO+,BGO-,CFP+,EHP+ fails.
 
 There are now SIX named unresolved global obligations: the remaining
 exact-three-corner class U3, II, C1, N6, N7 and complete asymmetric N8. These
@@ -180,7 +211,11 @@ remaining orientations.
 | FOUR_CORNERS.md | Full four-corner exclusion with bound (sqrt(33)-5)/16 |
 | TRIANGLE_OCCUPANCY.md | Universal bound for a triangle containing four points; full U4 exclusion |
 | THREE_CORNERS.md | Seven-point endpoint theorem; full U0, U1 and U2 exclusions |
+| SIX_POINT_ENDPOINT.md | Uniform six-point endpoint bound S/Gamma3; nontriangular hull bound strictly below S/9 |
 | CLUSTERED_TRIANGLE.md | Universal exclusion of three clustered interior points; full U3-CLUSTERED exclusion |
+| U3_FOUR_ONE_SIDE.md | Both 4/0 and 0/4 distributed fan splits; exhaustive hull reduction and six printed cubic contradictions |
+| TYPE_II.md | Four-row adjacent-corner reduction and complete stated side-hull exclusions; full II remains open |
+| N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
