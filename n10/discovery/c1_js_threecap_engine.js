@@ -72,7 +72,28 @@ for(const[I,J]of choose([...labels],2))for(const[A,B,C,P]of choose([...labels].f
 const meshTemplate="-OHC -OHY -OHZ -OHX +OCY +OCZ +OCX +OYZ -OYX -OZX -HCY -HCZ -HCX -HYZ -HYX +HZX +CYZ +CYX +CZX +YZX".split(" ");
 function occupants(kn){const out={};for(const tri of triangles)if(kn[tri])out[tri]=[...labels].filter(p=>inside(kn,tri,p));return out}
 function closure(assign){const kn={...BASE},steps=[],meshes=[];for(const[t,sg]of Object.entries(assign))put(kn,t,sg);
- for(let iteration=0;iteration<40;iteration++){let changed=false;const cont=occupants(kn);
+ for(let iteration=0;iteration<40;iteration++){let changed=false;
+  // The eight named outer vertices are extreme among all ten actual points.
+  for(const tri of triangles)if(kn[tri])for(const p of anchors)if(!tri.includes(p)){
+   const tests=[...tri].map((a,i)=>a+tri[(i+1)%3]+p),ss=tests.map(t=>kn[tri]*get(kn,t));
+   if(ss.every(v=>v===1))return{kn,steps,meshes,terminal:["extreme",tri,p]};
+   if(ss.filter(v=>v===0).length===1&&ss.filter(v=>v===1).length===2){const target=tests[ss.indexOf(0)],sg=-kn[tri];put(kn,target,sg);steps.push(["extreme",tri,p,target,sg]);changed=true}
+  }
+  // Y,Z are strict interior points of the fixed convex quadrilateral HCDF.
+  for(const pair of choose([...labels],2)){const base=pair.join("");
+   for(const T of"YZ"){
+    const verts=[..."HCDF"].filter(v=>!base.includes(v)),fixed=verts.filter(v=>get(kn,base+v)),unknown=verts.filter(v=>!get(kn,base+v));
+    if(!fixed.length)continue;const common=get(kn,base+fixed[0]);if(!fixed.every(v=>get(kn,base+v)===common))continue;
+    const onLine=base.includes(T),target=onLine?0:get(kn,base+T);
+    if(!unknown.length){
+     if(onLine||target===-common)return{kn,steps,meshes,terminal:["central_line",base,T]};
+     if(!target){put(kn,base+T,common);steps.push(["central_line",base,T,T,common]);changed=true}
+    }else if(unknown.length===1&&(onLine||target===-common)){
+     const V=unknown[0];put(kn,base+V,-common);steps.push(["central_line",base,T,V,-common]);changed=true;
+    }
+   }
+  }
+  const cont=occupants(kn);
   for(const[tri,pts]of Object.entries(cont)){
    if(pts.length>=4)return{kn,steps,meshes,terminal:["four",tri,pts.slice(0,4).join("")]};
    const cap=capFor(tri,kn[tri]);

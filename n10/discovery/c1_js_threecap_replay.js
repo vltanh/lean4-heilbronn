@@ -35,6 +35,10 @@ function mesh(known,word,ori){assert(new Set(word).size===6,"mesh distinct");con
 function geometry(node){const kn={...C1RTL.BASE};for(const[t,sg]of Object.entries(node.assign))add(kn,t,sg);const meshes=[];
  for(const row of node.steps||[]){const[kind,...r]=row;
   if(kind==="capacity"){const[t,pts,p,target,sg,value,source]=r;assert(new Set(pts).size===pts.length&&[...pts].every(v=>inside(kn,t,v)),"capacity occupants");const lim=cap(t,sign(kn,t),source);assert(eq(lim,value),"capacity cap transcription");assert(pts.length===3||lim.cmp(cost(pts.length+1))<0,"capacity threshold");assert(!t.includes(p)&&!pts.includes(p),"capacity new point");const tests=[...t].map((a,i)=>a+t[(i+1)%3]+p);assert(tests.includes(target)&&tests.filter(v=>v!==target).every(v=>sign(kn,v)===sign(kn,t)),"capacity inward tests");assert(sg===-sign(kn,t),"capacity conclusion");add(kn,target,sg)}
+  else if(kind==="extreme"){const[t,p,target,sg]=r;assert("OCPDQFRH".includes(p)&&!t.includes(p),"extreme vertex");const tests=[...t].map((a,i)=>a+t[(i+1)%3]+p);assert(sign(kn,t)!==0&&tests.includes(target)&&tests.filter(v=>v!==target).every(v=>sign(kn,v)===sign(kn,t))&&sg===-sign(kn,t),"extreme inward tests");add(kn,target,sg)}
+  else if(kind==="central_line"){const[base,T,V,sg]=r;assert(base.length===2&&base[0]!==base[1]&&"YZ".includes(T),"central line labels");const verts=[..."HCDF"].filter(v=>!base.includes(v));
+   if(V===T){assert(!base.includes(T)&&verts.every(v=>sign(kn,base+v)===sg),"central line target");add(kn,base+T,sg)}
+   else{assert(verts.includes(V)&&verts.filter(v=>v!==V).length>0&&verts.filter(v=>v!==V).every(v=>sign(kn,base+v)===-sg),"central line remaining vertex");assert(base.includes(T)||sign(kn,base+T)===sg,"central line interior test");add(kn,base+V,sg)}}
   else if(kind==="plu"){const[word,target,sg]=r,terms=gp(word),products=terms.map(([x,y,c])=>c*sign(kn,x)*sign(kn,y)),idx=terms.findIndex(([x,y])=>key(x)===key(target)||key(y)===key(target));
    assert(idx>=0&&products.filter(v=>v===0).length===1&&products[idx]===0,"GP unknown");const fixed=products.filter(Boolean);assert(fixed[0]===fixed[1],"GP common sign");
    const[x,y,c]=terms[idx],factor=key(x)===key(target)?x:y,other=factor===x?y:x;assert(sign(kn,other)!==0,"GP other");
@@ -47,6 +51,8 @@ function terminal(node,kn){const[kind,...r]=node.terminal;
  if(kind==="four"){const[t,pts]=r;assert(pts.length===4&&new Set(pts).size===4&&[...pts].every(p=>inside(kn,t,p)),"four terminal")}
  else if(kind==="area_cap"){const[t,pts,value,source]=r;assert([...pts].every(p=>inside(kn,t,p)),"cap terminal occupants");assert(eq(cap(t,sign(kn,t),source),value)&&R(value).cmp(cost(pts.length))<0,"cap terminal")}
  else if(kind==="cluster"){const[t,p,fan,others]=r;assert(inside(kn,t,p)&&others.length===2&&[...others].every(v=>inside(kn,t,v)&&inside(kn,fan,v))&&fan.includes(p)&&[...fan].filter(v=>v!==p).every(v=>t.includes(v)),"cluster terminal")}
+ else if(kind==="extreme"){const[t,p]=r;assert("OCPDQFRH".includes(p)&&inside(kn,t,p),"extreme terminal")}
+ else if(kind==="central_line"){const[base,T]=r;assert(base.length===2&&base[0]!==base[1]&&"YZ".includes(T),"central terminal labels");const verts=[..."HCDF"].filter(v=>!base.includes(v)),sg=sign(kn,base+verts[0]);assert(sg!==0&&verts.every(v=>sign(kn,base+v)===sg)&&(base.includes(T)||sign(kn,base+T)===-sg),"central line terminal")}
  else if(kind==="gp"){const ss=gp(r[0]).map(([x,y,c])=>c*sign(kn,x)*sign(kn,y));assert(ss.every(Boolean)&&ss.every(v=>v===ss[0]),"GP terminal")}
  else if(kind==="mesh"){const[word,ori,tr,sg]=r,desired=mesh(kn,word,ori);assert(desired.some(([t,v])=>key(t)===key(tr)&&v*C1RTL.canon(t)[1]===sg*C1RTL.canon(tr)[1])&&sign(kn,tr)===-sg,"mesh terminal")}
  else fail("terminal kind")}

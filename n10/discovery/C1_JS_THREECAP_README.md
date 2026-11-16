@@ -37,6 +37,23 @@ The stronger published THREE_CAP_CONTACT_BOUNDS.md gives
 The coordinate order is (h,c,d,f,u,v,z,w,p,q,r,t,j,k).
 All endpoints are exact conservative closed bounds.
 
+## Elementary hull propagation
+
+Every vertex of the strict outer octagon is extreme among all ten points,
+so it cannot lie in a triangle of three other actual points. Two inward
+edge tests therefore force the remaining test outward. A completed
+three-inward test is a geometric contradiction.
+
+For an actual line IJ, a central point Y or Z has its affine line value
+inside the convex range of the four HCDF vertex values. The interior
+premise is strict. Thus known same-signed values at all off-line vertices
+force the central point's sign. If the central point lies on IJ, or its
+known value has the opposite sign, and only one off-line vertex value is
+unknown, that value must have the opposite sign to the others. Vertices
+equal to I or J contribute known zero. Every application records the line,
+central point, target and sign; the separate reader replays these tests.
+An independent mathematical audit accepted both rules.
+
 ## Generic metric and physical relations
 
 Triangle costs are s,3s,.694,.823 for zero through three actual occupants.
@@ -63,9 +80,9 @@ area(HCDF)=1-(h-d)(c-f)<=1.
 
 ## Current status and files
 
-The current tree has14 determinant splits, three scalar-area leaves,
-one exact positive-linear-combination leaf, two fully signed open leaves,
-and nine unprocessed frontier nodes. It is incomplete.
+The current tree has28 determinant splits, three scalar-area leaves,
+16 exact positive-linear-combination leaves and ten unprocessed frontier
+nodes. There is no recorded fully signed open leaf. It is incomplete.
 
 Load/eval c1_js_threecap_engine.js, then c1_js_threecap_replay.js,
 then c1_js_threecap_linear_replay.js. Read the JSON frontier and call
@@ -76,8 +93,13 @@ The report explicitly counts open and frontier nodes. Generic discovery is
 
     C1RTL.runBatch(state,1,{rounds:24,maxSteps:8000,maxDepth:24})
 
-but a fully signed open leaf should next receive exact area-LP recovery or
-physical-box contraction, not a meaningless additional determinant split.
+but the newer c1_js_threecap_runner.js tries exact LP recovery first,
+using c1_js_threecap_packer.js to prune source ancestry. Evaluate both after
+the three readers, then call C1RTL_RUNNER.step(state,options). The runner
+requires c1AreaLPDriverJS and its dependencies as described below. It tries
+initial bounds before scalar propagation and never treats a numerical
+solver outcome as a proof. A fully signed survivor is recorded explicitly,
+not split on a nonexistent determinant.
 
 The linear leaf retains a complete exact staged proof. Its packet contains
 
@@ -122,4 +144,9 @@ order; use its ordinary combination helper. Existing C1 relations already
 include all signed four-point identities. The driver receives
 model={signs,relations:rows.map(x=>x.rel)} and bounds whose lo/hi entries
 have immutable {value,ref}. A certificate is accepted only after the
-separate C1 exact reader passes.
+separate C1 exact reader passes. The caller installs c1AreaLPDriverJS by
+replacing load("n7AreaLinearToolsJS") with load("c1AreaLinearToolsJS") in the
+preserved driver. The C1 linear-tools adapter replaces load("n7SignJS")
+with load("c1SignJS"); that helper exposes the stated C1 labels and the
+ordinary combinations function. Preserve this v1 factor catalogue when
+replaying the current records.
