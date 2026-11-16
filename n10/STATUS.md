@@ -308,6 +308,18 @@ identities have been reviewed. The other 4/4 edge pairs, remaining
 lower-height 3/5 arcs, and all-interior N7 placement remain open.
 The global algebra checker now has 40 passing groups.
 
+The entire Type-II count (2,2,3) is now closed in
+TYPE_II_223_COMPLETE.md. A capacity-one actual triangle selects one
+of the two central points; its three possible containing regions
+lead to eighteen exhaustive strict-sign rows. All conditional
+containments and nine rational boxes are proved geometrically, and
+all 1,462 integer terms are printed. An independent manuscript-reading
+SymPy check verifies every used sign and actual occupancy, every box,
+the exhaustive row coverage, and every exact negative cubic bound;
+the separate Fraction checker passes as well. Only (1,3,3) and
+(2,3,2) remain in the adjacent-corner family. The global algebra
+checker now has 41 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

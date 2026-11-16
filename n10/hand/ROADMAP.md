@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 31.
+Checkpoint 32.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -198,11 +198,14 @@ four-corner alternative and all zero-area faces.
         vertical clearance at least 2s above F. The complete rational
         box and six exhaustive placement contradictions have 424 printed
         integer terms; one row uses seven explicit affine squares.
-        Proof: TYPE_II_223_CORE.md. The two central points are still
-        needed to close the count.
-  - [ ] II-(2,2,3). Triangular left hull; nontriangular right hull whose
-        support-normalized additional point has the stronger placements
-        of II-223-CORE.
+        Proof: TYPE_II_223_CORE.md. The next item incorporates both
+        central points and closes the count.
+  - [x] II-(2,2,3). The entire count, with every allowed central
+        placement. A capacity-one triangle selects an actual central
+        point; three containing regions and eighteen exhaustive sign
+        rows yield fixed cubic contradictions. All 1,462 integer terms,
+        nine rational boxes, and conditional containments are printed
+        and independently audited. Proof: TYPE_II_223_COMPLETE.md.
   - [ ] II-(2,3,2). At least one triangular side hull; distributed central
         triple.
 - [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
@@ -390,6 +393,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | TYPE_II_R4_MIXED_III.md | Complete II+III support pair, forced DF straddle, and two printed cubics with 61 integer entries |
 | TYPE_II_R4_COMPLETE.md | Complete Type-II count (1,2,4), assembling both hull types and every central placement |
 | TYPE_II_223_CORE.md | Entire (2,2,3) eight-point side core: stronger box, three forced containing triangles, and vertical clearance; six rows, 424 terms |
+| TYPE_II_223_COMPLETE.md | Entire Type-II count (2,2,3), including both central points; eighteen exhaustive cubic rows, nine proved boxes, 1,462 integer terms |
 | C1_PENTAGON_GEOMETRY.md | Exact-pentagon 3/2 reduction, distributed meshes, rational box, endpoint and fan-capacity inequalities |
 | C1_PENTAGON.md | Entire exact-pentagon C1 child; nine roots, 34 polynomial and eight geometric leaves, 3,317 printed integer entries |
 | C1_EXTERIOR_REDUCTION.md | Complete side-cap and stated top/lower count exclusions; exhaustive 32-row exterior catalogue |

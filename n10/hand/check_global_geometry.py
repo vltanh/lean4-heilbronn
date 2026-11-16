@@ -1223,6 +1223,31 @@ def n7_corner_line():
     print("PASS: N7 whole AB/EF class identities, ordinate bound, and exhaustive eighteen-row oblique ledger")
 
 
+def adjacent_223_complete():
+    from pathlib import Path
+    from itertools import product
+    import re
+    from check_type_ii_223_complete import check_constants
+    check_constants()
+    a,k,c,d,u,v,r,t=sp.symbols("a k c d u v r t")
+    D,C,H,F,X,Y=(sp.Matrix(pt) for pt in [(0,1),(1,1),(a,k),(c,d),(u,v),(r,t)])
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(D,X,Y)+det(X,C,Y)-t+v)
+    zero(c*det(D,H,Y)-a*det(D,F,Y)-r*det(D,H,F))
+    note=Path(__file__).with_name("TYPE_II_223_COMPLETE.md").read_text()
+    rows={int(num):(region,{tok[:3]:tok[-1] for tok in choices.split(', ')}) for num,region,choices in
+        re.findall(r'^\| (\d+) \| (any|B|P|C) \| ([A-Z+\-, ]+) \| [A-I] \|$',note,re.M)}
+    assert len(rows)==18
+    for region in 'BPC':
+        for vals in product('+-',repeat=8):
+            known=dict(zip(['EPY','FXY','DFY','ECY','DHY','EXY','CPY','HXY'],vals))
+            if region=='B' and known['FXY']=='-':continue
+            if region=='C' and known['DFY']=='-':continue
+            hits=[num for num,(rg,ch) in rows.items() if rg in ('any',region) and all(known[word]==sg for word,sg in ch.items())]
+            assert len(hits)==1
+    print("PASS: complete Type-II (2,2,3) selection cap, nine box bootstraps, geometric identities, and exhaustive eighteen-row catalogue")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1264,3 +1289,4 @@ if __name__ == "__main__":
     c1_exterior_reduction()
     n7_long_triangle_caps()
     n7_corner_line()
+    adjacent_223_complete()
