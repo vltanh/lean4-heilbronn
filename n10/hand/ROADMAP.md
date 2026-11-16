@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 18.
+Checkpoint 19.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -195,7 +195,12 @@ four-corner alternative and all zero-area faces.
   - [x] N7-PROJECTED. Strict sharp bounds for each single inward-secondary
         chamber; every normalized N7 candidate neighborhood is included.
         Proof: N7_PROJECTED_CHAMBER.md.
-  - [ ] Complete all five placement rows outside the stated chambers.
+  - [x] N7-PROJECTED-SIGNS. Remove the extra projection-coordinate
+        inequality from the entire normalized good-sign chamber, at
+        every inward depth. Two exhaustive geometric rows have printed
+        cubic contradictions with 642 positive integer entries.
+        Proof: N7_PROJECTED_SIGNS.md.
+  - [ ] Complete all five placement rows outside the proved sign chambers.
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -297,6 +302,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_PROJECTED_CHAMBERS.md | Strict sharp bounds for both two-secondary omission-pair orbits; complete normalized N6 candidate neighborhoods |
 | N7_PLACEMENTS.md | Lower-cap exclusions, upper-cap capacity two, five exhaustive remaining counts and a uniform rational box |
 | N7_PROJECTED_CHAMBER.md | Strict sharp bound in each single inward-secondary chamber; complete normalized N7 candidate neighborhoods |
+| N7_PROJECTED_SIGNS.md | Complete normalized inward-secondary good-sign chamber without an extra coordinate condition; two cubic rows, 642 printed integer entries |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

@@ -150,6 +150,16 @@ the child; its nontriangular sibling and the other three Type-II count
 rows remain open. The exact global algebra checker now has 25 passing
 groups.
 
+For N7, N7_PROJECTED_SIGNS.md now removes the extra coordinate
+condition from the entire normalized inward-secondary good-sign
+chamber, at every inward depth. The complementary coordinate branch
+splits only by the order of the two upper side contacts. Both cases
+have printed cubic contradictions, with 642 positive integer entries
+in total. The transferred six-ear triangle bounds and the actual
+quadrilateral spread bounds have been independently checked; separate
+Fraction and SymPy expansions reproduce both exact negative bounds.
+Global coverage outside those sign chambers remains open.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

@@ -6,6 +6,10 @@ every normalized seven-boundary maximizer belongs to this chamber. The
 strictness is an attainment exclusion, with no claimed uniform gap from
 the candidate on the nonclosed seven-boundary domain.
 
+N7_PROJECTED_SIGNS.md removes the extra projection-coordinate condition
+from the entire normalized sign chamber of this note. Global coverage
+outside that sign chamber remains a separate obligation.
+
 All determinants below are doubled signed areas. Write s=2m for the
 minimum doubled unsigned triangle area of the original ten points.
 
