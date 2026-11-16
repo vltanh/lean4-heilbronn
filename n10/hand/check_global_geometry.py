@@ -625,6 +625,79 @@ def n8_ranges_and_quad_spread():
     print("PASS: tightened N8 ranges, overlap gap, quadrilateral spread cubic and applications")
 
 
+def adjacent_triangular_right():
+    q = sp.Rational
+    s = q(93,1000)
+    b,x,t,z,a,r,v,dx,dy,T = sp.symbols("b x t z a r v dx dy T")
+    w = 1-b
+    M = x*(1-t)-(b+w*t+3*s)*(1-x+3*s)/w
+    zero(sp.diff(M,x)-(1+3*s)/w)
+    zero(M.subs({x:1-s,t:s/w})-(1+3*s)*(1-5*s/w))
+    caps = [q(628,907),q(602053,907000),q(282659,453500)]
+    gaps = [q(8299,18140000),q(527239,18140000),q(1261939,18140000)]
+    for cap,gap in zip(caps,gaps):
+        assert q(149,20)*s-cap==gap>0
+    assert (q(177,20)+2)*s-1==q(181,20000)>0
+    assert (q(177,20)+14)*s-2==q(2501,20000)>0
+    first = z*dy-dx*(1-a)
+    second = dx*(a-v)-(r-z)*dy
+    zero((r-z)*first+z*second-(r*dx*(z/r+a-1)-z*dx*v))
+    Fz = (1-s-z)*((1/r+1/w)*z-(1+s)/w)
+    zero(sp.diff(Fz,z).subs(z,1-3*s)-((1/r+1/w)*(-1+5*s)+(1+s)/w))
+    zero(Fz.subs(z,1-3*s)-2*s*((1-3*s)/r-4*s/w))
+    U = x*(1-a)-z*(1-t)
+    V = z*(t-q(1,10))-x*(a-q(1,10))+(a-t)
+    zero((a-q(1,10))*U+(1-a)*V-(a-t)*(1-a-q(9,10)*z))
+    assert q(99,200)**2/(4*q(9,10))==q(1089,16000)
+    assert s-q(1089,16000)==q(399,16000)>0
+    assert 1-q(177,20)*s/(1-s)==q(1679,18140)
+    assert 1-q(157,20)*s/(1-s)==q(3539,18140)
+    cap = x-b*T+s*(1+b)-s*(x+1)/T
+    assert cap.subs({x:1-s,T:q(628,907),b:s})==q(78389420201,113919200000)
+    assert q(149,20)*s-q(78389420201,113919200000)==q(539497519,113919200000)>0
+    assert -q(1,5)+s*q(9,5)/q(7,10)**2>0
+    print("PASS: triangular-right three-fan caps, both exterior-fan exclusions, negative-B cap")
+
+
+def adjacent_upper_pair():
+    qrat = sp.Rational
+    s = qrat(93,1000)
+    b,q,p,py,x,t,z = sp.symbols("b q p py x t z")
+    lam = 1-q
+    B,E,P,Q = (sp.Matrix(pt) for pt in [(b,0),(0,lam),(p,py),(x,t)])
+    U,V = 2*area(B,P,Q),-2*area(E,P,Q)
+    J = b*(t-lam)+lam*x
+    zero((t-lam)*U+t*V-J*(py-t))
+    c = b*q+lam
+    t0 = lam+((1+q)*s+b*q*q)/(1+b*q)
+    F = (1-s-t)*(c*(t-lam)-lam*s)-q*s*(2*t-lam)
+    derivative = (-b*b*q*q*(q+s)+b*q*(q*q-4*s*q-3*s)
+                  +(1-2*s)*q*(1-q)-2*s)
+    zero((1+b*q)*sp.diff(F,t).subs(t,t0)-derivative)
+    f = q*(q*q-4*s*q-3*s)
+    g = (1-2*s)*q*(1-q)-2*s
+    assert sp.diff(f,q).subs(q,qrat(69,100))==qrat(31797,50000)>0
+    for lo,hi,upper in [(qrat(69,100),qrat(3,4),-qrat(112779,10000000)),
+                        (qrat(3,4),qrat(17,20),-qrat(138981,10000000)),
+                        (qrat(17,20),qrat(1),-qrat(3879,200000))]:
+        assert f.subs(q,hi)>0
+        assert qrat(9,50)*f.subs(q,hi)+g.subs(q,lo)==upper<0
+    G = (qrat(93,1000)*b**3*q**3-qrat(907,1000)*b*b*q**3
+         +qrat(194649,500000)*b*b*q*q+qrat(907,1000)*b*q**3
+         -qrat(1253053,1000000)*b*q*q+qrat(432543,1000000)*b*q
+         +qrat(84351,1000000)*q*q-qrat(177351,1000000)*q+qrat(31899,250000))
+    zero(F.subs(t,t0)+q*G/(1+b*q)**2)
+    zero(sp.diff(G,b,2)-q*q*(139500*b*q-453500*q+194649)/250000)
+    assert ((139500*qrat(9,50)-453500)*qrat(69,100)+194649)/250000==-qrat(1009401,2500000)
+    assert G.subs({b:0,q:1})==qrat(8649,250000)>0
+    expansion = (-qrat(16801947,125000000)*z**3+qrat(85831701,312500000)*z*z
+                 -qrat(58228623,1250000000)*z+qrat(42416289,1250000000))
+    zero(G.subs({b:qrat(9,50),q:1-z})-expansion)
+    assert qrat(85831701,312500000)-qrat(16801947,125000000)*qrat(31,100)==qrat(2912407683,12500000000)>0
+    assert qrat(42416289,1250000000)-qrat(58228623,1250000000)*qrat(31,100)==qrat(2436541587,125000000000)>0
+    print("PASS: adjacent upper-pair weighted identity, derivative table, complete positive rectangle")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -645,3 +718,5 @@ if __name__ == "__main__":
     n8_triangle_caps()
     adjacent_four_right()
     n8_ranges_and_quad_spread()
+    adjacent_triangular_right()
+    adjacent_upper_pair()

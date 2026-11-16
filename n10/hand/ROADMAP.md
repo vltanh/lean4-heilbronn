@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 13.
+Checkpoint 14.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -148,6 +148,10 @@ in this family.
           capacity. If both are above CE, the bottom support fan EBH is
           empty for every right hull. Proof: TYPE_II_R4.md.
     - [ ] One central point above CE and one below, or both above CE.
+          For a triangular right hull, TYPE_II_R4_TRIANGLE.md forces a
+          unique middle fan placement and fixes D positive and B negative
+          for the central-pair line. TYPE_II_UPPER_PAIR.md also fixes E
+          negative in the both-upper cut, for every right-hull alternative.
   - [ ] II-(1,3,3). Its central triple must be distributed.
   - [ ] II-(2,2,3). Triangular left hull; nontriangular right hull whose
         support-normalized additional point is in cell II.
@@ -183,6 +187,11 @@ in this family.
         positive integer entries, exact bounds, and occupancy/separation
         premises are supplied. Proof: N8_THREE_FIVE.md.
   - [ ] N8-4/4-SIDE. The line crosses opposite same-side boundary edges.
+    - [x] Both interior points in ABEF or both in CDGH: the complete
+          contained subclass is excluded by four printed cubic rows,
+          including their symmetry reductions. Proof: N8_SIDE_CONTAINED.md.
+    - [ ] Outside both common quadrilaterals: up to the stated symmetries,
+          AFO+,CHO+ or AFO+,DGP-. No placement is omitted by this split.
   - [ ] N8-4/4-CORNER-OBLIQUE. The line crosses opposite corner edges,
         but at least one of ADO+,BGO-,CFP+,EHP+ fails.
 
@@ -230,9 +239,12 @@ remaining orientations.
 | U3_TWO_TWO.md | Complete balanced 2/2 split; exhaustive seventeen-row cubic proof with all 1,463 integer entries printed |
 | TYPE_II.md | Four-row adjacent-corner reduction and complete stated side-hull exclusions; full II remains open |
 | TYPE_II_R4.md | Complete both-below-CE exclusion in (1,2,4), and uniform empty bottom fan in its both-above cut |
+| TYPE_II_R4_TRIANGLE.md | Unique middle fan placement for every triangular-right hull in (1,2,4), with fixed central-pair D/B signs |
+| TYPE_II_UPPER_PAIR.md | Complete opposite-B/E sign exclusion for the two upper central points, with every right hull allowed |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |
 | N8_THREE_FIVE.md | Entire 3/5 line class excluded by ten exhaustive cubic rows with all 1,807 integer entries printed |
+| N8_SIDE_CONTAINED.md | Complete ABEF/CDGH-contained side-line subclass, with all four rows and 867 integer entries printed |
 | N8_BOUNDARY_RANGES.md | Stronger uniform coordinate ranges and four definite contact-overlap bounds from the eight ears alone |
 | QUADRILATERAL_SPREAD.md | Two-diagonal spread bound 1-6t for t>=1/11, threshold-free bound 1-(3+2sqrt(2))t, and explicit N8 applications |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
