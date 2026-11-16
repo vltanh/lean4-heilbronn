@@ -1,6 +1,6 @@
 module
 
-public import Heilbronn.Common.Families
+public import Heilbronn.Corners.CornerFamilies.Interior
 
 /-! # Corner families, §§1–5: stars, seven points with a triangular hull, `≥ 4` upper points
 (`hand/CORNER_FAMILIES.md`, lines 1–302)
@@ -15,9 +15,6 @@ Definitions (shared by all parts of the note, and by other notes):
 
 * `InsideTriangle X A B C`: `X` strictly inside the triangle `ABC`, of either orientation;
 * `InClosedTriangle X A B C`: `X` in the closed triangle `ABC`, of either orientation;
-* `SurroundsOnce O V`: the points `V 0, …, V (n-1)` lie on rays from `O` at strictly increasing
-  angles spanning less than one turn (the neighbours of an interior vertex listed
-  counterclockwise, the angles from `V i` to `V (i+1)` summing to `2π`);
 * `ConvexQuad A B C D` (counterclockwise convex position), `InQuad X A B C D` (strictly inside),
   `quadArea2` (doubled area);
 * `sevenConfig A B C X`: the seven points `A, B, C, X 0, …, X 3`;
@@ -25,24 +22,16 @@ Definitions (shared by all parts of the note, and by other notes):
   above the diagonal `y = x`;
 * `upperRegion s = U_s`, `lowerRegion s = L_s` (8).
 
-**Results.** `starLemma_four`, `starLemma_five` (2) with `eq3`, `eq4`;
-`claim_five_point_convex_quad`, `claim_empty_convex_quad`, `claim_deg4or5`,
-`triangularHullLemma` (5); `typeIII_ge4upper` (1); `claim_area_le_half`,
+**Results.** `starLemma_four` (2) with `eq3`, `eq4`; `claim_empty_convex_quad` (the repaired
+claim of lines 161–165); `triangularHullLemma` (5) by a triangulation-free route (`flip_exists`,
+`flip0`, `two_fan_case`, `seven_core`); `typeIII_ge4upper` (1); `claim_area_le_half`,
 `globalOccupancyCorollary`; `claim_residual_regions`, `claim_residual_regions_count` (7)–(8).
+`InsideTriangle` and `InClosedTriangle` are defined in `CornerFamilies/Interior.lean`.
 
-**Triangulations.** Mathlib has no planar triangulations. The star lemma is stated for an
-arbitrary point `O` with neighbours `V i`: the triangulation enters only through the positive
-orientation of the faces `O V_i V_{i+1}` and, in degree five, the angle condition
-`Σ θ_i = 2π` (`SurroundsOnce`); only the triangles `O V_i V_j` are used. The triangulation claim
-of lines 172–215 (`claim_deg4or5`) is stated in the form the area sum (lines 217–228) uses: a
-star of degree four or five around an interior point together with `9 - d` further faces, all
-spanned by the seven points, whose areas add up to the hull area (flagged as a
-reformulation at the declaration).
-
-**Gap** (inventory 02, `CORNER_FAMILIES` lines 161–165). The argument that a minimum-area convex
-quadrilateral is empty may return the quadrilateral itself. The result (`claim_empty_convex_quad`)
-is true (fix: with `X` inside `abc`, the quadrilateral `aXcd` is convex and smaller) and is
-stated here; the flawed intermediate step is not.
+**Changes.** The triangulation statements of the manuscript are not formalized: the degree-five
+star lemma (`starLemma_five`, with its angle hypothesis `SurroundsOnce`), the five-point convex
+quadrilateral (`claim_five_point_convex_quad`) and the degree-four-or-five triangulation claim
+(`claim_deg4or5`) were removed; (5) is proved from the degree-four star lemma, (13) and (14).
 -/
 
 @[expose] public section
@@ -51,23 +40,6 @@ noncomputable section
 namespace Heilbronn.CornerFamilies
 
 /-! ### Shared notions -/
-
-/-- `X` lies strictly inside the triangle `ABC`, whose vertices may be in either orientation. -/
-def InsideTriangle (X A B C : Point) : Prop := InTriangle X A B C ∨ InTriangle X A C B
-
-/-- `X` lies in the closed triangle `ABC` (either orientation): the three edge signs are all
-`≥ 0` or all `≤ 0`. For a nondegenerate triangle this is its convex hull. -/
-def InClosedTriangle (X A B C : Point) : Prop :=
-  (0 ≤ sarea A B X ∧ 0 ≤ sarea B C X ∧ 0 ≤ sarea C A X) ∨
-    (sarea A B X ≤ 0 ∧ sarea B C X ≤ 0 ∧ sarea C A X ≤ 0)
-
-/-- The points `V 0, …, V (n-1)` surround `O` exactly once counterclockwise: they lie on rays
-from `O` at strictly increasing angles `θ 0 < ⋯ < θ (n-1) < θ 0 + 2π`. With positively oriented
-faces `O V_i V_{i+1}`, the angles from `V_i` to `V_{i+1}` then lie in `(0, π)` and sum to `2π`
-(`CORNER_FAMILIES.md` lines 115–121). -/
-def SurroundsOnce {n : ℕ} (O : Point) (V : Fin n → Point) : Prop :=
-  ∃ θ : Fin n → ℝ, StrictMono θ ∧ (∀ i j, θ j < θ i + 2 * Real.pi) ∧
-    ∀ i, ∃ r : ℝ, 0 < r ∧ V i = (O.1 + r * Real.cos (θ i), O.2 + r * Real.sin (θ i))
 
 /-- `A, B, C, D` are in convex position, in counterclockwise order. -/
 def ConvexQuad (A B C D : Point) : Prop :=
@@ -106,7 +78,7 @@ def lowerRegion (s : ℝ) : Set Point := {p | 0 ≤ p.2 ∧ p.1 ≤ 1 ∧ p.2 + 
 theorem eq3 (O : Point) (V : Fin 4 → Point) :
     sarea O (V 0) (V 2) * sarea O (V 1) (V 3) =
       sarea O (V 0) (V 1) * sarea O (V 2) (V 3) - sarea O (V 1) (V 2) * sarea O (V 3) (V 0) := by
-  sorry
+  unfold sarea; ring
 
 /-- **Star lemma** (`CORNER_FAMILIES:StarLemma`), equation (4): for `O` and five points and every
 cyclic index `i`, `b_i b_{i+1} + a_{i+1} b_{i+3} = a_i a_{i+2}` with `a_i = [V_i V_{i+1}]`,
@@ -115,7 +87,34 @@ theorem eq4 (O : Point) (V : Fin 5 → Point) (i : Fin 5) :
     sarea O (V i) (V (i + 2)) * sarea O (V (i + 1)) (V (i + 3)) +
         sarea O (V (i + 1)) (V (i + 2)) * sarea O (V (i + 3)) (V i) =
       sarea O (V i) (V (i + 1)) * sarea O (V (i + 2)) (V (i + 3)) := by
-  sorry
+  unfold sarea; ring
+
+/-- Two positive numbers with product at least `2s²` add up to at least `2√2 s`. -/
+theorem sum_ge_of_prod {x y s : ℝ} (hx : 0 ≤ x) (hy : 0 ≤ y) (hs : 0 ≤ s)
+    (h : 2 * s ^ 2 ≤ x * y) : 2 * Real.sqrt 2 * s ≤ x + y := by
+  have h2 : Real.sqrt 2 ^ 2 = 2 := Real.sq_sqrt (by norm_num)
+  by_contra hc
+  push Not at hc
+  have h0 : 0 ≤ 2 * Real.sqrt 2 * s := by positivity
+  have : (x + y) ^ 2 < (2 * Real.sqrt 2 * s) ^ 2 := by
+    apply pow_lt_pow_left₀ hc (by positivity) (by norm_num)
+  nlinarith [sq_nonneg (x - y)]
+
+/-- The degree-four star bound in doubled form: four positive faces at least `s` whose two
+diagonal areas `b, c` satisfy `|b|, |c| ≥ s` and the identity (3) add up to `(2 + 2√2)s`. -/
+theorem star4_core {a₀ a₁ a₂ a₃ b c s : ℝ} (hs : 0 < s) (h₀ : s ≤ a₀) (h₁ : s ≤ a₁)
+    (h₂ : s ≤ a₂) (h₃ : s ≤ a₃) (hb : s ≤ |b|) (hc : s ≤ |c|) (h : b * c = a₀ * a₂ - a₁ * a₃) :
+    (2 + 2 * Real.sqrt 2) * s ≤ a₀ + a₁ + a₂ + a₃ := by
+  have hbc : s * s ≤ |b * c| := by rw [abs_mul]; exact mul_le_mul hb hc hs.le (abs_nonneg _)
+  have p02 : s * s ≤ a₀ * a₂ := mul_le_mul h₀ h₂ hs.le (by linarith)
+  have p13 : s * s ≤ a₁ * a₃ := mul_le_mul h₁ h₃ hs.le (by linarith)
+  rcases le_or_gt 0 (b * c) with hp | hn
+  · rw [abs_of_nonneg hp] at hbc
+    have := sum_ge_of_prod (by linarith : 0 ≤ a₀) (by linarith : 0 ≤ a₂) hs.le (by nlinarith)
+    linarith
+  · rw [abs_of_neg hn] at hbc
+    have := sum_ge_of_prod (by linarith : 0 ≤ a₁) (by linarith : 0 ≤ a₃) hs.le (by nlinarith)
+    linarith
 
 /-- **Star lemma** (`CORNER_FAMILIES:StarLemma`), degree four, equation (2) with `d = 4`: if the
 faces `O V_i V_{i+1}` are positively oriented and every triangle `O V_i V_j` has area at least
@@ -127,85 +126,498 @@ theorem starLemma_four (O : Point) (V : Fin 4 → Point) (t : ℝ) (ht : 0 < t)
     (hface : ∀ i, 0 < sarea O (V i) (V (i + 1)))
     (harea : ∀ i j, i ≠ j → t ≤ triangleArea O (V i) (V j)) :
     (2 + 2 * Real.sqrt 2) * t ≤ ∑ i, triangleArea O (V i) (V (i + 1)) := by
-  sorry
+  have f0 := ge_of_pos ht (harea 0 1 (by decide)) (hface 0)
+  have f1 := ge_of_pos ht (harea 1 2 (by decide)) (hface 1)
+  have f2 := ge_of_pos ht (harea 2 3 (by decide)) (hface 2)
+  have f3 := ge_of_pos ht (harea 3 0 (by decide)) (hface 3)
+  have hb := two_le_abs (harea 0 2 (by decide))
+  have hc := two_le_abs (harea 1 3 (by decide))
+  have := star4_core (by linarith) f0 f1 f2 f3 hb hc (eq3 O V)
+  have hs : ∑ i, triangleArea O (V i) (V (i + 1)) = triangleArea O (V 0) (V 1) +
+      triangleArea O (V 1) (V 2) + triangleArea O (V 2) (V 3) + triangleArea O (V 3) (V 0) := by
+    rw [Fin.sum_univ_four]; rfl
+  rw [hs, triangleArea_eq, triangleArea_eq, triangleArea_eq, triangleArea_eq,
+    abs_of_pos (by linarith : (0 : ℝ) < sarea O (V 0) (V 1)),
+    abs_of_pos (by linarith : (0 : ℝ) < sarea O (V 1) (V 2)),
+    abs_of_pos (by linarith : (0 : ℝ) < sarea O (V 2) (V 3)),
+    abs_of_pos (by linarith : (0 : ℝ) < sarea O (V 3) (V 0))]
+  linarith
 
-/-- **Star lemma** (`CORNER_FAMILIES:StarLemma`), degree five, equation (2) with `d = 5`: if the
-five neighbours surround `O` once counterclockwise, the faces `O V_i V_{i+1}` are positively
-oriented, and every triangle `O V_i V_j` has area at least `t > 0`, the faces have total area at
-least `(3 + 2√2)t`. The neighbour polygon need not be convex.
-`hand/CORNER_FAMILIES.md`, lines 70–137.
+/-! ### §2. Seven points with a triangular convex hull
 
-Uses: CORNER_FAMILIES:StarLemma (4) -/
-theorem starLemma_five (O : Point) (V : Fin 5 → Point) (t : ℝ) (ht : 0 < t)
-    (hsurr : SurroundsOnce O V) (hface : ∀ i, 0 < sarea O (V i) (V (i + 1)))
-    (harea : ∀ i j, i ≠ j → t ≤ triangleArea O (V i) (V j)) :
-    (3 + 2 * Real.sqrt 2) * t ≤ ∑ i, triangleArea O (V i) (V (i + 1)) := by
-  sorry
+The manuscript proves (5) with planar triangulations (lines 139–228), which Mathlib lacks, and
+its step "a minimum-area convex quadrilateral is empty" (lines 161–165) has a gap (inventory 02;
+`claim_empty_convex_quad` states and proves the repaired claim). The proof here is
+triangulation-free: fix one interior point `Y` and split on how the other three fall into the
+fan triangles `ABY, BCY, CAY`:
 
-/-! ### §2. Seven points with a triangular convex hull -/
-
-/-- **Claim** (`CORNER_FAMILIES:claim-five-point-convex-quad`): five points in general position
-contain four in convex position (Esther Klein; proved inline). `hand/CORNER_FAMILIES.md`,
-lines 152–159. -/
-theorem claim_five_point_convex_quad (P : Fin 5 → Point) (hgp : 0 < minTriangleArea P) :
-    ∃ i j k l : Fin 5, ConvexQuad (P i) (P j) (P k) (P l) := by
-  sorry
+* three in one fan triangle: the six-point theorem (14) on it, `Γ + 2 > 7 + 2√2`;
+* two in one, one in another: (13) and the three subtriangles, `(4 + 2√3) + 3 + 1`;
+* one in each (`Z₁ ∈ ABY`, `Z₂ ∈ BCY`, `Z₃ ∈ CAY`): some edge `YB` (or `YC`, `YA`) is
+  flippable, `[YZ₁Z₂] > 0` (`flip_exists`: the three angles at `Y` add up to `2π`); after the
+  flip `Z₁` has degree four with faces `Z₁AB, Z₁BZ₂, Z₁Z₂Y, Z₁YA`, and the degree-four star
+  bound plus five more faces give `(2 + 2√2) + 5` (`flip0`). -/
 
 /-- **Claim** (`CORNER_FAMILIES:claim-empty-convex-quad`): among points in general position, a
 convex quadrilateral of minimum area spanned by them contains none of the points in its
 interior (none lies on its edges, by general position). The manuscript states this for its seven
-points; the printed proof has a gap (see the module docstring), the statement is true.
+points; the printed proof has a gap (lines 161–165), repaired here: a point `X` inside `abcd`
+lies on one side of the diagonal `ac`, and then `aXcd` or `abcX` is a smaller convex
+quadrilateral. (Not needed by the triangulation-free proof of (5).)
 `hand/CORNER_FAMILIES.md`, lines 161–165. -/
 theorem claim_empty_convex_quad {n : ℕ} (P : Fin n → Point) (hgp : 0 < minTriangleArea P)
     (i j k l : Fin n) (hq : ConvexQuad (P i) (P j) (P k) (P l))
     (hmin : ∀ i' j' k' l' : Fin n, ConvexQuad (P i') (P j') (P k') (P l') →
       quadArea2 (P i) (P j) (P k) (P l) ≤ quadArea2 (P i') (P j') (P k') (P l'))
     (m : Fin n) : ¬ InQuad (P m) (P i) (P j) (P k) (P l) := by
-  sorry
+  rintro ⟨x1, x2, x3, x4⟩
+  obtain ⟨q1, q2, q3, q4⟩ := hq
+  have hik : i ≠ k := by
+    rintro rfl; have : sarea (P i) (P j) (P i) = 0 := by unfold sarea; ring
+    linarith
+  have hkm : k ≠ m := by
+    rintro rfl; have : sarea (P k) (P l) (P k) = 0 := by unfold sarea; ring
+    linarith
+  have him : i ≠ m := by
+    rintro rfl; have : sarea (P l) (P i) (P i) = 0 := by unfold sarea; ring
+    linarith
+  have hne := sarea_ne_zero_of_min_pos hgp i k m hik hkm him
+  set a := P i; set b := P j; set c := P k; set d := P l; set X := P m
+  have e1 : sarea a b c = sarea a b X + sarea b c X + sarea c a X := by unfold sarea; ring
+  have e2 : sarea a c d = sarea a c X + sarea c d X + sarea d a X := by unfold sarea; ring
+  have s1 : sarea a X c = -sarea a c X := sarea_swap₂₃ _ _ _
+  have s2 : sarea c a X = -sarea a c X := by unfold sarea; ring
+  rcases hne.lt_or_gt with h | h
+  · -- `X` on the side of `b`: the quadrilateral `aXcd`
+    have hc : ConvexQuad a X c d := ⟨by linarith, by linarith [sarea_cycle X c d], q3, x4⟩
+    have := hmin i m k l hc
+    unfold quadArea2 at this
+    linarith
+  · -- `X` on the side of `d`: the quadrilateral `abcX`
+    have hc : ConvexQuad a b c X := ⟨q1, x2, by linarith [sarea_cycle a c X],
+      by linarith [sarea_cycle X a b]⟩
+    have := hmin i j k m hc
+    unfold quadArea2 at this
+    linarith
 
-/-- **Claim** (`CORNER_FAMILIES:claim-deg4or5`), in star form: seven points in general position
-with triangular hull `ABC` have a triangulation with an interior vertex of degree four or five;
-equivalently for the area count, there are an interior point `o`, its `d ∈ {4, 5}` distinct
-neighbours `v` surrounding it once with positively oriented faces, and `9 - d` further faces
-spanned by three distinct of the seven points, such that the areas of the `d` star faces and
-the `9 - d` other faces add up to the area of `ABC`. Reformulated without triangulations
-(Mathlib has none): the manuscript's claim is about a triangulation, and its proof uses the
-extension of a noncrossing edge set to a triangulation, edge and face counts, and flips.
-`hand/CORNER_FAMILIES.md`, lines 167–228.
+/-- One interior point in each fan triangle: some edge `YA, YB, YC` is flippable, that is, one of
+the three consecutive angles at `Y` is below `π` (in signs: `[YZ₁Z₂] > 0`, `[YZ₂Z₃] > 0` or
+`[YZ₃Z₁] > 0`). -/
+theorem flip_exists {A B C Y Z₁ Z₂ Z₃ : Point} (hY : InTriangle Y A B C)
+    (h1 : InTriangle Z₁ A B Y) (h2 : InTriangle Z₂ B C Y) (h3 : InTriangle Z₃ C A Y) :
+    0 < sarea Y Z₁ Z₂ ∨ 0 < sarea Y Z₂ Z₃ ∨ 0 < sarea Y Z₃ Z₁ := by
+  by_contra hcon
+  push Not at hcon
+  obtain ⟨n1, n2, n3⟩ := hcon
+  have ha : 0 < sarea Y B C := by rw [← sarea_cycle Y B C]; exact hY.2.1
+  have hb : 0 < sarea Y C A := by rw [← sarea_cycle Y C A]; exact hY.2.2
+  have hc : 0 < sarea Y A B := by rw [← sarea_cycle Y A B]; exact hY.1
+  have hα1 : 0 < sarea Y Z₁ B := by rw [sarea_cycle B Y Z₁]; exact h1.2.1
+  have hβ1 : 0 < sarea Y A Z₁ := h1.2.2
+  have hα2 : 0 < sarea Y Z₂ C := by rw [sarea_cycle C Y Z₂]; exact h2.2.1
+  have hβ2 : 0 < sarea Y B Z₂ := h2.2.2
+  have hα3 : 0 < sarea Y Z₃ A := by rw [sarea_cycle A Y Z₃]; exact h3.2.1
+  have hβ3 : 0 < sarea Y C Z₃ := h3.2.2
+  have e1 : sarea Y Z₁ Z₂ * sarea Y A B * sarea Y B C =
+      sarea Y Z₁ B * sarea Y Z₂ C * sarea Y A B - sarea Y Z₁ B * sarea Y B Z₂ * sarea Y C A +
+        sarea Y A Z₁ * sarea Y B Z₂ * sarea Y B C := by unfold sarea; ring
+  have e2 : sarea Y Z₂ Z₃ * sarea Y B C * sarea Y C A =
+      sarea Y Z₂ C * sarea Y Z₃ A * sarea Y B C - sarea Y Z₂ C * sarea Y C Z₃ * sarea Y A B +
+        sarea Y B Z₂ * sarea Y C Z₃ * sarea Y C A := by unfold sarea; ring
+  have e3 : sarea Y Z₃ Z₁ * sarea Y C A * sarea Y A B =
+      sarea Y Z₃ A * sarea Y Z₁ B * sarea Y C A - sarea Y Z₃ A * sarea Y A Z₁ * sarea Y B C +
+        sarea Y C Z₃ * sarea Y A Z₁ * sarea Y A B := by unfold sarea; ring
+  set a := sarea Y B C
+  set b := sarea Y C A
+  set c := sarea Y A B
+  set α1 := sarea Y Z₁ B
+  set β1 := sarea Y A Z₁
+  set α2 := sarea Y Z₂ C
+  set β2 := sarea Y B Z₂
+  set α3 := sarea Y Z₃ A
+  set β3 := sarea Y C Z₃
+  have l1 : α1 * α2 * c + β1 * β2 * a ≤ α1 * β2 * b := by
+    have : sarea Y Z₁ Z₂ * c * a ≤ 0 :=
+      mul_nonpos_of_nonpos_of_nonneg (mul_nonpos_of_nonpos_of_nonneg n1 hc.le) ha.le
+    linarith
+  have l2 : α2 * α3 * a + β2 * β3 * b ≤ α2 * β3 * c := by
+    have : sarea Y Z₂ Z₃ * a * b ≤ 0 :=
+      mul_nonpos_of_nonpos_of_nonneg (mul_nonpos_of_nonpos_of_nonneg n2 ha.le) hb.le
+    linarith
+  have l3 : α3 * α1 * b + β3 * β1 * c ≤ α3 * β1 * a := by
+    have : sarea Y Z₃ Z₁ * b * c ≤ 0 :=
+      mul_nonpos_of_nonpos_of_nonneg (mul_nonpos_of_nonpos_of_nonneg n3 hb.le) hc.le
+    linarith
+  have L1 : 0 ≤ α1 * α2 * c + β1 * β2 * a := by positivity
+  have L2 : 0 ≤ α2 * α3 * a + β2 * β3 * b := by positivity
+  have L3 : 0 ≤ α3 * α1 * b + β3 * β1 * c := by positivity
+  have hprod := mul_le_mul (mul_le_mul l1 l2 L2 (by positivity)) l3 L3 (by positivity)
+  have hexp : (α1 * α2 * c + β1 * β2 * a) * (α2 * α3 * a + β2 * β3 * b) *
+      (α3 * α1 * b + β3 * β1 * c) =
+      (α1 * α2 * α3) ^ 2 * (a * b * c) + (β1 * β2 * β3) ^ 2 * (a * b * c) +
+        (α1 * α2 * c * α2 * α3 * a * β3 * β1 * c + α1 * α2 * c * β2 * β3 * b * α3 * α1 * b +
+          α1 * α2 * c * β2 * β3 * b * β3 * β1 * c + β1 * β2 * a * α2 * α3 * a * α3 * α1 * b +
+          β1 * β2 * a * α2 * α3 * a * β3 * β1 * c + β1 * β2 * a * β2 * β3 * b * α3 * α1 * b) := by
+    ring
+  have hrest : 0 ≤ α1 * α2 * c * α2 * α3 * a * β3 * β1 * c + α1 * α2 * c * β2 * β3 * b * α3 * α1 * b +
+          α1 * α2 * c * β2 * β3 * b * β3 * β1 * c + β1 * β2 * a * α2 * α3 * a * α3 * α1 * b +
+          β1 * β2 * a * α2 * α3 * a * β3 * β1 * c + β1 * β2 * a * β2 * β3 * b * α3 * α1 * b := by
+    positivity
+  have hsq : 0 ≤ (α1 * α2 * α3 - β1 * β2 * β3) ^ 2 * (a * b * c) := by positivity
+  have hR : 0 < α1 * β2 * b * (α2 * β3 * c) * (α3 * β1 * a) := by positivity
+  nlinarith
 
-Uses: CORNER_FAMILIES:claim-five-point-convex-quad, CORNER_FAMILIES:claim-empty-convex-quad -/
--- FLAG: reformulation. The manuscript states "some triangulation of the seven points has an
--- interior vertex of degree 4 or 5" (lines 172–215); this is its star-and-area-sum consequence.
-theorem claim_deg4or5 (A B C : Point) (X : Fin 4 → Point)
-    (hX : ∀ i, InsideTriangle (X i) A B C) (hgp : 0 < minTriangleArea (sevenConfig A B C X)) :
-    let P := sevenConfig A B C X
-    (∃ (o : Fin 7) (v : Fin 4 → Fin 7) (F : Fin 5 → Fin 7 × Fin 7 × Fin 7),
-      3 ≤ o.val ∧ Function.Injective v ∧ (∀ i, v i ≠ o) ∧ SurroundsOnce (P o) (P ∘ v) ∧
-      (∀ i, 0 < sarea (P o) (P (v i)) (P (v (i + 1)))) ∧
-      (∀ j, (F j).1 ≠ (F j).2.1 ∧ (F j).2.1 ≠ (F j).2.2 ∧ (F j).1 ≠ (F j).2.2) ∧
-      triangleArea A B C = ∑ i, triangleArea (P o) (P (v i)) (P (v (i + 1))) +
-        ∑ j, triangleArea (P (F j).1) (P (F j).2.1) (P (F j).2.2)) ∨
-    (∃ (o : Fin 7) (v : Fin 5 → Fin 7) (F : Fin 4 → Fin 7 × Fin 7 × Fin 7),
-      3 ≤ o.val ∧ Function.Injective v ∧ (∀ i, v i ≠ o) ∧ SurroundsOnce (P o) (P ∘ v) ∧
-      (∀ i, 0 < sarea (P o) (P (v i)) (P (v (i + 1)))) ∧
-      (∀ j, (F j).1 ≠ (F j).2.1 ∧ (F j).2.1 ≠ (F j).2.2 ∧ (F j).1 ≠ (F j).2.2) ∧
-      triangleArea A B C = ∑ i, triangleArea (P o) (P (v i)) (P (v (i + 1))) +
-        ∑ j, triangleArea (P (F j).1) (P (F j).2.1) (P (F j).2.2)) := by
-  sorry
+/-- The flipped one-per-fan configuration (`[YZ₁Z₂] > 0`): the degree-four star at `Z₁` and five
+further faces give (5). Doubled form. -/
+theorem flip0 {A B C Y Z₁ Z₂ Z₃ : Point} {t : ℝ} (ht : 0 < t) (hY : InTriangle Y A B C)
+    (h1 : InTriangle Z₁ A B Y) (h2 : InTriangle Z₂ B C Y) (h3 : InTriangle Z₃ C A Y)
+    (hk : 0 < sarea Y Z₁ Z₂) (hmin : t ≤ minTriangleArea ![A, B, C, Y, Z₁, Z₂, Z₃]) :
+    (7 + 2 * Real.sqrt 2) * (2 * t) ≤ sarea A B C := by
+  have hs : 0 < 2 * t := by linarith
+  have hABY := inTri_pos ⟨h1.1, h1.2.1, h1.2.2⟩
+  have hBCY := inTri_pos ⟨h2.1, h2.2.1, h2.2.2⟩
+  have hABC := inTri_pos hY
+  -- the face `Z₁BZ₂` is positive
+  have hf1 : 0 < sarea Z₁ B Z₂ := by
+    have e : sarea B Z₁ Z₂ * sarea A B Y * sarea B C Y =
+        -(sarea Z₁ B Y * sarea B Z₂ Y * sarea A B C) - sarea Z₁ B Y * sarea B C Z₂ * sarea A B Y -
+          sarea A B Z₁ * sarea B Z₂ Y * sarea B C Y := by unfold sarea; ring
+    have g1 : 0 < sarea Z₁ B Y := by linarith [h1.2.1, sarea_cycle Z₁ B Y]
+    have g2 : 0 < sarea B Z₂ Y := by linarith [h2.2.2, sarea_cycle Y B Z₂]
+    have : sarea B Z₁ Z₂ * sarea A B Y * sarea B C Y < 0 := by
+      rw [e]; nlinarith [mul_pos (mul_pos g1 g2) hABC, mul_pos (mul_pos g1 h2.1) hABY,
+        mul_pos (mul_pos h1.1 g2) hBCY]
+    have : sarea B Z₁ Z₂ < 0 := by
+      by_contra hc; push Not at hc; nlinarith [mul_nonneg (mul_nonneg hc hABY.le) hBCY.le]
+    linarith [sarea_swap₁₂ B Z₁ Z₂]
+  have f0 : 2 * t ≤ sarea Z₁ A B := ge_of_pos ht (area_of_le_min hmin 4 0 1)
+    (by rw [← sarea_cycle Z₁ A B]; exact h1.1)
+  have f1 : 2 * t ≤ sarea Z₁ B Z₂ := ge_of_pos ht (area_of_le_min hmin 4 1 5) hf1
+  have f2 : 2 * t ≤ sarea Z₁ Z₂ Y := ge_of_pos ht (area_of_le_min hmin 4 5 3)
+    (by rw [sarea_cycle Y Z₁ Z₂]; exact hk)
+  have f3 : 2 * t ≤ sarea Z₁ Y A := ge_of_pos ht (area_of_le_min hmin 4 3 0)
+    (by rw [sarea_cycle A Z₁ Y, sarea_cycle Y A Z₁]; exact h1.2.2)
+  have hb : 2 * t ≤ |sarea Z₁ A Z₂| := two_le_abs (area_of_le_min hmin 4 0 5)
+  have hc : 2 * t ≤ |sarea Z₁ B Y| := two_le_abs (area_of_le_min hmin 4 1 3)
+  have id3 : sarea Z₁ A Z₂ * sarea Z₁ B Y =
+      sarea Z₁ A B * sarea Z₁ Z₂ Y - sarea Z₁ B Z₂ * sarea Z₁ Y A := by unfold sarea; ring
+  have star := star4_core hs f0 f1 f2 f3 hb hc id3
+  have g1 : 2 * t ≤ sarea B C Z₂ := ge_of_pos ht (area_of_le_min hmin 1 2 5) h2.1
+  have g2 : 2 * t ≤ sarea C Y Z₂ := ge_of_pos ht (area_of_le_min hmin 2 3 5) h2.2.1
+  have g3 : 2 * t ≤ sarea C A Z₃ := ge_of_pos ht (area_of_le_min hmin 2 0 6) h3.1
+  have g4 : 2 * t ≤ sarea A Y Z₃ := ge_of_pos ht (area_of_le_min hmin 0 3 6) h3.2.1
+  have g5 : 2 * t ≤ sarea Y C Z₃ := ge_of_pos ht (area_of_le_min hmin 3 2 6) h3.2.2
+  have tiling : sarea A B C = sarea Z₁ A B + sarea Z₁ B Z₂ + sarea Z₁ Z₂ Y + sarea Z₁ Y A +
+      sarea B C Z₂ + sarea C Y Z₂ + sarea C A Z₃ + sarea A Y Z₃ + sarea Y C Z₃ := by
+    unfold sarea; ring
+  linarith
+
+/-- One interior point in each fan triangle of `Y`: (5), doubled form. -/
+theorem flip_case {A B C Y Z₁ Z₂ Z₃ : Point} {t : ℝ} (ht : 0 < t) (hY : InTriangle Y A B C)
+    (h1 : InTriangle Z₁ A B Y) (h2 : InTriangle Z₂ B C Y) (h3 : InTriangle Z₃ C A Y)
+    (hmin : t ≤ minTriangleArea ![A, B, C, Y, Z₁, Z₂, Z₃]) :
+    (7 + 2 * Real.sqrt 2) * (2 * t) ≤ sarea A B C := by
+  have cyc1 : sarea B C A = sarea A B C := sarea_cycle A B C
+  have cyc2 : sarea C A B = sarea A B C := (sarea_cycle B C A).trans cyc1
+  rcases flip_exists hY h1 h2 h3 with hk | hk | hk
+  · exact flip0 ht hY h1 h2 h3 hk hmin
+  · have := flip0 (A := B) (B := C) (C := A) (Z₁ := Z₂) (Z₂ := Z₃) (Z₃ := Z₁) ht (inTri_rot hY)
+      h2 h3 h1 hk (min_sub hmin ![B, C, A, Y, Z₂, Z₃, Z₁] ![1, 2, 0, 3, 5, 6, 4] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := flip0 (A := C) (B := A) (C := B) (Z₁ := Z₃) (Z₂ := Z₁) (Z₃ := Z₂) ht
+      (inTri_rot (inTri_rot hY)) h3 h1 h2 hk (min_sub hmin ![C, A, B, Y, Z₃, Z₁, Z₂]
+        ![2, 0, 1, 3, 6, 4, 5] (by norm_num) (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+
+/-- Two of the other interior points in the fan triangle `ABY`: (5), doubled form. -/
+theorem two_fan_case {A B C Y P Q R : Point} {t : ℝ} (ht : 0 < t) (hY : InTriangle Y A B C)
+    (hP : InTriangle P A B Y) (hQ : InTriangle Q A B Y) (hR : InTriangle R A B C)
+    (hmin : t ≤ minTriangleArea ![A, B, C, Y, P, Q, R]) :
+    (7 + 2 * Real.sqrt 2) * (2 * t) ≤ sarea A B C := by
+  have e := sarea_add_sarea_add_sarea A B C Y
+  have hs2 := sqrt2_lt
+  have hs3 := sqrt3_gt
+  have hs5 := sqrt5_gt
+  rcases fan_cases hY hR (sarea_ne_of ht (area_of_le_min hmin 3 0 6))
+      (sarea_ne_of ht (area_of_le_min hmin 3 1 6)) (sarea_ne_of ht (area_of_le_min hmin 3 2 6))
+    with hR' | hR' | hR'
+  · have := six_core ht hP hQ hR' (min_sub hmin ![A, B, Y, P, Q, R] ![0, 1, 3, 4, 5, 6]
+      (by norm_num) (by decide) (by intro i; fin_cases i <;> simp))
+    have g1 : 2 * t ≤ sarea B C Y := ge_of_pos ht (area_of_le_min hmin 1 2 3) hY.2.1
+    have g2 : 2 * t ≤ sarea C A Y := ge_of_pos ht (area_of_le_min hmin 2 0 3) hY.2.2
+    nlinarith
+  · have := two_ccw ht hP hQ (min_sub hmin ![A, B, Y, P, Q] ![0, 1, 3, 4, 5]
+      (by norm_num) (by decide) (by intro i; fin_cases i <;> simp))
+    have g1 : 2 * t ≤ sarea B C R := ge_of_pos ht (area_of_le_min hmin 1 2 6) hR'.1
+    have g2 : 2 * t ≤ sarea C Y R := ge_of_pos ht (area_of_le_min hmin 2 3 6) hR'.2.1
+    have g3 : 2 * t ≤ sarea Y B R := ge_of_pos ht (area_of_le_min hmin 3 1 6) hR'.2.2
+    have g4 : 2 * t ≤ sarea C A Y := ge_of_pos ht (area_of_le_min hmin 2 0 3) hY.2.2
+    have e2 := sarea_add_sarea_add_sarea B C Y R
+    nlinarith
+  · have := two_ccw ht hP hQ (min_sub hmin ![A, B, Y, P, Q] ![0, 1, 3, 4, 5]
+      (by norm_num) (by decide) (by intro i; fin_cases i <;> simp))
+    have g1 : 2 * t ≤ sarea C A R := ge_of_pos ht (area_of_le_min hmin 2 0 6) hR'.1
+    have g2 : 2 * t ≤ sarea A Y R := ge_of_pos ht (area_of_le_min hmin 0 3 6) hR'.2.1
+    have g3 : 2 * t ≤ sarea Y C R := ge_of_pos ht (area_of_le_min hmin 3 2 6) hR'.2.2
+    have g4 : 2 * t ≤ sarea B C Y := ge_of_pos ht (area_of_le_min hmin 1 2 3) hY.2.1
+    have e2 := sarea_add_sarea_add_sarea C A Y R
+    nlinarith
+
+/-- (5), doubled form, when `X 1` lies in the fan triangle `A B (X 0)`. -/
+theorem seven_core_0 {A B C Y P₁ P₂ P₃ : Point} {t : ℝ} (ht : 0 < t)
+    (hY : InTriangle Y A B C) (hX1 : InTriangle P₁ A B C) (hX2 : InTriangle P₂ A B C)
+    (hX3 : InTriangle P₃ A B C) (hm : t ≤ minTriangleArea ![A, B, C, Y, P₁, P₂, P₃])
+    (h1 : InTriangle P₁ A B Y) :
+    (7 + 2 * Real.sqrt 2) * (2 * t) ≤ sarea A B C := by
+  have cyc1 : sarea B C A = sarea A B C := sarea_cycle A B C
+  have cyc2 : sarea C A B = sarea A B C := (sarea_cycle B C A).trans cyc1
+  rcases fan_cases hY hX2 (sarea_ne_of ht (area_of_le_min hm 3 0 5))
+      (sarea_ne_of ht (area_of_le_min hm 3 1 5)) (sarea_ne_of ht (area_of_le_min hm 3 2 5))
+    with h2 | h2 | h2 <;>
+  rcases fan_cases hY hX3 (sarea_ne_of ht (area_of_le_min hm 3 0 6))
+      (sarea_ne_of ht (area_of_le_min hm 3 1 6)) (sarea_ne_of ht (area_of_le_min hm 3 2 6))
+    with h3 | h3 | h3
+  · have := two_fan_case (A := A) (B := B) (C := C) ht hY h1 h2 hX3
+      (min_sub' hm ![A, B, C, Y, P₁, P₂, P₃] ![0, 1, 2, 3, 4, 5, 6] ![0, 1, 2, 3, 4, 5, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := A) (B := B) (C := C) ht hY h1 h2 hX3
+      (min_sub' hm ![A, B, C, Y, P₁, P₂, P₃] ![0, 1, 2, 3, 4, 5, 6] ![0, 1, 2, 3, 4, 5, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := A) (B := B) (C := C) ht hY h1 h2 hX3
+      (min_sub' hm ![A, B, C, Y, P₁, P₂, P₃] ![0, 1, 2, 3, 4, 5, 6] ![0, 1, 2, 3, 4, 5, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := A) (B := B) (C := C) ht hY h1 h3 hX2
+      (min_sub' hm ![A, B, C, Y, P₁, P₃, P₂] ![0, 1, 2, 3, 4, 6, 5] ![0, 1, 2, 3, 4, 6, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := B) (B := C) (C := A) ht (inTri_rot hY) h2 h3 (inTri_rot hX1)
+      (min_sub' hm ![B, C, A, Y, P₂, P₃, P₁] ![1, 2, 0, 3, 5, 6, 4] ![2, 0, 1, 3, 6, 4, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · exact flip_case ht hY h1 h2 h3
+      (min_sub' hm ![A, B, C, Y, P₁, P₂, P₃] ![0, 1, 2, 3, 4, 5, 6] ![0, 1, 2, 3, 4, 5, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+  · have := two_fan_case (A := A) (B := B) (C := C) ht hY h1 h3 hX2
+      (min_sub' hm ![A, B, C, Y, P₁, P₃, P₂] ![0, 1, 2, 3, 4, 6, 5] ![0, 1, 2, 3, 4, 6, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · exact flip_case ht hY h1 h3 h2
+      (min_sub' hm ![A, B, C, Y, P₁, P₃, P₂] ![0, 1, 2, 3, 4, 6, 5] ![0, 1, 2, 3, 4, 6, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+  · have := two_fan_case (A := C) (B := A) (C := B) ht (inTri_rot (inTri_rot hY)) h2 h3 (inTri_rot (inTri_rot hX1))
+      (min_sub' hm ![C, A, B, Y, P₂, P₃, P₁] ![2, 0, 1, 3, 5, 6, 4] ![1, 2, 0, 3, 6, 4, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+
+/-- (5), doubled form, when `X 1` lies in the fan triangle `B C (Y)`. -/
+theorem seven_core_1 {A B C Y P₁ P₂ P₃ : Point} {t : ℝ} (ht : 0 < t)
+    (hY : InTriangle Y A B C) (hX1 : InTriangle P₁ A B C) (hX2 : InTriangle P₂ A B C)
+    (hX3 : InTriangle P₃ A B C) (hm : t ≤ minTriangleArea ![A, B, C, Y, P₁, P₂, P₃])
+    (h1 : InTriangle P₁ B C Y) :
+    (7 + 2 * Real.sqrt 2) * (2 * t) ≤ sarea A B C := by
+  have cyc1 : sarea B C A = sarea A B C := sarea_cycle A B C
+  have cyc2 : sarea C A B = sarea A B C := (sarea_cycle B C A).trans cyc1
+  rcases fan_cases hY hX2 (sarea_ne_of ht (area_of_le_min hm 3 0 5))
+      (sarea_ne_of ht (area_of_le_min hm 3 1 5)) (sarea_ne_of ht (area_of_le_min hm 3 2 5))
+    with h2 | h2 | h2 <;>
+  rcases fan_cases hY hX3 (sarea_ne_of ht (area_of_le_min hm 3 0 6))
+      (sarea_ne_of ht (area_of_le_min hm 3 1 6)) (sarea_ne_of ht (area_of_le_min hm 3 2 6))
+    with h3 | h3 | h3
+  · have := two_fan_case (A := A) (B := B) (C := C) ht hY h2 h3 hX1
+      (min_sub' hm ![A, B, C, Y, P₂, P₃, P₁] ![0, 1, 2, 3, 5, 6, 4] ![0, 1, 2, 3, 6, 4, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := B) (B := C) (C := A) ht (inTri_rot hY) h1 h3 (inTri_rot hX2)
+      (min_sub' hm ![B, C, A, Y, P₁, P₃, P₂] ![1, 2, 0, 3, 4, 6, 5] ![2, 0, 1, 3, 4, 6, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · exact flip_case ht hY h2 h1 h3
+      (min_sub' hm ![A, B, C, Y, P₂, P₁, P₃] ![0, 1, 2, 3, 5, 4, 6] ![0, 1, 2, 3, 5, 4, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+  · have := two_fan_case (A := B) (B := C) (C := A) ht (inTri_rot hY) h1 h2 (inTri_rot hX3)
+      (min_sub' hm ![B, C, A, Y, P₁, P₂, P₃] ![1, 2, 0, 3, 4, 5, 6] ![2, 0, 1, 3, 4, 5, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := B) (B := C) (C := A) ht (inTri_rot hY) h1 h2 (inTri_rot hX3)
+      (min_sub' hm ![B, C, A, Y, P₁, P₂, P₃] ![1, 2, 0, 3, 4, 5, 6] ![2, 0, 1, 3, 4, 5, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := B) (B := C) (C := A) ht (inTri_rot hY) h1 h2 (inTri_rot hX3)
+      (min_sub' hm ![B, C, A, Y, P₁, P₂, P₃] ![1, 2, 0, 3, 4, 5, 6] ![2, 0, 1, 3, 4, 5, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · exact flip_case ht hY h3 h1 h2
+      (min_sub' hm ![A, B, C, Y, P₃, P₁, P₂] ![0, 1, 2, 3, 6, 4, 5] ![0, 1, 2, 3, 5, 6, 4] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+  · have := two_fan_case (A := B) (B := C) (C := A) ht (inTri_rot hY) h1 h3 (inTri_rot hX2)
+      (min_sub' hm ![B, C, A, Y, P₁, P₃, P₂] ![1, 2, 0, 3, 4, 6, 5] ![2, 0, 1, 3, 4, 6, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := C) (B := A) (C := B) ht (inTri_rot (inTri_rot hY)) h2 h3 (inTri_rot (inTri_rot hX1))
+      (min_sub' hm ![C, A, B, Y, P₂, P₃, P₁] ![2, 0, 1, 3, 5, 6, 4] ![1, 2, 0, 3, 6, 4, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+
+/-- (5), doubled form, when `X 1` lies in the fan triangle `C A (Y)`. -/
+theorem seven_core_2 {A B C Y P₁ P₂ P₃ : Point} {t : ℝ} (ht : 0 < t)
+    (hY : InTriangle Y A B C) (hX1 : InTriangle P₁ A B C) (hX2 : InTriangle P₂ A B C)
+    (hX3 : InTriangle P₃ A B C) (hm : t ≤ minTriangleArea ![A, B, C, Y, P₁, P₂, P₃])
+    (h1 : InTriangle P₁ C A Y) :
+    (7 + 2 * Real.sqrt 2) * (2 * t) ≤ sarea A B C := by
+  have cyc1 : sarea B C A = sarea A B C := sarea_cycle A B C
+  have cyc2 : sarea C A B = sarea A B C := (sarea_cycle B C A).trans cyc1
+  rcases fan_cases hY hX2 (sarea_ne_of ht (area_of_le_min hm 3 0 5))
+      (sarea_ne_of ht (area_of_le_min hm 3 1 5)) (sarea_ne_of ht (area_of_le_min hm 3 2 5))
+    with h2 | h2 | h2 <;>
+  rcases fan_cases hY hX3 (sarea_ne_of ht (area_of_le_min hm 3 0 6))
+      (sarea_ne_of ht (area_of_le_min hm 3 1 6)) (sarea_ne_of ht (area_of_le_min hm 3 2 6))
+    with h3 | h3 | h3
+  · have := two_fan_case (A := A) (B := B) (C := C) ht hY h2 h3 hX1
+      (min_sub' hm ![A, B, C, Y, P₂, P₃, P₁] ![0, 1, 2, 3, 5, 6, 4] ![0, 1, 2, 3, 6, 4, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · exact flip_case ht hY h2 h3 h1
+      (min_sub' hm ![A, B, C, Y, P₂, P₃, P₁] ![0, 1, 2, 3, 5, 6, 4] ![0, 1, 2, 3, 6, 4, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+  · have := two_fan_case (A := C) (B := A) (C := B) ht (inTri_rot (inTri_rot hY)) h1 h3 (inTri_rot (inTri_rot hX2))
+      (min_sub' hm ![C, A, B, Y, P₁, P₃, P₂] ![2, 0, 1, 3, 4, 6, 5] ![1, 2, 0, 3, 4, 6, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · exact flip_case ht hY h3 h2 h1
+      (min_sub' hm ![A, B, C, Y, P₃, P₂, P₁] ![0, 1, 2, 3, 6, 5, 4] ![0, 1, 2, 3, 6, 5, 4] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+  · have := two_fan_case (A := B) (B := C) (C := A) ht (inTri_rot hY) h2 h3 (inTri_rot hX1)
+      (min_sub' hm ![B, C, A, Y, P₂, P₃, P₁] ![1, 2, 0, 3, 5, 6, 4] ![2, 0, 1, 3, 6, 4, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := C) (B := A) (C := B) ht (inTri_rot (inTri_rot hY)) h1 h3 (inTri_rot (inTri_rot hX2))
+      (min_sub' hm ![C, A, B, Y, P₁, P₃, P₂] ![2, 0, 1, 3, 4, 6, 5] ![1, 2, 0, 3, 4, 6, 5] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := C) (B := A) (C := B) ht (inTri_rot (inTri_rot hY)) h1 h2 (inTri_rot (inTri_rot hX3))
+      (min_sub' hm ![C, A, B, Y, P₁, P₂, P₃] ![2, 0, 1, 3, 4, 5, 6] ![1, 2, 0, 3, 4, 5, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := C) (B := A) (C := B) ht (inTri_rot (inTri_rot hY)) h1 h2 (inTri_rot (inTri_rot hX3))
+      (min_sub' hm ![C, A, B, Y, P₁, P₂, P₃] ![2, 0, 1, 3, 4, 5, 6] ![1, 2, 0, 3, 4, 5, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+  · have := two_fan_case (A := C) (B := A) (C := B) ht (inTri_rot (inTri_rot hY)) h1 h2 (inTri_rot (inTri_rot hX3))
+      (min_sub' hm ![C, A, B, Y, P₁, P₂, P₃] ![2, 0, 1, 3, 4, 5, 6] ![1, 2, 0, 3, 4, 5, 6] (by norm_num)
+        (by decide) (by intro i; fin_cases i <;> simp))
+    linarith
+
+/-- (5) for a counterclockwise triangle, doubled form: the fan of `X 0` (see the section
+docstring). -/
+theorem seven_core {A B C : Point} {X : Fin 4 → Point} {t : ℝ} (ht : 0 < t)
+    (hX : ∀ i, InTriangle (X i) A B C) (hmin : t ≤ minTriangleArea (sevenConfig A B C X)) :
+    (7 + 2 * Real.sqrt 2) * (2 * t) ≤ sarea A B C := by
+  have hm : t ≤ minTriangleArea ![A, B, C, X 0, X 1, X 2, X 3] := hmin
+  rcases fan_cases (hX 0) (hX 1) (sarea_ne_of ht (area_of_le_min hm 3 0 4))
+      (sarea_ne_of ht (area_of_le_min hm 3 1 4)) (sarea_ne_of ht (area_of_le_min hm 3 2 4))
+    with h1 | h1 | h1
+  · exact seven_core_0 ht (hX 0) (hX 1) (hX 2) (hX 3) hm h1
+  · exact seven_core_1 ht (hX 0) (hX 1) (hX 2) (hX 3) hm h1
+  · exact seven_core_2 ht (hX 0) (hX 1) (hX 2) (hX 3) hm h1
 
 /-- **Triangular-hull lemma** (`CORNER_FAMILIES:TriangularHullLemma`), equation (5): seven points
 whose convex hull is a triangle `ABC` (the other four strictly inside) and whose triangles all
 have area at least `t` satisfy `area(ABC) ≥ (7 + 2√2)t`. (General position follows from `t > 0`;
-for `t ≤ 0` the bound is trivial.) `hand/CORNER_FAMILIES.md`, lines 139–228.
+for `t ≤ 0` the bound is trivial.) `hand/CORNER_FAMILIES.md`, lines 139–228; the proof here is
+the triangulation-free route of the section docstring.
 
-Uses: CORNER_FAMILIES:claim-deg4or5, CORNER_FAMILIES:StarLemma -/
+Uses: CORNER_FAMILIES:TwoInteriorPointLemma, CORNER_FAMILIES:SixPointTriangularHullTheorem,
+CORNER_FAMILIES:StarLemma -/
 theorem triangularHullLemma (A B C : Point) (X : Fin 4 → Point)
     (hX : ∀ i, InsideTriangle (X i) A B C) (t : ℝ)
     (hmin : t ≤ minTriangleArea (sevenConfig A B C X)) :
     (7 + 2 * Real.sqrt 2) * t ≤ triangleArea A B C := by
-  sorry
+  rcases le_or_gt t 0 with ht | ht
+  · have : 0 ≤ 7 + 2 * Real.sqrt 2 := by positivity
+    nlinarith [triangleArea_nonneg A B C]
+  rcases inside_orient (hX 0) (hX 1) with ⟨h0, h1⟩ | ⟨h0, h1⟩ <;>
+    rcases inside_orient (hX 0) (hX 2) with ⟨-, h2⟩ | ⟨h0', h2⟩ <;>
+    rcases inside_orient (hX 0) (hX 3) with ⟨-, h3⟩ | ⟨h0'', h3⟩ <;>
+    first
+    | (exfalso; linarith [inTri_pos h0, inTri_pos h0', sarea_swap₂₃ A B C])
+    | (exfalso; linarith [inTri_pos h0, inTri_pos h0'', sarea_swap₂₃ A B C])
+    | (exfalso; linarith [inTri_pos h0, inTri_pos h2, sarea_swap₂₃ A B C])
+    | (exfalso; linarith [inTri_pos h0, inTri_pos h3, sarea_swap₂₃ A B C])
+    | skip
+  · exact half_le (seven_core ht (fun i => by fin_cases i <;> assumption) hmin)
+  · rw [← triangleArea_swap₂₃]
+    exact half_le (seven_core ht (fun i => by fin_cases i <;> assumption)
+      (min_sub hmin (sevenConfig A C B X) ![0, 2, 1, 3, 4, 5, 6] (by norm_num) (by decide)
+        (by intro i; fin_cases i <;> simp [sevenConfig])))
 
 /-! ### §3. At least four upper points -/
+
+/-- Injectivity of an explicit index vector from the pairwise distinctness facts in context. -/
+macro "inj_tac" : tactic => `(tactic| (intro x y hxy; fin_cases x <;> fin_cases y <;>
+  first | rfl | (simp at hxy; done) |
+    (exfalso; simp at hxy; first | exact absurd hxy ‹_› | exact absurd hxy.symm ‹_›)))
+
+/-- The index of the free point `i` in `typeIIIConfig`. -/
+def fr (a : Fin 6) : Fin 9 := ⟨a.val + 3, by omega⟩
+
+theorem typeIII_fr (U V W X Y Z : Point) (a : Fin 6) :
+    typeIIIConfig U V W X Y Z (fr a) = freeSix U V W X Y Z a := by
+  fin_cases a <;> rfl
+
+theorem fr_ne {a b : Fin 6} (h : a ≠ b) : fr a ≠ fr b := by
+  intro e; apply h; simp only [fr, Fin.ext_iff] at e; exact Fin.ext (by omega)
+
+theorem fr_ne_small (a : Fin 6) : fr a ≠ 0 ∧ fr a ≠ 1 ∧ fr a ≠ 2 := by
+  simp only [fr, ne_eq, Fin.ext_iff]; refine ⟨?_, ?_, ?_⟩ <;> simp <;> omega
+
+theorem freeSix_mem {U V W X Y Z : Point} (hU : U ∈ unitSquare) (hV : V ∈ unitSquare)
+    (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
+    (a : Fin 6) : freeSix U V W X Y Z a ∈ unitSquare := by
+  fin_cases a <;> assumption
+
+/-- A point inside a triangle is none of its vertices. -/
+theorem inside_ne {X A B C : Point} (h : InsideTriangle X A B C) : X ≠ A ∧ X ≠ B ∧ X ≠ C := by
+  have z1 : ∀ P Q : Point, sarea P Q P = 0 := fun P Q => by unfold sarea; ring
+  have z2 : ∀ P Q : Point, sarea P Q Q = 0 := fun P Q => by unfold sarea; ring
+  refine ⟨?_, ?_, ?_⟩ <;> rintro rfl <;> rcases h with ⟨h1, h2, h3⟩ | ⟨h1, h2, h3⟩ <;>
+    simp only [z1, z2, lt_irrefl] at h1 h2 h3
+
+/-- A point inside a triangle makes it nondegenerate. -/
+theorem inside_sarea_ne {X A B C : Point} (h : InsideTriangle X A B C) : sarea A B C ≠ 0 := by
+  rcases h with h | h
+  · exact (inTri_pos h).ne'
+  · have := inTri_pos h; rw [sarea_swap₂₃] at this; linarith
+
+/-- In a Type-III configuration of positive least area, an upper free point is strictly inside
+`ABC`, `A = (0,0)`, `B = (0,1)`, `C = (1,1)` (lines 230–236). -/
+theorem upper_inside {U V W X Y Z : Point} (hU : U ∈ unitSquare) (hV : V ∈ unitSquare)
+    (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
+    (hpos : 0 < minTriangleArea (typeIIIConfig U V W X Y Z)) (a : Fin 6)
+    (hu : (freeSix U V W X Y Z a).1 < (freeSix U V W X Y Z a).2) :
+    InTriangle (freeSix U V W X Y Z a) (0, 0) (1, 1) (0, 1) := by
+  have hm := freeSix_mem hU hV hW hX hY hZ a
+  have n1 := sarea_ne_zero_of_min_pos hpos 0 1 (fr a) (by decide) (fr_ne_small a).2.1.symm
+    (fr_ne_small a).1.symm
+  have n2 := sarea_ne_zero_of_min_pos hpos 1 2 (fr a) (by decide) (fr_ne_small a).2.2.symm
+    (fr_ne_small a).2.1.symm
+  rw [typeIII_fr] at n1 n2
+  set Q := freeSix U V W X Y Z a
+  change sarea (0, 0) (0, 1) Q ≠ 0 at n1
+  change sarea (0, 1) (1, 1) Q ≠ 0 at n2
+  simp only [sarea] at n1 n2
+  obtain ⟨m1, m2, m3, m4⟩ := hm
+  refine ⟨?_, ?_, ?_⟩ <;> simp only [sarea]
+  · linarith
+  · have : Q.2 ≠ 1 := fun h => n2 (by rw [h]; ring)
+    have : Q.2 < 1 := lt_of_le_of_ne m4 this
+    linarith
+  · have : Q.1 ≠ 0 := fun h => n1 (by rw [h]; ring)
+    have : 0 < Q.1 := lt_of_le_of_ne m1 (Ne.symm this)
+    linarith
 
 /-- **Type-III exclusion (1)** (`CORNER_FAMILIES:TypeIII-ge4upper`): a Type-III configuration
 (corners `A = (0,0)`, `B = (0,1)`, `C = (1,1)`, six free points of the square) with at least four
@@ -218,15 +630,96 @@ theorem typeIII_ge4upper (U V W X Y Z : Point) (hU : U ∈ unitSquare) (hV : V �
     (h4 : 4 ≤ upperCount U V W X Y Z) :
     minTriangleArea (typeIIIConfig U V W X Y Z) ≤ 1 / (14 + 4 * Real.sqrt 2) ∧
       1 / (14 + 4 * Real.sqrt 2) < 1 / 19 ∧ (1 / 19 : ℝ) < A₀ := by
-  sorry
+  have hs2 := sqrt2_gt
+  have hd0 : (0 : ℝ) < 14 + 4 * Real.sqrt 2 := by positivity
+  refine ⟨?_, by rw [div_lt_div_iff₀ hd0 (by norm_num)]; linarith, by linarith [A₀_bounds.2.2.1]⟩
+  set P := typeIIIConfig U V W X Y Z with hPdef
+  by_contra hcon
+  push Not at hcon
+  have hpos : 0 < minTriangleArea P := lt_trans (by positivity) hcon
+  set F := freeSix U V W X Y Z
+  have h4' : 3 < {i : Fin 6 | (F i).1 < (F i).2}.ncard := by
+    have : upperCount U V W X Y Z = {i : Fin 6 | (F i).1 < (F i).2}.ncard := rfl
+    omega
+  obtain ⟨a, b, c, d, ha, hb, hc, hd, hab, hac, had, hbc, hbd, hcd⟩ :=
+    (Set.three_lt_ncard_iff (Set.toFinite _)).1 h4'
+  change (F a).1 < (F a).2 at ha
+  change (F b).1 < (F b).2 at hb
+  change (F c).1 < (F c).2 at hc
+  change (F d).1 < (F d).2 at hd
+  have hin : ∀ e : Fin 6, (F e).1 < (F e).2 → InsideTriangle (F e) (0, 0) (0, 1) (1, 1) :=
+    fun e he => Or.inr (upper_inside hU hV hW hX hY hZ hpos e he)
+  have hX' : ∀ i, InsideTriangle (![F a, F b, F c, F d] i) (0, 0) (0, 1) (1, 1) := by
+    intro i; fin_cases i
+    · exact hin a ha
+    · exact hin b hb
+    · exact hin c hc
+    · exact hin d hd
+  have f1 := fr_ne_small a
+  have f2 := fr_ne_small b
+  have f3 := fr_ne_small c
+  have f4 := fr_ne_small d
+  have g1 := fr_ne hab
+  have g2 := fr_ne hac
+  have g3 := fr_ne had
+  have g4 := fr_ne hbc
+  have g5 := fr_ne hbd
+  have g6 := fr_ne hcd
+  have hm7 : minTriangleArea P ≤
+      minTriangleArea (sevenConfig (0, 0) (0, 1) (1, 1) ![F a, F b, F c, F d]) :=
+    min_sub (le_refl _) _ ![0, 1, 2, fr a, fr b, fr c, fr d] (by norm_num)
+      (by obtain ⟨f1a, f1b, f1c⟩ := f1; obtain ⟨f2a, f2b, f2c⟩ := f2
+          obtain ⟨f3a, f3b, f3c⟩ := f3; obtain ⟨f4a, f4b, f4c⟩ := f4; inj_tac)
+      (by intro i; fin_cases i
+          · simp [hPdef, sevenConfig, typeIIIConfig]
+          · simp [hPdef, sevenConfig, typeIIIConfig]
+          · simp [hPdef, sevenConfig, typeIIIConfig]
+          · exact (typeIII_fr U V W X Y Z a).symm
+          · exact (typeIII_fr U V W X Y Z b).symm
+          · exact (typeIII_fr U V W X Y Z c).symm
+          · exact (typeIII_fr U V W X Y Z d).symm)
+  have h7 := triangularHullLemma _ _ _ _ hX' _ hm7
+  have harea : triangleArea ((0 : ℝ), (0 : ℝ)) (0, 1) (1, 1) = 1 / 2 := by
+    simp only [triangleArea_eq, sarea]; norm_num
+  rw [harea] at h7
+  rw [div_lt_iff₀ hd0] at hcon
+  nlinarith
 
 /-! ### §4. The global triangle-occupancy corollary -/
 
 /-- **Claim** (`CORNER_FAMILIES:GlobalOccupancyCorollary`), sub-claim: a triangle with vertices in
-the unit square has area at most `1/2`. `hand/CORNER_FAMILIES.md`, lines 258–261. -/
+the unit square has area at most `1/2` (the doubled signed area is
+`x_P(y_Q - y_R) + x_Q(y_R - y_P) + x_R(y_P - y_Q)`, at most the sum of its positive
+coefficients). `hand/CORNER_FAMILIES.md`, lines 258–261. -/
 theorem claim_area_le_half (P Q R : Point) (hP : P ∈ unitSquare) (hQ : Q ∈ unitSquare)
     (hR : R ∈ unitSquare) : triangleArea P Q R ≤ 1 / 2 := by
-  sorry
+  have key : ∀ P Q R : Point, P ∈ unitSquare → Q ∈ unitSquare → R ∈ unitSquare →
+      sarea P Q R ≤ 1 := by
+    intro P Q R hP hQ hR
+    obtain ⟨p1, p2, p3, p4⟩ := hP
+    obtain ⟨q1, q2, q3, q4⟩ := hQ
+    obtain ⟨r1, r2, r3, r4⟩ := hR
+    have e : sarea P Q R = P.1 * (Q.2 - R.2) + Q.1 * (R.2 - P.2) + R.1 * (P.2 - Q.2) := by
+      unfold sarea; ring
+    rw [e]
+    have m : ∀ x c : ℝ, 0 ≤ x → x ≤ 1 → x * c ≤ max c 0 := by
+      intro x c h0 h1
+      rcases le_total c 0 with h | h
+      · rw [max_eq_right h]; nlinarith
+      · rw [max_eq_left h]; nlinarith
+    have k1 := m _ (Q.2 - R.2) p1 p2
+    have k2 := m _ (R.2 - P.2) q1 q2
+    have k3 := m _ (P.2 - Q.2) r1 r2
+    have hmax : max (Q.2 - R.2) 0 + max (R.2 - P.2) 0 + max (P.2 - Q.2) 0 ≤ 1 := by
+      rcases le_total (Q.2 - R.2) 0 with h1 | h1 <;> rcases le_total (R.2 - P.2) 0 with h2 | h2 <;>
+        rcases le_total (P.2 - Q.2) 0 with h3 | h3 <;>
+        simp only [max_def] <;> split_ifs <;> linarith
+    linarith
+  have h1 := key P Q R hP hQ hR
+  have h2 := key P R Q hP hR hQ
+  rw [sarea_swap₂₃] at h2
+  have := abs_le.2 ⟨(by linarith : -1 ≤ sarea P Q R), h1⟩
+  rw [triangleArea_eq]; linarith
 
 /-- **Global occupancy corollary** (`CORNER_FAMILIES:GlobalOccupancyCorollary`): in a nine-point
 configuration of the unit square with minimum area at least `A₀`, a triangle spanned by three
@@ -237,7 +730,38 @@ Uses: CORNER_FAMILIES:TriangularHullLemma -/
 theorem globalOccupancyCorollary (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare)
     (hmin : A₀ ≤ minTriangleArea P) (i j k : Fin 9) :
     {m : Fin 9 | InsideTriangle (P m) (P i) (P j) (P k)}.ncard ≤ 3 := by
-  sorry
+  by_contra hcon
+  push Not at hcon
+  obtain ⟨a, b, c, d, ha, hb, hc, hd, hab, hac, had, hbc, hbd, hcd⟩ :=
+    (Set.three_lt_ncard_iff (Set.toFinite _)).1 hcon
+  simp only [Set.mem_ofPred_eq] at ha hb hc hd
+  have hne := inside_sarea_ne ha
+  have z1 : ∀ p q : Point, sarea p p q = 0 := fun p q => by unfold sarea; ring
+  have z2 : ∀ p q : Point, sarea p q q = 0 := fun p q => by unfold sarea; ring
+  have z3 : ∀ p q : Point, sarea p q p = 0 := fun p q => by unfold sarea; ring
+  have hij : i ≠ j := by rintro rfl; exact hne (z1 _ _)
+  have hjk : j ≠ k := by rintro rfl; exact hne (z2 _ _)
+  have hik : i ≠ k := by rintro rfl; exact hne (z3 _ _)
+  have v : ∀ m, InsideTriangle (P m) (P i) (P j) (P k) → m ≠ i ∧ m ≠ j ∧ m ≠ k := by
+    intro m hm
+    obtain ⟨n1, n2, n3⟩ := inside_ne hm
+    exact ⟨fun h => n1 (by rw [h]), fun h => n2 (by rw [h]), fun h => n3 (by rw [h])⟩
+  obtain ⟨ai, aj, ak⟩ := v a ha
+  obtain ⟨bi, bj, bk⟩ := v b hb
+  obtain ⟨ci, cj, ck⟩ := v c hc
+  obtain ⟨di, dj, dk⟩ := v d hd
+  have hX' : ∀ x, InsideTriangle (![P a, P b, P c, P d] x) (P i) (P j) (P k) := by
+    intro x; fin_cases x
+    · exact ha
+    · exact hb
+    · exact hc
+    · exact hd
+  have h7 := triangularHullLemma (P i) (P j) (P k) _ hX' A₀
+    (min_sub hmin _ ![i, j, k, a, b, c, d] (by norm_num) (by inj_tac)
+      (by intro x; fin_cases x <;> simp [sevenConfig]))
+  have := claim_area_le_half (P i) (P j) (P k) (hP i) (hP j) (hP k)
+  have hb0 := A₀_bounds
+  nlinarith [sqrt2_gt]
 
 /-! ### §5. Exact residual Type-III geometry -/
 
@@ -252,7 +776,30 @@ theorem claim_residual_regions (U V W X Y Z : Point) (hU : U ∈ unitSquare)
       2 * t ≤ |(freeSix U V W X Y Z i).2 - (freeSix U V W X Y Z i).1| ∧
       (freeSix U V W X Y Z i ∈ upperRegion (2 * t) ∨
         freeSix U V W X Y Z i ∈ lowerRegion (2 * t)) := by
-  sorry
+  have hm := freeSix_mem hU hV hW hX hY hZ i
+  have e1 := two_le_abs (area_of_le_min hmin 0 1 (fr i) (by decide) (fr_ne_small i).2.1.symm
+    (fr_ne_small i).1.symm)
+  have e2 := two_le_abs (area_of_le_min hmin 1 2 (fr i) (by decide) (fr_ne_small i).2.2.symm
+    (fr_ne_small i).2.1.symm)
+  have e3 := two_le_abs (area_of_le_min hmin 0 2 (fr i) (by decide) (fr_ne_small i).2.2.symm
+    (fr_ne_small i).1.symm)
+  rw [typeIII_fr] at e1 e2 e3
+  set Q := freeSix U V W X Y Z i
+  change 2 * t ≤ |sarea (0, 0) (0, 1) Q| at e1
+  change 2 * t ≤ |sarea (0, 1) (1, 1) Q| at e2
+  change 2 * t ≤ |sarea (0, 0) (1, 1) Q| at e3
+  have s1 : sarea (0, 0) (0, 1) Q = -Q.1 := by unfold sarea; ring
+  have s2 : sarea (0, 1) (1, 1) Q = Q.2 - 1 := by unfold sarea; ring
+  have s3 : sarea (0, 0) (1, 1) Q = Q.2 - Q.1 := by unfold sarea; ring
+  rw [s1, abs_neg, abs_of_nonneg hm.1] at e1
+  rw [s2, abs_of_nonpos (by linarith [hm.2.2.2])] at e2
+  rw [s3] at e3
+  refine ⟨e1, by linarith, e3, ?_⟩
+  rcases le_total 0 (Q.2 - Q.1) with h | h
+  · rw [abs_of_nonneg h] at e3
+    exact Or.inl ⟨e1, by linarith, by linarith⟩
+  · rw [abs_of_nonpos h] at e3
+    exact Or.inr ⟨hm.2.2.1, hm.2.1, by linarith⟩
 
 /-- **Claim** (`CORNER_FAMILIES:claim-residual-regions`), the count: at minimum area `≥ A₀`, at
 most three free points lie in `U_s` (are upper), by (1). `hand/CORNER_FAMILIES.md`,
@@ -263,6 +810,9 @@ theorem claim_residual_regions_count (U V W X Y Z : Point) (hU : U ∈ unitSquar
     (hV : V ∈ unitSquare) (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare)
     (hZ : Z ∈ unitSquare) (hmin : A₀ ≤ minTriangleArea (typeIIIConfig U V W X Y Z)) :
     upperCount U V W X Y Z ≤ 3 := by
-  sorry
+  by_contra h
+  push Not at h
+  obtain ⟨h1, h2, h3⟩ := typeIII_ge4upper U V W X Y Z hU hV hW hX hY hZ h
+  linarith
 
 end Heilbronn.CornerFamilies

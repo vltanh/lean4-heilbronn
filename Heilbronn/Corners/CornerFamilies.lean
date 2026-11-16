@@ -20,6 +20,8 @@ of §9, and §§10–12 with variable threshold and displaced base (`ONE_CORNER.
 **The note is split into parts** (each its own module, all in the namespace
 `Heilbronn.CornerFamilies`):
 
+* `CornerFamilies/Interior.lean` (§§7–8, general part): `InsideTriangle`, the two-interior-point
+  lemma (13), the six-point theorem (14);
 * `CornerFamilies/Stars.lean` (§§1–5): star lemma (2), triangular-hull lemma (5), Type-III
   exclusion (1) for `≥ 4` upper points, global occupancy corollary, residual regions (7)–(8);
 * `CornerFamilies/SupportTriangle.lean` (§6): nontriangular-hull (support-triangle) lemma and its
@@ -34,10 +36,11 @@ of §9, and §§10–12 with variable threshold and displaced base (`ONE_CORNER.
   exclusion of the `3+3` class;
 * this module: the complete Type-III exclusion (`typeIII_complete`, `typeIII_lt_A₀`).
 
-**Flags** (details in the parts): the triangulation claim of §2 is stated in star form
-(`claim_deg4or5`); the gap at lines 161–165 concerns only a proof step
-(`claim_empty_convex_quad` is stated, true); the mesh labelling in fixed coordinates
-(`claim_mesh_labelling`, Gap 3) is an unstated step of the manuscript.
+**Flags** (details in the parts): (5) is proved without triangulations (`Stars.lean`); the gap
+at lines 161–165 is repaired (`claim_empty_convex_quad`); the mesh labelling in fixed
+coordinates (`claim_mesh_labelling`, Gap 3) is an unstated step of the manuscript; the C-side
+capacity of §12 is proved by reflecting the A-side argument (as in `ONE_CORNER.md` §4), not by
+the container argument; `CornerFamilies/Interior.lean` holds (13) and (14).
 -/
 
 @[expose] public section
@@ -56,7 +59,15 @@ CORNER_FAMILIES:TypeIII-2+4, CORNER_FAMILIES:TypeIII-3+3 -/
 theorem typeIII_complete (U V W X Y Z : Point) (hU : U ∈ unitSquare) (hV : V ∈ unitSquare)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare) :
     minTriangleArea (typeIIIConfig U V W X Y Z) ≤ 7 / 128 := by
-  sorry
+  rcases Nat.lt_or_ge (upperCount U V W X Y Z) 4 with h | h
+  · interval_cases hc : upperCount U V W X Y Z
+    · exact typeIII_le1upper U V W X Y Z hU hV hW hX hY hZ (by omega)
+    · exact typeIII_le1upper U V W X Y Z hU hV hW hX hY hZ (by omega)
+    · exact typeIII_2plus4 U V W X Y Z hU hV hW hX hY hZ hc
+    · exact typeIII_3plus3 U V W X Y Z hU hV hW hX hY hZ hc
+  · obtain ⟨h1, h2, -⟩ := typeIII_ge4upper U V W X Y Z hU hV hW hX hY hZ h
+    have : (1 : ℝ) / 19 < 7 / 128 := by norm_num
+    linarith
 
 /-- **Type-III exclusion** (`CORNER_FAMILIES:TypeIII-complete`), the form used by the assembly:
 no Type-III configuration has minimum area `A₀`, since `7/128 < A₀`.
@@ -65,7 +76,7 @@ no Type-III configuration has minimum area `A₀`, since `7/128 < A₀`.
 Uses: CORNER_FAMILIES:TypeIII-complete -/
 theorem typeIII_lt_A₀ (U V W X Y Z : Point) (hU : U ∈ unitSquare) (hV : V ∈ unitSquare)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare) :
-    minTriangleArea (typeIIIConfig U V W X Y Z) < A₀ := by
-  sorry
+    minTriangleArea (typeIIIConfig U V W X Y Z) < A₀ :=
+  (typeIII_complete U V W X Y Z hU hV hW hX hY hZ).trans_lt A₀_bounds.1
 
 end Heilbronn.CornerFamilies
