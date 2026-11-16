@@ -403,14 +403,6 @@ theorem claim_k_gt_h {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
 
 /-! ### §3–4. The area of `CDEX` -/
 
-/-- `P(u) = 35 - 306u + 827u² - 640u³ > 0` on `[0, 1/2]` (`SEVEN_BOUNDARY_TOP_CAP.md` (4);
-a copy of `EightBoundary.cubic_P_pos`). -/
-theorem tcr_cubic_P_pos {u : ℝ} (h0 : 0 ≤ u) (h1 : u ≤ 1 / 2) :
-    0 < 35 - 306 * u + 827 * u ^ 2 - 640 * u ^ 3 := by
-  rcases le_total u (3 / 10) with h | h
-  · nlinarith [sq_nonneg (u - 17 / 63), mul_nonneg (sub_nonneg.2 h) (sq_nonneg (u - 1 / 4))]
-  · nlinarith [sq_nonneg (u - 3 / 10), mul_nonneg (sub_nonneg.2 h1) (sq_nonneg (u - 3 / 10))]
-
 /-- The scalar bound (3)–(4) of `SEVEN_BOUNDARY_TOP_CAP.md` in the strict form used by (11):
 the right side of (3) is below `24s/5 = 21/40` (adapted from `EightBoundary.scalar_bound_core`). -/
 theorem scalar_lt_2140 {X Z : ℝ} (hX : 0 < X) (hZ : 0 < Z) (hsZ : 7 / 64 * Z < 1)
@@ -441,7 +433,7 @@ theorem scalar_lt_2140 {X Z : ℝ} (hX : 0 < X) (hZ : 0 < Z) (hsZ : 7 / 64 * Z <
       (2 - 2 * u + 7 / 64) * u * (1 - 2 * u) - 7 / 64 * u - 2 * (7 / 64) * (1 - 2 * u) := by
     have := mul_le_mul_of_nonneg_right h3 (by positivity : (0 : ℝ) ≤ u * (1 - 2 * u))
     nlinarith
-  have hP := tcr_cubic_P_pos (u := u) hu0.le (by linarith)
+  have hP := EightBoundary.cubic_P_pos (u := u) (by linarith)
   nlinarith
 
 section RCert

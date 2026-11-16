@@ -326,25 +326,6 @@ theorem octConfig_exterior (a h b c d e f g k : ℝ) (P : Point) :
       sevenConfig a h b c d e f (g, k) P ∘ ![0, 2, 3, 4, 5, 7, 6, 1, 8] := by
   funext i; fin_cases i <;> rfl
 
-/-- Reading a radial word: `[O V_p V_q] > 0` when `q - p ≤ k_p` (a copy of
-`RadialCatalogue.IsRadialWord.pos_of`). -/
-theorem ec_pos_of {V : Fin 8 → Point} {O : Point} {k : Word} (hk : IsRadialWord V O k)
-    (p q : Fin 8) (h0 : 0 < ((q - p : Fin 8) : ℕ)) (h : ((q - p : Fin 8) : ℕ) ≤ k p) :
-    0 < sarea O (V p) (V q) := by
-  have := (hk p (q - p) h0).2 h
-  rwa [add_sub_cancel] at this
-
-/-- Reading a radial word: `[O V_p V_q] ≤ 0` when `q - p > k_p`. -/
-theorem ec_nonpos_of {V : Fin 8 → Point} {O : Point} {k : Word} (hk : IsRadialWord V O k)
-    (p q : Fin 8) (h0 : 0 < ((q - p : Fin 8) : ℕ)) (h : k p < ((q - p : Fin 8) : ℕ)) :
-    sarea O (V p) (V q) ≤ 0 := by
-  have := hk p (q - p) h0
-  rw [add_sub_cancel] at this
-  by_contra hc
-  push Not at hc
-  have := this.1 hc
-  omega
-
 /-- Every oriented cost (11) is nonnegative: convexity for the triangles of the octagon, the
 radial word for those containing `P`. -/
 theorem q_nonneg {V : Fin 8 → Point} {P : Point} {w : Word} (hV : IsConvexPolygon V)
@@ -388,7 +369,7 @@ theorem q_nonneg {V : Fin 8 → Point} {P : Point} {w : Word} (hV : IsConvexPoly
     · have hs : sgn w (i, j, l) = true := by
         unfold sgn; rw [hof]; simp [hl, hk]
       rw [hs, if_pos rfl, one_mul]
-      have hpos := ec_pos_of hw ⟨i, hi8⟩ ⟨j, hj8⟩
+      have hpos := hw.pos_of ⟨i, hi8⟩ ⟨j, hj8⟩
         (by rw [hsub]; omega) (by rw [hsub]; exact hk)
       have := SevenBoundaryCaps.cost hmin i j l (by rw [eVi, eVj, eVl])
         (by rw [hcyc]; exact hpos.le) hne1 hne2 hne3
@@ -397,7 +378,7 @@ theorem q_nonneg {V : Fin 8 → Point} {P : Point} {w : Word} (hV : IsConvexPoly
         unfold sgn; rw [hof]; simp [hl, hk]
       rw [hs]
       simp only [Bool.false_eq_true, ↓reduceIte, neg_one_mul]
-      have hneg := ec_nonpos_of hw ⟨i, hi8⟩ ⟨j, hj8⟩
+      have hneg := hw.nonpos_of ⟨i, hi8⟩ ⟨j, hj8⟩
         (by rw [hsub]; omega) (by rw [hsub]; omega)
       have := SevenBoundaryCaps.cost_neg hmin i j l (by rw [eVi, eVj, eVl])
         (by rw [hcyc]; exact hneg) hne1 hne2 hne3

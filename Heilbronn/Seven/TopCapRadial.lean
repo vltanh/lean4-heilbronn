@@ -2,6 +2,8 @@ module
 
 public import Heilbronn.Common.Families
 public import Heilbronn.Seven.TopCapRight
+public import Heilbronn.Global.GlobalCompletion
+public import Heilbronn.Sharp.GMovingProjection
 
 /-! # All sharp radial orientations of the seven-boundary exterior case (`hand/SEVEN_BOUNDARY_TOP_CAP_RADIAL.md`)
 
@@ -26,8 +28,10 @@ The four transformations of §2 (sending each R3 word to the representative `(3,
 identity (`F' = X`, `GLOBAL_COMPLETION` §5, F-moving chamber); `(x,y) ↦ (1-x,y)` with labels
 `V_{3-i}` (`G' = (1-g,k)`, `SHARP_G_MOVING_PROJECTION`, strict); `(x,y) ↦ (x,1-y)` with labels
 `V_{7-i}` (`C' = (g,1-k)`, `SHARP_BC_MOVING` Theorem 2); the half-turn with labels `V_{i+4}`
-(`B' = (1-g,1-k)`, `SHARP_BC_MOVING` Theorem 3). They are internal to the proof of `theorem1` and
-rely on chamber statements of other groups; they are not stated separately here.
+(`B' = (1-g,1-k)`, `SHARP_BC_MOVING` Theorem 3). They are the lemmas `r3_row1`, …, `r3_row4`:
+each writes the sharp chamber configuration as `φ ∘ sevenConfig ∘ σ` (`transfer_chamber`: same
+least area, and the construction pulls back to `IsOptimal`), checks the eleven chamber signs from
+the convexity of the octagon and the radial word, and applies the external chamber theorem.
 
 Naming note: this note calls `(x,y) ↦ (1-x,y)` the "vertical reflection" and `(x,y) ↦ (x,1-y)`
 the "horizontal reflection"; `SEVEN_BOUNDARY_CAPS.md` calls `x ↦ 1-x` "horizontal". Explicit maps
@@ -463,6 +467,232 @@ theorem claim_octagon_cover {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c 
   · exact claim_ear_bounds _ P hV hO hnd hq hk
   · exact claim_side_quad_bounds _ P hV hO hnd hq hk
 
+/-! ### §2. The four R3 words and the sharp chambers -/
+
+/-- The four words of class R3 (the orbit of the representative). -/
+theorem r3_words {w : Word} (hc : InClass .R3 w) :
+    w = ![3, 2, 3, 4, 5, 4, 4, 3] ∨ w = ![3, 4, 5, 4, 4, 3, 3, 2] ∨
+      w = ![4, 3, 3, 2, 3, 4, 5, 4] ∨ w = ![5, 4, 4, 3, 3, 2, 3, 4] := by
+  obtain ⟨refl, r, rfl⟩ := hc
+  revert refl r; decide
+
+/-- A point strictly inside the anchor heptagon lies in the square. -/
+theorem heptagon_mem_square {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P : Point}
+    (hP : InHeptagon a h b c d e f P) : P ∈ unitSquare := by
+  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
+  obtain ⟨x, y⟩ := P
+  obtain ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩ := hP
+  simp only [sarea] at hAB hBC hCD hDE hEF hFH hHA
+  have hx0 : 0 < x := by nlinarith
+  have hy0 : 0 < y := by nlinarith
+  have hx1 : x < 1 := by nlinarith
+  refine ⟨hx0.le, hx1.le, hy0.le, ?_⟩
+  by_contra hy; push Not at hy
+  simp only at hy
+  have h1 : x < f := by
+    nlinarith [mul_pos (show (0 : ℝ) < 1 - f by linarith) (show (0 : ℝ) < y - 1 by linarith),
+      mul_pos (show (0 : ℝ) < 1 - e by linarith) (show (0 : ℝ) < 1 - f by linarith)]
+  nlinarith [mul_pos (show (0 : ℝ) < f by linarith) (show (0 : ℝ) < y - 1 by linarith),
+    mul_pos (show (0 : ℝ) < 1 - h by linarith) (show (0 : ℝ) < f - x by linarith)]
+
+/-- **Transfer.** If `T` is the image of `S` under a square symmetry `φ` (an involution) and a
+relabelling `σ`, then `T` and `S` have the same least area, and `T = optimalConfiguration` makes
+`S` optimal. -/
+theorem transfer_chamber {S T : Fin 9 → Point} (φ : SquareSymmetry) (σ : Equiv.Perm (Fin 9))
+    (hinv : ∀ p, φ.apply (φ.apply p) = p) (hT : T = φ.apply ∘ S ∘ σ) :
+    minTriangleArea T = minTriangleArea S ∧ (T = optimalConfiguration → IsOptimal S) := by
+  refine ⟨?_, fun hopt => ⟨φ, σ, fun i => ?_⟩⟩
+  · rw [hT]
+    exact (SquareSymmetry.minTriangleArea_comp φ (S ∘ σ)).trans (minTriangleArea_comp_perm S σ)
+  · have := congrFun hT i
+    rw [hopt] at this
+    simp only [Function.comp_apply] at this
+    rw [this, hinv]
+
+/-- The relabellings of the four rows of the table of §2 (sevenConfig indices). -/
+def r3Perm : Fin 4 → Equiv.Perm (Fin 9)
+  | 0 => Equiv.ofBijective ![0, 2, 3, 4, 5, 7, 6, 1, 8] (by decide)
+  | 1 => Equiv.ofBijective ![4, 3, 2, 0, 1, 6, 7, 5, 8] (by decide)
+  | 2 => Equiv.ofBijective ![1, 6, 7, 5, 4, 3, 2, 0, 8] (by decide)
+  | 3 => Equiv.ofBijective ![5, 7, 6, 1, 0, 2, 3, 4, 8] (by decide)
+
+section R3
+variable {a h b c d e f g k x y : ℝ}
+
+/-- The common data of the R3 rows at minimum area at least `7/128`. -/
+structure R3Data (a h b c d e f g k x y : ℝ) : Prop where
+  conv : ConvHyp a h b c d e f g k
+  sq : ((x, y) : Point) ∈ unitSquare
+
+/-- Row 1 (identity, `F' = X`): `GLOBAL_COMPLETION` Theorem 3. -/
+theorem r3_row1 (D : R3Data a h b c d e f g k x y)
+    (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) (x, y) ![3, 2, 3, 4, 5, 4, 4, 3]) :
+    minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) ≤ A₀ ∧
+      (minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) = A₀ →
+        k = 1 ∧ IsOptimal (sevenConfig a h b c d e f (g, k) (x, y))) := by
+  have H := D.conv
+  set S := sevenConfig a h b c d e f (g, k) (x, y) with hS
+  set T := GlobalCompletion.movingFConfig a b c d e g f h k x y with hTdef
+  have hT : T = (⟨false, false, false⟩ : SquareSymmetry).apply ∘ S ∘ r3Perm 0 := by
+    funext i; fin_cases i <;> simp [hTdef, hS, GlobalCompletion.movingFConfig, sevenConfig,
+      SquareSymmetry.apply, r3Perm]
+  obtain ⟨hmT, hopt⟩ := transfer_chamber _ _ (fun p => by simp [SquareSymmetry.apply]) hT
+  have f1 := cvx_ABH H; have f2 := cvx_ABC H; have f3 := cvx_AFH H; have f4 := cvx_DEX H
+  have f5 := cvx_XFH H; have f6 := cvx_EXF H
+  have w1 := hw.pos_of 0 3 (by decide) (by decide)
+  have w2 := hw.pos_of 3 7 (by decide) (by decide)
+  have w3 := hw.pos_of 4 1 (by decide) (by decide)
+  have w4 := hw.pos_of 6 2 (by decide) (by decide)
+  have w5 := hw.pos_of 2 5 (by decide) (by decide)
+  simp only [exteriorOctagon, Matrix.cons_val] at w1 w2 w3 w4 w5
+  simp only [sarea] at f1 f2 f3 f4 f5 f6 w1 w2 w3 w4 w5
+  have hch : HandProof.InChamber T := by
+    intro i
+    fin_cases i <;>
+      simp [hTdef, HandProof.chamberSarea, HandProof.chamberTriangles,
+        GlobalCompletion.movingFConfig, sarea] <;>
+      linarith
+  obtain ⟨pa, phA, ph1, pb, pcb, pc1, pd, ped, pe1, pfb, pcf, pgf, pg1, pke, pkh, pk1, pf2,
+    pFEX⟩ := H
+  have hyp : GlobalCompletion.MovingFHyp a b c d e g f h k x y :=
+    ⟨⟨pa, by linarith, by linarith, pb, by linarith, by linarith, pd, by linarith, by linarith,
+      by linarith, by linarith, by linarith⟩, by linarith, by linarith, D.sq⟩
+  obtain ⟨⟨i, hi⟩, heq⟩ := GlobalCompletion.theorem3 hyp hch
+  have hle : ∀ j, minTriangleArea S ≤ HandProof.chamberArea T j := fun j =>
+    hmT ▸ HandProof.minTriangleArea_le_chamberArea T j
+  refine ⟨(hle i).trans hi, fun hm => ?_⟩
+  obtain ⟨hk1, hTo⟩ := heq fun j => hm ▸ hle j
+  exact ⟨hk1, hopt hTo⟩
+
+/-- Row 2 (`(x,y) ↦ (1-x,y)`, labels `V_{3-i}`, `G' = (1-g,k)`):
+`SHARP_G_MOVING_PROJECTION` Theorem 1, strictly below `7/128`. -/
+theorem r3_row2 (D : R3Data a h b c d e f g k x y)
+    (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) (x, y) ![3, 4, 5, 4, 4, 3, 3, 2]) :
+    minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) < 7 / 128 := by
+  have H := D.conv
+  set S := sevenConfig a h b c d e f (g, k) (x, y) with hS
+  set T := SharpGMovingProjection.gMovingConfig d (1 - c) (1 - b) a h (1 - f) (1 - g) e (1 - k)
+    (1 - x) y with hTdef
+  have hT : T = (⟨false, true, false⟩ : SquareSymmetry).apply ∘ S ∘ r3Perm 1 := by
+    funext i; fin_cases i <;> simp [hTdef, hS, SharpGMovingProjection.gMovingConfig,
+      SharpBCMoving.sharpConfig, sevenConfig, SquareSymmetry.apply, r3Perm]
+  obtain ⟨hmT, -⟩ := transfer_chamber _ _ (fun p => by simp [SquareSymmetry.apply]) hT
+  have f1 := cvx_CDE H; have f2 := cvx_BCD H; have f3 := cvx_DEX H; have f4 := cvx_AFH H
+  have f5 := cvx_EXF H; have f6 := cvx_XFH H
+  have w1 := hw.pos_of 0 3 (by decide) (by decide)
+  have w2 := hw.pos_of 4 0 (by decide) (by decide)
+  have w3 := hw.pos_of 2 7 (by decide) (by decide)
+  have w4 := hw.pos_of 1 5 (by decide) (by decide)
+  have w5 := hw.pos_of 6 1 (by decide) (by decide)
+  simp only [exteriorOctagon, Matrix.cons_val] at w1 w2 w3 w4 w5
+  simp only [sarea] at f1 f2 f3 f4 f5 f6 w1 w2 w3 w4 w5
+  have hch : HandProof.InChamber T := by
+    intro i
+    fin_cases i <;>
+      simp [hTdef, HandProof.chamberSarea, HandProof.chamberTriangles,
+        SharpGMovingProjection.gMovingConfig, SharpBCMoving.sharpConfig, sarea] <;>
+      linarith
+  obtain ⟨pa, phA, ph1, pb, pcb, pc1, pd, ped, pe1, pfb, pcf, pgf, pg1, pke, pkh, pk1, pf2,
+    pFEX⟩ := H
+  obtain ⟨hx0, hx1, hy0, hy1⟩ := D.sq
+  have hyp : SharpGMovingProjection.GMovingHyp d (1 - c) (1 - b) a h (1 - f) (1 - g) e (1 - k)
+      (1 - x) y :=
+    ⟨⟨pd, by linarith, by linarith, by linarith, by linarith, by linarith, pa, by linarith,
+      by linarith, by linarith, by linarith, by linarith⟩, by linarith, by linarith,
+      by linarith, by linarith, ⟨by simp only; linarith, by simp only; linarith, hy0, hy1⟩⟩
+  obtain ⟨⟨i, hi⟩, -⟩ := SharpGMovingProjection.theorem1 hyp hch
+  exact lt_of_le_of_lt (hmT ▸ HandProof.minTriangleArea_le_chamberArea T i) hi
+
+/-- Row 3 (`(x,y) ↦ (x,1-y)`, labels `V_{7-i}`, `C' = (g,1-k)`): `SHARP_BC_MOVING` Theorem 2. -/
+theorem r3_row3 (D : R3Data a h b c d e f g k x y)
+    (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) (x, y) ![4, 3, 3, 2, 3, 4, 5, 4]) :
+    minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) ≤ A₀ ∧
+      (minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) = A₀ →
+        k = 1 ∧ IsOptimal (sevenConfig a h b c d e f (g, k) (x, y))) := by
+  have H := D.conv
+  set S := sevenConfig a h b c d e f (g, k) (x, y) with hS
+  set T := SharpBCMoving.cMovingConfig (1 - h) f g (1 - e) (1 - d) c b (1 - a) (1 - k) x (1 - y)
+    with hTdef
+  have hT : T = (⟨false, false, true⟩ : SquareSymmetry).apply ∘ S ∘ r3Perm 2 := by
+    funext i; fin_cases i <;> simp [hTdef, hS, SharpBCMoving.cMovingConfig,
+      SharpBCMoving.sharpConfig, sevenConfig, SquareSymmetry.apply, r3Perm]
+  obtain ⟨hmT, hopt⟩ := transfer_chamber _ _ (fun p => by simp [SquareSymmetry.apply]) hT
+  have f1 := cvx_AFH H; have f2 := cvx_XFH H; have f3 := cvx_ABH H; have f4 := cvx_CDE H
+  have f5 := cvx_ABC H; have f6 := cvx_BCD H
+  have w1 := hw.pos_of 4 7 (by decide) (by decide)
+  have w2 := hw.pos_of 0 4 (by decide) (by decide)
+  have w3 := hw.pos_of 6 3 (by decide) (by decide)
+  have w4 := hw.pos_of 5 1 (by decide) (by decide)
+  have w5 := hw.pos_of 2 5 (by decide) (by decide)
+  simp only [exteriorOctagon, Matrix.cons_val] at w1 w2 w3 w4 w5
+  simp only [sarea] at f1 f2 f3 f4 f5 f6 w1 w2 w3 w4 w5
+  have hch : HandProof.InChamber T := by
+    intro i
+    fin_cases i <;>
+      simp [hTdef, HandProof.chamberSarea, HandProof.chamberTriangles,
+        SharpBCMoving.cMovingConfig, SharpBCMoving.sharpConfig, sarea] <;>
+      linarith
+  obtain ⟨pa, phA, ph1, pb, pcb, pc1, pd, ped, pe1, pfb, pcf, pgf, pg1, pke, pkh, pk1, pf2,
+    pFEX⟩ := H
+  obtain ⟨hx0, hx1, hy0, hy1⟩ := D.sq
+  have hyp : SharpBCMoving.CMovingHyp (1 - h) f g (1 - e) (1 - d) c b (1 - a) (1 - k) x (1 - y) :=
+    ⟨⟨by linarith, by linarith, by linarith, by linarith, by linarith, by linarith, by linarith,
+      by linarith, by linarith, pb, by linarith, by linarith⟩, by linarith, by linarith,
+      ⟨hx0, hx1, by simp only; linarith, by simp only; linarith⟩⟩
+  obtain ⟨⟨i, hi⟩, heq⟩ := SharpBCMoving.theorem2 hyp hch
+  have hle : ∀ j, minTriangleArea S ≤ HandProof.chamberArea T j := fun j =>
+    hmT ▸ HandProof.minTriangleArea_le_chamberArea T j
+  refine ⟨(hle i).trans hi, fun hm => ?_⟩
+  obtain ⟨ht, hTo⟩ := heq fun j => hm ▸ hle j
+  exact ⟨by linarith, hopt hTo⟩
+
+/-- Row 4 (half-turn, labels `V_{i+4}`, `B' = (1-g,1-k)`): `SHARP_BC_MOVING` Theorem 3. -/
+theorem r3_row4 (D : R3Data a h b c d e f g k x y)
+    (hw : IsRadialWord (exteriorOctagon a h b c d e f (g, k)) (x, y) ![5, 4, 4, 3, 3, 2, 3, 4]) :
+    minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) ≤ A₀ ∧
+      (minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) = A₀ →
+        k = 1 ∧ IsOptimal (sevenConfig a h b c d e f (g, k) (x, y))) := by
+  have H := D.conv
+  set S := sevenConfig a h b c d e f (g, k) (x, y) with hS
+  set T := SharpBCMoving.bMovingConfig (1 - e) (1 - g) (1 - f) (1 - h) (1 - a) (1 - b) (1 - c)
+    (1 - d) (1 - k) (1 - x) (1 - y) with hTdef
+  have hT : T = (⟨false, true, true⟩ : SquareSymmetry).apply ∘ S ∘ r3Perm 3 := by
+    funext i; fin_cases i <;> simp [hTdef, hS, SharpBCMoving.bMovingConfig,
+      SharpBCMoving.sharpConfig, sevenConfig, SquareSymmetry.apply, r3Perm]
+  obtain ⟨hmT, hopt⟩ := transfer_chamber _ _ (fun p => by simp [SquareSymmetry.apply]) hT
+  have f1 := cvx_DEX H; have f2 := cvx_EXF H; have f3 := cvx_CDE H; have f4 := cvx_ABH H
+  have f5 := cvx_BCD H; have f6 := cvx_ABC H
+  have w1 := hw.pos_of 4 7 (by decide) (by decide)
+  have w2 := hw.pos_of 7 3 (by decide) (by decide)
+  have w3 := hw.pos_of 0 5 (by decide) (by decide)
+  have w4 := hw.pos_of 2 6 (by decide) (by decide)
+  have w5 := hw.pos_of 6 1 (by decide) (by decide)
+  simp only [exteriorOctagon, Matrix.cons_val] at w1 w2 w3 w4 w5
+  simp only [sarea] at f1 f2 f3 f4 f5 f6 w1 w2 w3 w4 w5
+  have hch : HandProof.InChamber T := by
+    intro i
+    fin_cases i <;>
+      simp [hTdef, HandProof.chamberSarea, HandProof.chamberTriangles,
+        SharpBCMoving.bMovingConfig, SharpBCMoving.sharpConfig, sarea] <;>
+      linarith
+  obtain ⟨pa, phA, ph1, pb, pcb, pc1, pd, ped, pe1, pfb, pcf, pgf, pg1, pke, pkh, pk1, pf2,
+    pFEX⟩ := H
+  obtain ⟨hx0, hx1, hy0, hy1⟩ := D.sq
+  have hyp : SharpBCMoving.BMovingHyp (1 - e) (1 - g) (1 - f) (1 - h) (1 - a) (1 - b) (1 - c)
+      (1 - d) (1 - k) (1 - x) (1 - y) :=
+    ⟨⟨by linarith, by linarith, by linarith, by linarith, by linarith, by linarith, by linarith,
+      by linarith, by linarith, by linarith, by linarith, by linarith⟩, by linarith, by linarith,
+      ⟨by simp only; linarith, by simp only; linarith, by simp only; linarith,
+        by simp only; linarith⟩⟩
+  obtain ⟨⟨i, hi⟩, heq⟩ := SharpBCMoving.theorem3 hyp hch
+  have hle : ∀ j, minTriangleArea S ≤ HandProof.chamberArea T j := fun j =>
+    hmT ▸ HandProof.minTriangleArea_le_chamberArea T j
+  refine ⟨(hle i).trans hi, fun hm => ?_⟩
+  obtain ⟨ht, hTo⟩ := heq fun j => hm ▸ hle j
+  exact ⟨by linarith, hopt hTo⟩
+
+end R3
+
 /-- **Theorem 1** (`SEVEN_BOUNDARY_TOP_CAP_RADIAL:Theorem1`). Every configuration of the exterior
 case whose radial word (with respect to `A, B, C, D, E, X, F, H`) belongs to class R3 has minimum
 area at most `A₀`; equality forces `k = 1` and the known eight-boundary construction up to square
@@ -480,6 +710,26 @@ theorem theorem1 {a h b c d e f g k : ℝ} (hN : SevenNormal a h b c d e f)
         k = 1 ∧ IsOptimal (sevenConfig a h b c d e f (g, k) P)) ∧
       (w = ![3, 4, 5, 4, 4, 3, 3, 2] →
         minTriangleArea (sevenConfig a h b c d e f (g, k) P) < 7 / 128) := by
-  sorry
+  obtain ⟨x, y⟩ := P
+  -- at minimum area at least `7/128`: the data of the four rows
+  have key : 7 / 128 ≤ minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) →
+      (minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) ≤ A₀ ∧
+        (minTriangleArea (sevenConfig a h b c d e f (g, k) (x, y)) = A₀ →
+          k = 1 ∧ IsOptimal (sevenConfig a h b c d e f (g, k) (x, y)))) ∧
+      w ≠ ![3, 4, 5, 4, 4, 3, 3, 2] := by
+    intro hmin
+    have hkh := SevenBoundaryTopCapRight.claim_k_gt_h hN hX (hmin.trans SevenBoundaryCaps.min₁_left)
+    have D : R3Data a h b c d e f g k x y := ⟨convHyp hN hX hkh, heptagon_mem_square hN hP⟩
+    rcases r3_words hc with rfl | rfl | rfl | rfl
+    · exact ⟨r3_row1 D hw, by decide⟩
+    · exact absurd hmin (not_le.2 (r3_row2 D hw))
+    · exact ⟨r3_row3 D hw, by decide⟩
+    · exact ⟨r3_row4 D hw, by decide⟩
+  have hA := A₀_bounds.1
+  refine ⟨?_, fun hm => (key (by rw [hm]; exact hA.le)).1.2 hm, fun hw2 => ?_⟩
+  · by_contra hc'; push Not at hc'
+    exact absurd (key (hA.le.trans hc'.le)).1.1 (not_le.2 hc')
+  · by_contra hc'; push Not at hc'
+    exact (key hc').2 hw2
 
 end Heilbronn.SevenBoundaryTopCapRadial

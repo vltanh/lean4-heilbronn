@@ -5,6 +5,8 @@ public import Heilbronn.Seven.Setting
 public import Heilbronn.Eight.RadialCatalogue
 public import Heilbronn.Corners.CornerFamilies
 public import Heilbronn.Hulls.QuadrilateralHull
+public import Heilbronn.TypeII.TypeII.EndpointTriangle
+public import Heilbronn.Global.GlobalCompletion
 
 /-! # Continuous cap exclusions with seven boundary contacts (`hand/SEVEN_BOUNDARY_CAPS.md`)
 
@@ -431,6 +433,29 @@ theorem theorem3 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : P
 
 /-! ### §4. The left-hand pair -/
 
+/-- Opposite signs from the exclusion of both equal signs. -/
+theorem opp_sign {p q : ℝ} (hp : p ≠ 0) (hq : q ≠ 0) (h1 : 0 < p → 0 < q → False)
+    (h2 : p < 0 → q < 0 → False) : p * q < 0 := by
+  rcases lt_or_gt_of_ne hp with hp' | hp' <;> rcases lt_or_gt_of_ne hq with hq' | hq'
+  · exact (h2 hp' hq').elim
+  · exact mul_neg_of_neg_of_pos hp' hq'
+  · exact mul_neg_of_pos_of_neg hp' hq'
+  · exact (h1 hp' hq').elim
+
+/-- A free point of the §4 placement is on the `F` side of `HB` (Theorem 1 excludes `ABH`) and
+off the diagonals `BF`, `HC`. -/
+theorem left_point {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
+    (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f X))
+    (hX : InHeptagon a h b c d e f X) :
+    0 < sarea (0, h) (b, 0) X ∧ sarea (b, 0) (f, 1) X ≠ 0 ∧ sarea (0, h) (c, 0) X ≠ 0 := by
+  obtain ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩ := hX
+  have hpos : 0 < minTriangleArea (sevenConfig₁ a h b c d e f X) :=
+    lt_of_lt_of_le (by norm_num) hmin
+  refine ⟨?_, sarea_ne_zero_of_min_pos hpos 2 6 7, sarea_ne_zero_of_min_pos hpos 1 3 7⟩
+  by_contra hc; push Not at hc
+  have := theorem1 hN (X := X) ⟨hAB.le, by rw [sarea_swap₁₂]; linarith, hHA.le⟩
+  linarith
+
 /-- **Claim** (`SEVEN_BOUNDARY_CAPS:claim-left-pair-separation`). Under (1)–(2) and minimum area
 at least `7/128`, if both free points are inside the heptagon on the side of `CF` containing
 `A, B, H`, then both lie inside the quadrilateral `HBCF`, on opposite sides of its diagonal `BF`,
@@ -443,9 +468,132 @@ theorem claim_left_pair_separation {a h b c d e f : ℝ} (hN : SevenNormal a h b
     InPolygon ![(0, h), (b, 0), (c, 0), (f, 1)] P ∧ InPolygon ![(0, h), (b, 0), (c, 0), (f, 1)] Q ∧
       sarea (b, 0) (f, 1) P * sarea (b, 0) (f, 1) Q < 0 ∧
       sarea (0, h) (c, 0) P * sarea (0, h) (c, 0) Q < 0 := by
-  sorry
+  obtain ⟨hPh, hQh, hPc, hQc⟩ := hpl
+  obtain ⟨p1, p2, p3⟩ := left_point hN (hmin.trans min₁_left) hPh
+  obtain ⟨q1, q2, q3⟩ := left_point hN (hmin.trans min₁_right) hQh
+  have hT := theorem2 hN (P := P) (Q := Q)
+  have hN' := hN
+  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN'
+  obtain ⟨x, y⟩ := P
+  obtain ⟨z, w⟩ := Q
+  obtain ⟨hAB, hBC, hCD, hDE, hEF, hFH, hHA⟩ := hPh
+  obtain ⟨gAB, gBC, gCD, gDE, gEF, gFH, gHA⟩ := hQh
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro i; fin_cases i <;> simp [finRotate_apply] <;> assumption
+  · intro i; fin_cases i <;> simp [finRotate_apply] <;> assumption
+  · apply opp_sign p2 q2
+    · intro h1 h2
+      exact absurd hmin (not_le.2 (hT.2.2 ⟨p1.le, h1.le, hFH.le⟩ ⟨q1.le, h2.le, gFH.le⟩))
+    · intro h1 h2
+      exact absurd hmin (not_le.2 (hT.1 ⟨hBC.le, hPc.le, by rw [sarea_swap₁₂]; linarith⟩
+        ⟨gBC.le, hQc.le, by rw [sarea_swap₁₂]; linarith⟩))
+  · apply opp_sign p3 q3
+    · intro h1 h2
+      exact absurd hmin (not_le.2 (hT.2.1 ⟨h1.le, hPc.le, hFH.le⟩ ⟨h2.le, hQc.le, gFH.le⟩))
+    · -- both in the virtual-corner triangle `conv{(0,0), H, C}` (`QUADRILATERAL_HULL` Theorem 4)
+      intro h1 h2
+      simp only [sarea] at h1 h2 hHA gHA hBC gBC
+      have hP0 : QuadrilateralHull.InT0 h c (x, y) :=
+        ⟨by simp only; nlinarith, by simp only; nlinarith, by simp only; linarith⟩
+      have hQ0 : QuadrilateralHull.InT0 h c (z, w) :=
+        ⟨by simp only; nlinarith, by simp only; nlinarith, by simp only; linarith⟩
+      have k := QuadrilateralHull.min_T0_le ha hah hb hbc hP0 hQ0
+      have hsub : minTriangleArea (sevenConfig a h b c d e f (x, y) (z, w)) ≤
+          minTriangleArea ![(0, h), (c, 0), (0, a), (b, 0), (x, y), (z, w)] := by
+        have e : (![(0, h), (c, 0), (0, a), (b, 0), (x, y), (z, w)] : Fin 6 → Point) =
+            sevenConfig a h b c d e f (x, y) (z, w) ∘ ![1, 3, 0, 2, 7, 8] := by
+          funext j; fin_cases j <;> rfl
+        rw [e]; exact le_min_comp (by norm_num) _ (by decide)
+      have : h * c < 1 := by nlinarith
+      linarith
 
 /-! ### §5. The adjacent bottom ear -/
+
+/-- The scalar end of Theorem 4 ((15)–(18)): no positive `M, L, R` satisfy
+`M + s/L + s/R ≤ 1`, `L + R + 4s/M ≤ 2 - 2s` and `L ≤ 1 - 3s/M`. -/
+theorem thm4_scalar {M L R : ℝ} (hM : 0 < M) (hL : 0 < L) (hR : 0 < R)
+    (h1 : M + 7 / 64 / L + 7 / 64 / R ≤ 1) (h2 : L + R + 4 * (7 / 64) / M ≤ 2 - 2 * (7 / 64))
+    (h3 : L ≤ 1 - 3 * (7 / 64) / M) : False := by
+  have hsL : 0 < 7 / 64 / L := by positivity
+  have hsR : 0 < 7 / 64 / R := by positivity
+  have hM1 : M < 1 := by linarith
+  set U := 1 - 3 * (7 / 64) / M with hU
+  set V := 2 - 2 * (7 / 64) - 4 * (7 / 64) / M with hV
+  have hU0 : 0 < U := by linarith
+  have hsM : 7 / 64 < 7 / 64 / M := by rw [lt_div_iff₀ hM]; linarith
+  have hUV : 2 * U < V := by
+    have : 2 * U - V = 2 * (7 / 64) - 2 * (7 / 64 / M) := by
+      rw [hU, hV]; ring
+    linarith
+  have hVL : 0 < V - L := by linarith
+  have hVU : 0 < V - U := by linarith
+  have hRV : R ≤ V - L := by linarith
+  have k1 : 7 / 64 / (V - L) ≤ 7 / 64 / R := div_le_div_of_nonneg_left (by norm_num) hR hRV
+  have k2 : 1 / U + 1 / (V - U) ≤ 1 / L + 1 / (V - L) := by
+    rw [div_add_div _ _ hU0.ne' hVU.ne', div_add_div _ _ hL.ne' hVL.ne',
+      div_le_div_iff₀ (mul_pos hU0 hVU) (mul_pos hL hVL)]
+    linarith [mul_nonneg (mul_nonneg (show (0 : ℝ) ≤ V by linarith)
+      (show (0 : ℝ) ≤ U - L by linarith)) (show (0 : ℝ) ≤ V - U - L by linarith)]
+  have k3 : M + 7 / 64 / U + 7 / 64 / (V - U) ≤ 1 := by
+    have e1 : 7 / 64 / U + 7 / 64 / (V - U) = 7 / 64 * (1 / U + 1 / (V - U)) := by ring
+    have e2 : 7 / 64 / L + 7 / 64 / (V - L) = 7 / 64 * (1 / L + 1 / (V - L)) := by ring
+    linarith
+  -- `U = (M - 3s)/M`, `V - U = ((1-2s)M - s)/M`
+  have hUM : U * M = M - 3 * (7 / 64) := by rw [hU]; field_simp
+  have hVUM : (V - U) * M = (1 - 2 * (7 / 64)) * M - 7 / 64 := by rw [hU, hV]; field_simp; ring
+  have hM3 : 0 < M - 3 * (7 / 64) := by rw [← hUM]; exact mul_pos hU0 hM
+  have hD : 0 < (1 - 2 * (7 / 64)) * M - 7 / 64 := by rw [← hVUM]; exact mul_pos hVU hM
+  have hA : 7 / 64 / U * (M - 3 * (7 / 64)) = 7 / 64 * M := by
+    rw [← hUM]; field_simp [hU0.ne']
+  have hB : 7 / 64 / (V - U) * ((1 - 2 * (7 / 64)) * M - 7 / 64) = 7 / 64 * M := by
+    rw [← hVUM]; field_simp [hVU.ne']
+  have k4 := mul_le_mul_of_nonneg_right k3 (mul_pos hM3 hD).le
+  have hA' : 7 / 64 / U * (M - 3 * (7 / 64)) * ((1 - 2 * (7 / 64)) * M - 7 / 64) =
+      7 / 64 * M * ((1 - 2 * (7 / 64)) * M - 7 / 64) := by rw [hA]
+  have hB' : 7 / 64 / (V - U) * ((1 - 2 * (7 / 64)) * M - 7 / 64) * (M - 3 * (7 / 64)) =
+      7 / 64 * M * (M - 3 * (7 / 64)) := by rw [hB]
+  -- `N(M) > 0`
+  have hN : 0 < 3200 * M ^ 3 - 3900 * M ^ 2 + 1449 * M - 147 := by
+    nlinarith [mul_nonneg (sq_nonneg (M - 21 / 40)) (show (0 : ℝ) ≤ M - 27 / 160 by linarith)]
+  linarith
+
+/-- The scalar part of Theorem 4 (`SEVEN_BOUNDARY_CAPS.md` (12)–(15)). -/
+theorem theorem4_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
+    (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
+    (hf : f ≤ 1 / 2) (hf0 : 0 < f) (h12 : 3 * (7 / 64) ≤ a * (c - b)) (hABH : 7 / 64 ≤ b * (h - a))
+    (hBCD : 7 / 64 ≤ d * (c - b)) (hCDE : 7 / 64 ≤ (1 - c) * (e - d))
+    (hEFH : 7 / 64 ≤ (1 - f) * (1 - h) + f * (1 - e)) : False := by
+  have hL : 0 < h - a := by linarith
+  have hM : 0 < c - b := by linarith
+  have hR : 0 < e - d := by linarith
+  have hcs : c < 1 - 7 / 64 := by
+    nlinarith [mul_pos (show (0 : ℝ) < 1 - c by linarith) (show (0 : ℝ) < 1 - (e - d) by linarith)]
+  -- `hc ≥ Ks > 22s/3`
+  have hpq : 3 * (7 / 64) * (7 / 64) ≤ (a * b) * ((h - a) * (c - b)) := by
+    have := mul_le_mul h12 hABH (by norm_num) (by positivity)
+    linarith
+  have hpq' : 10 / 3 * (7 / 64) < a * b + (h - a) * (c - b) := by
+    have hp : 0 < a * b := mul_pos ha hb
+    have hq : 0 < (h - a) * (c - b) := mul_pos hL hM
+    nlinarith [sq_nonneg (a * b - (h - a) * (c - b))]
+  have hhc : 22 / 3 * (7 / 64) < h * c := by nlinarith
+  have hh1 : 1 - 7 / 64 < h := by
+    by_contra hc'; push Not at hc'
+    nlinarith [mul_le_mul_of_nonneg_right hc' (show (0 : ℝ) ≤ c by linarith)]
+  -- (14): `α + β ≥ 2s`
+  have hab : 2 * (7 / 64) ≤ (1 - h) + (1 - e) := by
+    have k1 : f * (2 * (7 / 64) - (1 - h)) ≤ f * (1 - e) := by
+      nlinarith [mul_nonneg (show (0 : ℝ) ≤ 7 / 64 - (1 - h) by linarith)
+        (show (0 : ℝ) ≤ 1 - 2 * f by linarith)]
+    have := le_of_mul_le_mul_left k1 hf0
+    linarith
+  -- (15)
+  have e1 : 7 / 64 / (h - a) ≤ b := by rw [div_le_iff₀ hL]; linarith
+  have e2 : 7 / 64 / (e - d) ≤ 1 - c := by rw [div_le_iff₀ hR]; linarith
+  have e3 : 3 * (7 / 64) / (c - b) ≤ a := by rw [div_le_iff₀ hM]; linarith
+  have e4 : 7 / 64 / (c - b) ≤ d := by rw [div_le_iff₀ hM]; linarith
+  have e5 : 4 * (7 / 64) / (c - b) = 3 * (7 / 64) / (c - b) + 7 / 64 / (c - b) := by ring
+  exact thm4_scalar hM hL hR (by linarith) (by linarith) (by linarith)
 
 /-- **Theorem 4** (`SEVEN_BOUNDARY_CAPS:Theorem4`). Under (1)–(2), a free point in the closed
 triangle `ABC` gives a triangle of area less than `7/128` (stated for the seven anchors and that
@@ -455,9 +603,139 @@ Uses: standard facts (`(√p + √q)² ≤ (a+L)(b+M)`, `√3 > 5/3`). -/
 theorem theorem4 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
     (hX : InClosedTriangle X (0, a) (b, 0) (c, 0)) :
     minTriangleArea (sevenConfig₁ a h b c d e f X) < 7 / 128 := by
-  sorry
+  by_contra hcon
+  push Not at hcon
+  have H := anchorCosts hN.1 (hcon.trans minAnchor_of₁)
+  obtain ⟨h1, h2, h3⟩ := hX
+  have c1 := cost hcon 0 2 7 rfl h1
+  have c2 := cost hcon 2 3 7 rfl h2
+  have c3 := cost hcon 3 0 7 rfl h3
+  have hsum : 3 * (7 / 64) ≤ a * (c - b) := by
+    have := sarea_add_sarea_add_sarea (0, a) (b, 0) (c, 0) X
+    have e : sarea (0, a) (b, 0) (c, 0) = a * (c - b) := by simp only [sarea]; ring
+    change 7 / 64 ≤ sarea (0, a) (b, 0) X at c1
+    change 7 / 64 ≤ sarea (b, 0) (c, 0) X at c2
+    change 7 / 64 ≤ sarea (c, 0) (0, a) X at c3
+    linarith
+  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
+  exact theorem4_core ha hah hh hb hbc hc hd hde he hf (by linarith) hsum H.ABH H.BCD H.CDE H.EFH
 
 /-! ### §6. The diagonal triangle `ACF` -/
+
+/-- The concave quadratic `Ñ(α,w) = (1-α)² N(α, w/(1-α))` of (24) (`w = (1-α)v`), positive on
+`0 < α < 5/32`, `s ≤ w ≤ 3/16 - α/2`: its endpoint values (the two printed polynomials in
+`t = 5/32 - α`) are positive and it is concave in `w`. -/
+theorem thm5_N {α w : ℝ} (hα0 : 0 < α) (hα : α < 5 / 32) (hw : 7 / 64 ≤ w)
+    (hw' : w ≤ 3 / 16 - α / 2) :
+    0 < (-(α * (64 * α ^ 2 - 71 * α + 14)) / 64) * w ^ 2 + ((1 - α) * (4096 * α ^ 3 - 4992 * α ^ 2 + 1064 * α - 49) / 4096) * w + (7 * (α - 1) ^ 2 * (16 * α - 3) * (64 * α - 7) / 65536) := by
+  have ht : 0 ≤ 5 / 32 - α := by linarith
+  have hNs : 0 < (-7 * (768 * α ^ 3 - 1053 * α ^ 2 + 369 * α - 35) / 262144) := by
+    nlinarith [mul_nonneg (mul_nonneg ht ht) ht, mul_nonneg ht ht]
+  have hNh : 0 < (α * (16384 * α ^ 4 - 47360 * α ^ 3 + 39728 * α ^ 2 - 10257 * α + 805) / 65536) := by
+    have : 0 < 16384 * α ^ 4 - 47360 * α ^ 3 + 39728 * α ^ 2 - 10257 * α + 805 := by
+      nlinarith [mul_nonneg (mul_nonneg (mul_nonneg ht ht) ht) ht,
+        mul_nonneg (mul_nonneg ht ht) ht, mul_nonneg ht ht]
+    positivity
+  have hA : 0 < -(-(α * (64 * α ^ 2 - 71 * α + 14)) / 64) := by
+    have : 0 < 64 * α ^ 2 - 71 * α + 14 := by nlinarith
+    have := mul_pos hα0 this
+    linarith
+  have hd : 0 < 3 / 16 - α / 2 - 7 / 64 := by linarith
+  have e : ((-(α * (64 * α ^ 2 - 71 * α + 14)) / 64) * w ^ 2 + ((1 - α) * (4096 * α ^ 3 - 4992 * α ^ 2 + 1064 * α - 49) / 4096) * w + (7 * (α - 1) ^ 2 * (16 * α - 3) * (64 * α - 7) / 65536)) * (3 / 16 - α / 2 - 7 / 64) =
+      (-7 * (768 * α ^ 3 - 1053 * α ^ 2 + 369 * α - 35) / 262144) * (3 / 16 - α / 2 - w) + (α * (16384 * α ^ 4 - 47360 * α ^ 3 + 39728 * α ^ 2 - 10257 * α + 805) / 65536) * (w - 7 / 64) +
+        (-(-(α * (64 * α ^ 2 - 71 * α + 14)) / 64)) * ((w - 7 / 64) * (3 / 16 - α / 2 - w)) * (3 / 16 - α / 2 - 7 / 64) := by ring
+  have k1 : 0 ≤ (-7 * (768 * α ^ 3 - 1053 * α ^ 2 + 369 * α - 35) / 262144) * (3 / 16 - α / 2 - w) := mul_nonneg hNs.le (by linarith)
+  have k2 : 0 ≤ (α * (16384 * α ^ 4 - 47360 * α ^ 3 + 39728 * α ^ 2 - 10257 * α + 805) / 65536) * (w - 7 / 64) := mul_nonneg hNh.le (by linarith)
+  have k3 : 0 ≤ (-(-(α * (64 * α ^ 2 - 71 * α + 14)) / 64)) * ((w - 7 / 64) * (3 / 16 - α / 2 - w)) * (3 / 16 - α / 2 - 7 / 64) :=
+    mul_nonneg (mul_nonneg hA.le (mul_nonneg (by linarith) (by linarith))) hd.le
+  have k4 : 0 < (-7 * (768 * α ^ 3 - 1053 * α ^ 2 + 369 * α - 35) / 262144) * (3 / 16 - α / 2 - w) + (α * (16384 * α ^ 4 - 47360 * α ^ 3 + 39728 * α ^ 2 - 10257 * α + 805) / 65536) * (w - 7 / 64) := by
+    rcases lt_or_eq_of_le hw with h1 | h1
+    · have := mul_pos hNh (show (0 : ℝ) < w - 7 / 64 by linarith); linarith
+    · rw [← h1]; have := mul_pos hNs hd; linarith
+  by_contra hc; push Not at hc
+  nlinarith [mul_nonpos_of_nonpos_of_nonneg hc hd.le]
+
+/-- The scalar heart of Theorem 5 (`SEVEN_BOUNDARY_CAPS.md` (20)–(24)) in the variables
+`α = s/(c-b)`, `u = b`, `v = 1 - c`: from `α(u+v) = α - s`, (21) in product form
+`αuv + (1-f)sv + fsu ≤ (1-s)uv`, `(1-α)v > s`, `f ≤ 1/2` and `αf ≥ v + α - αv - 3/16`
+(`G ≥ 13/16`), a contradiction. -/
+theorem thm5_scalar {α u v f : ℝ} (hα0 : 0 < α) (hu : 0 < u) (hv : 0 < v) (hf0 : 0 ≤ f)
+    (hf : f ≤ 1 / 2) (hsum : α * (u + v) = α - 7 / 64)
+    (h21 : α * u * v + (1 - f) * (7 / 64) * v + f * (7 / 64) * u ≤ (1 - 7 / 64) * u * v)
+    (hw : 7 / 64 < (1 - α) * v) (hG : v + α - α * v - 3 / 16 ≤ α * f) : False := by
+  have hwhi : (1 - α) * v ≤ 3 / 16 - α / 2 := by nlinarith
+  have hα : α < 5 / 32 := by linarith
+  rcases le_or_gt u v with huv | huv
+  · -- `v ≥ u`: (23)
+    have k1 : (u + v) / 2 ≤ (1 - f) * v + f * u := by
+      nlinarith [mul_nonneg (show (0 : ℝ) ≤ 1 / 2 - f by linarith) (sub_nonneg.2 huv)]
+    have k2 : 7 / 64 * ((u + v) / 2) ≤ (1 - 7 / 64 - α) * (u * v) := by nlinarith
+    have k3 : u * v ≤ (u + v) ^ 2 / 4 := by nlinarith [sq_nonneg (u - v)]
+    have hpos : 0 < 1 - 7 / 64 - α := by
+      by_contra hc; push Not at hc
+      nlinarith [mul_nonpos_of_nonpos_of_nonneg hc (mul_pos hu hv).le]
+    have k4 : 2 * (7 / 64) ≤ (1 - 7 / 64 - α) * (u + v) := by
+      have := mul_le_mul_of_nonneg_left k3 hpos.le
+      have huv0 : 0 < u + v := by linarith
+      nlinarith
+    have hp : α ^ 2 - (1 - 2 * (7 / 64)) * α + 7 / 64 * (1 - 7 / 64) ≤ 0 := by
+      have := mul_le_mul_of_nonneg_left k4 hα0.le
+      nlinarith
+    -- `v ≥ (u+v)/2` gives `α ≤ 7/47`
+    have hα47 : α ≤ 7 / 47 := by nlinarith
+    nlinarith [mul_nonneg (show (0 : ℝ) ≤ 7 / 47 - α by linarith)
+      (show (0 : ℝ) ≤ 1 - 2 * (7 / 64) - α - 7 / 47 by linarith)]
+  · -- `v < u`: raise `f` to `f₀`, then `Ñ ≤ 0`
+    have k1 : α * (α * u * v) + 7 / 64 * α * v + (α * f) * (7 / 64) * (u - v) ≤
+        (1 - 7 / 64) * α * u * v := by nlinarith
+    have k2 : (v + α - α * v - 3 / 16) * (7 / 64) * (u - v) ≤ (α * f) * (7 / 64) * (u - v) :=
+      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right hG (by norm_num)) (by linarith)
+    have hU : α * u = α - 7 / 64 - α * v := by linarith
+    have hPhi : α ^ 2 * (α * u) * v + 7 / 64 * α ^ 2 * v +
+        (α - 3 / 16 + (1 - α) * v) * (7 / 64) * (α * u - α * v) -
+        (1 - 7 / 64) * α * (α * u) * v ≤ 0 := by nlinarith
+    rw [hU] at hPhi
+    have hN := thm5_N hα0 hα hw.le hwhi
+    have e : (-(α * (64 * α ^ 2 - 71 * α + 14)) / 64) * ((1 - α) * v) ^ 2 + ((1 - α) * (4096 * α ^ 3 - 4992 * α ^ 2 + 1064 * α - 49) / 4096) * ((1 - α) * v) + (7 * (α - 1) ^ 2 * (16 * α - 3) * (64 * α - 7) / 65536) =
+        (1 - α) ^ 2 * (α ^ 2 * (α - 7 / 64 - α * v) * v + 7 / 64 * α ^ 2 * v +
+          (α - 3 / 16 + (1 - α) * v) * (7 / 64) * (α - 7 / 64 - α * v - α * v) -
+          (1 - 7 / 64) * α * (α - 7 / 64 - α * v) * v) := by ring
+    rw [e] at hN
+    nlinarith [mul_nonpos_of_nonneg_of_nonpos (sq_nonneg (1 - α)) hPhi]
+
+/-- The bound (19) of Theorem 5: `[ACF] = c(1-a) + af < 13/16`. -/
+theorem thm5_bound {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hb : 0 < b) (hbc : b < c)
+    (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1) (hbf : b ≤ f) (hfc : f ≤ c)
+    (hf : f ≤ 1 / 2) (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
+    (hABH : 7 / 64 ≤ b * (h - a)) (hCDE : 7 / 64 ≤ (1 - c) * (e - d))
+    (hEFH : 7 / 64 ≤ (1 - f) * (1 - h) + f * (1 - e)) :
+    c * (1 - a) + a * f < 13 / 16 := by
+  have hM : 0 < c - b := by linarith
+  obtain ⟨α, hα⟩ : ∃ α : ℝ, α * (c - b) = 7 / 64 := ⟨7 / 64 / (c - b), by field_simp⟩
+  have hα0 : 0 < α := by
+    by_contra hc'; push Not at hc'; nlinarith [mul_nonpos_of_nonpos_of_nonneg hc' hM.le]
+  have ha' : α ≤ a := by
+    by_contra hc'; push Not at hc'; nlinarith [mul_lt_mul_of_pos_right hc' hM]
+  have hd' : α ≤ d := by
+    by_contra hc'; push Not at hc'; nlinarith [mul_lt_mul_of_pos_right hc' hM]
+  have hv : 0 < 1 - c := by linarith
+  have hsum : α * (b + (1 - c)) = α - 7 / 64 := by linarith
+  have hh' : α * b + 7 / 64 ≤ h * b := by nlinarith [mul_le_mul_of_nonneg_right ha' hb.le]
+  have he' : α * (1 - c) + 7 / 64 ≤ e * (1 - c) := by
+    nlinarith [mul_le_mul_of_nonneg_right hd' hv.le]
+  have hHEF : (1 - f) * h + f * e ≤ 1 - 7 / 64 := by linarith
+  have hf0 : 0 ≤ f := by linarith
+  have h21 : α * b * (1 - c) + (1 - f) * (7 / 64) * (1 - c) + f * (7 / 64) * b ≤
+      (1 - 7 / 64) * b * (1 - c) := by
+    have k1 := mul_le_mul_of_nonneg_left hh' (mul_nonneg (show (0 : ℝ) ≤ 1 - f by linarith) hv.le)
+    have k2 := mul_le_mul_of_nonneg_left he' (mul_nonneg hf0 hb.le)
+    have k3 := mul_le_mul_of_nonneg_right hHEF (mul_pos hb hv).le
+    nlinarith
+  have hw : 7 / 64 < (1 - α) * (1 - c) := by nlinarith
+  by_contra hG; push Not at hG
+  have hG' : (1 - c) + α - α * (1 - c) - 3 / 16 ≤ α * f := by
+    nlinarith [mul_le_mul_of_nonneg_right ha' (show (0 : ℝ) ≤ c - f by linarith)]
+  exact thm5_scalar hα0 hb hv hf0 hf hsum h21 hw hG'
 
 /-- **Theorem 5** (`SEVEN_BOUNDARY_CAPS:Theorem5`). Under (1)–(2): if every anchor triangle has
 area at least `7/128` (the proof uses only `ABC, BCD, ABH, CDE, HEF`), then the doubled area
@@ -472,7 +750,59 @@ theorem theorem5 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
       ∀ P Q : Point, InClosedTriangle P (0, a) (c, 0) (f, 1) →
         InClosedTriangle Q (0, a) (c, 0) (f, 1) →
         minTriangleArea (sevenConfig a h b c d e f P Q) < 7 / 128 := by
-  sorry
+  have part1 : 7 / 128 ≤ minTriangleArea (sevenAnchorConfig a h b c d e f) →
+      sarea (0, a) (c, 0) (f, 1) < 13 / 16 := by
+    intro hmin
+    have H := anchorCosts hN.1 hmin
+    obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
+    have e : sarea (0, a) (c, 0) (f, 1) = c * (1 - a) + a * f := by simp only [sarea]; ring
+    rw [e]
+    exact thm5_bound ha hah hb hbc hc hd hde he hbf hfc hf H.ABC H.BCD H.ABH H.CDE H.EFH
+  have hK := capK_gt
+  refine ⟨part1, hK, fun P Q hP hQ => ?_⟩
+  by_contra hcon; push Not at hcon
+  have := part1 (hcon.trans (min₁_left.trans minAnchor_of₁))
+  have := capacity_one (P := sevenConfig a h b c d e f P Q) 0 3 6 7 8 (by decide) hP hQ
+    (by show sarea (0, a) (c, 0) (f, 1) < _; linarith)
+  linarith
+
+/-- The lines `AF`, `BF` and the top side meet at `F`:
+`(1-a)[BFX] = [AFX] + (fa + b(1-a))(1-y)`. -/
+theorem af_bf (a b f : ℝ) (X : Point) :
+    (1 - a) * sarea (b, 0) (f, 1) X = sarea (0, a) (f, 1) X + (f * a + b * (1 - a)) * (1 - X.2) := by
+  simp only [sarea]; ring
+
+/-- A point strictly inside the anchor heptagon is below the top side. -/
+theorem heptagon_y_lt {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
+    (hX : InHeptagon a h b c d e f X) : X.2 < 1 := by
+  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
+  obtain ⟨x, y⟩ := X
+  obtain ⟨-, -, -, -, hEF, hFH, -⟩ := hX
+  simp only [sarea] at hEF hFH ⊢
+  by_contra hy; push Not at hy
+  have h1 : x < f := by
+    nlinarith [mul_nonneg (show (0 : ℝ) ≤ 1 - f by linarith) (show (0 : ℝ) ≤ y - 1 by linarith),
+      mul_pos (show (0 : ℝ) < 1 - e by linarith) (show (0 : ℝ) < 1 - f by linarith)]
+  nlinarith [mul_nonneg (show (0 : ℝ) ≤ f by linarith) (show (0 : ℝ) ≤ y - 1 by linarith),
+    mul_pos (show (0 : ℝ) < 1 - h by linarith) (show (0 : ℝ) < f - x by linarith)]
+
+/-- Below `BF` implies below `AF` (for points under the top side). -/
+theorem af_neg_of_bf_neg {a b f : ℝ} (ha1 : a < 1) (ha : 0 < a) (hb : 0 < b) (hf : 0 ≤ f)
+    {X : Point} (hy : X.2 < 1) (hX : sarea (b, 0) (f, 1) X < 0) : sarea (0, a) (f, 1) X < 0 := by
+  have e := af_bf a b f X
+  nlinarith [mul_neg_of_pos_of_neg (show (0 : ℝ) < 1 - a by linarith) hX,
+    mul_nonneg (show (0 : ℝ) ≤ f * a + b * (1 - a) by positivity) (show (0 : ℝ) ≤ 1 - X.2 by linarith)]
+
+/-- Above `AF` implies above `BF` (for points under the top side). -/
+theorem bf_pos_of_af_pos {a b f : ℝ} (ha1 : a < 1) (ha : 0 < a) (hb : 0 < b) (hf : 0 ≤ f)
+    {X : Point} (hy : X.2 < 1) (hX : 0 < sarea (0, a) (f, 1) X) : 0 < sarea (b, 0) (f, 1) X := by
+  by_contra hc; push Not at hc
+  rcases lt_or_eq_of_le hc with hc | hc
+  · have := af_neg_of_bf_neg ha1 ha hb hf hy hc; linarith
+  · have e := af_bf a b f X
+    rw [hc] at e
+    nlinarith [mul_nonneg (show (0 : ℝ) ≤ f * a + b * (1 - a) by positivity)
+      (show (0 : ℝ) ≤ 1 - X.2 by linarith)]
 
 /-- **Claim** (`SEVEN_BOUNDARY_CAPS:claim-AF-separation`). Under (1)–(2), minimum area at least
 `7/128` and the placement of §4, both free points lie inside the quadrilateral `ACFH`, and each of
@@ -487,9 +817,156 @@ theorem claim_AF_separation {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e 
       sarea (0, a) (f, 1) P * sarea (0, a) (f, 1) Q < 0 ∧
       sarea (0, h) (c, 0) P * sarea (0, h) (c, 0) Q < 0 ∧
       sarea (b, 0) (f, 1) P * sarea (b, 0) (f, 1) Q < 0 := by
-  sorry
+  obtain ⟨-, -, hBF, hHC⟩ := claim_left_pair_separation hN hmin hpl
+  have hpl' := hpl
+  obtain ⟨hPh, hQh, hPc, hQc⟩ := hpl'
+  have hyP := heptagon_y_lt hN hPh
+  have hyQ := heptagon_y_lt hN hQh
+  have hT := theorem2 hN (P := P) (Q := Q)
+  have hT5 := (theorem5 hN).2.2 P Q
+  have hpos : 0 < minTriangleArea (sevenConfig a h b c d e f P Q) :=
+    lt_of_lt_of_le (by norm_num) hmin
+  -- `A C` is an edge: Theorem 4 excludes `ABC`
+  have hAC : ∀ X : Point, 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f X) →
+      InHeptagon a h b c d e f X → 0 < sarea (0, a) (c, 0) X := by
+    intro X hm hX
+    obtain ⟨hAB, hBC, -, -, -, -, -⟩ := hX
+    by_contra hc; push Not at hc
+    have := theorem4 hN (X := X) ⟨hAB.le, hBC.le, by rw [sarea_swap₁₂]; linarith⟩
+    linarith
+  have hP1 := hAC P (hmin.trans min₁_left) hPh
+  have hQ1 := hAC Q (hmin.trans min₁_right) hQh
+  have hN' := hN
+  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN'
+  obtain ⟨-, -, -, -, -, hPFH, hPHA⟩ := hPh
+  obtain ⟨-, -, -, -, -, hQFH, hQHA⟩ := hQh
+  refine ⟨?_, ?_, ?_, hHC, hBF⟩
+  · intro i; fin_cases i <;> simp [finRotate_apply] <;> assumption
+  · intro i; fin_cases i <;> simp [finRotate_apply] <;> assumption
+  · apply opp_sign (show sarea (0, a) (f, 1) P ≠ 0 from sarea_ne_zero_of_min_pos hpos 0 6 7)
+      (show sarea (0, a) (f, 1) Q ≠ 0 from sarea_ne_zero_of_min_pos hpos 0 6 8)
+    · -- both above `AF`: both in `HBF`
+      intro h1 h2
+      have hb1 := bf_pos_of_af_pos (by linarith) ha hb (by linarith) hyP h1
+      have hb2 := bf_pos_of_af_pos (by linarith) ha hb (by linarith) hyQ h2
+      have hP0 := (left_point hN (hmin.trans min₁_left) hpl.1).1
+      have hQ0 := (left_point hN (hmin.trans min₁_right) hpl.2.1).1
+      exact absurd hmin (not_le.2 (hT.2.2 ⟨hP0.le, hb1.le, hPFH.le⟩ ⟨hQ0.le, hb2.le, hQFH.le⟩))
+    · -- both below `AF`: both in `ACF`
+      intro h1 h2
+      exact absurd hmin (not_le.2 (hT5 ⟨hP1.le, hPc.le, by rw [sarea_swap₁₂]; linarith⟩
+        ⟨hQ1.le, hQc.le, by rw [sarea_swap₁₂]; linarith⟩))
 
 /-! ### §7. The upper left overlap -/
+
+/-- (29) of Theorem 6: `D(a,L) = (a - 7/32)L² + (a/8 + 49/1024)L + 49a/512 > 0` for `a > 1/7`,
+`0 < L ≤ 1 - a`. -/
+theorem thm6_D {a L : ℝ} (ha : 1 / 7 < a) (hL : 0 < L) (hLa : L ≤ 1 - a) :
+    0 < (a - 7 / 32) * L ^ 2 + (a / 8 + 49 / 1024) * L + 49 * a / 512 := by
+  rcases le_total (7 / 32) a with h | h
+  · nlinarith [mul_nonneg (sub_nonneg.2 h) (sq_nonneg L)]
+  · -- concave in `L`: `(a - 7/32) L² ≥ (a - 7/32) L (1-a)`
+    have k1 : (a - 7 / 32) * (L * (1 - a)) ≤ (a - 7 / 32) * L ^ 2 := by
+      have : L ^ 2 ≤ L * (1 - a) := by nlinarith
+      nlinarith [mul_le_mul_of_nonneg_left this (show (0 : ℝ) ≤ 7 / 32 - a by linarith)]
+    have k2 : 0 < -a ^ 2 + 43 / 32 * a - 175 / 1024 := by
+      nlinarith [mul_pos (show (0 : ℝ) < a - 1 / 7 by linarith)
+        (show (0 : ℝ) < 175 / 1024 / (1 / 7) + 1 - a by linarith)]
+    nlinarith [mul_pos hL k2]
+
+/-- (28)–(30) of Theorem 6, multiplied by `4aL`: with `h = a + L` and
+`C = L((1-h)/2 - s) - 2s(1-h)`, `K = Lh/4 - sh - sL/2`, the value `Csh + aLK` is negative. -/
+theorem thm6_T {a L : ℝ} (ha : 1 / 7 < a) (hL : 0 < L) (hLa : L ≤ 1 - a) :
+    (L * ((1 - (a + L)) / 2 - 7 / 64) - 2 * (7 / 64) * (1 - (a + L))) * (7 / 64) * (a + L) +
+      a * L * (L * (a + L) / 4 - 7 / 64 * (a + L) - 7 / 64 * L / 2) < 0 := by
+  have hD := thm6_D ha hL hLa
+  have hQ : 0 < (1 - 2 * (7 / 64)) * a ^ 2 + (6 * (7 / 64) - 1) * a + 4 * (7 / 64) ^ 2 := by
+    nlinarith [sq_nonneg (a - 11 / 50)]
+  have e : 4 * ((L * ((1 - (a + L)) / 2 - 7 / 64) - 2 * (7 / 64) * (1 - (a + L))) * (7 / 64) *
+      (a + L) + a * L * (L * (a + L) / 4 - 7 / 64 * (a + L) - 7 / 64 * L / 2)) =
+      -L * ((1 - 2 * (7 / 64)) * a ^ 2 + (6 * (7 / 64) - 1) * a + 4 * (7 / 64) ^ 2) -
+        (1 - (a + L)) * ((a - 7 / 32) * L ^ 2 + (a / 8 + 49 / 1024) * L + 49 * a / 512) := by
+    ring
+  nlinarith [mul_pos hL hQ, mul_nonneg (show (0 : ℝ) ≤ 1 - (a + L) by linarith) hD.le]
+
+/-- (26) of Theorem 6: `aLc ≥ sh`, `c < 1 - s` and `L ≤ 1 - a` force `a > 1/7`. -/
+theorem thm6_a {a h c : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hc1 : c < 1 - 7 / 64)
+    (hc0 : 7 / 64 * h ≤ a * (h - a) * c) : 1 / 7 < a := by
+  have hL : 0 < h - a := by linarith
+  have k1 : 7 / 64 * (a + (h - a)) < (1 - 7 / 64) * (a * (h - a)) := by
+    have := mul_lt_mul_of_pos_left hc1 (mul_pos ha hL)
+    linarith
+  have k2 : 0 < (1 - 7 / 64) * a - 7 / 64 := by
+    by_contra hc'; push Not at hc'
+    nlinarith [mul_le_mul_of_nonneg_left hc' hL.le]
+  have k3 : 7 / 64 < (1 - 7 / 64) * a * (1 - a) := by
+    nlinarith [mul_le_mul_of_nonneg_left (show h - a ≤ 1 - a by linarith) k2.le]
+  by_contra hc'; push Not at hc'
+  nlinarith [mul_le_mul_of_nonneg_left hc' (show (0 : ℝ) ≤ 6 / 7 - a by linarith)]
+
+/-- (27) of Theorem 6: `C = L((1-h)/2 - s) - 2s(1-h) ≤ 0`. -/
+theorem thm6_C {a h : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) :
+    (h - a) * ((1 - h) / 2 - 7 / 64) - 2 * (7 / 64) * (1 - h) ≤ 0 := by
+  have hL : 0 < h - a := by linarith
+  rcases le_total ((1 - h) / 2 - 7 / 64) 0 with hX | hX
+  · nlinarith [mul_nonpos_of_nonneg_of_nonpos hL.le hX]
+  · nlinarith [mul_le_mul_of_nonneg_right (show h - a ≤ h by linarith) hX, sq_nonneg (h - 39 / 64)]
+
+/-- (25) of Theorem 6 and the replacement `f ↦ 1/2`: `Ψ ≥ 0` and `Ψ ≤ Cc + K`. -/
+theorem thm6_psi {a h c f x y : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hc : 0 < c)
+    (hf0 : 0 < f) (hf : f ≤ 1 / 2)
+    (hAFQ : 7 / 64 ≤ f * (y - a) - (1 - a) * x) (hFHQ : 7 / 64 ≤ -f * (y - 1) + (1 - h) * (x - f))
+    (hHCQ : 7 / 64 ≤ c * (y - h) + h * x) (hfL : 3 * (7 / 64) ≤ f * (h - a)) :
+    0 ≤ ((h - a) * ((1 - h) / 2 - 7 / 64) - 2 * (7 / 64) * (1 - h)) * c +
+      ((h - a) * h / 4 - 7 / 64 * h - 7 / 64 * (h - a) / 2) := by
+  have hL : 0 < h - a := by linarith
+  have hZ0 : 0 ≤ c * (1 - h) + f * h := by
+    nlinarith [mul_nonneg hc.le (show (0 : ℝ) ≤ 1 - h by linarith)]
+  have hid : (c * (1 - h) + f * h) * (f * (y - a) - (1 - a) * x) +
+      (c * (1 - h) + f * h + c * (h - a)) * (-f * (y - 1) + (1 - h) * (x - f)) +
+      f * (h - a) * (c * (y - h) + h * x) = f * (h - a) * (c * (1 - h) + f * h) := by ring
+  have hPsi : 0 ≤ f * (h - a) * (c * (1 - h) + f * h) -
+      7 / 64 * (2 * (c * (1 - h) + f * h) + (h - a) * (c + f)) := by
+    have hw2 : 0 ≤ c * (1 - h) + f * h + c * (h - a) := by nlinarith [mul_pos hc hL]
+    linarith [mul_le_mul_of_nonneg_left hAFQ hZ0, mul_le_mul_of_nonneg_left hFHQ hw2,
+      mul_le_mul_of_nonneg_left hHCQ (mul_pos hf0 hL).le]
+  have hB : 0 ≤ (h - a) * c * (1 - h) + (h - a) * h * (1 / 2 + f) - 7 / 64 * (2 * h + (h - a)) := by
+    nlinarith [mul_nonneg (mul_nonneg hL.le hc.le) (show (0 : ℝ) ≤ 1 - h by linarith),
+      mul_le_mul_of_nonneg_left hfL (show (0 : ℝ) ≤ h by linarith),
+      mul_nonneg (mul_nonneg hL.le (show (0 : ℝ) ≤ h by linarith)) (show (0 : ℝ) ≤ 1 / 2 - f by linarith)]
+  have e : ((h - a) * ((1 - h) / 2 - 7 / 64) - 2 * (7 / 64) * (1 - h)) * c +
+      ((h - a) * h / 4 - 7 / 64 * h - 7 / 64 * (h - a) / 2) -
+      (f * (h - a) * (c * (1 - h) + f * h) -
+        7 / 64 * (2 * (c * (1 - h) + f * h) + (h - a) * (c + f))) =
+      (1 / 2 - f) * ((h - a) * c * (1 - h) + (h - a) * h * (1 / 2 + f) -
+        7 / 64 * (2 * h + (h - a))) := by ring
+  linarith [mul_nonneg (show (0 : ℝ) ≤ 1 / 2 - f by linarith) hB]
+
+/-- The scalar part of Theorem 6 (`SEVEN_BOUNDARY_CAPS.md` (25)–(30)), with `Q = (x,y)` and the
+costs of `AFQ, FHQ, HCQ, HAQ, ABH, ABC` and `c ≤ 1 - s`. -/
+theorem theorem6_core {a h b c f x y : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
+    (hbc : b < c) (hc1 : c < 1 - 7 / 64) (hbf : b ≤ f) (hf : f ≤ 1 / 2)
+    (hABH : 7 / 64 ≤ b * (h - a)) (hABC : 7 / 64 ≤ a * (c - b))
+    (hAFQ : 7 / 64 ≤ f * (y - a) - (1 - a) * x) (hFHQ : 7 / 64 ≤ -f * (y - 1) + (1 - h) * (x - f))
+    (hHCQ : 7 / 64 ≤ c * (y - h) + h * x) (hHAQ : 7 / 64 ≤ (h - a) * x) : False := by
+  have hL : 0 < h - a := by linarith
+  have hfL : 3 * (7 / 64) ≤ f * (h - a) := by linarith
+  have hc0 : 7 / 64 * h ≤ a * (h - a) * c := by
+    have k1 := mul_le_mul_of_nonneg_left hABH ha.le
+    have k2 := mul_le_mul_of_nonneg_left hABC hL.le
+    linarith
+  have ha7 := thm6_a ha hah hh hc1 hc0
+  have hPsi := thm6_psi ha hah hh (by linarith) (by linarith) hf hAFQ hFHQ hHCQ hfL
+  have hC0 := thm6_C ha hah hh
+  have hT := thm6_T ha7 hL (by linarith)
+  rw [show a + (h - a) = h by ring] at hT
+  have k := mul_le_mul_of_nonpos_left hc0 hC0
+  have hpos := mul_pos ha hL
+  have k2 : a * (h - a) * (((h - a) * ((1 - h) / 2 - 7 / 64) - 2 * (7 / 64) * (1 - h)) * c +
+      ((h - a) * h / 4 - 7 / 64 * h - 7 / 64 * (h - a) / 2)) < 0 := by
+    linarith
+  have := mul_nonneg hpos.le hPsi
+  linarith
 
 /-- **Theorem 6** (`SEVEN_BOUNDARY_CAPS:Theorem6`). Under (1)–(2), a point in both closed
 triangles `AHF` and `HCF` gives a triangle of area less than `7/128` (stated for the seven anchors
@@ -500,7 +977,39 @@ theorem theorem6 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Poi
     (hAHF : InClosedTriangle X (0, a) (f, 1) (0, h))
     (hHCF : InClosedTriangle X (0, h) (c, 0) (f, 1)) :
     minTriangleArea (sevenConfig₁ a h b c d e f X) < 7 / 128 := by
-  sorry
+  by_contra hcon
+  push Not at hcon
+  have H := anchorCosts hN.1 (hcon.trans minAnchor_of₁)
+  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
+  have hc1 : c < 1 - 7 / 64 := by
+    nlinarith [H.CDE, mul_pos (show (0 : ℝ) < 1 - c by linarith)
+      (show (0 : ℝ) < 1 - (e - d) by linarith)]
+  obtain ⟨x, y⟩ := X
+  obtain ⟨h1, h2, h3⟩ := hAHF
+  obtain ⟨g1, -, -⟩ := hHCF
+  have c1 := cost hcon 0 6 7 rfl h1
+  have c2 := cost hcon 6 1 7 rfl h2
+  have c3 := cost hcon 1 0 7 rfl h3
+  have c4 := cost hcon 1 3 7 rfl g1
+  simp only [sevenConfig₁, Matrix.cons_val, sarea] at c1 c2 c3 c4
+  exact theorem6_core (x := x) (y := y) ha hah hh hb hbc hc1 hbf hf H.ABH H.ABC (by linarith)
+    (by linarith) (by linarith) (by linarith)
+
+/-- The two sign patterns of a negative product. -/
+theorem mul_neg_cases {p q : ℝ} (h : p * q < 0) : (0 < p ∧ q < 0) ∨ (p < 0 ∧ 0 < q) := by
+  rcases lt_trichotomy p 0 with hp | hp | hp
+  · right; exact ⟨hp, by by_contra hq; push Not at hq; nlinarith [mul_nonneg_of_nonpos_of_nonpos hp.le hq]⟩
+  · rw [hp, zero_mul] at h; exact (lt_irrefl _ h).elim
+  · left; exact ⟨hp, by by_contra hq; push Not at hq; nlinarith [mul_nonneg hp.le hq]⟩
+
+/-- A point of the §4 placement above `HC` and above `AF` lies in `AHF ∩ HCF` (Theorem 6). -/
+theorem fh_excl {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
+    (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f X))
+    (hX : InHeptagon a h b c d e f X) (hCF : 0 < sarea (c, 0) (f, 1) X)
+    (hHC : 0 < sarea (0, h) (c, 0) X) (hAF : 0 < sarea (0, a) (f, 1) X) : False := by
+  obtain ⟨-, -, -, -, -, hFH, hHA⟩ := hX
+  have := theorem6 hN (X := X) ⟨hAF.le, hFH.le, hHA.le⟩ ⟨hHC.le, hCF.le, hFH.le⟩
+  linarith
 
 /-- **Corollary 7** (`SEVEN_BOUNDARY_CAPS:Corollary7`). Under (1)–(2), minimum area at least
 `7/128` and the placement of §4, the free points do not occupy the sectors of `HBCF` at `BC` and
@@ -514,9 +1023,155 @@ theorem corollary7 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q :
     (hpl : LeftPlacement a h b c d e f P Q) :
     (InSectorHB h b c f P ∧ 0 < sarea (0, a) (f, 1) P ∧ InSectorCF h b c f Q) ∨
       (InSectorHB h b c f Q ∧ 0 < sarea (0, a) (f, 1) Q ∧ InSectorCF h b c f P) := by
-  sorry
+  obtain ⟨hPq, hQq, hBF, hHC⟩ := claim_left_pair_separation hN hmin hpl
+  obtain ⟨-, -, hAF, -, -⟩ := claim_AF_separation hN hmin hpl
+  obtain ⟨hPh, hQh, hPc, hQc⟩ := hpl
+  have hyP := heptagon_y_lt hN hPh
+  have hyQ := heptagon_y_lt hN hQh
+  have hmP := hmin.trans min₁_left
+  have hmQ := hmin.trans min₁_right
+  have hN' := hN
+  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN'
+  rcases mul_neg_cases hBF with ⟨bP, bQ⟩ | ⟨bP, bQ⟩
+  · have aQ := af_neg_of_bf_neg (by linarith) ha hb (by linarith) hyQ bQ
+    have aP : 0 < sarea (0, a) (f, 1) P := by
+      rcases mul_neg_cases hAF with ⟨h1, -⟩ | ⟨-, h2⟩
+      · exact h1
+      · linarith
+    rcases mul_neg_cases hHC with ⟨cP, cQ⟩ | ⟨cP, cQ⟩
+    · exact (fh_excl hN hmP hPh hPc cP aP).elim
+    · exact Or.inl ⟨⟨hPq, bP, cP⟩, aP, ⟨hQq, bQ, cQ⟩⟩
+  · have aP := af_neg_of_bf_neg (by linarith) ha hb (by linarith) hyP bP
+    have aQ : 0 < sarea (0, a) (f, 1) Q := by
+      rcases mul_neg_cases hAF with ⟨h1, -⟩ | ⟨-, h2⟩
+      · linarith
+      · exact h2
+    rcases mul_neg_cases hHC with ⟨cP, cQ⟩ | ⟨cP, cQ⟩
+    · exact Or.inr ⟨⟨hQq, bQ, cQ⟩, aQ, ⟨hPq, bP, cP⟩⟩
+    · exact (fh_excl hN hmQ hQh hQc cQ aQ).elim
 
 /-! ### §8. The bottom-right ear -/
+
+/-- The monotonicity step of Theorem 8: with `b + w = b₀ + w₀ = S ≤ 1`, `w ≥ w₀ > 2b₀`, the
+function `s/b + 3sb/w` is at least its value at `(b₀, w₀)`. -/
+theorem thm8_mono {S b w b₀ w₀ : ℝ} (hS1 : S ≤ 1) (hb : 0 < b) (hw : 0 < w) (hb0 : 0 < b₀)
+    (hw0 : 0 < w₀) (hsum : b + w = S) (hsum0 : b₀ + w₀ = S) (hww : w₀ ≤ w) (h2 : 2 * b₀ < w₀) :
+    7 / 64 / b₀ + 3 * (7 / 64) * b₀ / w₀ ≤ 7 / 64 / b + 3 * (7 / 64) * b / w := by
+  have hbb : b ≤ b₀ := by linarith
+  have key : 3 * S * b * b₀ ≤ w * w₀ := by
+    have k1 : w₀ * w₀ ≤ w * w₀ := mul_le_mul_of_nonneg_right hww hw0.le
+    have k2 : (2 * b₀) * (2 * b₀) < w₀ * w₀ := mul_self_lt_mul_self (by linarith) h2
+    have k3 : b * b₀ ≤ b₀ * b₀ := mul_le_mul_of_nonneg_right hbb hb0.le
+    have k4 : 0 ≤ (1 - S) * (b * b₀) := mul_nonneg (by linarith) (mul_pos hb hb0).le
+    nlinarith
+  rw [div_add_div _ _ hb0.ne' hw0.ne', div_add_div _ _ hb.ne' hw.ne',
+    div_le_div_iff₀ (mul_pos hb0 hw0) (mul_pos hb hw)]
+  have e : (7 / 64 * w + b * (3 * (7 / 64) * b)) * (b₀ * w₀) -
+      (7 / 64 * w₀ + b₀ * (3 * (7 / 64) * b₀)) * (b * w) =
+      7 / 64 * (w - w₀) * (w * w₀ - 3 * S * b * b₀) := by
+    rw [show b = S - w by linarith, show b₀ = S - w₀ by linarith]; ring
+  nlinarith [mul_nonneg (show (0 : ℝ) ≤ w - w₀ by linarith) (sub_nonneg.2 key)]
+
+/-- The final comparison (35) of Theorem 8: with `w₀(M - s) = 3sM` and `b₀ + w₀ = 1 - M`,
+`s/M + s/b₀ + 3sb₀/w₀ > 1`, because `P(M) = 4096M³ - 2304M² + 196M + 49 > 0`. -/
+theorem thm8_final {M b₀ w₀ : ℝ} (hMs : 7 / 64 < M) (hb0 : 0 < b₀) (hw0 : 0 < w₀)
+    (hw0e : w₀ * (M - 7 / 64) = 3 * (7 / 64) * M) (hsum0 : b₀ + w₀ = 1 - M) :
+    1 < 7 / 64 / M + 7 / 64 / b₀ + 3 * (7 / 64) * b₀ / w₀ := by
+  have hM : 0 < M := by linarith
+  have e1 : 3 * (7 / 64) * b₀ / w₀ = b₀ * (M - 7 / 64) / M := by
+    rw [div_eq_div_iff hw0.ne' hM.ne']; linear_combination (-b₀) * hw0e
+  rw [e1]
+  have hq : b₀ * (M - 7 / 64) = -M ^ 2 + (1 - 2 * (7 / 64)) * M - 7 / 64 := by
+    have : b₀ = 1 - M - w₀ := by linarith
+    rw [this]; linear_combination (-1 : ℝ) * hw0e
+  have hP : 0 < 4096 * M ^ 3 - 2304 * M ^ 2 + 196 * M + 49 := by
+    nlinarith [mul_nonneg hM.le (sq_nonneg (M - 1 / 3)), sq_nonneg (M - 7 / 24)]
+  have key : 0 < (M - 7 / 64) * (7 / 64 * b₀ + 7 / 64 * M + b₀ ^ 2 * (M - 7 / 64) - M * b₀) := by
+    have e2 : (M - 7 / 64) * (7 / 64 * b₀ + 7 / 64 * M + b₀ ^ 2 * (M - 7 / 64) - M * b₀) =
+        M * ((4096 * M ^ 3 - 2304 * M ^ 2 + 196 * M + 49) / 4096) := by
+      linear_combination (b₀ * (M - 7 / 64) + (-M ^ 2 + (1 - 2 * (7 / 64)) * M - 7 / 64) +
+        7 / 64 - M) * hq
+    rw [e2]; positivity
+  have key' : M * b₀ < 7 / 64 * b₀ + 7 / 64 * M + b₀ ^ 2 * (M - 7 / 64) := by
+    by_contra hc; push Not at hc
+    nlinarith [mul_nonneg (show (0 : ℝ) ≤ M - 7 / 64 by linarith) (sub_nonneg.2 hc)]
+  rw [show 7 / 64 / M + 7 / 64 / b₀ + b₀ * (M - 7 / 64) / M =
+      (7 / 64 * b₀ + 7 / 64 * M + b₀ ^ 2 * (M - 7 / 64)) / (M * b₀) by field_simp,
+    lt_div_iff₀ (mul_pos hM hb0)]
+  linarith
+
+/-- The case `e > h` of Theorem 8 in the variables `M = c - b`, `b`, `w = 1 - c`:
+`s/M + s/b < 1`, `s/M + 3s/w < 1` and `s/M + s/b + 3sb/w ≤ 1` are incompatible. -/
+theorem thm8_case2 {M b w : ℝ} (hM : 0 < M) (hb : 0 < b) (hw : 0 < w) (hsum : b + M + w = 1)
+    (h1 : 7 / 64 / M + 7 / 64 / b < 1) (h2 : 7 / 64 / M + 3 * (7 / 64) / w < 1)
+    (h3 : 7 / 64 / M + 7 / 64 / b + 3 * (7 / 64) * b / w ≤ 1) : False := by
+  have hsb : 0 < 7 / 64 / b := by positivity
+  have hsM1 : 7 / 64 / M < 1 := by linarith
+  have hMs : 7 / 64 < M := by rwa [div_lt_one hM] at hsM1
+  have hMs' : 0 < M - 7 / 64 := by linarith
+  set w₀ := 3 * (7 / 64) * M / (M - 7 / 64) with hw0d
+  have hw0e : w₀ * (M - 7 / 64) = 3 * (7 / 64) * M := by rw [hw0d, div_mul_cancel₀ _ hMs'.ne']
+  have hw0 : 0 < w₀ := by rw [hw0d]; positivity
+  have hww : w₀ < w := by
+    have k : 3 * (7 / 64) / w < (M - 7 / 64) / M := by
+      have : (M - 7 / 64) / M = 1 - 7 / 64 / M := by field_simp
+      rw [this]; linarith
+    rw [div_lt_div_iff₀ hw hM] at k
+    by_contra hc; push Not at hc
+    nlinarith [mul_le_mul_of_nonneg_right hc hMs'.le]
+  set b₀ := 1 - M - w₀ with hb0d
+  have hb0 : 0 < b₀ := by linarith
+  have h2b : 2 * b₀ < w₀ := by
+    have : (w₀ - 2 * b₀) * (M - 7 / 64) = 2 * M ^ 2 + (7 * (7 / 64) - 2) * M + 2 * (7 / 64) := by
+      rw [hb0d]; linear_combination 3 * hw0e
+    have hpos : 0 < 2 * M ^ 2 + (7 * (7 / 64) - 2) * M + 2 * (7 / 64) := by
+      nlinarith [sq_nonneg (M - 79 / 256)]
+    by_contra hc; push Not at hc
+    nlinarith [mul_nonneg (show (0 : ℝ) ≤ 2 * b₀ - w₀ by linarith) hMs'.le]
+  have hmono := thm8_mono (S := 1 - M) (by linarith) hb hw hb0 hw0 (by linarith) (by linarith)
+    hww.le h2b
+  have hfin := thm8_final hMs hb0 hw0 hw0e (by linarith)
+  linarith
+
+/-- The scalar part of Theorem 8 (`SEVEN_BOUNDARY_CAPS.md` (31)–(35)). -/
+theorem theorem8_core {a h b c d e f : ℝ} (ha : 0 < a) (hah : a < h) (hh : h < 1) (hb : 0 < b)
+    (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1) (hbf : b ≤ f)
+    (hf : f ≤ 1 / 2) (hABC : 7 / 64 ≤ a * (c - b)) (hBCD : 7 / 64 ≤ d * (c - b))
+    (hABH : 7 / 64 ≤ b * (h - a)) (hEFH : 7 / 64 ≤ (1 - f) * (1 - h) + f * (1 - e))
+    (hneg : 3 * (7 / 64) ≤ (1 - c) * (e - d)) : False := by
+  have hL : 0 < h - a := by linarith
+  have hM : 0 < c - b := by linarith
+  have hR : 0 < e - d := by linarith
+  have hw : 0 < 1 - c := by linarith
+  have hHEF : (1 - f) * h + f * e ≤ 1 - 7 / 64 := by linarith
+  rcases le_or_gt e h with heh | heh
+  · -- `e ≤ h`: Cauchy–Schwarz with `√2 > 7/5`, `√3 > 5/3`
+    have hsum : h + e ≤ 2 - 2 * (7 / 64) := by
+      nlinarith [mul_nonneg (show (0 : ℝ) ≤ 1 / 2 - f by linarith) (sub_nonneg.2 heh)]
+    have hT1 : 7 / 64 * (2 * (7 / 5) * (61 / 15) - (61 / 15) ^ 2 * (c - b)) ≤ a + d := by
+      by_contra hc'; push Not at hc'
+      nlinarith [mul_lt_mul_of_pos_right hc' hM, sq_nonneg (61 / 15 * (c - b) - 7 / 5)]
+    have hT2 : 7 / 64 * (2 * (61 / 15) - (61 / 15) ^ 2 * b) ≤ h - a := by
+      by_contra hc'; push Not at hc'
+      nlinarith [mul_lt_mul_of_pos_right hc' hb, sq_nonneg (61 / 15 * b - 1)]
+    have hT3 : 7 / 64 * (2 * (5 / 3) * (61 / 15) - (61 / 15) ^ 2 * (1 - c)) ≤ e - d := by
+      by_contra hc'; push Not at hc'
+      nlinarith [mul_lt_mul_of_pos_right hc' hw, sq_nonneg (61 / 15 * (1 - c) - 5 / 3)]
+    nlinarith
+  · -- `e > h`
+    have hFb : (1 - b) * h + b * e ≤ 1 - 7 / 64 := by
+      nlinarith [mul_nonneg (sub_nonneg.2 hbf) (show (0 : ℝ) ≤ e - h by linarith)]
+    have e1 : 7 / 64 / (c - b) ≤ a := by rw [div_le_iff₀ hM]; linarith
+    have e2 : 7 / 64 / (c - b) ≤ d := by rw [div_le_iff₀ hM]; linarith
+    have e3 : 7 / 64 / b ≤ h - a := by rw [div_le_iff₀ hb]; linarith
+    have e4 : 3 * (7 / 64) / (1 - c) ≤ e - d := by rw [div_le_iff₀ hw]; linarith
+    have k1 : (1 - b) * (7 / 64 / (c - b) + 7 / 64 / b) ≤ (1 - b) * h :=
+      mul_le_mul_of_nonneg_left (by linarith) (by linarith)
+    have k2 : b * (7 / 64 / (c - b) + 3 * (7 / 64) / (1 - c)) ≤ b * e :=
+      mul_le_mul_of_nonneg_left (by linarith) hb.le
+    have k3 : b * (7 / 64 / b) = 7 / 64 := by field_simp
+    have k4 : b * (3 * (7 / 64) / (1 - c)) = 3 * (7 / 64) * b / (1 - c) := by ring
+    exact thm8_case2 hM hb hw (by ring) (by linarith) (by linarith) (by nlinarith)
 
 /-- **Theorem 8** (`SEVEN_BOUNDARY_CAPS:Theorem8`). Under (1)–(2): if every anchor triangle has
 area at least `7/128`, the doubled area `[CDE] = (1-c)(e-d)` is less than `3s = 21/64`;
@@ -529,7 +1184,28 @@ theorem theorem8 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
         sarea (c, 0) (1, d) (1, e) < 3 * (7 / 64)) ∧
       ∀ X : Point, InClosedTriangle X (c, 0) (1, d) (1, e) →
         minTriangleArea (sevenConfig₁ a h b c d e f X) < 7 / 128 := by
-  sorry
+  have part1 : 7 / 128 ≤ minTriangleArea (sevenAnchorConfig a h b c d e f) →
+      sarea (c, 0) (1, d) (1, e) < 3 * (7 / 64) := by
+    intro hmin
+    have H := anchorCosts hN.1 hmin
+    have e : sarea (c, 0) (1, d) (1, e) = (1 - c) * (e - d) := by simp only [sarea]; ring
+    rw [e]
+    by_contra hc'; push Not at hc'
+    obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
+    exact theorem8_core ha hah hh hb hbc hc hd hde he hbf hf H.ABC H.BCD H.ABH H.EFH hc'
+  refine ⟨part1, fun X hX => ?_⟩
+  by_contra hcon
+  push Not at hcon
+  have hlt := part1 (hcon.trans minAnchor_of₁)
+  obtain ⟨h1, h2, h3⟩ := hX
+  have c1 := cost hcon 3 4 7 rfl h1
+  have c2 := cost hcon 4 5 7 rfl h2
+  have c3 := cost hcon 5 3 7 rfl h3
+  have := sarea_add_sarea_add_sarea (c, 0) (1, d) (1, e) X
+  change 7 / 64 ≤ sarea (c, 0) (1, d) X at c1
+  change 7 / 64 ≤ sarea (1, d) (1, e) X at c2
+  change 7 / 64 ≤ sarea (1, e) (c, 0) X at c3
+  linarith
 
 /-! ### §9. Two right-hand triangles of capacity one -/
 
@@ -644,6 +1320,30 @@ theorem theorem9 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) :
       (by show sarea (1, d) (1, e) (f, 1) < _; linarith)
     linarith
 
+/-- A free point in the closed quadrilateral `CDEF` at least-area `7/128`: strictly inside
+`CEF` (Theorem 8 excludes `CDE`), strictly left of the edges `CD`, `DE`, and off the diagonal
+`DF`. -/
+theorem right_point {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Point}
+    (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f X))
+    (hX : InClosedPolygon ![(c, 0), (1, d), (1, e), (f, 1)] X) :
+    0 < sarea (c, 0) (1, d) X ∧ 0 < sarea (1, d) (1, e) X ∧ 0 < sarea (1, e) (f, 1) X ∧
+      0 < sarea (f, 1) (c, 0) X ∧ 0 < sarea (c, 0) (1, e) X ∧ sarea (1, d) (f, 1) X ≠ 0 := by
+  have h0 := hX 0; have h1 := hX 1; have h2 := hX 2; have h3 := hX 3
+  simp [finRotate_apply] at h0 h1 h2 h3
+  have c0 := cost hmin 3 4 7 rfl h0
+  have c1 := cost hmin 4 5 7 rfl h1
+  have c2 := cost hmin 5 6 7 rfl h2
+  have c3 := cost hmin 6 3 7 rfl h3
+  change 7 / 64 ≤ sarea (c, 0) (1, d) X at c0
+  change 7 / 64 ≤ sarea (1, d) (1, e) X at c1
+  change 7 / 64 ≤ sarea (1, e) (f, 1) X at c2
+  change 7 / 64 ≤ sarea (f, 1) (c, 0) X at c3
+  refine ⟨by linarith, by linarith, by linarith, by linarith, ?_,
+    sarea_ne_zero_of_min_pos (lt_of_lt_of_le (by norm_num) hmin) 4 6 7⟩
+  by_contra hc; push Not at hc
+  have := (theorem8 hN).2 X ⟨h0, h1, by rw [sarea_swap₁₂]; linarith⟩
+  linarith
+
 /-- **Claim** (`SEVEN_BOUNDARY_CAPS:claim-right-pair-DF`). Under (1)–(2) and minimum area at
 least `7/128`, if both free points lie in the closed right quadrilateral `CDEF`, then both are
 strictly inside `CEF` and `DF` separates them: one is in `CEF ∩ DEF`, the other in `CEF ∩ CDF`.
@@ -657,7 +1357,22 @@ theorem claim_right_pair_DF {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e 
         InTriangle Q (c, 0) (1, e) (f, 1) ∧ InTriangle Q (c, 0) (1, d) (f, 1)) ∨
       (InTriangle Q (c, 0) (1, e) (f, 1) ∧ InTriangle Q (1, d) (1, e) (f, 1) ∧
         InTriangle P (c, 0) (1, e) (f, 1) ∧ InTriangle P (c, 0) (1, d) (f, 1)) := by
-  sorry
+  obtain ⟨p0, p1, p2, p3, p4, p5⟩ := right_point hN (hmin.trans min₁_left) hP
+  obtain ⟨q0, q1, q2, q3, q4, q5⟩ := right_point hN (hmin.trans min₁_right) hQ
+  have hT := (theorem9 hN).2 P Q
+  have sw : ∀ X : Point, sarea (f, 1) (1, d) X = -sarea (1, d) (f, 1) X := fun X => sarea_swap₁₂ _ _ _
+  have hCEF : ∀ X : Point, 0 < sarea (c, 0) (1, e) X → 0 < sarea (1, e) (f, 1) X →
+      0 < sarea (f, 1) (c, 0) X → InTriangle X (c, 0) (1, e) (f, 1) := fun X a b c => ⟨a, b, c⟩
+  rcases lt_or_gt_of_ne p5 with hp | hp <;> rcases lt_or_gt_of_ne q5 with hq | hq
+  · -- both in `DEF`
+    exact absurd hmin (not_le.2 (hT.2 ⟨p1.le, p2.le, by rw [sw]; linarith⟩
+      ⟨q1.le, q2.le, by rw [sw]; linarith⟩))
+  · left
+    exact ⟨hCEF P p4 p2 p3, ⟨p1, p2, by rw [sw]; linarith⟩, hCEF Q q4 q2 q3, ⟨q0, hq, q3⟩⟩
+  · right
+    exact ⟨hCEF Q q4 q2 q3, ⟨q1, q2, by rw [sw]; linarith⟩, hCEF P p4 p2 p3, ⟨p0, hp, p3⟩⟩
+  · -- both in `CDF`
+    exact absurd hmin (not_le.2 (hT.1 ⟨p0.le, hp.le, p3.le⟩ ⟨q0.le, hq.le, q3.le⟩))
 
 /-! ### §10–11. The two upper exterior caps -/
 
@@ -712,6 +1427,130 @@ theorem theorem10 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {X : Po
     nlinarith [mul_nonneg (show (0 : ℝ) ≤ f by linarith) (sub_nonneg.2 hy1)]
   exact theorem10_core ha hah hh hf hABC hM hAHX hq hx0
 
+/-- **Support-cell bound** (`TYPE_II.md` §1, cells I, IV, V). For a counterclockwise support
+triangle `UVW` with contacts `H ∈ (U, W)`, `F ∈ (V, W)` and fifth point `X` with `[UFX] > 0` (so
+`X` is in none of the cells II, III), if the five points have least area at least `t > 0`, then
+`[UVW] ≥ 2Kt` with `K = 4 + 2√3`: the normalized doubled minimum is at most `1/K` in cell I,
+`1/12` in cell IV and `(5√5-11)/2 < 1/10` in cell V. -/
+theorem support_bound {U V W H F X : Point} (hS : TypeII.IsSupportTriangle U V W H F X)
+    (hL : 0 < sarea U F X) {t : ℝ} (ht : 0 < t)
+    (hmin : t ≤ minTriangleArea ![U, V, H, F, X]) :
+    2 * TypeII.Ktwo * t ≤ sarea U V W := by
+  obtain ⟨m1, m2, m3, m4, e1, e2, h₀, f₀, hdet, hA', hE', -, hH', hF', hN⟩ :=
+    TypeII.claim_support_affine hS
+  have hS0 : 0 < sarea U V W := hS.1
+  have hdet0 : 0 < m1 * m4 - m2 * m3 := by rw [hdet]; positivity
+  set φ := affineMap m1 m2 m3 m4 e1 e2
+  have hcfg : TypeII.hsConfig h₀ f₀ (φ X) = φ ∘ ![U, V, H, F, X] := by
+    funext k; fin_cases k
+    · exact hA'.symm
+    · exact hE'.symm
+    · exact hH'.symm
+    · exact hF'.symm
+    · rfl
+  have hmin' : 2 * t * (m1 * m4 - m2 * m3) / 2 ≤
+      minTriangleArea (TypeII.hsConfig h₀ f₀ (φ X)) := by
+    rw [hcfg, minTriangleArea_affineMap, abs_of_pos hdet0]
+    nlinarith
+  have hs : 0 < 2 * t * (m1 * m4 - m2 * m3) := by positivity
+  have five := TypeII.claim_five_cells hN hs hmin'
+  have hL' : 0 < sarea TypeII.hsA (TypeII.hsF f₀) (φ X) := by
+    rw [← hA', ← hF', sarea_affineMap]; exact mul_pos hdet0 hL
+  have hK7 : TypeII.Ktwo < 15 / 2 := by unfold TypeII.Ktwo; linarith [TypeII.sqrt_three_lt]
+  have h10 : 1 / 10 ≤ 1 / TypeII.Ktwo := by
+    rw [div_le_div_iff₀ (by norm_num) TypeII.Ktwo_pos]; linarith
+  have h12 : 1 / 12 ≤ 1 / TypeII.Ktwo := by
+    rw [div_le_div_iff₀ (by norm_num) TypeII.Ktwo_pos]; linarith
+  have hσ : 2 * t * (m1 * m4 - m2 * m3) ≤ 1 / TypeII.Ktwo := by
+    rcases five.1 with hI | hII | hIII | hIV | hV
+    · exact (TypeII.claim_cell_I_bound hN hs hmin' hI).2
+    · exact absurd hII.1 (not_lt.2 hL'.le)
+    · exact absurd hIII.1 (not_lt.2 hL'.le)
+    · exact (TypeII.claim_cell_IV_bound hN hs hmin' hIV).trans h12
+    · obtain ⟨-, h1, h2⟩ := TypeII.eq3 hN hs hmin' hV
+      linarith
+  rw [hdet, le_div_iff₀ TypeII.Ktwo_pos] at hσ
+  have e : 2 * t * (1 / sarea U V W) * TypeII.Ktwo = 2 * TypeII.Ktwo * t / sarea U V W := by ring
+  rw [e, div_le_one hS0] at hσ
+  exact hσ
+
+/-- The support triangle of Theorem 11: for `X = (x₁,x₂)`, `Y = (y₁,y₂)` beyond `EF` with `Y`
+weakly below the line `FX` (`(1-x₂)(y₁-f) ≤ (1-y₂)(x₁-f)`), the triangle `F, D, K'` with
+`K' = (1,k)` the right-side intercept of `FX` (`e < k ≤ 1`) is a support triangle with contacts
+`X ∈ (F, K')`, `E ∈ (D, K')` and fifth point `Y`. -/
+theorem far_support {d e f x₁ x₂ y₁ y₂ : ℝ} (hf : f < 1) (hd : 0 < d) (hde : d < e)
+    (he : e < 1) (hx1 : f < x₁) (hx1' : x₁ < 1) (hx2 : x₂ ≤ 1) (hy1 : f < y₁) (hy1' : y₁ < 1)
+    (hXE : 0 < sarea (f, 1) (1, e) (x₁, x₂)) (hYE : 0 < sarea (f, 1) (1, e) (y₁, y₂))
+    (hXY : (1 - x₂) * (y₁ - f) ≤ (1 - y₂) * (x₁ - f)) :
+    ∃ k : ℝ, d < k ∧ k ≤ 1 ∧
+      TypeII.IsSupportTriangle (f, 1) (1, d) (1, k) (x₁, x₂) (1, e) (y₁, y₂) := by
+  have hxf : 0 < x₁ - f := by linarith
+  have hf1 : 0 < 1 - f := by linarith
+  simp only [sarea] at hXE hYE
+  obtain ⟨l, hl⟩ : ∃ l : ℝ, l * (1 - f) = x₁ - f := ⟨(x₁ - f) / (1 - f), by field_simp⟩
+  have hl0 : 0 < l := by
+    by_contra hc'; push Not at hc'; nlinarith [mul_nonpos_of_nonpos_of_nonneg hc' hf1.le]
+  have hl1 : l < 1 := by
+    by_contra hc'; push Not at hc'; nlinarith [mul_le_mul_of_nonneg_right hc' hf1.le]
+  obtain ⟨k, hk⟩ : ∃ k : ℝ, (1 - k) * l = 1 - x₂ :=
+    ⟨1 - (1 - x₂) / l, by field_simp; ring⟩
+  have hk1 : k ≤ 1 := by
+    by_contra hc'; push Not at hc'; nlinarith [mul_pos (show (0 : ℝ) < k - 1 by linarith) hl0]
+  have e1 : (1 - k) * (x₁ - f) = (1 - f) * (1 - x₂) := by rw [← hl, ← hk]; ring
+  have hek : e < k := by
+    by_contra hc'; push Not at hc'
+    nlinarith [mul_le_mul_of_nonneg_right (show 1 - e ≤ 1 - k by linarith) hxf.le]
+  have hkd : 0 < k - d := by linarith
+  refine ⟨k, by linarith, hk1, ?_, ⟨1 - l, l, by linarith, hl0, by ring, ?_⟩,
+    ⟨(k - e) / (k - d), (e - d) / (k - d), div_pos (by linarith) hkd, div_pos (by linarith) hkd,
+      by field_simp; ring, ?_⟩, ?_⟩
+  · simp only [sarea]; nlinarith [mul_pos hf1 hkd]
+  · ext
+    · simp only [Prod.fst_add, Prod.smul_fst, smul_eq_mul]; linear_combination hl
+    · simp only [Prod.snd_add, Prod.smul_snd, smul_eq_mul]; linear_combination (-1 : ℝ) * hk
+  · ext
+    · simp only [Prod.fst_add, Prod.smul_fst, smul_eq_mul]; field_simp; ring
+    · simp only [Prod.snd_add, Prod.smul_snd, smul_eq_mul]; field_simp; ring
+  · apply TypeII.mem_convexHull_of_sarea
+    · simp only [sarea]; nlinarith [mul_pos hf1 hkd]
+    · simp only [sarea]; nlinarith [mul_pos hkd (show (0 : ℝ) < 1 - y₁ by linarith)]
+    · -- `[K'FY] = (1-f)(1-y₂) - (1-k)(y₁-f) ≥ 0`
+      simp only [sarea]
+      have e2 : (1 - k) * (y₁ - f) * (x₁ - f) = (1 - x₂) * (y₁ - f) * (1 - f) := by
+        rw [← hl, ← hk]; ring
+      have : (1 - k) * (y₁ - f) ≤ (1 - y₂) * (1 - f) := by
+        by_contra hc'; push Not at hc'
+        nlinarith [mul_lt_mul_of_pos_right hc' hxf, mul_le_mul_of_nonneg_right hXY hf1.le]
+      nlinarith
+    · simp only [sarea]
+      nlinarith [mul_le_mul_of_nonneg_right (show 1 - e ≤ 1 - d by linarith)
+        (show (0 : ℝ) ≤ y₁ - f by linarith)]
+
+/-- The core of Theorem 11: with the support triangle `F, D, K'` of `far_support`, since
+`[FEY] > 0` the cells give `Ω = (1-f)(k-d) ≥ Ks > 13/16`, while `Ω ≤ (1-b)(1-d) < 49/64`. -/
+theorem far_cap_core {b c d e f x₁ x₂ y₁ y₂ : ℝ} (hb8 : 1 / 8 < b) (hbf : b ≤ f) (hf : f ≤ 1 / 2)
+    (hbc : b < c) (hc : c < 1) (hd : 0 < d) (hde : d < e) (he : e < 1)
+    (hBCD : 7 / 64 ≤ d * (c - b))
+    (hx1 : f < x₁) (hx1' : x₁ < 1) (hx2 : x₂ ≤ 1) (hy1 : f < y₁) (hy1' : y₁ < 1)
+    (hXE : 0 < sarea (f, 1) (1, e) (x₁, x₂)) (hYE : 0 < sarea (f, 1) (1, e) (y₁, y₂))
+    (hXY : (1 - x₂) * (y₁ - f) ≤ (1 - y₂) * (x₁ - f))
+    (hmin : 7 / 128 ≤ minTriangleArea ![(f, 1), (1, d), (x₁, x₂), (1, e), (y₁, y₂)]) :
+    False := by
+  obtain ⟨k, hkd, hk1, hS⟩ :=
+    far_support (by linarith) hd hde he hx1 hx1' hx2 hy1 hy1' hXE hYE hXY
+  have hb := support_bound hS hYE (by norm_num) hmin
+  have hK := capK_gt
+  unfold capK at hK
+  unfold TypeII.Ktwo at hb
+  have hΩ : sarea (f, 1) (1, d) (1, k) = (1 - f) * (k - d) := by simp only [sarea]; ring
+  rw [hΩ] at hb
+  have h1 : (1 - f) * (k - d) ≤ (1 - b) * (1 - d) :=
+    mul_le_mul (by linarith) (by linarith) (by linarith) (by linarith)
+  have h2 : 7 / 64 < (1 - b) * d := by
+    have := mul_lt_mul_of_pos_left (show c - b < 1 - b by linarith) hd
+    linarith
+  linarith
+
 /-- **Theorem 11** (`SEVEN_BOUNDARY_CAPS:Theorem11`). Under (1)–(2), the far upper exterior cap
 `conv{F, E, (1,1)}` does not contain both free points at minimum area at least `7/128` (support
 triangle `DFK'` and the cells III–V of `TYPE_II.md` §1 give `Ω ≥ Ks > 13/16`, while
@@ -722,7 +1561,98 @@ SEVEN_BOUNDARY_CAPS:eq37. -/
 theorem theorem11 {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {P Q : Point}
     (hP : InFarUpperCap e f P) (hQ : InFarUpperCap e f Q) :
     minTriangleArea (sevenConfig a h b c d e f P Q) < 7 / 128 := by
-  sorry
+  by_contra hcon
+  push Not at hcon
+  have hA := hcon.trans (min₁_left.trans minAnchor_of₁)
+  obtain ⟨hb8, -, -, -⟩ := eq37 hN hA
+  have H := anchorCosts hN.1 hA
+  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN
+  obtain ⟨p₁, p₂⟩ := P
+  obtain ⟨q₁, q₂⟩ := Q
+  obtain ⟨u1, u2, u3⟩ := hP
+  obtain ⟨v1, v2, v3⟩ := hQ
+  have cP := cost hcon 6 5 7 rfl u1
+  have cQ := cost hcon 6 5 8 rfl v1
+  simp only [sarea] at u2 u3 v2 v3
+  have dP := cost hcon 4 5 7 (v := (e - d) * (1 - p₁)) (by sa_eval)
+    (mul_nonneg (by linarith) (by nlinarith))
+  have dQ := cost hcon 4 5 8 (v := (e - d) * (1 - q₁)) (by sa_eval)
+    (mul_nonneg (by linarith) (by nlinarith))
+  change 7 / 64 ≤ sarea (f, 1) (1, e) (p₁, p₂) at cP
+  change 7 / 64 ≤ sarea (f, 1) (1, e) (q₁, q₂) at cQ
+  have hp1 : p₁ < 1 := by nlinarith
+  have hq1 : q₁ < 1 := by nlinarith
+  have hp2 : p₂ ≤ 1 := by nlinarith
+  have hq2 : q₂ ≤ 1 := by nlinarith
+  have cP' := cP; have cQ' := cQ
+  simp only [sarea] at cP' cQ'
+  have hpf : f < p₁ := by nlinarith
+  have hqf : f < q₁ := by nlinarith
+  rcases le_total ((1 - p₂) * (q₁ - f)) ((1 - q₂) * (p₁ - f)) with hXY | hXY
+  · have hm := min_five' (sevenConfig a h b c d e f (p₁, p₂) (q₁, q₂)) 6 4 7 5 8 (by decide)
+    exact far_cap_core hb8 hbf hf hbc hc hd hde he H.BCD hpf hp1 hp2 hqf hq1
+      (by linarith) (by linarith) hXY (hcon.trans hm)
+  · have hm := min_five' (sevenConfig a h b c d e f (p₁, p₂) (q₁, q₂)) 6 4 8 5 7 (by decide)
+    exact far_cap_core hb8 hbf hf hbc hc hd hde he H.BCD hqf hq1 hq2 hpf hp1
+      (by linarith) (by linarith) hXY (hcon.trans hm)
+
+/-- A point of the square outside the open anchor heptagon lies in one of the two lower caps
+(written as in `GLOBAL_COMPLETION:Theorem2`) or is a far-cap point; the nearer upper cap is empty
+(Theorem 10) and a point on a side line of the heptagon gives a zero area. -/
+theorem outside_cases {a h b c d e f : ℝ} (hN : SevenNormal a h b c d e f) {Z : Point}
+    (hZ : Z ∈ unitSquare) (hmin : 7 / 128 ≤ minTriangleArea (sevenConfig₁ a h b c d e f Z))
+    (hout : ¬ InHeptagon a h b c d e f Z) :
+    (0 ≤ Z.1 ∧ 0 ≤ Z.2 ∧ a * Z.1 + b * Z.2 ≤ a * b) ∨
+      (Z.1 ≤ 1 ∧ 0 ≤ Z.2 ∧ d * (1 - Z.1) + (1 - c) * Z.2 ≤ d * (1 - c)) ∨
+      FarCapPoint e f Z := by
+  have hN' := hN
+  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN'
+  obtain ⟨z₁, z₂⟩ := Z
+  obtain ⟨hz1, hz1', hz2, hz2'⟩ := hZ
+  simp only at hz1 hz1' hz2 hz2' ⊢
+  simp only [InHeptagon, not_and_or, not_lt] at hout
+  rcases hout with h1 | h1 | h1 | h1 | h1 | h1 | h1
+  · left; simp only [sarea] at h1; exact ⟨hz1, hz2, by linarith⟩
+  · exfalso
+    simp only [sarea] at h1
+    have := cost hmin 2 3 7 (v := (c - b) * z₂) (by sa_eval) (mul_nonneg (by linarith) hz2)
+    nlinarith
+  · right; left; simp only [sarea] at h1; exact ⟨hz1', hz2, by linarith⟩
+  · exfalso
+    simp only [sarea] at h1
+    have := cost hmin 4 5 7 (v := (e - d) * (1 - z₁)) (by sa_eval)
+      (mul_nonneg (by linarith) (by linarith))
+    nlinarith
+  · right; right
+    have c1 := cost hmin 6 5 7 (v := sarea (f, 1) (1, e) (z₁, z₂)) rfl
+      (by rw [sarea_swap₁₂]; linarith)
+    have c2 := cost hmin 4 5 7 (v := (e - d) * (1 - z₁)) (by sa_eval)
+      (mul_nonneg (by linarith) (by linarith))
+    have c1' := c1
+    simp only [sarea] at c1'
+    have hz1l : z₁ < 1 := by nlinarith
+    have hfz : f < z₁ := by
+      nlinarith [mul_nonneg (show (0 : ℝ) ≤ 1 - f by linarith) (show (0 : ℝ) ≤ 1 - z₂ by linarith)]
+    have hez : e < z₂ := by
+      nlinarith [mul_pos (show (0 : ℝ) < 1 - e by linarith) (show (0 : ℝ) < 1 - z₁ by linarith)]
+    exact ⟨hfz, hz1l, hez, hz2', by linarith⟩
+  · exfalso
+    have hX : InNearUpperCap h f (z₁, z₂) := by
+      refine ⟨by rw [sarea_swap₁₂]; linarith, ?_, ?_⟩ <;> simp only [sarea] <;> nlinarith
+    have := theorem10 hN hX
+    linarith
+  · exfalso
+    simp only [sarea] at h1
+    have := cost hmin 1 0 7 (v := (h - a) * z₁) (by sa_eval) (mul_nonneg (by linarith) hz1)
+    nlinarith
+
+/-- A far-cap point lies in the closed far upper cap. -/
+theorem farCapPoint_mem {e f : ℝ} {Z : Point} (he : e < 1) (hf : f < 1) (hZ : FarCapPoint e f Z) :
+    InFarUpperCap e f Z := by
+  obtain ⟨z₁, z₂⟩ := Z
+  obtain ⟨h1, h2, h3, h4, h5⟩ := hZ
+  simp only at h1 h2 h3 h4
+  refine ⟨h5.le, ?_, ?_⟩ <;> simp only [sarea] <;> nlinarith
 
 /-- **Claim** (`SEVEN_BOUNDARY_CAPS:claim-exterior-reduction`). Under (1)–(2), with both free
 points in the square and minimum area at least `7/128`, if the free points are not both strictly
@@ -736,6 +1666,28 @@ theorem claim_exterior_reduction {a h b c d e f : ℝ} (hN : SevenNormal a h b c
     (hout : ¬ (InHeptagon a h b c d e f P ∧ InHeptagon a h b c d e f Q)) :
     (FarCapPoint e f P ∧ InHeptagon a h b c d e f Q) ∨
       (FarCapPoint e f Q ∧ InHeptagon a h b c d e f P) := by
-  sorry
+  have hN' := hN
+  obtain ⟨⟨ha, hah, hh, hb, hbc, hc, hd, hde, he, hbf, hfc⟩, hf⟩ := hN'
+  have lower : ∀ (hcap : GlobalCompletion.InLowerLeftCap a b P ∨
+      GlobalCompletion.InLowerRightCap c d P ∨ GlobalCompletion.InLowerLeftCap a b Q ∨
+      GlobalCompletion.InLowerRightCap c d Q), False := fun hcap =>
+    absurd hmin (not_le.2 (GlobalCompletion.theorem2 ha hah hh hb hbc hc hd hde he (by linarith)
+      (by linarith) hPs hQs hcap))
+  by_cases hPin : InHeptagon a h b c d e f P
+  · have hQin : ¬ InHeptagon a h b c d e f Q := fun hQ => hout ⟨hPin, hQ⟩
+    rcases outside_cases hN hQs (hmin.trans min₁_right) hQin with hq | hq | hq
+    · exact (lower (Or.inr (Or.inr (Or.inl hq)))).elim
+    · exact (lower (Or.inr (Or.inr (Or.inr hq)))).elim
+    · exact Or.inr ⟨hq, hPin⟩
+  · rcases outside_cases hN hPs (hmin.trans min₁_left) hPin with hp | hp | hp
+    · exact (lower (Or.inl hp)).elim
+    · exact (lower (Or.inr (Or.inl hp))).elim
+    · by_cases hQin : InHeptagon a h b c d e f Q
+      · exact Or.inl ⟨hp, hQin⟩
+      · rcases outside_cases hN hQs (hmin.trans min₁_right) hQin with hq | hq | hq
+        · exact (lower (Or.inr (Or.inr (Or.inl hq)))).elim
+        · exact (lower (Or.inr (Or.inr (Or.inr hq)))).elim
+        · exact absurd hmin (not_le.2 (theorem11 hN (farCapPoint_mem he (by linarith) hp)
+            (farCapPoint_mem he (by linarith) hq)))
 
 end Heilbronn.SevenBoundaryCaps
