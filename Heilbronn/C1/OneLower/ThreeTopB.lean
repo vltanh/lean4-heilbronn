@@ -38,9 +38,9 @@ theorem three_top (H : Comp h c d f Q) (topc : ∀ k : Fin 3, InTopCap d f (Q k.
     intro k
     have := top_mem_hull H.hA (H.hQ _) (topc k)
     rwa [Set.insert_comm] at this
-  have hFDE : 0 < sarea (f, 1) (1, d) ptE := by simp only [sarea, ptE]; nlinarith
+  have hFDE : 0 < sarea (f, 1) (1, d) ptE := by simp only [sarea]; nlinarith
   have hΩ : sarea (f, 1) (1, d) ptE ≤ 65 / 73 * (65 / 73) := by
-    simp only [sarea, ptE]
+    simp only [sarea]
     nlinarith [mul_le_mul (show 1 - d ≤ 65 / 73 by linarith) (show 1 - f ≤ 65 / 73 by linarith)
       (by linarith) (by norm_num)]
   -- the hull of `F, D` and the three cap points is not a triangle
@@ -53,13 +53,13 @@ theorem three_top (H : Comp h c d f Q) (topc : ∀ k : Fin 3, InTopCap d f (Q k.
       intro m hm
       fin_cases m
       · exact absurd rfl hm
-      all_goals first | (simp [hP5]; linarith [r0.1, r1.1, r2.1]) | simp [hP5]
+      all_goals (simp [hP5]; linarith [r0.1, r1.1, r2.1])
     have yb : ∀ m : Fin 5, m ≠ 1 → d + 2 * A₀ ≤ (P5 m).2 := by
       intro m hm
       fin_cases m
       · simp [hP5]; linarith
       · exact absurd rfl hm
-      all_goals first | (simp [hP5]; linarith [r0.2.1, r1.2.1, r2.2.1]) | simp [hP5]
+      all_goals (simp [hP5]; linarith [r0.2.1, r1.2.1, r2.2.1])
     have vF : a = 0 ∨ b = 0 ∨ e = 0 := by
       by_contra hn; push Not at hn
       have := hull_le 1 0 0 (f + 2 * A₀) (by

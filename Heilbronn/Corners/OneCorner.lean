@@ -172,7 +172,7 @@ the two-interior-point lemma gives a doubled area `≤ ξη/(6 + 2√3) < σ`).
 `hand/ONE_CORNER.md`, lines 30–87.
 
 Uses: CORNER_FAMILIES:TriangularHullLemma, CORNER_FAMILIES:TwoInteriorPointLemma -/
-theorem claim_normalization (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare)
+theorem claim_normalization (P : Fin 9 → Point) (_hP : ∀ i, P i ∈ unitSquare)
     (ξ η : ℝ) (hξ : 0 < ξ) (hξ1 : ξ ≤ 1) (hη : 0 < η) (hη1 : η ≤ 1)
     (hO : ∃ i, P i = (0, 0)) (hH : ∃ i, P i = (0, η)) (hC : ∃ i, P i = (ξ, 0))
     (h3 : 3 ≤ {m : Fin 9 | InsideTriangle (P m) (0, 0) (0, η) (ξ, 0)}.ncard)
@@ -1365,8 +1365,8 @@ theorem patternII_ratio {h c d f : ℝ} (hd : 0 < d) (hdh : d ≤ h) (hh1 : h �
 Pattern II, `W(1 - x)(1 - y) ≥ σ(3 - x - y)` at `σ = 7/64`, are incompatible (the relaxed ratio
 `AB/(W + A + B)` of (17) is below `1/10 < σ`). -/
 theorem claim_pattern_II (h c d f : ℝ) (hd : 0 < d) (hdh : d ≤ h) (hh1 : h ≤ 1) (hf : 0 < f)
-    (hfc : f ≤ c) (hc1 : c ≤ 1) (hx : 0 < diagX h c d f) (hx1 : diagX h c d f < 1)
-    (hy : 0 < diagY h c d f) (hy1 : diagY h c d f < 1) (hhc : 13 / 16 < h * c)
+    (hfc : f ≤ c) (hc1 : c ≤ 1) (_hx : 0 < diagX h c d f) (hx1 : diagX h c d f < 1)
+    (_hy : 0 < diagY h c d f) (hy1 : diagY h c d f < 1) (hhc : 13 / 16 < h * c)
     (hII : 7 / 64 * (3 - diagX h c d f - diagY h c d f) ≤
       quadWOf h c d f * (1 - diagX h c d f) * (1 - diagY h c d f)) : False := by
   obtain ⟨hW, -, hW', -, -, eA, eB⟩ := diag_identities hd hdh hh1 hf hfc hc1

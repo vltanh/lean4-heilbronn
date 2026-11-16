@@ -80,7 +80,7 @@ collinear, at least eight on its boundary: exactly eight are on the boundary, no
 each open side contains exactly two of them, and the ninth point is in the open square.
 `hand/EIGHT_BOUNDARY.md`, lines 11–27.
 Uses: standard fact (a side holding three points makes them collinear). -/
-theorem lemma1 (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare) (hinj : Function.Injective P)
+theorem lemma1 (P : Fin 9 → Point) (hP : ∀ i, P i ∈ unitSquare) (_hinj : Function.Injective P)
     (hncol : ∀ i j k, i ≠ j → j ≠ k → i ≠ k → sarea (P i) (P j) (P k) ≠ 0)
     (h8 : 8 ≤ {i : Fin 9 | OnSquareBoundary (P i)}.ncard) :
     {i : Fin 9 | OnSquareBoundary (P i)}.ncard = 8 ∧ (∀ i, ¬ IsCorner (P i)) ∧
@@ -193,7 +193,7 @@ which the hypothesis excludes.)
 `hand/EIGHT_BOUNDARY.md`, lines 146–178.
 Uses: standard facts (the identity `ac - bd = det(r₁,r₃)det(r₂,r₄)`; AM–GM). -/
 theorem lemma3 {V₁ V₂ V₃ V₄ O : Point} {s : ℝ} (hs : 0 < s)
-    (hconv : IsConvexPolygon ![V₁, V₂, V₃, V₄]) (hO : InClosedPolygon ![V₁, V₂, V₃, V₄] O)
+    (_hconv : IsConvexPolygon ![V₁, V₂, V₃, V₄]) (hO : InClosedPolygon ![V₁, V₂, V₃, V₄] O)
     (hmin : s / 2 ≤ minTriangleArea ![V₁, V₂, V₃, V₄, O]) :
     2 * (1 + Real.sqrt 2) * s ≤ sarea V₁ V₂ V₃ + sarea V₁ V₃ V₄ :=
   lemma3_core hs hO hmin
@@ -208,7 +208,7 @@ theorem lemma3 {V₁ V₂ V₃ V₄ O : Point} {s : ℝ} (hs : 0 < s)
 cubic `P(u) = 35 - 306u + 827u² - 640u³ > 0` on `(0, 1/2)`.)
 `hand/EIGHT_BOUNDARY.md`, lines 231–286.
 Uses: none. -/
-theorem claim_scalar_bound {s X Z : ℝ} (hs : 0 < s) (hX : 0 < X) (hZ : 0 < Z) (hsZ : s * Z < 1)
+theorem claim_scalar_bound {s X Z : ℝ} (hs : 0 < s) (hX : 0 < X) (_hZ : 0 < Z) (hsZ : s * Z < 1)
     (hXZ : 4 ≤ X * Z)
     (hQ : 2 * (1 + Real.sqrt 2) * s ≤ 2 - s * Z - s * (2 - s * Z) / (1 - s * Z) - X + 2 * s) :
     s < 7 / 64 :=

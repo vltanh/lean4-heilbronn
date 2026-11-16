@@ -35,7 +35,7 @@ theorem check12 :
 /-- Theorem 12, the certificate: the fourteen oriented doubled areas cannot all be `≥ 7/64`. -/
 theorem cert12 {a b c d e f g h x y : ℝ} (H : Base a b c d e f g h x y)
     (oAD : 7 / 64 ≤ sarea (0, a) (1, d) (x, y)) (oEH : 7 / 64 ≤ sarea (1, e) (0, h) (x, y))
-    (oCF : 7 / 64 ≤ sarea (c, 0) (f, 1) (x, y)) (oGB : 7 / 64 ≤ sarea (g, 1) (b, 0) (x, y))
+    (oCF : 7 / 64 ≤ sarea (c, 0) (f, 1) (x, y)) (_oGB : 7 / 64 ≤ sarea (g, 1) (b, 0) (x, y))
     (oEA : 7 / 64 ≤ sarea (1, e) (0, a) (x, y)) (oHD : 7 / 64 ≤ sarea (0, h) (1, d) (x, y))
     (oFB : 7 / 64 ≤ sarea (f, 1) (b, 0) (x, y)) (oGC : 7 / 64 ≤ sarea (g, 1) (c, 0) (x, y))
     (oBE : 7 / 64 ≤ sarea (b, 0) (1, e) (x, y)) (oDG : 7 / 64 ≤ sarea (1, d) (g, 1) (x, y))
@@ -50,7 +50,7 @@ theorem cert12 {a b c d e f g h x y : ℝ} (H : Base a b c d e f g h x y)
   · revert t
     simp only [case12, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
       and_true, eval_v, eval_minus, eval_zero, eval_one, eval_k, eval_esarea, zeta]
-    simp only [Heilbronn.sarea] at oAD oEH oCF oGB oEA oHD oFB oGC oBE oDG oBC oFG oDE oHA ⊢
+    simp only [Heilbronn.sarea] at oAD oEH oCF _oGB oEA oHD oFB oGC oBE oDG oBC oFG oDE oHA ⊢
     push_cast
     refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> linarith
 

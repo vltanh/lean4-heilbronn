@@ -614,7 +614,7 @@ theorem Oct.inPolygon {a h b c d f x y z w : ℝ} (H : Oct a h b c d f x y z w) 
   · show 0 < sarea (b, 0) (c, 0) Q
     exact edge_pos (H := (0, h)) (C := (c, 0)) (D := (1, d)) (F := (f, 1))
       (by exact H.t127.le)
-      (le_of_eq (by simp only [sarea] <;> ring))
+      (le_of_eq (by simp only [sarea]; ring))
       (by exact H.t124.le)
       (by exact H.t125.le)
       (Or.inl (by exact H.t127))
@@ -622,7 +622,7 @@ theorem Oct.inPolygon {a h b c d f x y z w : ℝ} (H : Oct a h b c d f x y z w) 
   · show 0 < sarea (c, 0) (x, y) Q
     exact edge_pos (H := (0, h)) (C := (c, 0)) (D := (1, d)) (F := (f, 1))
       (by exact H.t237.le)
-      (le_of_eq (by simp only [sarea] <;> ring))
+      (le_of_eq (by simp only [sarea]; ring))
       (by exact H.t234.le)
       (by exact H.t235.le)
       (Or.inl (by exact H.t237))
@@ -630,42 +630,42 @@ theorem Oct.inPolygon {a h b c d f x y z w : ℝ} (H : Oct a h b c d f x y z w) 
   · show 0 < sarea (x, y) (1, d) Q
     exact edge_pos (H := (0, h)) (C := (c, 0)) (D := (1, d)) (F := (f, 1))
       (by exact H.t347.le)
-      (by rw [show sarea (x, y) (1, d) (c, 0) = sarea (c, 0) (x, y) (1, d) by simp only [sarea] <;> ring]; exact H.t234.le)
-      (le_of_eq (by simp only [sarea] <;> ring))
+      (by rw [show sarea (x, y) (1, d) (c, 0) = sarea (c, 0) (x, y) (1, d) by simp only [sarea]; ring]; exact H.t234.le)
+      (le_of_eq (by simp only [sarea]; ring))
       (by exact H.t345.le)
       (Or.inl (by exact H.t347))
       hHCQ hCDQ hDFQ hFHQ hHCD hHDF
   · show 0 < sarea (1, d) (f, 1) Q
     exact edge_pos (H := (0, h)) (C := (c, 0)) (D := (1, d)) (F := (f, 1))
       (by exact H.t457.le)
-      (by rw [show sarea (1, d) (f, 1) (c, 0) = sarea (c, 0) (1, d) (f, 1) by simp only [sarea] <;> ring]; exact H.t245.le)
-      (le_of_eq (by simp only [sarea] <;> ring))
-      (le_of_eq (by simp only [sarea] <;> ring))
+      (by rw [show sarea (1, d) (f, 1) (c, 0) = sarea (c, 0) (1, d) (f, 1) by simp only [sarea]; ring]; exact H.t245.le)
+      (le_of_eq (by simp only [sarea]; ring))
+      (le_of_eq (by simp only [sarea]; ring))
       (Or.inl (by exact H.t457))
       hHCQ hCDQ hDFQ hFHQ hHCD hHDF
   · show 0 < sarea (f, 1) (z, w) Q
     exact edge_pos (H := (0, h)) (C := (c, 0)) (D := (1, d)) (F := (f, 1))
       (by exact H.t567.le)
-      (by rw [show sarea (f, 1) (z, w) (c, 0) = sarea (c, 0) (f, 1) (z, w) by simp only [sarea] <;> ring]; exact H.t256.le)
-      (by rw [show sarea (f, 1) (z, w) (1, d) = sarea (1, d) (f, 1) (z, w) by simp only [sarea] <;> ring]; exact H.t456.le)
-      (le_of_eq (by simp only [sarea] <;> ring))
+      (by rw [show sarea (f, 1) (z, w) (c, 0) = sarea (c, 0) (f, 1) (z, w) by simp only [sarea]; ring]; exact H.t256.le)
+      (by rw [show sarea (f, 1) (z, w) (1, d) = sarea (1, d) (f, 1) (z, w) by simp only [sarea]; ring]; exact H.t456.le)
+      (le_of_eq (by simp only [sarea]; ring))
       (Or.inl (by exact H.t567))
       hHCQ hCDQ hDFQ hFHQ hHCD hHDF
   · show 0 < sarea (z, w) (0, h) Q
     exact edge_pos (H := (0, h)) (C := (c, 0)) (D := (1, d)) (F := (f, 1))
-      (le_of_eq (by simp only [sarea] <;> ring))
-      (by rw [show sarea (z, w) (0, h) (c, 0) = sarea (c, 0) (z, w) (0, h) by simp only [sarea] <;> ring]; exact H.t267.le)
-      (by rw [show sarea (z, w) (0, h) (1, d) = sarea (1, d) (z, w) (0, h) by simp only [sarea] <;> ring]; exact H.t467.le)
-      (by rw [show sarea (z, w) (0, h) (f, 1) = sarea (f, 1) (z, w) (0, h) by simp only [sarea] <;> ring]; exact H.t567.le)
-      (Or.inr (by rw [show sarea (z, w) (0, h) (1, d) = sarea (1, d) (z, w) (0, h) by simp only [sarea] <;> ring]; exact H.t467))
+      (le_of_eq (by simp only [sarea]; ring))
+      (by rw [show sarea (z, w) (0, h) (c, 0) = sarea (c, 0) (z, w) (0, h) by simp only [sarea]; ring]; exact H.t267.le)
+      (by rw [show sarea (z, w) (0, h) (1, d) = sarea (1, d) (z, w) (0, h) by simp only [sarea]; ring]; exact H.t467.le)
+      (by rw [show sarea (z, w) (0, h) (f, 1) = sarea (f, 1) (z, w) (0, h) by simp only [sarea]; ring]; exact H.t567.le)
+      (Or.inr (by rw [show sarea (z, w) (0, h) (1, d) = sarea (1, d) (z, w) (0, h) by simp only [sarea]; ring]; exact H.t467))
       hHCQ hCDQ hDFQ hFHQ hHCD hHDF
   · show 0 < sarea (0, h) (0, a) Q
     exact edge_pos (H := (0, h)) (C := (c, 0)) (D := (1, d)) (F := (f, 1))
-      (le_of_eq (by simp only [sarea] <;> ring))
-      (by rw [show sarea (0, h) (0, a) (c, 0) = sarea (0, a) (c, 0) (0, h) by simp only [sarea] <;> ring]; exact H.t027.le)
-      (by rw [show sarea (0, h) (0, a) (1, d) = sarea (0, a) (1, d) (0, h) by simp only [sarea] <;> ring]; exact H.t047.le)
-      (by rw [show sarea (0, h) (0, a) (f, 1) = sarea (0, a) (f, 1) (0, h) by simp only [sarea] <;> ring]; exact H.t057.le)
-      (Or.inr (by rw [show sarea (0, h) (0, a) (1, d) = sarea (0, a) (1, d) (0, h) by simp only [sarea] <;> ring]; exact H.t047))
+      (le_of_eq (by simp only [sarea]; ring))
+      (by rw [show sarea (0, h) (0, a) (c, 0) = sarea (0, a) (c, 0) (0, h) by simp only [sarea]; ring]; exact H.t027.le)
+      (by rw [show sarea (0, h) (0, a) (1, d) = sarea (0, a) (1, d) (0, h) by simp only [sarea]; ring]; exact H.t047.le)
+      (by rw [show sarea (0, h) (0, a) (f, 1) = sarea (0, a) (f, 1) (0, h) by simp only [sarea]; ring]; exact H.t057.le)
+      (Or.inr (by rw [show sarea (0, h) (0, a) (1, d) = sarea (0, a) (1, d) (0, h) by simp only [sarea]; ring]; exact H.t047))
       hHCQ hCDQ hDFQ hFHQ hHCD hHDF
 
 /-! ### The certificate cover -/
@@ -789,8 +789,8 @@ theorem plain_nonneg (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X 
   push_cast; linarith
 
 /-- The facts of the radial word entry hold. -/
-theorem holds_orient {P : ℕ → Point} {i j k : ℕ} {sg : Bool} (hij : i ≠ j) (hjk : j ≠ k)
-    (hik : i ≠ k) : SFact.Holds P (Model.orient i j k sg) ↔ OrientHolds sg (sarea (P i) (P j) (P k)) := by
+theorem holds_orient {P : ℕ → Point} {i j k : ℕ} {sg : Bool} (_hij : i ≠ j) (_hjk : j ≠ k)
+    (_hik : i ≠ k) : SFact.Holds P (Model.orient i j k sg) ↔ OrientHolds sg (sarea (P i) (P j) (P k)) := by
   unfold Model.orient
   have c1 := sarea_cycle (P i) (P j) (P k)
   have c2 := sarea_cycle (P j) (P k) (P i)
@@ -799,7 +799,6 @@ theorem holds_orient {P : ℕ → Point} {i j k : ℕ} {sg : Bool} (hij : i ≠ 
   have s3 := sarea_swap₁₃ (P i) (P j) (P k)
   split_ifs <;> simp only [SFact.Holds] <;>
     first
-    | rfl
     | rw [c1]
     | rw [c2, c1]
     | rw [s1, orientHolds_not]
@@ -900,7 +899,7 @@ theorem cap_orders (hN : NAnchors a h b c d f) (hX : InCapR c d X) (hY : InCapL 
   change sarea (c, 0) (1, d) X ≠ 0 at nCDX
   change sarea (0, a) (0, h) Y ≠ 0 at nAHY
   change sarea (f, 1) (0, h) Y ≠ 0 at nFHY
-  simp only [ptC, ptD, ptF, ptH, sarea] at cX cY nBCX nCDX nAHY nFHY
+  simp only [sarea] at cX cY nBCX nCDX nAHY nFHY
   have y0' : 0 < X.2 := lt_of_le_of_ne y0 (fun e => nBCX (by rw [← e]; ring))
   have z0' : 0 < Y.1 := lt_of_le_of_ne z0 (fun e => nAHY (by rw [← e]; ring))
   have cX' : (1 - c) * (X.2 - 0) - (d - 0) * (X.1 - c) < 0 := lt_of_le_of_ne cX nCDX
@@ -922,7 +921,7 @@ doubled area at least `7/64`, the full hull is the strictly convex octagon (3)
 `A, B, C, X, D, F, Y, H` (counterclockwise) and `Q` is strictly inside it.
 `hand/SIX_BOUNDARY_TWO_SIDE_UPPER.md`, lines 71-81. -/
 theorem claim_octagon (hN : NAnchors a h b c d f)
-    (hX : InCapR c d X) (hY : InCapL f h Y) (hQ : Q ∈ unitSquare) (hQu : InUpperQuad h c d f Q)
+    (hX : InCapR c d X) (hY : InCapL f h Y) (_hQ : Q ∈ unitSquare) (hQu : InUpperQuad h c d f Q)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     IsConvexCCW (octagonXY a h b c d f X Y) ∧ InPolygon (octagonXY a h b c d f X Y) Q := by
   have H := oct_of_setting hN hX hY (Q := Q) (by linarith)
@@ -945,7 +944,7 @@ theorem half_lt_of_caps {m α d y b : ℝ} (hm : 0 < m) (hα : 0 < α) (hsum : m
 /-- (10): from `(1 - f)[CDQ] + (1 - c)[DFQ] = [CDF](1 - r)` with `[CDF] ≤ 1 - f`, `r ≤ 1 - s`. -/
 theorem upper_le {f c K r S1 S2 : ℝ} (hS1 : 7 / 64 ≤ S1) (hS2 : 7 / 64 ≤ S2)
     (i9 : (1 - f) * S1 + (1 - c) * S2 = K * (1 - r)) (hK1 : K ≤ 1 - f) (hK : 0 < K)
-    (hf1 : f ≤ 1) (hc1 : c < 1) : r ≤ 1 - 7 / 64 := by
+    (_hf1 : f ≤ 1) (hc1 : c < 1) : r ≤ 1 - 7 / 64 := by
   by_contra hcon
   push Not at hcon
   have m1 := mul_le_mul_of_nonneg_left hS1 (show (0:ℝ) ≤ 1 - f by linarith)
@@ -996,8 +995,8 @@ theorem common_scalar_a {a h b c d f x y z w : ℝ} (hN : NAnchors a h b c d f)
 
 /-- The scalar part of the common bounds (6)-(10). -/
 theorem common_scalar {a h b c d f x y z w r t S1 S2 S3 : ℝ} (hN : NAnchors a h b c d f)
-    (x0 : 0 ≤ x) (x1 : x ≤ 1) (y0 : 0 ≤ y) (z0 : 0 ≤ z) (w1 : w ≤ 1) (q0 : 0 ≤ r) (q1 : r ≤ 1)
-    (q2 : 0 ≤ t) (q3 : t ≤ 1) (hxc : c < x) (hwh : h < w)
+    (_x0 : 0 ≤ x) (x1 : x ≤ 1) (y0 : 0 ≤ y) (z0 : 0 ≤ z) (w1 : w ≤ 1) (q0 : 0 ≤ r) (_q1 : r ≤ 1)
+    (q2 : 0 ≤ t) (_q3 : t ≤ 1) (hxc : c < x) (hwh : h < w)
     (hABC : 7 / 64 ≤ a * (c - b)) (hABH : 7 / 64 ≤ b * (h - a))
     (hHDF : 7 / 64 ≤ 1 - h + f * (h - d)) (hCDF : 7 / 64 ≤ 1 - c + d * (c - f))
     (hMy : 7 / 64 ≤ (c - b) * y) (hLz : 7 / 64 ≤ (h - a) * z)
@@ -1203,7 +1202,7 @@ theorem claim_80_certificates (hN : NAnchors a h b c d f)
         rw [List.mem_filterMap]
         obtain ⟨r1, r6⟩ := word_range hpoly hq ⟨i, hi⟩
         refine ⟨q ⟨i, hi⟩, List.mem_map.2 ⟨q ⟨i, hi⟩ - 1, List.mem_range.2 (by omega), by omega⟩, ?_⟩
-        rw [if_pos (consistent_of_holds (hbase.append hfs) hb)]
+        rw [ite_eq_left (consistent_of_holds (hbase.append hfs) hb)]
       · exact ⟨[], by simp, by simp [AllHold]⟩
   · intro fs tag hfs hc
     simp only [Model.spec, Bool.and_eq_true, beq_iff_eq] at hc
@@ -1329,7 +1328,7 @@ theorem claim_sharp_word (hN : NAnchors a h b c d f)
       simp [SharpBCMoving.chamberSarea, SharpBCMoving.chamberTriangles, hPbe,
         SharpBEMoving.beMovingConfig, SharpBCMoving.sharpConfig, hT, hP, nConfig, sarea] <;> ring
   have hdist : ∀ i : Fin 11, (T i).1 ≠ (T i).2.1 ∧ (T i).2.1 ≠ (T i).2.2 ∧ (T i).1 ≠ (T i).2.2 := by
-    intro i; fin_cases i <;> simp [hT] <;> decide
+    intro i; fin_cases i <;> simp [hT]
   have hch : SharpBCMoving.InChamber Pbe := by
     obtain ⟨s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11⟩ := signs
     intro i

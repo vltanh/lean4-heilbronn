@@ -408,8 +408,8 @@ positive threshold. `hand/TYPE_II.md`, lines 1141–1187.
 Implicit in the manuscript: in §12 the same-side position of `B, E` comes from §6 (at `7/64` and
 `b ≤ 1/2`); here it is a hypothesis, as `TYPE_II_COMPLETION.md` §8.2 and `TYPE_II_BALANCED.md`
 §6 use the table. -/
-theorem claim_PQ_line_table {l b s : ℝ} {P Q : Point} (hs : 0 < s) (hb : 0 < b) (hb1 : b < 1)
-    (hl : 0 < l) (hl1 : l < 1)
+theorem claim_PQ_line_table {l b s : ℝ} {P Q : Point} (hs : 0 < s) (hb : 0 < b) (_hb1 : b < 1)
+    (_hl : 0 < l) (hl1 : l < 1)
     (hPB : InTriangle P ptD (ptB b) ptC) (hPE : InTriangle P ptD (ptE l) ptC)
     (hQB : InTriangle Q ptD (ptB b) ptC) (hQE : InTriangle Q ptD (ptE l) ptC)
     (hmin : s / 2 ≤ minTriangleArea ![ptD, ptC, ptE l, ptB b, P, Q])

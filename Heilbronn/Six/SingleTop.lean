@@ -1210,7 +1210,7 @@ theorem Conf.two_inside (H : Conf a h b c d f X P Q) {i j l j₁ j₂ : ℕ} (hi
     (by
       intro x y hxy
       simp only [List.nodup_cons, List.mem_cons, List.not_mem_nil, or_false, not_or] at hd
-      fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> first | rfl | omega)
+      fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> omega)
   have e1 : (fun x => cfg a h b c d f X P Q (![i, j, l, j₁, j₂] x)) =
       ![cfg a h b c d f X P Q i, cfg a h b c d f X P Q j, cfg a h b c d f X P Q l,
         cfg a h b c d f X P Q j₁, cfg a h b c d f X P Q j₂] := by

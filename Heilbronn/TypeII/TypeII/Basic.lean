@@ -135,7 +135,7 @@ def DiagSector (W X Y Z P : Point) : Prop :=
 /-- **Claim** (`TYPE_II:claim-central-cut`, made up). A central point is inside `DCE` exactly
 when it is above `CE` (`[ECX] > 0`), and inside `EBC` exactly when it is below `CE`: the other
 edge tests are automatic. `hand/TYPE_II.md`, lines 672–676 (there in affine coordinates). -/
-theorem claim_central_cut {l b : ℝ} {X : Point} (hb : 0 < b) (hb1 : b < 1) (hl : 0 < l)
+theorem claim_central_cut {l b : ℝ} {X : Point} (hb : 0 < b) (_hb1 : b < 1) (hl : 0 < l)
     (hl1 : l < 1) (hX : IsCentral b X) :
     (InTriangle X ptD (ptE l) ptC ↔ 0 < sarea (ptE l) ptC X) ∧
       (InTriangle X (ptE l) (ptB b) ptC ↔ sarea (ptE l) ptC X < 0) := by

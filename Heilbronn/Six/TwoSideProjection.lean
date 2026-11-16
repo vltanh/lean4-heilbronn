@@ -72,7 +72,7 @@ then `[HAX] < 3s` and `HAX` contains no further free point.
 `hand/SIX_BOUNDARY_TWO_SIDE_PROJECTION.md`, lines 67-102.
 Uses: SIX_BOUNDARY_HULL:claim-transposition -/
 theorem lemma2 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
-    (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
+    (_hX : X ∈ unitSquare) (_hY : Y ∈ unitSquare) (_hZ : Z ∈ unitSquare)
     (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     (InCapR c d X →
       sarea (ptB b) (ptC c) X < 3 * (7 / 64) ∧
@@ -147,7 +147,7 @@ theorem claim_BQX_sign {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b 
   have hN' := hN
   obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN'
   have hL := lemma2 hN hX hY hQ hmin
-  have hQT' : h * Q.1 + c * Q.2 ≤ h * c := by simp only [ptC, ptH, sarea] at q2; linarith
+  have hQT' : h * Q.1 + c * Q.2 ≤ h * c := by simp only [sarea] at q2; linarith
   have hQ2h : Q.2 ≤ h := by nlinarith
   have hQ1c : Q.1 ≤ c := by nlinarith
   refine ⟨fun hXR => ?_, fun hYL => ?_⟩
@@ -159,7 +159,7 @@ theorem claim_BQX_sign {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b 
     change sarea (b, 0) Q X ≠ 0 at nBQX
     obtain ⟨⟨x0, x1, y0, y1⟩, hcap⟩ := hXR
     have hd : 0 < d := by linarith
-    simp only [ptC, ptD, sarea] at hcap
+    simp only [sarea] at hcap
     have hxc : c ≤ X.1 := by nlinarith
     have s1 : 0 < sarea (b, 0) (c, 0) Q := by
       have : 0 ≤ sarea (b, 0) (c, 0) Q := by simp only [sarea]; nlinarith
@@ -171,7 +171,7 @@ theorem claim_BQX_sign {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b 
     rcases lt_or_gt_of_ne nBQX with h1 | h1
     · exact h1
     · exfalso
-      apply (hL.1 ⟨⟨x0, x1, y0, y1⟩, by simp only [ptC, ptD, sarea]; linarith⟩).2.2
+      apply (hL.1 ⟨⟨x0, x1, y0, y1⟩, by simp only [sarea]; linarith⟩).2.2
       refine ⟨s1, s2, ?_⟩
       rw [← sarea_cycle]; exact h1
   · have nHA := sarea_ne_zero_of_min_pos hpos 1 0 8
@@ -182,7 +182,7 @@ theorem claim_BQX_sign {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b 
     change sarea (0, a) Q Y ≠ 0 at nAQY
     obtain ⟨⟨z0, z1, w0, w1⟩, hcap⟩ := hYL
     have hf : 0 < f := by linarith
-    simp only [ptF, ptH, sarea] at hcap
+    simp only [sarea] at hcap
     have hwh : h ≤ Y.2 := by nlinarith
     have s1 : 0 < sarea (0, h) (0, a) Q := by
       have : 0 ≤ sarea (0, h) (0, a) Q := by simp only [sarea]; nlinarith
@@ -198,7 +198,7 @@ theorem claim_BQX_sign {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b 
       have := (lemma2 (X := Y) (Y := X) (Z := Q) hN hY hX hQ (by
         rw [show nConfig a h b c d f Y X Q = nConfig a h b c d f X Y Q ∘ Equiv.swap 6 7 by
           funext i; fin_cases i <;> rfl, minTriangleArea_comp_perm]; exact hmin)).2
-        ⟨hYc, by simp only [ptF, ptH, sarea]; linarith⟩
+        ⟨hYc, by simp only [sarea]; linarith⟩
       apply this.2.2
       refine ⟨s1, ?_, ?_⟩
       · have := sarea_swap₂₃ (0, a) Q Y; linarith
@@ -253,7 +253,7 @@ theorem xProj_C {c μ x y r t x' : ℝ} (ht0 : 0 ≤ t) (hy0 : 0 ≤ y) (hxc : c
 /-- Projection step for the anchor `D`: `[DXQ] < 0` at both ends of the segment. -/
 theorem xProj_D {h c d μ x y r t x' : ℝ} (hμ : 0 < μ) (hh : 0 < h) (hc0 : 0 < c) (hd : 0 < d) (hdh : d ≤ h)
     (hx1 : x ≤ 1) (hyd : y ≤ d) (hr0 : 0 ≤ r) (ht0 : 0 ≤ t) (hrc : r ≤ c)
-    (hT : h * r + c * t ≤ h * c) (hcap : (1 - c) * y - d * (x - c) ≤ 0)
+    (hT : h * r + c * t ≤ h * c) (_hcap : (1 - c) * y - d * (x - c) ≤ 0)
     (hCD : μ ≤ d * (x - c) - (1 - c) * y) (hD : μ ≤ |(x - 1) * (t - d) - (y - d) * (r - 1)|)
     (hxx : x ≤ x') (hx'1 : x' ≤ 1) :
     μ ≤ |(x' - 1) * (t - d) - (y - d) * (r - 1)| := by
@@ -324,7 +324,7 @@ theorem xProj_A {a μ x y r t x' : ℝ} (hμ : 0 < μ) (hA : μ ≤ |x * (t - a)
 
 /-- The orders (3) of the placements, from a positive least area. -/
 theorem orders {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
-    (hX : InCapR c d X) (hY : InCapL f h Y) (hQ : Q ∈ unitSquare) (hQT : InT0 h c Q)
+    (hX : InCapR c d X) (hY : InCapL f h Y) (_hQ : Q ∈ unitSquare) (hQT : InT0 h c Q)
     (hpos : 0 < minTriangleArea (nConfig a h b c d f X Y Q)) :
     (c < X.1 ∧ 0 < X.2 ∧ X.2 < d) ∧ (Y.1 < f ∧ 0 < Y.1 ∧ h < Y.2) ∧
       (0 < Q.1 ∧ 0 < Q.2 ∧ h * Q.1 + c * Q.2 < h * c) := by
@@ -346,7 +346,7 @@ theorem orders {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
   change sarea (0, a) (0, h) Q ≠ 0 at nAHQ
   change sarea (b, 0) (c, 0) Q ≠ 0 at nBCQ
   change sarea (c, 0) (0, h) Q ≠ 0 at nCHQ
-  simp only [ptC, ptD, ptF, ptH, sarea] at cX cY q2 nBCX nCDX nAHY nFHY nAHQ nBCQ nCHQ
+  simp only [sarea] at cX cY q2 nBCX nCDX nAHY nFHY nAHQ nBCQ nCHQ
   have y0' : 0 < X.2 := lt_of_le_of_ne y0 (fun e => nBCX (by rw [← e]; ring))
   have z0' : 0 < Y.1 := lt_of_le_of_ne z0 (fun e => nAHY (by rw [← e]; ring))
   have r0' : 0 < Q.1 := lt_of_le_of_ne q0 (fun e => nAHQ (by rw [← e]; ring))
@@ -417,38 +417,38 @@ theorem claim_X_projection_R {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAncho
   change μ ≤ |sarea (c, 0) X Q| at bC
   change μ ≤ |sarea (1, d) X Q| at bD
   change μ ≤ |sarea (f, 1) X Q| at bF
-  simp only [ptB, ptC, ptD, sarea] at bA bH bB bC bD bF hBQX cX
+  simp only [sarea] at bA bH bB bC bD bF hBQX cX
   refine ⟨SixBoundaryExterior.lemma6R hN hμ0 X ⟨⟨x0, x1, y0, y1⟩, cX⟩
     (anchorPairBound_of_min hmin) x' hxx hx'1, fun i hi => ?_, fun h3 => ?_⟩
   · fin_cases i
     · exact absurd rfl hi
     · have := xProj_H (h := h) (c := c) (d := d) (μ := μ) (x := X.1) (y := X.2) (r := Q.1) (t := Q.2) (x' := x') (by linarith) hyd.le hdh hy0.le hxc.le (by linarith) hth hT.le
-        (by convert bH using 2 <;> ring) hxx
-      simp only [anchorPts, Fin.reduceFinMk, Fin.isValue, Matrix.cons_val, sarea]
-      convert this using 2 <;> ring
-    · have := xProj_B (b := b) (μ := μ) (x := X.1) (y := X.2) (r := Q.1) (t := Q.2) (x' := x') ht0.le (by linarith) (by convert bB using 2 <;> ring) hxx
-      simp only [anchorPts, Fin.reduceFinMk, Fin.isValue, Matrix.cons_val, sarea]
-      convert this using 2 <;> ring
-    · have := xProj_C (c := c) (μ := μ) (x := X.1) (y := X.2) (r := Q.1) (t := Q.2) (x' := x') ht0.le hy0.le hxc.le hrc (by convert bC using 2 <;> ring) hxx
-      simp only [anchorPts, Fin.reduceFinMk, Fin.isValue, Matrix.cons_val, sarea]
-      convert this using 2 <;> ring
+        (by convert bH using 2; ring) hxx
+      simp only [anchorPts, Fin.reduceFinMk, Matrix.cons_val, sarea]
+      convert this using 2; ring
+    · have := xProj_B (b := b) (μ := μ) (x := X.1) (y := X.2) (r := Q.1) (t := Q.2) (x' := x') ht0.le (by linarith) (by convert bB using 2; ring) hxx
+      simp only [anchorPts, Fin.reduceFinMk, Matrix.cons_val, sarea]
+      convert this using 2; ring
+    · have := xProj_C (c := c) (μ := μ) (x := X.1) (y := X.2) (r := Q.1) (t := Q.2) (x' := x') ht0.le hy0.le hxc.le hrc (by convert bC using 2; ring) hxx
+      simp only [anchorPts, Fin.reduceFinMk, Matrix.cons_val, sarea]
+      convert this using 2; ring
     · have := xProj_D (h := h) (c := c) (d := d) (μ := μ) (x := X.1) (y := X.2) (r := Q.1) (t := Q.2) (x' := x') hμ0 (by linarith) (by linarith) (by linarith) hdh x1 hyd.le
-        hr0.le ht0.le hrc hT.le (by linarith) hCD (by convert bD using 2 <;> ring) hxx hx'1
-      simp only [anchorPts, Fin.reduceFinMk, Fin.isValue, Matrix.cons_val, sarea]
-      convert this using 2 <;> ring
+        hr0.le ht0.le hrc hT.le (by linarith) hCD (by convert bD using 2) hxx hx'1
+      simp only [anchorPts, Fin.reduceFinMk, Matrix.cons_val, sarea]
+      convert this using 2
     · have := xProj_F (h := h) (c := c) (f := f) (μ := μ) (x := X.1) (y := X.2) (r := Q.1) (t := Q.2) (x' := x') (by linarith) hh (by linarith) (by linarith) hfc hxc.le hy0.le
-        y1 hr0.le ht0.le q3 hT.le (by convert bF using 2 <;> ring) hxx
-      simp only [anchorPts, Fin.reduceFinMk, Fin.isValue, Matrix.cons_val, sarea]
-      convert this using 2 <;> ring
-  · simp only [ptA, sarea] at h3 ⊢
-    have := xProj_A (a := a) (μ := μ) (x := X.1) (y := X.2) (r := Q.1) (t := Q.2) (x' := x') hμ0 (by convert bA using 2 <;> ring) hxx (by linarith)
-    convert this using 2 <;> ring
+        y1 hr0.le ht0.le q3 hT.le (by convert bF using 2) hxx
+      simp only [anchorPts, Fin.reduceFinMk, Matrix.cons_val, sarea]
+      convert this using 2
+  · simp only [sarea] at h3 ⊢
+    have := xProj_A (a := a) (μ := μ) (x := X.1) (y := X.2) (r := Q.1) (t := Q.2) (x' := x') hμ0 (by convert bA using 2; ring) hxx (by linarith)
+    convert this using 2; ring
 
 /-- The anchors of the transposed parameters are the transposed anchors, relabelled. -/
 theorem sarea_anchorPts_transpose (a h b c d f : ℝ) (P Q : Point) (i : Fin 6) :
     sarea (anchorPts b c a h f d i) (transpose P) (transpose Q) =
       -sarea (anchorPts a h b c d f (![2, 3, 0, 1, 5, 4] i)) P Q := by
-  fin_cases i <;> simp [anchorPts, sarea, transpose] <;> ring
+  fin_cases i <;> simp [anchorPts, sarea, transpose]
 
 /-- **Claim** (`SIX_BOUNDARY_TWO_SIDE_PROJECTION:claim-X-projection`). Let `X = (x, y) ∈ CD(1,0)`,
 `Y = (z, w) ∈ FH(0,1)`, `Q = (r, t) ∈ T₀`, and let `7/64 ≤ μ` with every doubled area of the
@@ -509,19 +509,19 @@ theorem claim_X_projection {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAnchors
   · have hc3 : (transpose Q).2 - b = Q.1 - b := rfl
     have h3 : ((transpose Q).2 - b) * sarea (ptA b) (transpose Q) (transpose Y) ≤ 0 := by
       have e : sarea (ptA b) (transpose Q) (transpose Y) = -sarea (ptB b) Q Y := by
-        simp only [ptA, ptB, sarea, transpose]; ring
+        simp only [sarea, transpose]; ring
       rw [hc3, e]; linarith
     have := K.2.2 h3
     rw [ePt] at this
     have e : sarea (ptA b) (transpose (Y.1, w')) (transpose Q) = -sarea (ptB b) (Y.1, w') Q := by
-      simp only [ptA, ptB, sarea, transpose]; ring
+      simp only [sarea, transpose]; ring
     rw [e, abs_neg] at this
     exact this
 
 /-- A triangle with the two cap points and a lower-left anchor `V = (p, q)` (`A, H, B, C`): the
 area `[V X' Y']` is positive and nondecreasing in `x'` and `w'` when its two partial slopes
 `w' - q ≥ 0` and `x' - p ≥ 0` are, with `[VXY] ≥ μ` at the start. -/
-theorem xy_mono {μ p q x y z w x' w' : ℝ} (hμ : 0 < μ)
+theorem xy_mono {μ p q x y z w x' w' : ℝ} (_hμ : 0 < μ)
     (hpos : 0 ≤ (x - p) * (w - q) - (y - q) * (z - p))
     (hV : μ ≤ |(x - p) * (w - q) - (y - q) * (z - p)|) (hxx : x ≤ x') (hww : w ≤ w')
     (hwq : q ≤ w) (hxp : p ≤ x) :
@@ -620,7 +620,7 @@ theorem claim_XY_pairs {a h b c d f μ : ℝ} {X Y Q : Point} (hN : NAnchors a h
   have pO : 0 ≤ (X1 - 0) * (Y2 - 0) - (X2 - 0) * (Y1 - 0) :=
     xy_pos hxz hyw hz0.le hy0.le (Or.inl hz0.le) (by linarith) (Or.inl hy0.le)
   refine ⟨fun i => ?_, ?_⟩
-  · fin_cases i <;> simp only [anchorPts, Fin.reduceFinMk, Fin.isValue, Matrix.cons_val, sarea]
+  · fin_cases i <;> simp only [anchorPts, Fin.reduceFinMk, Matrix.cons_val, sarea]
     · exact xy_mono hμ0 pA bA hxx hww (by linarith) (by linarith)
     · exact xy_mono hμ0 pH bH hxx hww (by linarith) (by linarith)
     · exact xy_mono hμ0 pB bB hxx hww (by linarith) (by linarith)

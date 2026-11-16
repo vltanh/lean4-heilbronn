@@ -64,7 +64,7 @@ structure Placement (h c d f : ℝ) (L P Q X : Point) : Prop where
 `f ≤ d`: `d ≤ 41/65`, `f < 3/7`. `hand/C1_ONE_LOWER_TOP_TRIANGLE.md`, lines 42-73. -/
 theorem params {t h c d f g k : ℝ} (ht : 8 / 73 < t) (hd : 0 < d) (hh : h < 1) (hf : 0 < f)
     (hc : c < 1) (hfd : f ≤ d) (hdh : d ≤ h) (hfc : f ≤ c) (g1 : g ≤ 1) (k1 : k ≤ 1)
-    (hc3 : 3 * t ≤ h * c) (aHF : t ≤ h * f) (aCD : t ≤ c * d)
+    (hc3 : 3 * t ≤ h * c) (aHF : t ≤ h * f) (_aCD : t ≤ c * d)
     (hDXF : 3 * t ≤ (1 - d) * (g - f) - (1 - f) * (1 - k)) :
     24 / 73 ≤ h ∧ 24 / 73 ≤ c ∧ 8 / 73 ≤ d ∧ 8 / 73 ≤ f ∧ 24 / 73 ≤ g - f ∧ 24 / 73 ≤ k - d ∧
       d ≤ 41 / 65 ∧ f ≤ 3 / 7 := by
@@ -112,10 +112,10 @@ top-cap point `Z = (g, k)` with `(1-f)(k-d) - (1-d)(1-g) ≥ t` and `h ≥ 3t`,
 `[ZFH] = (1-h)g + f(h-k) < 1 - β` whenever `β < 3t` and `βu < 3tu² + (1-u)t` on `(0, 1]` (for
 `k ≥ h` it is at most `1 - h ≤ 1 - 3t`; for `k < h`, `(1-f)k ≥ t` gives
 `u(hu + fk) ≥ 3tu² + (1-u)t` with `u = 1 - f`; this replaces the AM-GM step `hu + t/u ≥ 2√3 t`). -/
-theorem ear_gen {t β h d f g k : ℝ} (hβ3 : β < 3 * t) (ht : 0 < t)
+theorem ear_gen {t β h d f g k : ℝ} (hβ3 : β < 3 * t) (_ht : 0 < t)
     (hβ : ∀ u : ℝ, 0 < u → u ≤ 1 → β * u < 3 * t * u ^ 2 + (1 - u) * t) (h3 : 3 * t ≤ h)
-    (hh : h < 1) (hd : 0 < d) (hd1 : d < 1) (hf : 0 < f) (hf1 : f < 1) (g0 : 0 ≤ g) (g1 : g ≤ 1)
-    (k1 : k ≤ 1) (a : t ≤ (1 - f) * (k - d) - (1 - d) * (1 - g)) :
+    (hh : h < 1) (hd : 0 < d) (hd1 : d < 1) (hf : 0 < f) (hf1 : f < 1) (_g0 : 0 ≤ g) (g1 : g ≤ 1)
+    (_k1 : k ≤ 1) (a : t ≤ (1 - f) * (k - d) - (1 - d) * (1 - g)) :
     (1 - h) * g + f * (h - k) < 1 - β := by
   rcases le_or_gt h k with hk | hk
   · have e1 := mul_le_mul_of_nonneg_left g1 (show (0:ℝ) ≤ 1 - h by linarith)
@@ -362,7 +362,7 @@ theorem Placement.factors_nonneg (hS : Placement h c d f L P Q X) (hfd : f ≤ d
   obtain ⟨x0, x1, y0, y1⟩ := hS.topSq
   clear hS
   simp only [Model.factors, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff,
-    implies_true, and_true, eval_minus, eval_times, eval_one, eval_v, eval_k, zeta]
+    implies_true, and_true, eval_minus, eval_one, eval_v, eval_k, zeta]
   push_cast
   and_intros
   all_goals linarith

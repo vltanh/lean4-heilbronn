@@ -48,7 +48,7 @@ theorem claim_LP_identities (l : ℝ) (L P : Point) :
 /-! ### The positions of §6.3 -/
 
 /-- `L` strictly inside `DBE` lies below `y = 1` and strictly inside `DCE` when above `CE`. -/
-theorem pos_L {l b : ℝ} {L : Point} (hb : 0 < b) (hl1 : l < 1)
+theorem pos_L {l b : ℝ} {L : Point} (_hb : 0 < b) (hl1 : l < 1)
     (hL : InTriangle L ptD (ptE l) (ptB b)) (hLce : 0 < sarea (ptE l) ptC L) :
     0 < sarea ptC ptD L ∧ InTriangle L ptD (ptE l) ptC := by
   have h1 : 0 < sarea ptC ptD L := by
@@ -127,9 +127,9 @@ strictly inside `DBE` and above `CE`, `P` central and above `CE`, `0 < b < 1`, `
 positive least area of `D, C, E, B, L, P`: `d_D > 0`, and the signs `(d_E, d_C)` of the line `LP`
 are one of `(+,-)`, `(-,+)`, `(-,-)` (the three vertices of `DCE` are not on one side of `LP`).
 `hand/TYPE_II_COMPLETION.md`, lines 510–525. -/
-theorem eq15 {l b : ℝ} {L P : Point} (hb : 0 < b) (hb1 : b < 1) (hl : 0 < l) (hl1 : l < 1)
+theorem eq15 {l b : ℝ} {L P : Point} (hb : 0 < b) (_hb1 : b < 1) (_hl : 0 < l) (hl1 : l < 1)
     (hL : InTriangle L ptD (ptE l) (ptB b)) (hLce : 0 < sarea (ptE l) ptC L)
-    (hP : IsCentral b P) (hPce : 0 < sarea (ptE l) ptC P)
+    (hP : IsCentral b P) (_hPce : 0 < sarea (ptE l) ptC P)
     (hpos : 0 < minTriangleArea ![ptD, ptC, ptE l, ptB b, L, P]) :
     0 < sarea ptD L P ∧
       ((0 < sarea (ptE l) L P ∧ sarea ptC L P < 0) ∨ (sarea (ptE l) L P < 0 ∧ 0 < sarea ptC L P) ∨
@@ -160,7 +160,7 @@ doubled threshold `s > 0` for `D, C, E, B, L, P` and `0 < b < 1`: if `d_E, d_C <
 isolates `D`), then with `q = 1 - λ`, `z = 1 - L_y`: `z² - qz + 2sq - s² ≤ 0` and
 `z ≥ s(q+1)/(bq)`; the derivation (18) → `J(l, z) ≤ 0` → (19) uses only `b < 1`.
 `hand/TYPE_II_COMPLETION.md`, lines 586–611 and 731–735. -/
-theorem eq19 {l b s : ℝ} {L P : Point} (hs : 0 < s) (hb : 0 < b) (hb1 : b < 1) (hl : 0 < l)
+theorem eq19 {l b s : ℝ} {L P : Point} (hs : 0 < s) (hb : 0 < b) (hb1 : b < 1) (_hl : 0 < l)
     (hl1 : l < 1) (hL : InTriangle L ptD (ptE l) (ptB b)) (hLce : 0 < sarea (ptE l) ptC L)
     (hP : IsCentral b P) (hPce : 0 < sarea (ptE l) ptC P)
     (hmin : s / 2 ≤ minTriangleArea ![ptD, ptC, ptE l, ptB b, L, P])
@@ -226,7 +226,7 @@ theorem lemma7 {l b s : ℝ} {L P : Point} (hs : 0 < s) (hb : 0 < b) (hb1 : b < 
   rcases hsg with ⟨hE, hC⟩ | ⟨hE, hC⟩ | ⟨hE, hC⟩
   · -- `d_E > 0`: the weighted identity
     have hE' := tc_ge_of_pos hs2 hmin 2 4 5 hE
-    simp only [Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_one] at hE'
+    simp only [Matrix.cons_val] at hE'
     apply le_Zroot_of_quad
     have h1 : s ≤ L.1 * (P.2 - L.2) := by
       have hw : (1 - l) * s ≤ (1 - l) * (L.1 * (P.2 - L.2)) := by

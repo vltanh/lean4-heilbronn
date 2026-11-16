@@ -373,11 +373,11 @@ theorem Comp.config_sq (H : Comp h c d f Q) (k : Fin 9) :
   fin_cases k
   all_goals first
     | exact H.hQ _
-    | (simp only [c1Config, unitSquare, Set.mem_setOf_eq, Fin.zero_eta, Fin.mk_one,
-        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+    | (simp only [c1Config, unitSquare, Set.mem_ofPred_eq, Fin.zero_eta, Fin.mk_one,
+        Matrix.cons_val_zero, Matrix.cons_val_one]
        refine ⟨?_, ?_, ?_, ?_⟩ <;> linarith)
     | (show (_ : Point) ∈ unitSquare
-       simp only [c1Config, unitSquare, Set.mem_setOf_eq]
+       simp only [c1Config, unitSquare, Set.mem_ofPred_eq]
        refine ⟨?_, ?_, ?_, ?_⟩ <;> simp <;> linarith)
 
 /-! ### §1. The top cap (7) -/
@@ -394,7 +394,7 @@ theorem top_mem_hull (hA : C1Anchors h c d f) {X : Point} (hX : X ∈ unitSquare
     ext p; simp only [Set.mem_insert_iff, Set.mem_singleton_iff]; tauto
   rw [this]
   unfold InTopCap ptD ptF at hT
-  apply mem_convexHull_of_sarea <;> simp only [sarea, ptE] at hT ⊢
+  apply mem_convexHull_of_sarea <;> simp only [sarea] at hT ⊢
   · nlinarith
   · nlinarith
   · nlinarith
@@ -410,13 +410,12 @@ theorem Comp.top_two (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
     (by intro a; fin_cases a <;> simp <;> omega)
     (by
       intro a b hab
-      fin_cases a <;> fin_cases b <;> simp at hab ⊢ <;> first | rfl | omega |
-        exact Fin.ext (by omega))
+      fin_cases a <;> fin_cases b <;> simp at hab ⊢ <;> omega)
   have e : (fun a => cfg h c d f Q (![2, 3, i.val + 5, j.val + 5] a)) = ![(1, d), (f, 1), Q i, Q j] := by
     funext a; fin_cases a <;> first | rfl | exact cfg_free h c d f Q _
   rw [e] at hm
   rw [triangleArea_eq] at this
-  simp only [sarea, ptE, topCapArea] at this ⊢
+  simp only [sarea, topCapArea] at this ⊢
   rw [abs_of_nonpos (by nlinarith)] at this
   nlinarith
 
@@ -433,14 +432,13 @@ theorem Comp.top_three (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hil
     (by intro a; fin_cases a <;> simp <;> omega)
     (by
       intro a b hab
-      fin_cases a <;> fin_cases b <;> simp at hab ⊢ <;> first | rfl | omega |
-        exact Fin.ext (by omega))
+      fin_cases a <;> fin_cases b <;> simp at hab ⊢ <;> omega)
   have e : (fun a => cfg h c d f Q (![2, 3, i.val + 5, j.val + 5, l.val + 5] a)) =
       ![(1, d), (f, 1), Q i, Q j, Q l] := by
     funext a; fin_cases a <;> first | rfl | exact cfg_free h c d f Q _
   rw [e] at hm
   rw [triangleArea_eq] at this
-  simp only [sarea, ptE, topCapArea, TypeII.kEnd] at this ⊢
+  simp only [sarea, topCapArea, TypeII.kEnd] at this ⊢
   rw [abs_of_nonpos (by nlinarith)] at this
   have hA0 := A₀_bounds
   have s2 : (1.4142 : ℝ) < Real.sqrt 2 := by
@@ -459,7 +457,7 @@ theorem Comp.top_four (H : Comp h c d f Q) (hT : ∀ i, InTopCap d f (Q i)) : Fa
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
   have := TypeIICompletion.theorem1 _ H.config_sq H.hmin 2 3 (by decide) ptE (by
     rw [triangleArea_eq]
-    simp only [c1Config, sarea, ptE, Matrix.cons_val]
+    simp only [c1Config, sarea, Matrix.cons_val]
     gcongr; rw [abs_le]; constructor <;> nlinarith)
   have h4 := four_le_card (p := fun k => k ≠ 2 ∧ k ≠ 3 ∧
       c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) k ∈ convexHull ℝ
@@ -490,8 +488,7 @@ theorem Comp.quad_two (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
     (by intro a; fin_cases a <;> simp <;> omega)
     (by
       intro a b hab
-      fin_cases a <;> fin_cases b <;> simp at hab ⊢ <;> first | rfl | omega |
-        exact Fin.ext (by omega))
+      fin_cases a <;> fin_cases b <;> simp at hab ⊢ <;> omega)
   have e : (fun a => cfg h c d f Q (![4, 1, 2, 3, i.val + 5, j.val + 5] a)) =
       ![(0, h), (c, 0), (1, d), (f, 1), Q i, Q j] := by
     funext a; fin_cases a <;> first | rfl | exact cfg_free h c d f Q _
@@ -520,7 +517,7 @@ theorem Comp.quad_three (H : Comp h c d f Q) {i j l : Fin 4} (hij : i ≠ j) (hi
           (c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 2)
           (c1Config h c d f (Q 0) (Q 1) (Q 2) (Q 3) 3)} := by
     intro k hk
-    simp only [Set.mem_setOf_eq, c1Config_free]
+    simp only [Set.mem_ofPred_eq, c1Config_free]
     exact hk
   have := three_le_ncard (hmem i hi) (hmem j hj) (hmem l hl)
     (by simp [Fin.ext_iff]; omega) (by simp [Fin.ext_iff]; omega)
@@ -628,7 +625,7 @@ theorem Comp.two_inside (H : Comp h c d f Q) {a b e j₁ j₂ : ℕ} (ha : a < 9
     (by
       intro x y hxy
       simp only [List.nodup_cons, List.mem_cons, List.not_mem_nil, or_false, not_or] at hd
-      fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> first | rfl | omega)
+      fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> omega)
   have e1 : (fun x => cfg h c d f Q (![a, b, e, j₁, j₂] x)) = ![cfg h c d f Q a,
       cfg h c d f Q b, cfg h c d f Q e, cfg h c d f Q j₁, cfg h c d f Q j₂] := by
     funext x; fin_cases x <;> rfl
@@ -749,7 +746,7 @@ theorem right_support (hA : C1Anchors h c d f) {x y : ℝ} {Y : Point} (x1 : x �
     · simp only [Prod.snd_add, Prod.smul_snd, smul_eq_mul]; field_simp; ring
   · refine ⟨1 - c / p, c / p, ?_, div_pos (by linarith) hp0, by ring, ?_⟩
     · rw [sub_pos, div_lt_one hp0]; exact hpc
-    · ext <;> simp <;> field_simp
+    · ext <;> simp; field_simp
   · have hPDY : sarea (p, 0) (1, d) Y * (d - y) = -sarea (1, d) (x, y) Y * d := by
       simp only [sarea, hp]; field_simp; ring
     apply mem_convexHull_of_sarea
@@ -783,8 +780,7 @@ theorem Comp.right_pair_core (H : Comp h c d f Q) {i j : Fin 4} (hij : i ≠ j)
     (by intro a; fin_cases a <;> simp <;> omega)
     (by
       intro a b hab
-      fin_cases a <;> fin_cases b <;> simp at hab ⊢ <;> first | rfl | omega |
-        exact Fin.ext (by omega))
+      fin_cases a <;> fin_cases b <;> simp at hab ⊢ <;> omega)
   have e : (fun a => cfg h c d f Q (![2, 0, i.val + 5, 1, j.val + 5] a)) =
       ![(1, d), (0, 0), ((Q i).1, (Q i).2), (c, 0), Q j] := by
     funext a; fin_cases a <;> first | rfl | exact cfg_free h c d f Q _

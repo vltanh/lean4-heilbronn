@@ -94,7 +94,7 @@ theorem balancedRow_excluded {l b : ℝ} {L P Q R S : Point} (hrow : BalancedRow
 
 /-- The three containers are exclusive and, at positive least area, exhaustive for a free point
 of the square. -/
-theorem container_trichotomy {b : ℝ} {X : Point} (hb : 0 < b) (hb1 : b < 1)
+theorem container_trichotomy {b : ℝ} {X : Point} (_hb : 0 < b) (_hb1 : b < 1)
     (hX : X ∈ unitSquare) (h1 : sarea ptD (ptB b) X ≠ 0) (h2 : sarea (ptB b) ptC X ≠ 0)
     (h3 : sarea ptC ptD X ≠ 0) :
     (IsLeft b X ∨ IsCentral b X ∨ IsRight b X) ∧ ¬ (IsLeft b X ∧ IsCentral b X) ∧
@@ -113,7 +113,7 @@ theorem container_trichotomy {b : ℝ} {X : Point} (hb : 0 < b) (hb1 : b < 1)
   · exact absurd h.2.1 (not_lt.2 h.1.le)
   · obtain ⟨hl, hr⟩ := h
     simp only [IsLeft, IsRight, sarea, ptD, ptB, ptC] at hl hr
-    nlinarith [mul_nonneg hb.le hy0]
+    nlinarith [mul_nonneg _hb.le hy0]
   · exact absurd h.2 (not_lt.2 h.1.2.1.le)
 
 -- Note: the proof works at doubled threshold 7/64 in §§5–10, but also uses `TYPE_II_BALANCED.md`
@@ -159,7 +159,7 @@ theorem theorem11 {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z
     intro j
     have k : (⟨j.val + 4, by omega⟩ : Fin 9) ≠ 0 ∧ (⟨j.val + 4, by omega⟩ : Fin 9) ≠ 1 ∧
         (⟨j.val + 4, by omega⟩ : Fin 9) ≠ 3 := by
-      refine ⟨?_, ?_, ?_⟩ <;> intro h <;> rw [Fin.ext_iff] at h <;> simp at h <;> omega
+      refine ⟨?_, ?_, ?_⟩ <;> intro h <;> rw [Fin.ext_iff] at h <;> simp at h
     have e1 := sarea_ne_zero_of_min_pos hpos 0 3 ⟨j.val + 4, by omega⟩ (by decide)
       (Ne.symm k.2.2) (Ne.symm k.1)
     have e2 := sarea_ne_zero_of_min_pos hpos 3 1 ⟨j.val + 4, by omega⟩ (by decide)
@@ -223,7 +223,7 @@ theorem theorem11 {l b : ℝ} {V W X Y Z : Point} (hd : TypeIIData l b V W X Y Z
     · exact h
     · exfalso; rw [Fin.ext_iff] at h; simp at h; omega
     · exfalso; rw [Fin.ext_iff] at h; simp at h; omega
-    · rw [Fin.ext_iff] at h; simp only [Fin.val_mk, add_left_inj] at h
+    · rw [Fin.ext_iff] at h; simp only [add_left_inj] at h
       have := hfinj (Fin.ext h)
       rw [Fin.ext_iff] at this; simp at this
       exact Fin.ext (by omega)

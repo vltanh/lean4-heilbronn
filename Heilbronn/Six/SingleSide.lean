@@ -1135,7 +1135,7 @@ theorem Conf.two_inside (H : Conf a h b c d f X P Q) {i j l j₁ j₂ : ℕ} (hi
     (by
       intro x y hxy
       simp only [List.nodup_cons, List.mem_cons, List.not_mem_nil, or_false, not_or] at hd
-      fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> first | rfl | omega)
+      fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> omega)
   have e1 : (fun x => cfg a h b c d f X P Q (![i, j, l, j₁, j₂] x)) =
       ![cfg a h b c d f X P Q i, cfg a h b c d f X P Q j, cfg a h b c d f X P Q l,
         cfg a h b c d f X P Q j₁, cfg a h b c d f X P Q j₂] := by
@@ -1791,7 +1791,7 @@ Uses: SIX_BOUNDARY_SINGLE_SIDE:Theorem1 -/
 theorem n6_01 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
     (hX : InCapR c d X ∨ InCapL f h X) (hYsq : Y ∈ unitSquare) (hZsq : Z ∈ unitSquare)
     (hY : InHexagon a h b c d f Y) (hZ : InHexagon a h b c d f Z)
-    (hsix : ExactlySixContacts X Y Z)
+    (_hsix : ExactlySixContacts X Y Z)
     (hmin : A₀ ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
     False := by
   have := theorem1 hN hX hYsq hZsq hY hZ

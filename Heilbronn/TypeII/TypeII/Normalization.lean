@@ -549,7 +549,7 @@ theorem right_three_bound {b : ℝ} {P Q R : Point} (hb1 : b < 1) (hP : P ∈ un
 
 /-- The scalar contradiction of (12): `s ≤ bv + λw`, `kw(1-v) ≥ s`, `b(1-λ) ≥ 3s` with
 `w = 1 - b`, `0 < k < 0.172` and `s > 7/64` are incompatible (AM–GM). -/
-theorem exclude213_scalar {b l v s k : ℝ} (hb : 0 < b) (hb1 : b < 1) (hl : 0 ≤ l)
+theorem exclude213_scalar {b l v s k : ℝ} (hb : 0 < b) (hb1 : b < 1) (_hl : 0 ≤ l)
     (hk : 0 < k) (hk1 : k < 172 / 1000) (hs : 7 / 64 < s) (h1 : s ≤ b * v + l * (1 - b))
     (h2 : s ≤ k * (1 - b) * (1 - v)) (h3 : 3 * s ≤ b * (1 - l)) : False := by
   set w := 1 - b with hw

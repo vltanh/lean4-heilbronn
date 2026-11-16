@@ -364,7 +364,7 @@ theorem tl_left {s q r v x y : ℝ} (hs : 0 < s) (hqr : 3 * s ≤ q * r) (hr1 : 
 values at the auxiliary points `T₀` (meet of the lines (5), (6)) and `T₁ = (r, u + s/L)`.
 `hand/UNBALANCED_FINAL_NEGATIVE_LINE.md`, lines 105-184, 186-200.
 Uses: UNBALANCED_FINAL_NEGATIVE_LINE:claim-F, UNBALANCED_FINAL_NEGATIVE_LINE:claim-params. -/
-theorem claim_two_lines (h : NegSetting l b P Q R S T) (hneg : sarea Q T (ptE l) < 0) :
+theorem claim_two_lines (h : NegSetting l b P Q R S T) (_hneg : sarea Q T (ptE l) < 0) :
     let s : ℝ := 8 / 73
     let q := 1 - l
     let r := R.1

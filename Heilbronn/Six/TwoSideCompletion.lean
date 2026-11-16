@@ -195,7 +195,7 @@ theorem kinds_bound {a h b c d f μ : ℝ} {M U V : Point} {P : Fin 9 → Point}
     (hidx : ∀ i : Fin 9, i.val ≠ k →
       (∃ l : Fin 6, i.val = l.val ∧ P i = anchorPts a h b c d f l) ∨ (i.val = u ∧ P i = U) ∨
         (i.val = v ∧ P i = V))
-    (hu : 6 ≤ u) (hv : 6 ≤ v) (huv : u ≠ v)
+    (_hu : 6 ≤ u) (_hv : 6 ≤ v) (_huv : u ≠ v)
     (bAA : ∀ l₁ l₂ : Fin 6, l₁ ≠ l₂ →
       μ ≤ |sarea (anchorPts a h b c d f l₁) (anchorPts a h b c d f l₂) M|)
     (bAU : ∀ l : Fin 6, μ ≤ |sarea (anchorPts a h b c d f l) U M|)
@@ -345,7 +345,7 @@ theorem claim_obstruction {a h b c d f : ℝ} {X Y Q : Point}
   obtain ⟨⟨x0, -, -, -⟩, -⟩ := hX
   obtain ⟨q0, -, q1, -⟩ := hQ
   obtain ⟨⟨-, -, w0, -⟩, -⟩ := hY
-  simp only [ptA, ptB, sarea] at g1 g2
+  simp only [sarea] at g1 g2
   constructor
   · have : 0 < Q.1 * ((Q.2 - a) * (X.2 - a)) := by nlinarith [mul_nonneg x0 (sq_nonneg (Q.2 - a))]
     have := pos_of_mul_pos_right this q0
@@ -437,8 +437,7 @@ theorem quad_I (H : LowerFacts a h b c d f x y z w r t) (ht : a ≤ t) (hr : b �
   have cAHQ := H.cAHQ; have cBCQ := H.cBCQ; have cHCQ := H.cHCQ; have cABQ := H.cABQ
   refine quad_false H qI_check ?_
   simp only [qIAtoms, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-    and_true, eval_v, eval_minus, eval_plus, eval_times, eval_zero, eval_one, eval_ofNat, eval_k,
-    zeta]
+    and_true, eval_v, eval_minus, eval_times, eval_zero, eval_one, eval_k, zeta]
   push_cast
   obtain ⟨c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20,
     c21, c22⟩ := C
@@ -455,8 +454,7 @@ theorem quad_M1 (H : LowerFacts a h b c d f x y z w r t) (ht : a ≤ t) (hr : r 
   have cAHQ := H.cAHQ; have cBCQ := H.cBCQ; have cHCQ := H.cHCQ; have cABQ := H.cABQ
   refine quad_false H qM1_check ?_
   simp only [qM1Atoms, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-    and_true, eval_v, eval_minus, eval_plus, eval_times, eval_zero, eval_one, eval_ofNat, eval_k,
-    zeta]
+    and_true, eval_v, eval_minus, eval_times, eval_zero, eval_one, eval_k, zeta]
   push_cast
   obtain ⟨c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20,
     c21, c22⟩ := C
@@ -473,8 +471,7 @@ theorem quad_M2 (H : LowerFacts a h b c d f x y z w r t) (ht : t ≤ a) (hr : b 
   have cAHQ := H.cAHQ; have cBCQ := H.cBCQ; have cHCQ := H.cHCQ; have cABQ := H.cABQ
   refine quad_false H qM2_check ?_
   simp only [qM2Atoms, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-    and_true, eval_v, eval_minus, eval_plus, eval_times, eval_zero, eval_one, eval_ofNat, eval_k,
-    zeta]
+    and_true, eval_v, eval_minus, eval_times, eval_zero, eval_one, eval_k, zeta]
   push_cast
   obtain ⟨c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20,
     c21, c22⟩ := C
@@ -491,8 +488,7 @@ theorem quad_III (H : LowerFacts a h b c d f x y z w r t) (ht : t ≤ a) (hr : r
   have cAHQ := H.cAHQ; have cBCQ := H.cBCQ; have cHCQ := H.cHCQ; have cABQ := H.cABQ
   refine quad_false H qIII_check ?_
   simp only [qIIIAtoms, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-    and_true, eval_v, eval_minus, eval_plus, eval_times, eval_zero, eval_one, eval_ofNat, eval_k,
-    zeta]
+    and_true, eval_v, eval_minus, eval_times, eval_zero, eval_one, eval_k, zeta]
   push_cast
   obtain ⟨c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20,
     c21, c22⟩ := C
@@ -528,7 +524,7 @@ theorem lower_areas1 {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c 
 
 /-- The costs of the lower point `Q`. -/
 theorem lower_areas2 {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c d f)
-    (hQ : Q ∈ unitSquare) (hQT : InT0 h c Q) (hABQ : 0 < sarea (ptA a) (ptB b) Q)
+    (_hQ : Q ∈ unitSquare) (hQT : InT0 h c Q) (hABQ : 0 < sarea (ptA a) (ptB b) Q)
     (h7 : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Q)) :
     7 / 64 ≤ (h - a) * Q.1 ∧ 7 / 64 ≤ (c - b) * Q.2 ∧ 7 / 64 ≤ c * (h - Q.2) - h * Q.1 ∧
       7 / 64 ≤ b * (Q.2 - a) + a * Q.1 := by
@@ -543,7 +539,7 @@ theorem lower_areas2 {a h b c d f : ℝ} {X Y Q : Point} (hN : NAnchors a h b c 
       (by simp only [sarea]; nlinarith) (area_of_le_min h7 2 3 8)
     simp only [sarea] at this; linarith
   · have := sarea_le_of_nonpos hp (p := (0, h)) (q := (c, 0)) (r := Q)
-      (by simp only [ptC, ptH, sarea] at q2 ⊢; linarith) (area_of_le_min h7 1 3 8)
+      (by simp only [sarea] at q2 ⊢; linarith) (area_of_le_min h7 1 3 8)
     simp only [sarea] at this; linarith
   · have := two_mul_le_sarea_of_nonneg hp (p := (0, a)) (q := (b, 0)) (r := Q) hABQ.le
       (area_of_le_min h7 0 2 8)
@@ -592,7 +588,7 @@ theorem bad_bounds {a h b c d f : ℝ} {X Y Q : Point} (hS : LowerSetting a h b 
   change 7 / 64 ≤ |sarea (0, a) Q X| at bA
   change 7 / 64 ≤ |sarea (b, 0) Q Y| at bB
   obtain ⟨g1, g2⟩ := hbad
-  simp only [ptA, ptB, sarea] at g1 g2 bA bB
+  simp only [sarea] at g1 g2 bA bB
   have eA : (Q.1 - 0) * (X.2 - a) - (Q.2 - a) * (X.1 - 0) = Q.1 * (X.2 - a) - (Q.2 - a) * X.1 := by
     ring
   have eB : (Q.1 - b) * (Y.2 - 0) - (Q.2 - 0) * (Y.1 - b) = (Q.1 - b) * Y.2 - Q.2 * (Y.1 - b) := by

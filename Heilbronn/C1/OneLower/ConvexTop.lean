@@ -100,7 +100,7 @@ bound `t > s`: `hc ≥ 3t`, `hf, cd ≥ t` give `h, c ≥ 3s`, `d, f ≥ s`; wit
 `hand/C1_ONE_LOWER_CONVEX_TOP.md`, lines 49-67. -/
 theorem params {t h c d f : ℝ} (ht : 8 / 73 < t) (hd : 0 < d) (hh : h < 1) (hf : 0 < f)
     (hc : c < 1) (hfd : f ≤ d) (hdh : d ≤ h) (hfc : f ≤ c)
-    (hc3 : 3 * t ≤ h * c) (aHF : t ≤ h * f) (aCD : t ≤ c * d) :
+    (hc3 : 3 * t ≤ h * c) (aHF : t ≤ h * f) (_aCD : t ≤ c * d) :
     24 / 73 ≤ h ∧ 24 / 73 ≤ c ∧ 8 / 73 ≤ d ∧ 8 / 73 ≤ f ∧
       (4 * t ≤ (1 - d) * (1 - f) → d ≤ 33 / 65 ∧ f ≤ 17 / 50) ∧
       (7 / 11 < (1 - d) * (1 - f) → d ≤ 204 / 715 ∧ f ≤ 13 / 64) := by
@@ -339,7 +339,7 @@ theorem Cell.omega (C : Cell m h c d f X Y L Q) :
       funext a; fin_cases a <;> rfl
     rw [e] at hm
     rw [triangleArea_eq] at this
-    simp only [sarea, ptE] at this ⊢
+    simp only [sarea] at this ⊢
     rw [abs_of_nonpos (by nlinarith)] at this
     nlinarith
   · subst hm
@@ -697,10 +697,8 @@ theorem claim_hull {h c d f : ℝ} {X Y L Q : Point} (hS : ThreeTop h c d f X Y 
   have hinj : Function.Injective ι := by
     intro a b hab
     have hσ := σ.injective
-    fin_cases a <;> fin_cases b <;> simp only [hι, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two, Matrix.cons_val_three, Fin.isValue] at hab ⊢ <;>
+    fin_cases a <;> fin_cases b <;> simp only [hι, Fin.isValue] at hab ⊢ <;>
       first
-      | rfl
       | (exfalso; exact absurd (Fin.castSucc_injective _ hab) (fun h => by
           have := hσ h; revert this; decide))
       | (exfalso; exact Fin.castSucc_ne_last _ hab)

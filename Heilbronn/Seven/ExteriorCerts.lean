@@ -69,7 +69,7 @@ theorem qAtom_eval (w : Word) (t : Fin 9 × Fin 9 × Fin 9) (z : ℕ → ℝ) :
       sarea ((pt t.1).1.eval z, (pt t.1).2.eval z) ((pt t.2.1).1.eval z, (pt t.2.1).2.eval z)
         ((pt t.2.2).1.eval z, (pt t.2.2).2.eval z) - 7 / 64 := by
   unfold qAtom
-  split_ifs <;> simp [eval_esarea] <;> push_cast <;> ring
+  split_ifs <;> simp [eval_esarea]
 
 /-- **Soundness.** A successful check excludes every point of the cube at which the factors and
 the oriented costs are nonnegative. -/

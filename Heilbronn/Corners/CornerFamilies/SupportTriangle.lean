@@ -469,8 +469,8 @@ theorem typeIII_five_lower {U V W X Y Z : Point} (hU : U ∈ unitSquare) (hV : V
     ⟨0, rfl⟩ ⟨1, rfl⟩
   exact (min_sub (le_refl _) _ _ (by norm_num) hinj
     (by intro i; fin_cases i
-        · simp [sevenConfig, typeIIIConfig]
-        · simp [sevenConfig, typeIIIConfig]
+        · simp [typeIIIConfig]
+        · simp [typeIIIConfig]
         all_goals exact (typeIII_fr U V W X Y Z _).symm)).trans h7
 
 /-- **Type-III exclusion (9)** (`CORNER_FAMILIES:TypeIII-le1upper`): a Type-III configuration with

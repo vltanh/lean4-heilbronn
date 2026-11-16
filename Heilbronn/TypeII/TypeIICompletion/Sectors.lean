@@ -44,7 +44,7 @@ theorem DRL_neg {l b : ℝ} {L R : Point} (hb : 0 < b) (hb1 : b < 1) (hl1 : l < 
     nlinarith [mul_pos (show 0 < R.1 by linarith) (show 0 < 1 - l by linarith)]
 
 /-- A central point lies strictly left of the line `R → C` for a right point `R`. -/
-theorem RC_pos_of_central {b : ℝ} {X R : Point} (hb : 0 < b) (hX : IsCentral b X)
+theorem RC_pos_of_central {b : ℝ} {X R : Point} (_hb : 0 < b) (hX : IsCentral b X)
     (hR : IsRight b R) (hu1 : R.2 ≤ 1) : 0 < sarea R ptC X := by
   simp only [IsRight, sarea, ptB, ptC] at hR
   refine tc_pos_of_inTri hX ?_ ?_ ?_ ?_ <;> simp only [sarea, ptD, ptB, ptC] <;> nlinarith
@@ -87,7 +87,7 @@ hull `D, C, R, B, E`, lines 837–842), proved here from `[RCX] ≥ 0` for every
 (`shear_mem`, `second_shear_sq`); for `u = 0` the image is a Type-III configuration (line 815),
 which `theorem8_typeIII` excludes through `CORNER_FAMILIES.md`. -/
 theorem claim_second_shear {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
-    (hS : InTriangle S (ptB b) R ptC) (hu : 0 < R.2) :
+    (hS : InTriangle S (ptB b) R ptC) (_hu : 0 < R.2) :
     let ψ := secondShear R.1 R.2
     let b' := 1 - b - (1 - R.1) / (1 - R.2)
     (∀ X Y Z : Point, sarea (ψ X) (ψ Y) (ψ Z) = -sarea X Y Z) ∧
@@ -188,7 +188,7 @@ theorem G_end4 {z : ℝ} (hz : 13 / 16 ≤ z) (hZ : z ≤ 1) : 0 < chamberG (11 
 /-- The four rectangles of §8.3: `G(b', v) > 0` on the parameter range of Theorem 8. -/
 theorem theorem8_G {b q v b' : ℝ} (hb2 : b ≤ 1 / 2) (hb13 : 1 / 3 < b) (hv : 13 / 16 ≤ v)
     (hv1 : v ≤ 1) (h29 : b * (v - q) ≤ 1 - 7 / 64 - q) (hb' : 1 / 2 < b') (hbb : b' ≤ 1 - b)
-    (hq1 : q ≤ 1) (h25a : b ≤ 2 / 5 → 89 / 100 < q) (h25b : b ≤ 3 / 7 → 7 / 8 ≤ q)
+    (_hq1 : q ≤ 1) (h25a : b ≤ 2 / 5 → 89 / 100 < q) (h25b : b ≤ 3 / 7 → 7 / 8 ≤ q)
     (h25c : b ≤ 9 / 20 → 27 / 32 < q) : 0 < chamberG b' v := by
   rcases le_or_gt b (2 / 5) with h1 | h1
   · have hq := h25a h1
@@ -409,7 +409,7 @@ theorem theorem8_params {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement
     have := tc_two_int (by norm_num) hPin hQin h5
     simp only [sarea, ptD, ptC] at this; linarith
   have hδ := tc_ge_of_pos (by norm_num : (0 : ℝ) < 7 / 128) hmin 2 3 7 hδpos
-  simp only [typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_one]
+  simp only [typeIIConfig_eq, Matrix.cons_val]
     at hδ
   simp only [sarea, ptE, ptB] at hδ
   have hrb : 0 ≤ R.1 - b := by
@@ -443,8 +443,8 @@ CORNER_FAMILIES:TypeIII-complete, TYPE_II_BALANCED:claim-not-both-above-CE,
 TYPE_II:claim-PQ-line-table, TYPE_II:claim-chamber-general, TYPE_II_COMPLETION:eq25. -/
 theorem theorem8 {l b : ℝ} {L P Q R S : Point} (hpl : BalancedPlacement l b L P Q R S)
     (hS : InTriangle S (ptB b) R ptC)
-    (hLs : DiagSector ptD (ptE l) R ptC L) (hPs : DiagSector ptC ptD (ptE l) R P)
-    (hSs : DiagSector (ptE l) R ptC ptD S) (hQs : DiagSector R ptC ptD (ptE l) Q) :
+    (_hLs : DiagSector ptD (ptE l) R ptC L) (hPs : DiagSector ptC ptD (ptE l) R P)
+    (_hSs : DiagSector (ptE l) R ptC ptD S) (hQs : DiagSector R ptC ptD (ptE l) Q) :
     minTriangleArea (typeIIConfig l b L P Q R S) < A₀ := by
   by_contra hcon
   push Not at hcon
@@ -648,7 +648,7 @@ theorem one_sided_LR {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L
       (by norm_num) (by decide) (by intro i; fin_cases i <;> rfl)
   have hK := tc_two_int (by norm_num) hSin hQin h5
   have hDEL := tc_ge_of_pos hs2 hmin 0 2 4 hL.1
-  simp only [typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_one]
+  simp only [typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero]
     at hDEL
   simp only [sarea, ptD, ptE, ptC] at hK hDEL
   have hKs := tc_Ks_gt
@@ -678,7 +678,7 @@ theorem theorem9 {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l b L P Q
   obtain ⟨⟨hb, hb1, hl, hl1, -, -, -, ⟨hr0, hr1, hu0, hu1⟩, -⟩, -, -, -, -, -, -, -, hR, -⟩ :=
     hpl
   have hδ := tc_ge_of_pos (by norm_num : (0 : ℝ) < 7 / 128) hcon 2 3 7 hδpos
-  simp only [typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_one]
+  simp only [typeIIConfig_eq, Matrix.cons_val]
     at hδ
   simp only [sarea, ptE, ptB] at hδ
   have hrb : 0 ≤ R.1 - b := by
@@ -705,7 +705,7 @@ theorem claim_one_sided {l b : ℝ} {L P Q R S : Point} (hfp : FinalPlacement l 
   obtain ⟨⟨hb, hb1, hl, hl1, -, -, -, ⟨hr0, hr1, hu0, hu1⟩, -⟩, -, -, -, -, -, -, -, hR, -⟩ :=
     hpl
   have hδ := tc_ge_of_pos (by norm_num : (0 : ℝ) < 7 / 128) hmin 2 3 7 hδpos
-  simp only [typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_one]
+  simp only [typeIIConfig_eq, Matrix.cons_val]
     at hδ
   simp only [sarea, ptE, ptB] at hδ
   have hrb : 0 < R.1 - b := by
@@ -741,7 +741,7 @@ theorem bary33 {H h ηQ EB ER A1 A2 A3 : ℝ} (hbary : H * ηQ = A1 * (-EB) + A2
     mul_nonneg (show 0 ≤ ηQ - 7 / 64 by linarith) hH]
 
 /-- The bound (37) on `h = [ESL]`. -/
-theorem h_bound {k a c l' lam : ℝ} (hk0 : 0 ≤ k) (hk : k ≤ 50 / 57) (ha0 : 0 ≤ a)
+theorem h_bound {k a c l' lam : ℝ} (_hk0 : 0 ≤ k) (hk : k ≤ 50 / 57) (ha0 : 0 ≤ a)
     (ha : a ≤ 9 / 16) (hl' : 7 / 64 ≤ l') (hc : 3 * (7 / 64) ≤ c) (hlam : 0 ≤ lam)
     (hkl : l' ≤ k) : k * a - l' * c - lam * (k - l') ≤ 35607 / 77824 := by
   nlinarith [mul_le_mul_of_nonneg_right hk ha0,
@@ -750,7 +750,7 @@ theorem h_bound {k a c l' lam : ℝ} (hk0 : 0 ≤ k) (hk : k ≤ 50 / 57) (ha0 :
 
 /-- The bound (38) on `H = [BRL]`. -/
 theorem H_bound {b r u a l' : ℝ} (hb : 0 < b) (hb2 : b ≤ 1 / 2) (hrb : 0 ≤ r - b) (hr1 : r ≤ 1)
-    (hu0 : 0 ≤ u) (hu : u ≤ 3 / 16) (ha0 : 0 ≤ a) (hba : b * a ≤ b - 2 * (7 / 64))
+    (_hu0 : 0 ≤ u) (hu : u ≤ 3 / 16) (ha0 : 0 ≤ a) (hba : b * a ≤ b - 2 * (7 / 64))
     (hl' : 7 / 64 ≤ l') (hlb : l' ≤ b) :
     (r - b) * a + u * (b - l') ≤ 363 / 1024 := by
   have h1 : b * ((r - b) * a) ≤ (1 - b) * (b - 2 * (7 / 64)) := by

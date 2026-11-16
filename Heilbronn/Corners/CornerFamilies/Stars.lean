@@ -542,12 +542,11 @@ theorem triangularHullLemma (A B C : Point) (X : Fin 4 → Point)
   rcases inside_orient (hX 0) (hX 1) with ⟨h0, h1⟩ | ⟨h0, h1⟩ <;>
     rcases inside_orient (hX 0) (hX 2) with ⟨-, h2⟩ | ⟨h0', h2⟩ <;>
     rcases inside_orient (hX 0) (hX 3) with ⟨-, h3⟩ | ⟨h0'', h3⟩ <;>
-    first
-    | (exfalso; linarith [inTri_pos h0, inTri_pos h0', sarea_swap₂₃ A B C])
-    | (exfalso; linarith [inTri_pos h0, inTri_pos h0'', sarea_swap₂₃ A B C])
-    | (exfalso; linarith [inTri_pos h0, inTri_pos h2, sarea_swap₂₃ A B C])
-    | (exfalso; linarith [inTri_pos h0, inTri_pos h3, sarea_swap₂₃ A B C])
-    | skip
+    try first
+        | (exfalso; linarith [inTri_pos h0, inTri_pos h0', sarea_swap₂₃ A B C])
+        | (exfalso; linarith [inTri_pos h0, inTri_pos h0'', sarea_swap₂₃ A B C])
+        | (exfalso; linarith [inTri_pos h0, inTri_pos h2, sarea_swap₂₃ A B C])
+        | (exfalso; linarith [inTri_pos h0, inTri_pos h3, sarea_swap₂₃ A B C])
   · exact half_le (seven_core ht (fun i => by fin_cases i <;> assumption) hmin)
   · rw [← triangleArea_swap₂₃]
     exact half_le (seven_core ht (fun i => by fin_cases i <;> assumption)
@@ -572,7 +571,7 @@ theorem fr_ne {a b : Fin 6} (h : a ≠ b) : fr a ≠ fr b := by
   intro e; apply h; simp only [fr, Fin.ext_iff] at e; exact Fin.ext (by omega)
 
 theorem fr_ne_small (a : Fin 6) : fr a ≠ 0 ∧ fr a ≠ 1 ∧ fr a ≠ 2 := by
-  simp only [fr, ne_eq, Fin.ext_iff]; refine ⟨?_, ?_, ?_⟩ <;> simp <;> omega
+  simp only [fr, ne_eq, Fin.ext_iff]; refine ⟨?_, ?_, ?_⟩ <;> simp
 
 theorem freeSix_mem {U V W X Y Z : Point} (hU : U ∈ unitSquare) (hV : V ∈ unitSquare)
     (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare) (hZ : Z ∈ unitSquare)
@@ -770,7 +769,7 @@ minimum area `t > 0`, with `s = 2t`, every free point satisfies `x ≥ s`, `y �
 `|y - x| ≥ s`, hence lies in `U_s` or in `L_s`. `hand/CORNER_FAMILIES.md`, lines 271–289. -/
 theorem claim_residual_regions (U V W X Y Z : Point) (hU : U ∈ unitSquare)
     (hV : V ∈ unitSquare) (hW : W ∈ unitSquare) (hX : X ∈ unitSquare) (hY : Y ∈ unitSquare)
-    (hZ : Z ∈ unitSquare) (t : ℝ) (ht : 0 < t)
+    (hZ : Z ∈ unitSquare) (t : ℝ) (_ht : 0 < t)
     (hmin : t ≤ minTriangleArea (typeIIIConfig U V W X Y Z)) (i : Fin 6) :
     2 * t ≤ (freeSix U V W X Y Z i).1 ∧ (freeSix U V W X Y Z i).2 ≤ 1 - 2 * t ∧
       2 * t ≤ |(freeSix U V W X Y Z i).2 - (freeSix U V W X Y Z i).1| ∧

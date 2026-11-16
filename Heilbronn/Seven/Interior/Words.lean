@@ -106,7 +106,6 @@ theorem Comp.word_exists (H : Comp a h b c d e f P Q) {x : ℕ} (hx : x = 7 ∨ 
     interval_cases i <;> interval_cases j <;> simp only [signOf] <;>
       first
       | exact absurd rfl hij
-      | rfl
       | exact e01.symm | exact e12.symm | exact e23.symm | exact e34.symm | exact e45.symm
       | exact e56.symm | exact b06.symm
       | (rw [bv_swap _ _ (by norm_num) (by norm_num) (by norm_num)]; simp [e01, e12, e23, e34,

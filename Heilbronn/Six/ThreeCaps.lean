@@ -186,9 +186,8 @@ theorem common_nonneg {a h b c d f x y z w r t : ℝ} (H : Hyps a h b c d f x y 
     hr0, hr1, ht0, ht1, hyd, hxc, hzf, htd, hrf, cABC, cABH, cAYH, cBCX, cCXD, cXDQ, cDFQ,
     cFYH, cFYQ⟩ := H
   simp only [commonAtoms, costAtoms, List.cons_append, List.nil_append, List.forall_mem_cons,
-    List.not_mem_nil, IsEmpty.forall_iff, implies_true, and_true, eval_v, eval_minus,
-    eval_plus, eval_times, eval_zero, eval_one, eval_ofNat, eval_k, eval_esarea, Heilbronn.sarea,
-    zeta]
+    List.not_mem_nil, IsEmpty.forall_iff, implies_true, and_true, eval_v, eval_minus, eval_times,
+    eval_zero, eval_one, eval_k, eval_esarea, Heilbronn.sarea, zeta]
   push_cast
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> linarith

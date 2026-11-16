@@ -106,7 +106,7 @@ theorem ur_basic {l b : ℝ} {P Q R S T : Point} (hu : UnbalancedTriRight l b P 
   have hδ : 0 < sarea (ptE l) (ptB b) R := by
     simp only [sarea, ptE, ptB]; nlinarith [mul_pos hl (show 0 < R.1 - b by linarith)]
   have hδs := tc_ge_of_pos hs2 h146 2 3 6 hδ
-  simp only [typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_one]
+  simp only [typeIIConfig_eq, Matrix.cons_val, Matrix.cons_val_zero]
     at hbq hδs
   have hbq' : 8 / 73 ≤ b * (1 - l) := by
     have : sarea ptD (ptE l) (ptB b) = b * (1 - l) := by simp only [sarea, ptD, ptE, ptB]; ring
@@ -542,9 +542,9 @@ theorem t13_cap {m w : ℝ} (hm : 21 / 25 ≤ m) (hm1 : m ≤ 1) (h : 3 / 28 ≤
 /-- The same-side case (§13.2, (48)): with `d_A, d_Z < 0` for the line `X → Y`, (46) holds and
 `hβτ ≤ (hβ - τ(h+β)) v - (h+β-hβ) v²` for `v = min(w, z) ≥ τ`. -/
 theorem t13_same {h β x w y z : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
-    (hx : 0 ≤ x) (hy : 0 ≤ y) (hw : 3 / 28 ≤ w) (hz : 3 / 28 ≤ z)
-    (hlX : 3 / 28 ≤ β * x - (1 - β) * w) (hkX : 3 / 28 ≤ h * (1 - x) - w)
-    (hlY : 3 / 28 ≤ β * y - (1 - β) * z) (hkY : 3 / 28 ≤ h * (1 - y) - z)
+    (_hx : 0 ≤ x) (_hy : 0 ≤ y) (hw : 3 / 28 ≤ w) (hz : 3 / 28 ≤ z)
+    (hlX : 3 / 28 ≤ β * x - (1 - β) * w) (_hkX : 3 / 28 ≤ h * (1 - x) - w)
+    (_hlY : 3 / 28 ≤ β * y - (1 - β) * z) (hkY : 3 / 28 ≤ h * (1 - y) - z)
     (hdA : 3 / 28 ≤ y * w - x * z) (hdZ : 3 / 28 ≤ y * w - x * z + z - w) :
     (0 < h * β - 3 / 28 * (h + β) ∧
       4 * (3 / 28) * (h * β) * (h + β - h * β) ≤ (h * β - 3 / 28 * (h + β)) ^ 2) ∧
@@ -617,7 +617,7 @@ theorem t13_pp_quad {h β x w z dH dZ : ℝ} (hh : 0 < h) (hβ : 0 < β) (hβ1 :
   · nlinarith [mul_le_mul_of_nonneg_right hkh (show (0 : ℝ) ≤ w - 3 / 28 by linarith)]
 
 /-- (46) from the isolated case: `B ≥ A' > 0`. -/
-theorem t13_46_of_quad {h β t : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
+theorem t13_46_of_quad {h β t : ℝ} (hh : 0 < h) (_hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
     (ht : 0 ≤ t)
     (hA : h * β * (3 / 28) ≤ (h * β - 3 / 28 * (h + (h + β - h * β))) * t -
         (h + β - h * β) * t ^ 2) :
@@ -633,7 +633,7 @@ theorem t13_46_of_quad {h β t : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) 
 
 /-- The containment case `(-,+)` (§13.4): `X` inside `HFY` forces `-N(Y) ≥ 3τ`, impossible. -/
 theorem t13_contain {h β y z : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
-    (hy : 0 ≤ y) (hz : 3 / 28 ≤ z)
+    (_hy : 0 ≤ y) (hz : 3 / 28 ≤ z)
     (hlY : 3 / 28 ≤ β * y - (1 - β) * z) (hkY : 3 / 28 ≤ h * (1 - y) - z)
     (hN : 3 * (3 / 28) ≤ (1 - β) * h - (1 - β) * z - (h - β) * y) : False := by
   have hq : ∀ c : ℝ, 0 < c → c ≤ 1 → 0 < c ^ 2 - (1 - 3 / 28) * c + 2 * (3 / 28) := by
@@ -653,7 +653,7 @@ theorem t13_contain {h β y z : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (
     nlinarith [mul_nonneg hβ.le (hq h hh hh1.le).le, mul_nonneg (show 0 ≤ 1 - β by linarith) hh.le]
 
 /-- The distance cap (45) for one point, in both orders of `h, β`. -/
-theorem t13_W {h β x w : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
+theorem t13_W {h β x w : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (_hβ1 : β < 1)
     (hlX : 3 / 28 ≤ β * x - (1 - β) * w) (hkX : 3 / 28 ≤ h * (1 - x) - w)
     (hN : 3 / 28 ≤ (1 - β) * h - (1 - β) * w - (h - β) * x) :
     (β ≤ h → 3 / 28 ≤ (1 - β) * (β - w)) ∧ (h ≤ β → 3 / 28 ≤ (1 - h) * (h - w)) := by
@@ -672,7 +672,7 @@ theorem t13_W {h β x w : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (hβ1 :
     nlinarith [mul_pos hβ (show 0 < 3 / 28 - (1 - h) * (h - w) by linarith)]
 
 /-- From (46), the caps of both points give `w, z ≤ W₀`. -/
-theorem t13_caps {h β w : ℝ} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < β) (hβ1 : β < 1)
+theorem t13_caps {h β w : ℝ} (_hh : 0 < h) (hh1 : h < 1) (_hβ : 0 < β) (hβ1 : β < 1)
     (hU : 36 / 49 ≤ h * β) (h44a : 3 / 28 ≤ h * (1 - β)) (h44b : 3 / 28 ≤ (1 - h) * β)
     (hW : (β ≤ h → 3 / 28 ≤ (1 - β) * (β - w)) ∧ (h ≤ β → 3 / 28 ≤ (1 - h) * (h - w))) :
     w ≤ 477 / 2800 := by
@@ -722,13 +722,13 @@ theorem t13_pt {h β : ℝ} {P Q : Point} (hh : 0 < h) (hh1 : h < 1) (hβ : 0 < 
     nlinarith [mul_pos (show (0 : ℝ) < 1 - β by linarith) (show 0 < h * (1 - P.1) - (P.2 - P.1)
       by linarith), mul_nonneg (mul_nonneg (show (0 : ℝ) ≤ 1 - h by linarith) hβ.le) hx]
   have g6 := sarea_le_of_le_min_of_neg ht hmin 2 3 4 hN
-  simp only [Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_one] at g6
+  simp only [Matrix.cons_val] at g6
   simp only [sarea, hsH, hsF] at g6
   refine ⟨hx, by linarith, by linarith, by linarith, by linarith, by linarith⟩
 
 /-- The sign pair `(d_H, d_F) = (+,-)` is impossible (49). -/
-theorem t13_pm {W K HX B0 Lm NN u0 e0 dH dF : ℝ} (hK : 0 < K) (hHX : 0 < HX) (hB0 : 0 < B0)
-    (hLm : 0 < Lm) (hW : 0 < W) (hNN : 0 < NN) (hu0 : 0 < u0) (he0 : 0 < e0) (hdH : 0 < dH)
+theorem t13_pm {W K HX B0 Lm NN u0 e0 dH dF : ℝ} (_hK : 0 < K) (hHX : 0 < HX) (hB0 : 0 < B0)
+    (_hLm : 0 < Lm) (hW : 0 < W) (hNN : 0 < NN) (hu0 : 0 < u0) (he0 : 0 < e0) (hdH : 0 < dH)
     (hdF : dF < 0) (i1 : W * dH = K * u0 - HX * e0) (i2 : W * dF = B0 * u0 - Lm * e0)
     (i3 : HX * B0 - K * Lm = W * NN) : False := by
   have q1 : HX * e0 < K * u0 := by nlinarith [mul_pos hW hdH]
