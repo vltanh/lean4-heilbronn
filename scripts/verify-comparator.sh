@@ -6,7 +6,9 @@
 # toolchain builds Palomar/<Case>/Challenge.lean and the root module Heilbronn in a sandbox,
 # checks that the theorems of comparator.json have the same statements over identical definitions
 # and use only the permitted axioms, and replays the proofs through Lean's kernel and the
-# toolchain's independent kernels NanoDa and con-ron.
+# toolchain's independent kernel NanoDa; both must accept. Then, as Palomar does, con-ron replays
+# the same export with two workers for at most 30 minutes: an advisory check, whose capacity
+# limit (memory or time) is a warning and whose rejection is a failure.
 #
 # Every Challenge restates the definitions of Heilbronn/Geometry.lean word for word, all of them
 # and in the same order: Lean names the auxiliary lemmas inside a definition after the first
@@ -15,17 +17,23 @@
 # Challenge before the check; the header of each Challenge and its theorems are left as they are.
 #
 # Needs Linux, python3 and bubblewrap (`bwrap`), which sandboxes the build.
-# Run from anywhere: scripts/verify-comparator.sh [--write] [Case ...]
+# The kernel replays take hours (for nine points: Lean's kernel about 2 h 10 min on one core,
+# NanoDa about 30 min, con-ron with two workers about 1 h 50 min and 23 GB, so the 30-minute
+# replay declines); --definitions-only stops after the definitions check, which CI runs.
+#
+# Run from anywhere: scripts/verify-comparator.sh [--write] [--definitions-only] [Case ...]
 # (default: every directory under Palomar/).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 write=0
+definitions_only=0
 cases=()
 for arg in "$@"; do
   case "$arg" in
     --write) write=1 ;;
-    -*) echo "usage: scripts/verify-comparator.sh [--write] [Case ...]" >&2; exit 2 ;;
+    --definitions-only) definitions_only=1 ;;
+    -*) echo "usage: scripts/verify-comparator.sh [--write] [--definitions-only] [Case ...]" >&2; exit 2 ;;
     *) cases+=("$arg") ;;
   esac
 done
@@ -71,15 +79,21 @@ if stale:
         "Heilbronn/Geometry.lean; run scripts/verify-comparator.sh --write"
     )
 PY
+if [ "$definitions_only" -eq 1 ]; then
+  echo "The definitions of every Challenge match Heilbronn/Geometry.lean."
+  exit 0
+fi
 
-# Palomar ignores `enable_nanoda` and registers the toolchain's kernels itself; a copy of each
-# comparator.json does the same here.
+# Palomar ignores `enable_nanoda` and registers the toolchain's NanoDa kernel itself; a copy of
+# each comparator.json does the same here. con-ron runs afterwards on its own, as in Palomar's
+# PalomarSubmission/scripts/verify_submission.py (CON_RON_JOBS = 2, CON_RON_REPLAY_SECONDS).
 prefix=$(lean --print-prefix)
-config=$(mktemp "${TMPDIR:-/tmp}/comparator.XXXXXX")
-trap 'rm -f "$config"' EXIT
+work=$(mktemp -d "${TMPDIR:-/tmp}/comparator.XXXXXX")
+trap 'rm -rf "$work"' EXIT
+status=0
 for case_name in "${cases[@]}"; do
   echo "== Palomar/$case_name"
-  python3 - "Palomar/$case_name/comparator.json" "$config" "$prefix" <<'PY'
+  python3 - "Palomar/$case_name/comparator.json" "$work/config.json" "$prefix" <<'PY'
 import json
 import sys
 
@@ -87,12 +101,48 @@ source, destination, prefix = sys.argv[1:]
 with open(source) as file:
     config = json.load(file)
 config.pop("enable_nanoda", None)
-config["external_kernels"] = {
-    "nanoda": [f"{prefix}/bin/nanoda_bin"],
-    "con-ron": [f"{prefix}/bin/con-ron"],
-}
+config["external_kernels"] = {"nanoda": [f"{prefix}/bin/nanoda_bin"]}
 with open(destination, "w") as file:
     json.dump(config, file, indent=2)
 PY
-  lake comparator --config "$config"
+  lake comparator --config "$work/config.json" 2>&1 | tee "$work/comparator.log"
+  if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+    exit 1
+  fi
+
+  # The con-ron replay, on the solution export of the declarations Comparator exported.
+  names=$(python3 - "$work/comparator.log" "Palomar/$case_name/comparator.json" <<'PY'
+import json
+import re
+import sys
+
+log, config = sys.argv[1:]
+solution = json.load(open(config))["solution_module"]
+lines = [l for l in open(log) if l.startswith("Exporting #[") and l.rstrip().endswith(f"from {solution}")]
+if not lines:
+    raise SystemExit("error: no solution export in the Comparator log")
+print(" ".join(re.match(r"Exporting #\[(.*)\] from ", lines[-1]).group(1).split(", ")))
+PY
+)
+  solution=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['solution_module'])" \
+    "Palomar/$case_name/comparator.json")
+  # shellcheck disable=SC2086
+  lake env leanexport "$solution" -- $names > "$work/solution.ndjson"
+  set +e
+  timeout 1800 "$prefix/bin/con-ron" --jobs=2 --verified "$work/solution.ndjson" \
+    > "$work/con-ron.log" 2>&1
+  code=$?
+  set -e
+  tail -n 3 "$work/con-ron.log"
+  if [ "$code" -eq 0 ] && grep -q "^con-ron: accepted" "$work/con-ron.log"; then
+    echo "con-ron accepted Palomar/$case_name"
+  elif [ "$code" -eq 2 ] || [ "$code" -eq 3 ] || [ "$code" -eq 124 ] || [ "$code" -eq 137 ]; then
+    echo "warning: con-ron declined Palomar/$case_name (exit $code: support, fuel, time or memory);" \
+      "Lean and NanoDa accepted, as Palomar requires"
+  else
+    echo "error: con-ron rejected Palomar/$case_name (exit $code)" >&2
+    status=1
+  fi
+  rm -f "$work/solution.ndjson"
 done
+exit "$status"

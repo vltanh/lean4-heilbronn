@@ -235,8 +235,10 @@ review:
     written by Claude and checked by the sanity checks and Comparator; it
     has not yet had a human review, and neither has the mathematics. Lean's
     kernel checks every proof, and lake comparator also replays the compared
-    theorems through the NanoDa and con-ron kernels. That establishes the
-    proofs, not that the statement says what the prose claims.
+    theorems through the NanoDa kernel; locally, con-ron with two workers
+    accepted the same export too (45,152 declarations, 1 h 50 min). That
+    establishes the proofs, not that the statement says what the prose
+    claims.
 
 alignment:
   namespace: "Heilbronn.Nine"

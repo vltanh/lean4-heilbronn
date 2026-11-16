@@ -47,12 +47,22 @@ which the Palomar registry uses. Every proof is complete and rests on
   sandbox, checks that the case's three theorems (for nine points
   `Nine.optimal_value`, `Nine.heilbronn_number` and `Nine.optimal_configurations`)
   have the same statements over identical definitions and use only the three
-  standard axioms, and replays the proofs through the toolchain's NanoDa and
-  con-ron kernels and Lean's.
+  standard axioms, and replays the proofs through Lean's kernel and the
+  toolchain's NanoDa kernel, which must both accept. Then, as Palomar does, the
+  con-ron kernel replays the same export with two workers for at most 30
+  minutes. That replay is advisory: Palomar records a capacity limit (memory or
+  time) as a warning and only a rejection as a failure, and so does the script.
+  The certificates make the replays long. For nine points the export holds
+  45,152 declarations (1.2 GB); Lean's kernel replays it in about 2 h 10 min on
+  one core and 1.6 GB, NanoDa in about 30 minutes and 2 GB, and con-ron with
+  two workers accepts it in 1 h 50 min and 23 GB, so its 30-minute replay
+  declines with a warning, in Palomar and here.
 
-[`.github/workflows/lean.yml`](../.github/workflows/lean.yml) runs these steps
-on every push to `main` and on pull requests; its axiom audit covers every
-declaration under `Heilbronn`.
+[`.github/workflows/lean.yml`](../.github/workflows/lean.yml) runs the build,
+the axiom audit (of every declaration under `Heilbronn`) and the sanity checks
+on every push to `main` and on pull requests, checks that every Challenge
+restates `Geometry.lean` (`scripts/verify-comparator.sh --definitions-only`)
+and elaborates, and leaves the kernel replays to the preflight.
 [`.github/workflows/palomar.yml`](../.github/workflows/palomar.yml), run by
 hand for one case, runs Palomar's own mechanical verification of a commit
 without submitting it; its report must say `status: pass`. Every case is a
