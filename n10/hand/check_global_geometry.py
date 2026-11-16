@@ -598,6 +598,33 @@ def adjacent_four_right():
     print("PASS: adjacent-corner four-right lower-cut gap and uniform empty-fan bound")
 
 
+def n8_ranges_and_quad_spread():
+    q = sp.Rational
+    sigma = q(93,1000)
+    ell = q(31,251)
+    assert q(753,1000)*q(247,1000) < 2*sigma
+    assert sigma/q(753,1000) == ell
+    assert 1-4*sigma/(1-ell) == q(31657,55000)
+    assert sigma/q(31657,55000) == q(5115,31657)
+    assert (6+4*q(707,500))*sigma-1 == q(10501,125000) > q(21,250)
+    assert q(707,500)**2 < 2
+    z,t,b,c,L,R,eps,eta = sp.symbols("z t b c L R eps eta")
+    zero((1-b)*b*((2-c)/(1-b)+(1+c)/b-6)-(1-2*b)*(c-3*b+1))
+    zero((3*b-1)*(b-t)-t*(1+b)-b*(3*b-1-4*t))
+    H = z**3-2*z*z*t-10*z*t*t+6*z*t-z+6*t*t
+    cleared = (2*t*(t*(3-z)/(1-z-2*t)+2*z)/(1+z)-z)*(1+z)*(1-z-2*t)
+    zero(cleared-H)
+    zero(H.subs(z,(1-8*t)/3)-8*(t+1)*(1-2*t)*(11*t-1)/27)
+    assert q(3,121)+q(3,4)-1 == -q(109,484)
+    a,e,f,h,x,y,U,V = sp.symbols("a e f h x y U V")
+    A,E,F,H0,O,P = (sp.Matrix(p) for p in [
+        (0,a),(1,e),(f,1),(0,h),(x,y),(x+U,y+V)])
+    zero(2*area(A,E,F)+2*area(A,F,H0)-(1-a+f*(h-e)))
+    zero(2*area(O,P,F)-2*area(O,P,A)-((1-a)*U-f*V))
+    zero(2*area(O,P,H0)-2*area(O,P,E)-((h-e)*U+V))
+    print("PASS: tightened N8 ranges, overlap gap, quadrilateral spread cubic and applications")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -617,3 +644,4 @@ if __name__ == "__main__":
     n8_line_caps()
     n8_triangle_caps()
     adjacent_four_right()
+    n8_ranges_and_quad_spread()

@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 10.
+Checkpoint 11.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -176,7 +176,8 @@ Only the distributed alternative of U3 remains unresolved in this family.
         The uniform triangle bound area2(AEF)<69/100 and all eight square
         images force O into AHF and AEH, and P into AEF, with the explicit
         additional signs in N8_TRIANGLE_CAPS.md. The final contradiction
-        for this remaining placement is still open.
+        for this remaining placement is still open. QUADRILATERAL_SPREAD.md
+        supplies two further uniform inequalities when EHP<0.
   - [ ] N8-4/4-SIDE. The line crosses opposite same-side boundary edges.
   - [ ] N8-4/4-CORNER-OBLIQUE. The line crosses opposite corner edges,
         but at least one of ADO+,BGO-,CFP+,EHP+ fails.
@@ -226,6 +227,8 @@ remaining orientations.
 | TYPE_II_R4.md | Complete both-below-CE exclusion in (1,2,4), and uniform empty bottom fan in its both-above cut |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |
+| N8_BOUNDARY_RANGES.md | Stronger uniform coordinate ranges and four definite contact-overlap bounds from the eight ears alone |
+| QUADRILATERAL_SPREAD.md | Two-diagonal spread bound 1-6t for t>=1/11, threshold-free bound 1-(3+2sqrt(2))t, and explicit N8 applications |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |
