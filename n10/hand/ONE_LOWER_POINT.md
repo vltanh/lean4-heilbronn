@@ -127,3 +127,46 @@ More generally, any separately proved scalar upper bound hc<=M gives
 For a fixed rational M this last expression is quadratic. Equations
 (4)--(7) use only the same local five actual points as the lemma and
 are valid in both central alternatives without any new normalization.
+
+## 4. Coordinate bounds shared by the lower alternatives
+
+Every lower point G=(g,z) in this note has g,z>0 and the HC clearance
+
+    hc-hg-cz>=s.
+
+The exact identity
+
+    hc(1-g-z)-(hc-hg-cz)
+      =h(1-c)g+c(1-h)z>=0
+
+therefore proves
+
+    g+z<=1-s/(hc)<=1-s.                             (8)
+
+More generally, a separately proved upper bound hc<=M gives
+
+    g+z<=1-s/M.                                    (9)
+
+This statement is valid in both ears as well as the central position.
+It is an affine inequality when M is a fixed constant.
+
+For a central point, the two inequalities (4) also give explicit
+coordinate lower bounds. Suppose known scalar bounds satisfy
+
+    h<=h_hi, c<=c_hi, a>=a_lo>=0, b>=b_lo>=0,
+    a_lo<h_hi, b_lo<c_hi.
+
+Then
+
+    g>=s(c_hi+b_lo)/[h_hi(c_hi-b_lo)],
+    z>=s(h_hi+a_lo)/[c_hi(h_hi-a_lo)].               (10)
+
+All denominators are positive. To verify the directions, the ratio
+(c+b)/(c-b) decreases with c and increases with b on c>b>=0;
+its derivatives are -2b/(c-b)^2 and 2c/(c-b)^2. Apply these facts
+and h<=h_hi to the first inequality in (4). The second bound follows
+by the same argument with the pairs (h,a) and (c,b) interchanged.
+
+Combining (9) with either bound in (10) gives the corresponding
+upper bound for the other coordinate. These deductions do not use
+a contact-order choice and introduce no new configuration assumption.

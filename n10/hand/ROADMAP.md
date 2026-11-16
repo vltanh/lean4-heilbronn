@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 54.
+Checkpoint 55.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -316,7 +316,15 @@ four-corner alternative and all zero-area faces.
         Fraction/SymPy expansions reproduce all negative bounds.
         Together with the top case, every side pair excludes the
         opposite cap. Proof: C1_SIDE_PAIR_OPPOSITE_CENTRAL.md.
-  - [ ] C1-EXTERIOR. Exclude the remaining 19 exterior count rows
+  - [x] C1-TOP-PAIR-BOTH-SIDES. Two top-cap points cannot coexist
+        with both side caps, independently of the fifth free point.
+        This closes (0,1,1,2,1) and (1,0,1,2,1). The nontriangular
+        top hull has an analytic scalar contradiction; the triangular
+        hull has one 158-term cubic with upper bound
+        -63250709/250000000. Both hulls, the uniform box and all
+        factors have independent geometry and Fraction/SymPy audits.
+        Proof: C1_TOP_PAIR_BOTH_SIDES.md.
+  - [ ] C1-EXTERIOR. Exclude the remaining 17 exterior count rows
         with zero, one or two lower points, from the exhaustive
         C1-EXTERIOR-CATALOGUE.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
@@ -397,6 +405,12 @@ four-corner alternative and all zero-area faces.
         deductions, boxes, triangle occupants and the actual convex
         pentagon have independent geometry and Fraction/SymPy audits.
         Proof: N6_ONE_LOWER_SIDE_PAIR_TOP.md.
+  - [x] N6-TOP-PAIR-BOTH-SIDES. The entire (0,0,1,2,1) count.
+        Four explicit actual-triangle comparisons transfer both
+        top-hull arguments and the same 158-term sum from the C1
+        theorem. The inner top point is used only through its actual
+        three-fan cost; no arbitrary virtual-point clearance is assumed.
+        Proof: N6_TWO_TOP_BOTH_SIDES.md.
   - [x] OCCUPIED-QUADRILATERAL-SUPPORT. Universal polynomial support
         inequalities for one or two actual occupants, including all
         overlapping opposite-ear counts and the central-pair cost.
@@ -678,7 +692,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_TWO_LOWER_COMPLETE.md | Exhaustive assembly of every k=2 placement from the exact hull, upper/side, upper/top and two-exterior theorems |
 | TYPE_II_133_NONTRIANGULAR.md and TYPE_II_133_CELL_I.md | Exhaustive three-cell right-hull reduction and complete cell-I exclusion: sixty roots, 1,899 deductions, 24 cubics / 932 terms and 36 geometric exclusions |
 | N6_SIDE_PAIR_REDUCTION.md | Every side pair has a triangular cap hull and Gamma2 endpoint cost; a side pair and top pair are incompatible, closing (0,0,2,2,0) and reflection |
-| ONE_LOWER_POINT.md | Four exhaustive local alternatives for one point in HABC, both central contact-order cubics, the impossible double-ear cell, and a shared central-strip inequality with cubic consequences |
+| ONE_LOWER_POINT.md | Four exhaustive local alternatives for one point in HABC, both central contact-order cubics, the impossible double-ear cell, a shared central-strip inequality, and exact coordinate-sum and central-coordinate bounds |
 | C1_SIDE_PAIR_OPPOSITE_TOP.md | A side pair, opposite side point and top point are incompatible; two complete count rows close by a cubic box and direct determinant inequalities |
 | TYPE_II_133_CELL_III.md | Complete third nontriangular support cell: sixty roots, five refinements, 65 leaves, 2,012 deductions, 38 cubics / 1,117 terms and 27 geometric exclusions |
 | TYPE_II_133_CELL_II.md | Complete second nontriangular support cell: 120 roots, thirteen refinements, 133 leaves, 4,185 deductions, 44 cubics / 2,219 terms and 89 geometric exclusions |
@@ -691,6 +705,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_SIDE_PAIR_OPPOSITE_CENTRAL.md | Both remaining side-pair/opposite-cap counts: three cubics / 454 terms, 58 deductions and 27 exact monotonicity certificates; completes exclusion of every opposite-cap point with a side pair |
 | N7_RIGHT_SPAN_CAP.md | Uniform actual DEF capacity one from a scalar balancing identity preserving the five premises of the bottom-span theorem |
 | N6_ONE_LOWER_SIDE_PAIR_TOP.md | Entire (1,0,2,1,0) count and transpose: analytic exclusion of both lower ears, two weak central orders, 38 deductions and 184 printed cubic terms |
+| C1_TOP_PAIR_BOTH_SIDES.md | Both side caps exclude two top points: two complete C1 counts, an analytic nontriangular-hull contradiction and one 158-term cubic for the triangular hull |
+| N6_TWO_TOP_BOTH_SIDES.md | Entire (0,0,1,2,1) count by four actual-area comparisons transferring both C1 top-hull arguments and the unchanged exact sum |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

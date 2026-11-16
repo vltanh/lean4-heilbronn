@@ -22,4 +22,9 @@ assert sp.expand((c*P-s*W)-quartic-c*(1-h)*P)==0
 assert sp.expand((h*P-s*W)-quartic-h*(1-c)*P)==0
 M=sp.symbols('M')
 assert sp.expand((M*P-s*W)-quartic-(M-h*c)*P)==0
-print('PASS: one-lower-point ears, both ordered central bounds, common central strip and cubic consequences')
+assert sp.expand(h*c*(1-g-z)-(h*c-h*g-c*z)-h*(1-c)*g-c*(1-h)*z)==0
+assert sp.cancel(sp.diff((c+b)/(c-b),c)+2*b/(c-b)**2)==0
+assert sp.cancel(sp.diff((c+b)/(c-b),b)-2*c/(c-b)**2)==0
+assert sp.cancel(sp.diff((h+a)/(h-a),h)+2*a/(h-a)**2)==0
+assert sp.cancel(sp.diff((h+a)/(h-a),a)-2*h/(h-a)**2)==0
+print('PASS: one-lower-point ears, ordered bounds, common strip, coordinate sum and monotone coordinate minima')

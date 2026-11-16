@@ -1717,7 +1717,12 @@ def one_lower_point():
     zero(c*P-s*W-quartic-c*(1-h)*P)
     zero(h*P-s*W-quartic-h*(1-c)*P)
     zero(M*P-s*W-quartic-(M-h*c)*P)
-    print('PASS: exhaustive one-lower ear catalogue, both contact-order bounds and shared central-strip cubic identities')
+    zero(h*c*(1-g-z)-(h*c-h*g-c*z)-h*(1-c)*g-c*(1-h)*z)
+    zero(sp.diff((c+b)/(c-b),c)+2*b/(c-b)**2)
+    zero(sp.diff((c+b)/(c-b),b)-2*c/(c-b)**2)
+    zero(sp.diff((h+a)/(h-a),h)+2*a/(h-a)**2)
+    zero(sp.diff((h+a)/(h-a),a)-2*h/(h-a)**2)
+    print('PASS: exhaustive one-lower catalogue, central strip, coordinate sum and monotone coordinate minima')
 
 
 def c1_side_pair_opposite_top():
@@ -1909,6 +1914,41 @@ def n6_one_lower_side_pair_top():
     print('PASS: complete N6 lower/side-pair/top count, exact ear gap and both fixed cubic inventories')
 
 
+def c1_two_top_both_sides():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000)
+    h,c,d,f,p,r,t,u,v,y=sp.symbols('h c d f p r t u v y')
+    pts={'D':sp.Matrix([1,d]),'F':sp.Matrix([f,1]),'P':sp.Matrix([p,y]),'T':sp.Matrix([u,v]),'R':sp.Matrix([r,t])}
+    D=lambda word:2*area(*(pts[ch] for ch in word))
+    zero(-D('DPT')-(1-p)*(v-d)-(d-y)*(1-u))
+    zero(-D('FTR')-(1-t)*(u-f)-(f-r)*(1-v))
+    zero(D('DTF')-(1-d)*u-(1-f)*v+1-d*f)
+    assert 1-4*s/(1-4*s)<q(408,1000)
+    assert q(408,1000)*q(65,100)*q(35,100)==q(9282,100000)<s
+    assert q(408,1000)*(q(954,2000))**2<s and s/q(65,100)>q(143,1000)
+    assert q(46,1000)*q(628,1000)+q(265,1000)*q(241,1000)==q(92753,1000000)<s
+    assert 2*q(628,1000)*q(759,1000)-1+q(372,1000)**2==q(91688,1000000)<s
+    assert 1-3*s/(1-4*s)<q(556,1000)
+    assert q(556,1000)*q(79,100)*q(21,100)<s and q(556,1000)*(q(817,2000))**2<s
+    assert q(372,1000)+3*s/q(628,1000)>q(816,1000)
+    text=Path(__file__).with_name('C1_TOP_PAIR_BOTH_SIDES.md').read_text()
+    terms=re.search(r'^```c1-top-pair-sum\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(terms)==158 and all(int(line.split()[0])>0 for line in terms)
+    assert q(-63250709,250000000)<0
+    print('PASS: complete C1 top-pair/both-side theorem, both hull boxes and 158-term inventory')
+
+
+def n6_two_top_both_sides():
+    a,b,c,e,f,h,p,q,r,t=sp.symbols('a b c e f h p q r t')
+    pts={'O':sp.Matrix([0,0]),'A':sp.Matrix([0,a]),'B':sp.Matrix([b,0]),'C':sp.Matrix([c,0]),'E':sp.Matrix([1,e]),'F':sp.Matrix([f,1]),'H':sp.Matrix([0,h]),'P':sp.Matrix([p,q]),'R':sp.Matrix([r,t])}
+    D=lambda word:2*area(*(pts[ch] for ch in word))
+    for lhs,rhs,gap in [('OCP','BCP',b*q),('ORH','ARH',a*r),('OCF','BCF',b),('OEH','AEH',a)]:zero(D(lhs)-D(rhs)-gap)
+    zero(c*(-D('CEP'))+(1-c)*D('OCP')-e*c*(p-c))
+    zero(h*(-D('FHR'))+(1-h)*D('ORH')-f*h*(t-h))
+    print('PASS: entire N6 two-top/both-side count by four actual-area transfer identities')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1981,3 +2021,5 @@ if __name__ == "__main__":
     c1_side_pair_opposite_central()
     n7_right_span_cap()
     n6_one_lower_side_pair_top()
+    c1_two_top_both_sides()
+    n6_two_top_both_sides()

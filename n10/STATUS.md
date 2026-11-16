@@ -632,6 +632,23 @@ reproduce both exact negative bounds. Eighteen N6 count rows with
 k=0 or k=1 remain up to transposition. The global algebra checker
 now has 71 passing groups.
 
+C1_TOP_PAIR_BOTH_SIDES.md now closes both counts (0,1,1,2,1) and
+(1,0,1,2,1), irrespective of the fifth free point. The nontriangular
+top hull has a scalar contradiction; the triangular hull has one
+158-term cubic with exact upper bound -63250709/250000000. Independent
+geometry checks both hulls, every scalar bootstrap, the complete box
+and all eight used triangle signs; separate Fraction and SymPy
+expansions agree. N6_TWO_TOP_BOTH_SIDES.md transfers the same proof
+to the entire N6 count (0,0,1,2,1) through four explicit comparisons
+with actual triangle areas. No virtual-point clearance is assumed.
+There are now seventeen remaining exterior count rows in each of
+C1 and N6, with their respective catalogues and normalizations.
+
+ONE_LOWER_POINT.md also proves g+z<=1-s/(hc), its fixed-box
+consequence, and explicit monotone lower bounds for both coordinates
+in the central position. These inequalities have exact identity and
+derivative checks. The global algebra checker has 73 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

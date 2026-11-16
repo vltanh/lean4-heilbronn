@@ -122,6 +122,9 @@ N6_ONE_LOWER_SIDE_PAIR_TOP.md also excludes the complete count
 (1,0,2,1,0) and its transpose. Its two lower-ear alternatives have
 an explicit scalar gap, and both central contact orders have printed
 cubic contradictions.
+N6_TWO_TOP_BOTH_SIDES.md excludes (0,0,1,2,1): four actual-area
+comparisons transfer both hull arguments of C1_TOP_PAIR_BOTH_SIDES.md,
+including its unchanged 158-term cubic.
 The entire k=2 family is now closed in N6_TWO_LOWER_COMPLETE.md.
 Surviving exterior placements with k=0 or k=1 remain separate
 obligations in ROADMAP.md.
