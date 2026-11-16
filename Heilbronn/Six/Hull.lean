@@ -1,6 +1,7 @@
 module
 
 public import Heilbronn.Six.Setting
+public import Heilbronn.Corners.CornerFamilies.SixPoint
 
 /-! # The exact six-anchor hull in family N (`hand/SIX_BOUNDARY_HULL.md`)
 
@@ -49,6 +50,128 @@ open SixBoundary
 
 /-! ### Section 1: the anchor ears -/
 
+/-- Two free points strictly inside an actual triangle of a configuration of least area at least
+`t > 0` force its doubled area to be at least `2(4 + 2√3)t` (the two-interior-point lemma). -/
+theorem two_inside_sarea {P : Fin 9 → Point} {t : ℝ} (ht : 0 < t) (hmin : t ≤ minTriangleArea P)
+    {a b e j₁ j₂ : Fin 9} (hinj : Function.Injective ![a, b, e, j₁, j₂])
+    (h₁ : InTriangle (P j₁) (P a) (P b) (P e)) (h₂ : InTriangle (P j₂) (P a) (P b) (P e)) :
+    2 * ((4 + 2 * Real.sqrt 3) * t) ≤ sarea (P a) (P b) (P e) := by
+  have hm := hmin.trans (le_min_comp (by norm_num) P hinj)
+  have e1 : P ∘ ![a, b, e, j₁, j₂] = ![P a, P b, P e, P j₁, P j₂] := by
+    funext x; fin_cases x <;> rfl
+  rw [e1] at hm
+  have k := CornerFamilies.twoInteriorPointLemma _ _ _ _ _ (Or.inl h₁) (Or.inl h₂) t ht hm
+  have hpos : 0 < sarea (P a) (P b) (P e) := by
+    obtain ⟨t1, t2, t3⟩ := h₁
+    have := sarea_add_sarea_add_sarea (P a) (P b) (P e) (P j₁)
+    linarith
+  rw [triangleArea_eq, abs_of_pos hpos] at k
+  linarith
+
+/-- `13/16 < (4 + 2√3) · 7/64`: an ear below `ρ` cannot contain two free points. -/
+theorem rho_lt_Ks : (13 / 16 : ℝ) < 2 * ((4 + 2 * Real.sqrt 3) * (7 / 128)) := by
+  have : (12 / 7 : ℝ) < Real.sqrt 3 := by
+    rw [Real.lt_sqrt (by norm_num)]; norm_num
+  linarith
+
+/-- The Cauchy-Schwarz step (4)-(5): `s/a + s/L ≤ 1` gives `a + sL ≥ s(21/16)² = 3087/16384`. -/
+theorem ear_scalar {a L : ℝ} (ha : 0 < a) (hL : 0 < L) (h : 7 / 64 * (a + L) ≤ a * L) :
+    3087 / 16384 ≤ a + 7 / 64 * L := by
+  have key : (441 / 256) * (a * L) ≤ (a + 7 / 64 * L) * (a + L) := by
+    nlinarith [sq_nonneg (a - 5 / 16 * L), sq_nonneg L]
+  have hp : 0 < a + L := by linarith
+  have : (441 / 256) * (7 / 64 * (a + L)) ≤ (a + 7 / 64 * L) * (a + L) := by nlinarith
+  nlinarith
+
+/-- The scalar part of Theorem 1: the six ears are below `ρ = 13/16`. -/
+theorem theorem1_ears {a h b c d f : ℝ} (hN : NAnchors a h b c d f)
+    (hABC : 7 / 64 ≤ a * (c - b)) (hABH : 7 / 64 ≤ b * (h - a))
+    (hHDF : 7 / 64 ≤ 1 - h + f * (h - d)) (hCDF : 7 / 64 ≤ 1 - c + d * (c - f)) :
+    sarea (ptA a) (ptB b) (ptH h) < 13 / 16 ∧ sarea (ptA a) (ptB b) (ptC c) < 13 / 16 ∧
+      sarea (ptB b) (ptC c) (ptD d) < 13 / 16 ∧ sarea (ptC c) (ptD d) (ptF f) < 13 / 16 ∧
+      sarea (ptD d) (ptF f) (ptH h) < 13 / 16 ∧ sarea (ptF f) (ptH h) (ptA a) < 13 / 16 := by
+  obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN
+  have eHDF : 1 - h + f * (h - d) < 13 / 16 := by
+    have hf1 : f ≤ 1 - 7 / 64 := by
+      nlinarith [mul_le_mul_of_nonneg_right (by linarith : d ≤ 1) (sub_nonneg.2 hfc)]
+    have h3 : 1 - h + f * (h - d) ≤ 1 - a - 7 / 64 * (h - a) := by
+      nlinarith [mul_le_mul_of_nonneg_right hf1 (sub_nonneg.2 hdh)]
+    have h2 : 7 / 64 * (a + (h - a)) ≤ a * (h - a) := by
+      nlinarith [mul_le_mul_of_nonneg_left hABC (sub_nonneg.2 hah.le),
+        mul_le_mul_of_nonneg_left hABH ha.le]
+    have := ear_scalar ha (by linarith) h2
+    linarith
+  have eCDF : 1 - c + d * (c - f) < 13 / 16 := by
+    have hd1 : d ≤ 1 - 7 / 64 := by
+      nlinarith [mul_le_mul_of_nonneg_right (by linarith : f ≤ 1) (sub_nonneg.2 hdh)]
+    have h3 : 1 - c + d * (c - f) ≤ 1 - b - 7 / 64 * (c - b) := by
+      nlinarith [mul_le_mul_of_nonneg_right hd1 (sub_nonneg.2 hfc)]
+    have h2 : 7 / 64 * (b + (c - b)) ≤ b * (c - b) := by
+      nlinarith [mul_le_mul_of_nonneg_left hABH (sub_nonneg.2 hbc.le),
+        mul_le_mul_of_nonneg_left hABC hb.le]
+    have := ear_scalar hb (by linarith) h2
+    linarith
+  have eAFH : f * (h - a) < 13 / 16 := by
+    by_contra hge
+    push Not at hge
+    have hbs : 7 / 64 ≤ b := by nlinarith
+    have ha7 : 7 / 57 ≤ a := by nlinarith
+    have hf : 13 / 16 ≤ f := by nlinarith
+    have hZ : c * (1 - h) + f * h ≤ 1 - 7 / 64 := by
+      nlinarith [mul_le_mul_of_nonneg_right hdh (sub_nonneg.2 hfc)]
+    nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ c) (sub_nonneg.2 hh.le)]
+  have eBCD : d * (c - b) < 13 / 16 := by
+    by_contra hge
+    push Not at hge
+    have has : 7 / 64 ≤ a := by nlinarith
+    have hb7 : 7 / 57 ≤ b := by nlinarith
+    have hd : 13 / 16 ≤ d := by nlinarith
+    have hZ : h * (1 - c) + c * d ≤ 1 - 7 / 64 := by
+      nlinarith [mul_le_mul_of_nonneg_right hfc (sub_nonneg.2 hdh)]
+    nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ h) (sub_nonneg.2 hc.le)]
+  simp only [sarea]
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · nlinarith [mul_le_mul_of_nonneg_right hbf (sub_nonneg.2 hah.le)]
+  · nlinarith [mul_le_mul_of_nonneg_right had (sub_nonneg.2 hbc.le)]
+  · nlinarith
+  · nlinarith
+  · nlinarith
+  · nlinarith
+
+/-- An actual triangle of doubled area below `ρ` holds at most one of the free points. -/
+theorem ear_cap {P : Fin 9 → Point} (hmin : 7 / 128 ≤ minTriangleArea P) {i j k : Fin 9}
+    (hlt : sarea (P i) (P j) (P k) < 13 / 16) (h67 : Function.Injective ![i, j, k, 6, 7])
+    (h68 : Function.Injective ![i, j, k, 6, 8]) (h78 : Function.Injective ![i, j, k, 7, 8]) :
+    AtMostOne (fun W => InTriangle W (P i) (P j) (P k)) (P 6) (P 7) (P 8) := by
+  have hp : (0 : ℝ) < 7 / 128 := by norm_num
+  refine ⟨fun ⟨t1, t2⟩ => ?_, fun ⟨t1, t2⟩ => ?_, fun ⟨t1, t2⟩ => ?_⟩
+  · linarith [two_inside_sarea hp hmin h67 t1 t2, rho_lt_Ks]
+  · linarith [two_inside_sarea hp hmin h68 t1 t2, rho_lt_Ks]
+  · linarith [two_inside_sarea hp hmin h78 t1 t2, rho_lt_Ks]
+
+/-- The ear areas, read off a configuration with every doubled area at least `7/64`. -/
+theorem anchor_areas {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
+    (hmin : 7 / 128 ≤ minTriangleArea (nConfig a h b c d f X Y Z)) :
+    7 / 64 ≤ a * (c - b) ∧ 7 / 64 ≤ b * (h - a) ∧ 7 / 64 ≤ 1 - h + f * (h - d) ∧
+      7 / 64 ≤ 1 - c + d * (c - f) := by
+  have hp : (0 : ℝ) < 7 / 128 := by norm_num
+  obtain ⟨ha, hah, hh, hb, hbc, hc, had, hdh, hbf, hfc⟩ := hN
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · have := two_mul_le_sarea_of_nonneg hp (p := (0, a)) (q := (b, 0)) (r := (c, 0))
+      (by simp only [sarea]; nlinarith) (area_of_le_min hmin 0 2 3)
+    simp only [sarea] at this; linarith
+  · have := two_mul_le_sarea_of_nonneg hp (p := (0, a)) (q := (b, 0)) (r := (0, h))
+      (by simp only [sarea]; nlinarith) (area_of_le_min hmin 0 2 1)
+    simp only [sarea] at this; linarith
+  · have := two_mul_le_sarea_of_nonneg hp (p := (0, h)) (q := (1, d)) (r := (f, 1))
+      (by simp only [sarea]; nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ f) (sub_nonneg.2 hdh)])
+      (area_of_le_min hmin 1 4 5)
+    simp only [sarea] at this; linarith
+  · have := two_mul_le_sarea_of_nonneg hp (p := (c, 0)) (q := (1, d)) (r := (f, 1))
+      (by simp only [sarea]; nlinarith [mul_nonneg (by linarith : (0:ℝ) ≤ d) (sub_nonneg.2 hfc)])
+      (area_of_le_min hmin 3 4 5)
+    simp only [sarea] at this; linarith
+
 /-- **Theorem 1** (`SIX_BOUNDARY_HULL:Theorem1`). Under the N normalization, if every doubled
 area is at least `s = 7/64`, each of the six cyclic anchor ears `ABH, ABC, BCD, CDF, DFH, FHA`
 has doubled area strictly below `ρ = 13/16`; consequently none of them contains two free points
@@ -68,7 +191,15 @@ theorem theorem1 {a h b c d f : ℝ} {X Y Z : Point} (hN : NAnchors a h b c d f)
       AtMostOne (fun P => InTriangle P (ptC c) (ptD d) (ptF f)) X Y Z ∧
       AtMostOne (fun P => InTriangle P (ptD d) (ptF f) (ptH h)) X Y Z ∧
       AtMostOne (fun P => InTriangle P (ptF f) (ptH h) (ptA a)) X Y Z) := by
-  sorry
+  obtain ⟨hABC, hABH, hHDF, hCDF⟩ := anchor_areas hN hmin
+  have ears := theorem1_ears hN hABC hABH hHDF hCDF
+  refine ⟨ears, ?_⟩
+  exact ⟨ear_cap (i := 0) (j := 2) (k := 1) hmin ears.1 (by decide) (by decide) (by decide),
+    ear_cap (i := 0) (j := 2) (k := 3) hmin ears.2.1 (by decide) (by decide) (by decide),
+    ear_cap (i := 2) (j := 3) (k := 4) hmin ears.2.2.1 (by decide) (by decide) (by decide),
+    ear_cap (i := 3) (j := 4) (k := 5) hmin ears.2.2.2.1 (by decide) (by decide) (by decide),
+    ear_cap (i := 4) (j := 5) (k := 1) hmin ears.2.2.2.2.1 (by decide) (by decide) (by decide),
+    ear_cap (i := 5) (j := 1) (k := 0) hmin ears.2.2.2.2.2 (by decide) (by decide) (by decide)⟩
 
 /-! ### Section 2: the upper pair -/
 
@@ -83,7 +214,11 @@ theorem theorem2 {a h b c d f : ℝ} {Q P R : Point} (hN : NAnchors a h b c d f)
     (hQl : InLowerQuad a h b c Q) (hPu : InUpperQuad h c d f P) (hRu : InUpperQuad h c d f R) :
     ¬ (InTriangle P (ptH h) (ptD d) (ptF f) ∧ InTriangle R (ptH h) (ptD d) (ptF f)) ∧
       ¬ (InTriangle P (ptC c) (ptD d) (ptF f) ∧ InTriangle R (ptC c) (ptD d) (ptF f)) := by
-  sorry
+  obtain ⟨-, ⟨-, -, -, hCDF, hDFH, -⟩⟩ := theorem1 hN hQ hP hR hmin
+  have perm : ∀ W : Point, InTriangle W (ptH h) (ptD d) (ptF f) ↔
+      InTriangle W (ptD d) (ptF f) (ptH h) := fun W => by
+    unfold InTriangle; tauto
+  refine ⟨fun ⟨h1, h2⟩ => hDFH.2.2 ⟨(perm P).1 h1, (perm R).1 h2⟩, fun ⟨h1, h2⟩ => hCDF.2.2 ⟨h1, h2⟩⟩
 
 /-- The unordered sector assignment `{S, T}` of the two upper points `P, R`. -/
 def SectorPair (S T : Point → Prop) (P R : Point) : Prop :=
