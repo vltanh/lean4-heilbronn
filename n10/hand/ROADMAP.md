@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 53.
+Checkpoint 54.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -390,6 +390,13 @@ four-corner alternative and all zero-area faces.
         All boxes, actual convex pentagons and conditional factors
         have independent geometry and Fraction/SymPy audits.
         Proof: N6_SIDE_PAIR_OPPOSITE.md.
+  - [x] N6-ONE-LOWER-SIDE-PAIR-TOP. The entire (1,0,2,1,0) count
+        and its transpose. Both lower ears contradict the exact
+        contact gap 8299/18140000; the two weak central orders have
+        109- and 75-term cubic contradictions. All 38 common Pluecker
+        deductions, boxes, triangle occupants and the actual convex
+        pentagon have independent geometry and Fraction/SymPy audits.
+        Proof: N6_ONE_LOWER_SIDE_PAIR_TOP.md.
   - [x] OCCUPIED-QUADRILATERAL-SUPPORT. Universal polynomial support
         inequalities for one or two actual occupants, including all
         overlapping opposite-ear counts and the central-pair cost.
@@ -683,6 +690,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_BOTTOM_SPAN_CAP.md | Uniform actual BCE capacity one, from five contact clearances and a strict positive quartic discriminant bound |
 | C1_SIDE_PAIR_OPPOSITE_CENTRAL.md | Both remaining side-pair/opposite-cap counts: three cubics / 454 terms, 58 deductions and 27 exact monotonicity certificates; completes exclusion of every opposite-cap point with a side pair |
 | N7_RIGHT_SPAN_CAP.md | Uniform actual DEF capacity one from a scalar balancing identity preserving the five premises of the bottom-span theorem |
+| N6_ONE_LOWER_SIDE_PAIR_TOP.md | Entire (1,0,2,1,0) count and transpose: analytic exclusion of both lower ears, two weak central orders, 38 deductions and 184 printed cubic terms |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

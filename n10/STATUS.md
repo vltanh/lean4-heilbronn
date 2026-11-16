@@ -621,6 +621,17 @@ inequality directions have independent geometric and symbolic checks.
 The global algebra checker now has 70 passing groups. C1, N6 and N7
 remain the three open global families.
 
+N6_ONE_LOWER_SIDE_PAIR_TOP.md now excludes the entire count
+(1,0,2,1,0) and its transpose. A contact gap of 8299/18140000
+eliminates both lower-ear placements. The remaining two weak central
+contact orders have cubic contradictions with 109 and 75 printed
+terms. Independent review checks the common box, all 38 Pluecker
+deductions, both actual triangle occupants and the ten convexity
+tests for the actual pentagon. Separate Fraction and SymPy readers
+reproduce both exact negative bounds. Eighteen N6 count rows with
+k=0 or k=1 remain up to transposition. The global algebra checker
+now has 71 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

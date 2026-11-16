@@ -1890,6 +1890,25 @@ def n7_right_span_cap():
     print('PASS: N7 right-span capacity-one triangle and scalar balancing with exactly five preserved premises')
 
 
+def n6_one_lower_side_pair_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);K=q(149,20);alpha=q(1037,10000)
+    assert K*s-(1-3*s/(1-s))==q(8299,18140000)>0
+    assert alpha*(1-alpha)<s and q(707,500)**2<2
+    U=1-s/(1-alpha);E0=K*s/(1-alpha);C1=1-3*s/U
+    assert U==q(8033,8963) and E0==q(13857,17926) and C1==q(5532323,8033000)
+    text=Path(__file__).with_name('N6_ONE_LOWER_SIDE_PAIR_TOP.md').read_text()
+    trace=re.search(r'^```n6-lpt-geometry\n(.*?)^```$',text,re.M|re.S)[1]
+    assert len(trace.strip().splitlines())==38
+    assert re.findall(r'^### Row (\w+)$',text,re.M)==['AC','BH']
+    sums=re.findall(r'^```n6-lpt-sum\n(.*?)^```$',text,re.M|re.S)
+    assert [len(t.strip().splitlines()) for t in sums]==[109,75]
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==2 and all(bound<0 for bound in bounds)
+    print('PASS: complete N6 lower/side-pair/top count, exact ear gap and both fixed cubic inventories')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1961,3 +1980,4 @@ if __name__ == "__main__":
     adjacent_complete()
     c1_side_pair_opposite_central()
     n7_right_span_cap()
+    n6_one_lower_side_pair_top()
