@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 9 — November 16, 2026.
+Checkpoint 10.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -139,6 +139,10 @@ Only the distributed alternative of U3 remains unresolved in this family.
         alternatives in (2,2,3), and the two-quadrilateral-side alternative
         in (2,3,2). Proof: TYPE_II.md. No whole row is claimed closed.
   - [ ] II-(1,2,4). The endpoint-six theorem gives b<=1-Gamma3*sigma.
+    - [x] Both central points below CE: excluded by the two-interior-point
+          capacity. If both are above CE, the bottom support fan EBH is
+          empty for every right hull. Proof: TYPE_II_R4.md.
+    - [ ] One central point above CE and one below, or both above CE.
   - [ ] II-(1,3,3). Its central triple must be distributed.
   - [ ] II-(2,2,3). Triangular left hull; nontriangular right hull whose
         support-normalized additional point is in cell II.
@@ -169,6 +173,10 @@ Only the distributed alternative of U3 remains unresolved in this family.
         4/4 class, projection overlap supplies the coordinatewise ordering
         needed by N8-CANDIDATE-SIGNS. Proof: N8_OP_LINE_CAPS.md.
   - [ ] N8-3/5. The remaining three-versus-five boundary arc class.
+        The uniform triangle bound area2(AEF)<69/100 and all eight square
+        images force O into AHF and AEH, and P into AEF, with the explicit
+        additional signs in N8_TRIANGLE_CAPS.md. The final contradiction
+        for this remaining placement is still open.
   - [ ] N8-4/4-SIDE. The line crosses opposite same-side boundary edges.
   - [ ] N8-4/4-CORNER-OBLIQUE. The line crosses opposite corner edges,
         but at least one of ADO+,BGO-,CFP+,EHP+ fails.
@@ -215,7 +223,9 @@ remaining orientations.
 | CLUSTERED_TRIANGLE.md | Universal exclusion of three clustered interior points; full U3-CLUSTERED exclusion |
 | U3_FOUR_ONE_SIDE.md | Both 4/0 and 0/4 distributed fan splits; exhaustive hull reduction and six printed cubic contradictions |
 | TYPE_II.md | Four-row adjacent-corner reduction and complete stated side-hull exclusions; full II remains open |
+| TYPE_II_R4.md | Complete both-below-CE exclusion in (1,2,4), and uniform empty bottom fan in its both-above cut |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
+| N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

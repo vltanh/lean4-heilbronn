@@ -545,6 +545,59 @@ def adjacent_corners():
     print("PASS: adjacent-corner endpoint constants, side-hull quartic, cross-triangle bound")
 
 
+def n8_triangle_caps():
+    q = sp.Rational
+    alpha, L, z, s = sp.symbols("alpha L z s")
+    QL = (1-alpha-L)*((alpha-s)*L-s*alpha)
+    square = (alpha-s)*(L-(1-alpha)/2-s*alpha/(2*(alpha-s)))**2
+    zero((alpha*(1-alpha)-s)**2/(4*(alpha-s))-QL-square)
+    zero(s/(1-s/L-s/alpha)*(s/(1-alpha-L)+s/L)
+         -s*s*alpha*(1-alpha)/QL)
+    sigma = q(93,1000)
+    polynomial = (4*sigma*sigma*alpha*(alpha-sigma)*(1-alpha)
+                  -(q(31,100)-alpha)*(alpha*(1-alpha)-sigma)**2)
+    rows = [
+        (q(1,10),q(1,5),250000000000,
+         [4976370,26598258,19963803,8758105,7616264,24623380]),
+        (q(1,5),q(31,100),25000000000000,
+         [2462338000,4333120760,8399927317,15738884481,26467133562,40145457870]),
+    ]
+    for left,right,denominator,coefficients in rows:
+        assert all(n > 0 for n in coefficients)
+        bernstein = sum(q(n,denominator)*sp.binomial(5,i)*z**i*(1-z)**(5-i)
+                        for i,n in enumerate(coefficients))
+        zero(polynomial.subs(alpha,left+(right-left)*z)-bernstein)
+    assert q(149,20)*sigma-q(69,100) == q(57,20000) > 0
+    a,b,c,d,e,f,g,h,x,y,u,v = sp.symbols("a b c d e f g h x y u v")
+    A,B,C,D,E,F,G,H,O,P = (sp.Matrix(p) for p in [
+        (0,a),(b,0),(c,0),(1,d),(1,e),(f,1),(g,1),(0,h),(x,y),(u,v)])
+    for T,U in [(A,F),(D,G),(C,H)]:
+        zero(2*area(T,U,P)-2*area(T,U,O)
+             -2*area(O,P,T)+2*area(O,P,U))
+    zero(2*area(A,G,P)-(g/f)*2*area(A,F,P)+(1-g/f)*(1-a)*u)
+    for V,formula in [(B,b*(1-a)+f*a),(C,c*(1-a)+f*a),
+                       (D,1-f*d-(1-f)*a)]:
+        zero(2*area(V,F,A)-formula)
+        zero(2*area(V,F,H)-formula.subs(a,h))
+    print("PASS: N8 triangle-cap elimination, both positive quintic rows, forced-sign identities")
+
+
+def adjacent_four_right():
+    q = sp.Rational
+    b,K,G = sp.symbols("b K G", positive=True)
+    sigma = q(93,1000)
+    w = 1-b
+    zero(sp.diff(w/b+G*b/w,b)-(-1/b**2+G/w**2))
+    zero(sp.diff(K*w+G*b/w,b)-(-K+G/w**2))
+    zero((w/b+G*b/w).subs(b,1/K)-((K-1)+G/(K-1)))
+    zero((K*w+G*b/w).subs(b,1/K)-((K-1)+G/(K-1)))
+    assert q(129,20)*sigma+sigma/q(3539,20000)-1 == q(8877383,70780000) > 0
+    assert sigma*(q(189,20)+q(177,130))-1 == q(1423,260000) > 0
+    assert q(69,40)**2 < 3 and q(67,30)**2 < 5
+    assert 1-q(177,20)*sigma == q(3539,20000)
+    print("PASS: adjacent-corner four-right lower-cut gap and uniform empty-fan bound")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -562,3 +615,5 @@ if __name__ == "__main__":
     six_point_endpoint()
     adjacent_corners()
     n8_line_caps()
+    n8_triangle_caps()
+    adjacent_four_right()
