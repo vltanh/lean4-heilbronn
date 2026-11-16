@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 75.
+Checkpoint 76.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -615,6 +615,15 @@ four-corner alternative and all zero-area faces.
         polynomial/square-gap checks pass.
         Proof: SIDE_PAIR_AREA_REFINEMENTS.md. These bounds strengthen
         the open side-pair counts without closing a whole count alone.
+  - [x] LINEAR-AREA-CERTIFICATES. Four exact affine product
+        envelopes turn witnessed signed product identities into affine
+        nonnegative factors. A printed nonnegative rational combination
+        with a negative exact interval upper bound gives a contradiction;
+        both signs of the analogous area-bound rule are proved.
+        Immutable source records and outward rounding are mandatory.
+        Independent polynomial expansion verifies all four remainders.
+        Proof: LINEAR_AREA_CERTIFICATES.md. A numerical LP output
+        alone does not satisfy this rule or close any placement count.
   - [x] THREE-CAP-CONTACT-BOUNDS. Occupancy of all three exterior
         caps forces d,f<79/100 and h,c<108/125 in both C1 and N6.
         Two exact contact decompositions and the top-cap budget prove
@@ -1018,6 +1027,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_SIDE_PAIR_BOUNDS.md | Side-pair bounds without a top point: outer area below (11/3)s, inner weights above 3/11 and fan caps below (5/3)s; twelve positive Bernstein coefficients |
 | SIDE_PAIR_AREA_REFINEMENTS.md | Actual outer-side bottom caps (3/2)s in N6 and 2s in C1, four physical area comparisons and the retained four-area equality |
 | THREE_CAP_CONTACT_BOUNDS.md | Three occupied caps force d,f<.79 and h,c<.864 in C1 and N6, with actual capacity-one triangles and a complete closed coordinate box |
+| LINEAR_AREA_CERTIFICATES.md | Four affine product envelopes, exact positive weighted-sum contradictions, new area-bound certificates and immutable source requirements |
 | AREA_RELATIONS.md | Unconditional four-point linear and six-label four-product identities, exact positive-product interval rules and the stronger one-interior quadrilateral cost |
 | SCALAR_AREA_INTERVALS.md | Exact finite fan, signed-Pluecker, support and linear area rules, immutable rational dependency packets and an optional geometry-aware replay interface |
 | N6_TOP_PAIR_BARYCENTRIC_BOUNDS.md | Triangular top-pair weights above 1/9, strengthened to 3/17 by any side-cap point, and eight affine inequalities |
