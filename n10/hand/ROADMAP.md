@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 67.
+Checkpoint 68.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -522,6 +522,23 @@ four-corner alternative and all zero-area faces.
         exact scalar gaps and eight affine remainder identities are
         independently checked. Proof: N6_TOP_PAIR_BARYCENTRIC_BOUNDS.md.
         This is a local reduction, not an additional count closure.
+  - [x] N6-WEIGHTED-TOP-FAN. A proved actual outer-triangle cap
+        and three separately witnessed fan costs give four weighted
+        affine barycentric bounds. The uniform rational caps are
+        9s and (80335369/9300000)s; an occupied side cap permits
+        (17/3)s. The complete remainder identities and exact constants
+        have independent checks. Proof: N6_TOP_WEIGHTED_BARYCENTRICS.md.
+        Every fan cost retains its own actual containment witnesses.
+  - [x] N6-SIDE-PAIR-BOUNDS. Without an occupied top cap, a side pair
+        has outer coordinates p>.915, c<.616 and q>930/5123.
+        Retaining both actual lower-contact clearances proves its
+        outer triangle has area below (11/3)s: three exact Bernstein
+        identities have twelve strictly positive rational coefficients.
+        All three inner barycentric weights exceed 3/11, and every
+        actual fan triangle has area below (5/3)s. Both reflections,
+        all outer square faces and eight affine remainder identities
+        have independent audits. Proof: N6_SIDE_PAIR_BOUNDS.md.
+        These bounds do not by themselves close a placement count.
   - [x] ENDPOINT-SIX-REFINED. A nontriangular six-point endpoint hull
         satisfies m<(125/1142)S. The exhaustive support-cell proof uses
         an exact quadratic gap and the previously proved central-pair
@@ -563,6 +580,17 @@ four-corner alternative and all zero-area faces.
         requirements are proved in MULTIAFFINE_BOX_BOUNDS.md.
         This supplies a rule for later printed tables, not a
         closure of a remaining placement family.
+  - [x] SCALAR-AREA-INTERVALS. Finite exact bounds on positive actual
+        triangle areas follow from actual fans, fully signed Pluecker
+        identities, proved support products and linear area inequalities.
+        Every denominator sign, outward rational rounding rule and
+        immutable dependency requirement is proved explicitly.
+        Independent mathematical audits pass, and the printed conditional
+        example has exact contradiction gap 1/10.
+        Proof: SCALAR_AREA_INTERVALS.md. The optional arithmetic reader
+        requires geometry callbacks unless arithmetic-only mode is
+        explicitly selected; actual geometry and complete branch coverage
+        remain separate obligations.
   - [ ] Complete the remaining sixteen exterior-cap counts with k=0
         or k=1, outside the stated projection chambers. Counts below
         are (k,j,r,t,l), up to exchange of the two side caps:
@@ -900,6 +928,9 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_ONE_LOWER_ABH.md | Entire lower-ear ABH child: 58 splits, 55 cubics / 21,373 terms, four geometric terminals, 1,993 deductions and 41 explicit rational squares |
 | N7_ONE_LOWER_ABC.md | Entire lower-ear ABC child: 93 splits, 84 cubics / 37,612 terms, ten geometric terminals, 3,411 deductions and 41 explicit rational squares |
 | N6_TOP_AFFINE_CAPS.md | Actual top-cap contact/apex affine upper bounds and inherited actual-container caps, with all determinant identities |
+| N6_TOP_WEIGHTED_BARYCENTRICS.md | General weighted actual top-fan affine bounds with separately witnessed costs and the exact uniform rational outer cap |
+| N6_SIDE_PAIR_BOUNDS.md | Side-pair bounds without a top point: outer area below (11/3)s, inner weights above 3/11 and fan caps below (5/3)s; twelve positive Bernstein coefficients |
+| SCALAR_AREA_INTERVALS.md | Exact finite fan, signed-Pluecker, support and linear area rules, immutable rational dependency packets and an optional geometry-aware replay interface |
 | N6_TOP_PAIR_BARYCENTRIC_BOUNDS.md | Triangular top-pair weights above 1/9, strengthened to 3/17 by any side-cap point, and eight affine inequalities |
 | SIX_POINT_ENDPOINT_REFINED.md | Strict nontriangular six-point endpoint bound m<(125/1142)S, from the exhaustive support-cell catalogue |
 | C1_ONE_LOWER_SIDE_PAIR_TOP.md | Entire (1,1,2,1,0) count and transpose: 34 splits, 31 cubics / 7,430 terms, four geometric terminals, 908 deductions and 114 interval updates |
