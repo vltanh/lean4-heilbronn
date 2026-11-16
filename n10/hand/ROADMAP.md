@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 27.
+Checkpoint 28.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -198,6 +198,15 @@ four-corner alternative and all zero-area faces.
   - [ ] II-(2,3,2). At least one triangular side hull; distributed central
         triple.
 - [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
+  - [x] C1-EXACT-PENTAGON. The actual hull is exactly the five selected
+        anchors O,C,D,F,H. The lower distributed triple and upper pair
+        reduce to nine anchor-line roots and 33 binary refinements.
+        All 34 polynomial leaves and eight geometric leaves are closed;
+        3,317 positive integer terms, their strict rational bounds, and
+        every geometric derivation are printed. Proof: C1_PENTAGON.md
+        and C1_PENTAGON_GEOMETRY.md.
+  - [ ] C1-EXTERIOR. Exclude the remaining placements with an actual
+        hull vertex outside the selected anchor pentagon.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
       points and four strictly interior points.
   - [x] N6-PLACEMENTS. The lower-left cap is empty; both anchor regions
@@ -348,6 +357,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | TYPE_II_R4_MIXED_I.md | Complete I+II support pair, all line orientations, and one fixed physical-contact quartic with 86 integer entries |
 | TYPE_II_R4_MIXED_III.md | Complete II+III support pair, forced DF straddle, and two printed cubics with 61 integer entries |
 | TYPE_II_R4_COMPLETE.md | Complete Type-II count (1,2,4), assembling both hull types and every central placement |
+| C1_PENTAGON_GEOMETRY.md | Exact-pentagon 3/2 reduction, distributed meshes, rational box, endpoint and fan-capacity inequalities |
+| C1_PENTAGON.md | Entire exact-pentagon C1 child; nine roots, 34 polynomial and eight geometric leaves, 3,317 printed integer entries |
 | TYPE_II_UPPER_PAIR.md | Complete opposite-B/E sign exclusion for the two upper central points, with every right hull allowed |
 | N8_OP_LINE_CAPS.md | Octagon containment, all 1/7 and 2/6 line exclusions, and the exhaustive remaining OP catalogue |
 | N8_TRIANGLE_CAPS.md | Uniform actual-triangle capacity and complete forced placement in the 3/5 line class; no class closure claimed |

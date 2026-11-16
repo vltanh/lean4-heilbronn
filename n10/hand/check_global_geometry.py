@@ -1038,6 +1038,37 @@ def n7_top_three_five():
     print("PASS: complete N7 HGF 3/5 placement identities, ordinate bound, and the stronger AGO-positive box")
 
 
+def c1_exact_pentagon():
+    q=sp.Rational;s=q(93,1000);K0=q(3927,500)
+    h,c,d,f,u,v,z,w,x,a,r,t=sp.symbols("h c d f u v z w x a r t")
+    O,H,C,D,F,Y,Z,X,R=(sp.Matrix(pt) for pt in
+        [(0,0),(0,h),(c,0),(1,d),(f,1),(u,v),(z,w),(x,a),(r,t)])
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(H,C,D)+det(H,D,F)-(1-(h-d)*(c-f)))
+    zero(det(C,D,Y)-(d*(c-u)+(1-c)*v))
+    zero(det(D,F,Y)-(1-d*f-(1-d)*u-(1-f)*v))
+    cap=x+w-z-a+z*a-x*w
+    zero(det(Z,X,sp.Matrix([1,1]))-cap)
+    zero(cap.subs({x:1-4*s,w:1-4*s,z:s,a:s})-(1-2*s-15*s*s))
+    assert q(433,250)**2<3 and q(559,250)**2<5 and q(707,500)**2<2
+    assert (4+2*q(433,250))*s>q(694,1000)
+    assert (11+3*q(559,250))*s/2>q(823,1000)
+    assert 2*(1+q(707,500))*s>q(449,1000)
+    assert q(907,1000)**2<q(823,1000)
+    assert 1-K0*s==q(134789,500000)<q(27,100)
+    assert K0*s/2==q(365211,10**6)
+    kappa=sp.symbols("kappa")
+    envelope=(q(442,93)-kappa)**2/3+q(442,93)-kappa-6*kappa+3
+    assert envelope.subs(kappa,q(8,5))==-q(87029,648675)<0
+    assert sp.diff(envelope,kappa).subs(kappa,q(442,93))==-7
+    assert 2*s/(1-s)>q(41,200) and s+q(41,200)==q(149,500)
+    assert 1-2*s-15*s*s==q(684265,10**6)<q(694,1000)
+    assert 1-4*s+3*s*s==q(653947,10**6)<q(694,1000)
+    assert 1-4*s+s*s==q(636649,10**6)<q(694,1000)
+    assert q(517,730)>q(177,250) and 1-q(306,823)>q(157,250)
+    print("PASS: C1 exact-pentagon geometry, distributed-mesh ranges, capacity-one fans, and ear bounds")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1073,3 +1104,4 @@ if __name__ == "__main__":
     adjacent_mixed_iii()
     n6_exact_hull_reduction()
     n7_top_three_five()
+    c1_exact_pentagon()

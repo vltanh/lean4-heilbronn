@@ -252,6 +252,18 @@ independent geometry and exact-identity audit. The exact-hull parent
 and the exterior placements remain open. The global algebra checker
 now has 34 passing groups.
 
+The entire C1 exact-pentagon child is now excluded. Its forced 3/2
+lower/upper split, distributed lower mesh, endpoint inequalities, and
+capacity-one fans are proved in C1_PENTAGON_GEOMETRY.md. The complete
+C1_PENTAGON.md has nine exhaustive anchor-line roots, 33 binary splits,
+34 polynomial leaves, and eight geometric leaves. All 3,317 positive
+integer entries are printed, and every coefficient-box upper bound is
+strictly below -1/100. A manuscript-reading Fraction checker replays
+the full sign tree and all geometric witnesses; a separate SymPy
+reconstruction verifies every printed sum. The C1 exterior placements
+and the global C1 parent remain open. The global algebra checker now
+has 35 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
