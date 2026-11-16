@@ -1,0 +1,1561 @@
+{
+  "scope": "N7 all-interior (1,2,0), central lower cells CA/CB only. All listed frontier roots remain open.",
+  "hand_dependencies": [
+    "N7_ONE_LOWER_SETUP.md",
+    "N7_CENTRAL_AREA_ORIENTATION.md",
+    "N7_CENTRAL_PAIR_CUT.md",
+    "SCALAR_AREA_INTERVALS.md",
+    "MULTIAFFINE_BOX_BOUNDS.md",
+    "SIX_POINT_ENDPOINT_REFINED.md"
+  ],
+  "word_definition": {
+    "O": "(AGO,DGO)",
+    "P": "(AGP,DGP)",
+    "filename_letters": "m means negative; p means positive"
+  },
+  "frontier": [
+    {
+      "cell": "CA",
+      "word_O": "--",
+      "word_P": "--",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CA_mm_mm.json",
+      "sha": "38ccc85f23d932c6a27d27072c4fda4768ca9287",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO-",
+        "DGO-",
+        "AGP-",
+        "DGP-"
+      ],
+      "known_signs": 90,
+      "stages": [
+        {
+          "signs": 90,
+          "area": 11,
+          "box": 50
+        },
+        {
+          "signs": 90,
+          "area": 6,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CA",
+      "word_O": "--",
+      "word_P": "-+",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CA_mm_mp.json",
+      "sha": "131d1c2a36aa7c325214e25af4057415e9efc5f7",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO-",
+        "DGO-",
+        "AGP-",
+        "DGP+"
+      ],
+      "known_signs": 95,
+      "stages": [
+        {
+          "signs": 95,
+          "area": 19,
+          "box": 51
+        },
+        {
+          "signs": 95,
+          "area": 15,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CA",
+      "word_O": "--",
+      "word_P": "+-",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CA_mm_pm.json",
+      "sha": "9d3c520ea2967fd437ea0e72ae36d34dcf2e115a",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO-",
+        "DGO-",
+        "AGP+",
+        "DGP-"
+      ],
+      "known_signs": 96,
+      "stages": [
+        {
+          "signs": 93,
+          "area": 328,
+          "box": 105
+        },
+        {
+          "signs": 93,
+          "area": 298,
+          "box": 14
+        },
+        {
+          "signs": 96,
+          "area": 300,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CA",
+      "word_O": "+-",
+      "word_P": "--",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CA_pm_mm.json",
+      "sha": "669fd0a81e44095c01d12f892d2d5ffb5f3b02fd",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO+",
+        "DGO-",
+        "AGP-",
+        "DGP-"
+      ],
+      "known_signs": 92,
+      "stages": [
+        {
+          "signs": 91,
+          "area": 18,
+          "box": 50
+        },
+        {
+          "signs": 91,
+          "area": 11,
+          "box": 0
+        },
+        {
+          "signs": 92,
+          "area": 11,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CA",
+      "word_O": "+-",
+      "word_P": "-+",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CA_pm_mp.json",
+      "sha": "2babee11d636a5945de2a587c5e35660e1fb0c37",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO+",
+        "DGO-",
+        "AGP-",
+        "DGP+"
+      ],
+      "known_signs": 93,
+      "stages": [
+        {
+          "signs": 93,
+          "area": 22,
+          "box": 47
+        },
+        {
+          "signs": 93,
+          "area": 22,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CA",
+      "word_O": "+-",
+      "word_P": "+-",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CA_pm_pm.json",
+      "sha": "fccbd5c8c6b1ed38f062a641c09bc62924214757",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO+",
+        "DGO-",
+        "AGP+",
+        "DGP-"
+      ],
+      "known_signs": 84,
+      "stages": [
+        {
+          "signs": 82,
+          "area": 13,
+          "box": 44
+        },
+        {
+          "signs": 84,
+          "area": 13,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CB",
+      "word_O": "--",
+      "word_P": "--",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CB_mm_mm.json",
+      "sha": "1350903526d3bd7b143209a4e7a7b389c82e3bf5",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO-",
+        "DGO-",
+        "AGP-",
+        "DGP-"
+      ],
+      "known_signs": 90,
+      "stages": [
+        {
+          "signs": 90,
+          "area": 15,
+          "box": 51
+        },
+        {
+          "signs": 90,
+          "area": 8,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CB",
+      "word_O": "--",
+      "word_P": "-+",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CB_mm_mp.json",
+      "sha": "25986e4bfbc60954ec2f02882c3c3af4ed73c6e2",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO-",
+        "DGO-",
+        "AGP-",
+        "DGP+"
+      ],
+      "known_signs": 95,
+      "stages": [
+        {
+          "signs": 95,
+          "area": 24,
+          "box": 51
+        },
+        {
+          "signs": 95,
+          "area": 18,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CB",
+      "word_O": "--",
+      "word_P": "+-",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CB_mm_pm.json",
+      "sha": "82d0d7d8d48ec5e598755fd235a94b9595bf4eb7",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO-",
+        "DGO-",
+        "AGP+",
+        "DGP-"
+      ],
+      "known_signs": 96,
+      "stages": [
+        {
+          "signs": 93,
+          "area": 296,
+          "box": 115
+        },
+        {
+          "signs": 93,
+          "area": 269,
+          "box": 13
+        },
+        {
+          "signs": 96,
+          "area": 270,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CB",
+      "word_O": "+-",
+      "word_P": "--",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CB_pm_mm.json",
+      "sha": "281205e82b00c26b275a8fe863369aa9a458e15e",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO+",
+        "DGO-",
+        "AGP-",
+        "DGP-"
+      ],
+      "known_signs": 92,
+      "stages": [
+        {
+          "signs": 91,
+          "area": 22,
+          "box": 51
+        },
+        {
+          "signs": 91,
+          "area": 13,
+          "box": 0
+        },
+        {
+          "signs": 92,
+          "area": 13,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CB",
+      "word_O": "+-",
+      "word_P": "-+",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CB_pm_mp.json",
+      "sha": "4abfadde2161b7fcdbfcefa6e837db68ece5b6b0",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO+",
+        "DGO-",
+        "AGP-",
+        "DGP+"
+      ],
+      "known_signs": 93,
+      "stages": [
+        {
+          "signs": 93,
+          "area": 26,
+          "box": 50
+        },
+        {
+          "signs": 93,
+          "area": 26,
+          "box": 0
+        }
+      ]
+    },
+    {
+      "cell": "CB",
+      "word_O": "+-",
+      "word_P": "+-",
+      "status": "open",
+      "path": "n10/discovery/n7_js_frontier_CB_pm_pm.json",
+      "sha": "9aa30f2769b0cea7d8649b347f43788f4638eba6",
+      "extra": [
+        "ACG+",
+        "BGH+",
+        "AGO+",
+        "DGO-",
+        "AGP+",
+        "DGP-"
+      ],
+      "known_signs": 84,
+      "stages": [
+        {
+          "signs": 82,
+          "area": 17,
+          "box": 47
+        },
+        {
+          "signs": 84,
+          "area": 17,
+          "box": 0
+        }
+      ]
+    }
+  ],
+  "source_modules": [
+    {
+      "path": "n10/discovery/n7_js_area_core.js",
+      "sha": "f67076f62c83684c5e520b54da1f8f20bac84978",
+      "characters": 6341,
+      "store_key": "scalarAreaJSCore"
+    },
+    {
+      "path": "n10/discovery/n7_js_geometry_base.js",
+      "sha": "3760ec7d570a077970c8264baffce7c53aa6e3a8",
+      "characters": 2564,
+      "store_key": "n7SignJS"
+    },
+    {
+      "path": "n10/discovery/n7_js_geometry_rules.js",
+      "sha": "3f4932550a9a90f97c31bf62cf09824742e91366",
+      "characters": 7262,
+      "store_key": "n7AdvancedSignsJS"
+    },
+    {
+      "path": "n10/discovery/n7_js_area_model.js",
+      "sha": "f717961f7f4b9e5e272cd0477764296635f188dc",
+      "characters": 7683,
+      "store_key": "n7AreaBuilderJS"
+    },
+    {
+      "path": "n10/discovery/n7_js_physical_factors.js",
+      "sha": "f73735c5f0c5d67233250388379f433810dfc0d7",
+      "characters": 5981,
+      "store_key": "n7PhysicalFactorJS"
+    },
+    {
+      "path": "n10/discovery/n7_js_box_contractor.js",
+      "sha": "49ec71b5626c374056a2561b9e993ae71fc19845",
+      "characters": 3818,
+      "store_key": "physicalBoxContractorJS"
+    }
+  ],
+  "diagnostics": {
+    "sixteen_word_pass": [
+      {
+        "cell": "CA",
+        "word": "----",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP-",
+          "CFP-",
+          "DGP-"
+        ],
+        "signs": 91,
+        "raw": 26,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "----",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP-",
+          "CFP-",
+          "DGP-"
+        ],
+        "signs": 91,
+        "raw": 26,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "+---",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP-",
+          "CFP-",
+          "DGP-"
+        ],
+        "signs": 93,
+        "raw": 35,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "+---",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP-",
+          "CFP-",
+          "DGP-"
+        ],
+        "signs": 93,
+        "raw": 39,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "-+--",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP+",
+          "CFP-",
+          "DGP-"
+        ],
+        "signs": 87,
+        "raw": 45,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "-+--",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP+",
+          "CFP-",
+          "DGP-"
+        ],
+        "signs": 87,
+        "raw": 45,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "++--",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP+",
+          "CFP-",
+          "DGP-"
+        ],
+        "signs": 90,
+        "raw": 27,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "++--",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP+",
+          "CFP-",
+          "DGP-"
+        ],
+        "signs": 90,
+        "raw": 29,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "--+-",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP-",
+          "CFP+",
+          "DGP-"
+        ],
+        "signs": 91,
+        "raw": 32,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "--+-",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP-",
+          "CFP+",
+          "DGP-"
+        ],
+        "signs": 91,
+        "raw": 32,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "+-+-",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP-",
+          "CFP+",
+          "DGP-"
+        ],
+        "signs": 91,
+        "raw": 30,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "+-+-",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP-",
+          "CFP+",
+          "DGP-"
+        ],
+        "signs": 91,
+        "raw": 35,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "-++-",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP+",
+          "CFP+",
+          "DGP-"
+        ],
+        "signs": 86,
+        "raw": 59,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "-++-",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP+",
+          "CFP+",
+          "DGP-"
+        ],
+        "signs": 86,
+        "raw": 77,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "+++-",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP+",
+          "CFP+",
+          "DGP-"
+        ],
+        "signs": 87,
+        "raw": 22,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "+++-",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP+",
+          "CFP+",
+          "DGP-"
+        ],
+        "signs": 87,
+        "raw": 22,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "---+",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP-",
+          "CFP-",
+          "DGP+"
+        ],
+        "signs": 89,
+        "raw": 28,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "---+",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP-",
+          "CFP-",
+          "DGP+"
+        ],
+        "signs": 89,
+        "raw": 29,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "+--+",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP-",
+          "CFP-",
+          "DGP+"
+        ],
+        "signs": 96,
+        "raw": 283,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "+--+",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP-",
+          "CFP-",
+          "DGP+"
+        ],
+        "signs": 96,
+        "raw": 251,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "-+-+",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP+",
+          "CFP-",
+          "DGP+"
+        ],
+        "signs": 92,
+        "raw": 706,
+        "closed": true,
+        "pruned": 72,
+        "initial": 13,
+        "relations": 9,
+        "terminal": {
+          "triangle": "ACP",
+          "lower": "T0706",
+          "upper": "T0697"
+        }
+      },
+      {
+        "cell": "CB",
+        "word": "-+-+",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP+",
+          "CFP-",
+          "DGP+"
+        ],
+        "signs": 92,
+        "raw": 704,
+        "closed": true,
+        "pruned": 72,
+        "initial": 13,
+        "relations": 9,
+        "terminal": {
+          "triangle": "ACP",
+          "lower": "T0704",
+          "upper": "T0695"
+        }
+      },
+      {
+        "cell": "CA",
+        "word": "++-+",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP+",
+          "CFP-",
+          "DGP+"
+        ],
+        "geometryError": "Error: Plucker sign contradiction GACDP"
+      },
+      {
+        "cell": "CB",
+        "word": "++-+",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP+",
+          "CFP-",
+          "DGP+"
+        ],
+        "geometryError": "Error: Plucker sign contradiction GACDP"
+      },
+      {
+        "cell": "CA",
+        "word": "--++",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP-",
+          "CFP+",
+          "DGP+"
+        ],
+        "signs": 88,
+        "raw": 23,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "--++",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP-",
+          "CFP+",
+          "DGP+"
+        ],
+        "signs": 88,
+        "raw": 24,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "+-++",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP-",
+          "CFP+",
+          "DGP+"
+        ],
+        "signs": 94,
+        "raw": 244,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CB",
+        "word": "+-++",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP-",
+          "CFP+",
+          "DGP+"
+        ],
+        "signs": 94,
+        "raw": 214,
+        "closed": false,
+        "initial": null
+      },
+      {
+        "cell": "CA",
+        "word": "-+++",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP+",
+          "CFP+",
+          "DGP+"
+        ],
+        "signs": 91,
+        "raw": 468,
+        "closed": true,
+        "pruned": 65,
+        "initial": 20,
+        "relations": 24,
+        "terminal": {
+          "triangle": "ACD",
+          "lower": "T0468",
+          "upper": "U_ACD"
+        }
+      },
+      {
+        "cell": "CB",
+        "word": "-+++",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP-",
+          "AGP+",
+          "CFP+",
+          "DGP+"
+        ],
+        "signs": 91,
+        "raw": 467,
+        "closed": true,
+        "pruned": 63,
+        "initial": 21,
+        "relations": 25,
+        "terminal": {
+          "triangle": "ACD",
+          "lower": "T0467",
+          "upper": "U_ACD"
+        }
+      },
+      {
+        "cell": "CA",
+        "word": "++++",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP+",
+          "CFP+",
+          "DGP+"
+        ],
+        "geometryError": "Error: Plucker sign contradiction GACDP"
+      },
+      {
+        "cell": "CB",
+        "word": "++++",
+        "extra": [
+          "ACG+",
+          "BGH+",
+          "AEP+",
+          "AGP+",
+          "CFP+",
+          "DGP+"
+        ],
+        "geometryError": "Error: Plucker sign contradiction GACDP"
+      }
+    ],
+    "ordered_pair_pass": [
+      {
+        "cell": "CA",
+        "wO": "--",
+        "wP": "--",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 90,
+            "area": 11,
+            "box": 50
+          },
+          {
+            "signs": 90,
+            "area": 6,
+            "box": 0
+          }
+        ],
+        "known": 90
+      },
+      {
+        "cell": "CB",
+        "wO": "--",
+        "wP": "--",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 90,
+            "area": 15,
+            "box": 51
+          },
+          {
+            "signs": 90,
+            "area": 8,
+            "box": 0
+          }
+        ],
+        "known": 90
+      },
+      {
+        "cell": "CA",
+        "wO": "--",
+        "wP": "-+",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 95,
+            "area": 19,
+            "box": 51
+          },
+          {
+            "signs": 95,
+            "area": 15,
+            "box": 0
+          }
+        ],
+        "known": 95
+      },
+      {
+        "cell": "CB",
+        "wO": "--",
+        "wP": "-+",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 95,
+            "area": 24,
+            "box": 51
+          },
+          {
+            "signs": 95,
+            "area": 18,
+            "box": 0
+          }
+        ],
+        "known": 95
+      },
+      {
+        "cell": "CA",
+        "wO": "--",
+        "wP": "+-",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 93,
+            "area": 328,
+            "box": 105
+          },
+          {
+            "signs": 93,
+            "area": 298,
+            "box": 14
+          },
+          {
+            "signs": 96,
+            "area": 300,
+            "box": 0
+          }
+        ],
+        "known": 96
+      },
+      {
+        "cell": "CB",
+        "wO": "--",
+        "wP": "+-",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 93,
+            "area": 296,
+            "box": 115
+          },
+          {
+            "signs": 93,
+            "area": 269,
+            "box": 13
+          },
+          {
+            "signs": 96,
+            "area": 270,
+            "box": 0
+          }
+        ],
+        "known": 96
+      },
+      {
+        "cell": "CA",
+        "wO": "-+",
+        "wP": "--",
+        "closed": {
+          "kind": "box",
+          "steps": 19,
+          "terminal": {
+            "factor": 98,
+            "target": "a",
+            "old": [
+              "139/1000",
+              "6143/20000"
+            ],
+            "lines": [
+              [
+                "-27/250",
+                "-3015051/5000000"
+              ],
+              [
+                "-27/250",
+                "-11697/20000"
+              ],
+              [
+                "-402053/500000",
+                "-239544239/10000000000"
+              ],
+              [
+                "-402053/500000",
+                "13907/125000"
+              ]
+            ]
+          }
+        },
+        "stages": [
+          {
+            "signs": 104,
+            "area": 1527,
+            "box": 19
+          }
+        ],
+        "known": 104
+      },
+      {
+        "cell": "CB",
+        "wO": "-+",
+        "wP": "--",
+        "closed": {
+          "kind": "box",
+          "steps": 50,
+          "terminal": {
+            "factor": 54,
+            "target": "c",
+            "old": [
+              "795159/1000000",
+              "402053/500000"
+            ],
+            "lines": [
+              [
+                "-551753/1000000",
+                "145579/500000"
+              ],
+              [
+                "-265509/500000",
+                "145579/500000"
+              ],
+              [
+                "-113549/200000",
+                "6143/20000"
+              ],
+              [
+                "-54701/100000",
+                "6143/20000"
+              ]
+            ]
+          }
+        },
+        "stages": [
+          {
+            "signs": 104,
+            "area": 591,
+            "box": 50
+          }
+        ],
+        "known": 104
+      },
+      {
+        "cell": "CA",
+        "wO": "-+",
+        "wP": "-+",
+        "closed": {
+          "kind": "scalar",
+          "updates": 0
+        },
+        "stages": [
+          {
+            "signs": 95,
+            "area": 0
+          }
+        ],
+        "known": 95
+      },
+      {
+        "cell": "CB",
+        "wO": "-+",
+        "wP": "-+",
+        "closed": {
+          "kind": "scalar",
+          "updates": 0
+        },
+        "stages": [
+          {
+            "signs": 95,
+            "area": 0
+          }
+        ],
+        "known": 95
+      },
+      {
+        "cell": "CA",
+        "wO": "-+",
+        "wP": "+-",
+        "closed": {
+          "kind": "box",
+          "steps": 17,
+          "terminal": {
+            "factor": 98,
+            "target": "a",
+            "old": [
+              "139/1000",
+              "122217/200000"
+            ],
+            "lines": [
+              [
+                "-27/250",
+                "-38744337/62500000"
+              ],
+              [
+                "-27/250",
+                "-11697/20000"
+              ],
+              [
+                "-402053/500000",
+                "-4680503317/31250000000"
+              ],
+              [
+                "-402053/500000",
+                "13907/125000"
+              ]
+            ]
+          }
+        },
+        "stages": [
+          {
+            "signs": 101,
+            "area": 526,
+            "box": 17
+          }
+        ],
+        "known": 101
+      },
+      {
+        "cell": "CB",
+        "wO": "-+",
+        "wP": "+-",
+        "closed": {
+          "kind": "box",
+          "steps": 46,
+          "terminal": {
+            "factor": 54,
+            "target": "c",
+            "old": [
+              "795159/1000000",
+              "402053/500000"
+            ],
+            "lines": [
+              [
+                "-551753/1000000",
+                "145579/500000"
+              ],
+              [
+                "-265509/500000",
+                "145579/500000"
+              ],
+              [
+                "-113549/200000",
+                "6143/20000"
+              ],
+              [
+                "-54701/100000",
+                "6143/20000"
+              ]
+            ]
+          }
+        },
+        "stages": [
+          {
+            "signs": 101,
+            "area": 521,
+            "box": 46
+          }
+        ],
+        "known": 101
+      },
+      {
+        "cell": "CA",
+        "wO": "+-",
+        "wP": "--",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 91,
+            "area": 18,
+            "box": 50
+          },
+          {
+            "signs": 91,
+            "area": 11,
+            "box": 0
+          },
+          {
+            "signs": 92,
+            "area": 11,
+            "box": 0
+          }
+        ],
+        "known": 92
+      },
+      {
+        "cell": "CB",
+        "wO": "+-",
+        "wP": "--",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 91,
+            "area": 22,
+            "box": 51
+          },
+          {
+            "signs": 91,
+            "area": 13,
+            "box": 0
+          },
+          {
+            "signs": 92,
+            "area": 13,
+            "box": 0
+          }
+        ],
+        "known": 92
+      },
+      {
+        "cell": "CA",
+        "wO": "+-",
+        "wP": "-+",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 93,
+            "area": 22,
+            "box": 47
+          },
+          {
+            "signs": 93,
+            "area": 22,
+            "box": 0
+          }
+        ],
+        "known": 93
+      },
+      {
+        "cell": "CB",
+        "wO": "+-",
+        "wP": "-+",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 93,
+            "area": 26,
+            "box": 50
+          },
+          {
+            "signs": 93,
+            "area": 26,
+            "box": 0
+          }
+        ],
+        "known": 93
+      },
+      {
+        "cell": "CA",
+        "wO": "+-",
+        "wP": "+-",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 82,
+            "area": 13,
+            "box": 44
+          },
+          {
+            "signs": 84,
+            "area": 13,
+            "box": 0
+          }
+        ],
+        "known": 84
+      },
+      {
+        "cell": "CB",
+        "wO": "+-",
+        "wP": "+-",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 82,
+            "area": 17,
+            "box": 47
+          },
+          {
+            "signs": 84,
+            "area": 17,
+            "box": 0
+          }
+        ],
+        "known": 84
+      }
+    ],
+    "upper_pair_pass": [
+      {
+        "cell": "CA",
+        "type": "C",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 87,
+            "area": 95,
+            "box": 55
+          },
+          {
+            "signs": 88,
+            "area": 94,
+            "box": 6
+          },
+          {
+            "signs": 88,
+            "area": 94,
+            "box": 0
+          }
+        ],
+        "known": 88
+      },
+      {
+        "cell": "CB",
+        "type": "C",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 87,
+            "area": 101,
+            "box": 58
+          },
+          {
+            "signs": 88,
+            "area": 101,
+            "box": 6
+          },
+          {
+            "signs": 88,
+            "area": 101,
+            "box": 0
+          }
+        ],
+        "known": 88
+      },
+      {
+        "cell": "CA",
+        "type": "E",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 97,
+            "area": 282,
+            "box": 70
+          },
+          {
+            "signs": 97,
+            "area": 236,
+            "box": 6
+          },
+          {
+            "signs": 98,
+            "area": 234,
+            "box": 1
+          },
+          {
+            "signs": 98,
+            "area": 234,
+            "box": 0
+          }
+        ],
+        "known": 98
+      },
+      {
+        "cell": "CB",
+        "type": "E",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 97,
+            "area": 287,
+            "box": 72
+          },
+          {
+            "signs": 97,
+            "area": 297,
+            "box": 4
+          },
+          {
+            "signs": 98,
+            "area": 292,
+            "box": 1
+          },
+          {
+            "signs": 98,
+            "area": 292,
+            "box": 0
+          }
+        ],
+        "known": 98
+      },
+      {
+        "cell": "CA",
+        "type": "EF",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 88,
+            "area": 18,
+            "box": 44
+          },
+          {
+            "signs": 88,
+            "area": 18,
+            "box": 2
+          },
+          {
+            "signs": 88,
+            "area": 18,
+            "box": 0
+          }
+        ],
+        "known": 88
+      },
+      {
+        "cell": "CB",
+        "type": "EF",
+        "closed": null,
+        "stages": [
+          {
+            "signs": 88,
+            "area": 22,
+            "box": 48
+          },
+          {
+            "signs": 88,
+            "area": 22,
+            "box": 2
+          },
+          {
+            "signs": 88,
+            "area": 22,
+            "box": 0
+          }
+        ],
+        "known": 88
+      }
+    ]
+  },
+  "lost_runtime_artifacts": "The earlier shell-based CA/CB mixed area-plus-cubic candidates and original central search trees were not recoverable in this JS checkpoint; none is asserted closed here."
+}

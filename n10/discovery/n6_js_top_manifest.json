@@ -1,0 +1,266 @@
+{
+  "format": "n6-top-discovery-dag-v1",
+  "status": "Author-generated exhaustive closure; independent geometry/arithmetic replay remains required before hand-proof acceptance.",
+  "nodeCount": 565463,
+  "roots": {
+    "top_scalar_forest_BTTT_--+-": 166154,
+    "top_scalar_coupled_signed_probe": 204993,
+    "top_scalar_coordinate_low": 207793,
+    "top_scalar_coordinate_high": 216459,
+    "top_scalar_coordinate_high_r_low": 218525,
+    "top_scalar_coordinate_high_r_high": 313074,
+    "top_scalar_coordinate_cr_w_low": 315449,
+    "top_scalar_coordinate_cr_w_high": 375145,
+    "top_scalar_coordinate_crw_j_low": 377317,
+    "top_scalar_coordinate_crw_j_high": 379942,
+    "top_scalar_complete_input_metric_1": 383566,
+    "top_scalar_last_open_1": 407196,
+    "top_scalar_open1_h_low": 414513,
+    "top_scalar_open1_h_high": 416578,
+    "top_scalar_open1_h_k_low": 418444,
+    "top_scalar_open1_h_k_high": 446661,
+    "top_scalar_open1_hk_w_low": 449170,
+    "top_scalar_open1_hk_w_high": 454167,
+    "top_scalar_open1_hkw_p_low": 457762,
+    "top_scalar_open1_hkw_p_high": 515932,
+    "top_scalar_open1_hkwp_q_low": 518895,
+    "top_scalar_open1_hkwp_q_high": 520238,
+    "top_scalar_open1_final_forced_probe": 522032,
+    "top_scalar_complete_input_metric_2": 554019,
+    "top_scalar_complete2_h_low": 556353,
+    "top_scalar_complete2_h_high": 565462
+  },
+  "parts": [
+    {
+      "path": "n10/discovery/n6_js_top_archive_000.json",
+      "start": 0,
+      "count": 40000,
+      "blob": "b7ef73149d9e03e035825b4732caa5508248a9bf"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_001.json",
+      "start": 40000,
+      "count": 40000,
+      "blob": "124083525d286482e194a93390059512bc3e30d4"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_002.json",
+      "start": 80000,
+      "count": 40000,
+      "blob": "394dbac15e07e8009b8988d3a4068794c27d541c"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_003.json",
+      "start": 120000,
+      "count": 40000,
+      "blob": "710c8c805ce1725d6ec4eb7e1c4a82e4bca87a36"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_004.json",
+      "start": 160000,
+      "count": 40000,
+      "blob": "bb6d8dd7f268b6208a9bfc52105790d38f34c7c6"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_005.json",
+      "start": 200000,
+      "count": 40000,
+      "blob": "f26f78825f7a6757c4108d8a49f24a822d6a6bc0"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_006.json",
+      "start": 240000,
+      "count": 40000,
+      "blob": "0f91c69b12b4b916bb506d40ea1abbcb46ede28e"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_007.json",
+      "start": 280000,
+      "count": 40000,
+      "blob": "bf7eea75f849141d7fdeae4db7162756916a242a"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_008.json",
+      "start": 320000,
+      "count": 40000,
+      "blob": "5ab883f39b30d57be5052fdcc6000e988f20e107"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_009.json",
+      "start": 360000,
+      "count": 40000,
+      "blob": "39d7b25cd19dc51dd21ab404f24e15a716afc453"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_010.json",
+      "start": 400000,
+      "count": 40000,
+      "blob": "ee325df3777ba8716925e7bda094d9e43930d0cc"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_011.json",
+      "start": 440000,
+      "count": 40000,
+      "blob": "b2236ed5c4006687c951a1bc603f9c8f70abb698"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_012.json",
+      "start": 480000,
+      "count": 40000,
+      "blob": "919ec2c9f6d4ae69f0c53a08b3c1a7fb6a2cdf97"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_013.json",
+      "start": 520000,
+      "count": 40000,
+      "blob": "cc9e7c0f540b72743768c9cbc5051b36ab376937"
+    },
+    {
+      "path": "n10/discovery/n6_js_top_archive_014.json",
+      "start": 560000,
+      "count": 5463,
+      "blob": "c092e349562571b93a5710c9774eab5fc409a01c"
+    }
+  ],
+  "assembly": {
+    "status": "Author-generated exhaustive closure; independent geometry/arithmetic replay remains required before hand-proof acceptance.",
+    "threshold": "93/1000",
+    "locations": "BTTT",
+    "topWord": "--+-",
+    "normalization": "e<=f, with the published six-label top transposition normalization only",
+    "signForestRoot": "top_scalar_forest_BTTT_--+-",
+    "metricClosures": {
+      "root/APQ-/AQR-/AQS+/BQR-/HQS-/CQR+/PQS+/APS-": {
+        "packet": "top_scalar_coupled_signed_probe",
+        "split": {
+          "variable": "c",
+          "cut": "79/100",
+          "low": {
+            "packet": "top_scalar_coordinate_low"
+          },
+          "high": {
+            "packet": "top_scalar_coordinate_high",
+            "split": {
+              "variable": "r",
+              "cut": "19/25",
+              "low": {
+                "packet": "top_scalar_coordinate_high_r_low"
+              },
+              "high": {
+                "packet": "top_scalar_coordinate_high_r_high",
+                "split": {
+                  "variable": "w",
+                  "cut": "11/20",
+                  "low": {
+                    "packet": "top_scalar_coordinate_cr_w_low"
+                  },
+                  "high": {
+                    "packet": "top_scalar_coordinate_cr_w_high",
+                    "split": {
+                      "variable": "j",
+                      "cut": "29/50",
+                      "low": {
+                        "packet": "top_scalar_coordinate_crw_j_low"
+                      },
+                      "high": {
+                        "packet": "top_scalar_coordinate_crw_j_high"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "root/APQ+/AQR-/AQS+/CQR+/HQS-/BPQ-": {
+        "packet": "top_scalar_complete_input_metric_1"
+      },
+      "root/APQ+/AQR-/AQS+/CQR+/HQS-/BPQ+/BQR-/PQR-/APR+": {
+        "packet": "top_scalar_last_open_1",
+        "split": {
+          "variable": "h",
+          "cut": "3/4",
+          "low": {
+            "packet": "top_scalar_open1_h_low"
+          },
+          "high": {
+            "packet": "top_scalar_open1_h_high",
+            "split": {
+              "variable": "k",
+              "cut": "19/25",
+              "low": {
+                "packet": "top_scalar_open1_h_k_low"
+              },
+              "high": {
+                "packet": "top_scalar_open1_h_k_high",
+                "split": {
+                  "variable": "w",
+                  "cut": "27/50",
+                  "low": {
+                    "packet": "top_scalar_open1_hk_w_low"
+                  },
+                  "high": {
+                    "packet": "top_scalar_open1_hk_w_high",
+                    "split": {
+                      "variable": "p",
+                      "cut": "49/100",
+                      "low": {
+                        "packet": "top_scalar_open1_hkw_p_low",
+                        "split": {
+                          "variable": "q",
+                          "cut": "8/25",
+                          "low": {
+                            "packet": "top_scalar_open1_hkwp_q_low",
+                            "continuation": "top_scalar_open1_final_forced_probe"
+                          },
+                          "high": {
+                            "packet": "top_scalar_open1_hkwp_q_high"
+                          }
+                        }
+                      },
+                      "high": {
+                        "packet": "top_scalar_open1_hkw_p_high"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "scopeRule": "Each sign leaf includes its complete feedback-derived signs. A continuation may omit such a valid premise and thus prove a stronger statement. Any reintroduced forced sign cites its original feedback source.",
+    "counts": {
+      "signNodes": 33,
+      "signSplits": 16,
+      "signLeaves": 17,
+      "coordinateSplits": 9,
+      "finalTerminals": 26
+    },
+    "remainingBTTTWords": [
+      "----",
+      "---+",
+      "+--+"
+    ],
+    "remainingITTTWords": [
+      "----",
+      "---+",
+      "--+-",
+      "-++-",
+      "+--+",
+      "++-+"
+    ],
+    "compressionFrontier": {
+      "base": "top_scalar_complete_input_metric_2",
+      "low": "top_scalar_complete2_h_low",
+      "high": "top_scalar_complete2_h_high",
+      "split": {
+        "variable": "h",
+        "cut": "19/25"
+      },
+      "notice": "Optional shorter replacement under construction; the complete older third-metric tree above is already retained."
+    }
+  }
+}
