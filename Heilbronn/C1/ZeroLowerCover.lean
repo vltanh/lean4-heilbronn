@@ -123,9 +123,8 @@ theorem Cell.fac_base (C : Cell h c d f Q ks) :
   obtain ⟨-, -, a3, a4⟩ := C.comp.anchor_bounds
   have t := two_A₀.1
   have := C.hfd
-  simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast
+  simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true, and_true,
+      eval_minus, eval_one, eval_v, eval_k, zeta, sQ]; push_cast
   and_intros <;> linarith
 
 /-- The table after (7), from `Ω₀` and (1). -/
@@ -146,9 +145,8 @@ theorem Cell.fac_top1 (C : Cell h c d f Q ks) :
     have t := two_A₀.1
     have hT := (table_bounds C.hfd (by linarith) (C.comp.hA.2.2.1.trans_le' C.comp.hA.2.1)
       (b := 2 * A₀) (by unfold topCapArea at hΩ; linarith)).1 t
-    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast
+    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true, and_true,
+      eval_minus, eval_v, eval_k, zeta]; push_cast
     and_intros <;> linarith
   · simp
 
@@ -163,9 +161,8 @@ theorem Cell.fac_top2 (C : Cell h c d f Q ks) :
     have hT := (table_bounds C.hfd (by linarith [two_A₀.1])
       (C.comp.hA.2.2.1.trans_le' C.comp.hA.2.1) (b := 6 * A₀)
       (by unfold topCapArea at hΩ; linarith)).2.1 (by linarith)
-    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast
+    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true, and_true,
+      eval_minus, eval_v, eval_k, zeta]; push_cast
     and_intros <;> linarith
   · simp
 
@@ -180,9 +177,8 @@ theorem Cell.fac_top3 (C : Cell h c d f Q ks) :
     have hT := (table_bounds C.hfd (by linarith [two_A₀.1])
       (C.comp.hA.2.2.1.trans_le' C.comp.hA.2.1) (b := topCapArea d f)
       (by unfold topCapArea; linarith)).2.2 hΩ
-    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast
+    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true, and_true,
+      eval_minus, eval_v, eval_k, zeta]; push_cast
     and_intros <;> linarith
   · simp
 
@@ -207,9 +203,8 @@ theorem Cell.fac_right1 (C : Cell h c d f Q ks) :
     obtain ⟨-, -, a3, -⟩ := C.comp.anchor_bounds
     have t := two_A₀.1
     have := right_consequences (c := c) (d := d) (by linarith) C.comp.hA.1 (by linarith)
-    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast
+    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true, and_true,
+      eval_minus, eval_v, eval_k, zeta]; push_cast
     and_intros <;> linarith
   · simp
 
@@ -225,9 +220,8 @@ theorem Cell.fac_right2 (C : Cell h c d f Q ks) :
     have t := two_A₀.2
     have : 6 * A₀ ≤ 1 - c := by
       nlinarith [mul_le_mul_of_nonneg_right (show d ≤ 1 by linarith) (sub_nonneg.2 hc1.le)]
-    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast
+    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true, and_true,
+      eval_minus, eval_v, eval_k, zeta]; push_cast
     and_intros <;> linarith
   · simp
 
@@ -237,9 +231,8 @@ theorem Cell.fac_left1 (C : Cell h c d f Q ks) :
   split_ifs with hc
   · obtain ⟨a, ha⟩ := keys_one ks C.key 3 hc
     obtain ⟨-, -, -, -, l5, l6, l7⟩ := C.comp.left_row C.hfd a ((C.region a).2.2.2 ha).1
-    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast
+    simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true, and_true,
+      eval_minus, eval_v, eval_k, zeta]; push_cast
     and_intros <;> linarith
   · simp
 
@@ -279,7 +272,7 @@ theorem Cell.fac_point (C : Cell h c d f Q ks) (a : Fin 4) :
   · have c0 : cat (kw ks a) = 0 := by omega
     obtain ⟨u1, u2⟩ := C.comp.upper_row a (r0 c0)
     simp only [List.forall_mem_cons, List.forall_mem_append, List.not_mem_nil, IsEmpty.forall_iff,
-      implies_true, and_true, eval_minus, eval_one, eval_v, eval_k, hx, hy, zeta, sQ]
+      implies_true, and_true, eval_minus, eval_k, hx, hy, sQ]
     push_cast
     and_intros <;> linarith
 
@@ -312,9 +305,8 @@ theorem Cell.qcosts_nonneg (C : Cell h c d f Q ks) :
       have := C.comp.quad_two hab ((C.region a).1 ha) ((C.region b).1 hb)
       have t := two_A₀.2
       simp only [List.mem_singleton] at he; subst he
-      simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast; unfold upperQuadArea at this; linarith
+      simp only [eval_minus, eval_times, eval_one, eval_v, eval_k,
+      zeta]; push_cast; unfold upperQuadArea at this; linarith
     · simp at he
   · split_ifs at he with hc
     · obtain ⟨a, b, hab, ha, hb⟩ := keys_two ks C.key 1 (show 2 ≤ cnt ks 1 by omega)
@@ -323,25 +315,21 @@ theorem Cell.qcosts_nonneg (C : Cell h c d f Q ks) :
       obtain ⟨-, k2⟩ := C.comp.right_pair_bounds hab hRa hRb hODa hODb
       have t := two_A₀.2
       simp only [List.mem_singleton] at he; subst he
-      simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast; linarith
+      simp only [eval_minus, eval_times, eval_one, eval_v, eval_k, zeta]; push_cast; linarith
     · simp at he
   · split_ifs at he with hc hc'
     · obtain ⟨a, b, hab, ha, hb⟩ := keys_two ks C.key 2 (show 2 ≤ cnt ks 2 by omega)
       have := C.comp.top_two hab ((C.region a).2.2.1 ha) ((C.region b).2.2.1 hb)
       have t := two_A₀.2
       simp only [List.mem_singleton] at he; subst he
-      simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast; unfold topCapArea at this; linarith
+      simp only [eval_minus, eval_times, eval_one, eval_v, eval_k,
+      zeta]; push_cast; unfold topCapArea at this; linarith
     · obtain ⟨a, b, e', hab, hae, hbe, ha, hb, he'⟩ := keys_three ks C.key hc'
       have := C.comp.top_three hab hae hbe ((C.region a).2.2.1 ha) ((C.region b).2.2.1 hb)
         ((C.region e').2.2.1 he')
       simp only [List.mem_singleton] at he; subst he
-      simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast; unfold topCapArea at this; linarith
+      simp only [eval_minus, eval_times, eval_one, eval_v, eval_k,
+      zeta]; push_cast; unfold topCapArea at this; linarith
     · simp at he
 
 theorem Cell.cubics_nonneg (C : Cell h c d f Q ks) :
@@ -355,17 +343,13 @@ theorem Cell.cubics_nonneg (C : Cell h c d f Q ks) :
       obtain ⟨hR, hOD⟩ := (C.region a).2.1 ha
       obtain ⟨-, -, -, h5⟩ := C.comp.right_row a hR hOD
       simp only [List.mem_singleton] at he; subst he
-      simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast; linarith
+      simp only [eval_minus, eval_times, eval_one, eval_v, eval_k, zeta, sQ]; push_cast; linarith
     · simp at he
   · split_ifs at he with hc
     · obtain ⟨a, ha⟩ := keys_one ks C.key 3 hc
       obtain ⟨l1, -⟩ := C.comp.left_row C.hfd a ((C.region a).2.2.2 ha).1
       simp only [List.mem_singleton] at he; subst he
-      simp only [List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff, implies_true,
-      and_true, eval_minus, eval_plus, eval_times, eval_ofNat, eval_zero, eval_one, eval_v, eval_k,
-      zeta, sQ]; push_cast; linarith
+      simp only [eval_minus, eval_times, eval_one, eval_v, eval_k, zeta, sQ]; push_cast; linarith
     · simp at he
 
 /-! ### The strengthened triangle costs (18) -/
@@ -734,7 +718,7 @@ theorem Labeled.pair_sound (L : Labeled h c d f Q ks) {i j : Fin 4} (hij : i < j
   have hwj := L.lt j
   unfold pairSign at hs
   simp only at hs
-  split_ifs at hs with h1 h2 h3 h4 h5 h6 <;> (try simp only [Option.some.injEq, reduceCtorEq] at hs) <;>
+  split_ifs at hs with h1 h2 h3 h4 h5 h6 <;> (try simp only [Option.some.injEq] at hs) <;>
     (try subst hs)
   · rcases lt_or_gt_of_ne h1 with hl | hl
     · simp only [hl, decide_true, OrientHolds, ite_true]

@@ -365,7 +365,7 @@ theorem hull_lt {S : Set Point} (α β γ : ℝ) (hS : ∀ p ∈ S, 0 < α * p.1
     ∀ p ∈ convexHull ℝ S, 0 < α * p.1 + β * p.2 + γ := by
   have hc : Convex ℝ {p : Point | 0 < α * p.1 + β * p.2 + γ} := by
     intro p hp q hq a b ha hb hab
-    simp only [Set.mem_setOf_eq, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd,
+    simp only [Set.mem_ofPred_eq, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd,
       smul_eq_mul] at hp hq ⊢
     have e1 : γ = a * γ + b * γ := by rw [← add_mul, hab, one_mul]
     rcases ha.lt_or_eq with ha' | ha'
@@ -485,7 +485,7 @@ theorem octTwo_table : ∀ i j k : Fin 8, i < j → j < k →
     orientedLookup (capTable [(5, 0), (6, 3), (7, 3)] ++ xyTable2) (octTwo i) (octTwo j)
       (octTwo k) = some true := by decide +kernel
 
-theorem count_eight' {h c d f : ℝ} {R X Y L : Point} (H : Comp h c d f ![R, X, Y, L])
+theorem count_eight' {h c d f : ℝ} {R X Y L : Point} (_H : Comp h c d f ![R, X, Y, L])
     (ι : Fin 8 → Fin 9) (hι : Function.Injective ι) (hl : ∀ m, ι m ≠ 8) {tb : List SFact}
     (htb : AllHold (SFact.Holds (cfg h c d f ![R, X, Y, L])) tb)
     (ht : ∀ i j k : Fin 8, i < j → j < k →

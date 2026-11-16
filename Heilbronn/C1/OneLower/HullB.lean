@@ -235,10 +235,10 @@ theorem not_triangularHull_four {d f : ℝ} {X Y : Point} (hX : InTopCap d f X)
       rcases hp with rfl | rfl | rfl
       exacts [hT i (Ne.symm hmi), hT j (Ne.symm hmj), hT k (Ne.symm hmk)]
     fin_cases m
-    · exact oD (hsub {ptF f, X, Y} (fun x hx => by fin_cases x <;> simp_all [hP]) (hall 0))
-    · exact oF (hsub {ptD d, X, Y} (fun x hx => by fin_cases x <;> simp_all [hP]) (hall 1))
-    · exact oX (hsub {ptD d, Y, ptF f} (fun x hx => by fin_cases x <;> simp_all [hP]) (hall 2))
-    · exact oY (hsub {ptD d, X, ptF f} (fun x hx => by fin_cases x <;> simp_all [hP]) (hall 3))
+    · exact oD (hsub {ptF f, X, Y} (fun x hx => by fin_cases x <;> simp_all) (hall 0))
+    · exact oF (hsub {ptD d, X, Y} (fun x hx => by fin_cases x <;> simp_all) (hall 1))
+    · exact oX (hsub {ptD d, Y, ptF f} (fun x hx => by fin_cases x <;> simp_all) (hall 2))
+    · exact oY (hsub {ptD d, X, ptF f} (fun x hx => by fin_cases x <;> simp_all) (hall 3))
   have : ∃ m : Fin 4, m ≠ i ∧ m ≠ j ∧ m ≠ k := by
     by_contra hn; push Not at hn
     have : (Finset.univ : Finset (Fin 4)) ⊆ {i, j, k} := by

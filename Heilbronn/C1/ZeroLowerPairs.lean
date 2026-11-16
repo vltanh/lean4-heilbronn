@@ -127,8 +127,7 @@ theorem Comp.min6 (H : Comp h c d f Q) (a b e g : ℕ) (i j : Fin 4) (hij : i �
       intro x y hxy
       simp only [List.nodup_cons, List.mem_cons, List.not_mem_nil, or_false, not_or,
         List.nodup_nil, and_true] at hd
-      fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> first | rfl | omega |
-        exact hij (Fin.ext (by omega)))
+      fin_cases x <;> fin_cases y <;> simp at hxy ⊢ <;> omega)
   have e : (fun x => cfg h c d f Q (![a, b, e, g, i.val + 5, j.val + 5] x)) =
       ![cfg h c d f Q a, cfg h c d f Q b, cfg h c d f Q e, cfg h c d f Q g, Q i, Q j] := by
     funext x; fin_cases x <;> first | rfl | exact cfg_free h c d f Q _
@@ -343,13 +342,11 @@ theorem upper_signs (hA : C1Anchors h c d f) {X Y : Point} (ux : UpperPt h c d f
     (try have f3 := isoD_of hA ux uy m m' xCF yCF (mul_neg_of_pos_of_neg xHD yHD)) <;>
     (try have f3 := isoD_of hA ux uy m m' xCF yCF (mul_neg_of_neg_of_pos xHD yHD)) <;>
     interval_cases v <;>
-    simp only [upperPair, hx1, hy1, hx2, hy2, ne_eq, not_true_eq_false, false_and,
-      Bool.false_eq_true, ite_false, ite_true, Option.some.injEq, reduceCtorEq, and_self,
-      Bool.not_true, Bool.not_false, not_false_eq_true, true_and, and_true,
-      OfNat.ofNat_ne_zero, one_ne_zero] at hsg <;>
+    simp only [upperPair, hx1, hy1, hx2, hy2, ne_eq, not_true_eq_false, Bool.false_eq_true,
+      ite_false, ite_true, Option.some.injEq, reduceCtorEq, and_self, Bool.not_true, Bool.not_false,
+      not_false_eq_true, true_and, and_true, OfNat.ofNat_ne_zero, one_ne_zero] at hsg <;>
     subst hsg <;>
-    simp (config := { decide := true }) only [cfg, ite_true, ite_false, Bool.false_eq_true,
-      OrientHolds, Bool.not_true, Bool.not_false] <;>
+    simp (config := { decide := true }) only [cfg, ite_true, ite_false, OrientHolds] <;>
     nlinarith
 
 /-- **Two upper points** (`C1_ZERO_LOWER.md` §5, (13), ONE_CORNER_COMPLETION Theorems 2–3): two
@@ -406,7 +403,7 @@ theorem hull_le {S : Set Point} (α β γ m : ℝ) (hS : ∀ p ∈ S, m ≤ α *
     ∀ p ∈ convexHull ℝ S, m ≤ α * p.1 + β * p.2 + γ := by
   have hc : Convex ℝ {p : Point | m ≤ α * p.1 + β * p.2 + γ} := by
     intro p hp q hq a b ha hb hab
-    simp only [Set.mem_setOf_eq, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd,
+    simp only [Set.mem_ofPred_eq, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd,
       smul_eq_mul] at hp hq ⊢
     have e1 : γ = a * γ + b * γ := by rw [← add_mul, hab, one_mul]
     have e2 : m = a * m + b * m := by rw [← add_mul, hab, one_mul]
@@ -461,7 +458,7 @@ theorem seg_false {S : Set Point} (hS : S ⊆ {(f, 1), (1, d)}) {Y : Point}
 /-- A triangle `F, D, X` of top-cap points cannot hold two further points of the configuration
 (two-interior-point lemma: its doubled area is at most `Ω₀ < ρ`). -/
 theorem Comp.tri_false (H : Comp h c d f Q) {k s t : Fin 4} (hks : k ≠ s) (hkt : k ≠ t)
-    (hst : s ≠ t) (hk : InTopCap d f (Q k)) (hs : InTopCap d f (Q s)) (ht : InTopCap d f (Q t))
+    (hst : s ≠ t) (hk : InTopCap d f (Q k)) (_hs : InTopCap d f (Q s)) (_ht : InTopCap d f (Q t))
     {S : Set Point} (hS : S ⊆ {(f, 1), (1, d), Q k}) (hYs : Q s ∈ convexHull ℝ S)
     (hYt : Q t ∈ convexHull ℝ S) : False := by
   obtain ⟨hd, hdh, hh, hf, hfc, hc⟩ := H.hA
@@ -584,9 +581,9 @@ theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
     intro k
     have := top_mem_hull H.hA (H.hQ _) (topc k)
     rwa [Set.insert_comm] at this
-  have hFDE : 0 < sarea (f, 1) (1, d) ptE := by simp only [sarea, ptE]; nlinarith
+  have hFDE : 0 < sarea (f, 1) (1, d) ptE := by simp only [sarea]; nlinarith
   have hΩ : sarea (f, 1) (1, d) ptE ≤ 65 / 73 * (65 / 73) := by
-    simp only [sarea, ptE]
+    simp only [sarea]
     nlinarith [mul_le_mul (show 1 - d ≤ 65 / 73 by linarith) (show 1 - f ≤ 65 / 73 by linarith)
       (by linarith) (by norm_num)]
   -- the hull of `F, D` and the three cap points is not a triangle
@@ -599,13 +596,13 @@ theorem Comp.three_seeds (H : Comp h c d f Q) (hfd : f ≤ d) {ks : List ℕ}
       intro m hm
       fin_cases m
       · exact absurd rfl hm
-      all_goals first | (simp [hP5]; linarith [r0.1, r1.1, r2.1]) | simp [hP5]
+      all_goals (simp [hP5]; linarith [r0.1, r1.1, r2.1])
     have yb : ∀ m : Fin 5, m ≠ 1 → d + 2 * A₀ ≤ (P5 m).2 := by
       intro m hm
       fin_cases m
       · simp [hP5]; linarith
       · exact absurd rfl hm
-      all_goals first | (simp [hP5]; linarith [r0.2.1, r1.2.1, r2.2.1]) | simp [hP5]
+      all_goals (simp [hP5]; linarith [r0.2.1, r1.2.1, r2.2.1])
     have vF : a = 0 ∨ b = 0 ∨ e = 0 := by
       by_contra hn; push Not at hn
       have := hull_le 1 0 0 (f + 2 * A₀) (by

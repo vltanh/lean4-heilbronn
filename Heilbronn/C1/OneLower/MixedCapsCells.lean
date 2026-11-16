@@ -274,7 +274,7 @@ theorem MPre.common (C : MPre key h c d f Q) :
   obtain ⟨w3, w4⟩ := H.coord_ge 3
   obtain ⟨x0, x1, y0, y1⟩ := H.hQ 2
   have ht0 := two_A₀.1
-  simp only [cfg, ptO, ptC, ptD, ptF, ptH] at l1 l2 l3 q1 q2 q3 q4
+  simp only [cfg] at l1 l2 l3 q1 q2 q3 q4
   have eW : sarea (0, h) (c, 0) (Q 3) + sarea (c, 0) (1, d) (Q 3) + sarea (1, d) (f, 1) (Q 3) +
       sarea (f, 1) (0, h) (Q 3) = 1 - (h - d) * (c - f) := by unfold sarea; ring
   have e1 : sarea (0, 0) (c, 0) (Q 2) = c * (Q 2).2 := by unfold sarea; ring
@@ -668,12 +668,10 @@ theorem MCell.factors_rt_ok (C : MCell key h c d f Q) (hk : key.1 = 0) :
   split_ifs with h'
   · obtain ⟨o1, o2⟩ := hdo h'
     simp only [List.cons_append, List.nil_append, List.forall_mem_cons, List.not_mem_nil,
-      IsEmpty.forall_iff, implies_true, and_true, eval_minus, eval_times, eval_one, eval_v,
-      eval_k, zeta]
+      IsEmpty.forall_iff, implies_true, and_true, eval_minus, eval_one, eval_v, eval_k, zeta]
     push_cast; and_intros; all_goals first | exact sub_nonneg.2 ‹_› | linarith
-  · simp only [List.append_nil, List.forall_mem_cons, List.not_mem_nil,
-      IsEmpty.forall_iff, implies_true, and_true, eval_minus, eval_times, eval_one, eval_v,
-      eval_k, zeta]
+  · simp only [List.append_nil, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff,
+      implies_true, and_true, eval_minus, eval_one, eval_v, eval_k, zeta]
     push_cast; and_intros; all_goals first | exact sub_nonneg.2 ‹_› | linarith
 
 /-- The affine factors of the class `RL` are nonnegative. -/
@@ -697,12 +695,10 @@ theorem MCell.factors_rl_ok (C : MCell key h c d f Q) (hk : key.1 = 1) :
   split_ifs with h'
   · obtain ⟨o1, o2⟩ := hdo h'
     simp only [List.cons_append, List.nil_append, List.forall_mem_cons, List.not_mem_nil,
-      IsEmpty.forall_iff, implies_true, and_true, eval_minus, eval_times, eval_one, eval_v,
-      eval_k, zeta]
+      IsEmpty.forall_iff, implies_true, and_true, eval_minus, eval_one, eval_v, eval_k, zeta]
     push_cast; and_intros; all_goals first | exact sub_nonneg.2 ‹_› | linarith
-  · simp only [List.append_nil, List.forall_mem_cons, List.not_mem_nil,
-      IsEmpty.forall_iff, implies_true, and_true, eval_minus, eval_times, eval_one, eval_v,
-      eval_k, zeta]
+  · simp only [List.append_nil, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff,
+      implies_true, and_true, eval_minus, eval_one, eval_v, eval_k, zeta]
     push_cast; and_intros; all_goals first | exact sub_nonneg.2 ‹_› | linarith
 
 /-- The affine factors of the class `TL` are nonnegative. -/
@@ -727,12 +723,10 @@ theorem MCell.factors_tl_ok (C : MCell key h c d f Q) (hk : key.1 = 2) :
   split_ifs with h'
   · obtain ⟨o1, o2⟩ := hdo h'
     simp only [List.cons_append, List.nil_append, List.forall_mem_cons, List.not_mem_nil,
-      IsEmpty.forall_iff, implies_true, and_true, eval_minus, eval_times, eval_one, eval_v,
-      eval_k, zeta]
+      IsEmpty.forall_iff, implies_true, and_true, eval_minus, eval_one, eval_v, eval_k, zeta]
     push_cast; and_intros; all_goals first | exact sub_nonneg.2 ‹_› | linarith
-  · simp only [List.append_nil, List.forall_mem_cons, List.not_mem_nil,
-      IsEmpty.forall_iff, implies_true, and_true, eval_minus, eval_times, eval_one, eval_v,
-      eval_k, zeta]
+  · simp only [List.append_nil, List.forall_mem_cons, List.not_mem_nil, IsEmpty.forall_iff,
+      implies_true, and_true, eval_minus, eval_one, eval_v, eval_k, zeta]
     push_cast; and_intros; all_goals first | exact sub_nonneg.2 ‹_› | linarith
 
 /-- The affine factors are nonnegative. -/
