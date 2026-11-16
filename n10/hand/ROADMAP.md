@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 47.
+Checkpoint 48.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -205,6 +205,15 @@ four-corner alternative and all zero-area faces.
           Proof: TYPE_II_133_TRIANGULAR_RIGHT.md and its appendix.
     - [ ] II-133-NONTRIANGULAR-RIGHT. Exclude every remaining
           nontriangular right hull and support-cell alternative.
+      - [x] II-133-CELL-I. The entire first support cell: sixty
+            exhaustive ray roots, 36 geometric exclusions and
+            24 cubics with 932 printed terms. Independent geometry
+            verifies all ten common rational boxes, all 1,899
+            deductions and every conditional factor; separate
+            Fraction/SymPy expansions reproduce the strict bounds.
+            Proof: TYPE_II_133_NONTRIANGULAR.md and
+            TYPE_II_133_CELL_I.md.
+      - [ ] II-133-CELLS-II-III. Exclude both remaining support cells.
   - [x] II-223-CORE. In the entire eight-point side core of (2,2,3),
         the remaining support point lies in DCH, DCF, and CFP, with
         vertical clearance at least 2s above F. The complete rational
@@ -587,6 +596,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | C1_THREE_TOP_NO_SIDE.md | Three top points force both side caps empty; two complete exterior count rows close by endpoint-container and determinant inequalities |
 | N6_TWO_LOWER_TOP.md and N6_TWO_LOWER_TOP_TABLES.md | Entire two-lower/upper/top-cap placement: eight roots, 267 nodes, 821 deductions, 113 cubics, 65 geometric exclusions, 27,514 printed terms and 572 explicit shifted affine squares |
 | N6_TWO_LOWER_COMPLETE.md | Exhaustive assembly of every k=2 placement from the exact hull, upper/side, upper/top and two-exterior theorems |
+| TYPE_II_133_NONTRIANGULAR.md and TYPE_II_133_CELL_I.md | Exhaustive three-cell right-hull reduction and complete cell-I exclusion: sixty roots, 1,899 deductions, 24 cubics / 932 terms and 36 geometric exclusions; cells II/III remain open |
 | OPPOSITE_CORNERS.md | Uniform C2 contact bounds, central/central exclusion, and complete C2 assembly |
 | C2_SAME_HALF_CORNER.md | All orientations of two central points from one half in a C2 corner triangle |
 | C2_MIXED.md | Complete same-corner mixed/mixed C2 exclusion; exhaustive half-line catalogue |

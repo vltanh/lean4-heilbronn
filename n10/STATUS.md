@@ -529,6 +529,19 @@ reproduce every exact negative bound. The largest is
 placements remain in N6. The global algebra checker now has 58
 passing groups.
 
+The entire nontriangular support cell I of Type-II (1,3,3) is now
+excluded. TYPE_II_133_NONTRIANGULAR.md proves the exhaustive three-cell
+geometry, all ten rational boxes and every shared factor;
+TYPE_II_133_CELL_I.md closes all sixty ray roots with 36 geometric
+exclusions and 24 cubics containing 932 printed terms. A fresh
+independent geometry reader verifies 1,720 Pluecker, 171 mesh, seven
+line and one chord deduction, including 178 strengthened-triangle,
+67 quadrilateral and 38 mesh factor occurrences. Independent Fraction
+and SymPy expansions pass; the largest upper bound is
+-318882482113/15625000000000. The remaining Type-II obligations are
+nontriangular support cells II and III. The global algebra checker
+now has 59 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

@@ -1663,6 +1663,31 @@ def n6_two_lower_complete():
     print('PASS: complete N6 upper/top-cap identities, eight-root inventory, explicit squares and entire two-lower assembly')
 
 
+def adjacent_133_nontriangular_cell_i():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);K=q(933,125);J=q(4427,500)
+    b,a,k,c,d,r,j=sp.symbols('b a k c d r j')
+    pts={'B':sp.Matrix([b,0]),'H':sp.Matrix([a,k]),'F':sp.Matrix([c,d]),'C':sp.Matrix([1,1]),'R':sp.Matrix([r,j])}
+    D=lambda word:2*area(*(pts[ch] for ch in word))
+    zero((1-k)*D('CBR')+D('HCR')-D('BHC')*(1-j))
+    zero(-D('BFR')-d*(r-b)+(c-b)*j)
+    zero(D('BHR')-(a-b)*j+k*(r-b))
+    assert q(833,1000)**2<K*s and q(736,1000)**2<q(542,1000)
+    method=Path(__file__).with_name('TYPE_II_133_NONTRIANGULAR.md').read_text()
+    assert len(re.findall(r'^Box I{1,3}[0-3]:$',method,re.M))==10
+    text=Path(__file__).with_name('TYPE_II_133_CELL_I.md').read_text()
+    assert len(re.findall(r'^## Leaf I_E[123]H[0-3]F[0-3][mp]m$',text,re.M))==60
+    traces=re.findall(r'^### Sign trace\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(traces)==60 and sum(len(block.strip().splitlines()) for block in traces)==1899
+    sums=re.findall(r'^### Fixed polynomial\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==24 and sum(len(block.strip().splitlines()) for block in sums)==932
+    assert len(re.findall(r'^Exclusion:',text,re.M))==36
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==24 and max(bounds)==q(-318882482113,15625000000000)<0
+    print('PASS: Type-II133 nontriangular support identities and complete sixty-root cell-I inventory')
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1722,3 +1747,4 @@ if __name__ == "__main__":
     c1_side_top_pair_complete()
     c1_three_top_no_side()
     n6_two_lower_complete()
+    adjacent_133_nontriangular_cell_i()
