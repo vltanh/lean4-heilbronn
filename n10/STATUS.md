@@ -334,6 +334,17 @@ triangle, 988 quadrilateral, 82 spread, and one distributed-mesh factor
 premises. The exterior-cap N6 placements remain open. The global
 algebra checker now has 42 passing groups.
 
+The entire single-exterior N7 3/5 line class is now closed, at every
+height and every short-arc position. N7_THREE_FIVE_LOWER_HEIGHT.md
+supplies the final seven exhaustive binary ledgers: 93 printed cubic
+contradictions with 27,884 integer terms and two direct FH-edge
+contradictions. Its 58 quadratic five-chain substitutions use explicitly
+proved upper bounds. Independent geometric replay regenerated all
+printed signs and validated all 392 used occupancy/spread witnesses;
+separate Fraction and SymPy readers reproduce every exact bound.
+The remaining N7 tasks are the other 4/4 edge pairs and the all-interior
+placement. The global algebra checker now has 43 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

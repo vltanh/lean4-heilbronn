@@ -1269,6 +1269,39 @@ def n6_exact_hull_complete():
     print("PASS: N6 exact-hull contact gaps, distributed-mesh identity, capacity constants, and complete printed tree inventory")
 
 
+def n7_all_three_five():
+    from pathlib import Path
+    from itertools import combinations
+    import re
+    q=sp.Rational;s=q(93,1000);eta=q(93,790);ell=q(7347,69700)
+    h=sp.symbols("h");envelope=(1-ell)*(h-eta)*(1-h)-3*s*(1-h)-s*(h-eta)
+    assert envelope.subs(h,q(257,500))==-q(216669513,1376575000000)<0
+    assert envelope.subs(h,q(203,250))==-q(87402983,344143750000)<0
+    assert sp.diff(envelope,h).subs(h,q(257,500))>0 and sp.diff(envelope,h).subs(h,q(203,250))<0
+    note=Path(__file__).with_name("N7_THREE_FIVE_LOWER_HEIGHT.md").read_text()
+    rows=re.findall(r'^\| (R\d+) \| ([A-H]{3}) \| ([A-Z+\-, ]+) \| (N|T|N gap|T gap) \|$',note,re.M)
+    assert len(rows)==93
+    def complete(paths):
+        if any(not p for p in paths):assert len(paths)==1;return 1
+        assert len({p[0][:3] for p in paths})==1 and {p[0][-1] for p in paths}=={'+','-'}
+        return sum(complete([p[1:] for p in paths if p[0][-1]==sg]) for sg in '+-')
+    counts=[]
+    for arc in ['ABC','BCD','CDE','DEF','EFG','GHA','HAB']:
+        paths=[choices.split(', ') for _,aa,choices,_ in rows if aa==arc]
+        if arc=='DEF':paths.append(['FHO-'])
+        if arc=='GHA':paths.append(['EGP+','CGP-','BGO+','FHP-'])
+        counts.append(complete(paths))
+    assert counts==[13,14,17,10,14,14,13]
+    factors=re.findall(r'^\| (F5_[A-H]{5}_[XY]) \| ([A-H]{3}) \| ([A-H]{3}) \| ([A-H]{3}) \| ([A-H]{3})<=([0-9/]+) \|$',note,re.M)
+    assert len(factors)==58
+    for name,X,Y,Z,word,bound in factors:
+        _,vertices,side=name.split('_');A,B,C,D,E=vertices
+        assert (X,Y,Z)==(A+B+E,A+D+E,A+B+D)
+        assert word==(X if side=='X' else Y) and 0<q(bound)<q(9,10)
+        order=sorted(vertices);assert len(set(vertices))==5 and any(list(vertices)==order[i:]+order[:i] for i in range(5))
+    print("PASS: complete N7 3/5 lower-height boxes, seven exhaustive binary ledgers, and all fifty-eight five-chain substitutions")
+
+
 if __name__ == "__main__":
     triangle_occupancy()
     endpoint_cells()
@@ -1312,3 +1345,4 @@ if __name__ == "__main__":
     n7_corner_line()
     adjacent_223_complete()
     n6_exact_hull_complete()
+    n7_all_three_five()
