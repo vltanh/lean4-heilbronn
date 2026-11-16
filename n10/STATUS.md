@@ -474,6 +474,21 @@ for the entire single-exterior family. Only all-interior counts
 (1,2,0) and (0,2,1) remain in N7. The global algebra checker now has
 53 passing groups.
 
+The entire triangular-right hull child of Type-II (1,3,3) is now
+excluded. TYPE_II_133_TRIANGULAR_RIGHT.md selects one actual right
+interior point by its smaller C-barycentric coefficient and proves
+its height bound. Three CE cases, four DH ray cuts and two signs of
+DHR give 24 roots. Twenty-eight binary refinements yield 52 closed
+leaves: eight geometric exclusions and 44 cubics with all 2,194
+positive integer terms printed. Independent geometric review validates
+the selected-point argument, all global and conditional boxes, both
+ray orders, 877 Pluecker and 56 mesh deductions, 151 strengthened
+triangle occurrences, 126 quadrilateral occurrences and 72 mesh-factor
+occurrences. Separate Fraction and SymPy readers reproduce every
+exact bound and the exhaustive tree. Only nontriangular right hulls
+remain in Type II. The global algebra checker now has 54 passing
+groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

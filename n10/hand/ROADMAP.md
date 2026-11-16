@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 43.
+Checkpoint 44.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -193,6 +193,18 @@ four-corner alternative and all zero-area faces.
             cubic contradictions with 28 and 33 integer terms, maximum 21.
             Proof: TYPE_II_R4_MIXED_III.md.
   - [ ] II-(1,3,3). Its central triple must be distributed.
+    - [x] II-133-TRIANGULAR-RIGHT. The complete triangular right
+          hull, with all central and right-point placements. A
+          barycentric selection bounds one actual right point;
+          three CE cases and four DH ray cuts give 24 roots.
+          Twenty-eight binary refinements close all 52 leaves:
+          44 cubics with 2,194 printed terms and eight geometric
+          exclusions. All 933 explicit sign deductions, boxes,
+          occupancy and mesh factors have independent geometry
+          and Fraction/SymPy audits.
+          Proof: TYPE_II_133_TRIANGULAR_RIGHT.md and its appendix.
+    - [ ] II-133-NONTRIANGULAR-RIGHT. Exclude every remaining
+          nontriangular right hull and support-cell alternative.
   - [x] II-223-CORE. In the entire eight-point side core of (2,2,3),
         the remaining support point lies in DCH, DCF, and CFP, with
         vertical clearance at least 2s above F. The complete rational
@@ -491,6 +503,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | TYPE_II_232_LEFT_TRIANGLE.md | Entire triangular-left child with three central points; two distributed meshes, the analytic chamber and one 16-term cubic |
 | TYPE_II_232_LEFT_QUADRILATERAL.md | Entire quadrilateral-left child with three central points: sixteen exhaustive leaves, five geometric contradictions and eleven cubics, 410 printed terms |
 | TYPE_II_232_COMPLETE.md | Entire adjacent-corner count (2,3,2), assembling both left hulls while keeping both right points unrestricted |
+| TYPE_II_133_TRIANGULAR_RIGHT.md | Entire triangular-right hull child of (1,3,3): 24 ray roots, 52 exhaustive leaves, 44 cubics / 2,194 printed terms, eight geometric exclusions and 933 explicit deductions |
 | C1_PENTAGON_GEOMETRY.md | Exact-pentagon 3/2 reduction, distributed meshes, rational box, endpoint and fan-capacity inequalities |
 | C1_PENTAGON.md | Entire exact-pentagon C1 child; nine roots, 34 polynomial and eight geometric leaves, 3,317 printed integer entries |
 | C1_EXTERIOR_REDUCTION.md | Complete side-cap and stated top/lower count exclusions; exhaustive 32-row exterior catalogue |

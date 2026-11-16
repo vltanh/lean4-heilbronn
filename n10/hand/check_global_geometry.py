@@ -1440,6 +1440,30 @@ def n6_two_lower_two_exterior():
     print("PASS: complete N6 two-lower/two-exterior cap identities, TT catalogue, exterior line rule, and full printed inventory")
 
 
+def adjacent_133_triangular_right():
+    from pathlib import Path
+    import re
+    from check_type_ii_133_triangular_right import scalar_checks
+    scalar_checks()
+    q=sp.Rational;s=q(93,1000);K=q(933,125)
+    b,lam,h,k,r,j=sp.symbols('b lam h k r j')
+    P={name:sp.Matrix(pair) for name,pair in zip('DEBHCR',[(0,1),(0,lam),(b,0),(h,k),(1,1),(r,j)])}
+    D=lambda word:2*area(*(P[ch] for ch in word))
+    zero(D('BHC')-h+b+(1-b)*k)
+    zero(D('EBH')-b*k-lam*(h-b))
+    zero(D('HCR')-(1-k)*(1-r)+(1-h)*(1-j))
+    a=K*s
+    assert q(273,100)**2<K and q(833,1000)**2<a
+    note=Path(__file__).with_name('TYPE_II_133_TRIANGULAR_RIGHT_TABLES.md').read_text()
+    assert len(re.findall(r'^## Leaf E[123]H[0-3][mp]+$',note,re.M))==52
+    assert len(re.findall(r'^P [A-Z]{5} [+-][A-Z]{3}$',note,re.M))==877
+    assert len(re.findall(r'^M [A-Z]{3} [A-Z]{3} [+-][A-Z]{3}$',note,re.M))==56
+    sums=re.findall(r'^### Fixed polynomial\n\n```text\n(.*?)^```$',note,re.M|re.S)
+    assert len(sums)==44 and sum(len(z.strip().splitlines()) for z in sums)==2194
+    assert len(re.findall(r'^Exclusion:',note,re.M))==8
+    print("PASS: entire Type-II133 triangular-right point-selection identities, scalar boxes and complete printed inventory")
+
+
 def n7_ah_de_and_single_exterior():
     from pathlib import Path
     import re
@@ -1604,3 +1628,4 @@ if __name__ == "__main__":
     n7_bc_fg_complete()
     n7_heptagon_occupied_ear()
     n7_ah_de_and_single_exterior()
+    adjacent_133_triangular_right()
