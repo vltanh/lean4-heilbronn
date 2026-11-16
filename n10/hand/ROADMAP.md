@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 39.
+Checkpoint 40.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -280,6 +280,13 @@ four-corner alternative and all zero-area faces.
         and 376 conditional witnesses have independent geometry and
         Fraction/SymPy audits. Proof: N6_TWO_LOWER_CAPS.md and its
         complete printed table appendix.
+  - [x] N6-TWO-LOWER-UPPER-SIDE. The complete k=2,j=1 placement
+        with either side cap occupied, including closed outer square
+        faces. Both normalized location models have sixteen roots,
+        107 nodes, 654 explicit geometric deductions, 56 cubic and
+        26 geometric leaves; all 5,741 positive integer terms are printed.
+        Independent geometry and separate Fraction/SymPy audits pass.
+        Proof: N6_TWO_LOWER_SIDE.md and its complete table appendix.
   - [ ] Complete all surviving exterior-cap placements outside the two
         stated projection chambers.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
@@ -350,8 +357,13 @@ four-corner alternative and all zero-area faces.
         witnesses, and 82 other conditional witnesses are independently
         audited, with separate Fraction/SymPy arithmetic checks.
         Proof: N7_CDGH_LINE.md.
+  - [x] N7-INTERIOR-TWO-LOWER. In the all-interior heptagon with
+        h>=e, exclude counts (k,j,q)=(2,1,0) in HABC,HCEF,CDE.
+        The right contact D is the boundary-valid side-cap point in
+        N6_TWO_LOWER_SIDE.md, Section 6; both lower-normalized side
+        locations are covered. No additional symmetry is assumed.
   - [ ] Complete the two surviving placement rows outside the proved
-        sign chambers: all of (0,0,3) and the two remaining side-edge
+        sign chambers: the rest of (0,0,3) and the two remaining side-edge
         4/4 pairs of (1,0,2).
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
@@ -477,6 +489,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_EXACT_HULL_REDUCTION.md | Complete exact-hull lower catalogue and rational boxes; all nested mixed rows excluded, eight rows remain |
 | N6_EXACT_HULL.md | Entire exact-hull 2/2 child: complete 686-node geometric tree, 290 cubic and 229 geometric leaves; all 44,924 terms printed in the CS, CO and MIXED appendices |
 | N6_TWO_LOWER_CAPS.md | Entire two-lower/two-exterior placement, including outer faces: all six cap pairs, 32 roots, 54 cubics and two geometric leaves; all 5,434 terms in N6_TWO_LOWER_CAPS_TABLES.md |
+| N6_TWO_LOWER_SIDE.md | Entire two-lower/upper-interior/side-cap placement, both normalized side locations and outer faces: 56 cubics, 26 geometric leaves and 5,741 terms; also excludes all-interior N7 count (2,1,0) |
 | N7_PLACEMENTS.md | Lower-cap exclusions, upper-cap capacity two, five exhaustive remaining counts and a uniform rational box |
 | N7_UPPER_OCCUPANCY.md | Complete (2,1,0) exclusion, at least one free point in the heptagon, and two-exterior chord placements |
 | N7_OPPOSITE_UPPER_CAPS.md | Complete exclusion of simultaneous occupancy of the two upper caps, including the entire (1,1,1) row |

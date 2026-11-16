@@ -417,6 +417,23 @@ separate rational and symbolic checks accept the argument. C1 retains
 27 exterior count rows with at most two lower points. The global
 algebra checker now has 49 passing groups.
 
+The entire N6 placement with two lower points, one upper-interior
+point and one side-cap point is now excluded by N6_TWO_LOWER_SIDE.md
+and its printed appendix. Both side-cap models remain after the one
+lower normalization, and the theorem includes outer square faces.
+Sixteen roots have 107 nodes, 654 explicit geometric deductions,
+56 fixed cubic contradictions and 26 geometric exclusions. All 5,741
+positive integer terms are printed, with maximum weight 41,353.
+A fresh independent geometry replay validates every step, both
+twelve-word upper splits, nine cross splits, fourteen binary splits,
+all 221 triangle/quadrilateral witnesses, 151 cap witnesses and nine
+spread witnesses. Separate Fraction and SymPy readers reconstruct
+every sum and exact negative bound. Section 6 also excludes the
+entire all-interior N7 count (k,j,q)=(2,1,0), using the seventh contact
+as a boundary side-cap point. The N6 top-cap and other exterior counts
+and the remaining N7 counts stay open. The global algebra checker
+now has 50 passing groups.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

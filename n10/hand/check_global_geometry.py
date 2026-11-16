@@ -1440,6 +1440,27 @@ def n6_two_lower_two_exterior():
     print("PASS: complete N6 two-lower/two-exterior cap identities, TT catalogue, exterior line rule, and full printed inventory")
 
 
+def n6_two_lower_upper_side():
+    from pathlib import Path
+    from itertools import product
+    import re
+    import n6_exterior_geometry as geometry
+    q=sp.Rational;s=q(93,1000)
+    for location in ('IR','IL'):
+        geometry.set_locations(location);known=geometry.initial('central')
+        assert geometry.inside(known,'HCEF','R')
+        assert not geometry.inside(known,'ABCEFH','S')
+        words=geometry.line_patterns(known,'HCEF','RS')
+        assert len(words)==12 and all(sum(x!=y for x,y in zip(vv,vv[1:]+vv[:1]))==2 for vv in words)
+    assert 2*(1+sp.sqrt(2))*s>q(24,5)*s
+    note=Path(__file__).with_name('N6_TWO_LOWER_SIDE.md').read_text()
+    records=re.findall(r'^\| ((?:IR|IL)/[^ |]+) \| X\d{4} \| (\d+) \| (\d+) \| (\d+) \| (\d+) \| (\d+) \|$',note,re.M)
+    assert len(records)==16 and [sum(int(row[i]) for row in records) for i in range(1,6)]==[107,56,26,5741,654]
+    c,d,e=sp.symbols('c d e')
+    zero(2*area(sp.Matrix([c,0]),sp.Matrix([1,e]),sp.Matrix([1,d]))-(1-c)*(d-e))
+    print("PASS: complete N6 two-lower/upper/side-cap catalogue and boundary transfer to all-interior N7")
+
+
 def c1_two_lower_three_caps():
     q=sp.Rational;s=q(93,1000);rho=q(347,500)
     z=sp.symbols('z')
@@ -1504,3 +1525,4 @@ if __name__ == "__main__":
     adjacent_232_complete()
     n6_two_lower_two_exterior()
     c1_two_lower_three_caps()
+    n6_two_lower_upper_side()
