@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 85.
+Checkpoint 86.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -541,7 +541,7 @@ four-corner alternative and all zero-area faces.
         Two semantic readers pass; the independent implementation
         checks 1,188 polynomial identities and 17,821 endpoint lines.
         Proof: N6_BTTT_TOP_WORD_MMMM.md and its indexed tables.
-        The remaining top words and both top-triple parents stay open.
+        The whole BTTT assembly below includes this word; ITTT stays open.
   - [x] N6-BTTT-TOP-RIGHT-WORD. The complete normalized ---+ word:
         thirteen actual-sign splits cover fourteen contradictions,
         with no coordinate cuts. The complete literal tables print
@@ -553,7 +553,7 @@ four-corner alternative and all zero-area faces.
         Separate JavaScript and Python/Fraction readers replay every
         table, source scope and leaf. Seven corruptions are rejected.
         Proof: N6_BTTT_REMAINING_TRIANGULAR.md and its indexed tables.
-        The normalized +--+ word and both top-triple parents stay open.
+        The normalized +--+ word is excluded by the assembly below.
   - [x] N6-BTTT-CENTRAL-TOP-LOWER-EAR. In the normalized +--+
         top word, the entire HBP<0 alternative is impossible without
         further sign or coordinate cuts. The literal argument has
@@ -572,8 +572,24 @@ four-corner alternative and all zero-area faces.
         area sources, the shared central identity and every terminal.
         Twelve argument mutations and eight Markdown corruptions
         are rejected. Proof: N6_BTTT_REMAINING_CENTRAL_POSITIVE.md
-        and its indexed tables. The exact remaining frontier is
-        +--+ with ACP>0, HBP>0 and AFP<0; the parent stays open.
+        and its indexed tables. The negative-AFP alternative is
+        excluded by the following theorem.
+  - [x] N6-BTTT-CENTRAL-TOP-NEGATIVE-AFP. In the normalized +--+
+        word with HBP>0, AFP<0 is impossible. Sixty-five sign splits
+        cover 66 explicit contradictions, with no coordinate cuts.
+        Independent readers verify 137 contexts, 6,833 deductions,
+        560 stages, 33,808 coordinate updates, 7,610 physical factors,
+        137,031 scalar updates, 25,725 relations, 1,596 affine bounds
+        and 157,995 positive affine terms. All immutable sources and
+        inherited boxes pass independent review. Twelve independent
+        corruptions are rejected, including a deleted binary leaf.
+        Proof: N6_BTTT_REMAINING_CENTRAL_NEGATIVE.md and its indexed
+        literal tables. This completes the central word.
+  - [x] N6-BTTT-COMPLETE. The whole (1,0,0,3,0) count is excluded.
+        All six residual normalized top words and all three children
+        of +--+ have complete independently accepted written proofs.
+        The exact transposition preserves the residual set, so e<=f
+        covers the entire count. Proof: N6_BTTT_REMAINING_COUNT.md.
   - [x] N6-ITTT-TOP-TRIANGLE-WORD. The normalized --+- top word
         with P strictly inside HCEF is impossible: nineteen sign
         splits cover twenty leaves, including two explicit clustered
@@ -716,9 +732,9 @@ four-corner alternative and all zero-area faces.
         fourteen polynomial identities, all 256 six-label sign conversions
         and three positive square gaps are checked.
         Proof: AREA_RELATIONS.md and check_area_relations.js.
-  - [ ] Complete the remaining fourteen exterior-cap counts with k=0
+  - [ ] Complete the remaining thirteen exterior-cap counts with k=0
         or k=1, outside the stated projection chambers. The ledger also
-        retains the completed IIRR and IRRT rows. Counts are (k,j,r,t,l), up to
+        retains the completed IIRR, IRRT and BTTT rows. Counts are (k,j,r,t,l), up to
         exchange of the two side caps:
     - [ ] N6-IRTL: (0,1,1,1,1).
     - [ ] N6-IRTT: (0,1,1,2,0).
@@ -748,14 +764,10 @@ four-corner alternative and all zero-area faces.
     - [ ] N6-BIRR: (1,1,2,0,0).
     - [ ] N6-BIIT: (1,2,0,1,0).
     - [ ] N6-BIIR: (1,2,1,0,0).
-    - [ ] N6-BTTT: (1,0,0,3,0), retaining only its unfinished top word.
-          The normalized --+-, ---- and ---+ words are complete in
-          N6_BTTT_TOP_TRIANGLE_WORD.md, N6_BTTT_TOP_WORD_MMMM.md and
-          N6_BTTT_REMAINING_TRIANGULAR.md. The earlier single-ear
-          exclusions remain complete. N6_BTTT_REMAINING_CENTRAL_EAR.md
-          also excludes HBP<0 in +--+. The positive-AFP theorem
-          N6_BTTT_REMAINING_CENTRAL_POSITIVE.md leaves exactly
-          ACP>0, HBP>0, AFP<0 in that word. The parent stays open.
+    - [x] N6-BTTT: (1,0,0,3,0). The whole count is excluded by
+          N6_BTTT_REMAINING_COUNT.md, assembling all six normalized
+          top words and every lower-central child. All actual sign,
+          coordinate and scalar premises have independent acceptance.
     - [ ] N6-ITTT: (0,1,0,3,0).
           The normalized --+- word is complete in
           N6_ITTT_TOP_TRIANGLE_WORD.md; the other residual words
@@ -969,6 +981,15 @@ four-corner alternative and all zero-area faces.
         all source premises pass review.
         Proof: N7_CENTRAL_COMPLETION_EFG_CAP.md and its literal tables.
         This proves capacity one for EFG; both central parents stay open.
+  - [x] N7-CENTRAL-E-ONLY-STRUCTURE. In both central roots the
+        E-only word forces GOP<0, EGP>0, BEG>0, BDG>0, AEP<0
+        and BEP<0; hence P lies in actual BCE. Only three G-sign
+        words and five ordered central words remain. Actual capacity
+        arguments, affine containments and exhaustive cyclic line
+        signs have independent review; the separate exact reader
+        expands every displayed identity and finite catalogue.
+        Proof: N7_CENTRAL_COMPLETION_E_ONLY.md. This is a reduction;
+        the five words and both central parents remain open.
   - [ ] N7-INTERIOR-REMAINDER. Exclude the two central lower cells
         CA and CB in the sole remaining all-interior heptagon count
         (k,j,q)=(1,2,0). Both lower-ear children are complete above.
@@ -1174,6 +1195,10 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_BTTT_REMAINING_TRIANGULAR.md and indexed tables | Complete normalized BTTT ---+ word: thirteen sign splits, fourteen leaves, 1,356 deductions, 1,493 coordinate updates, 664 scalar updates and two independent manuscript readers |
 | N6_BTTT_REMAINING_CENTRAL_EAR.md and indexed tables | Complete HBP<0 alternative of normalized +--+: no splits, 39 deductions, 28 factors, 152 coordinate updates and two independent manuscript readers |
 | N6_BTTT_REMAINING_CENTRAL_POSITIVE.md and indexed tables | Complete AFP>0 alternative of normalized +--+ with HBP>0: five splits, six leaves, 1,178 deductions, 1,262 coordinate updates and two independent manuscript readers |
+| N6_BTTT_REMAINING_CENTRAL_NEGATIVE.md and indexed tables | Complete AFP<0 alternative: 65 splits, 66 leaves, 33,808 coordinate updates, 137,031 scalar updates, 1,596 affine bounds and two independent literal readers |
+| N6_BTTT_REMAINING_COUNT.md | Complete BTTT (1,0,0,3,0) exclusion, assembling all normalized top words and lower-central alternatives |
+| N6_BTTT_REMAINING_AFFINE_BOUNDS.md | Exact affine actual-area bound and terminal rule with six independently reviewed source families |
+| N7_CENTRAL_COMPLETION_E_ONLY.md | Uniform E-only sign and actual-containment consequences; three G-sign words and five ordered central words remain |
 | N6_BTTT_TOP_TRIANGLE_WORD.md and indexed tables | Complete normalized BTTT --+- word: sixteen sign splits, nine coordinate cuts, twenty-six terminal contradictions and two independent semantic readers |
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_ONE_LOWER_THREE_CAPS.md | Entire (1,0,1,1,1) count: two reflected lower alternatives, 89 deductions, 158 interval steps, forty scalar caps and two cubics / 742 terms |

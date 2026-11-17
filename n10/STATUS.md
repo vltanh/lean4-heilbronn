@@ -942,6 +942,29 @@ and every nonnegative factor have independent mathematical acceptance.
 This closes the stated capacity theorem. The E-only word and both central
 N7 roots still require contradictions; the global hand proof stays open.
 
+## Hand checkpoint 86: complete N6 BTTT count
+
+The [whole BTTT count](hand/N6_BTTT_REMAINING_COUNT.md), one lower
+point and three top-cap points, now has a complete hand exclusion.
+Its final negative-AFP child has 65 exhaustive sign splits and 66 explicit
+contradictions. Separate JavaScript and Fraction readers reconstruct all
+137 contexts, 6,833 geometric deductions, 560 stages, 33,808 coordinate
+updates, 7,610 physical factors, 137,031 ordinary scalar updates, 25,725
+relations, 1,596 affine bounds and 157,995 positive affine terms.
+Every source scope, inherited box and terminal has independent geometric
+and exact arithmetic acceptance. Twelve independent corruptions are rejected.
+The exact top-word catalogue, actual transposition and nonzero-determinant
+alternatives assemble the entire count without a remaining branch.
+
+The [central N7 E-only reduction](hand/N7_CENTRAL_COMPLETION_E_ONLY.md)
+also has independent acceptance. Uniform capacity and sign arguments put P
+inside actual BCE and leave three G-sign words and five ordered central
+words. These are structural consequences; the five words remain open.
+
+The remaining global hand-proof ledger has ten C1 count rows, thirteen N6
+count rows and the two central N7 roots. The unrestricted hand theorem is
+still incomplete. The computer-assisted theorem remains complete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
