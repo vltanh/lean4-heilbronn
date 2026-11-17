@@ -1137,6 +1137,34 @@ These are local capacities. The global frontier remains ten C1
 counts, eleven N6 counts and the two central N7 roots. C, CE and EF
 remain open, and the unrestricted hand theorem is incomplete.
 
+## Hand checkpoint 94: two complete C1 count exclusions
+
+The whole [BIIRL count](hand/C1_ONE_LOWER_TWO_CENTRAL_SIDES.md),
+`(1,2,1,0,1)`, and its transpose are excluded by 152 actual-sign splits
+and 153 contradictory leaves. Independent geometry, scalar/source,
+coordinate ancestry, exact polynomial and complete-cover review passes
+all 315 literal contexts. This includes 218 derived affine area bounds,
+37 global coordinate certificates, 13,645 coordinate updates and 21,354
+positive products. A separate manuscript and dependency review passes.
+
+The whole [BBIIR count](hand/C1_TWO_LOWER_TWO_CENTRAL_RIGHT.md),
+`(2,2,1,0,0)`, and its transpose are excluded by 24 exhaustive angular
+roots, 185 actual-sign splits and 209 contradictory leaves. Independent
+review passes all 331 literal contexts, including 39,382 actual relations,
+89,563 scalar updates, 7,684 physical sources, 12,494 coordinate updates,
+51 global coordinate certificates and 24,557 positive products. The
+terminals include 45 affine-area contradictions and one unsigned-clearance
+quartic leaf. Its separate literal arithmetic reader also passes.
+
+For each count, 29 deliberate source, scope, immutable-version, endpoint,
+arithmetic and coverage corruptions are rejected. Every proof premise is
+an actual geometric inequality or printed exact finite derivation.
+
+The accepted global hand frontier is eight C1 counts, eleven N6 counts
+and the two central N7 roots. The N7 literal extraction/review continues;
+its discovery results do not change this ledger. The unrestricted hand
+theorem is incomplete. No Lean compilation or CI was run.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

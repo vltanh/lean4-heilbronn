@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 93.
+Checkpoint 94.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -392,7 +392,7 @@ four-corner alternative and all zero-area faces.
         records are rejected, including an omitted leaf with altered
         totals. Proof: C1_TWO_CENTRAL_THREE_CAPS.md and its tables.
         The C1 parent stays open.
-  - [ ] C1-EXTERIOR. Exclude the remaining ten exterior count rows
+  - [ ] C1-EXTERIOR. Exclude the remaining eight exterior count rows
         from the exhaustive C1-EXTERIOR-CATALOGUE. Counts are
         (k,j,r,t,l), up to exchange of the two side caps:
     - [ ] C1-IITTT: (0,2,0,3,0).
@@ -400,11 +400,27 @@ four-corner alternative and all zero-area faces.
     - [ ] C1-BITTT: (1,1,0,3,0).
     - [ ] C1-BIRTT: (1,1,1,2,0).
     - [ ] C1-BIITT: (1,2,0,2,0).
-    - [ ] C1-BIIRL: (1,2,1,0,1).
+    - [x] C1-BIIRL: (1,2,1,0,1). The entire count and transpose:
+          152 actual-sign splits and 153 contradictions, with no
+          coordinate-case restriction. Independent actual-source,
+          ancestry, exact arithmetic and full-cover review passes
+          all 315 literal contexts, 218 affine area bounds, 37 common
+          coordinate certificates, 13,645 coordinate updates and
+          21,354 positive products. A separate manuscript/dependency
+          review passes; 29 corrupted records are rejected.
+          Proof: C1_ONE_LOWER_TWO_CENTRAL_SIDES.md and its tables.
     - [ ] C1-BIIRT: (1,2,1,1,0).
     - [ ] C1-BIIRR: (1,2,2,0,0).
     - [ ] C1-BBIIT: (2,2,0,1,0).
-    - [ ] C1-BBIIR: (2,2,1,0,0).
+    - [x] C1-BBIIR: (2,2,1,0,0). The entire count and transpose:
+          24 exhaustive angular roots, 185 actual-sign splits and
+          209 contradictions. Independent actual-source, ancestry,
+          exact arithmetic and full-cover review passes all 331
+          contexts, 51 common coordinate certificates, 12,494
+          coordinate updates and 24,557 positive products, including
+          45 affine-area terminals and one unsigned-clearance quartic
+          leaf. Twenty-nine corrupted records are rejected.
+          Proof: C1_TWO_LOWER_TWO_CENTRAL_RIGHT.md and its tables.
 - [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
       points and four strictly interior points.
   - [x] N6-PLACEMENTS. The lower-left cap is empty; both anchor regions
