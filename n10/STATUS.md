@@ -965,6 +965,25 @@ The remaining global hand-proof ledger has ten C1 count rows, thirteen N6
 count rows and the two central N7 roots. The unrestricted hand theorem is
 still incomplete. The computer-assisted theorem remains complete.
 
+## Hand checkpoint 87: four remaining ITTT top words
+
+The [single-ear pair](hand/N6_BTTT_REMAINING_ITTT_EARS.md) and
+[remaining triangular pair](hand/N6_BTTT_REMAINING_ITTT_TRIANGULAR.md)
+now have complete independently accepted literal arguments. Together their
+31 actual-sign splits cover 35 impossible leaves: 27 interval contradictions,
+seven incompatible area-bound pairs and one actual distributed-mesh exclusion.
+Separate readers reconstruct 275 contexts, 11,892 geometric deductions,
+20,783 coordinate updates, 16,176 scalar updates, 3,142 relations and 53
+capacity signs. New upper-point factors use fixed initial-box contact-area
+ceilings and actual HCEF inward tests. Every inherited box and scalar source
+has independent ancestry checks. All 36 independent corruptions are rejected.
+
+Together with the earlier `--+-` result, these exclude all three normalized
+triangular and both single-ear ITTT words. The central `+--+` word remains
+open, so the whole ITTT count remains unchecked. The global frontier is still
+ten C1 count rows, thirteen N6 count rows and two central N7 roots; the
+unrestricted hand theorem is incomplete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
