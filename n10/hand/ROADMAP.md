@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 89.
+Checkpoint 90.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -1042,7 +1042,8 @@ four-corner alternative and all zero-area faces.
         accept all geometry, bounds, source ancestry and coverage;
         22 independent corruptions are rejected.
         Proof: N7_CENTRAL_COMPLETION_E_ONLY_EXCLUSION.md and tables.
-        The C, CE, EF and CEF upper-pair words remain open.
+        The C, CE and EF upper-pair words remain open after the CEF
+        exclusion below.
   - [x] N7-CENTRAL-UPPER-FAN-CAPS. If HCF contains the two upper
         points, then f>617/1000 and actual AEF and BEF both have
         capacity one in both roots. Exact contact identities, positive
@@ -1051,6 +1052,23 @@ four-corner alternative and all zero-area faces.
         accept every substitution and comparison.
         Proof: N7_CENTRAL_COMPLETION_UPPER_FAN_CAP.md.
         This conditional lemma does not close another upper-pair word.
+  - [x] N7-CENTRAL-CEF-COMPLETE. The entire CEF upper-pair word is
+        excluded in both central roots. Six coarse words in each root
+        and every further binary sign cut give 31 exhaustive leaves:
+        twelve polynomial, ten geometric, six scalar and three
+        coordinate contradictions. Two source-complete readers check
+        all 234 stages, 7,968 deductions, 2,986 relations, 14,313
+        immutable scalar updates, 2,808 physical factors and 5,142
+        coordinate updates with 52,331 endpoint lines. The terminal
+        sums have 2,302 positive products; ten six-order tables exclude
+        all sixty mesh orderings. Independent mathematical review
+        accepts all geometry, natural contact caps, QAREA floors and
+        secant/tangent directions. Twenty-six independent corruptions
+        are rejected.
+        Proof: N7_CENTRAL_COMPLETION_CEF_EXCLUSION.md and indexed tables.
+        The broader AE-transfer implication, with FOP unrestricted,
+        is separately proved in N7_CENTRAL_COMPLETION_CEF2_TRANSFER.md.
+        The C, CE and EF words and both central parents remain open.
   - [ ] N7-INTERIOR-REMAINDER. Exclude the two central lower cells
         CA and CB in the sole remaining all-interior heptagon count
         (k,j,q)=(1,2,0). Both lower-ear children are complete above.
@@ -1269,6 +1287,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_CENTRAL_COMPLETION_E_ONLY.md | Uniform E-only actual-containment and sign reduction used by the complete exclusion |
 | N7_CENTRAL_COMPLETION_E_ONLY_EXCLUSION.md and indexed tables | Whole E-only word in CA and CB: twelve leaves, 72 stages, 1,344 cubic products, 35 scalar-area terms and two independent source-complete readers |
 | N7_CENTRAL_COMPLETION_UPPER_FAN_CAP.md | Occupied HCF forces f>.617 and AEF/BEF capacity one in both central roots, with independent exact review |
+| N7_CENTRAL_COMPLETION_CEF_EXCLUSION.md and indexed tables | Whole CEF word in CA and CB: 31 leaves, 234 stages, 2,302 positive polynomial products, sixty mesh obstructions and two independent source-complete readers |
+| N7_CENTRAL_COMPLETION_CEF2_TRANSFER.md | Two CEF occupants and AEG<0,COP<0,EOP>0 force AEO>0, with FOP unrestricted; independent actual-containment and identity review |
 | N6_BTTT_TOP_TRIANGLE_WORD.md and indexed tables | Complete normalized BTTT --+- word: sixteen sign splits, nine coordinate cuts, twenty-six terminal contradictions and two independent semantic readers |
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_ONE_LOWER_THREE_CAPS.md | Entire (1,0,1,1,1) count: two reflected lower alternatives, 89 deductions, 158 interval steps, forty scalar caps and two cubics / 742 terms |

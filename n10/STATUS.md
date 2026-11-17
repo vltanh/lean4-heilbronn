@@ -1035,6 +1035,34 @@ The remaining global hand-proof ledger is ten C1 count rows, twelve N6
 count rows and two central N7 roots. The unrestricted hand theorem is
 incomplete; the computer-assisted theorem remains complete.
 
+## Hand checkpoint 90: complete central N7 CEF word
+
+The [whole CEF word](hand/N7_CENTRAL_COMPLETION_CEF_EXCLUSION.md)
+is excluded in both central roots CA and CB. Six coarse ordered words
+in each root and all further binary sign cuts give 31 exhaustive leaves:
+twelve polynomial, ten geometric, six scalar and three coordinate
+contradictions. Occupied HCF supplies independently proved f>.617 and
+AEF/BEF capacity-one sources; natural contact caps and immutable QAREA
+floors give the additional physical inequalities.
+
+Separate source-complete readers reconstruct all 234 stages, 7,968
+sign deductions, 5,287 initial bounds, 14,366 endpoint values, 2,986
+relations, 14,313 scalar updates, 2,808 physical factors, and 5,142
+coordinate updates with 52,331 complete endpoint lines. The exact
+terminal sums contain 2,302 positive polynomial products; all sixty
+mesh-order obstructions are explicit. Independent mathematical review
+accepts every source, inherited box, sign scope and coverage argument;
+26 deliberate corruptions are rejected.
+
+The [broader AE-transfer lemma](hand/N7_CENTRAL_COMPLETION_CEF2_TRANSFER.md)
+also has independent acceptance: CEF containing O,P together with
+AEG<0,COP<0,EOP>0 forces AEO>0, without a premise on FOP.
+
+C, CE and EF remain open in the two central N7 roots. The global
+frontier remains ten C1 count rows, twelve N6 count rows and those two
+central N7 roots. The unrestricted hand theorem is incomplete; the
+computer-assisted theorem remains complete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
