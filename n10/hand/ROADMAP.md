@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 90.
+Checkpoint 91.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -1072,6 +1072,16 @@ four-corner alternative and all zero-area faces.
   - [ ] N7-INTERIOR-REMAINDER. Exclude the two central lower cells
         CA and CB in the sole remaining all-interior heptagon count
         (k,j,q)=(1,2,0). Both lower-ear children are complete above.
+  - [x] N7-CENTRAL-HCE-CAP. If HCE contains O,P, AEF has capacity
+        two in both central roots. Fourteen rational rectangles cover
+        the full c,h domain. The ordered endpoint ratio, actual CDE
+        clearance and top/right endpoint bound give exact AEF ceilings
+        .814603 in CA and .823185 in CB, both strictly below the
+        three-occupant cost .823422. Two independent exact readers
+        check seven actual-coordinate identities and every row; fresh
+        interval-union coverage and four corruption checks pass.
+        Proof: N7_CENTRAL_COMPLETION_HCE_CAP.md. This conditional cap
+        leaves C, CE and EF and both central parents open.
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -1289,6 +1299,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_CENTRAL_COMPLETION_UPPER_FAN_CAP.md | Occupied HCF forces f>.617 and AEF/BEF capacity one in both central roots, with independent exact review |
 | N7_CENTRAL_COMPLETION_CEF_EXCLUSION.md and indexed tables | Whole CEF word in CA and CB: 31 leaves, 234 stages, 2,302 positive polynomial products, sixty mesh obstructions and two independent source-complete readers |
 | N7_CENTRAL_COMPLETION_CEF2_TRANSFER.md | Two CEF occupants and AEG<0,COP<0,EOP>0 force AEO>0, with FOP unrestricted; independent actual-containment and identity review |
+| N7_CENTRAL_COMPLETION_HCE_CAP.md | Two HCE occupants force AEF capacity two in both central roots; fourteen exact rectangles, ordered endpoint ratios and independently checked positive gaps |
 | N6_BTTT_TOP_TRIANGLE_WORD.md and indexed tables | Complete normalized BTTT --+- word: sixteen sign splits, nine coordinate cuts, twenty-six terminal contradictions and two independent semantic readers |
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_ONE_LOWER_THREE_CAPS.md | Entire (1,0,1,1,1) count: two reflected lower alternatives, 89 deductions, 158 interval steps, forty scalar caps and two cubics / 742 terms |

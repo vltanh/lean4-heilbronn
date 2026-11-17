@@ -24,9 +24,14 @@ and cell placements are
     G strictly inside HABC, ACG>0,HBG>0,
     O,P strictly inside HCEF.
 
-Use the normalization HOP<0. The actual upper-ear separation theorem
-[UPPER_EAR_SEPARATION.md](UPPER_EAR_SEPARATION.md) makes HEF empty.
-Since EFP,FHP>0, P outside HEF gives HEP<0 and EHP>0.
+Use the normalization HOP<0. Actual HEF has capacity one by the common
+setup. Its capacity-one ray rule at H gives HEP<0 and hence EHP>0:
+put u_X=HEX and v_X=-HFX>0 for X=O,P. The actual identity
+
+    v_O u_P-v_P u_O=HEF HOP<0
+
+would make u_O>0 if u_P>0, putting both points inside HEF.
+This contradicts capacity one; clearance excludes u_P=0.
 The [central pair cut](N7_CENTRAL_PAIR_CUT.md) gives DGO<0.
 The [central area-orientation lemma](N7_CENTRAL_AREA_ORIENTATION.md)
 excludes AGT>0,DGT>0 for T=O,P.
@@ -313,8 +318,8 @@ author or discovery code. Its fresh actual-coordinate and Fraction
 arithmetic reconstructs every sign, source identity, immutable bound,
 inherited box, endpoint line, translated coefficient and mesh
 obstruction, and independently checks the complete binary cover.
-It also expands all 27 natural-cap identities and both instances of
-(2). Its complete replay agrees with every count above and the
+It also expands all 27 natural-cap identities, both instances of
+(2), and the introductory HEF ray identity. Its complete replay agrees with every count above and the
 indexed totals. The independent geometric review accepts the actual
 containments, the occupied-HCF capacity premises, the support and
 QAREA inequalities, and the secant/tangent directions.

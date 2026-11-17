@@ -1063,6 +1063,28 @@ frontier remains ten C1 count rows, twelve N6 count rows and those two
 central N7 roots. The unrestricted hand theorem is incomplete; the
 computer-assisted theorem remains complete.
 
+## Hand checkpoint 91: occupied-HCE capacity theorem
+
+The [occupied-HCE theorem](hand/N7_CENTRAL_COMPLETION_HCE_CAP.md)
+proves actual AEF capacity two in both central N7 roots. Fourteen
+closed rectangles cover the complete c,h domain. The ordered endpoint
+ratio, CDE clearance and e(1-b)>=4s give AEF<=.814603 in CA and
+AEF<=.823185 in CB, with exact positive gaps .008819 and .000237
+below the three-occupant threshold .823422. Independent mathematical
+review and separate exact readers check all seven identities, every
+row and full continuous coverage; four corruptions are rejected.
+
+The CEF introduction now states the correct common HEF capacity-one
+premise and its explicit ray derivation of EHP>0. The earlier prose
+had invoked the stronger empty-HEF conclusion outside its stated
+two-CEF-occupant hypothesis. The literal CEF tables already used the
+valid common setup and are unchanged; the independent reader also
+expands the introductory ray identity.
+
+The remaining frontier is unchanged: ten C1 counts, twelve N6 counts,
+and two central N7 roots, with C, CE and EF still open. The unrestricted
+hand theorem is incomplete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

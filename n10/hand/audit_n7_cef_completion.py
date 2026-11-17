@@ -112,6 +112,7 @@ for triangle,(cap,remainder) in NATURAL_CAPS.items():
     check(sub(cap,det(triangle))==remainder,'natural contact identity '+triangle)
 for point in 'OP':
     check(mul(sc(det('HOP'),-1),det('CF'+point))==add(mul(det('FH'+point),det('COP')),mul(det('HC'+point),det('FOP'))))
+check(sub(mul(sc(det('HFO'),-1),det('HEP')),mul(sc(det('HFP'),-1),det('HEO')))==mul(det('HEF'),det('HOP')))
 
 def geometry(packet,stage,history,stats):
     kn={}
