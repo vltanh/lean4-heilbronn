@@ -1165,6 +1165,33 @@ and the two central N7 roots. The N7 literal extraction/review continues;
 its discovery results do not change this ledger. The unrestricted hand
 theorem is incomplete. No Lean compilation or CI was run.
 
+## Hand checkpoint 95: complete N7 hand proof
+
+The [complete seven-boundary assembly](hand/N7_CENTRAL_COMPLETION_PARENT.md)
+proves the sharp strict bound `m<A*` for every normalized N7 configuration.
+Independent mathematical review checks all five exterior count classes,
+all octagon arc and opposite-edge classes, the five interior counts,
+the boundary-valid N6 side-point transfer, every lower cell and all eight
+central pair-line words. Weak contact equalities remain covered. The
+single-exterior projection retains the sharp hypothesis; the assembly
+does not claim a uniform gap below A*.
+
+The remaining central words now have complete literal proofs:
+[C in both cells](hand/N7_CENTRAL_COMPLETION_C_EXCLUSION.md),
+[CE/EF in CA](hand/N7_CENTRAL_COMPLETION_CA_UPPER_EXCLUSION.md) and
+[CE/EF in CB](hand/N7_CENTRAL_COMPLETION_CB_UPPER_EXCLUSION.md).
+Together they have 230 contradictory leaves, 214 binary sign splits
+and 1,334 shared source stages across sixteen roots. Independent
+actual-point and Fraction readers reconstruct every full ancestor chain,
+physical inequality, immutable endpoint and terminal contradiction.
+All 74 deliberate source, scope, arithmetic and coverage corruptions
+are rejected. The separate assembly reader checks the exact threshold
+gaps, complete catalogues and manuscript links.
+
+HP12-N7 is complete. The accepted global frontier is eight C1 count
+rows and eleven N6 count rows. The unrestricted hand theorem remains
+incomplete. No Lean compilation or CI was run.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

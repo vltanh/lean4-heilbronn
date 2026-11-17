@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 94.
+Checkpoint 95.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -838,8 +838,11 @@ four-corner alternative and all zero-area faces.
           sixteen-word catalogue and exact transposition cover the
           entire continuous domain, including closed square sides.
           Assembly: N6_BTTT_REMAINING_ITTT_COUNT.md.
-- [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
-      points and three strictly interior points.
+- [x] HP12-N7. The complete normalized seven-boundary family has
+      m<A*. N7_CENTRAL_COMPLETION_PARENT.md assembles every exterior
+      placement, actual hull, all-interior count, lower cell and central
+      pair word, including all permitted equality faces. The sharp
+      projected subcase retains m>=A* throughout its contradiction.
   - [x] N7-PLACEMENTS. Both lower caps are empty, each upper cap has
         capacity two, and five remaining count rows are exhaustive.
         Proof: N7_PLACEMENTS.md.
@@ -985,7 +988,7 @@ four-corner alternative and all zero-area faces.
         all exact gaps have independent review; eight fresh polynomial
         expansions and the sixteen-check standalone reader pass.
         Proof: UPPER_PAIR_CONTACT_CAPS.md. This shared N6/N7 lemma
-        leaves the containing placement parents open.
+        supplies a source in the later placement assemblies.
   - [x] N7-CENTRAL-ACD-CAP. In both central lower roots, the
         actual ACD area is below 27/40. Elimination of a and d using
         the shared lower strip and two actual anchor clearances leaves
@@ -993,7 +996,7 @@ four-corner alternative and all zero-area faces.
         discriminant gap is 199202807/10^12. Thus ACD has capacity
         one; ADG<0 forces ADO,ADP>0. Independent geometry, source-box
         review and all exact polynomial/gap checks pass.
-        Proof: N7_CENTRAL_ACD_CAP.md. The two central parents stay open.
+        Proof: N7_CENTRAL_ACD_CAP.md. The complete central assembly below uses this cap.
   - [x] N7-CENTRAL-AREA-ORIENTATION. In either central lower cell,
         neither upper point T can have both AGT>0 and DGT>0.
         Three Pluecker deductions and an actual-contact comparison
@@ -1002,8 +1005,8 @@ four-corner alternative and all zero-area faces.
         rational updates give the exact contradiction gap 1941/1000000.
         Independent physical-polynomial, geometry and immutable exact
         arithmetic checks pass. Proof: N7_CENTRAL_AREA_ORIENTATION.md.
-        This closes the stated orientation chamber in both CA and CB;
-        the other orientations and both central parents remain open.
+        The complete central assembly below uses this orientation exclusion
+        in both CA and CB.
   - [x] N7-CENTRAL-PAIR-CUT. After HOP<0 orders the two upper
         points, DGO<0 in both central lower cells. A contrary sign
         forces two actual points into each of HAO and CDH; four exact
@@ -1013,8 +1016,8 @@ four-corner alternative and all zero-area faces.
         qualified inward-contact scalar variant.
         The same note proves capacity one for actual ADG, BDG and CDG,
         with orientation-independent caps for the first two.
-        Proof: N7_CENTRAL_PAIR_CUT.md. Six coarse ordered upper-pair
-        sign words remain; both central parents stay unchecked.
+        Proof: N7_CENTRAL_PAIR_CUT.md. The complete central assembly below covers every remaining
+        coarse ordered upper-pair sign word.
   - [x] UPPER-EAR-SEPARATION. With any actual lower point, two
         actual occupants of CEF force HEF empty. A split at h=37/50
         gives two short contact contradictions, with all rational gaps
@@ -1033,8 +1036,7 @@ four-corner alternative and all zero-area faces.
         prove these statements. An independent SymPy/Fraction pass
         checks 33 identities and exact comparisons; the separate
         author reader checks 39. Proof: N7_CENTRAL_COMPLETION.md,
-        Sections 1–6. The E-only assembly below uses these lemmas;
-        both central parents remain open.
+        Sections 1–6. The E-only assembly below uses these lemmas.
   - [x] N7-CENTRAL-EFG-CAP. If CEF contains the two upper points,
         actual EFG<(149/20)s in both central lower roots, independently
         of the upper-pair line. Six exhaustive G-sign words in each
@@ -1046,7 +1048,7 @@ four-corner alternative and all zero-area faces.
         corruptions are rejected. Independent actual geometry and
         all source premises pass review.
         Proof: N7_CENTRAL_COMPLETION_EFG_CAP.md and its literal tables.
-        This proves capacity one for EFG; both central parents stay open.
+        This proves capacity one for EFG in the complete assembly below.
   - [x] N7-CENTRAL-E-ONLY-STRUCTURE. In both central roots the
         E-only word forces GOP<0, EGP>0, BEG>0, BDG>0, AEP<0
         and BEP<0; hence P lies in actual BCE. Only three G-sign
@@ -1055,7 +1057,7 @@ four-corner alternative and all zero-area faces.
         signs have independent review; the separate exact reader
         expands every displayed identity and finite catalogue.
         Proof: N7_CENTRAL_COMPLETION_E_ONLY.md. The following complete
-        exclusion discharges all five words; both parents stay open.
+        exclusion discharges all five words.
   - [x] N7-CENTRAL-E-ONLY-COMPLETE. The entire E-only upper-pair
         word is excluded in both central roots. Five ordered words,
         with one further AEG sign split, give twelve complete leaves:
@@ -1068,8 +1070,7 @@ four-corner alternative and all zero-area faces.
         accept all geometry, bounds, source ancestry and coverage;
         22 independent corruptions are rejected.
         Proof: N7_CENTRAL_COMPLETION_E_ONLY_EXCLUSION.md and tables.
-        The C, CE and EF upper-pair words remain open after the CEF
-        exclusion below.
+        The CEF, C, CE and EF exclusions below complete the central roots.
   - [x] N7-CENTRAL-UPPER-FAN-CAPS. If HCF contains the two upper
         points, then f>617/1000 and actual AEF and BEF both have
         capacity one in both roots. Exact contact identities, positive
@@ -1094,10 +1095,13 @@ four-corner alternative and all zero-area faces.
         Proof: N7_CENTRAL_COMPLETION_CEF_EXCLUSION.md and indexed tables.
         The broader AE-transfer implication, with FOP unrestricted,
         is separately proved in N7_CENTRAL_COMPLETION_CEF2_TRANSFER.md.
-        The C, CE and EF words and both central parents remain open.
-  - [ ] N7-INTERIOR-REMAINDER. Exclude the two central lower cells
-        CA and CB in the sole remaining all-interior heptagon count
-        (k,j,q)=(1,2,0). Both lower-ear children are complete above.
+        The C, CE and EF exclusions below complete the central parents.
+  - [x] N7-INTERIOR-REMAINDER. Both central lower cells CA and CB
+        are excluded in the all-interior count (k,j,q)=(1,2,0).
+        All five admissible upper-pair words have complete proofs;
+        the three other words have direct affine/capacity exclusions.
+        Both lower-ear children are complete above.
+        Assembly: N7_CENTRAL_COMPLETION_PARENT.md, Section 5.
   - [x] N7-CENTRAL-HCE-CAP. If HCE contains O,P, AEF has capacity
         two in both central roots. Fourteen rational rectangles cover
         the full c,h domain. The ordered endpoint ratio, actual CDE
@@ -1107,7 +1111,7 @@ four-corner alternative and all zero-area faces.
         check seven actual-coordinate identities and every row; fresh
         interval-union coverage and four corruption checks pass.
         Proof: N7_CENTRAL_COMPLETION_HCE_CAP.md. This conditional cap
-        leaves C, CE and EF and both central parents open.
+        supplies a conditional source for the complete central assembly.
   - [x] N7-CENTRAL-GLOBAL-AEF-CAP. Actual AEF has capacity two
         throughout both central roots, with no pair-word premise.
         Sixteen rational rectangles show that one HEF occupant gives
@@ -1117,23 +1121,44 @@ four-corner alternative and all zero-area faces.
         Separate exact readers and independent mathematical review
         check nine identities, every source and the complete rectangle
         covers; four corruptions are rejected.
-        Proof: N7_CENTRAL_COMPLETION_GLOBAL_AEF_CAP.md. C, CE and EF
-        and both central parent roots remain open.
+        Proof: N7_CENTRAL_COMPLETION_GLOBAL_AEF_CAP.md. This is a
+        uniform source used in the complete central assembly.
   - [x] N7-CENTRAL-BOX-CAPS. ABF and AFH each have capacity two
         throughout both central roots. Two actual determinant formulas
         and two nonnegative box remainders give ABF<=143425697/181400000,
         AFH<=.760263 in CA and <=.775274 in CB, all strictly below
         the three-occupant cost .823422. Independent mathematical
         review and two exact readers check every source and gap.
-        Proof: N7_CENTRAL_COMPLETION_BOX_CAPS.md. The capacities do
-        not exclude an upper-pair word or either central parent.
+        Proof: N7_CENTRAL_COMPLETION_BOX_CAPS.md. The complete central
+        assembly below uses these capacities.
   - [x] N7-CENTRAL-QUAD-CAP. Actual ABEF has capacity two: its
         area is 1-(e-a)(f-b)<=1, whereas three actual interior points
         cost at least 93/91. Two occupants and three inward tests at
         a third point force the fourth test negative by clearance.
         Independent geometry and separate exact identity/gap checks
         pass. Proof: N7_CENTRAL_COMPLETION_QUAD_CAP.md. Both central
-        parents and the remaining three upper-pair words stay open.
+        parents are excluded by the complete assembly below.
+  - [x] N7-CENTRAL-C-COMPLETE. Both central C words: twelve coarse
+        roots, 39 additional sign splits and 51 contradictory leaves.
+        Independent actual geometry, source, storage, ancestry, exact
+        arithmetic and full-cover review accepts all 300 shared stages,
+        including 48 literal mesh-order obstructions. Twenty-eight
+        corruptions are rejected. Proof: N7_CENTRAL_COMPLETION_C_EXCLUSION.md.
+  - [x] N7-CENTRAL-CE-EF-COMPLETE. Both words in both cells: CA
+        has 93 sign splits/95 leaves and CB has 82 splits/84 leaves.
+        Independent review accepts all 550 CA and 484 CB shared stages,
+        reconstructing every actual source and full ordered ancestor
+        chain. All 22 CA and 24 CB corruptions are rejected, including
+        the explicitly weakened CB barycentric source and foreign-word
+        shared-stage references. Proofs: N7_CENTRAL_COMPLETION_CA_UPPER_EXCLUSION.md
+        and N7_CENTRAL_COMPLETION_CB_UPPER_EXCLUSION.md.
+  - [x] N7-COMPLETE. N7_CENTRAL_COMPLETION_PARENT.md proves m<A*
+        for every normalized N7 configuration. Independent coverage
+        review checks the five exterior counts, all octagon arc and
+        edge-pair classes, five interior counts, the boundary-valid
+        N6 side-point transfer, four lower cells, all eight central
+        words and every permitted equality face. This closes N7 only;
+        eight C1 counts and eleven N6 counts remain globally.
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
