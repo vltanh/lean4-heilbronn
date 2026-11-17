@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 88.
+Checkpoint 89.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -521,7 +521,7 @@ four-corner alternative and all zero-area faces.
         all 923 deductions, every box and 25,177 factor occurrences;
         separate Fraction/SymPy readers reproduce every exact bound.
         Proof: N6_BTTT_TOP_EARS.md and N6_TOP_TRIPLE_SETUP.md.
-        The remaining top words and the two top-triple counts stay open.
+        The whole BTTT and ITTT assemblies below include these words.
   - [x] N6-BTTT-TOP-TRIANGLE-WORD. The normalized --+- top word
         is impossible throughout its continuous domain: sixteen sign
         splits and nine weak coordinate cuts cover twenty-six terminal
@@ -532,7 +532,7 @@ four-corner alternative and all zero-area faces.
         implementation expands 4,501 determinant identities and checks
         60,725 endpoint lines.
         Proof: N6_BTTT_TOP_TRIANGLE_WORD.md and its indexed tables.
-        This closes one word, not the remaining BTTT or ITTT parent.
+        The whole BTTT assembly below includes this word.
   - [x] N6-BTTT-TOP-LEFT-WORD. The complete normalized ---- word:
         fifteen actual-sign splits cover sixteen contradictions, with
         no coordinate cuts. The literal tables print 1,584 geometric
@@ -541,7 +541,7 @@ four-corner alternative and all zero-area faces.
         Two semantic readers pass; the independent implementation
         checks 1,188 polynomial identities and 17,821 endpoint lines.
         Proof: N6_BTTT_TOP_WORD_MMMM.md and its indexed tables.
-        The whole BTTT assembly below includes this word; ITTT stays open.
+        The whole BTTT assembly below includes this word.
   - [x] N6-BTTT-TOP-RIGHT-WORD. The complete normalized ---+ word:
         thirteen actual-sign splits cover fourteen contradictions,
         with no coordinate cuts. The complete literal tables print
@@ -599,7 +599,7 @@ four-corner alternative and all zero-area faces.
         fourteen capacity signs and every terminal; the second expands
         1,885 physical identities and 44,780 endpoint lines.
         Proof: N6_ITTT_TOP_TRIANGLE_WORD.md and its indexed tables.
-        The remaining ITTT words and its parent stay open.
+        The whole ITTT assembly below includes this word.
   - [x] N6-ITTT-SINGLE-EAR-WORDS. Both normalized -++- and ++-+
         words are impossible: nineteen sign splits cover twenty-one
         leaves. Complete literal tables print 158 contexts, 7,433
@@ -620,7 +620,24 @@ four-corner alternative and all zero-area faces.
         eighteen independent corruptions are rejected.
         Proof: N6_BTTT_REMAINING_ITTT_TRIANGULAR.md and indexed tables.
         With the accepted --+- theorem this closes the triangular group.
-        Only the central +--+ word and the ITTT parent remain open.
+        The central word is excluded by the next theorem.
+  - [x] N6-ITTT-CENTRAL-WORD. The entire normalized +--+ word is
+        impossible. Its 145 actual-sign splits cover 146 leaves:
+        72 interval, 47 scalar-area, twelve affine, thirteen coordinate
+        polynomial, one zero-barycentric and one conflicting-sign
+        contradiction. Complete literal tables print 329 contexts,
+        17,516 geometric deductions, 1,243 stages, 71,636 coordinate
+        updates, 242,434 scalar updates, 174 affine bounds and 53
+        capacity signs. Both exact readers and separate mathematical
+        review accept every source and branch; twenty independent
+        source/arithmetic/coverage corruptions are rejected.
+        Proof: N6_BTTT_REMAINING_ITTT_CENTRAL.md, its setup and indexed
+        literal tables, and N6_BTTT_REMAINING_COORDINATE_PRODUCTS.md.
+  - [x] N6-ITTT-COMPLETE. The whole (0,1,0,3,0) count is excluded.
+        All six normalized word trees have complete independently
+        accepted proofs: 195 actual-sign splits and 201 leaves.
+        The exhaustive catalogue and exact transposition cover the
+        entire count. Proof: N6_BTTT_REMAINING_ITTT_COUNT.md.
   - [x] N6-TOP-TRANSPOSE. An explicit square transposition and six
         label maps preserve the residual top-word groups and permit
         e<=f. Exact square gaps give a,e<.168 in the triangular or
@@ -753,9 +770,9 @@ four-corner alternative and all zero-area faces.
         fourteen polynomial identities, all 256 six-label sign conversions
         and three positive square gaps are checked.
         Proof: AREA_RELATIONS.md and check_area_relations.js.
-  - [ ] Complete the remaining thirteen exterior-cap counts with k=0
+  - [ ] Complete the remaining twelve exterior-cap counts with k=0
         or k=1, outside the stated projection chambers. The ledger also
-        retains the completed IIRR, IRRT and BTTT rows. Counts are (k,j,r,t,l), up to
+        retains the completed IIRR, IRRT, BTTT and ITTT rows. Counts are (k,j,r,t,l), up to
         exchange of the two side caps:
     - [ ] N6-IRTL: (0,1,1,1,1).
     - [ ] N6-IRTT: (0,1,1,2,0).
@@ -789,12 +806,12 @@ four-corner alternative and all zero-area faces.
           N6_BTTT_REMAINING_COUNT.md, assembling all six normalized
           top words and every lower-central child. All actual sign,
           coordinate and scalar premises have independent acceptance.
-    - [ ] N6-ITTT: (0,1,0,3,0).
-          All three normalized triangular words and both single-ear
-          words are complete. N6_BTTT_REMAINING_ITTT_TRIANGULAR.md,
-          N6_BTTT_REMAINING_ITTT_EARS.md and N6_ITTT_TOP_TRIANGLE_WORD.md
-          supply the accepted proofs. Only the central +--+ word
-          remains open; the parent count is still unchecked.
+    - [x] N6-ITTT: (0,1,0,3,0). All six residual normalized words
+          have complete independently accepted proofs: three triangular,
+          two single-ear and the central +--+ word. The exhaustive
+          sixteen-word catalogue and exact transposition cover the
+          entire continuous domain, including closed square sides.
+          Assembly: N6_BTTT_REMAINING_ITTT_COUNT.md.
 - [ ] HP12-N7. Exclude corner-free normalized maximizers with seven boundary
       points and three strictly interior points.
   - [x] N7-PLACEMENTS. Both lower caps are empty, each upper cap has
@@ -1243,6 +1260,10 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_BTTT_REMAINING_COUNT.md | Complete BTTT (1,0,0,3,0) exclusion, assembling all normalized top words and lower-central alternatives |
 | N6_BTTT_REMAINING_ITTT_EARS.md and indexed tables | Both normalized single-ear ITTT words: nineteen splits, twenty-one leaves, 12,127 coordinate updates and two independent literal readers |
 | N6_BTTT_REMAINING_ITTT_TRIANGULAR.md and indexed tables | Both remaining normalized triangular ITTT words: twelve splits, fourteen leaves, 8,656 coordinate updates and two independent literal readers |
+| N6_BTTT_REMAINING_ITTT_CENTRAL.md and indexed tables | Entire central ITTT word: 145 splits, 146 leaves, 1,243 stages, 174 affine bounds, thirteen coordinate polynomial terminals and two independent literal readers |
+| N6_BTTT_REMAINING_ITTT_CENTRAL_SETUP.md | Actual EQRF/S geometry, exact contact ceilings, upper-point identities and initial continuous boxes |
+| N6_BTTT_REMAINING_ITTT_COUNT.md | Whole ITTT (0,1,0,3,0) exclusion: six normalized words, 195 splits and 201 leaves |
+| N6_BTTT_REMAINING_COORDINATE_PRODUCTS.md | Positive coordinate-polynomial products, repeated-index translation and exact signed coefficient ceiling |
 | N6_BTTT_REMAINING_ITTT_ROUTE.md | Exact upper-point coordinate factors with contact ceilings fixed before refinement |
 | N6_BTTT_REMAINING_AFFINE_BOUNDS.md | Exact affine actual-area bound and terminal rule with six independently reviewed source families |
 | N7_CENTRAL_COMPLETION_E_ONLY.md | Uniform E-only actual-containment and sign reduction used by the complete exclusion |

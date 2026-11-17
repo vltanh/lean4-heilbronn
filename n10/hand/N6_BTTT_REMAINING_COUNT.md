@@ -62,4 +62,5 @@ Independent review of this assembly checks the sixteen-word catalogue,
 the transposition preserving the complete residual set, and both
 nonzero-determinant binary alternatives. The entire count is excluded.
 This combined-count note introduces no new area rule, numerical factor,
-or unprinted sign inference. The ITTT count remains separate and open.
+or unprinted sign inference. The ITTT count is excluded separately in
+[N6_BTTT_REMAINING_ITTT_COUNT.md](N6_BTTT_REMAINING_ITTT_COUNT.md).

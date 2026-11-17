@@ -1,17 +1,12 @@
-# An exact coordinate route for the remaining ITTT words
+# Exact coordinate factors for ITTT
 
-This note supplies a proved auxiliary inequality and records a route
-for the remaining ITTT top-triple cases. It does not exclude an ITTT
-word or the whole count. The normalized word `--+-` is already excluded
-by [N6_ITTT_TOP_TRIANGLE_WORD.md](N6_ITTT_TOP_TRIANGLE_WORD.md).
-The five other normalized words were `----`, `---+`, `-++-`,
-`++-+`, and `+--+`. The independently accepted
-[single-ear proof](N6_BTTT_REMAINING_ITTT_EARS.md) and
-[triangular proof](N6_BTTT_REMAINING_ITTT_TRIANGULAR.md) now exclude
-the first four; only `+--+` remains open. Transposition exchanges the first two and the
-single-ear pair, while preserving the central word, but the change
-of \(e,f\) requires both normalized members of each pair to be
-handled before using that symmetry for a whole group.
+This note proves auxiliary inequalities used in the completed ITTT
+arguments. The [whole-count assembly](N6_BTTT_REMAINING_ITTT_COUNT.md)
+combines all six normalized top words: `----`, `---+`, `--+-`,
+`-++-`, `++-+`, and `+--+`. Transposition exchanges the first pair
+and the single-ear pair, while preserving the two other words after
+ray relabeling. Each normalized member has its own accepted exclusion,
+so the exact transposition covers the entire count.
 
 Use the actual ITTT contacts and point \(P=(p,q)\) strictly inside
 \(HCEF\), as in [N6_TOP_TRIPLE_SETUP.md](N6_TOP_TRIPLE_SETUP.md).
@@ -86,9 +81,8 @@ These inequalities retain the simultaneous two-area content of
 \(p,q\le1-s\) can lose it. They are compatible with the actual
 signed-area, occupancy, capacity, four-point, product-envelope,
 and affine-barycentric rules already used by the completed BTTT
-proof. A prospective ITTT case tree can use (2) as a physical
-coordinate factor, then inherit its proved boxes and scalar bounds
-in its actual-sign descendants. It still needs complete binary
-coverage and exact positive terminal certificates for every leaf.
-No output of the discovery implementation supplies such a closure
-by itself.
+proof. The completed ITTT case trees use (2) as a physical coordinate
+factor and inherit proved boxes and scalar bounds in actual-sign
+descendants. Their separate theorem notes and literal tables supply
+complete binary coverage and exact contradictions for every leaf.
+The present auxiliary inequalities introduce no additional closure.

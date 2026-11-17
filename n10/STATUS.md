@@ -1007,6 +1007,34 @@ The central N7 C, CE, EF and CEF upper-pair words still require proofs.
 Both central parent roots remain open, as do ten C1 and thirteen N6 count
 rows. The unrestricted hand theorem is incomplete.
 
+## Hand checkpoint 89: complete ITTT count
+
+The [central ITTT word](hand/N6_BTTT_REMAINING_ITTT_CENTRAL.md)
+has a complete independently accepted literal argument: 145 actual-sign
+splits cover 146 contradictory leaves, with no coordinate cuts. The two
+exact readers reconstruct 329 contexts, 17,516 geometric deductions,
+1,243 stages, 71,636 coordinate updates, 16,942 physical factors,
+242,434 scalar updates, 42,487 relations, 174 affine bounds and 53
+capacity signs. Every immutable source and inherited box has independent
+review. Twenty deliberate source, arithmetic and coverage corruptions
+are rejected, including omission of a binary leaf and the conflicting-sign
+terminal's required capacity premise.
+
+Thirteen terminal sums use the independently proved
+[coordinate-product rule](hand/N6_BTTT_REMAINING_COORDINATE_PRODUCTS.md):
+2,372 nonnegative sources, 5,643 positive products, 7,277 expanded and
+8,290 translated coefficients give exact negative ceilings. The other
+leaves have 72 interval, 47 area, twelve affine, one zero-barycentric and
+one conflicting-sign contradiction.
+
+Together with the three accepted triangular words and two single-ear
+words, this [closes the whole ITTT count](hand/N6_BTTT_REMAINING_ITTT_COUNT.md)
+(0,1,0,3,0). The exact sixteen-word
+catalogue and transposition supply exhaustive coverage of that count.
+The remaining global hand-proof ledger is ten C1 count rows, twelve N6
+count rows and two central N7 roots. The unrestricted hand theorem is
+incomplete; the computer-assisted theorem remains complete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
