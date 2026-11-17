@@ -56,10 +56,12 @@ which the Palomar registry uses. Every proof is complete and rests on
   con-ron kernel replays the same export with two workers for at most 30
   minutes. That replay is advisory: Palomar records a capacity limit (memory or
   time) as a warning and only a rejection as a failure, and so does the script.
-  The certificates make the replays long. Before the faster `Cert.check`,
-  Lean's kernel replayed the nine-point export in about 2 h 10 min on one
-  core, NanoDa in about 30 minutes, and con-ron with two workers in 1 h 50 min
-  and 23 GB, so its 30-minute replay declines with a warning, in Palomar and
+  The certificates make the replays long. In Palomar's preflight on its
+  standard runner (4 cores, 16 GB), the build of nine points takes 66 minutes
+  and peaks at 6.3 GB, and Comparator's replays through Lean's kernel and
+  NanoDa take 170 minutes together, peaking at 6.2 GB: about 4 h 30 min of
+  Palomar's 5 h 30 min in all. Con-ron needs about 1 h 50 min and 23 GB with
+  two workers, so its 30-minute replay declines with a warning, in Palomar and
   here.
 
 [`.github/workflows/lean.yml`](../.github/workflows/lean.yml) runs the build,
