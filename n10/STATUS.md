@@ -984,6 +984,29 @@ open, so the whole ITTT count remains unchecked. The global frontier is still
 ten C1 count rows, thirteen N6 count rows and two central N7 roots; the
 unrestricted hand theorem is incomplete.
 
+## Hand checkpoint 88: complete central N7 E-only word
+
+The [whole E-only word](hand/N7_CENTRAL_COMPLETION_E_ONLY_EXCLUSION.md)
+is excluded in both central roots CA and CB. Its complete five-word cover,
+with one further actual AEG split, has twelve impossible leaves. Two
+separate source-complete readers reconstruct 72 stages, 3,040 geometric
+deductions, 3,080 initial scalar versions, 12,598 scalar updates, 2,373
+relations, 1,429 physical factors, 2,394 coordinate updates and 23,233
+complete endpoint lines. Every positive terminal combination is exact:
+six cubics have 1,344 products and two scalar-area sums have 35 terms.
+The other four leaves have scalar or coordinate contradictions. Independent
+mathematical review accepts every actual source, normalized barycentric
+argument, nested-fan identity and branch; 22 corruptions are rejected.
+
+The [occupied-HCF lemma](hand/N7_CENTRAL_COMPLETION_UPPER_FAN_CAP.md)
+also has independent acceptance. If HCF contains both upper points, then
+f>617/1000 and both AEF and BEF have capacity one. Separate exact readers
+check all contact/difference identities and positive rational gaps.
+
+The central N7 C, CE, EF and CEF upper-pair words still require proofs.
+Both central parent roots remain open, as do ten C1 and thirteen N6 count
+rows. The unrestricted hand theorem is incomplete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

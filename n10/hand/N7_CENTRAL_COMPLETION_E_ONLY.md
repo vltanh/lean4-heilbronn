@@ -2,7 +2,8 @@
 
 This note concerns the two all-interior lower-central roots CA and CB in
 `N7_ONE_LOWER_SETUP.md`. It records consequences valid on the whole E-only
-upper-pair word; it does not close that word.
+upper-pair word. The complete exclusion is proved separately in
+[N7_CENTRAL_COMPLETION_E_ONLY_EXCLUSION.md](N7_CENTRAL_COMPLETION_E_ONLY_EXCLUSION.md).
 
 Use the actual contacts
 \(A=(0,a), B=(b,0), C=(c,0), D=(1,d), E=(1,e),
@@ -262,5 +263,7 @@ accepted EFG-cap audit. The optional command is
 python3 n10/hand/audit_n7_e_only.py
 ~~~
 
-These structural consequences are accepted as stated. They leave the five
-ordered words in (10), both central roots, and the global N7 exclusion open.
+These structural consequences are accepted as stated. The five ordered
+words in (10) are excluded in the complete E-only proof linked above.
+Other upper-pair words, both central roots and the global N7 exclusion
+remain open.

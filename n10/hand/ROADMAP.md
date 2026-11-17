@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 87.
+Checkpoint 88.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -980,7 +980,7 @@ four-corner alternative and all zero-area faces.
         both central roots. Independent geometry and exact checks of
         nine identities and five positive comparison gaps pass.
         Proof: UPPER_EAR_SEPARATION.md. The actual-contact theorem
-        also applies to N6; the surviving E-only cut remains open.
+        also applies to N6. The N7 E-only exclusion is assembled below.
   - [x] N7-CENTRAL-E-ONLY-CONTACT-LEMMAS. In both central lower
         roots with two actual points in CEF, the three triangles
         AFH, BFH and ABF are empty, e>57/100, and AEF has capacity
@@ -990,8 +990,8 @@ four-corner alternative and all zero-area faces.
         prove these statements. An independent SymPy/Fraction pass
         checks 33 identities and exact comparisons; the separate
         author reader checks 39. Proof: N7_CENTRAL_COMPLETION.md,
-        Sections 1–6. These lemmas leave the E-only word and both
-        central parents open.
+        Sections 1–6. The E-only assembly below uses these lemmas;
+        both central parents remain open.
   - [x] N7-CENTRAL-EFG-CAP. If CEF contains the two upper points,
         actual EFG<(149/20)s in both central lower roots, independently
         of the upper-pair line. Six exhaustive G-sign words in each
@@ -1011,8 +1011,29 @@ four-corner alternative and all zero-area faces.
         arguments, affine containments and exhaustive cyclic line
         signs have independent review; the separate exact reader
         expands every displayed identity and finite catalogue.
-        Proof: N7_CENTRAL_COMPLETION_E_ONLY.md. This is a reduction;
-        the five words and both central parents remain open.
+        Proof: N7_CENTRAL_COMPLETION_E_ONLY.md. The following complete
+        exclusion discharges all five words; both parents stay open.
+  - [x] N7-CENTRAL-E-ONLY-COMPLETE. The entire E-only upper-pair
+        word is excluded in both central roots. Five ordered words,
+        with one further AEG sign split, give twelve complete leaves:
+        two scalar, two coordinate, six cubic and two scalar-area
+        contradictions. Full literal tables print 72 stages, 3,040
+        geometric deductions, 12,598 scalar updates, 2,394 coordinate
+        updates with 23,233 endpoint lines, 1,344 positive cubic
+        products and 35 positive scalar-area terms. Two separate
+        source-complete readers and independent mathematical review
+        accept all geometry, bounds, source ancestry and coverage;
+        22 independent corruptions are rejected.
+        Proof: N7_CENTRAL_COMPLETION_E_ONLY_EXCLUSION.md and tables.
+        The C, CE, EF and CEF upper-pair words remain open.
+  - [x] N7-CENTRAL-UPPER-FAN-CAPS. If HCF contains the two upper
+        points, then f>617/1000 and actual AEF and BEF both have
+        capacity one in both roots. Exact contact identities, positive
+        denominator bounds and rational endpoint gaps prove the lemma.
+        Independent mathematical review and separate exact readers
+        accept every substitution and comparison.
+        Proof: N7_CENTRAL_COMPLETION_UPPER_FAN_CAP.md.
+        This conditional lemma does not close another upper-pair word.
   - [ ] N7-INTERIOR-REMAINDER. Exclude the two central lower cells
         CA and CB in the sole remaining all-interior heptagon count
         (k,j,q)=(1,2,0). Both lower-ear children are complete above.
@@ -1224,7 +1245,9 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_BTTT_REMAINING_ITTT_TRIANGULAR.md and indexed tables | Both remaining normalized triangular ITTT words: twelve splits, fourteen leaves, 8,656 coordinate updates and two independent literal readers |
 | N6_BTTT_REMAINING_ITTT_ROUTE.md | Exact upper-point coordinate factors with contact ceilings fixed before refinement |
 | N6_BTTT_REMAINING_AFFINE_BOUNDS.md | Exact affine actual-area bound and terminal rule with six independently reviewed source families |
-| N7_CENTRAL_COMPLETION_E_ONLY.md | Uniform E-only sign and actual-containment consequences; three G-sign words and five ordered central words remain |
+| N7_CENTRAL_COMPLETION_E_ONLY.md | Uniform E-only actual-containment and sign reduction used by the complete exclusion |
+| N7_CENTRAL_COMPLETION_E_ONLY_EXCLUSION.md and indexed tables | Whole E-only word in CA and CB: twelve leaves, 72 stages, 1,344 cubic products, 35 scalar-area terms and two independent source-complete readers |
+| N7_CENTRAL_COMPLETION_UPPER_FAN_CAP.md | Occupied HCF forces f>.617 and AEF/BEF capacity one in both central roots, with independent exact review |
 | N6_BTTT_TOP_TRIANGLE_WORD.md and indexed tables | Complete normalized BTTT --+- word: sixteen sign splits, nine coordinate cuts, twenty-six terminal contradictions and two independent semantic readers |
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_ONE_LOWER_THREE_CAPS.md | Entire (1,0,1,1,1) count: two reflected lower alternatives, 89 deductions, 158 interval steps, forty scalar caps and two cubics / 742 terms |
