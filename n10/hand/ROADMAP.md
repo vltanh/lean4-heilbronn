@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 92.
+Checkpoint 93.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -1103,6 +1103,21 @@ four-corner alternative and all zero-area faces.
         covers; four corruptions are rejected.
         Proof: N7_CENTRAL_COMPLETION_GLOBAL_AEF_CAP.md. C, CE and EF
         and both central parent roots remain open.
+  - [x] N7-CENTRAL-BOX-CAPS. ABF and AFH each have capacity two
+        throughout both central roots. Two actual determinant formulas
+        and two nonnegative box remainders give ABF<=143425697/181400000,
+        AFH<=.760263 in CA and <=.775274 in CB, all strictly below
+        the three-occupant cost .823422. Independent mathematical
+        review and two exact readers check every source and gap.
+        Proof: N7_CENTRAL_COMPLETION_BOX_CAPS.md. The capacities do
+        not exclude an upper-pair word or either central parent.
+  - [x] N7-CENTRAL-QUAD-CAP. Actual ABEF has capacity two: its
+        area is 1-(e-a)(f-b)<=1, whereas three actual interior points
+        cost at least 93/91. Two occupants and three inward tests at
+        a third point force the fourth test negative by clearance.
+        Independent geometry and separate exact identity/gap checks
+        pass. Proof: N7_CENTRAL_COMPLETION_QUAD_CAP.md. Both central
+        parents and the remaining three upper-pair words stay open.
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -1323,6 +1338,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_CENTRAL_COMPLETION_CEF2_TRANSFER.md | Two CEF occupants and AEG<0,COP<0,EOP>0 force AEO>0, with FOP unrestricted; independent actual-containment and identity review |
 | N7_CENTRAL_COMPLETION_HCE_CAP.md | Two HCE occupants force AEF capacity two in both central roots; fourteen exact rectangles, ordered endpoint ratios and independently checked positive gaps |
 | N7_CENTRAL_COMPLETION_GLOBAL_AEF_CAP.md | Uniform actual AEF capacity two in both central roots; sixteen HEF-occupied rectangles and the accepted HCE theorem cover every upper-point placement |
+| N7_CENTRAL_COMPLETION_BOX_CAPS.md | Uniform capacity two for ABF and AFH from actual determinant formulas, common boxes and two explicit nonnegative remainders |
+| N7_CENTRAL_COMPLETION_QUAD_CAP.md | Actual ABEF capacity two and its four-edge capacity sign implication, with strict actual convexity and the exact cost gap 2/91 |
 | N6_BTTT_TOP_TRIANGLE_WORD.md and indexed tables | Complete normalized BTTT --+- word: sixteen sign splits, nine coordinate cuts, twenty-six terminal contradictions and two independent semantic readers |
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_ONE_LOWER_THREE_CAPS.md | Entire (1,0,1,1,1) count: two reflected lower alternatives, 89 deductions, 158 interval steps, forty scalar caps and two cubics / 742 terms |

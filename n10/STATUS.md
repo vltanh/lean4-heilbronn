@@ -1116,6 +1116,27 @@ The global hand-proof frontier is ten C1 count rows, eleven N6 count
 rows and the two central N7 roots. C, CE and EF remain open in N7.
 The unrestricted hand theorem is incomplete.
 
+## Hand checkpoint 93: central anchor and quadrilateral capacities
+
+The [common-box anchor lemma](hand/N7_CENTRAL_COMPLETION_BOX_CAPS.md)
+proves capacity two for actual ABF and AFH throughout both central
+N7 roots. Exact nonnegative remainders give
+ABF<=143425697/181400000, AFH<=.760263 in CA and <=.775274 in CB.
+All ceilings are strictly below the three-occupant cost .823422.
+Independent mathematical review and two exact readers verify the
+four actual-coordinate identities and every printed cap and gap.
+
+The [actual ABEF quadrilateral](hand/N7_CENTRAL_COMPLETION_QUAD_CAP.md)
+also has capacity two, since its exact area is 1-(e-a)(f-b)<=1
+and three interior points would cost 93/91>1. With two actual
+occupants, three inward edge tests at a third point force the
+fourth test negative. Independent actual geometry and separate
+identity/gap readers pass.
+
+These are local capacities. The global frontier remains ten C1
+counts, eleven N6 counts and the two central N7 roots. C, CE and EF
+remain open, and the unrestricted hand theorem is incomplete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
