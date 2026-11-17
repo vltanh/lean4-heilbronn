@@ -1085,6 +1085,37 @@ The remaining frontier is unchanged: ten C1 counts, twelve N6 counts,
 and two central N7 roots, with C, CE and EF still open. The unrestricted
 hand theorem is incomplete.
 
+## Hand checkpoint 92: complete BRTT count and uniform AEF capacity
+
+The [BRTT count](hand/N6_BTTT_REMAINING_BRTT.md), (1,0,1,2,0),
+and its left-cap transpose are excluded. Both top-hull alternatives
+are covered by 45 binary actual-sign splits and 46 contradictory
+leaves: thirty interval, three scalar and thirteen coordinate-product
+terminals. There is no e<=f assumption and no coordinate cut.
+
+Separate semantic readers and independent mathematical review check
+all 99 contexts, 4,731 actual-sign deductions, 293 stages, 2,473
+physical factors, 8,792 coordinate updates, 37,694 scalar updates,
+4,535 relations, 49,074 immutable bounds and thirteen capacity
+sources. Every fixed initial-box support maximum and both coarse-box
+versions have explicit proofs. The terminal sums have 2,829 source
+occurrences, 6,095 positive products, 6,586 expanded and 7,306 shifted
+coefficients. Thirty independent corruptions are rejected in each
+top-hull alternative. The accepted full ITTT regression still passes.
+
+The [uniform AEF theorem](hand/N7_CENTRAL_COMPLETION_GLOBAL_AEF_CAP.md)
+also proves capacity two throughout both central N7 roots, with no
+pair-word premise. Sixteen rational rectangles handle a single HEF
+occupant; the accepted HCE theorem handles the complementary placement.
+Fresh independent geometry, Fraction arithmetic, complete interval-union
+coverage and nine coordinate identities verify the stated uniform
+ceilings .814603 in CA and .823185 in CB, both below .823422.
+Four corruptions are rejected.
+
+The global hand-proof frontier is ten C1 count rows, eleven N6 count
+rows and the two central N7 roots. C, CE and EF remain open in N7.
+The unrestricted hand theorem is incomplete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

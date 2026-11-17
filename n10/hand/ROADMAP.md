@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 91.
+Checkpoint 92.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -770,9 +770,9 @@ four-corner alternative and all zero-area faces.
         fourteen polynomial identities, all 256 six-label sign conversions
         and three positive square gaps are checked.
         Proof: AREA_RELATIONS.md and check_area_relations.js.
-  - [ ] Complete the remaining twelve exterior-cap counts with k=0
+  - [ ] Complete the remaining eleven exterior-cap counts with k=0
         or k=1, outside the stated projection chambers. The ledger also
-        retains the completed IIRR, IRRT, BTTT and ITTT rows. Counts are (k,j,r,t,l), up to
+        retains the completed IIRR, IRRT, BTTT, ITTT and BRTT rows. Counts are (k,j,r,t,l), up to
         exchange of the two side caps:
     - [ ] N6-IRTL: (0,1,1,1,1).
     - [ ] N6-IRTT: (0,1,1,2,0).
@@ -795,7 +795,17 @@ four-corner alternative and all zero-area faces.
           65 caps and 1,000 endpoint values; a fresh implementation
           also expands 4,321 physical determinant identities.
     - [ ] N6-IIRL: (0,2,1,0,1).
-    - [ ] N6-BRTT: (1,0,1,2,0).
+    - [x] N6-BRTT: (1,0,1,2,0). Both top-hull alternatives and
+          both side-cap reflections are excluded. Forty-five binary
+          determinant splits cover 46 leaves, with no coordinate cuts:
+          thirty interval, three scalar and thirteen coordinate-product
+          contradictions. Separate readers and mathematical review check
+          all 99 contexts, 4,731 deductions, 293 stages, 2,473 physical
+          factors, 8,792 coordinate updates, 37,694 scalar updates,
+          4,535 relations and thirteen capacity sources. The positive
+          terminal sums have 6,095 products and exact negative ceilings.
+          Thirty corruptions are rejected in each alternative.
+          Proof: N6_BTTT_REMAINING_BRTT.md, setup and two indexed tables.
     - [ ] N6-BITT: (1,1,0,2,0).
     - [ ] N6-BIRL: (1,1,1,0,1).
     - [ ] N6-BIRT: (1,1,1,1,0).
@@ -1082,6 +1092,17 @@ four-corner alternative and all zero-area faces.
         interval-union coverage and four corruption checks pass.
         Proof: N7_CENTRAL_COMPLETION_HCE_CAP.md. This conditional cap
         leaves C, CE and EF and both central parents open.
+  - [x] N7-CENTRAL-GLOBAL-AEF-CAP. Actual AEF has capacity two
+        throughout both central roots, with no pair-word premise.
+        Sixteen rational rectangles show that one HEF occupant gives
+        AEF<=.814356 in CA and <=.818395 in CB. Combining with the
+        occupied-HCE theorem by the actual HE diagonal partition gives
+        uniform ceilings .814603 and .823185, both below .823422.
+        Separate exact readers and independent mathematical review
+        check nine identities, every source and the complete rectangle
+        covers; four corruptions are rejected.
+        Proof: N7_CENTRAL_COMPLETION_GLOBAL_AEF_CAP.md. C, CE and EF
+        and both central parent roots remain open.
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -1291,6 +1312,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_BTTT_REMAINING_ITTT_CENTRAL.md and indexed tables | Entire central ITTT word: 145 splits, 146 leaves, 1,243 stages, 174 affine bounds, thirteen coordinate polynomial terminals and two independent literal readers |
 | N6_BTTT_REMAINING_ITTT_CENTRAL_SETUP.md | Actual EQRF/S geometry, exact contact ceilings, upper-point identities and initial continuous boxes |
 | N6_BTTT_REMAINING_ITTT_COUNT.md | Whole ITTT (0,1,0,3,0) exclusion: six normalized words, 195 splits and 201 leaves |
+| N6_BTTT_REMAINING_BRTT.md, setup and indexed tables | Whole BRTT (1,0,1,2,0) and reflection: both top hulls, 45 splits, 46 leaves and two independent semantic readers |
 | N6_BTTT_REMAINING_COORDINATE_PRODUCTS.md | Positive coordinate-polynomial products, repeated-index translation and exact signed coefficient ceiling |
 | N6_BTTT_REMAINING_ITTT_ROUTE.md | Exact upper-point coordinate factors with contact ceilings fixed before refinement |
 | N6_BTTT_REMAINING_AFFINE_BOUNDS.md | Exact affine actual-area bound and terminal rule with six independently reviewed source families |
@@ -1300,6 +1322,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N7_CENTRAL_COMPLETION_CEF_EXCLUSION.md and indexed tables | Whole CEF word in CA and CB: 31 leaves, 234 stages, 2,302 positive polynomial products, sixty mesh obstructions and two independent source-complete readers |
 | N7_CENTRAL_COMPLETION_CEF2_TRANSFER.md | Two CEF occupants and AEG<0,COP<0,EOP>0 force AEO>0, with FOP unrestricted; independent actual-containment and identity review |
 | N7_CENTRAL_COMPLETION_HCE_CAP.md | Two HCE occupants force AEF capacity two in both central roots; fourteen exact rectangles, ordered endpoint ratios and independently checked positive gaps |
+| N7_CENTRAL_COMPLETION_GLOBAL_AEF_CAP.md | Uniform actual AEF capacity two in both central roots; sixteen HEF-occupied rectangles and the accepted HCE theorem cover every upper-point placement |
 | N6_BTTT_TOP_TRIANGLE_WORD.md and indexed tables | Complete normalized BTTT --+- word: sixteen sign splits, nine coordinate cuts, twenty-six terminal contradictions and two independent semantic readers |
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_ONE_LOWER_THREE_CAPS.md | Entire (1,0,1,1,1) count: two reflected lower alternatives, 89 deductions, 158 interval steps, forty scalar caps and two cubics / 742 terms |

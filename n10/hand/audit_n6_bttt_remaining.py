@@ -12,6 +12,8 @@ The flags --ittt-ear-mppm, --ittt-ear-ppmp, --ittt-tri-mmmm and
 all four are in audit_n6_ittt_words_mutations.py.
 --ittt-central checks the complete normalized +--+ word, including
 coordinate-product terminals and all binary siblings.
+--brtt-triangular and --brtt-convex check the two exhaustive BRTT
+top-pair alternatives, without an e<=f normalization.
 """
 from pathlib import Path
 from fractions import Fraction as F
@@ -19,15 +21,20 @@ from itertools import combinations,permutations,product
 import re,json,sys
 ARGS=sys.argv[1:];MUTATIONS='--mutations' in ARGS
 if MUTATIONS:ARGS.remove('--mutations')
-assert ARGS in ([], ['--central-ear'], ['--central-positive'], ['--central-negative'], ['--ittt-ear-mppm'], ['--ittt-ear-ppmp'], ['--ittt-tri-mmmm'], ['--ittt-tri-mmmp'], ['--ittt-central']) and (not MUTATIONS or ARGS==['--central-negative']), 'Unsupported audit mode'
+assert ARGS in ([], ['--central-ear'], ['--central-positive'], ['--central-negative'], ['--ittt-ear-mppm'], ['--ittt-ear-ppmp'], ['--ittt-tri-mmmm'], ['--ittt-tri-mmmp'], ['--ittt-central'], ['--brtt-triangular'], ['--brtt-convex']) and (not MUTATIONS or ARGS==['--central-negative']), 'Unsupported audit mode'
+BRTT=ARGS in (['--brtt-triangular'],['--brtt-convex'])
 ITTT_CENTRAL=ARGS==['--ittt-central']
 ITTT_MPPM=ARGS==['--ittt-ear-mppm'];ITTT_PPMP=ARGS==['--ittt-ear-ppmp'];ITTT_MMMM=ARGS==['--ittt-tri-mmmm'];ITTT_MMMP=ARGS==['--ittt-tri-mmmp'];ITTT=ITTT_MPPM or ITTT_PPMP or ITTT_MMMM or ITTT_MMMP or ITTT_CENTRAL
-CENTRAL_EAR=ARGS==['--central-ear'];CENTRAL_POSITIVE=ARGS==['--central-positive'];CENTRAL_NEGATIVE=ARGS==['--central-negative'];FEEDBACK=CENTRAL_POSITIVE or CENTRAL_NEGATIVE or ITTT;CENTRAL=CENTRAL_EAR or CENTRAL_POSITIVE or CENTRAL_NEGATIVE or ITTT_CENTRAL
+CENTRAL_EAR=ARGS==['--central-ear'];CENTRAL_POSITIVE=ARGS==['--central-positive'];CENTRAL_NEGATIVE=ARGS==['--central-negative'];FEEDBACK=CENTRAL_POSITIVE or CENTRAL_NEGATIVE or ITTT or BRTT;CENTRAL=CENTRAL_EAR or CENTRAL_POSITIVE or CENTRAL_NEGATIVE or ITTT_CENTRAL
 ROOT=Path(__file__).resolve().parent/('N6_BTTT_REMAINING_ITTT_EAR_MPPM_TABLES' if ITTT_MPPM else 'N6_BTTT_REMAINING_ITTT_EAR_PPMP_TABLES' if ITTT_PPMP else 'N6_BTTT_REMAINING_ITTT_TRI_MMMM_TABLES' if ITTT_MMMM else 'N6_BTTT_REMAINING_ITTT_TRI_MMMP_TABLES' if ITTT_MMMP else 'N6_BTTT_REMAINING_CENTRAL_NEGATIVE_TABLES' if CENTRAL_NEGATIVE else 'N6_BTTT_REMAINING_CENTRAL_EAR_TABLES' if CENTRAL_EAR else 'N6_BTTT_REMAINING_CENTRAL_POSITIVE_TABLES' if CENTRAL_POSITIVE else 'N6_BTTT_REMAINING_TABLES');L='ABCEFHPQRS';V='a b c e f h p q u v r w j k'.split();s=F(93,1000);alpha=F(1037,10000);K=F(149,20);J=F(4427,500);G=F(1457,250)
 TOP_COST=G if CENTRAL else K
 if ITTT_CENTRAL:ROOT=Path(__file__).resolve().parent/'N6_BTTT_REMAINING_ITTT_CENTRAL_TABLES'
 CONTACT_CEILING=F(33,125) if CENTRAL else F(21,125)
 WORD='-++-' if ITTT_MPPM else '++-+' if ITTT_PPMP else '----' if ITTT_MMMM else '---+' if ITTT_MMMP else '+--+' if CENTRAL else '---+'
+if BRTT:
+ WORD='+' if ARGS==['--brtt-convex'] else '-'
+ ROOT=Path(__file__).resolve().parent/('N6_BTTT_REMAINING_BRTT_CONVEX_TABLES' if WORD=='+' else 'N6_BTTT_REMAINING_BRTT_TRIANGULAR_TABLES')
+ from n6_brtt_independent import coarse as brtt_coarse,physical as brtt_physical
 EMPTY=['ABC','ABE','ACE','BCE']+([] if CENTRAL else ['ABF','ABH','AFH','BFH'])
 COST=[s,3*s,K*s,J*s]
 def rows(text,title):
@@ -112,21 +119,23 @@ for ci,t in blocks((ROOT/'contexts.md').read_text(),'Context'):
  for w in combinations('ABCEFH',3):put(''.join(w),1)
  for p in 'PQRS':
   for i,a in enumerate('ABCEFH'):
-   edge=a+'ABCEFH'[(i+1)%6];put(edge+p,-1 if p!='P' and edge=='EF' else 1)
+   edge=a+'ABCEFH'[(i+1)%6];put(edge+p,(-1 if (p=='Q' and edge=='CE' or p in 'RS' and edge=='EF') else 1) if BRTT else (-1 if p!='P' and edge=='EF' else 1))
   put('HC'+p,-1 if p=='P' and not ITTT else 1)
   if p!='P':
-   for edge,sg in ([('HE',1),('CF',-1)] if ITTT else [('HE',1),('CF',-1),('HP',1),('CP',-1)]):put(edge+p,sg)
- for w,sg in [('EQR',1),('EQS',1),('ERS',1)]+list(zip(['FQR','FQS','FRS','QRS'],[1 if t=='+' else -1 for t in WORD])):put(w,sg)
+   for edge,sg in ([('HE',-1 if p=='Q' else 1),('CF',-1),('HP',1),('CP',-1)] if BRTT else [('HE',1),('CF',-1)] if ITTT else [('HE',1),('CF',-1),('HP',1),('CP',-1)]):put(edge+p,sg)
+ initial_top=[('EQR',-1),('EQS',-1),('EPR',-1),('EPS',-1),('FPR',1),('FPS',1),('ERS',1),('FRS',1 if WORD=='+' else -1)] if BRTT else [('EQR',1),('EQS',1),('ERS',1)]+list(zip(['FQR','FQS','FRS','QRS'],[1 if t=='+' else -1 for t in WORD]))
+ for w,sg in initial_top:put(w,sg)
  for i,w,sg,rule,wit in rows(t,'Geometric deductions'):
   sg=1 if sg=='+' else -1;assert sign(kn,w)==0
   if rule=='branch':assert w+('+' if sg==1 else '-') in listv(props(t)['Given actual signs'])
-  elif rule=='fixed-top-cross':assert (w[0]=='E' and sg==-1 or w[0]=='F' and sg==1) and w[1]=='P' and w[2] in 'QRS'
+  elif rule=='fixed-top-cross':assert (w[0]=='E' and sg==-1 or w[0]=='F' and sg==1) and w[1]=='P' and w[2] in ('RS' if BRTT else 'QRS')
   elif rule=='plu':
    a,b,c,d,e=wit;ss=[(a+b+c,a+d+e,1),(a+b+d,a+c+e,-1),(a+b+e,a+c+d,1)];vals=[co*sign(kn,x)*sign(kn,y) for x,y,co in ss];nz=[v for v in vals if v];assert len(nz)==2 and nz[0]==nz[1]
    x,y,co=ss[vals.index(0)];known=sign(kn,x) or sign(kn,y);tr=y if sign(kn,x) else x;assert sign({key(w):sg*sign({key(w):1},w)},tr)==-nz[0]*co*known
   elif rule in ['empty','via']:
    mm=re.fullmatch(r'hull ([A-Z]+); point ([A-Z])(?:; line ([A-Z]{2}))?',wit);h,p,line=mm.groups()
    if rule=='empty':
+    assert not BRTT,'BRTT has no unconditional empty anchor'
     assert h in EMPTY;tests=[h[j]+h[(j+1)%len(h)]+p for j in range(len(h))];assert sum(sign(kn,x)==1 for x in tests)==2;tr=next(x for x in tests if not sign(kn,x));assert key(tr)==key(w) and sg*sign({key(w):1},w)==-sign({key(tr):1},tr)
    else:
     assert h=='ABCEFH' and p=='P' or h==('HCEF' if ITTT else 'HABC') and p=='P' or inside(kn,h,p)
@@ -149,27 +158,37 @@ stages={};allbounds={};bary_updates=0;updates=0;coordinate=0;relations_n=0;physi
 def mark_terminal(sid):
  assert sid not in terminal_stages
  terminal_stages.add(sid)
-for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEGATIVE or ITTT else ['stages_00.md'] if CENTRAL_EAR else ['stages_00.md','stages_01.md','stages_02.md']):
+for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEGATIVE or ITTT or BRTT else ['stages_00.md'] if CENTRAL_EAR else ['stages_00.md','stages_01.md','stages_02.md']):
  for sid,t in blocks((ROOT/filename).read_text(),'Stage'):
   pp=props(t);kn=ctx[int(pp['Context'])];scope=pp['Scope'];assert sid not in stages;stages[sid]=(scope,t,kn)
+  if BRTT:assert pp['Coordinate cut']=='none'
   # Independently reconstruct printed physical factors and all endpoint interval updates.
   if pp['Box present']=='yes':
    box=rows(t,'Coordinate box');lo=[F(r[1]) for r in box];hi=[F(r[2]) for r in box]
-   top=TOP_COST*s;cap=1-top/(1-alpha);delta=s/(1-alpha);ear=sign(kn,'ACP')<0 or sign(kn,'HBP')<0;rho=(4 if ITTT else K if ear else G)*s
-   exlo=[alpha,alpha,rho,alpha,alpha,rho,delta,delta]+[alpha+s]*6;exhi=[min(cap,CONTACT_CEILING),cap,F(1),min(cap,CONTACT_CEILING),cap,F(1),1-s,1-s]+[F(1)]*6
-   exlo[2]=max(exlo[2],alpha+s/exhi[0]);exlo[5]=max(exlo[5],alpha+s/exhi[1])
-   if not ITTT and sign(kn,'ACP')==1 and sign(kn,'HBP')==1:exlo[6]=exlo[7]=s*(1+alpha)/(1-alpha)
-   if not ITTT:exhi[6]=1-s-exlo[7];exhi[7]=1-s-exlo[6]
-   for pt in 'QRS':
-    oo=[p for p in 'QRS' if p!=pt and inside(kn,'E'+pt+'F',p)];i=6+2*'PQRS'.index(pt);exlo[i]=exlo[i+1]=alpha+COST[len(oo)]/(1-alpha)
-    for p in oo:j=6+2*'PQRS'.index(p);exhi[j]=min(exhi[j],1-delta);exhi[j+1]=min(exhi[j+1],1-delta)
+   if BRTT:
+    exlo,exhi,rho=brtt_coarse(sys.modules[__name__],kn,int(pp['Coarse version']),WORD)
+   else:
+    top=TOP_COST*s;cap=1-top/(1-alpha);delta=s/(1-alpha);ear=sign(kn,'ACP')<0 or sign(kn,'HBP')<0;rho=(4 if ITTT else K if ear else G)*s
+    exlo=[alpha,alpha,rho,alpha,alpha,rho,delta,delta]+[alpha+s]*6;exhi=[min(cap,CONTACT_CEILING),cap,F(1),min(cap,CONTACT_CEILING),cap,F(1),1-s,1-s]+[F(1)]*6
+    exlo[2]=max(exlo[2],alpha+s/exhi[0]);exlo[5]=max(exlo[5],alpha+s/exhi[1])
+    if not ITTT and sign(kn,'ACP')==1 and sign(kn,'HBP')==1:exlo[6]=exlo[7]=s*(1+alpha)/(1-alpha)
+    if not ITTT:exhi[6]=1-s-exlo[7];exhi[7]=1-s-exlo[6]
+    for pt in 'QRS':
+     oo=[p for p in 'QRS' if p!=pt and inside(kn,'E'+pt+'F',p)];i=6+2*'PQRS'.index(pt);exlo[i]=exlo[i+1]=alpha+COST[len(oo)]/(1-alpha)
+     for p in oo:j=6+2*'PQRS'.index(p);exhi[j]=min(exhi[j],1-delta);exhi[j+1]=min(exhi[j+1],1-delta)
    if pp['Parent box']!='none':
     parent=int(pp['Parent box']);assert FEEDBACK and parent<sid and parent in stageboxes and (scope==stages[parent][0] or scope.startswith(stages[parent][0]+'/'));plo,phi=stageboxes[parent];exlo=[max(a,b) for a,b in zip(exlo,plo)];exhi=[min(a,b) for a,b in zip(exhi,phi)]
    assert lo==exlo and hi==exhi
    polys={}
    for fi,name,prem,printed in rows(t,'Physical factors'):
     mm=re.fullmatch(r'actual ([A-Z]{3}); occupants (.*)',prem)
-    if mm:
+    if BRTT:
+     assert prem.startswith('brtt ')
+     def earlier_brtt(obj):
+      br=allbounds[obj['ref']];assert br[:3]==(obj['triangle'],obj['direction'],F(obj['value'])) and br[3]<sid and (scope==br[4] or scope.startswith(br[4]+'/'))
+      return br[2]
+     expected=brtt_physical(sys.modules[__name__],json.loads(prem[5:]),kn,lo,hi,int(pp['Coarse version']),WORD,earlier_brtt)
+    elif mm:
      tr,ii=mm.groups();assert sorted(listv(ii))==sorted(occ(kn,tr));expected=polyadd(scale(det(tr),sign(kn,tr)),const(-COST[len(listv(ii))]))
     elif prem.startswith('contact order '):
      aa,bb={'ha':(5,0),'ea':(3,0),'he':(5,3),'fb':(4,1),'cf':(2,4),'sym':(4,3)}[prem[14:]];expected=sub(vv[aa],vv[bb])
@@ -203,8 +222,9 @@ for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEG
      M=(1-alpha)**2/s;assert F(m0)==M and sum(costs)<=M;ce,cf,cu=costs;oi=6+2*'PQRS'.index(outer);ii=6+2*'PQRS'.index(inner)
      terms=[polyadd(scale(vv[ii],M),const(-ce),scale(vv[4],-(M-ce-cu)),scale(vv[oi],-cu)),polyadd(const(M-cf-cu),scale(vv[4],cf),scale(vv[oi],cu),scale(vv[ii],-M)),polyadd(scale(vv[ii+1],M),const(-cf),scale(vv[3],-(M-cf-cu)),scale(vv[oi+1],-cu)),polyadd(const(M-ce-cu),scale(vv[3],ce),scale(vv[oi+1],cu),scale(vv[ii+1],-M))];expected=terms[int(axis)]
     else:raise Exception(prem)
-    assert parsepoly(printed)==expected,(sid,fi,name);polys[fi]=expected;physical_n+=1
+    assert parsepoly(printed)==expected and fi not in polys,(sid,fi,name);polys[fi]=expected;physical_n+=1
    def lines(poly,idx):
+    assert all(len(mon)==len(set(mon)) for mon in poly),'nonmultiaffine interval source'
     inds=sorted(set(sum((list(m) for m in poly),[]))-{idx});at=lo.copy();out=set()
     for bs in product([0,1],repeat=len(inds)):
      for j,b in zip(inds,bs):at[j]=hi[j] if b else lo[j]
@@ -265,12 +285,12 @@ for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEG
     else:
      mm=re.fullmatch(r'quadrilateral ([A-Z]{4}); occupants (.*); rate ([^ ]+)',wit);h,ii,rate0=mm.groups();a,b,c,d=h;ii=listv(ii);assert 1<=len(ii)<=2 and len(set(ii))==len(ii) and all(inside(kn,h,p) for p in ii);nn=tuple(sorted([sum(inside(kn,a+c+d,p) for p in ii),sum(inside(kn,b+c+d,p) for p in ii)]));rates=({(0,0):F(29,5),(0,1):F(149,20),(1,1):F(12)} if len(ii)==1 else {(0,0):F(1142,125),(0,1):F(1142,125),(0,2):F(139,10),(1,1):F(12),(1,2):F(199,10),(2,2):F(149,5)});rate=rates[nn]
      if len(ii)==2 and all(inside(kn,a+b+c,p) and inside(kn,a+b+d,p) for p in ii):rate=max(rate,F(299,31))
-     if CENTRAL_NEGATIVE or ITTT:assert F(rate0)>0 and F(rate0)<=max(rate,G if len(ii)==1 else rate);rate=F(rate0)
+     if CENTRAL_NEGATIVE or ITTT or BRTT:assert F(rate0)>0 and F(rate0)<=max(rate,G if len(ii)==1 else rate);rate=F(rate0)
      else:assert F(rate0)==rate
      expected=list(map(key,[a+b+d,a+b+c,a+c+d]))
     assert convex(kn,h) and [X,Y,Z]==expected and F(ks)==rate*s
    elif kind=='four':
-    assert (CENTRAL_NEGATIVE or ITTT) and wit.startswith('vertices ');a,b,c,d=wit[9:];assert len(set((a,b,c,d)))==4
+    assert (CENTRAL_NEGATIVE or ITTT or BRTT) and wit.startswith('vertices ');a,b,c,d=wit[9:];assert len(set((a,b,c,d)))==4
     expected={key(w):co*sign(kn,w) for w,co in [(a+b+c,1),(a+c+d,1),(a+b+d,-1),(b+c+d,-1)]};assert all(expected.values())
     assert eqn.endswith(' = 0') and area_coefficients(eqn[:-4])==expected
     assert not polyadd(det(a+b+c),det(a+c+d),scale(det(a+b+d),-1),scale(det(b+c+d),-1))
@@ -345,7 +365,7 @@ for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEG
     if output=='none':mark_terminal(sid);affine_terminals+=1;print('fresh affine terminal',sid,result,flush=True)
     else:records[output]=(target,direction,result);allbounds[output]=(target,direction,result,sid,scope);affine_n+=1
   if rows(t,'Coordinate certificate sources'):
-   assert ITTT_CENTRAL
+   assert ITTT_CENTRAL or BRTT
    from n6_coordinate_products_independent import audit_coordinate_certificate
    def coordinate_endpoint(obj):
     ref=obj['ref'];br=allbounds[ref];assert br[:3]==(obj['triangle'],obj['direction'],F(obj['value']))
@@ -392,11 +412,14 @@ def visit(node,allowed=frozenset(),depth=0,parent=None):
 root_given=frozenset({'BHP-','AFP-'}) if CENTRAL_NEGATIVE else frozenset({'BHP+'}) if CENTRAL_EAR else frozenset({'BHP-','AFP+'}) if CENTRAL_POSITIVE else frozenset()
 visit('root',root_given)
 assert len(seen)==len(tree) and assigned==set(stages)
-if ITTT_CENTRAL:
+if ITTT_CENTRAL or BRTT:
  assert len(tree)==2*len(leaves)-1
 else:
  assert len(tree)==(21 if ITTT_MPPM else 19 if ITTT_PPMP else 11 if ITTT_MMMM else 15 if ITTT_MMMP else 131 if CENTRAL_NEGATIVE else 1 if CENTRAL_EAR else 11 if CENTRAL_POSITIVE else 27) and len(leaves)==(11 if ITTT_MPPM else 10 if ITTT_PPMP else 6 if ITTT_MMMM else 8 if ITTT_MMMP else 66 if CENTRAL_NEGATIVE else 1 if CENTRAL_EAR else 6 if CENTRAL_POSITIVE else 14)
-metadata=dict(rows(idx,'Hypotheses and format'));assert sorted(leaves)==sorted(map(int,listv(metadata['Terminal stage order'])))==sorted(terminal_stages);assert metadata['Top word']==WORD and metadata['Normalized e <= f']=='yes' and F(metadata['Threshold'])==s
+metadata=dict(rows(idx,'Hypotheses and format'));assert sorted(leaves)==sorted(map(int,listv(metadata['Terminal stage order'])))==sorted(terminal_stages);assert metadata['Top word']==WORD and metadata['Normalized e <= f']==('no' if BRTT else 'yes') and F(metadata['Threshold'])==s
+if BRTT:
+ assert metadata['Locations']=='BRTT' and metadata['Actual labels']==L and metadata['Variables']==', '.join(V)
+ assert not rows(idx,'Coordinate continuations')
 totals=dict(rows(idx,'Exact totals'))
 for name,value in {'contexts':len(ctx),'signNodes':len(tree),'signSplits':len(tree)-len(leaves),'signLeaves':len(leaves),'coordinateSplits':0,'terminals':len(terminal_stages),'stages':len(stages),'boxStages':len(stageboxes),'intervalSteps':coordinate,'physicalFactors':physical_n,'areaBounds':len(allbounds),'areaUpdates':updates,'scalarRelations':relations_n,'linearFactors':affine_factors,'linearWeights':affine_weights,'linearTerminals':affine_terminals,**({'affineBounds':affine_n} if CENTRAL_NEGATIVE or ITTT_CENTRAL else {}),**coordinate_stats}.items():assert int(totals[name])==value,(name,totals[name],value)
 print('independent binary coverage',len(tree),len(leaves),sorted(leaves))
