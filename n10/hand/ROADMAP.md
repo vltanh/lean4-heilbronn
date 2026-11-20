@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 100.
+Checkpoint 101.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -392,11 +392,16 @@ four-corner alternative and all zero-area faces.
         records are rejected, including an omitted leaf with altered
         totals. Proof: C1_TWO_CENTRAL_THREE_CAPS.md and its tables.
         The C1 parent stays open.
-  - [ ] C1-EXTERIOR. Exclude the remaining seven exterior count rows
+  - [ ] C1-EXTERIOR. Exclude the remaining six exterior count rows
         from the exhaustive C1-EXTERIOR-CATALOGUE. Counts are
         (k,j,r,t,l), up to exchange of the two side caps:
     - [ ] C1-IITTT: (0,2,0,3,0).
-    - [ ] C1-IIRTT: (0,2,1,2,0).
+    - [x] C1-IIRTT: (0,2,1,2,0) and its transpose. The convex
+          top pair is excluded by the chain theorem. For the triangular
+          pair, 240 sign splits give 46 geometric, 153 scalar,
+          28 coordinate and 14 weighted contradictions. The full
+          replay checks 492 stages and all 312,954 scalar updates.
+          [Proof](C1_IIRTT.md) and [tables](C1_IIRTT_TABLES/INDEX.md).
     - [ ] C1-BITTT: (1,1,0,3,0).
     - [ ] C1-BIRTT: (1,1,1,2,0).
     - [x] C1-IIRTT and C1-BIRTT top-pair reduction. In both counts
@@ -405,7 +410,7 @@ four-corner alternative and all zero-area faces.
           whose smallest consecutive doubled area is at most
           (5√5−11)/2. The remaining six-point chain gives DPF<.462
           and proves that QDP, CQD and OCQ are empty. The triangular
-          alternative remains open in each count.
+          alternative remains open in BIRTT.
           [Seven-point proof](SEVEN_POINT_MONOTONE_CHAIN.md) and
           [six-point proof](SIX_POINT_MONOTONE_CHAIN.md).
     - [ ] C1-BIITT: (1,2,0,2,0).

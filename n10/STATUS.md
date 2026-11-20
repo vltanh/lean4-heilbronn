@@ -1282,6 +1282,21 @@ ears even when they contain the same actual point.
 The unrestricted hand upper bound remains open in seven one-corner
 counts and nine six-contact counts.
 
+## Hand checkpoint 101 — the one-corner IIRTT count
+
+Two central points, a point in the right cap and a top pair cannot
+occur at the proposed optimum. Coordinate transposition also excludes
+the left-cap case. The convex top pair contradicts the seven-point
+chain theorem. The triangular alternative has 240 exhaustive sign
+splits and 241 contradictory leaves. Independent replay of the
+manuscript checks 13,624 sign deductions, 312,954 scalar updates,
+7,218 coordinate updates and 1,297 terms across fourteen weighted
+sums. The acceptance run covers both global stages, every inherited
+box and all endpoints of the closed intervals.
+[Proof](hand/C1_IIRTT.md) and [tables](hand/C1_IIRTT_TABLES/INDEX.md).
+
+Six one-corner counts and nine six-contact counts remain open.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
