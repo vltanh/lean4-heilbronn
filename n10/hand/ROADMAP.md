@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 98.
+Checkpoint 99.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -839,7 +839,13 @@ four-corner alternative and all zero-area faces.
           terminal sums have 6,095 products and exact negative ceilings.
           Thirty corruptions are rejected in each alternative.
           Proof: N6_BTTT_REMAINING_BRTT.md, setup and two indexed tables.
-    - [ ] N6-BITT: (1,1,0,2,0).
+    - [ ] N6-BITT: (1,1,0,2,0). Only the lower-central position
+          remains in either top-pair alternative. In the convex
+          alternative an occupied lower ear would force a distinct
+          octagon ear above its ceiling. In the triangular alternative
+          all 50 noncentral branches are contradictory, and the last
+          leaf gives both required positive signs. [Convex proof](N6_BTTT_REMAINING_BITT_OCTAGON.md)
+          and [triangular proof](N6_BTTT_REMAINING_BITT_TRIANGULAR_REDUCTION.md).
     - [ ] N6-BIRL: (1,1,1,0,1).
     - [ ] N6-BIRT: (1,1,1,1,0).
     - [x] N6-BIRR: (1,1,2,0,0), including its transpose. The side

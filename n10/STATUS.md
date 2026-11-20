@@ -1244,6 +1244,22 @@ triangles. Independent review checked the boundary cases and all
 Both counts still require the triangular alternative. Seven C1 and
 nine N6 counts remain open.
 
+## Hand checkpoint 99 — both lower ears in BITT
+
+In the six-contact count `(1,1,0,2,0)`, the lower point P must
+satisfy both `[ACP]>0` and `[HBP]>0`. When the two top points form
+a convex chain, putting P in a lower ear would force a different
+octagon ear to have doubled area at least .279 and at most .249.
+When one top point lies inside the outer top triangle, the 50
+determinant splits give 50 contradictions and one leaf on which both
+signs are positive. An independent reader checks every leaf, including
+4,725 coordinate updates and 17,386 area updates. Nine deliberate
+alterations were rejected. [Convex argument](hand/N6_BTTT_REMAINING_BITT_OCTAGON.md)
+and [triangular argument](hand/N6_BTTT_REMAINING_BITT_TRIANGULAR_REDUCTION.md).
+
+The lower-central case remains open for both top-pair alternatives.
+Seven C1 counts and nine N6 counts remain open.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

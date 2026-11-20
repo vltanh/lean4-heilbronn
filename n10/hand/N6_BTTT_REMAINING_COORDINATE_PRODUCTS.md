@@ -50,6 +50,12 @@ case. Its literal source row states the complete polynomial and its
 immutable bound or actual geometric witness. Products use one or two
 of those sources, so the resulting degree is at most four.
 
+The BITT application also permits products of three or four sources.
+Every factor is printed and proved before multiplication. The same
+coefficient estimate applies, including repeated coordinates at their
+full multiplicity; its proof imposes no degree restriction. These
+longer products are used only at the terminal comparison.
+
 An application prints every source, every positive integer product
 weight, the full expanded polynomial, the full translated polynomial,
 all width products, every coefficient contribution, and the exact

@@ -12,6 +12,7 @@ The flags --ittt-ear-mppm, --ittt-ear-ppmp, --ittt-tri-mmmm and
 all four are in audit_n6_ittt_words_mutations.py.
 --ittt-central checks the complete normalized +--+ word, including
 coordinate-product terminals and all binary siblings.
+--bitt-triangular-lower-central checks that both lower ears are excluded.
 --brtt-triangular and --brtt-convex check the two exhaustive BRTT
 top-pair alternatives, without an e<=f normalization.
 """
@@ -21,11 +22,13 @@ from itertools import combinations,permutations,product
 import re,json,sys
 ARGS=sys.argv[1:];MUTATIONS='--mutations' in ARGS
 if MUTATIONS:ARGS.remove('--mutations')
-assert ARGS in ([], ['--central-ear'], ['--central-positive'], ['--central-negative'], ['--ittt-ear-mppm'], ['--ittt-ear-ppmp'], ['--ittt-tri-mmmm'], ['--ittt-tri-mmmp'], ['--ittt-central'], ['--brtt-triangular'], ['--brtt-convex']) and (not MUTATIONS or ARGS==['--central-negative']), 'Unsupported audit mode'
+assert ARGS in ([], ['--central-ear'], ['--central-positive'], ['--central-negative'], ['--ittt-ear-mppm'], ['--ittt-ear-ppmp'], ['--ittt-tri-mmmm'], ['--ittt-tri-mmmp'], ['--ittt-central'], ['--brtt-triangular'], ['--brtt-convex'], ['--bitt-triangular-lower-central']) and (not MUTATIONS or ARGS==['--central-negative']), 'Unsupported audit mode'
 BRTT=ARGS in (['--brtt-triangular'],['--brtt-convex'])
+BITT=ARGS==['--bitt-triangular-lower-central']
+TOP_PAIR=BRTT or BITT
 ITTT_CENTRAL=ARGS==['--ittt-central']
 ITTT_MPPM=ARGS==['--ittt-ear-mppm'];ITTT_PPMP=ARGS==['--ittt-ear-ppmp'];ITTT_MMMM=ARGS==['--ittt-tri-mmmm'];ITTT_MMMP=ARGS==['--ittt-tri-mmmp'];ITTT=ITTT_MPPM or ITTT_PPMP or ITTT_MMMM or ITTT_MMMP or ITTT_CENTRAL
-CENTRAL_EAR=ARGS==['--central-ear'];CENTRAL_POSITIVE=ARGS==['--central-positive'];CENTRAL_NEGATIVE=ARGS==['--central-negative'];FEEDBACK=CENTRAL_POSITIVE or CENTRAL_NEGATIVE or ITTT or BRTT;CENTRAL=CENTRAL_EAR or CENTRAL_POSITIVE or CENTRAL_NEGATIVE or ITTT_CENTRAL
+CENTRAL_EAR=ARGS==['--central-ear'];CENTRAL_POSITIVE=ARGS==['--central-positive'];CENTRAL_NEGATIVE=ARGS==['--central-negative'];FEEDBACK=CENTRAL_POSITIVE or CENTRAL_NEGATIVE or ITTT or TOP_PAIR;CENTRAL=CENTRAL_EAR or CENTRAL_POSITIVE or CENTRAL_NEGATIVE or ITTT_CENTRAL
 ROOT=Path(__file__).resolve().parent/('N6_BTTT_REMAINING_ITTT_EAR_MPPM_TABLES' if ITTT_MPPM else 'N6_BTTT_REMAINING_ITTT_EAR_PPMP_TABLES' if ITTT_PPMP else 'N6_BTTT_REMAINING_ITTT_TRI_MMMM_TABLES' if ITTT_MMMM else 'N6_BTTT_REMAINING_ITTT_TRI_MMMP_TABLES' if ITTT_MMMP else 'N6_BTTT_REMAINING_CENTRAL_NEGATIVE_TABLES' if CENTRAL_NEGATIVE else 'N6_BTTT_REMAINING_CENTRAL_EAR_TABLES' if CENTRAL_EAR else 'N6_BTTT_REMAINING_CENTRAL_POSITIVE_TABLES' if CENTRAL_POSITIVE else 'N6_BTTT_REMAINING_TABLES');L='ABCEFHPQRS';V='a b c e f h p q u v r w j k'.split();s=F(93,1000);alpha=F(1037,10000);K=F(149,20);J=F(4427,500);G=F(1457,250)
 TOP_COST=G if CENTRAL else K
 if ITTT_CENTRAL:ROOT=Path(__file__).resolve().parent/'N6_BTTT_REMAINING_ITTT_CENTRAL_TABLES'
@@ -35,6 +38,10 @@ if BRTT:
  WORD='+' if ARGS==['--brtt-convex'] else '-'
  ROOT=Path(__file__).resolve().parent/('N6_BTTT_REMAINING_BRTT_CONVEX_TABLES' if WORD=='+' else 'N6_BTTT_REMAINING_BRTT_TRIANGULAR_TABLES')
  from n6_brtt_independent import coarse as brtt_coarse,physical as brtt_physical
+if BITT:
+ WORD='-'
+ ROOT=Path(__file__).resolve().parent/'N6_BTTT_REMAINING_BITT_TRIANGULAR_CENTRAL_REDUCTION_TABLES'
+ from n6_bitt_independent import coarse as brtt_coarse,physical as brtt_physical,seed as bitt_seed
 EMPTY=['ABC','ABE','ACE','BCE']+([] if CENTRAL else ['ABF','ABH','AFH','BFH'])
 COST=[s,3*s,K*s,J*s]
 def rows(text,title):
@@ -117,14 +124,17 @@ for ci,t in blocks((ROOT/'contexts.md').read_text(),'Context'):
  def put(w,sg):
   k=key(w);e=sign({k:1},w)*sg;assert k not in kn or kn[k]==e;kn[k]=e
  for w in combinations('ABCEFH',3):put(''.join(w),1)
- for p in 'PQRS':
-  for i,a in enumerate('ABCEFH'):
-   edge=a+'ABCEFH'[(i+1)%6];put(edge+p,(-1 if (p=='Q' and edge=='CE' or p in 'RS' and edge=='EF') else 1) if BRTT else (-1 if p!='P' and edge=='EF' else 1))
-  put('HC'+p,-1 if p=='P' and not ITTT else 1)
-  if p!='P':
-   for edge,sg in ([('HE',-1 if p=='Q' else 1),('CF',-1),('HP',1),('CP',-1)] if BRTT else [('HE',1),('CF',-1)] if ITTT else [('HE',1),('CF',-1),('HP',1),('CP',-1)]):put(edge+p,sg)
- initial_top=[('EQR',-1),('EQS',-1),('EPR',-1),('EPS',-1),('FPR',1),('FPS',1),('ERS',1),('FRS',1 if WORD=='+' else -1)] if BRTT else [('EQR',1),('EQS',1),('ERS',1)]+list(zip(['FQR','FQS','FRS','QRS'],[1 if t=='+' else -1 for t in WORD]))
- for w,sg in initial_top:put(w,sg)
+ if BITT:
+  bitt_seed(put)
+ else:
+  for p in 'PQRS':
+   for i,a in enumerate('ABCEFH'):
+    edge=a+'ABCEFH'[(i+1)%6];put(edge+p,(-1 if (p=='Q' and edge=='CE' or p in 'RS' and edge=='EF') else 1) if BRTT else (-1 if p!='P' and edge=='EF' else 1))
+   put('HC'+p,-1 if p=='P' and not ITTT else 1)
+   if p!='P':
+    for edge,sg in ([('HE',-1 if p=='Q' else 1),('CF',-1),('HP',1),('CP',-1)] if BRTT else [('HE',1),('CF',-1)] if ITTT else [('HE',1),('CF',-1),('HP',1),('CP',-1)]):put(edge+p,sg)
+  initial_top=[('EQR',-1),('EQS',-1),('EPR',-1),('EPS',-1),('FPR',1),('FPS',1),('ERS',1),('FRS',1 if WORD=='+' else -1)] if BRTT else [('EQR',1),('EQS',1),('ERS',1)]+list(zip(['FQR','FQS','FRS','QRS'],[1 if t=='+' else -1 for t in WORD]))
+  for w,sg in initial_top:put(w,sg)
  for i,w,sg,rule,wit in rows(t,'Geometric deductions'):
   sg=1 if sg=='+' else -1;assert sign(kn,w)==0
   if rule=='branch':assert w+('+' if sg==1 else '-') in listv(props(t)['Given actual signs'])
@@ -135,7 +145,7 @@ for ci,t in blocks((ROOT/'contexts.md').read_text(),'Context'):
   elif rule in ['empty','via']:
    mm=re.fullmatch(r'hull ([A-Z]+); point ([A-Z])(?:; line ([A-Z]{2}))?',wit);h,p,line=mm.groups()
    if rule=='empty':
-    assert not BRTT,'BRTT has no unconditional empty anchor'
+    assert not TOP_PAIR,'Top-pair counts have no unconditional empty anchor'
     assert h in EMPTY;tests=[h[j]+h[(j+1)%len(h)]+p for j in range(len(h))];assert sum(sign(kn,x)==1 for x in tests)==2;tr=next(x for x in tests if not sign(kn,x));assert key(tr)==key(w) and sg*sign({key(w):1},w)==-sign({key(tr):1},tr)
    else:
     assert h=='ABCEFH' and p=='P' or h==('HCEF' if ITTT else 'HABC') and p=='P' or inside(kn,h,p)
@@ -158,14 +168,14 @@ stages={};allbounds={};bary_updates=0;updates=0;coordinate=0;relations_n=0;physi
 def mark_terminal(sid):
  assert sid not in terminal_stages
  terminal_stages.add(sid)
-for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEGATIVE or ITTT or BRTT else ['stages_00.md'] if CENTRAL_EAR else ['stages_00.md','stages_01.md','stages_02.md']):
+for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEGATIVE or ITTT or TOP_PAIR else ['stages_00.md'] if CENTRAL_EAR else ['stages_00.md','stages_01.md','stages_02.md']):
  for sid,t in blocks((ROOT/filename).read_text(),'Stage'):
   pp=props(t);kn=ctx[int(pp['Context'])];scope=pp['Scope'];assert sid not in stages;stages[sid]=(scope,t,kn)
-  if BRTT:assert pp['Coordinate cut']=='none'
+  if TOP_PAIR:assert pp['Coordinate cut']=='none'
   # Independently reconstruct printed physical factors and all endpoint interval updates.
   if pp['Box present']=='yes':
    box=rows(t,'Coordinate box');lo=[F(r[1]) for r in box];hi=[F(r[2]) for r in box]
-   if BRTT:
+   if TOP_PAIR:
     exlo,exhi,rho=brtt_coarse(sys.modules[__name__],kn,int(pp['Coarse version']),WORD)
    else:
     top=TOP_COST*s;cap=1-top/(1-alpha);delta=s/(1-alpha);ear=sign(kn,'ACP')<0 or sign(kn,'HBP')<0;rho=(4 if ITTT else K if ear else G)*s
@@ -182,8 +192,8 @@ for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEG
    polys={}
    for fi,name,prem,printed in rows(t,'Physical factors'):
     mm=re.fullmatch(r'actual ([A-Z]{3}); occupants (.*)',prem)
-    if BRTT:
-     assert prem.startswith('brtt ')
+    if TOP_PAIR:
+     assert prem.startswith('bitt ' if BITT else 'brtt ')
      def earlier_brtt(obj):
       br=allbounds[obj['ref']];assert br[:3]==(obj['triangle'],obj['direction'],F(obj['value'])) and br[3]<sid and (scope==br[4] or scope.startswith(br[4]+'/'))
       return br[2]
@@ -285,12 +295,12 @@ for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEG
     else:
      mm=re.fullmatch(r'quadrilateral ([A-Z]{4}); occupants (.*); rate ([^ ]+)',wit);h,ii,rate0=mm.groups();a,b,c,d=h;ii=listv(ii);assert 1<=len(ii)<=2 and len(set(ii))==len(ii) and all(inside(kn,h,p) for p in ii);nn=tuple(sorted([sum(inside(kn,a+c+d,p) for p in ii),sum(inside(kn,b+c+d,p) for p in ii)]));rates=({(0,0):F(29,5),(0,1):F(149,20),(1,1):F(12)} if len(ii)==1 else {(0,0):F(1142,125),(0,1):F(1142,125),(0,2):F(139,10),(1,1):F(12),(1,2):F(199,10),(2,2):F(149,5)});rate=rates[nn]
      if len(ii)==2 and all(inside(kn,a+b+c,p) and inside(kn,a+b+d,p) for p in ii):rate=max(rate,F(299,31))
-     if CENTRAL_NEGATIVE or ITTT or BRTT:assert F(rate0)>0 and F(rate0)<=max(rate,G if len(ii)==1 else rate);rate=F(rate0)
+     if CENTRAL_NEGATIVE or ITTT or TOP_PAIR:assert F(rate0)>0 and F(rate0)<=max(rate,G if len(ii)==1 else rate);rate=F(rate0)
      else:assert F(rate0)==rate
      expected=list(map(key,[a+b+d,a+b+c,a+c+d]))
     assert convex(kn,h) and [X,Y,Z]==expected and F(ks)==rate*s
    elif kind=='four':
-    assert (CENTRAL_NEGATIVE or ITTT or BRTT) and wit.startswith('vertices ');a,b,c,d=wit[9:];assert len(set((a,b,c,d)))==4
+    assert (CENTRAL_NEGATIVE or ITTT or TOP_PAIR) and wit.startswith('vertices ');a,b,c,d=wit[9:];assert len(set((a,b,c,d)))==4
     expected={key(w):co*sign(kn,w) for w,co in [(a+b+c,1),(a+c+d,1),(a+b+d,-1),(b+c+d,-1)]};assert all(expected.values())
     assert eqn.endswith(' = 0') and area_coefficients(eqn[:-4])==expected
     assert not polyadd(det(a+b+c),det(a+c+d),scale(det(a+b+d),-1),scale(det(b+c+d),-1))
@@ -365,7 +375,7 @@ for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEG
     if output=='none':mark_terminal(sid);affine_terminals+=1;print('fresh affine terminal',sid,result,flush=True)
     else:records[output]=(target,direction,result);allbounds[output]=(target,direction,result,sid,scope);affine_n+=1
   if rows(t,'Coordinate certificate sources'):
-   assert ITTT_CENTRAL or BRTT
+   assert ITTT_CENTRAL or TOP_PAIR
    from n6_coordinate_products_independent import audit_coordinate_certificate
    def coordinate_endpoint(obj):
     ref=obj['ref'];br=allbounds[ref];assert br[:3]==(obj['triangle'],obj['direction'],F(obj['value']))
@@ -376,19 +386,30 @@ for filename in (sorted(p.name for p in ROOT.glob('stages_*.md')) if CENTRAL_NEG
    mark_terminal(sid);coordinate_samples.append((certificate,sid,stageboxes[sid],dict(polys),dict(kn),scope))
    for name,n in stats.items():coordinate_stats[name]=coordinate_stats.get(name,0)+n
    print('independent coordinate-product terminal',sid,result,flush=True)
+  if rows(t,'Lower-central conclusion'):
+   assert BITT and rows(t,'Lower-central conclusion')==[['ACP+, HBP+']]
+   assert sign(kn,'ACP')==sign(kn,'HBP')==1
+   mark_terminal(sid)
   for ri,lr,ur,pl,pu in rows(t,'Zero barycentric contradiction'):
    mark_terminal(sid)
    low,_,target=bary(relations[ri],[records[x] for x in listv(lr)],'lo');high,_,_=bary(relations[ri],[records[x] for x in listv(ur)],'hi');assert target=='none' and low==F(pl) and high==F(pu) and (low>0 or high<0);print('fresh zero determinant interval',low,high,flush=True)
   for tr,lr,ur,pl,pu in rows(t,'Area contradiction'):
    mark_terminal(sid)
    assert records[lr]==(tr,'lo',F(pl)) and records[ur]==(tr,'hi',F(pu)) and F(pl)>F(pu)
+  for outer,pivot,fan,others in rows(t,'Clustered-triple contradiction'):
+   assert BITT and inside(kn,outer,pivot)
+   assert len(set(fan))==3 and pivot in fan and set(fan)-{pivot}<=set(outer)
+   occupants=listv(others)
+   assert len(set(occupants))==len(occupants)==2
+   assert all(inside(kn,outer,point) and inside(kn,fan,point) for point in occupants)
+   mark_terminal(sid)
   for h,ps in rows(t,'Distributed-mesh contradiction'):
    mark_terminal(sid)
    ps=listv(ps);assert len(ps)==3 and len(set(ps))==3 and all(inside(kn,h,p) for p in ps)
    for perm in permutations(ps):
     mp=dict(zip('ABCXYZ',h+''.join(perm)));assert any(sign(kn,''.join(mp[a] for a in w))==-1 for w in 'ABZ BCX CAY AZY BXZ CYX ZXY AZX BXY CYZ AXY BYZ CZX'.split())
   for tr,known,opposite in rows(t,'Conflicting actual-sign contradiction'):
-   assert ITTT_CENTRAL and known in ('-', '+') and sign(kn,tr)==(1 if known=='+' else -1)
+   assert (ITTT_CENTRAL or BITT) and known in ('-', '+') and sign(kn,tr)==(1 if known=='+' else -1)
    assert opposite==tr+('-' if known=='+' else '+')
    mark_terminal(sid);sign_conflicts[sid]=opposite
 print('independent exact physical/interval/scalar pass',{'physical_factors':physical_n,'coordinate':coordinate,'scalar':updates,'barycentric_updates':bary_updates,'relations':relations_n,'bounds':len(allbounds)},flush=True)
@@ -400,23 +421,37 @@ def visit(node,allowed=frozenset(),depth=0,parent=None):
   assert st not in assigned;assigned.add(st);scope,text,kn=stages[st];assert scope==node and context_given[int(props(text)['Context'])]<=available
   if props(text)['Box present']=='yes':
    expected_parent=parent if FEEDBACK else None;assert props(text)['Parent box']==('none' if expected_parent is None else str(expected_parent));parent=st
-  else:assert props(text)['Parent box']=='none' and st in terminal_stages
+  else:
+   assert props(text)['Parent box']=='none'
+   if st not in terminal_stages:
+    assert BITT and all(not rows(text,section) for section in ('Initial area bounds','Scalar relations','Exact area updates'))
+    assert sp=='none' and any(stage>st and str(stage) in listv(r[3]) and stages[stage][0]==node for stage in terminal_stages)
   for n,stage,token,h,ii,p,ref,upper,nextcost in forces:
    if n!=node or int(stage)!=st:continue
    ii=listv(ii);br=allbounds[ref];assert br[:4]==(key(h),'hi',F(upper),st);assert len(set(ii))==len(ii) and all(inside(kn,h,x) for x in ii) and p not in h and p not in ii;assert F(nextcost)==COST[len(ii)+1]>F(upper);sg=sign(kn,h);tests=[h[i]+h[(i+1)%3]+p for i in range(3)];assert sum(sign(kn,tr)==sg for tr in tests)==2;missing=next(tr for tr in tests if sign(kn,tr)!=sg);assert sign(kn,missing)==0 and key(missing)==key(token[:3]);assert sign({key(token[:3]):(1 if token[-1]=='+' else -1)*sign({key(token[:3]):1},token[:3])},missing)==-sg;available.add(token)
   if st in sign_conflicts:assert sign_conflicts[st] in available
- if sp=='none':assert not children and r[6]!='none';leaves.append(int(r[6]));return
+ if sp=='none':
+  assert not children and r[6]!='none'
+  terminal=int(r[6])
+  assert terminal in terminal_stages and stages[terminal][0]==node and str(terminal) in listv(r[3])
+  leaves.append(terminal)
+  return
  assert len(set(sp))==3 and set(sp)<=set(L) and children==[node+'/'+sp+'-',node+'/'+sp+'+']
  for c,sg in zip(children,['-','+']):
   visit(c,available|{sp+sg},depth+1,parent)
 root_given=frozenset({'BHP-','AFP-'}) if CENTRAL_NEGATIVE else frozenset({'BHP+'}) if CENTRAL_EAR else frozenset({'BHP-','AFP+'}) if CENTRAL_POSITIVE else frozenset()
 visit('root',root_given)
 assert len(seen)==len(tree) and assigned==set(stages)
-if ITTT_CENTRAL or BRTT:
+if ITTT_CENTRAL or TOP_PAIR:
  assert len(tree)==2*len(leaves)-1
 else:
  assert len(tree)==(21 if ITTT_MPPM else 19 if ITTT_PPMP else 11 if ITTT_MMMM else 15 if ITTT_MMMP else 131 if CENTRAL_NEGATIVE else 1 if CENTRAL_EAR else 11 if CENTRAL_POSITIVE else 27) and len(leaves)==(11 if ITTT_MPPM else 10 if ITTT_PPMP else 6 if ITTT_MMMM else 8 if ITTT_MMMP else 66 if CENTRAL_NEGATIVE else 1 if CENTRAL_EAR else 6 if CENTRAL_POSITIVE else 14)
 metadata=dict(rows(idx,'Hypotheses and format'));assert sorted(leaves)==sorted(map(int,listv(metadata['Terminal stage order'])))==sorted(terminal_stages);assert metadata['Top word']==WORD and metadata['Normalized e <= f']==('no' if BRTT else 'yes') and F(metadata['Threshold'])==s
+if BITT:
+ assert metadata['Locations']=='BITT' and metadata['Proof conclusion']=='lower-central'
+ assert metadata['Lower-central residual']=='no' and metadata['Format']=='n6-bitt-proof-v1'
+ assert metadata['Actual labels']==L and metadata['Variables']==', '.join(V)
+ assert not rows(idx,'Coordinate continuations')
 if BRTT:
  assert metadata['Locations']=='BRTT' and metadata['Actual labels']==L and metadata['Variables']==', '.join(V)
  assert not rows(idx,'Coordinate continuations')

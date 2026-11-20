@@ -83,7 +83,7 @@ def audit_coordinate_certificate(cert, stage, box, physical, endpoint, area, var
         assert product not in products and int(weight) > 0 and str(int(weight)) == weight
         products.add(product)
         factors = factors.split(', ')
-        assert len(factors) in (1, 2)
+        assert 1 <= len(factors) <= 4
         p = {(): F(int(weight))}
         for source in factors:
             p = mul(p, sources[source])
