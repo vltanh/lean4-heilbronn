@@ -1260,6 +1260,28 @@ and [triangular argument](hand/N6_BTTT_REMAINING_BITT_TRIANGULAR_REDUCTION.md).
 The lower-central case remains open for both top-pair alternatives.
 Seven C1 counts and nine N6 counts remain open.
 
+## Hand checkpoint 100 — the nine-point core of IRTT
+
+In six-contact IRTT, the right-cap point and the triangular top pair
+give a monotone chain inside a rectangle of width at most .8963.
+Rescaling gives doubled area below .35852 for the outer top triangle.
+Each of the three weights of the inner point exceeds 2325/8963. A
+second rescaling forces the first bottom contact below .19. The line
+from the outer top point through the inner point leaves the octagon
+through one of four specified edges. The occupied triangle HER
+also forces the tenth point into HCE. The two cubic tables give
+56 positive coefficients, including their endpoint checks.
+[Width argument](hand/N6_IRTT_CORE_CAPS.md) and
+[radial cases](hand/N6_IRTT_CORE_GAPS.md).
+
+A separate pentagon inequality retains all three consecutive ear
+areas in the endpoint comparison. The argument applies to occupied
+ears even when they contain the same actual point.
+[Pentagon inequality](hand/PENTAGON_EAR_SUPPORT.md).
+
+The unrestricted hand upper bound remains open in seven one-corner
+counts and nine six-contact counts.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

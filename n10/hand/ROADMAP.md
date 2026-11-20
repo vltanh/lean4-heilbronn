@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 99.
+Checkpoint 100.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -808,7 +808,14 @@ four-corner alternative and all zero-area faces.
           points form a convex nonagon. NINE_CONVEX_POINTS.md proves
           that one of its consecutive doubled areas is at most 64/729,
           strictly below 93/1000. The proof uses finite Hölder twice.
-    - [ ] N6-IRTT: (0,1,1,2,0).
+    - [ ] N6-IRTT: (0,1,1,2,0). The convex top-pair alternative
+          is excluded. In the triangular alternative the bottom
+          coordinate satisfies `1037/10000 < b < 19/100`, and each
+          barycentric weight of S in ERF exceeds 2325/8963.
+          The line RS exits the octagon through HA, AB, BC or CQ.
+          The tenth point P lies in triangle HCE.
+          [Width bounds](N6_IRTT_CORE_CAPS.md) and
+          [four radial cuts](N6_IRTT_CORE_GAPS.md).
     - [x] N6-IRRT: (0,1,2,1,0), including its left-side reflection.
           N6_IRRT.md and thirteen complete case tables give twelve
           exhaustive sign splits and thirteen contradictions: seven
@@ -1412,6 +1419,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | N6_BTTT_TOP_EARS.md | Both entire single-ear top-quadrilateral BTTT alternatives: two roots, twenty splits, 22 cubics / 9,860 terms, 923 deductions and 549 explicit affine squares |
 | N6_ONE_LOWER_THREE_CAPS.md | Entire (1,0,1,1,1) count: two reflected lower alternatives, 89 deductions, 158 interval steps, forty scalar caps and two cubics / 742 terms |
 | QUADRILATERAL_AREA_SUPPORT.md | Support inequalities retain the actual quadrilateral floor and the minimum of two witnessed triangle-floor products; both denominator signs are proved |
+| PENTAGON_EAR_SUPPORT.md | The three consecutive ear areas bound the doubled area of an endpoint support triangle, with a sharper bound for each occupied ear |
 | N6_TOP_TRIPLE_TRANSPOSE.md | Explicit transposition and six label maps preserve every residual top group; exact .168/.264 contact ceilings and anchor-span lower bounds |
 | C1_ONE_LOWER_THREE_CAPS.md | Entire (1,1,1,1,1) count: 37 splits, 37 cubics / 7,280 terms, one shared-central endpoint terminal, 1,053 deductions and 250 interval updates |
 | C1_TWO_CENTRAL_SIDE_PAIR_TOP.md | Entire (0,2,2,1,0) count and transpose: 76 splits, 61 cubics / 9,344 terms, sixteen geometric terminals, 2,528 deductions and 274 interval updates |
