@@ -51,7 +51,16 @@ function exactPacketJSON(source) {
   const result=value();space();if(at!==source.length)fail("Trailing data");
   return result;
 }
-function verifyN6IIRRIndependent(input) {
+const sidePairManuscripts = {
+ IIRR: {version: 2, caps: 65, leaves: 128, area: 83, deductions: 3281, updates: 13957},
+ BIRR: {version: 1, caps: 68, leaves: 61, area: 38, deductions: 1771, updates: 7948},
+};
+
+function verifyN6IIRRIndependent(input, family = "IIRR") {
+const manuscript = sidePairManuscripts[family];
+if (!manuscript) throw Error("unknown side-pair domain");
+const lowerPoint = family === "BIRR";
+
 const state=typeof input==="string"?exactPacketJSON(input):input;
 const {Q,q,constant:C,variable:V,add,sub,mul,scale,neg,eq,assert}=(() => {
  const gcd=(a,b)=>{a=a<0n?-a:a;b=b<0n?-b:b;while(b){const t=a%b;a=b;b=t;}return a;};
@@ -95,14 +104,23 @@ const {Q,q,constant:C,variable:V,add,sub,mul,scale,neg,eq,assert}=(() => {
  const base={};
  function choose(xs,k){if(!k)return[[]];const out=[];for(let i=0;i<=xs.length-k;i++)for(const tail of choose(xs.slice(i+1),k-1))out.push([xs[i],...tail]);return out;}
  for(const t of choose([..."ABCEFH"],3))record(base,t.join(""),1);
- for(const x of "PQRS")for(const [edge,sg] of [["AB",1],["AC",1],["AH",-1],["BC",1],["BH",-1],["CH",-1],["EF",1],["EH",1],["FH",1]])record(base,edge+x,sg);
+ for(const x of "PQRS")for(const [edge,sg] of [["AB",1],["AC",1],["AH",-1],["BC",1],["BH",-1],["CH",lowerPoint && x === "P" ? 1 : -1],["EF",1],["EH",1],["FH",1]])record(base,edge+x,sg);
  for(const x of "PQ")for(const edge of ["CE","BE"])record(base,edge+x,1);
  for(const x of "RS")for(const edge of ["AE","AF","BE","BF","CE","CF"])record(base,edge+x,-1);
- for(const [t,sg]of [["HPQ",-1],["ERS",-1],["CRS",1],["BRS",1]])record(base,t,sg);
- assert(Object.keys(base).length===76,"76 initial signs");
+ for(const [t,sg]of [["HPQ",lowerPoint ? 1 : -1],["ERS",-1],["CRS",1],["BRS",1]])record(base,t,sg);
+ if(lowerPoint)record(base,"CPQ",-1);
+ assert(Object.keys(base).length===(lowerPoint?77:76),"complete initial signs");
  if(state.base)compareObjects(state.base,base,"fixed initial sign table");
- const b1=one.sub(rho.div(ceiling)),c1=q("77/125"),c0=s.mul(4),a0=s.div(c1.sub(eps)),a1=one.sub(s.div(b1)),e0=rho.div(one.sub(eps)),r0=q("183/200"),w1=ceiling.sub(s.mul(3).div(one.sub(c0))),x0=s.div(one.sub(a0));
+ const b1=one.sub(rho.div(ceiling)),c1=q("77/125"),c0=s.mul(lowerPoint ? "1457/250" : 4),a0=s.div(c1.sub(eps)),a1=one.sub(s.div(b1)),e0=rho.div(one.sub(eps)),r0=q("183/200"),w1=ceiling.sub(s.mul(3).div(one.sub(c0))),x0=s.div(one.sub(a0));
  const box=[[a0,a1],[eps,b1],[c0,c1],[e0,ceiling],[eps,c1],[e0,one],[x0,ceiling],[a0,ceiling],[x0,ceiling],[a0,ceiling],[r0,one],[a0,w1],[c0.mul(5).add(3).add(r0.mul(3)).div(11),c1.mul(3).add(8).div(11)],[e0.add(a0).mul(3).div(11),ceiling.mul(5).add(w1.mul(3)).div(11)]];
+ if (lowerPoint) {
+  const p0 = s.mul(c1.add(eps)).div(c1.sub(eps));
+  const q0 = s.mul(one.add(a0)).div(c1.mul(one.sub(a0)));
+  const sum = one.sub(s.div(c1));
+  box[5] = [c0.div(c1), one];
+  box[6] = [p0, sum.sub(q0)];
+  box[7] = [q0, sum.sub(p0)];
+ }
  assert(box.every(([l,u])=>l.cmp(0)>0&&l.cmp(u)<0&&u.cmp(1)<=0),"proved closed box order");
  if(state.box)assert(equal(state.box,box.map(b=>b.map(String))),"fixed coordinate box");
  const P={A:[C(0),V("a")],B:[V("b"),C(0)],C:[V("c"),C(0)],E:[C(1),V("e")],F:[V("f"),C(1)],H:[C(0),V("h")],P:[V("p"),V("q")],Q:[V("u"),V("v")],R:[V("r"),V("w")],S:[V("j"),V("k")]};
@@ -139,7 +157,7 @@ const {Q,q,constant:C,variable:V,add,sub,mul,scale,neg,eq,assert}=(() => {
   } else throw Error("unused or unsupported cap witness "+type);
   evaluatedCaps.set(memo,out);return out;
  }
- if(state.capCatalogue){assert(state.capCatalogue.length===65,"complete published cap catalogue");for(const c of state.capCatalogue)same(cap(c.t,c.sg,c.source),c.value,"printed catalogue cap");}
+ if(state.capCatalogue){assert(state.capCatalogue.length===manuscript.caps,"complete published cap catalogue");for(const c of state.capCatalogue)same(cap(c.t,c.sg,c.source),c.value,"printed catalogue cap");}
  const gpTerms=w=>{validWord(w,5);const[a,b,c,d,e]=w;return[[a+b+c,a+d+e,1],[a+b+d,a+c+e,-1],[a+b+e,a+c+d,1]];};
  const gpSeen=new Set();
  function verifyGP(w){if(gpSeen.has(w))return;checkPoly(add(...gpTerms(w).map(([a,b,k])=>scale(mul(D(a),D(b)),k))),"physical five-label identity "+w);gpSeen.add(w);}
@@ -199,6 +217,17 @@ const {Q,q,constant:C,variable:V,add,sub,mul,scale,neg,eq,assert}=(() => {
     const[,word,orientation]=w;validWord(word,4);assert(orientation===1||orientation===-1,"affine orientation");const[A,B,C,D]=word;
     for(const[t,k]of[[A+B+C,1],[A+C+D,1],[A+B+D,-1],[B+C+D,-1]]){assert(sign(kn,t),"known affine sign");addCoefficient(key(t),orientation*k*sign(kn,t));}
     checkPoly(add(...Object.entries(expected).map(([t,k])=>scale(unsigned(kn,t),k))),"physical four-point affine identity");
+   }else if (lowerPoint && w[0] === "right_compare") {
+    const edge = w[2];
+    assert(equal(w, ["right_compare", "R", edge]) && ["EF", "EH"].includes(edge), "actual outer side comparison");
+    const triangle = edge + "R";
+    assert(sign(kn, triangle) === 1 && sign(kn, "CER") === -1, "actual side orientations");
+    const clearance = sub(unsigned(kn, triangle), unsigned(kn, "CER"));
+    const horizontal = sub(C(1), V("r")), vertical = sub(V("e"), V("w"));
+    const remainder = edge === "EF" ? add(horizontal, mul(sub(V("c"), V("f")), vertical))
+                                    : add(mul(V("h"), horizontal), mul(V("c"), vertical));
+    checkPoly(sub(clearance, remainder), "side comparison with nonnegative remainder");
+    expected = {[triangle]: 1, CER: -1};
    }else{
     assert(w[0]==="barycentric"&&w[2]==="S"&&w[3]==="CER"&&["lower","upper"].includes(w[4]),"actual-line barycentric inequality");const line=w[1],lower=w[4]==="lower";validWord(line,2);
     if(!line.includes("S")){const sg=sign(kn,line+"S");assert(sg,"barycentric target sign");addCoefficient(key(line+"S"),(lower?11:-11)*sg);}
@@ -308,19 +337,20 @@ const {Q,q,constant:C,variable:V,add,sub,mul,scale,neg,eq,assert}=(() => {
  }
  assert(seen.size===Object.keys(state.nodes).length,"no unreachable proof nodes");
  assert(stats.geometry+stats.area===stats.splits+1,"full binary coverage");
- assert(stats.splits===127&&stats.geometry===45&&stats.area===83&&stats.deductions===3281&&stats.updates===13957,"fixed manuscript totals");
+ assert(stats.splits===manuscript.leaves-1&&stats.geometry===manuscript.leaves-manuscript.area&&stats.area===manuscript.area&&stats.deductions===manuscript.deductions&&stats.updates===manuscript.updates,"fixed manuscript totals");
  return{status:"PASS",...stats,complete:true,initial_signs:Object.keys(base).length,unique_physical_caps:evaluatedCaps.size,source:"independent coordinate polynomials and immutable arithmetic; no discovery import"};
 }
 if(typeof module!=="undefined"&&module.exports)module.exports={verifyN6IIRRIndependent,exactPacketJSON};
 
-function readN6IIRRIndependent(geometryMarkdown,areaMarkdown){
+function readN6IIRRIndependent(geometryMarkdown,areaMarkdown,family="IIRR"){
+ const manuscript=sidePairManuscripts[family];
  const requireFact=(x,m)=>{if(!x)throw Error("IIRR manuscript: "+m);};
  const sections=(text,level)=>{const rows=text.split(/\r?\n/),out=new Map(),prefix="#".repeat(level)+" ";let current=null;for(const line of rows){if(line.startsWith(prefix)&&line[level+1]!=="#"){current=line.slice(prefix.length);requireFact(!out.has(current),"duplicate section "+current);out.set(current,[]);}else if(current)out.get(current).push(line);}return out;};
  const table=lines=>{const all=lines.filter(l=>l.startsWith("|"));requireFact(all.length>=2,"missing table");return all.slice(2).filter(l=>l.trim()).map(l=>{requireFact(l.endsWith("|"),"closed table row");return l.slice(1,-1).split("|").map(v=>v.trim());});};
  const integer=s=>{requireFact(/^-?\d+$/.test(s),"integer token");const n=Number(s);requireFact(Number.isSafeInteger(n),"safe integer token");return n;};
  const g=sections(geometryMarkdown,2),a=sections(areaMarkdown,2),caps=new Map(),state={nodes:Object.create(null),queue:[],done:true},leafMap=new Map();
  for(const row of table(g.get("Fixed domain")||[])){requireFact(row.length===2&&["version","box","base"].includes(row[0])&&!Object.prototype.hasOwnProperty.call(state,row[0]),"fixed domain field");state[row[0]]=exactPacketJSON(row[1]);}
- requireFact(state.version===2&&state.box&&state.base,"complete fixed domain");
+ requireFact(state.version===manuscript.version&&state.box&&state.base,"complete fixed domain");
  for(const row of table(g.get("Cap catalogue")||[])){
   requireFact(row.length===6,"cap column count");const[id,t,sg,value,method,idx]=row;requireFact(/^C\d{3}$/.test(id)&&!caps.has(id),"unique cap identifier");let source;
   if(method==="box")source=["box",exactPacketJSON(idx),[]];
@@ -329,7 +359,7 @@ function readN6IIRRIndependent(geometryMarkdown,areaMarkdown){
   requireFact(method==="box"||idx==="-","no unused cap indices");
   caps.set(id,{t,sg:integer(sg),value,source});
  }
- requireFact(caps.size===65,"all65 caps");
+ requireFact(caps.size===manuscript.caps,"all caps");
  for(const row of table(g.get("Nonnegative box-corner differences")||[])){
   requireFact(row.length===3,"corner column count");const[id,index,value]=row,cap=caps.get(id);
   requireFact(cap&&cap.source[0]==="box"&&integer(index)===cap.source[2].length,"ordered complete cap corners");cap.source[2].push(value);
@@ -340,11 +370,12 @@ function readN6IIRRIndependent(geometryMarkdown,areaMarkdown){
   if(kind==="split")state.nodes[id]={kind,triangle:data};
   else{requireFact(["area","geometry"].includes(kind)&&new RegExp("^"+(kind==="area"?"A":"G")+"\\d{3}$").test(data)&&!leafMap.has(data),"distinct typed leaf");state.nodes[id]={kind,steps:[],meshes:[]};leafMap.set(data,id);}
  }
- requireFact(state.nodes.r&&leafMap.size===128,"complete leaf catalogue");
+ requireFact(state.nodes.r&&leafMap.size===manuscript.leaves,"complete leaf catalogue");
  const usedGeometry=new Set(),usedAreas=new Set();
  for(const[title,lines]of g){
   if(!title.startsWith("Leaf "))continue;const code=title.slice(5),id=leafMap.get(code);requireFact(id&&!usedGeometry.has(code),"referenced geometry section");usedGeometry.add(code);const node=state.nodes[id];
-  const declared=lines.find(l=>l.startsWith("Node: "));requireFact(declared&&declared.startsWith("Node: "+id+"."),"printed leaf node");
+  const prefix=family==="BIRR"?"Path: ":"Node: ";
+   const declared=lines.find(l=>l.startsWith(prefix));requireFact(declared&&declared.startsWith(prefix+id+"."),"printed leaf node");
   for(const row of table(lines)){
    requireFact(row.length===3,"geometry column count");const[index,rule,json]=row,args=exactPacketJSON(json);requireFact(Array.isArray(args),"geometry arguments");
    if(index==="T"){
@@ -359,7 +390,7 @@ function readN6IIRRIndependent(geometryMarkdown,areaMarkdown){
   }
   requireFact(node.kind!=="geometry"||node.terminal,"closed geometric leaf");
  }
- requireFact(usedGeometry.size===128&&g.size===132,"exact geometry sections");
+ requireFact(usedGeometry.size===manuscript.leaves&&g.size===manuscript.leaves+4,"exact geometry sections");
  for(const[title,lines]of a){
   requireFact(/^Leaf A\d{3}$/.test(title),"area section title");const code=title.slice(5),id=leafMap.get(code),node=state.nodes[id];requireFact(node?.kind==="area"&&!usedAreas.has(code),"referenced area section");usedAreas.add(code);
   const parts=sections(lines.join("\n"),3);requireFact(parts.size===4,"four area subsections");const proof={initial:Object.create(null),relations:[],updates:[]};node.proof=proof;
@@ -378,19 +409,21 @@ function readN6IIRRIndependent(geometryMarkdown,areaMarkdown){
   }
   const end=table(parts.get("Contradiction")||[]);requireFact(end.length===1&&end[0].length===4&&end[0][0]==="E","one scalar contradiction");proof.end={triangle:end[0][1],lower:end[0][2],upper:end[0][3]};
  }
- requireFact(usedAreas.size===83,"all83 area sections");
+ requireFact(usedAreas.size===manuscript.area,"all area sections");
  const pending=[["r",{}]],seen=new Set();
  while(pending.length){const[id,assign]=pending.pop(),node=state.nodes[id];requireFact(node&&!seen.has(id),"both children and acyclic ancestry");seen.add(id);node.assign=assign;if(node.kind==="split")for(const[suffix,sign]of[["m",-1],["p",1]])pending.push([id+suffix,{...assign,[node.triangle]:sign}]);}
  requireFact(seen.size===Object.keys(state.nodes).length,"all printed tree rows reachable");
  state.capCatalogue=[...caps.values()];return state;
 }
-function auditN6IIRRManuscript(geometryMarkdown,areaMarkdown){
- return verifyN6IIRRIndependent(readN6IIRRIndependent(geometryMarkdown,areaMarkdown));
+function auditN6IIRRManuscript(geometryMarkdown,areaMarkdown,family="IIRR"){
+ return verifyN6IIRRIndependent(readN6IIRRIndependent(geometryMarkdown,areaMarkdown,family),family);
 }
 if(typeof module!=="undefined"&&module.exports)module.exports={verifyN6IIRRIndependent,readN6IIRRIndependent,auditN6IIRRManuscript};
 if(typeof require==="function"&&typeof module!=="undefined"&&require.main===module){
  const fs=require("node:fs"),path=require("node:path");
- const geometry=fs.readFileSync(path.join(__dirname,"N6_IIRR_GEOMETRY.md"),"utf8");
- const areas=fs.readFileSync(path.join(__dirname,"N6_IIRR_AREA_CHAINS.md"),"utf8");
- process.stdout.write(JSON.stringify(auditN6IIRRManuscript(geometry,areas))+"\n");
+ const family=process.argv[2]||"IIRR";
+ if(!Object.hasOwn(sidePairManuscripts,family))throw Error("choose IIRR or BIRR");
+ const geometry=fs.readFileSync(path.join(__dirname,"N6_"+family+"_GEOMETRY.md"),"utf8");
+ const areas=fs.readFileSync(path.join(__dirname,"N6_"+family+"_AREA_CHAINS.md"),"utf8");
+ process.stdout.write(JSON.stringify(auditN6IIRRManuscript(geometry,areas,family))+"\n");
 }

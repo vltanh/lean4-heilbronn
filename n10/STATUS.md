@@ -1192,6 +1192,25 @@ HP12-N7 is complete. The accepted global frontier is eight C1 count
 rows and eleven N6 count rows. The unrestricted hand theorem remains
 incomplete. No Lean compilation or CI was run.
 
+## Hand checkpoint 96: a convex nonagon bound and two N6 exclusions
+
+A strictly convex polygon in a rectangle of width W and height H has
+sum of cube roots of its consecutive doubled areas at most
+`4(WH)^(1/3)`. For nine vertices in the unit square this bounds
+the smallest doubled area by 64/729, below 93/1000. The six boundary
+contacts and three exterior cap points of IRTL form such a nonagon.
+The proof also limits an octagon to one occupied ear and one occupant
+in that ear. [Convex polygon inequality and IRTL proof](hand/NINE_CONVEX_POINTS.md)
+
+The N6 count BIRR and its reflection are excluded. The side pair forces
+the lower point into its central cell and the upper point into HCE.
+Independent review checks the 14 coordinate intervals and all 61 leaves,
+including 7,948 exact scalar updates and 38 strict terminal gaps.
+[Complete BIRR proof](hand/N6_BIRR.md)
+
+Eight C1 counts and nine N6 counts remain open. The unrestricted
+pen-and-paper upper bound is incomplete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

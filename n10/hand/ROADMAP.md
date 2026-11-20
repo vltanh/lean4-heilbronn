@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 95.
+Checkpoint 96.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -786,11 +786,14 @@ four-corner alternative and all zero-area faces.
         fourteen polynomial identities, all 256 six-label sign conversions
         and three positive square gaps are checked.
         Proof: AREA_RELATIONS.md and check_area_relations.js.
-  - [ ] Complete the remaining eleven exterior-cap counts with k=0
+  - [ ] Complete the remaining nine exterior-cap counts with k=0
         or k=1, outside the stated projection chambers. The ledger also
         retains the completed IIRR, IRRT, BTTT, ITTT and BRTT rows. Counts are (k,j,r,t,l), up to
         exchange of the two side caps:
-    - [ ] N6-IRTL: (0,1,1,1,1).
+    - [x] N6-IRTL: (0,1,1,1,1). The six contacts and three cap
+          points form a convex nonagon. NINE_CONVEX_POINTS.md proves
+          that one of its consecutive doubled areas is at most 64/729,
+          strictly below 93/1000. The proof uses finite Hölder twice.
     - [ ] N6-IRTT: (0,1,1,2,0).
     - [x] N6-IRRT: (0,1,2,1,0), including its left-side reflection.
           N6_IRRT.md and thirteen complete case tables give twelve
@@ -825,7 +828,11 @@ four-corner alternative and all zero-area faces.
     - [ ] N6-BITT: (1,1,0,2,0).
     - [ ] N6-BIRL: (1,1,1,0,1).
     - [ ] N6-BIRT: (1,1,1,1,0).
-    - [ ] N6-BIRR: (1,1,2,0,0).
+    - [x] N6-BIRR: (1,1,2,0,0), including its transpose. The side
+          pair puts the lower point in the central cell and the upper
+          point in HCE. N6_BIRR.md gives 60 splits and 61 contradictions.
+          Independent review checks all 77 initial signs, 1,771 deductions,
+          1,272 box corners, 7,948 updates and 38 final scalar gaps.
     - [ ] N6-BIIT: (1,2,0,1,0).
     - [ ] N6-BIIR: (1,2,1,0,0).
     - [x] N6-BTTT: (1,0,0,3,0). The whole count is excluded by
@@ -1158,7 +1165,7 @@ four-corner alternative and all zero-area faces.
         edge-pair classes, five interior counts, the boundary-valid
         N6 side-point transfer, four lower cells, all eight central
         words and every permitted equality face. This closes N7 only;
-        eight C1 counts and eleven N6 counts remain globally.
+        the current counts are listed under C1 and N6 above.
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
