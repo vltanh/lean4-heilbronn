@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 97.
+Checkpoint 98.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -399,6 +399,15 @@ four-corner alternative and all zero-area faces.
     - [ ] C1-IIRTT: (0,2,1,2,0).
     - [ ] C1-BITTT: (1,1,0,3,0).
     - [ ] C1-BIRTT: (1,1,1,2,0).
+    - [x] C1-IIRTT and C1-BIRTT top-pair reduction. In both counts
+          the outer top point P puts the inner one strictly inside
+          DPF. A convex pair would form a seven-point monotone chain
+          whose smallest consecutive doubled area is at most
+          (5√5−11)/2. The remaining six-point chain gives DPF<.462
+          and proves that QDP, CQD and OCQ are empty. The triangular
+          alternative remains open in each count.
+          [Seven-point proof](SEVEN_POINT_MONOTONE_CHAIN.md) and
+          [six-point proof](SIX_POINT_MONOTONE_CHAIN.md).
     - [ ] C1-BIITT: (1,2,0,2,0).
     - [x] C1-BIIRL: (1,2,1,0,1). The entire count and transpose:
           152 actual-sign splits and 153 contradictions, with no

@@ -1224,6 +1224,26 @@ checks the geometric hypotheses and the full tree, including all
 Seven C1 counts and nine N6 counts remain open. The unrestricted
 ten-point pen-and-paper upper bound is incomplete.
 
+## Hand checkpoint 98 — monotone chains in the square
+
+Seven points ordered by height with five positive consecutive turns
+have a consecutive doubled area at most `(5√5−11)/2 < 1/11`. A
+seven-point construction attains the first constant. This excludes
+the convex top-pair alternative in the one-corner counts
+`(0,2,1,2,0)` and `(1,1,1,2,0)` and their transposes. The inner
+top point must lie strictly inside the triangle cut off by the
+outer one. [Sharp chain bound and application](hand/SEVEN_POINT_MONOTONE_CHAIN.md)
+
+The remaining six-point chain bounds that outer triangle by .462,
+puts each of the inner point's three barycentric weights above
+31/154 and excludes occupants from the other three consecutive
+triangles. Independent review checked the boundary cases and all
+32 coefficients in the four cubic comparisons.
+[Six-point inequality](hand/SIX_POINT_MONOTONE_CHAIN.md)
+
+Both counts still require the triangular alternative. Seven C1 and
+nine N6 counts remain open.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,
