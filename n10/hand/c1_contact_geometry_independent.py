@@ -165,8 +165,11 @@ class Geometry:
         tokens = '-OHC -OHY -OHZ -OHX +OCY +OCZ +OCX +OYZ -OYX -OZX -HCY -HCZ -HCX -HYZ -HYX +HZX +CYZ +CYX +CZX +YZX'.split()
         return [(''.join(mapping[p] for p in t[1:]), orientation*(1 if t[0] == '+' else -1)) for t in tokens]
 
+    def has_container(self, point, container):
+        return self.containers[point] == container
+
     def line_rule(self, known, base, point, container, vertex=None, orientation=None):
-        assert len(base) == len(set(base)) == 2 and self.containers[point] == container
+        assert len(base) == len(set(base)) == 2 and self.has_container(point, container)
         vertices = [v for v in container if v not in base]
         if vertex is None:
             sg = sign(known, base+vertices[0])
@@ -182,6 +185,11 @@ class Geometry:
             put(known, base+vertex, orientation)
 
     def geometry(self, steps, final):
+        known = self.derive_signs(steps)
+        assert known == dict(final)
+        return known
+
+    def derive_signs(self, steps):
         known = self.base()
         for t, sg in self.meta['assign'].items():
             put(known, t, sg)
@@ -243,7 +251,6 @@ class Geometry:
                 meshes.append([word, orientation])
             else:
                 raise AssertionError(kind)
-        assert known == dict(final)
         assert meshes == self.meta['meshes']
         return known
 
@@ -376,7 +383,7 @@ class Geometry:
                     acc(t, co*orientation*sign(known, t))
             elif tag == 'c1_norm':
                 if w[0] == 'h_ge_c':
-                    assert self.biirl
+                    assert self.biirl or self.box[0][0] >= self.box[1][1]
                     acc('OHD', 1); acc('OCF', -1)
                 elif w[0] == 'h_ge_d':
                     acc('OHC', 1); acc('OCD', -1)

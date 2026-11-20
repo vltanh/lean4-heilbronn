@@ -1211,6 +1211,19 @@ including 7,948 exact scalar updates and 38 strict terminal gaps.
 Eight C1 counts and nine N6 counts remain open. The unrestricted
 pen-and-paper upper bound is incomplete.
 
+## Hand checkpoint 97 — one corner with a right-side pair
+
+The C1 count `(1,2,2,0,0)` and its transpose are excluded at doubled
+area `93/1000`. The two points in the side cap determine the outer
+vertex. The position of the inner point bounds the three areas in
+its subdivision of the outer triangle. The 107 sign splits then give
+41 geometric and 67 arithmetic contradictions. Independent review
+checks the geometric hypotheses and the full tree, including all
+14,125 arithmetic updates. [Proof and tables](hand/C1_BIIRR.md)
+
+Seven C1 counts and nine N6 counts remain open. The unrestricted
+ten-point pen-and-paper upper bound is incomplete.
+
 ## Publication and verification correction
 
 The previous local completion commit contained the independent checker,

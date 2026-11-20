@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 96.
+Checkpoint 97.
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -392,7 +392,7 @@ four-corner alternative and all zero-area faces.
         records are rejected, including an omitted leaf with altered
         totals. Proof: C1_TWO_CENTRAL_THREE_CAPS.md and its tables.
         The C1 parent stays open.
-  - [ ] C1-EXTERIOR. Exclude the remaining eight exterior count rows
+  - [ ] C1-EXTERIOR. Exclude the remaining seven exterior count rows
         from the exhaustive C1-EXTERIOR-CATALOGUE. Counts are
         (k,j,r,t,l), up to exchange of the two side caps:
     - [ ] C1-IITTT: (0,2,0,3,0).
@@ -410,7 +410,12 @@ four-corner alternative and all zero-area faces.
           review passes; 29 corrupted records are rejected.
           Proof: C1_ONE_LOWER_TWO_CENTRAL_SIDES.md and its tables.
     - [ ] C1-BIIRT: (1,2,1,1,0).
-    - [ ] C1-BIIRR: (1,2,2,0,0).
+    - [x] C1-BIIRR: (1,2,2,0,0). The side-pair theorem fixes the
+          outer point. The contact and occupancy inequalities give
+          a single coordinate box. All 107 determinant splits and
+          108 contradictory leaves cover this count and its transpose.
+          Independent review checks 4,973 geometric deductions and
+          14,125 arithmetic steps. [Proof and tables](C1_BIIRR.md)
     - [ ] C1-BBIIT: (2,2,0,1,0).
     - [x] C1-BBIIR: (2,2,1,0,0). The entire count and transpose:
           24 exhaustive angular roots, 185 actual-sign splits and
