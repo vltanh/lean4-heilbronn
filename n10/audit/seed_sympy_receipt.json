@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "scope": "attainment, unrestricted local theorem, global threshold comparisons, integer bounds",
+  "independent_arithmetic": "SymPy QQ.algebraic_field with Horner rational sign enclosures",
+  "sympy_version": "1.14.0",
+  "triangles": 120,
+  "active_triangles": 16,
+  "dual_certificates": 38,
+  "local_radius": "1/2000",
+  "local_margin": "57921081/30250000",
+  "global_thresholds_below_A": {
+    "corner": "4653/100000",
+    "N": "2326870979127/50000000000000"
+  },
+  "dual_data_sha256": "98d8c1b7ba38cd6d9f970da72f93b80c8d5e0abed87446ce6120ad037bd75f46",
+  "global_upper_bound_claimed": false
+}

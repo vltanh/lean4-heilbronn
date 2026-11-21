@@ -1,0 +1,6 @@
+II_PROGRESS pattern=0 roots=0 search=21289 bb=0 local=0 ms=4
+II_PROGRESS pattern=100 roots=366998 search=83694671 bb=366998 local=0 ms=23570
+II_PROGRESS pattern=200 roots=602619 search=175262370 bb=602619 local=0 ms=43234
+II_PROGRESS pattern=300 roots=641728 search=225192830 bb=641728 local=0 ms=52542
+II_RANGE_PASS start=0 stop=348 total=348 patterns=348 roots=641738 search=229409076 bb=641738 local=0
+II_COMPLETE_PASS

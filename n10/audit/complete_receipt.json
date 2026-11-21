@@ -1,0 +1,336 @@
+{
+  "schema": 1,
+  "status": "UNRESTRICTED_N10_COMPUTER_ASSISTED_PROOF_PASS",
+  "theorem": "H10 = the unique real root of 3456*A^3 - 1764*A^2 + 268*A - 9",
+  "scope": "Fresh exact seed/LP replay plus complete recorded global runs and independent per-pattern agreement; C++ enumeration recomputation is a separate command.",
+  "unresolved_regions": 0,
+  "patterns": 888824,
+  "roots": 49008609,
+  "root_lemmas": 27,
+  "families": {
+    "III": {
+      "patterns": 1,
+      "roots": 12172,
+      "search": 19430909,
+      "certified": 0,
+      "primary_boxes": 12172,
+      "independent_boxes": 12172,
+      "primary_local": 0,
+      "independent_local": 0
+    },
+    "II": {
+      "patterns": 348,
+      "roots": 641738,
+      "search": 229409076,
+      "certified": 0,
+      "primary_boxes": 641738,
+      "independent_boxes": 641738,
+      "primary_local": 0,
+      "independent_local": 0
+    },
+    "C2": {
+      "patterns": 17903,
+      "roots": 58494,
+      "search": 10382270,
+      "certified": 0,
+      "primary_boxes": 58494,
+      "independent_boxes": 58494,
+      "primary_local": 0,
+      "independent_local": 0
+    },
+    "C1": {
+      "patterns": 35545,
+      "roots": 9366572,
+      "search": 1107173588,
+      "certified": 0,
+      "primary_boxes": 9366572,
+      "independent_boxes": 9366572,
+      "primary_local": 0,
+      "independent_local": 0
+    },
+    "N": {
+      "patterns": 835027,
+      "roots": 38929633,
+      "search": 1246854794,
+      "certified": 27,
+      "primary_boxes": 39060816,
+      "independent_boxes": 39074196,
+      "primary_local": 0,
+      "independent_local": 0
+    }
+  },
+  "primary": {
+    "schema": 1,
+    "checker_kind": "primary",
+    "source_sha256": "c7515883c88417ca9d8f6e6e3341aa8e7503c3c8695e587020a43508281761eb",
+    "families": {
+      "III": {
+        "complete": true,
+        "total": 1,
+        "ranges": 1,
+        "gaps": [],
+        "patterns": 1,
+        "roots": 12172,
+        "search": 19430909,
+        "bb": 12172,
+        "local": 0,
+        "certified": 0
+      },
+      "II": {
+        "complete": true,
+        "total": 348,
+        "ranges": 1,
+        "gaps": [],
+        "patterns": 348,
+        "roots": 641738,
+        "search": 229409076,
+        "bb": 641738,
+        "local": 0,
+        "certified": 0
+      },
+      "C2": {
+        "complete": true,
+        "total": 17903,
+        "ranges": 1,
+        "gaps": [],
+        "patterns": 17903,
+        "roots": 58494,
+        "search": 10382270,
+        "bb": 58494,
+        "local": 0,
+        "certified": 0
+      },
+      "C1": {
+        "complete": true,
+        "total": 35545,
+        "ranges": 1,
+        "gaps": [],
+        "patterns": 35545,
+        "roots": 9366572,
+        "search": 1107173588,
+        "bb": 9366572,
+        "local": 0,
+        "certified": 0
+      },
+      "N": {
+        "complete": true,
+        "total": 835027,
+        "ranges": 3,
+        "gaps": [],
+        "patterns": 835027,
+        "roots": 38929633,
+        "search": 1246854794,
+        "bb": 39060816,
+        "local": 0,
+        "certified": 27
+      }
+    },
+    "scope": "provenance and exhaustive range accounting; geometric replay is separate",
+    "root_lemmas": {
+      "manifest_sha256": "38f8c6ba91c2f59010f975f74fc256a209cbaa70005883a8aefb6d705a83c074",
+      "table_sha256": "5a5fc27434eecac93004f508b589af7e01cb76507cd1eeb1c7bf6453929d9426",
+      "roots": 27,
+      "nodes": 51,
+      "counts": {
+        "local": 5,
+        "area": 0,
+        "farkas": 34,
+        "empty": 0,
+        "split": 12,
+        "contractions": 115,
+        "lp_bounds": 2500
+      },
+      "patterns": [
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299
+      ],
+      "verification": "fresh independent arbitrary-integer replay"
+    },
+    "all_families_complete": true,
+    "status": "PASS"
+  },
+  "independent": {
+    "schema": 1,
+    "checker_kind": "independent",
+    "source_sha256": "11b9961e44c336826e0e91c6d42c9fa56947a995501aec5879168a6ddda733c6",
+    "families": {
+      "III": {
+        "complete": true,
+        "total": 1,
+        "ranges": 1,
+        "gaps": [],
+        "patterns": 1,
+        "roots": 12172,
+        "search": 19430909,
+        "bb": 12172,
+        "local": 0,
+        "certified": 0
+      },
+      "II": {
+        "complete": true,
+        "total": 348,
+        "ranges": 1,
+        "gaps": [],
+        "patterns": 348,
+        "roots": 641738,
+        "search": 229409076,
+        "bb": 641738,
+        "local": 0,
+        "certified": 0
+      },
+      "C2": {
+        "complete": true,
+        "total": 17903,
+        "ranges": 1,
+        "gaps": [],
+        "patterns": 17903,
+        "roots": 58494,
+        "search": 10382270,
+        "bb": 58494,
+        "local": 0,
+        "certified": 0
+      },
+      "C1": {
+        "complete": true,
+        "total": 35545,
+        "ranges": 1,
+        "gaps": [],
+        "patterns": 35545,
+        "roots": 9366572,
+        "search": 1107173588,
+        "bb": 9366572,
+        "local": 0,
+        "certified": 0
+      },
+      "N": {
+        "complete": true,
+        "total": 835027,
+        "ranges": 2,
+        "gaps": [],
+        "patterns": 835027,
+        "roots": 38929633,
+        "search": 1246854794,
+        "bb": 39074196,
+        "local": 0,
+        "certified": 27
+      }
+    },
+    "scope": "provenance and exhaustive range accounting; geometric replay is separate",
+    "root_lemmas": {
+      "manifest_sha256": "38f8c6ba91c2f59010f975f74fc256a209cbaa70005883a8aefb6d705a83c074",
+      "table_sha256": "5a5fc27434eecac93004f508b589af7e01cb76507cd1eeb1c7bf6453929d9426",
+      "roots": 27,
+      "nodes": 51,
+      "counts": {
+        "local": 5,
+        "area": 0,
+        "farkas": 34,
+        "empty": 0,
+        "split": 12,
+        "contractions": 115,
+        "lp_bounds": 2500
+      },
+      "patterns": [
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        57964,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299,
+        269299
+      ],
+      "verification": "fresh independent arbitrary-integer replay"
+    },
+    "all_families_complete": true,
+    "status": "PASS"
+  },
+  "manifests": [
+    {
+      "path": "n10/runs/primary/manifest.json",
+      "sha256": "7b9d778ac7707986296b834a18d1422a127455f739c4e76399cd487a2a42d5d0"
+    },
+    {
+      "path": "n10/runs/independent/manifest.json",
+      "sha256": "724b49f177c672dea54815976a38f2b76ba56b1f57683fbafc1d3be1e29e4313"
+    }
+  ],
+  "exact_checks": [
+    {
+      "path": "n10/seed/verify_n10.py",
+      "sha256": "a0a86f769302e1866a594507eba45219154a7a17f4f58ffc2a4b3cf01b58e0de",
+      "exit_code": 0,
+      "stdout": "CONSTRUCTION_120_TRIANGLES_PASS; 16 exact equalities, 104 strict gaps\nPOSITIVE_STRESS_AND_ONE_DIMENSIONAL_KERNEL_PASS\nLOCAL_DUALS_PASS; 38 certificates; transverse constant 81\nUNRESTRICTED_LOCAL_RADIUS_1_OVER_2000_PASS\nlocal quadratic contradiction margin = 57921081/30250000\nSYMMETRIC_FAMILY_IDENTITIES_PASS\nNO_UNRESTRICTED_GLOBAL_UPPER_BOUND_CLAIMED"
+    },
+    {
+      "path": "n10/audit/verify_seed_sympy.py",
+      "sha256": "b155687cb67a8a6b754a2483e1b786a5e134f92b6784ea9eff58eb103b1a6709",
+      "exit_code": 0,
+      "stdout": "{\n  \"schema\": 1,\n  \"status\": \"PASS\",\n  \"scope\": \"attainment, unrestricted local theorem, global threshold comparisons, integer bounds\",\n  \"independent_arithmetic\": \"SymPy QQ.algebraic_field with Horner rational sign enclosures\",\n  \"sympy_version\": \"1.14.0\",\n  \"triangles\": 120,\n  \"active_triangles\": 16,\n  \"dual_certificates\": 38,\n  \"local_radius\": \"1/2000\",\n  \"local_margin\": \"57921081/30250000\",\n  \"global_thresholds_below_A\": {\n    \"corner\": \"4653/100000\",\n    \"N\": \"2326870979127/50000000000000\"\n  },\n  \"dual_data_sha256\": \"98d8c1b7ba38cd6d9f970da72f93b80c8d5e0abed87446ce6120ad037bd75f46\",\n  \"global_upper_bound_claimed\": false\n}"
+    },
+    {
+      "path": "n10/audit/check_geometry_bounds.py",
+      "sha256": "290540d997e80d01b1a0aa8bbeac76a50a581b268cf1dee9118c82e0939f6a61",
+      "exit_code": 0,
+      "stdout": "{\n  \"A_interval\": [\n    \"2228699624801567538337306833259735260167090826410973/47890485652059026823698344598447161988085597568237568\",\n    \"142636775987300323899600294961170939213089926139761069/3064991081731777716716694054300618367237478244367204352\"\n  ],\n  \"global_completion_claimed\": false,\n  \"integer_bounds\": {\n    \"fine_determinant\": 1064327255687168,\n    \"grid_determinant\": 968,\n    \"local_coordinate_comparison\": 46160412672,\n    \"midpoint_sort_determinant\": 4257309022748672\n  },\n  \"local_contradiction_margin\": \"57921081/30250000\",\n  \"status\": \"GEOMETRY_CONSTANTS_PASS\",\n  \"strict_A_minus_N_lower_bound\": \"518082032179902332637152021903198078223871105317/292300327466180583640736966543256603931186508595200000000000000\",\n  \"thresholds\": {\n    \"N\": \"2326870979127/50000000000000\",\n    \"corner\": \"4653/100000\"\n  },\n  \"wide_integer_bounds\": {\n    \"N_contraction_numerator\": 57130770474626477335914040673697792,\n    \"N_face_product\": 53216362784358400000000000000,\n    \"N_target\": 2476552203552353483369742336,\n    \"corner_contraction_numerator\": 57121661966442896811884544,\n    \"corner_face_product\": 53216362784358400000,\n    \"corner_target\": 2476157360356196352,\n    \"root_polynomial_intermediate\": 6312222752180000000000000000000000000,\n    \"template_enclosure_numerator\": 46137346000000000000000000000000\n  }\n}"
+    },
+    {
+      "path": "n10/audit/test_lp_certificate.py",
+      "sha256": "c41edf9e85c8db1f19d4c0f21bf7e2eafb6b2fddc2767812bc5ac34996461ab3",
+      "exit_code": 0,
+      "stdout": ""
+    },
+    {
+      "path": "n10/audit/test_run_manifest.py",
+      "sha256": "fc5e1cf0a06b456b62ba28a9225d0ad84a1a1fef7366420d989ca7f19b7c893d",
+      "exit_code": 0,
+      "stdout": ""
+    }
+  ],
+  "lean_verification": false,
+  "ci_used": false
+}

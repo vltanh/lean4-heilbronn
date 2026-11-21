@@ -1,0 +1,1157 @@
+{
+  "initial": {
+    "L_ACD": {
+      "triangle": "ACD",
+      "side": "lo",
+      "value": "13857/20000"
+    },
+    "U_ACD": {
+      "triangle": "ACD",
+      "side": "hi",
+      "value": "35133/50000"
+    },
+    "U_ACE": {
+      "triangle": "ACE",
+      "side": "hi",
+      "value": "440513/500000"
+    },
+    "L_ACG": {
+      "triangle": "ACG",
+      "side": "lo",
+      "value": "93/1000"
+    },
+    "L_ACP": {
+      "triangle": "ACP",
+      "side": "lo",
+      "value": "279/1000"
+    },
+    "L_ADG": {
+      "triangle": "ADG",
+      "side": "lo",
+      "value": "93/1000"
+    },
+    "L_ADP": {
+      "triangle": "ADP",
+      "side": "lo",
+      "value": "93/1000"
+    },
+    "L_AGP": {
+      "triangle": "AGP",
+      "side": "lo",
+      "value": "93/1000"
+    },
+    "L_CDE": {
+      "triangle": "CDE",
+      "side": "lo",
+      "value": "93/1000"
+    },
+    "L_CDP": {
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "93/1000"
+    },
+    "L_CEP": {
+      "triangle": "CEP",
+      "side": "lo",
+      "value": "93/1000"
+    },
+    "L_DEP": {
+      "triangle": "DEP",
+      "side": "lo",
+      "value": "93/1000"
+    },
+    "L_DGP": {
+      "triangle": "DGP",
+      "side": "lo",
+      "value": "93/1000"
+    }
+  },
+  "relations": [
+    [
+      "fan",
+      "ACD",
+      "ACG",
+      "CDG",
+      "ADG"
+    ],
+    [
+      "fan",
+      "ACD",
+      "ACP",
+      "CDP",
+      "ADP"
+    ],
+    [
+      "fan",
+      "ACE",
+      "ACP",
+      "CEP",
+      "AEP"
+    ],
+    [
+      "fan",
+      "ACP",
+      "ACG",
+      "CGP",
+      "AGP"
+    ],
+    [
+      "plu",
+      "ACP",
+      "ADG",
+      "ACD",
+      "AGP",
+      "ACG",
+      "ADP"
+    ],
+    [
+      "plu",
+      "ACE",
+      "CDP",
+      "ACD",
+      "CEP",
+      "ACP",
+      "CDE"
+    ],
+    [
+      "plu",
+      "ADP",
+      "CDG",
+      "ACD",
+      "DGP",
+      "ADG",
+      "CDP"
+    ],
+    [
+      "plu",
+      "AEP",
+      "CDP",
+      "ACP",
+      "DEP",
+      "ADP",
+      "CEP"
+    ],
+    [
+      "plu",
+      "ADP",
+      "CGP",
+      "ACP",
+      "DGP",
+      "AGP",
+      "CDP"
+    ]
+  ],
+  "updates": [
+    {
+      "id": "T0002",
+      "relation": 0,
+      "rule": "sub",
+      "triangle": "CDG",
+      "side": "hi",
+      "value": "25833/50000",
+      "sources": [
+        "U_ACD",
+        "L_ACG",
+        "L_ADG"
+      ]
+    },
+    {
+      "id": "T0004",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ACP",
+      "side": "hi",
+      "value": "25833/50000",
+      "sources": [
+        "U_ACD",
+        "L_CDP",
+        "L_ADP"
+      ]
+    },
+    {
+      "id": "T0006",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ADP",
+      "side": "hi",
+      "value": "16533/50000",
+      "sources": [
+        "U_ACD",
+        "L_ACP",
+        "L_CDP"
+      ]
+    },
+    {
+      "id": "T0013",
+      "relation": 4,
+      "rule": "sumlo",
+      "triangle": "ADG",
+      "side": "lo",
+      "value": "70727/500000",
+      "sources": [
+        "L_ACD",
+        "L_AGP",
+        "L_ACG",
+        "L_ADP",
+        "T0004"
+      ]
+    },
+    {
+      "id": "T0014",
+      "relation": 5,
+      "rule": "sumlo",
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "102587/1000000",
+      "sources": [
+        "L_ACD",
+        "L_CEP",
+        "L_ACP",
+        "L_CDE",
+        "U_ACE"
+      ]
+    },
+    {
+      "id": "T0017",
+      "relation": 6,
+      "rule": "sumlo",
+      "triangle": "ADP",
+      "side": "lo",
+      "value": "152801/1000000",
+      "sources": [
+        "L_ACD",
+        "L_DGP",
+        "T0013",
+        "T0014",
+        "T0002"
+      ]
+    },
+    {
+      "id": "T0022",
+      "relation": 8,
+      "rule": "sumlo",
+      "triangle": "CGP",
+      "side": "lo",
+      "value": "107323/1000000",
+      "sources": [
+        "L_ACP",
+        "L_DGP",
+        "L_AGP",
+        "T0014",
+        "T0006"
+      ]
+    },
+    {
+      "id": "T0024",
+      "relation": 0,
+      "rule": "sub",
+      "triangle": "CDG",
+      "side": "hi",
+      "value": "234103/500000",
+      "sources": [
+        "U_ACD",
+        "L_ACG",
+        "T0013"
+      ]
+    },
+    {
+      "id": "T0026",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ACP",
+      "side": "hi",
+      "value": "55909/125000",
+      "sources": [
+        "U_ACD",
+        "T0014",
+        "T0017"
+      ]
+    },
+    {
+      "id": "T0028",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ADP",
+      "side": "hi",
+      "value": "321073/1000000",
+      "sources": [
+        "U_ACD",
+        "L_ACP",
+        "T0014"
+      ]
+    },
+    {
+      "id": "T0030",
+      "relation": 3,
+      "rule": "sum",
+      "triangle": "ACP",
+      "side": "lo",
+      "value": "293323/1000000",
+      "sources": [
+        "L_ACG",
+        "T0022",
+        "L_AGP"
+      ]
+    },
+    {
+      "id": "T0034",
+      "relation": 4,
+      "rule": "sumlo",
+      "triangle": "ADG",
+      "side": "lo",
+      "value": "175833/1000000",
+      "sources": [
+        "L_ACD",
+        "L_AGP",
+        "L_ACG",
+        "T0017",
+        "T0026"
+      ]
+    },
+    {
+      "id": "T0036",
+      "relation": 5,
+      "rule": "sumlo",
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "104099/1000000",
+      "sources": [
+        "L_ACD",
+        "L_CEP",
+        "T0030",
+        "L_CDE",
+        "U_ACE"
+      ]
+    },
+    {
+      "id": "T0039",
+      "relation": 6,
+      "rule": "sumlo",
+      "triangle": "ADP",
+      "side": "lo",
+      "value": "35343/200000",
+      "sources": [
+        "L_ACD",
+        "L_DGP",
+        "T0034",
+        "T0036",
+        "T0024"
+      ]
+    },
+    {
+      "id": "T0044",
+      "relation": 8,
+      "rule": "sumlo",
+      "triangle": "CGP",
+      "side": "lo",
+      "value": "57557/500000",
+      "sources": [
+        "T0030",
+        "L_DGP",
+        "L_AGP",
+        "T0036",
+        "T0028"
+      ]
+    },
+    {
+      "id": "T0045",
+      "relation": 0,
+      "rule": "sub",
+      "triangle": "CDG",
+      "side": "hi",
+      "value": "433827/1000000",
+      "sources": [
+        "U_ACD",
+        "L_ACG",
+        "T0034"
+      ]
+    },
+    {
+      "id": "T0047",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ACP",
+      "side": "hi",
+      "value": "210923/500000",
+      "sources": [
+        "U_ACD",
+        "T0036",
+        "T0039"
+      ]
+    },
+    {
+      "id": "T0049",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ADP",
+      "side": "hi",
+      "value": "152619/500000",
+      "sources": [
+        "U_ACD",
+        "T0030",
+        "T0036"
+      ]
+    },
+    {
+      "id": "T0052",
+      "relation": 3,
+      "rule": "sum",
+      "triangle": "ACP",
+      "side": "lo",
+      "value": "150557/500000",
+      "sources": [
+        "L_ACG",
+        "T0044",
+        "L_AGP"
+      ]
+    },
+    {
+      "id": "T0056",
+      "relation": 4,
+      "rule": "sumlo",
+      "triangle": "ADG",
+      "side": "lo",
+      "value": "191703/1000000",
+      "sources": [
+        "L_ACD",
+        "L_AGP",
+        "L_ACG",
+        "T0039",
+        "T0047"
+      ]
+    },
+    {
+      "id": "T0058",
+      "relation": 5,
+      "rule": "sumlo",
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "104921/1000000",
+      "sources": [
+        "L_ACD",
+        "L_CEP",
+        "T0052",
+        "L_CDE",
+        "U_ACE"
+      ]
+    },
+    {
+      "id": "T0061",
+      "relation": 6,
+      "rule": "sumlo",
+      "triangle": "ADP",
+      "side": "lo",
+      "value": "19489/100000",
+      "sources": [
+        "L_ACD",
+        "L_DGP",
+        "T0056",
+        "T0058",
+        "T0045"
+      ]
+    },
+    {
+      "id": "T0066",
+      "relation": 8,
+      "rule": "sumlo",
+      "triangle": "CGP",
+      "side": "lo",
+      "value": "12371/100000",
+      "sources": [
+        "T0052",
+        "L_DGP",
+        "L_AGP",
+        "T0058",
+        "T0049"
+      ]
+    },
+    {
+      "id": "T0067",
+      "relation": 0,
+      "rule": "sub",
+      "triangle": "CDG",
+      "side": "hi",
+      "value": "417957/1000000",
+      "sources": [
+        "U_ACD",
+        "L_ACG",
+        "T0056"
+      ]
+    },
+    {
+      "id": "T0069",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ACP",
+      "side": "hi",
+      "value": "402849/1000000",
+      "sources": [
+        "U_ACD",
+        "T0058",
+        "T0061"
+      ]
+    },
+    {
+      "id": "T0071",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ADP",
+      "side": "hi",
+      "value": "2373/8000",
+      "sources": [
+        "U_ACD",
+        "T0052",
+        "T0058"
+      ]
+    },
+    {
+      "id": "T0074",
+      "relation": 3,
+      "rule": "sum",
+      "triangle": "ACP",
+      "side": "lo",
+      "value": "30971/100000",
+      "sources": [
+        "L_ACG",
+        "T0066",
+        "L_AGP"
+      ]
+    },
+    {
+      "id": "T0078",
+      "relation": 4,
+      "rule": "sumlo",
+      "triangle": "ADG",
+      "side": "lo",
+      "value": "204939/1000000",
+      "sources": [
+        "L_ACD",
+        "L_AGP",
+        "L_ACG",
+        "T0061",
+        "T0069"
+      ]
+    },
+    {
+      "id": "T0080",
+      "relation": 5,
+      "rule": "sumlo",
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "26457/250000",
+      "sources": [
+        "L_ACD",
+        "L_CEP",
+        "T0074",
+        "L_CDE",
+        "U_ACE"
+      ]
+    },
+    {
+      "id": "T0083",
+      "relation": 6,
+      "rule": "sumlo",
+      "triangle": "ADP",
+      "side": "lo",
+      "value": "206057/1000000",
+      "sources": [
+        "L_ACD",
+        "L_DGP",
+        "T0078",
+        "T0080",
+        "T0067"
+      ]
+    },
+    {
+      "id": "T0088",
+      "relation": 8,
+      "rule": "sumlo",
+      "triangle": "CGP",
+      "side": "lo",
+      "value": "65141/500000",
+      "sources": [
+        "T0074",
+        "L_DGP",
+        "L_AGP",
+        "T0080",
+        "T0071"
+      ]
+    },
+    {
+      "id": "T0089",
+      "relation": 0,
+      "rule": "sub",
+      "triangle": "CDG",
+      "side": "hi",
+      "value": "404721/1000000",
+      "sources": [
+        "U_ACD",
+        "L_ACG",
+        "T0078"
+      ]
+    },
+    {
+      "id": "T0091",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ACP",
+      "side": "hi",
+      "value": "15631/40000",
+      "sources": [
+        "U_ACD",
+        "T0080",
+        "T0083"
+      ]
+    },
+    {
+      "id": "T0093",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ADP",
+      "side": "hi",
+      "value": "143561/500000",
+      "sources": [
+        "U_ACD",
+        "T0074",
+        "T0080"
+      ]
+    },
+    {
+      "id": "T0096",
+      "relation": 3,
+      "rule": "sum",
+      "triangle": "ACP",
+      "side": "lo",
+      "value": "158141/500000",
+      "sources": [
+        "L_ACG",
+        "T0088",
+        "L_AGP"
+      ]
+    },
+    {
+      "id": "T0099",
+      "relation": 4,
+      "rule": "sumlo",
+      "triangle": "ADG",
+      "side": "lo",
+      "value": "213929/1000000",
+      "sources": [
+        "L_ACD",
+        "L_AGP",
+        "L_ACG",
+        "T0083",
+        "T0091"
+      ]
+    },
+    {
+      "id": "T0101",
+      "relation": 5,
+      "rule": "sumlo",
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "53261/500000",
+      "sources": [
+        "L_ACD",
+        "L_CEP",
+        "T0096",
+        "L_CDE",
+        "U_ACE"
+      ]
+    },
+    {
+      "id": "T0104",
+      "relation": 6,
+      "rule": "sumlo",
+      "triangle": "ADP",
+      "side": "lo",
+      "value": "107757/500000",
+      "sources": [
+        "L_ACD",
+        "L_DGP",
+        "T0099",
+        "T0101",
+        "T0089"
+      ]
+    },
+    {
+      "id": "T0109",
+      "relation": 8,
+      "rule": "sumlo",
+      "triangle": "CGP",
+      "side": "lo",
+      "value": "136947/1000000",
+      "sources": [
+        "T0096",
+        "L_DGP",
+        "L_AGP",
+        "T0101",
+        "T0093"
+      ]
+    },
+    {
+      "id": "T0110",
+      "relation": 0,
+      "rule": "sub",
+      "triangle": "CDG",
+      "side": "hi",
+      "value": "395731/1000000",
+      "sources": [
+        "U_ACD",
+        "L_ACG",
+        "T0099"
+      ]
+    },
+    {
+      "id": "T0112",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ACP",
+      "side": "hi",
+      "value": "23789/62500",
+      "sources": [
+        "U_ACD",
+        "T0101",
+        "T0104"
+      ]
+    },
+    {
+      "id": "T0114",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ADP",
+      "side": "hi",
+      "value": "17491/62500",
+      "sources": [
+        "U_ACD",
+        "T0096",
+        "T0101"
+      ]
+    },
+    {
+      "id": "T0116",
+      "relation": 2,
+      "rule": "sub",
+      "triangle": "AEP",
+      "side": "hi",
+      "value": "7371/15625",
+      "sources": [
+        "U_ACE",
+        "T0096",
+        "L_CEP"
+      ]
+    },
+    {
+      "id": "T0117",
+      "relation": 3,
+      "rule": "sum",
+      "triangle": "ACP",
+      "side": "lo",
+      "value": "322947/1000000",
+      "sources": [
+        "L_ACG",
+        "T0109",
+        "L_AGP"
+      ]
+    },
+    {
+      "id": "T0121",
+      "relation": 4,
+      "rule": "sumlo",
+      "triangle": "ADG",
+      "side": "lo",
+      "value": "44389/200000",
+      "sources": [
+        "L_ACD",
+        "L_AGP",
+        "L_ACG",
+        "T0104",
+        "T0112"
+      ]
+    },
+    {
+      "id": "T0123",
+      "relation": 5,
+      "rule": "sumlo",
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "53613/500000",
+      "sources": [
+        "L_ACD",
+        "L_CEP",
+        "T0117",
+        "L_CDE",
+        "U_ACE"
+      ]
+    },
+    {
+      "id": "T0126",
+      "relation": 6,
+      "rule": "sumlo",
+      "triangle": "ADP",
+      "side": "lo",
+      "value": "111481/500000",
+      "sources": [
+        "L_ACD",
+        "L_DGP",
+        "T0121",
+        "T0123",
+        "T0110"
+      ]
+    },
+    {
+      "id": "T0130",
+      "relation": 7,
+      "rule": "sumlo",
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "5381/50000",
+      "sources": [
+        "T0117",
+        "L_DEP",
+        "T0126",
+        "L_CEP",
+        "T0116"
+      ]
+    },
+    {
+      "id": "T0132",
+      "relation": 8,
+      "rule": "sumlo",
+      "triangle": "CGP",
+      "side": "lo",
+      "value": "143083/1000000",
+      "sources": [
+        "T0117",
+        "L_DGP",
+        "L_AGP",
+        "T0130",
+        "T0114"
+      ]
+    },
+    {
+      "id": "T0133",
+      "relation": 0,
+      "rule": "sub",
+      "triangle": "CDG",
+      "side": "hi",
+      "value": "77543/200000",
+      "sources": [
+        "U_ACD",
+        "L_ACG",
+        "T0121"
+      ]
+    },
+    {
+      "id": "T0135",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ACP",
+      "side": "hi",
+      "value": "186039/500000",
+      "sources": [
+        "U_ACD",
+        "T0130",
+        "T0126"
+      ]
+    },
+    {
+      "id": "T0137",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ADP",
+      "side": "hi",
+      "value": "272093/1000000",
+      "sources": [
+        "U_ACD",
+        "T0117",
+        "T0130"
+      ]
+    },
+    {
+      "id": "T0139",
+      "relation": 2,
+      "rule": "sub",
+      "triangle": "AEP",
+      "side": "hi",
+      "value": "465079/1000000",
+      "sources": [
+        "U_ACE",
+        "T0117",
+        "L_CEP"
+      ]
+    },
+    {
+      "id": "T0140",
+      "relation": 3,
+      "rule": "sum",
+      "triangle": "ACP",
+      "side": "lo",
+      "value": "329083/1000000",
+      "sources": [
+        "L_ACG",
+        "T0132",
+        "L_AGP"
+      ]
+    },
+    {
+      "id": "T0144",
+      "relation": 4,
+      "rule": "sumlo",
+      "triangle": "ADG",
+      "side": "lo",
+      "value": "45781/200000",
+      "sources": [
+        "L_ACD",
+        "L_AGP",
+        "L_ACG",
+        "T0126",
+        "T0135"
+      ]
+    },
+    {
+      "id": "T0146",
+      "relation": 5,
+      "rule": "sumlo",
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "107873/1000000",
+      "sources": [
+        "L_ACD",
+        "L_CEP",
+        "T0140",
+        "L_CDE",
+        "U_ACE"
+      ]
+    },
+    {
+      "id": "T0149",
+      "relation": 6,
+      "rule": "sumlo",
+      "triangle": "ADP",
+      "side": "lo",
+      "value": "229879/1000000",
+      "sources": [
+        "L_ACD",
+        "L_DGP",
+        "T0144",
+        "T0146",
+        "T0133"
+      ]
+    },
+    {
+      "id": "T0153",
+      "relation": 7,
+      "rule": "sumlo",
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "111773/1000000",
+      "sources": [
+        "T0140",
+        "L_DEP",
+        "T0149",
+        "L_CEP",
+        "T0139"
+      ]
+    },
+    {
+      "id": "T0155",
+      "relation": 8,
+      "rule": "sumlo",
+      "triangle": "CGP",
+      "side": "lo",
+      "value": "75341/500000",
+      "sources": [
+        "T0140",
+        "L_DGP",
+        "L_AGP",
+        "T0153",
+        "T0137"
+      ]
+    },
+    {
+      "id": "T0156",
+      "relation": 0,
+      "rule": "sub",
+      "triangle": "CDG",
+      "side": "hi",
+      "value": "76151/200000",
+      "sources": [
+        "U_ACD",
+        "L_ACG",
+        "T0144"
+      ]
+    },
+    {
+      "id": "T0158",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ACP",
+      "side": "hi",
+      "value": "22563/62500",
+      "sources": [
+        "U_ACD",
+        "T0153",
+        "T0149"
+      ]
+    },
+    {
+      "id": "T0160",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ADP",
+      "side": "hi",
+      "value": "65451/250000",
+      "sources": [
+        "U_ACD",
+        "T0140",
+        "T0153"
+      ]
+    },
+    {
+      "id": "T0162",
+      "relation": 2,
+      "rule": "sub",
+      "triangle": "AEP",
+      "side": "hi",
+      "value": "458943/1000000",
+      "sources": [
+        "U_ACE",
+        "T0140",
+        "L_CEP"
+      ]
+    },
+    {
+      "id": "T0163",
+      "relation": 3,
+      "rule": "sum",
+      "triangle": "ACP",
+      "side": "lo",
+      "value": "168341/500000",
+      "sources": [
+        "L_ACG",
+        "T0155",
+        "L_AGP"
+      ]
+    },
+    {
+      "id": "T0165",
+      "relation": 3,
+      "rule": "sub",
+      "triangle": "CGP",
+      "side": "hi",
+      "value": "5469/31250",
+      "sources": [
+        "T0158",
+        "L_ACG",
+        "L_AGP"
+      ]
+    },
+    {
+      "id": "T0167",
+      "relation": 4,
+      "rule": "sumlo",
+      "triangle": "ADG",
+      "side": "lo",
+      "value": "118853/500000",
+      "sources": [
+        "L_ACD",
+        "L_AGP",
+        "L_ACG",
+        "T0149",
+        "T0158"
+      ]
+    },
+    {
+      "id": "T0171",
+      "relation": 6,
+      "rule": "sumlo",
+      "triangle": "ADP",
+      "side": "lo",
+      "value": "239009/1000000",
+      "sources": [
+        "L_ACD",
+        "L_DGP",
+        "T0167",
+        "T0153",
+        "T0156"
+      ]
+    },
+    {
+      "id": "T0175",
+      "relation": 7,
+      "rule": "sumlo",
+      "triangle": "CDP",
+      "side": "lo",
+      "value": "116657/1000000",
+      "sources": [
+        "T0163",
+        "L_DEP",
+        "T0171",
+        "L_CEP",
+        "T0162"
+      ]
+    },
+    {
+      "id": "T0177",
+      "relation": 8,
+      "rule": "sumlo",
+      "triangle": "ADP",
+      "side": "lo",
+      "value": "120453/500000",
+      "sources": [
+        "T0163",
+        "L_DGP",
+        "L_AGP",
+        "T0175",
+        "T0165"
+      ]
+    },
+    {
+      "id": "T0178",
+      "relation": 8,
+      "rule": "sumlo",
+      "triangle": "CGP",
+      "side": "lo",
+      "value": "80519/500000",
+      "sources": [
+        "T0163",
+        "L_DGP",
+        "L_AGP",
+        "T0175",
+        "T0160"
+      ]
+    },
+    {
+      "id": "T0183",
+      "relation": 1,
+      "rule": "sub",
+      "triangle": "ACP",
+      "side": "hi",
+      "value": "345097/1000000",
+      "sources": [
+        "U_ACD",
+        "T0175",
+        "T0177"
+      ]
+    },
+    {
+      "id": "T0188",
+      "relation": 3,
+      "rule": "sum",
+      "triangle": "ACP",
+      "side": "lo",
+      "value": "173519/500000",
+      "sources": [
+        "L_ACG",
+        "T0178",
+        "L_AGP"
+      ]
+    }
+  ],
+  "contradiction": {
+    "triangle": "ACP",
+    "lower": "T0188",
+    "upper": "T0183"
+  }
+}

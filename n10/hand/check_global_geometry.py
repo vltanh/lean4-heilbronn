@@ -1,0 +1,2411 @@
+#!/usr/bin/env python3
+"""Exact transcription checks for the new n=10 hand geometry.
+
+This script checks polynomial identities and rational comparisons printed in
+TRIANGLE_OCCUPANCY.md, THREE_CORNERS.md, CLUSTERED_TRIANGLE.md,
+SIX_POINT_ENDPOINT.md, TYPE_II.md, SYMMETRIC_CHAMBER.md,
+ASYMMETRIC_SIGN_CHAMBER.md, plus the opposite-corner notes.
+It does not enumerate configurations
+or prove geometric coverage. The written arguments supply those deductions.
+Run locally with: python3 n10/hand/check_global_geometry.py
+"""
+
+from fractions import Fraction as Q
+
+import sympy as sp
+
+
+def zero(expression):
+    assert sp.cancel(expression) == 0, expression
+
+
+def area(u, v, w):
+    return sp.det(sp.Matrix.hstack(v-u, w-u))/2
+
+
+def triangle_occupancy():
+    A, B, C = (sp.Matrix(p) for p in [(0, 0), (1, 0), (0, 1)])
+    Z, X, Y = (sp.Matrix(sp.symbols(name)) for name in
+               ["zx zy", "xx xy", "yx yy"])
+    x, y, z = area(A, B, Z), area(B, C, X), area(C, A, Y)
+    a, b, c, k = area(A, Z, Y), area(B, X, Z), area(C, Y, X), area(Z, X, Y)
+    uA, uB, uC = area(A, Z, X), area(B, X, Y), area(C, Y, Z)
+    vA, vB, vC = area(A, X, Y), area(B, Y, Z), area(C, Z, X)
+    for expression in [
+        x+y+z+a+b+c+k-area(A, B, C),
+        a-uA-vA+k, b-uB-vB+k, c-uC-vC+k,
+        x*k-a*b+uA*vB, y*k-b*c+uB*vC, z*k-c*a+uC*vA,
+    ]:
+        zero(expression)
+
+    ta, tb, tc, K, ua, ub, uc = sp.symbols("ta tb tc K ua ub uc")
+    va, vb, vc = ta+K-ua, tb+K-ub, tc+K-uc
+    raw = ((1+ta)*(1+tb)+(1+tb)*(1+tc)+(1+tc)*(1+ta)
+           -(1+ua)*(1+vb)-(1+ub)*(1+vc)-(1+uc)*(1+va))
+    zero(raw-(ta*tb+tb*tc+tc*ta+ta+tb+tc-3*K-(ua*vb+ub*vc+uc*va)))
+
+    r = Q(63, 200)
+    assert r*r*(Q(5, 4)-r)/2 == Q(742203, 16000000)
+    assert Q(742203, 16000000)-Q(5, 108) == Q(39481, 432000000) > 0
+    assert Q(11, 5)**2 < 5
+    print("PASS: seven face identities, scalar expansion, occupancy threshold")
+
+
+def endpoint_cells():
+    h, f, x, w, r, H, R = sp.symbols("h f x w r H R")
+    alpha, beta = 1-h, 1-f
+    L, K, N = f*w-beta*x, h*(1-x)-w, f*w+(h-beta)*x-f*h
+    zero(N-(-f*K-alpha*beta*x))
+    zero(N-(alpha*L-h*f*(1-x-w)))
+    zero(N-(alpha*f-alpha*x-f*(1-x-w)))
+    zero(1+alpha/h+f/beta-(h+beta-h*beta)/(h*beta))
+    cap = R*(1-H+R)/(H-R)
+    zero(sp.diff(cap, H)+R/(H-R)**2)
+    phi = r*(1-r)**2/(2-r)
+    zero(sp.diff(phi, r)-2*(1-r)*(r*r-3*r+1)/(2-r)**2)
+    zero(phi.subs(r, (3-sp.sqrt(5))/2)-(5*sp.sqrt(5)-11)/2)
+    assert 5*55**2 < 123**2
+    assert Q(123, 55)*5/2-Q(11, 2) == Q(1, 11)
+    print("PASS: endpoint-cell identities, cap maximum, exact comparison")
+
+
+def seven_point_endpoint():
+    h, beta, sigma, x, w = sp.symbols("h beta sigma x w")
+    N = (1-beta)*w+(h-beta)*x-(1-beta)*h
+    lower = beta*(1-h)*w/h-beta*(1-h)-sigma+beta*sigma/h
+    zero(N.subs(x, 1-(sigma+w)/h)-lower)
+    q = sp.Rational
+    threshold, u, k0, k1 = q(93, 1000), q(9, 10), q(16461, 20000), q(4371, 5000)
+    F = lambda z: z-threshold/(1-z)
+    M, M1 = F(k0), F(k1)
+    assert M == q(21055479, 70780000)
+    assert M1 == q(424359, 3145000)
+    assert threshold-(M1-threshold) == q(160611, 3145000) > 0
+    assert (1-k0)**2 < threshold
+    assert 3*threshold < M < 4*threshold
+    B = lambda z: 1-2*threshold/u-(2/u-1)*z
+    assert B(M) > 0
+    assert B(3*threshold) == q(1357, 3000)
+    bound = (M-threshold)*B(3*threshold)
+    assert bound == q(6546592741, 70780000000)
+    assert threshold-bound == q(35947259, 70780000000) > 0
+    assert q(1, 11)-q(55, 608) == q(3, 6688) > 0
+    # Regression check of the four explicitly proved vertex-pair rows.
+    lo = [(0, threshold), (B(threshold), threshold), (0, M), (B(M), M)]
+    hi = [(0, 3*threshold), (B(3*threshold), 3*threshold), (0, M), (B(M), M)]
+    determinant = lambda p, q, r: ((q[0]-p[0])*(r[1]-p[1])
+                                   -(q[1]-p[1])*(r[0]-p[0]))
+    assert max(abs(determinant(p, q, r)) for p in hi for q in hi for r in lo) == bound
+    print("PASS: seven-point strip identity, both exact gaps, trapezoid table")
+
+
+def symmetric_opposite_orientation():
+    a, b, t = sp.symbols("a b t")
+    c = 1-a-b
+    A, B, D, G, H, O = (sp.Matrix(p) for p in
+                         [(0, a), (a, 0), (1, b), (b, 1), (0, 1-b), (t, t)])
+    zero(-2*area(A, D, O)-(a*(1-2*t)-c*t))
+    zero(-2*area(A, H, O)-c*t)
+    zero(2*area(A, G, H)-b*c)
+    zero(2*area(A, B, O)-a*(2*t-a))
+    zero(a*(2*t-a)+a*(1-2*t)-c*t-(a*(1-a)-c*t))
+    print("PASS: opposite symmetric orientation area formulas")
+
+
+def clustered_triangle():
+    u, h, x, z, sigma = sp.symbols("u h x z sigma")
+    q, w = u+h, 1-u-h
+    b, c = (1-h)*x+u*z, -h*x+u*z
+    zero(u*(x+z)-(q*b+w*c))
+    T = u*(w-sigma)-sigma
+    x1, x2 = sigma*(1+u)/w, (u*(1-sigma)-sigma)/q
+    zero(u-x1-T/w)
+    zero(x2-u-T/q)
+    A = sp.Matrix([0, 1])
+    V1 = sp.Matrix([x1, 1-sigma-x1])
+    V2 = sp.Matrix([x2, 1-sigma-x2])
+    V3 = sp.Matrix([u, h+sigma/u])
+    zero(2*area(A, V1, V2)-sigma*T/(q*w))
+    zero(-2*area(A, V1, V3)-sigma*T/(u*w))
+    zero(-2*area(A, V2, V3)-(u-sigma)*T/(u*q))
+    numerator = ((u-sigma)*(u*(1-u-2*sigma)-sigma)
+                 -sigma*u*(u+sigma))
+    N = -u**3+(1-2*sigma)*u**2+(sigma**2-2*sigma)*u+sigma**2
+    zero(numerator-N)
+    zero(N.subs(u, sigma)+2*sigma**3)
+    threshold, G = Q(93, 1000), Q(149, 20)
+    q0 = 1-G*threshold
+    assert q0 == Q(6143, 20000)
+    assert 1-threshold-2*q0 == Q(2927, 10000) > 0
+    assert 2-q0*(G-1) == Q(7553, 400000) > 0
+    assert 2*(1-2*threshold-3*Q(1, 4)) == Q(16, 125) > 0
+    assert N.subs({u: sp.Rational(1, 4), sigma: sp.Rational(93, 1000)}) == -sp.Rational(351, 800000)
+    print("PASS: clustered-triangle identity, three vertex areas, exact cubic bounds")
+
+
+def opposite_corners():
+    q = sp.Rational
+    sigma, cap, offset = q(93, 1000), q(89, 100), q(11, 100)
+    h, beta, w, p, v, r = sp.symbols("h beta w p v r")
+    F = lambda t: t-sigma/(1-t)
+    R = ((1-beta)*(h-w)-sigma)/(h-beta)
+    zero(sp.diff(R, h)-(1-beta)*(w-F(beta))/(h-beta)**2)
+    zero(sp.diff(R, beta)-((1-h)*(h-w)-sigma)/(h-beta)**2)
+    zero(R.subs({h: cap, beta: q(93, 110)})-(1-q(170, 49)*w))
+    a, c = q(31, 300), q(1579, 441)
+    assert 3*sigma-(1-a)/c == q(45111, 1579000) > 0
+    assert sigma-(1-a)**2/(4*c) == q(2328191, 63160000) > 0
+    assert 4*sigma*(1-offset**2)-((1-offset)*cap-2*sigma)**2 == q(14159, 100000000) > 0
+
+    # The weighted determinant identity and the necessary product bound.
+    x = sp.symbols("x")
+    A, E, H = (sp.Matrix(t) for t in [(0, 0), (1, 1), (0, h)])
+    P, Qp = sp.Matrix([p, p+w]), sp.Matrix([x, x+v])
+    dH, dE = 2*area(P, Qp, H), 2*area(P, Qp, E)
+    zero(w*dH+(h-w)*dE-(h*(1-p)-w)*(w-v))
+    poly = (1+4*sigma)*r*r-12*sigma*r+4*sigma*sigma
+    zero(poly.subs(r, 2*sigma)-16*sigma*sigma*(sigma-1))
+    assert poly.subs(r, q(39, 50)) == -q(1449, 1250000)
+    assert 8*sigma-q(1837, 2500) == q(23, 2500) > 0
+
+    # Both same-half corner orientations and their convex quadratic.
+    Lc = cap-sigma-sigma/cap
+    D, Q0 = 2*sigma/cap, Lc/2
+    assert sigma-Lc**2/8 == q(2094597311, 63368000000) > 0
+    corner_pair = lambda z: z*(z-D)*(1/offset-1)-sigma*z/offset-sigma*(z-D)
+    assert corner_pair(D) == -q(8649, 48950)
+    assert sigma-corner_pair(Q0) == q(4970239, 356000000) > 0
+
+    # The two cross-half corner bounds, including the small strict margins.
+    f, d = sp.symbols("f d")
+    L = cap-sigma/cap
+    pair_bound = (L*(1-f*d)-sigma*(1+f))**2/(4*(1+d)*(1+f)*(1-f*d))
+    assert sigma-pair_bound.subs({f: offset, d: offset}) == q(14159, 395160000) > 0
+    U = (cap*h-(cap+3)*sigma)/(h+cap*offset)
+    T = f*(h-sigma)+(1-h-f*offset)*U
+    F0, k = q(307, 1000), q(1521, 2500)
+    h0 = k/(1-F0)
+    assert h0 == q(338, 385)
+    rising_derivative = (275000000000*h**4+53845000000*h**3
+                         +820950057500*h**2+93358980000*h+4569922071)
+    rising_derivative /= 25000*h*h*(10000*h+979)**2
+    falling_numerator = 5830000000*h*h+1141514000*h-4721013101
+    zero(sp.diff(T.subs(f, 1-k/h), h)-rising_derivative)
+    zero(sp.diff(T.subs(f, F0), h)+falling_numerator/(100*(10000*h+979)**2))
+    assert falling_numerator.subs(h, q(7, 8)) == 741405399 > 0
+    assert 3*sigma-T.subs({h: h0, f: F0}) == q(1027091, 17532270000) > 0
+    print("PASS: opposite-corner identities, contact/product bounds, both corner exclusions")
+
+
+def noncentral_corners():
+    q = sp.Rational
+    sigma, cap = q(93, 1000), q(89, 100)
+    J, z, b = sp.symbols("J z b")
+    x0 = sigma/J
+    y0 = sigma*(1-J*J)/(J*(1-J-sigma))
+    N = (-J**5+3*J**4+(4*sigma-3)*J**3
+         +(2*sigma*sigma-6*sigma+1)*J*J
+         +(2*sigma-2*sigma*sigma)*J+2*sigma*sigma-sigma**3)
+    zero(sigma-(y0-x0)*(J-x0-y0)-sigma*N/(J*J*(1-J-sigma)**2))
+    expansion = (q(300087, 5000000000)+q(5793, 12500000)*z
+                 +z*z*(q(305249, 500000)+q(99, 250)*z-q(6, 5)*z*z-z**3))
+    zero(N.subs(J, q(21, 25)+z)-expansion)
+    assert q(149, 20)*sigma-q(83, 100)**2 == q(79, 20000) > 0
+    W = J**3-(1+sigma)*J*J+2*sigma
+    assert W.subs(J, q(83, 100)) == q(48193, 10000000) > 0
+    assert q(300087, 5000000000)-q(5793, 12500000)/100 == q(55383, 1000000000) > 0
+    assert q(305249, 500000)-q(99, 250)/100-q(6, 5)/400-q(1, 8000) == q(603413, 1000000) > 0
+
+    fan_bound = (1-sigma/(1-b))*(b-4*sigma/cap)-sigma*(1+1/b)
+    Nb = -(445000*b**3-631000*b*b+168702*b+41385)/445000
+    zero(b*(1-b)*fan_bound-Nb)
+    expansion = -z**3-q(4103, 4450)*z*z+q(861, 111250)*z-q(1239, 2225000)
+    zero(Nb.subs(b, q(39, 50)+z)-expansion)
+    assert q(4103, 4450)-q(39, 50) == q(316, 2225)
+    assert q(1239, 2225000)-q(861, 111250)**2/(4*q(316, 2225)) == q(3173919, 7031000000) > 0
+    print("PASS: noncentral corner cut polynomial and empty-fan inequality")
+
+
+def mixed_corners():
+    q = sp.Rational
+    sigma, a, c = q(93, 1000), q(69, 100), q(89, 100)
+    beta, h, b, z = sp.symbols("beta h b z")
+    F = beta**3-beta**2+(3*sigma+sigma*sigma)*beta-2*sigma*sigma
+    expansion = z**3+q(7, 20)*z*z-q(4851, 1000000)*z+q(15381, 20000000)
+    zero(F.subs(beta, q(9, 20)+z)-expansion)
+    assert q(4851, 1000000)**2-4*q(1, 5)*q(15381, 20000000) == -q(591707799, 1000000000000)
+    G = h*b+h*sigma-(h*(1-beta)+b)*(1-3*sigma/beta)
+    zero(G.subs({h:a,b:a})-(a*a-2*a-2*a*sigma+a*beta+6*a*sigma/beta))
+    assert G.subs({h:a,b:a,beta:a}) == q(93, 50000) > 0
+    D0 = h+b-h*b
+    zero((D0*(h+b)/h).subs(b,a)-((1-a)*h+a*(2-a)+a*a/h))
+    assert a*a-(1-a)*c*c == q(230549, 1000000) > 0
+    T = (2-c)*(c-sigma)
+    M = (c+a-c*a)*(c+a)/c
+    assert T == q(88467, 100000)
+    assert M == q(763061, 445000)
+    assert 4*sigma*M-(T-sigma)**2 == q(9917547879, 890000000000) > 0
+    print("PASS: mixed-half cubic, both containment bounds, same-corner constants")
+
+
+def mixed_cross_corners():
+    q = sp.Rational
+    sigma, a, c, r = q(93, 1000), q(69, 100), q(89, 100), q(11, 100)
+    h, b, f, u, v, x, y, z = sp.symbols("h b f u v x y z")
+    f0 = 1-sigma/(1-h)
+    X = (f*h*b-f*sigma-b*sigma)/(b+f*h)
+    X0 = X.subs({b:c,f:f0})
+    zero((q(21, 100)-X0)*(c+f0*h)*(1-h)
+         -(680000*h*h-979430*h+354021)/1000000)
+    zero((q(7, 40)-X0)*(c+f0*h)*(1-h)
+         -(715000*h*h-980025*h+322871)/1000000)
+    assert q(979430, 1000000)**2-4*q(680000, 1000000)*q(354021, 1000000) == -q(36539951, 10000000000)
+    assert (715000*q(41, 50)**2-980025*q(41, 50)+322871)/1000000 == q(33, 2000000)
+    for H, Z, lower, gap, derivative in [
+        (q(41, 50), q(21, 100), a, q(117009, 89000000), q(27889, 111250)),
+        (c, q(7, 40), q(41, 50), q(48367, 14240000), q(59013, 178000)),
+    ]:
+        L, K = H-sigma-sigma/c, lower/c+r
+        assert sigma-Z*(L-K*Z) == gap > 0
+        assert L-2*K*Z == derivative > 0
+    D = y*u-x*v
+    dH, dB = h*(u-x)-D, b*(y-v)-D
+    zero((b-u)*(v-sp.Symbol("d")*u)+u*(b*sp.Symbol("d")-sp.Symbol("d")*u+(1-b)*v)-b*(1-u)*v)
+    zero((b-u)*dH+u*dB-(u-x)*(h*(b-u)-b*v))
+    V = h*(1-u/c)-sigma/(u-sigma/h)
+    H0 = q(17, 20)
+    poly = (q(85, 89)*z**3-q(141, 178)*z*z-q(1097, 178000)*z-q(165153, 151300000))
+    zero(((V.subs(h,H0)-sigma/(1-u))*(u-sigma/H0)*(1-u)).subs(u,z+q(39, 100))-poly)
+    assert q(165153, 151300000)-q(1097, 178000)**2/(4*q(373, 1780)) == q(472358599, 451479200000) > 0
+    assert q(141, 178)-q(85, 89)*q(61, 100) == q(373, 1780)
+    assert (V.subs({h:c,u:q(1,2)})-2*sigma) == -q(5481, 176000)
+    assert (q(1,2)-sigma/c)**2-sigma == q(502387, 7921000) > 0
+    L0 = h*h/sigma-(1+h)/f0-h/c
+    zero((1+h)/f0-(h+1-sigma+sigma*(2-sigma)/(1-h-sigma)))
+    zero((V-(2*h-u*(h*h/sigma-(1+h)/f0)))*(u-sigma/h)-u*(L0*(u-sigma/h)-h))
+    assert 2*c/sigma-1-1/c-sigma*(2-sigma)/(1-H0-sigma)**2 == -q(112259480, 2987997)
+    assert L0.subs(h,H0) == q(305930, 157263)
+    assert sigma/c+H0/L0.subs(h,H0)-q(1,2) == q(22564199, 544555400) > 0
+    print("PASS: mixed cross-pair signs, two rational tables, A-cut scalar contradiction")
+
+
+def universal_mixed_corner():
+    q = sp.Rational
+    sigma = q(93, 1000)
+    h, f, w, z = sp.symbols("h f w z")
+    r = 1-w/h-sigma/(w-sigma)
+    D = h+f-h*f
+    T = D*(1-w/h)-(h+f)*sigma/(w-sigma)
+    zero(sp.diff(T,f)-(r+w-h))
+    zero(sp.diff(T,h)-(1-f+f*w/(h*h)-sigma/(w-sigma)))
+    t = q(15717, 100000)
+    assert 12*t-(1+2*t)**2 == q(396375911, 2500000000) > 0
+    assert 4*q(31, 250)-(1-2*sigma-q(31, 250))**2 == q(199, 10000) > 0
+    H, F = q(83, 100), q(17019, 41500)
+    D1 = H+F-H*F
+    U, V = D1*(1-sigma/H), sigma*D1*(H+F)/H
+    assert U == q(2751827551, 3444500000)
+    assert V == q(2233830552387, 17868343750000)
+    assert 4*V-(U-sigma)**2 == q(20914942006991399, 11864580250000000000) > 0
+    assert q(25947, 77000)**2-sigma*q(17,20)*q(1261,1000)/q(89,100) == q(204369639,131920250000) > 0
+    f0, fmax = 2*sigma+2*sigma/h, 1-sigma/(1-h)
+    w0 = sigma*(3/fmax-2)
+    P = (250000000000*h**5-350223500000*h**4+104548000000*h**3
+         -20978504853*h*h+25279678500*h+1430951103)
+    zero(T.subs({f:f0,w:w0})-sigma-P/(69750000*h*h*(1000*h-907)))
+    expansion = (250000000000*z**5+q(2074329500000,3)*z**4
+                 +q(6059227000000,9)*z**3+q(6152926618969,27)*z*z
+                 +q(19249553345,81)*z+q(4167656341,972))
+    zero(P.subs(h,q(5,6)+z)-expansion)
+    assert q(4167656341,972)-q(19249553345,81*300)-q(6059227000000,9*300**3)-q(250000000000,300**5) == q(1405598833,405) > 0
+    print("PASS: universal mixed-corner envelope, both intervals, positive quintic")
+
+
+def mixed_central_placement():
+    q = sp.Rational
+    sigma, c = q(93,1000), q(89,100)
+    h, z = sp.symbols("h z")
+    f0 = 1-sigma/(1-h)
+    R = (h*c-(c+1)*sigma)/(h+c)
+    W = R*(h-sigma*(h+1)/(h*f0)-sigma/c)-sigma*sigma/(h*c)
+    N = 890000000*h**4-1251770000*h**3+270351000*h*h+141348747*h-8501967
+    zero(sigma-W-N/(10000*h*(100*h+89)*(907-1000*h)))
+    expansion = 890000000*z**4+1596230000*z**3+683703000*z*z-6768053*z+q(6197153,5)
+    zero(N.subs(h,q(4,5)+z)-expansion)
+    assert 683703000-1596230000*q(11,100) == 508117700
+    assert 6768053**2-4*508117700*q(6197153,5) == -2473299961715671
+    assert q(6197153,5)-q(6768053**2,4*508117700) == q(2473299961715671,2032470800) > 0
+    R0 = c+sigma-c*sigma*(1+h)/(h*f0)
+    g = 907*h*h-2000*h+907
+    zero(sp.diff(R0,h)-8277*g/(100*h*h*(1000*h-907)**2))
+    assert g.subs(h,q(69,100)) == -q(411773,10000)
+    assert sp.diff(g,h).subs(h,c) < 0
+    assert R0.subs(h,q(69,100)) == q(1116359,1610000)
+    assert q(373,50)*sigma-R0.subs(h,q(69,100)) == q(1567,4025000) > 0
+    print("PASS: mixed/central quartic, quadrilateral capacity, complete closure constants")
+
+
+def opposite_mixed_complete():
+    q = sp.Rational
+    sigma, c = q(93,1000), q(89,100)
+    h, b, d, f, p, t, u, v, x, y, r0, z = sp.symbols("h b d f p t u v x y r0 z")
+    C, T = h*b-h*p-b*t, h*u+b*v-h*b
+    dH = h*(u-p)+p*v-u*t
+    zero((h+b)*dH-((h+u-v)*C+(h-t+p)*T))
+    DA = x*v-u*y
+    M, N = -DA-h*(u-x), DA+d*(u-x)-(v-y)
+    K, L = h-y+(1-h)*x, v-d*u
+    zero(M+N-((1-d)*x+h*(1-u)-K-L))
+    zero(h*x+2*K+y-x-(h+K))
+    assert 2*sigma*(4+q(100,69))-1 == q(39,2875) > 0
+    a = sigma/c
+    assert 1-2*sigma-2*a == q(26923,44500)
+    assert 4*a-(1-2*sigma-2*a)**2 == q(102852071,1980250000) > 0
+
+    A0 = sigma+a
+    F = lambda f,b: (f*(b+sigma)-b*A0)*(b-2*sigma)-sigma*(1+b-f)*(f+A0)
+    F1, F2 = F((1+r0-v)/2,(1+r0+v)/2), F((1-r0-v)/2,(1-r0+v)/2)
+    P = 11125000*v**3+9311500*v*v-3106261*v+246761
+    S0 = -P/44500000
+    Cv = (11125000*v+26911500)/44500000
+    J = (55625*r0*r0-55625*v*v+46615*v+85872)/222500
+    zero(F1+F2-S0-Cv*r0*r0)
+    zero(F1-F2-r0*J)
+    assert Cv.subs(v,q(2,5)) < q(7,8)
+    assert q(85872,222500)-q(3,8) == q(4869,445000) > 0
+    expansion = 11125000*z**3+13761500*z*z-29861*z+q(3307637,135)
+    zero(P.subs(v,z+q(2,15))-expansion)
+    assert 13761500-11125000*q(2,15) == q(36834500,3)
+    assert 29861**2-4*q(36834500,3)*q(3307637,135) == -q(97395898036199,81)
+    print("PASS: opposite-mixed containment identity, both orientations, final cubic contradiction")
+
+
+def n8_line_caps():
+    a, b, r, z, X, Y, T, s = sp.symbols("a b r z X Y T s")
+    zero(1+a/(1-a)+b/(1-b)-(1-a*b)/((1-a)*(1-b)))
+    cap = r*r*(1-r)/(1+r)
+    zero(sp.diff(cap,r)+2*r*(r*r+r-1)/(1+r)**2)
+    zero(cap.subs(r,(sp.sqrt(5)-1)/2)-(5*sp.sqrt(5)-11)/2)
+    W=(1-X-s/T)*(1-s/X)+(1-Y-s/T)*(1-s/Y)
+    zero((W-(1+T-X-Y+s-s/T)).subs(T,1-s/X-s/Y))
+    Wbound=1+T+s-s/T-4*s/(1-T)
+    polynomial=T**3-7*s*T*T+(10*s-1)*T+s
+    zero((8*s-Wbound)*T*(1-T)-polynomial)
+    sigma=sp.Rational(93,1000)
+    expansion=z**3+sp.Rational(849,1000)*z*z+sp.Rational(29,1000)*z+sp.Rational(81,4000)
+    zero(polynomial.subs({T:z+sp.Rational(1,2),s:sigma})-expansion)
+    assert Q(29,1000)**2-4*Q(349,1000)*Q(81,4000)==-Q(6857,250000)
+    zero(sp.Rational(1,8)-z*z/(4*(1+z))-(1-z)*(2*z+1)/(8*(1+z)))
+    assert 5*55**2<123**2
+    assert 7*Q(93,1000)>Q(157,250)
+    print("PASS: N8 octagon containment, both small-arc kinds, quadrilateral capacity")
+
+
+def asymmetric_sign_chamber():
+    a1, a2, a3, a4, b1, b2, b3, b4 = sp.symbols("a1 a2 a3 a4 b1 b2 b3 b4")
+    x, y, U, V, s, M, m, k, t = sp.symbols("x y U V s M m k t")
+    A, B, C, D, E, F, G, H, O, P = (sp.Matrix(p) for p in [
+        (0,a1), (a2,0), (1-b1,0), (1,b2), (1,1-a3),
+        (1-a4,1), (b3,1), (0,1-b4), (x,y), (x+U,y+V)])
+    r = x*V-y*U
+    identities = [
+        (A,O,P,1,r+a1*U), (B,O,P,-1,a2*V-r),
+        (E,O,P,-1,V-U+a3*U-r), (F,O,P,1,U-V+a4*V+r),
+        (A,D,O,1,y-b2*x-a1*(1-x)),
+        (B,G,O,-1,x-b3*y-a2*(1-y)),
+        (C,F,P,1,1-x-U-b1*(1-y-V)-a4*(y+V)),
+        (E,H,P,1,1-y-V-b4*(1-x-U)-a3*(x+U)),
+        (A,G,H,1,b3*(1-a1-b4)), (B,C,D,1,b2*(1-a2-b1)),
+        (C,D,E,1,b1*(1-a3-b2)), (F,G,H,1,b4*(1-a4-b3)),
+    ]
+    for p0,p1,p2,sign,formula in identities:
+        zero(sign*2*area(p0,p1,p2)-formula)
+    zero(U*y-U*b2*x-(s-r)*(1-x)-(x*(V-r-U*b2)-s*(1-x)))
+    zero((1-x-U)*V-(1-y-V)*U-(V-U-r))
+    qbound = (U+V)/(2*U)-s*(1+3*U)/(U*(1-U))
+    zero(((U+V+2*s)/U-4*s*(1+U)/(U*(1-U)))/2-qbound)
+    HH = (1+3*M)/(1-M)
+    k0 = (1-M)/(4*M)
+    DD = (M+m)/2
+    first = k*(DD-k*M*m)/(1+k)
+    zero(sp.diff(first,k)-(DD-M*m*k*(k+2))/(1+k)**2)
+    zero(1-M*k0*(k0+2)-(7*M*M+10*M-1)/(16*M))
+    psi = (1-M)*(2*M+m*(1+M))/(4*(1+3*M))
+    zero(first.subs(k,k0)-psi)
+    zero((DD-k0*M*m)/HH-psi)
+    phi = t*(1-t/2)*(1-2*t)/(2-3*t)
+    zero(psi.subs(m,M)-phi.subs(t,(1-M)/2))
+    f = 12*t**3-27*t*t+20*t-4
+    zero(sp.diff(phi,t)+f/(2*(2-3*t)**2))
+    zero(sp.diff(f,t)-36*(t-sp.Rational(2,3))*(t-sp.Rational(5,6)))
+    assert Q(9,130) < Q(1,11)
+    assert 7*Q(1,10)**2+10*Q(1,10)-1 == Q(7,100) > 0
+    print("PASS: asymmetric twelve-triangle formulas, reciprocal bounds, sharp scalar envelope")
+
+
+def six_point_endpoint():
+    q = sp.Rational
+    h, beta, p, x, w, v, t, r, U, J = sp.symbols("h beta p x w v t r U J")
+    rho, eta = sp.symbols("rho eta")
+    rx, ry = (1-eta)/(1-rho*eta), rho*(1-eta)/(1-rho*eta)
+    zero(ry-rho*rx)
+    zero(rx-(1-eta+eta*ry))
+
+    # The mixed-cell obstruction is valid at its own threshold 1/9.
+    mixed = 9*h*h-11*h+3
+    zero(9*h*(1-h)*(1/(3*h)+1/(9*(1-h))-1)-mixed)
+    assert mixed.subs(h, q(13,16)) == q(1,256) > 0
+    assert q(149,180) > q(13,16)
+    assert q(69,40)**2 < 3
+    assert q(1,9)-q(7,64) == q(1,576) > 0
+    assert 7*q(7,64) > q(2,3)
+
+    # Both same-side bounds and the opposite-side weighted identity.
+    c0, a0 = 1/h+1/beta-1, 1-t*(1/h+1/beta)
+    ell = lambda z: (t+(1-beta)*z)/beta
+    upper = lambda z: 1-(t+z)/h
+    zero(w*upper(v)-ell(w)*v-w+v
+         -(v*(1-t/beta)-t*w/h-c0*w*v))
+    zero(w*upper(v)-ell(w)*v
+         -(w*(1-t/h)-t*v/beta-c0*w*v))
+    P, X = sp.Matrix([p,p+w]), sp.Matrix([x,x+v])
+    H, E = sp.Matrix([0,h]), sp.Matrix([1,1])
+    dH, dE = 2*area(P,X,H), 2*area(P,X,E)
+    K = h*(1-p)-w
+    zero(w*dH+(h-w)*dE-K*(w-v))
+    zero(K.subs(p,ell(w))/h-(1-t/beta-c0*w))
+    A0 = 1-t/beta-c0*t
+    zero(a0-A0-t*(1/beta-1))
+    # Rearrangement of the mixed H/F sign branch.
+    hf_bound = h*(1-beta)-t*(h-beta)*(2-beta)/beta-(1-beta)*t-3*t
+    zero(hf_bound-(h*beta*(1-beta)-t*(2*h+2*beta-h*beta))/beta)
+    scalar = beta*(1-beta)/(2+beta)
+    assert scalar.subs(beta,q(2,3)) == q(1,12) < q(7,64)
+
+    Phi = (U-t*J)**2-4*t*U*(J-U)
+    zero(sp.diff(Phi,J)-2*t*(t*J-3*U))
+    quad = (1+4*t)*r*r-12*t*r+4*t*t
+    zero(Phi.subs({U:r*r,J:2*r})-r*r*quad)
+    zero(1024*quad.subs(t,q(7,64))-(8*r-7)*(184*r-7))
+    assert q(7,32) > q(7,184)
+    assert q(7,8)*(1-q(7,8)) == q(7,64)
+    assert q(7,3)**2 > 5
+    assert 5*250**2-559**2 == 19 > 0
+    sigma = q(93,1000)
+    assert q(4427,500)*sigma-(1-sigma)**2 == q(773,1000000) > 0
+    print("PASS: endpoint-six mixed obstruction, complete pair algebra, rational threshold")
+
+
+def adjacent_corners():
+    q = sp.Rational
+    sigma, k = q(93,1000), 3-2*sp.sqrt(2)
+    beta, h, b, x, z, a, r, y, t, w, v, rho = sp.symbols("beta h b x z a r y t w v rho")
+    zero(k*(2-beta)-beta*(1-beta)-(beta-(2-sp.sqrt(2)))**2)
+    zero(t+(1-beta)*t+(h-beta)*t*(2-beta)/beta-t*h*(2-beta)/beta)
+    assert q(141,100)**2 < 2
+    assert q(9,50) < q(3,16)
+    assert (q(149,20)+4)*sigma-1 == q(1297,20000) > 0
+    assert 1-9*sigma == q(163,1000)
+
+    # The quadrilateral-left branch: exact denominator clearing and
+    # the two positive bounds in its translated quartic.
+    G = (2*x**4-q(907,1000)*x**3-q(93,250)*x*x
+         +q(42036,312500)*x+q(8649,500000))
+    cleared = (q(29,5)*sigma*sigma/(x*x-sigma)
+               +2*x-2*sigma/x-(1-sigma))*x*(x*x-sigma)
+    zero(cleared-G)
+    expansion = (z*z*(2*z*z+q(2893,1000)*z+q(41721,40000))
+                 +q(982583,40000000)*z+q(2989777,1600000000))
+    zero(G.subs(x,z+q(19,40))-expansion)
+    assert q(41721,40000)-q(2893,1000)*q(9,200) == q(22821,25000) > 0
+    assert q(2989777,1600000000)-q(982583,40000000)*q(9,200) == q(3052819,4000000000) > 0
+    assert 2*sigma > q(43,100)**2
+    assert q(3,1)+2*q(7,5) == q(29,5)
+
+    # The triangular-right and noncentral support cases use one exact cap.
+    assert 1-q(69,100)/(1-3*sigma) == q(31,721)
+    assert q(31,100)*q(31,721)+q(1,10)*(1-3*sigma) == q(615941,7210000)
+    assert sigma-q(615941,7210000) == q(54589,7210000) > 0
+    assert 11*sigma-1 == q(23,1000) > 0
+
+    # Both quadrilateral side hulls: the right lower-point cap, the
+    # actual cross-triangle formula, and the final scalar rearrangement.
+    second = x*v-t*w+w-v-x+t
+    zero(second.subs(v,(rho+t*w)/x).subs(w,1)
+         -(1-x)*(x-t-rho)/x)
+    B = sp.Matrix([b,0])
+    P, R = sp.Matrix([b*a,y]), sp.Matrix([b+(1-b)*(1-r),t])
+    cross = b*(1-a)*t+(1-b)*(1-r)*y
+    zero(-2*area(B,P,R)-cross)
+    bounded = cross.subs({t:1-r-sigma/((1-b)*r),y:1-a-sigma/(b*a)})
+    zero(bounded-((1-a)*(1-r)
+         -sigma*(b*(1-a)/((1-b)*r)+(1-b)*(1-r)/(b*a))))
+    zero(((1-z)**2-2*sigma*(1-z)/z-sigma)*z
+         -(z*(1-z)**2-sigma*(2-z)))
+    print("PASS: adjacent-corner endpoint constants, side-hull quartic, cross-triangle bound")
+
+
+def n8_triangle_caps():
+    q = sp.Rational
+    alpha, L, z, s = sp.symbols("alpha L z s")
+    QL = (1-alpha-L)*((alpha-s)*L-s*alpha)
+    square = (alpha-s)*(L-(1-alpha)/2-s*alpha/(2*(alpha-s)))**2
+    zero((alpha*(1-alpha)-s)**2/(4*(alpha-s))-QL-square)
+    zero(s/(1-s/L-s/alpha)*(s/(1-alpha-L)+s/L)
+         -s*s*alpha*(1-alpha)/QL)
+    sigma = q(93,1000)
+    polynomial = (4*sigma*sigma*alpha*(alpha-sigma)*(1-alpha)
+                  -(q(31,100)-alpha)*(alpha*(1-alpha)-sigma)**2)
+    rows = [
+        (q(1,10),q(1,5),250000000000,
+         [4976370,26598258,19963803,8758105,7616264,24623380]),
+        (q(1,5),q(31,100),25000000000000,
+         [2462338000,4333120760,8399927317,15738884481,26467133562,40145457870]),
+    ]
+    for left,right,denominator,coefficients in rows:
+        assert all(n > 0 for n in coefficients)
+        bernstein = sum(q(n,denominator)*sp.binomial(5,i)*z**i*(1-z)**(5-i)
+                        for i,n in enumerate(coefficients))
+        zero(polynomial.subs(alpha,left+(right-left)*z)-bernstein)
+    assert q(149,20)*sigma-q(69,100) == q(57,20000) > 0
+    a,b,c,d,e,f,g,h,x,y,u,v = sp.symbols("a b c d e f g h x y u v")
+    A,B,C,D,E,F,G,H,O,P = (sp.Matrix(p) for p in [
+        (0,a),(b,0),(c,0),(1,d),(1,e),(f,1),(g,1),(0,h),(x,y),(u,v)])
+    for T,U in [(A,F),(D,G),(C,H)]:
+        zero(2*area(T,U,P)-2*area(T,U,O)
+             -2*area(O,P,T)+2*area(O,P,U))
+    zero(2*area(A,G,P)-(g/f)*2*area(A,F,P)+(1-g/f)*(1-a)*u)
+    for V,formula in [(B,b*(1-a)+f*a),(C,c*(1-a)+f*a),
+                       (D,1-f*d-(1-f)*a)]:
+        zero(2*area(V,F,A)-formula)
+        zero(2*area(V,F,H)-formula.subs(a,h))
+    print("PASS: N8 triangle-cap elimination, both positive quintic rows, forced-sign identities")
+
+
+def adjacent_four_right():
+    q = sp.Rational
+    b,K,G = sp.symbols("b K G", positive=True)
+    sigma = q(93,1000)
+    w = 1-b
+    zero(sp.diff(w/b+G*b/w,b)-(-1/b**2+G/w**2))
+    zero(sp.diff(K*w+G*b/w,b)-(-K+G/w**2))
+    zero((w/b+G*b/w).subs(b,1/K)-((K-1)+G/(K-1)))
+    zero((K*w+G*b/w).subs(b,1/K)-((K-1)+G/(K-1)))
+    assert q(129,20)*sigma+sigma/q(3539,20000)-1 == q(8877383,70780000) > 0
+    assert sigma*(q(189,20)+q(177,130))-1 == q(1423,260000) > 0
+    assert q(69,40)**2 < 3 and q(67,30)**2 < 5
+    assert 1-q(177,20)*sigma == q(3539,20000)
+    print("PASS: adjacent-corner four-right lower-cut gap and uniform empty-fan bound")
+
+
+def n8_ranges_and_quad_spread():
+    q = sp.Rational
+    sigma = q(93,1000)
+    ell = q(31,251)
+    assert q(753,1000)*q(247,1000) < 2*sigma
+    assert sigma/q(753,1000) == ell
+    assert 1-4*sigma/(1-ell) == q(31657,55000)
+    assert sigma/q(31657,55000) == q(5115,31657)
+    assert (6+4*q(707,500))*sigma-1 == q(10501,125000) > q(21,250)
+    assert q(707,500)**2 < 2
+    z,t,b,c,L,R,eps,eta = sp.symbols("z t b c L R eps eta")
+    zero((1-b)*b*((2-c)/(1-b)+(1+c)/b-6)-(1-2*b)*(c-3*b+1))
+    zero((3*b-1)*(b-t)-t*(1+b)-b*(3*b-1-4*t))
+    H = z**3-2*z*z*t-10*z*t*t+6*z*t-z+6*t*t
+    cleared = (2*t*(t*(3-z)/(1-z-2*t)+2*z)/(1+z)-z)*(1+z)*(1-z-2*t)
+    zero(cleared-H)
+    zero(H.subs(z,(1-8*t)/3)-8*(t+1)*(1-2*t)*(11*t-1)/27)
+    assert q(3,121)+q(3,4)-1 == -q(109,484)
+    a,e,f,h,x,y,U,V = sp.symbols("a e f h x y U V")
+    A,E,F,H0,O,P = (sp.Matrix(p) for p in [
+        (0,a),(1,e),(f,1),(0,h),(x,y),(x+U,y+V)])
+    zero(2*area(A,E,F)+2*area(A,F,H0)-(1-a+f*(h-e)))
+    zero(2*area(O,P,F)-2*area(O,P,A)-((1-a)*U-f*V))
+    zero(2*area(O,P,H0)-2*area(O,P,E)-((h-e)*U+V))
+    print("PASS: tightened N8 ranges, overlap gap, quadrilateral spread cubic and applications")
+
+
+def adjacent_triangular_right():
+    q = sp.Rational
+    s = q(93,1000)
+    b,x,t,z,a,r,v,dx,dy,T = sp.symbols("b x t z a r v dx dy T")
+    w = 1-b
+    M = x*(1-t)-(b+w*t+3*s)*(1-x+3*s)/w
+    zero(sp.diff(M,x)-(1+3*s)/w)
+    zero(M.subs({x:1-s,t:s/w})-(1+3*s)*(1-5*s/w))
+    caps = [q(628,907),q(602053,907000),q(282659,453500)]
+    gaps = [q(8299,18140000),q(527239,18140000),q(1261939,18140000)]
+    for cap,gap in zip(caps,gaps):
+        assert q(149,20)*s-cap==gap>0
+    assert (q(177,20)+2)*s-1==q(181,20000)>0
+    assert (q(177,20)+14)*s-2==q(2501,20000)>0
+    first = z*dy-dx*(1-a)
+    second = dx*(a-v)-(r-z)*dy
+    zero((r-z)*first+z*second-(r*dx*(z/r+a-1)-z*dx*v))
+    Fz = (1-s-z)*((1/r+1/w)*z-(1+s)/w)
+    zero(sp.diff(Fz,z).subs(z,1-3*s)-((1/r+1/w)*(-1+5*s)+(1+s)/w))
+    zero(Fz.subs(z,1-3*s)-2*s*((1-3*s)/r-4*s/w))
+    U = x*(1-a)-z*(1-t)
+    V = z*(t-q(1,10))-x*(a-q(1,10))+(a-t)
+    zero((a-q(1,10))*U+(1-a)*V-(a-t)*(1-a-q(9,10)*z))
+    assert q(99,200)**2/(4*q(9,10))==q(1089,16000)
+    assert s-q(1089,16000)==q(399,16000)>0
+    assert 1-q(177,20)*s/(1-s)==q(1679,18140)
+    assert 1-q(157,20)*s/(1-s)==q(3539,18140)
+    cap = x-b*T+s*(1+b)-s*(x+1)/T
+    assert cap.subs({x:1-s,T:q(628,907),b:s})==q(78389420201,113919200000)
+    assert q(149,20)*s-q(78389420201,113919200000)==q(539497519,113919200000)>0
+    assert -q(1,5)+s*q(9,5)/q(7,10)**2>0
+    print("PASS: triangular-right three-fan caps, both exterior-fan exclusions, negative-B cap")
+
+
+def adjacent_upper_pair():
+    qrat = sp.Rational
+    s = qrat(93,1000)
+    b,q,p,py,x,t,z = sp.symbols("b q p py x t z")
+    lam = 1-q
+    B,E,P,Q = (sp.Matrix(pt) for pt in [(b,0),(0,lam),(p,py),(x,t)])
+    U,V = 2*area(B,P,Q),-2*area(E,P,Q)
+    J = b*(t-lam)+lam*x
+    zero((t-lam)*U+t*V-J*(py-t))
+    c = b*q+lam
+    t0 = lam+((1+q)*s+b*q*q)/(1+b*q)
+    F = (1-s-t)*(c*(t-lam)-lam*s)-q*s*(2*t-lam)
+    derivative = (-b*b*q*q*(q+s)+b*q*(q*q-4*s*q-3*s)
+                  +(1-2*s)*q*(1-q)-2*s)
+    zero((1+b*q)*sp.diff(F,t).subs(t,t0)-derivative)
+    f = q*(q*q-4*s*q-3*s)
+    g = (1-2*s)*q*(1-q)-2*s
+    assert sp.diff(f,q).subs(q,qrat(69,100))==qrat(31797,50000)>0
+    for lo,hi,upper in [(qrat(69,100),qrat(3,4),-qrat(112779,10000000)),
+                        (qrat(3,4),qrat(17,20),-qrat(138981,10000000)),
+                        (qrat(17,20),qrat(1),-qrat(3879,200000))]:
+        assert f.subs(q,hi)>0
+        assert qrat(9,50)*f.subs(q,hi)+g.subs(q,lo)==upper<0
+    G = (qrat(93,1000)*b**3*q**3-qrat(907,1000)*b*b*q**3
+         +qrat(194649,500000)*b*b*q*q+qrat(907,1000)*b*q**3
+         -qrat(1253053,1000000)*b*q*q+qrat(432543,1000000)*b*q
+         +qrat(84351,1000000)*q*q-qrat(177351,1000000)*q+qrat(31899,250000))
+    zero(F.subs(t,t0)+q*G/(1+b*q)**2)
+    zero(sp.diff(G,b,2)-q*q*(139500*b*q-453500*q+194649)/250000)
+    assert ((139500*qrat(9,50)-453500)*qrat(69,100)+194649)/250000==-qrat(1009401,2500000)
+    assert G.subs({b:0,q:1})==qrat(8649,250000)>0
+    expansion = (-qrat(16801947,125000000)*z**3+qrat(85831701,312500000)*z*z
+                 -qrat(58228623,1250000000)*z+qrat(42416289,1250000000))
+    zero(G.subs({b:qrat(9,50),q:1-z})-expansion)
+    assert qrat(85831701,312500000)-qrat(16801947,125000000)*qrat(31,100)==qrat(2912407683,12500000000)>0
+    assert qrat(42416289,1250000000)-qrat(58228623,1250000000)*qrat(31,100)==qrat(2436541587,125000000000)>0
+    print("PASS: adjacent upper-pair weighted identity, derivative table, complete positive rectangle")
+
+
+
+def lower_contact_projection_and_caps():
+    q = sp.Rational
+    a,b,c,d,e,f,g,h,x,y,U,V,delta,eta = sp.symbols("a b c d e f g h x y U V delta eta")
+    A,B,C,D,E,F,G,H,O,P = (sp.Matrix(t) for t in
+        [(0,a),(b,0),(c,0),(1,d),(1,e),(f,1),(g,1),(0,h),(x,y),(x+U,y+V)])
+    area2 = lambda I,J,K: 2*area(I,J,K)
+    Din=sp.Matrix([1-delta,d]);Gin=sp.Matrix([g,1-eta])
+    zero(area2(C,D,E)-area2(C,Din,E)-delta*e)
+    zero(area2(F,G,H)-area2(F,Gin,H)-eta*f)
+    zero(area2(A,D,O)-area2(A,Din,O)-delta*(y-a))
+    zero(-area2(B,G,O)+area2(B,Gin,O)-eta*(x-b))
+    Cin=sp.Matrix([c,eta]);Hin=sp.Matrix([eta,h])
+    zero(area2(B,C,D)-area2(B,Cin,D)-eta*(1-b))
+    zero(area2(C,F,P)-area2(Cin,F,P)-eta*(f-x-U))
+    zero(area2(A,G,H)-area2(A,G,Hin)-eta*(1-a))
+    zero(area2(E,H,P)-area2(E,Hin,P)-eta*(e-y-V))
+    zero(area2(B,C,D)-area2(B,Cin,Din)-eta*(1-delta-b))
+    zero(area2(C,D,E)-area2(Cin,Din,E)-delta*(e-eta))
+    s=q(93,1000);M=sp.symbols("M")
+    assert (M*M-(1-s)*M+s).subs(M,q(79,100))==q(57,100000)
+    assert s/q(79,100)==q(93,790)
+    assert s/(1-q(93,790))==q(7347,69700)
+    assert (5+q(29,5))*s-1==q(11,2500)>0
+    assert q(4427,500)*s-(1-s)**2==q(773,1000000)>0
+    zz=sp.symbols("zz")
+    assert (1-q(7,2)*zz+2*zz**2).subs(zz,q(1,3))==q(1,18)
+    assert (-1+4*zz-2*zz**2).subs(zz,q(5,16))==q(7,128)
+    print("PASS: N6/N7 projection identities, candidate margins, and exterior-cap rational bounds")
+
+
+
+def adjacent_upper_p_and_two_upper():
+    q=sp.Rational;s=q(93,1000)
+    lam,b,px,py,y,t,z,a,xx,xy,r,v,T = sp.symbols("lam b px py y t z a xx xy r v T")
+    E=sp.Matrix([0,lam]);B=sp.Matrix([b,0]);P=sp.Matrix([px,py]);Y=sp.Matrix([y,t]);R=sp.Matrix([r,v])
+    area2=lambda I,J,K:2*area(I,J,K)
+    ebp=area2(E,B,P)
+    expr=((1-lam)*(ebp-s)).subs({px:(py-lam-s)/(1-lam),b:q(9,50),py:q(9,20)})
+    zero(expr-(-q(41,50)*lam**2+q(189,1000)*lam-q(3,250)))
+    assert -q(3,250)+q(189,1000)**2/(4*q(41,50))==-q(3639,3280000)
+    assert ((1-3*s)*(1-s)-s)/(q(4,5)+1-3*s)==q(560947,1521000)
+    assert 1-s*(2-q(3539,18140))/q(602053,907000)==q(8996147,12041060)
+    assert (q(9,10)-s)/5-(q(9,10)-(1-3*s))*q(9,20)==q(1617,20000)<s
+    assert q(149,20)*s-q(3,4)*(1-s)==q(63,5000)>0
+    zero((y-b)*area2(E,R,Y)+(r-y)*area2(E,B,Y)-y*((r-b)*t-v*(y-b)))
+    F=T+s-s*(1+T)/(1-3*s-s*T)
+    assert F.subs(T,q(628,721))==q(230268674161,332696077000)
+    assert q(149,20)*s-F.subs(T,q(628,721))==q(4796055769,6653921540000)>0
+    assert 1-q(149,20)*s/(1-s)==q(4283,18140)
+    assert 1-q(157,20)*s/(1-q(31,300))==q(9997,53800)
+    assert q(93,500)-q(9997,53800)==q(49,269000)>0
+    assert q(93,500)*q(177,1000)+q(11,100)*(1-3*s-q(177,1000))==q(46381,500000)<s
+    b0=q(93,890)
+    assert q(81,1000)-(1-q(177,20)*s/(1-b0))==q(143,1594000)>0
+    assert q(185,1000)-(1-q(157,20)*s/(1-b0))==q(379,1594000)>0
+    assert 3*s/(1-b0)-q(311,1000)==q(443,797000)>0
+    assert q(585,1000)-(1-4*s/(1-b0))==q(13,31880)>0
+    assert 1-3*s-q(4,5)*(q(177,20)+1)*s==-q(37,3125)
+    print("PASS: upper-P sign contradictions, second-triangle identity, two-upper box constants")
+
+
+def adjacent_one_upper():
+    q=sp.Rational;s=q(93,1000);tau=q(93073,1000000)
+    b,T,lam,y,t,z,a = sp.symbols("b T lam y t z a")
+    D,E,B,Y,Z=(sp.Matrix(pt) for pt in [(0,1),(0,lam),(b,0),(y,t),(z,a)])
+    area2=lambda I,J,K:2*area(I,J,K)
+    zero(area2(E,Y,Z)-area2(D,Y,Z)-(1-lam)*(y-z))
+    zero(area2(E,Y,Z)-area2(B,Y,Z)-b*(a-t)-lam*(z-y))
+    assert 1-s/(1-q(177,20)*s)==q(1679,3539)<q(19,40)
+    assert q(279,907)+2*s==q(223851,453500)>q(49,100)
+    u=1-3*tau;Tb=1-tau/(1-b)
+    F=T+tau-tau*(1+T)/(u-b*T)
+    zero(sp.diff(F,T)-(1-tau*(u+b)/(u-b*T)**2))
+    zero(sp.diff(F,b)+tau*T*(1+T)/(u-b*T)**2)
+    assert 1-q(59,500)/q(27,50)**2==q(434,729)>0
+    g=Tb-3*tau**2/b;f=F.subs(T,Tb)
+    zero(sp.diff(g,b)-tau*(3*tau/b**2-1/(1-b)**2))
+    cut=q(327,2500);cap=q(933,125)*tau
+    assert f.subs(b,cut)==q(495032499115388709,712995842008000000)
+    assert g.subs(b,cut)==q(65774049426083,94742800000000)
+    assert cap==q(86837109,125000000)
+    assert cap-f.subs(b,cut)==q(35435259571886247,89124480251000000000)>0
+    assert cap-g.subs(b,cut)==q(217386892193,473714000000000)>0
+    assert q(433,250)**2==q(187489,62500)<3
+    print("PASS: single-upper containments' identities and exact monotone scalar cut")
+
+
+
+def adjacent_lower_p():
+    q=sp.Rational;s=q(93,1000);G=q(177,20);u=1-3*s
+    b,lam,r,v,y,t,px,py=sp.symbols("b lam r v y t px py")
+    F=u+s-(G-1)*s*b/(1-b)-s*u/b;B0=1-G*s
+    zero(sp.diff(F,b)-s*(u/b**2-(G-1)/(1-b)**2))
+    assert F.subs(b,B0)==q(3484138643,12528060000)
+    assert 3*s-F.subs(b,B0)==q(11190097,12528060000)>0
+    assert q(19,40)-q(15,8)*s==q(481,1600)
+    assert q(279,907)-q(481,1600)==q(10133,1451200)>0
+    assert (G+2)*s-1==q(181,20000)>0
+    lam0=29*s/(10*(1-s));b0=s/(1-lam0)
+    assert lam0==q(2697,9070) and b0==q(84351,637300)
+    assert b0-q(13,100)==q(751,318650)>0
+    assert 1-(G-1)*s/(1-q(13,100))==q(933,5800)
+    assert q(161,1000)-q(933,5800)==q(1,7250)>0
+    T=1-t;L=y-b*T;d=px-b*(1-py);c=lam-v;AA=r-b*c
+    D,E,B,R,P,Y=(sp.Matrix(pt) for pt in [(0,1),(0,lam),(b,0),(r,v),(px,py),(y,t)])
+    area2=lambda I,J,K:2*area(I,J,K)
+    zero(area2(D,P,Y)-(L*(1-py)-T*d))
+    zero(area2(E,B,R)+area2(E,R,P)-(AA*py+c*d))
+    zero(AA*T-c*L-(r*T-c*y))
+    assert q(9,10)*q(4,5)-q(19,40)*q(721,1000)==q(15101,40000)>0
+    h=1-s*(2-t)/L
+    zero(sp.diff(h,t)-s*(y+b)/L**2)
+    value=h.subs({y:q(721,1000),b:q(13,100),t:q(161,1000)})
+    assert value==q(440903,611930)
+    assert q(721,1000)-value==q(29853,61193000)>0
+    assert q(721,1000)-s/q(13,100)==q(73,13000)>0
+    print("PASS: final triangular-right cut, empty EBY cap, ER bounds, quadrilateral barycentric identity")
+
+
+def adjacent_nontriangular_right():
+    q=sp.Rational;s=q(93,1000)
+    b,r,v,h,beta,lam,Om,U,t=sp.symbols("b r v h beta lam Om U t")
+    D0=1-s*(1-b)/b-9*b*s/(1-b)
+    zero(sp.diff(D0,b)-s/b**2+9*s/(1-b)**2)
+    val=(1-s)*D0.subs(b,q(103,1000))
+    assert val==q(262504847,3079700000)
+    assert s-val==q(23907253,3079700000)>0
+    t0=q(31,299);r0=q(843,1000)
+    Q=lambda z:(1+4*t)*z*z-12*t*z+4*t*t
+    assert Q(r0).subs(t,t0)==-q(40450427,89401000000)
+    zero(Q(2*t)-16*t*t*(t-1))
+    assert r0*r0+t0-(1-2*s)==q(98051,299000000)>0
+    D,E,B,C,H,FF=(sp.Matrix(pt) for pt in
+        [(0,1),(0,lam),(b,0),(1,1),
+         (b+h*(r-b),h*v),(r+(1-beta)*(1-r),v+(1-beta)*(1-v))])
+    omega=r-b-(1-b)*v
+    M=2*area(D,H,FF)
+    zero(M-(1-beta+omega*(beta-h*beta)+v*(beta-h)))
+    zero(2*area(E,H,FF)-M+(1-lam)*(FF[0]-H[0]))
+    zero(2*area(D,B,H)-h*(omega+v))
+    general=1-Om*U-(1-Om-v)*beta-v*U/beta
+    zero(sp.diff(general,beta)+(1-Om)-v*(1+U/beta**2))
+    zero(-(1-Om)+q(11,5)*(q(9,10)-Om)/q(9,10)-(q(6,5)-q(13,9)*Om))
+    assert q(6,5)-13*s==-q(9,1000)
+    assert q(177,20)*s-q(9,10)*(1-s)==q(27,4000)>0
+    print("PASS: nontriangular right-hull product bound, physical middle areas, and both fan caps")
+
+
+def exterior_count_budgets():
+    q=sp.Rational;s=q(93,1000)
+    a,b,e,f,p,qq,t,u=sp.symbols("a b e f p qq t u")
+    zero((1-e)*(1-f)+e*(1-b)-(1-b*e-f*(1-e)))
+    assert q(4427,500)*s-(1-s)**2==q(773,1000000)>0
+    assert 3*s-q(1,4)==q(29,1000)>0
+    assert (q(29,5)+5)*s-1==q(11,2500)>0
+    first=p*qq*(1-f*t/((1-f)*(1-p))-(1-f)*t/(f*(1-qq)))-t*(f*qq/(1-f)+(1-f)*p/f)
+    second=p*qq-t*(f*qq/((1-f)*(1-p))+(1-f)*p/(f*(1-qq)))
+    zero(first-second)
+    envelope=u*u*(1-u)/(1+u)
+    zero(sp.diff(envelope,u)-2*u*(1-u-u*u)/(1+u)**2)
+    zero(envelope.subs(u,(sp.sqrt(5)-1)/2)-(5*sp.sqrt(5)-11)/2)
+    assert s-q(1,11)==q(23,11000)>0
+    print("PASS: N6 exterior-count budgets and the complete N7 opposite-upper-cap inequality")
+
+
+def central_support_pair():
+    q=sp.Rational;t=q(31,299);m,z=sp.symbols("m z")
+    S0=1/m+m/(m-t);W=m-t/(1-m)
+    G=lambda x:x*(1-t*S0-(S0-1)*x)
+    P=2*m**4-2*m**3+(t-1)*m*m+(t+1)*m-t
+    Q=117208*m**3-117208*m*m+19499*m-961
+    zero(sp.diff(G(z),z).subs(z,W)-Q/(299*m*(299*m-31)*(1-m)))
+    zero(G(W)-t+t*P/((m-t)*(1-m)**2))
+    printed=2*z**4+q(564,125)*z**3+q(40567403,18687500)*z*z-q(9508796,583984375)*z+q(1659390599,9343750000000)
+    zero(P.subs(m,z+q(407,500))-printed)
+    assert Q.subs(m,q(407,500))==q(7283395843,15625000)>0
+    assert sp.diff(Q,m).subs(m,q(4,5))==q(1425139,25)>0
+    assert q(40567403,18687500)-2==q(3192403,18687500)>0
+    assert -q(9508796,583984375)+q(17,1000)==q(3351507,4671875000)>0
+    assert q(1659390599,9343750000000)-q(17,100000)==q(70953099,9343750000000)>0
+    zero(2*z*z-q(17,1000)*z+q(17,100000)-2*(z-q(17,4000))**2-q(1071,8000000))
+    assert q(93,1000)/t==q(897,1000)
+    print("PASS: complete central-support pair exclusion, height cap, positive quartic, and N6 area consequence")
+
+
+def n7_same_upper_cap():
+    q=sp.Rational;s=q(93,1000);K=q(149,20)
+    a,f,g,h,z=sp.symbols("a f g h z")
+    z0=(f*z-g)/(f-g);SS=f*(z0-a);u=(h-a)/(z0-a);v=g/f
+    AGH=g*(h-a);FGH=f*(z-h)-g*(1-h)
+    zero(AGH-SS*u*v)
+    zero(FGH-SS*(1-u)*(1-v))
+    zero((SS-K*s)*(f-g)-(f*f*(z-a)-f*g*(1-a)-K*s*(f-g)))
+    assert s-q(100,1089)==q(1277,1089000)>0
+    assert 12*s-1==q(29,250)>0
+    ell=q(7347,69700);eta=q(93,790)
+    f0=K*s/(1-eta);h0=4*s/(1-ell);h1=1-3*s
+    assert 0<eta<h1<1 and 0<h0<1 and 0<f0<1
+    assert q(7,5)**2<2 and q(12,5)**2<6
+    print("PASS: same-upper-cap support identities, weighted-ear contradiction, and rational-box denominators")
+
+
+def adjacent_mixed_i():
+    q=sp.Rational;s=q(93,1000);t0=q(31,299)
+    h,f,beta,t,x,z,u,v=sp.symbols("h f beta t x z u v")
+    zero(2/f+3/(1-f)-q(49,5)-(49*(f-q(22,49))**2+q(6,49))/(5*f*(1-f)))
+    assert q(49,5)*t0-1==q(24,1495)>0
+    F=beta**3-beta**2+(3*t0+t0*t0)*beta-2*t0*t0
+    assert F.subs(beta,q(2,5))==q(125338,11175125)>0
+    assert sp.diff(F,beta).subs(beta,q(2,5))==q(3992,2235025)>0
+    A,H,J,P,Q=(sp.Matrix(pt) for pt in [(0,0),(0,h),(1,1),(x,x+z),(u,u+v)])
+    zero(z*2*area(P,Q,H)+(h-z)*2*area(P,Q,J)-(h*(1-x)-z)*(z-v))
+    assert (h*h-(1+2*t0)*h+3*t0).subs(h,q(167,200))==q(1411,11960000)>0
+    assert (q(149,20)-3)/(q(149,20)**2-2*q(149,20))==q(1780,16241)
+    assert s/q(1780,16241)==q(1510413,1780000)
+    assert q(152,1000)-(1-q(1510413,1780000))==q(973,1780000)>0
+    assert q(167,200)*q(49,897)==q(8183,179400)<q(46,1000)
+    assert q(167,200)+(1-q(167,200))*q(152,1000)==q(10751,12500)<q(861,1000)
+    assert t0/q(21,25)==q(775,6279)>q(49,400)>q(3,25)
+    b,lam,a,k,p,y,c,d=sp.symbols("b lam a k p y c d")
+    D0=1-s*(1-b)/b-q(848,1000)*b/(1-b)
+    assert q(167,200)*D0.subs(b,q(152,1000))==q(522209,1900000)
+    assert 3*s-q(522209,1900000)==q(7891,1900000)>0
+    assert q(6,5)*q(184,625)==q(1104,3125)<q(2,5)<4*t0
+    B,C,D,E,H,P=(sp.Matrix(pt) for pt in [(b,0),(1,1),(0,1),(0,lam),(a,k),(p,y)])
+    zero(2*area(E,H,P)-(a*y-k*p-lam*(a-p)))
+    zero(-2*area(D,H,P)-(a*(1-y)-(1-k)*p))
+    zero(2*area(E,H,P)-2*area(D,H,P)-(1-lam)*(a-p))
+    T=p-b-(1-b)*y;U=a-p+(1-a)*y;W=a-b
+    ratio=(U-(1-p)*k)/(W-(1-b)*k)
+    zero(sp.diff(ratio,k)+(1-a)*T/(W-(1-b)*k)**2)
+    E1=lam*(p-b)+b*y;E2=a*y-lam*(a-p)
+    zero((a-p)*E1+(p-b)*E2-p*y*(a-b))
+    assert (s-q(152,1000)*q(46,1000))-q(11,100)*q(758,1000)==q(657,250000)>0
+    assert q(103,1000)+q(848,1000)*q(12,100)+3*s==q(48376,100000)>q(48,100)
+    print("PASS: complete mixed-I support branch, contact eliminations, scalar gaps, and rational box")
+
+
+def n7_small_arcs():
+    q=sp.Rational;s=q(93,1000)
+    a,b,c,d,e,f,g,h,z=sp.symbols("a b c d e f g h z")
+    A,B,C,D,E,F,G,H=(sp.Matrix(pt) for pt in
+        [(0,a),(b,0),(c,0),(1,d),(1,e),(f,1),(g,z),(0,h)])
+    det=lambda X,Y,Z:2*area(X,Y,Z)
+    zero(det(E,F,H)-det(E,F,G)-g*(1-e)-(1-f)*(z-h))
+    zero(det(E,G,H)-(z-(1-g)*h-g*e))
+    zero(sp.diff(det(E,F,G)+det(E,G,H),z)-f)
+    zero(det(G,H,A)+det(G,A,B)-g*h-b*(z-a))
+    apex=sp.Matrix([1,1+(1-z)*(1-f)/(f-g)])
+    zero(det(D,apex,G)-(1-g)*(1-d+(1-z)*(1-f)/(f-g)))
+    zero(det(G,F,apex))
+    chains=[
+        (A,E,sp.Matrix([0,1+f*(1-e)/(1-f)]),1-a+f*(1-e)/(1-f)),
+        (B,sp.Matrix([1+e*(1-f)/(1-e),0]),F,1-b+e*(1-f)/(1-e)),
+        (D,sp.Matrix([1,h+(z-h)/g]),H,h-d+(z-h)/g),
+        (H,sp.Matrix([0,-d*c/(1-c)]),D,h+d*c/(1-c)),
+        (A,sp.Matrix([1,-a*(1-b)/b]),E,e+a*(1-b)/b)]
+    for X,Y,Z,S in chains:zero(det(X,Y,Z)-S)
+    assert q(177,20)*s-(1-s)**2==q(401,1000000)>0
+    assert s<q(4,25) and 1-4*s<7*s and 1-3*s<8*s
+    eta=q(93,790);ell=q(7347,69700);h0=4*s/(1-ell);h1=1-s
+    f0=4*s/(1-eta);x0=s/(h1-eta);g1=1-ell-s/(1-h0)
+    assert 0<eta<h0<h1<1 and 0<x0<g1<1-ell and h0+s<1
+    assert 0<f0<1-ell and 0<1-4*s
+    print("PASS: N7 small-arc catalogue metrics, moving cap, actual endpoint triangle, and all five convex-chain factors")
+
+
+def adjacent_mixed_iii():
+    q=sp.Rational;s=q(93,1000);t0=q(31,299);eta0=q(167,200)
+    Om,rho,x,z,b,r=sp.symbols("Om rho x z b r")
+    assert eta0*(eta0-4*s)*q(897,1000)-s*(eta0+3)==-q(1974063,200000000)<0
+    assert q(628,1000)-(1-3*t0/eta0)==q(6231,12483250)>0
+    assert q(685,1000)-(q(152,1000)+q(628,1000)*q(848,1000))==q(57,125000)>0
+    assert q(35,1000)-q(628,1000)*q(49,897)==q(623,897000)>0
+    assert q(296,1000)-(q(1,4)+eta0*q(49,897))==q(347,897000)>0
+    assert s-q(152,1000)*q(35,1000)-q(15,100)*q(582,1000)==q(19,50000)>0
+    assert q(103,1000)+q(82,100)*q(848,1000)-q(798,1000)==q(9,25000)>0
+    assert q(889,1000)-q(742,835)==q(63,167000)>0
+    assert q(666,1000)-q(556,835)==q(11,83500)>0
+    assert t0/q(628,1000)-q(165,1000)==q(881,9388600)>0
+    assert q(103,1000)+q(848,1000)*q(165,1000)+s-q(33,100)==q(37,6250)>0
+    assert q(555,1000)-(q(666,1000)-q(103,1000)-s)/q(848,1000)==q(1,1325)>0
+    assert 2*s-q(49,1000)*q(435,1000)-q(835,1000)*q(19,100)==q(1207,200000)>0
+    zero(r-(r-b)*x+(1-r)*(1-x-z)-(1-(1-b)*x-(1-r)*z))
+    eta,k0,d1,u,v,t=sp.symbols("eta k0 d1 u v t")
+    D,F,Q=(sp.Matrix(pt) for pt in [(d1,-k0),(0,eta),(u,u+v)])
+    zero(2*area(D,F,Q)-(d1*(eta-u-v)-(eta+k0)*u))
+    reduced=d1*eta*eta-t*(d1+4)*eta-3*t/Om
+    zero(reduced.subs({d1:1/Om,eta:eta0,t:s/Om})-(eta0*(eta0-4*s)*Om-s*(eta0+3))/Om**2)
+    print("PASS: final mixed-III support branch, forced DF straddle, physical map, and all box gaps")
+
+
+def n6_exact_hull_reduction():
+    q=sp.Rational;s=q(93,1000);K=q(149,20)
+    a,b,c,e,f,h,x,y=sp.symbols("a b c e f h x y")
+    A,B,C,E,F,H,X=(sp.Matrix(pt) for pt in
+        [(0,a),(b,0),(c,0),(1,e),(f,1),(0,h),(x,y)])
+    det=lambda U,V,W:2*area(U,V,W)
+    zero((1-f)*det(C,E,X)+(1-c)*det(E,F,X)-det(C,E,F)*(1-x))
+    zero((1-h)*det(E,F,X)+(1-e)*det(F,H,X)-det(E,F,H)*(1-y))
+    zero(c*det(H,B,X)-b*det(H,C,X)-h*(c-b)*x)
+    zero(det(A,B,X)-det(H,B,X)-(h-a)*(b-x))
+    assert s-q(1037,10000)*(1-q(1037,10000))==q(5369,10**8)>0
+    t,r=sp.symbols("t r");poly=(1+4*t)*r*r-12*t*r+4*t*t
+    assert poly.subs({t:s,r:q(39,50)})==-q(1449,1250000)
+    assert (3-6*r+2*r*r).subs(r,q(69,100))==-q(939,5000)
+    assert (K-3)/(K*K-2*K)==q(1780,16241)
+    assert s/q(1780,16241)==q(1510413,1780000)>9*s
+    beta,z=sp.symbols("beta z")
+    FF=beta**3-beta**2+(3*s+s*s)*beta-2*s*s
+    zero(FF.subs(beta,z+q(9,20))-(z**3+q(7,20)*z*z-q(4851,10**6)*z+q(15381,20000000)))
+    assert q(4851,10**6)**2-4*q(1,5)*q(15381,20000000)==-q(591707799,10**12)<0
+    assert q(489,200)**2<6 and q(989,100)*s==q(91977,100000)
+    ratio=r*r-(1-s)*r+2*s
+    assert ratio.subs(r,q(313,1000))==ratio.subs(r,q(594,1000))==q(39,500000)>0
+    assert q(313,1000)*q(91977,100000)==q(28788801,10**8)>q(287,1000)
+    print("PASS: N6 exact-hull boxes, endpoint eliminations, mixed nested-row exclusion, and stronger remaining floors")
+
+
+def n7_top_three_five():
+    q=sp.Rational;s=q(93,1000);eta=q(93,790);ell=q(7347,69700)
+    a,b,e,f,g,h,z,x,y,u,v=sp.symbols("a b e f g h z x y u v")
+    A,B,E,F,G,H,O,P=(sp.Matrix(pt) for pt in
+        [(0,a),(b,0),(1,e),(f,1),(g,z),(0,h),(x,y),(u,v)])
+    det=lambda X,Y,Z:2*area(X,Y,Z)
+    zero(det(H,O,P)-det(A,O,P)-(u-x)*(h-a))
+    zero(f*det(A,G,P)-g*det(A,F,P)+u*det(A,F,G))
+    zero(z*det(B,H,P)-h*det(B,G,P)+v*(b*(z-h)+h*g))
+    zero((1-e)*det(F,H,O)+(1-h)*det(E,F,O)-det(E,F,H)*(1-y))
+    zero(det(A,G,O)+det(G,H,O)-(h-a)*(g-x))
+    bound=(1-ell)*(h-eta)*(1-h)-3*s*(1-h)-s*(h-eta)
+    zero(bound+(492588700*h*h-652994170*h+205585707)/550630000)
+    assert bound.subs(h,q(257,500))==-q(216669513,1376575000000)<0
+    assert bound.subs(h,q(203,250))==-q(87402983,344143750000)<0
+    assert sp.diff(bound,h).subs(h,q(257,500))>0
+    assert sp.diff(bound,h).subs(h,q(203,250))<0
+    print("PASS: complete N7 HGF 3/5 placement identities, ordinate bound, and the stronger AGO-positive box")
+
+
+def c1_exact_pentagon():
+    q=sp.Rational;s=q(93,1000);K0=q(3927,500)
+    h,c,d,f,u,v,z,w,x,a,r,t=sp.symbols("h c d f u v z w x a r t")
+    O,H,C,D,F,Y,Z,X,R=(sp.Matrix(pt) for pt in
+        [(0,0),(0,h),(c,0),(1,d),(f,1),(u,v),(z,w),(x,a),(r,t)])
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(H,C,D)+det(H,D,F)-(1-(h-d)*(c-f)))
+    zero(det(C,D,Y)-(d*(c-u)+(1-c)*v))
+    zero(det(D,F,Y)-(1-d*f-(1-d)*u-(1-f)*v))
+    cap=x+w-z-a+z*a-x*w
+    zero(det(Z,X,sp.Matrix([1,1]))-cap)
+    zero(cap.subs({x:1-4*s,w:1-4*s,z:s,a:s})-(1-2*s-15*s*s))
+    assert q(433,250)**2<3 and q(559,250)**2<5 and q(707,500)**2<2
+    assert (4+2*q(433,250))*s>q(694,1000)
+    assert (11+3*q(559,250))*s/2>q(823,1000)
+    assert 2*(1+q(707,500))*s>q(449,1000)
+    assert q(907,1000)**2<q(823,1000)
+    assert 1-K0*s==q(134789,500000)<q(27,100)
+    assert K0*s/2==q(365211,10**6)
+    kappa=sp.symbols("kappa")
+    envelope=(q(442,93)-kappa)**2/3+q(442,93)-kappa-6*kappa+3
+    assert envelope.subs(kappa,q(8,5))==-q(87029,648675)<0
+    assert sp.diff(envelope,kappa).subs(kappa,q(442,93))==-7
+    assert 2*s/(1-s)>q(41,200) and s+q(41,200)==q(149,500)
+    assert 1-2*s-15*s*s==q(684265,10**6)<q(694,1000)
+    assert 1-4*s+3*s*s==q(653947,10**6)<q(694,1000)
+    assert 1-4*s+s*s==q(636649,10**6)<q(694,1000)
+    assert q(517,730)>q(177,250) and 1-q(306,823)>q(157,250)
+    print("PASS: C1 exact-pentagon geometry, distributed-mesh ranges, capacity-one fans, and ear bounds")
+
+
+def n7_height_three_five():
+    q=sp.Rational;s=q(93,1000)
+    c,d,e,f,g,h,z,x,y=sp.symbols("c d e f g h z x y")
+    C,D,E,F,G,H,T=(sp.Matrix(pt) for pt in
+        [(c,0),(1,d),(1,e),(f,1),(g,z),(0,h),(x,y)])
+    Gp=sp.Matrix([g,1]);det=lambda A,B,C:2*area(A,B,C)
+    zero(det(F,Gp,T)-det(F,G,T)-(1-z)*(f-x))
+    zero(det(E,F,T)-((1-f)*(1-y)-(1-e)*(x-f)))
+    zero(det(F,Gp,H)-(f-g)*(1-h))
+    zero(det(E,F,Gp)-(f-g)*(1-e))
+    for A,B,co in [(C,D,1-c),(C,H,-c),(D,H,-1)]:
+        zero(sp.diff(det(A,B,G),z)-co)
+    assert s/q(753,1000)==q(31,251)
+    assert s/q(31657,55000)>q(31,251)>q(93,790)>q(7347,69700)
+    p0,q0,r0,t0=sp.symbols("p0 q0 r0 t0")
+    A0,B0,D0,E0=(sp.Matrix(pt) for pt in [(0,0),(p0,q0),(r0,t0),(1,0)])
+    X=det(A0,B0,E0);Y=det(A0,D0,E0);Z=det(A0,B0,D0);Delta=X-Z
+    R1=A0+Y/Delta*(B0-A0);R2=E0+X/Delta*(D0-E0)
+    for coordinate in R1-R2:zero(coordinate)
+    zero(Y-Delta-det(B0,D0,E0))
+    zero(-det(A0,E0,R1)-X*Y/Delta)
+    print("PASS: all N7 h>=e long-triangle transfers, uniform ordinate bound, and the five-chain supporting-ray identity")
+
+
+def adjacent_223_core():
+    q=sp.Rational;s=q(93,1000);Om0=q(271,500)
+    b,lam,a,k,c,d,p,y,u,v,Om=sp.symbols("b lam a k c d p y u v Om")
+    D,E,B,H,F,C,P,X=(sp.Matrix(pt) for pt in
+        [(0,1),(0,lam),(b,0),(a,k),(c,d),(1,1),(p,y),(u,v)])
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(E,B,H)-(lam*(a-b)+b*k))
+    zero(det(E,C,P)-(y-lam-(1-lam)*p))
+    zero(det(D,F,X)+det(F,C,X)-(v-d))
+    assert q(7071,5000)**2<2 and 3/q(429,2500)>q(209,50)**2
+    assert 1-q(209,25)*s==q(5563,25000)
+    assert q(141421,100000)**2<2 and q(8579,50000)*Om0<s
+    B0=q(23,50);C0=1-2*s+s/B0;R0=2*s*(1-B0)/B0
+    assert C0==q(5843,5750) and R0==q(2511,11500)
+    assert 4*R0-(C0-s)**2==q(11183711,529000000)>0
+    J=(1-s/Om0)*(1-Om0/(1-b))
+    for bb,aa,want,lower in [
+        (q(279,1000),q(907,1000),q(13919217,245411096),q(56,1000)),
+        (q(295,1000),q(907,1000),q(2789213,46770264),q(59,1000)),
+        (q(296,1000),q(885,1000),q(872211,14046472),q(62,1000))]:
+        assert (s-bb*J.subs(b,bb))/(aa-bb)==want>lower
+    assert s*q(721,1000)<Om0**2 and q(721,1000)**2<Om0
+    assert 3*s/q(944,1000)>q(295,1000)
+    assert 3*s/q(941,1000)>q(296,1000)
+    assert 3*s/q(938,1000)>q(297,1000)
+    m=sp.symbols("m");G=m*(1-m)/(2-m);t0=q(93,704)
+    m0=t0/q(164,1000)
+    assert m0==q(11625,14432)>q(3,4)
+    assert t0-G.subs(m,m0)==q(42687,45235136)>0
+    epsilon=q(115,1000)
+    assert t0-G.subs(m,s/epsilon)==q(24831,11091520)>0
+    assert epsilon*(epsilon+s)/(epsilon-s)==q(299,275)>1
+    assert J.subs(b,q(297,1000))==q(72289,381026)<q(19,100)
+    assert 1-3*s/q(703,1000)<q(604,1000)
+    assert s/q(938,1000)>q(99,1000)
+    assert q(458,1000)-2*s/q(938,1000)<q(26,100)
+    assert q(62,1000)+2*s>q(247,1000)
+    assert 1-(q(99,1000)+s)/q(458,1000)<q(581,1000)
+    qq=sp.symbols("qq");poly=b*qq**2-s*(2*b+1)*qq-s
+    assert poly.subs({b:q(458,1000),qq:q(685,1000)})==-q(15373,10**8)
+    assert s/q(588,1000)>q(158,1000)
+    assert q(297,1000)+q(703,1000)*s/q(588,1000)+s>q(501,1000)
+    assert 1-s/q(836,1000)<q(889,1000)
+    assert (q(889,1000)-q(297,1000)-s)/q(703,1000)<q(71,100)
+    assert q(542,1000)*q(158,1000)+s>q(178,1000)
+    assert q(164,1000)+2*s==q(7,20)
+    assert q(297,1000)+q(703,1000)*q(7,20)+s==q(12721,20000)>q(159,250)
+    print("PASS: Type-II (2,2,3) eight-point core, all exact box bootstraps, and final contact gaps")
+
+
+def c1_exterior_reduction():
+    from pathlib import Path
+    from itertools import product
+    import re
+    q=sp.Rational;s=q(93,1000)
+    c,d,x,y=sp.symbols("c d x y")
+    intercept=(d*x-y)/(d-y)
+    zero(2*area(sp.Matrix([1,d]),sp.Matrix([x,y]),sp.Matrix([intercept,0])))
+    zero((1-c)*(1-s-s/c)-(1-(1-s)*c-s/c))
+    assert s*(1-s)==q(84351,10**6)>q(29,100)**2
+    assert 1-2*q(29,100)==q(21,50)<q(347,500)
+    z=sp.symbols("z");pair=z*z-(1-2*s)*z+s
+    assert pair.subs(z,q(347,500))==q(243,25000)>0
+    assert sp.diff(pair,z).subs(z,q(347,500))>0
+    assert (1-q(347,500))*(1-s)==q(138771,500000)<3*s
+    assert q(4427,500)*s-(1-s)**2==q(773,10**6)>0
+    assert 3*s>q(1,4) and (1-4*s)**2==q(394384,10**6)<5*s
+    triple=z*z-(1-2*s)*z+s*s
+    assert triple.subs(z,q(823,1000))==q(2007,125000)>0
+    assert sp.diff(triple,z).subs(z,q(823,1000))>0
+    manuscript=Path(__file__).with_name("C1_EXTERIOR_REDUCTION.md").read_text()
+    printed={int(k):set(tuple(map(int,rr)) for rr in re.findall(r'\((\d),(\d),(\d),(\d)\)',body))
+        for k,body in re.findall(r'^\| ([0-3]) \| (.+) \|$',manuscript,re.M)}
+    expected={k:set() for k in range(4)}
+    for k,j,r,t,l in product(range(4),range(3),range(3),range(4),range(3)):
+        if k+j+r+t+l!=5 or r<l or (r,l)==(2,2):continue
+        if max(r,l)==2 and (k>1 or t>1):continue
+        if (k==3 or t==3) and r*l:continue
+        if (k,j,r,t,l)==(3,2,0,0,0):continue
+        expected[k].add((j,r,t,l))
+    assert printed==expected and [len(printed[k]) for k in range(4)]==[8,12,8,4]
+    print("PASS: C1 exterior support cuts, all scalar gaps, and the complete 32-row count catalogue")
+
+
+def n7_long_triangle_caps():
+    q=sp.Rational;s=q(93,1000)
+    f,g,h,e,z=sp.symbols("f g h e z")
+    E,F,G,H=(sp.Matrix(pt) for pt in [(1,e),(f,1),(g,z),(0,h)])
+    det=lambda A,B,C:2*area(A,B,C)
+    W=(1-f)*(1-h)+f*(1-e)
+    zero((1-f)*det(F,G,H)+f*det(E,F,G)-(f-g)*W)
+    B=(f-q(3,5))*((1-f)*(1-4*s+f*(4*s-q(117,1000)))-s*f)-s*(1-f)
+    zero(B+(1275*f**3+1565*f**2-5003*f+2349)/5000)
+    t=sp.symbols("t")
+    zero(B.subs(f,t+q(4,5))-(-q(51,200)*t**3-q(37,40)*t**2+q(51,5000)*t-q(1,5000)))
+    assert q(37,40)-q(51,1000)==q(437,500)
+    assert q(51,5000)**2/(4*q(437,500))-q(1,5000)==-q(14879,87400000)<0
+    assert s-q(609,2000)**2==q(1119,4000000)>0
+    assert q(121,250)-(1-q(609,2000))**2==q(1119,4000000)>0
+    assert q(149,20)*s>q(69,100)
+    print("PASS: N7 global g bound, paired-ear factors, and all long-triangle scalar comparisons")
+
+
+def n7_corner_line():
+    from pathlib import Path
+    from itertools import product
+    import re
+    q=sp.Rational;s=q(93,1000)
+    a,b,c,d,e,f,g,h,z,x,y,u,v=sp.symbols("a b c d e f g h z x y u v")
+    A,B,C,D,E,F,G,H,O,P=(sp.Matrix(pt) for pt in
+        [(0,a),(b,0),(c,0),(1,d),(1,e),(f,1),(g,z),(0,h),(x,y),(u,v)])
+    det=lambda A,B,C:2*area(A,B,C)
+    for T in [O,P]:
+        yy=T[1]
+        zero(z*det(B,H,T)-h*det(B,G,T)+yy*(b*(z-h)+h*g))
+        zero(det(D,F,T)-(1-d)*det(C,F,T)-(1-c+d*(c-f))*(1-yy))
+        zero((1-e)*det(F,H,T)+(1-h)*det(E,F,T)-det(E,F,H)*(1-yy))
+    zero(det(A,O,P)-det(E,O,P)-(v-y)+(e-a)*(u-x))
+    zero(det(F,O,P)-det(B,O,P)-(u-x)+(f-b)*(v-y))
+    zero(det(A,B,E)+det(A,E,F)-1+(e-a)*(f-b))
+    note=Path(__file__).with_name("N7_CORNER_LINE.md").read_text()
+    rows={row:choices.split(', ') for row,choices in re.findall(r'^\| (R\d+) \| ([A-Z+\-, ]+) \|$',note,re.M)}
+    assert len(rows)==18
+    for vals in product('+-',repeat=5):
+        given=dict(zip(['ADO','BGO','CFP','EHP','BHO'],vals))
+        hits=[row for row,choices in rows.items() if all(given[token[:3]]==token[-1] for token in choices)]
+        assert len(hits)==(0 if vals[:4]==('+','-','+','+') else 1)
+    print("PASS: N7 whole AB/EF class identities, ordinate bound, and exhaustive eighteen-row oblique ledger")
+
+
+def adjacent_223_complete():
+    from pathlib import Path
+    from itertools import product
+    import re
+    from check_type_ii_223_complete import check_constants
+    check_constants()
+    a,k,c,d,u,v,r,t=sp.symbols("a k c d u v r t")
+    D,C,H,F,X,Y=(sp.Matrix(pt) for pt in [(0,1),(1,1),(a,k),(c,d),(u,v),(r,t)])
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(D,X,Y)+det(X,C,Y)-t+v)
+    zero(c*det(D,H,Y)-a*det(D,F,Y)-r*det(D,H,F))
+    note=Path(__file__).with_name("TYPE_II_223_COMPLETE.md").read_text()
+    rows={int(num):(region,{tok[:3]:tok[-1] for tok in choices.split(', ')}) for num,region,choices in
+        re.findall(r'^\| (\d+) \| (any|B|P|C) \| ([A-Z+\-, ]+) \| [A-I] \|$',note,re.M)}
+    assert len(rows)==18
+    for region in 'BPC':
+        for vals in product('+-',repeat=8):
+            known=dict(zip(['EPY','FXY','DFY','ECY','DHY','EXY','CPY','HXY'],vals))
+            if region=='B' and known['FXY']=='-':continue
+            if region=='C' and known['DFY']=='-':continue
+            hits=[num for num,(rg,ch) in rows.items() if rg in ('any',region) and all(known[word]==sg for word,sg in ch.items())]
+            assert len(hits)==1
+    print("PASS: complete Type-II (2,2,3) selection cap, nine box bootstraps, geometric identities, and exhaustive eighteen-row catalogue")
+
+
+def n6_exact_hull_complete():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);K=q(149,20);J=q(4427,500)
+    a,b,c,h,x,y,u,v=sp.symbols("a b c h x y u v")
+    A,B,C,H,U,V=(sp.Matrix(pt) for pt in [(0,a),(b,0),(c,0),(0,h),(x,y),(u,v)])
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(A,U,V)-det(H,U,V)-(h-a)*(x-u))
+    zero(det(B,U,V)-det(C,U,V)-(c-b)*(v-y))
+    xx=sp.symbols("x0:12");AA,BB,CC,XX,YY,ZZ=[sp.Matrix(xx[2*i:2*i+2]) for i in range(6)]
+    faces=[(AA,BB,ZZ),(BB,CC,XX),(CC,AA,YY),(AA,ZZ,YY),(BB,XX,ZZ),(CC,YY,XX),(ZZ,XX,YY)]
+    zero(sum(det(*tri) for tri in faces)-det(AA,BB,CC))
+    assert q(559,250)**2<5 and (15+3*q(559,250))*s/2>1
+    assert 2*K>J+3 and q(93,91)>1 and s>q(1,11)
+    note=Path(__file__).with_name("N6_EXACT_HULL.md").read_text()
+    records=re.findall(r'^\| (CS--|CO--|CO\+-|CO\+\+|MH--|MH-\+|MH\+\+|MHC\+\+) \| N\d{4} \| (\d+) \| (\d+) \| (\d+) \| (\d+) \| (\d+) \|$',note,re.M)
+    assert len(records)==8
+    assert [sum(int(row[i]) for row in records) for i in range(1,6)]==[686,290,229,44924,4388]
+    print("PASS: N6 exact-hull contact gaps, distributed-mesh identity, capacity constants, and complete printed tree inventory")
+
+
+def n7_all_three_five():
+    from pathlib import Path
+    from itertools import combinations
+    import re
+    q=sp.Rational;s=q(93,1000);eta=q(93,790);ell=q(7347,69700)
+    h=sp.symbols("h");envelope=(1-ell)*(h-eta)*(1-h)-3*s*(1-h)-s*(h-eta)
+    assert envelope.subs(h,q(257,500))==-q(216669513,1376575000000)<0
+    assert envelope.subs(h,q(203,250))==-q(87402983,344143750000)<0
+    assert sp.diff(envelope,h).subs(h,q(257,500))>0 and sp.diff(envelope,h).subs(h,q(203,250))<0
+    note=Path(__file__).with_name("N7_THREE_FIVE_LOWER_HEIGHT.md").read_text()
+    rows=re.findall(r'^\| (R\d+) \| ([A-H]{3}) \| ([A-Z+\-, ]+) \| (N|T|N gap|T gap) \|$',note,re.M)
+    assert len(rows)==93
+    def complete(paths):
+        if any(not p for p in paths):assert len(paths)==1;return 1
+        assert len({p[0][:3] for p in paths})==1 and {p[0][-1] for p in paths}=={'+','-'}
+        return sum(complete([p[1:] for p in paths if p[0][-1]==sg]) for sg in '+-')
+    counts=[]
+    for arc in ['ABC','BCD','CDE','DEF','EFG','GHA','HAB']:
+        paths=[choices.split(', ') for _,aa,choices,_ in rows if aa==arc]
+        if arc=='DEF':paths.append(['FHO-'])
+        if arc=='GHA':paths.append(['EGP+','CGP-','BGO+','FHP-'])
+        counts.append(complete(paths))
+    assert counts==[13,14,17,10,14,14,13]
+    factors=re.findall(r'^\| (F5_[A-H]{5}_[XY]) \| ([A-H]{3}) \| ([A-H]{3}) \| ([A-H]{3}) \| ([A-H]{3})<=([0-9/]+) \|$',note,re.M)
+    assert len(factors)==58
+    for name,X,Y,Z,word,bound in factors:
+        _,vertices,side=name.split('_');A,B,C,D,E=vertices
+        assert (X,Y,Z)==(A+B+E,A+D+E,A+B+D)
+        assert word==(X if side=='X' else Y) and 0<q(bound)<q(9,10)
+        order=sorted(vertices);assert len(set(vertices))==5 and any(list(vertices)==order[i:]+order[:i] for i in range(5))
+    print("PASS: complete N7 3/5 lower-height boxes, seven exhaustive binary ledgers, and all fifty-eight five-chain substitutions")
+
+
+def c1_convex_top_pair():
+    q=sp.Rational;s=q(93,1000);rho=q(823,1000)
+    h,c,d,f,x,y=sp.symbols("h c d f x y")
+    H,C,D,F,Z=[sp.Matrix(t) for t in [(0,h),(c,0),(1,d),(f,1),(x,y)]]
+    det=lambda A,B,C:2*area(A,B,C)
+    A=1-c+d*(c-f);U=1-h+f*(h-d);delta=d*f-(1-h)*(1-c)
+    zero(A*(-det(H,F,Z))+U*det(C,D,Z)+delta*(-det(D,F,Z))-A*U)
+    assert q(81,10000)<s*s and rho>(1-s)**2 and rho<q(227,250)**2
+    u,v=sp.symbols("u v")
+    for expr,want in [(A,1-rho/h+v-u*v/rho),(U,1-h+u-u*v/rho),
+                      (delta,u*v/rho-1+h+rho/h-rho)]:
+        zero(expr.subs({c:rho/h,d:v*h/rho,f:u/h},simultaneous=True)-want)
+    print("PASS: C1 convex top-pair cap identity, positive determinant threshold, and scalar boundary substitution")
+
+
+def c1_three_lower_exteriors():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);rho=q(823,1000)
+    assert s/(1-s)-q(177,200)*(1-q(177,200))==q(27603,36280000)>0
+    assert rho/q(177,200)-q(929,1000)==q(167,177000)>0
+    assert s/(rho*(1-rho))-q(319,500)==q(10317,24278500)>0
+    assert q(191,500)-(1-s-s/(1-rho))==q(1,2360)>0
+    assert (1-4*s)*q(191,500)-3*s*(rho+s)==-q(3917,250000)<0
+    specs=[('TWO_TOP','c1tt',[''],4,8,10,2),
+           ('SIDE_TOP','c1st',['RT.','TR.','LT.','TL.'],10,0,19,21),
+           ('ONE_TOP','c1ti',['TU.','UT.'],9,33,47,4),
+           ('ONE_SIDE','c1si',['RU.','UR.','LU.','UL.'],9,25,51,10)]
+    totals=[0]*4
+    for suffix,prefix,models,nroot,nsplit,npoly,ngeo in specs:
+        note=Path(__file__).with_name('C1_THREE_LOWER_'+suffix+'.md').read_text()
+        def block(name):
+            found=re.findall(r'```'+prefix+'-'+name+r'\n(.*?)\n```',note,re.S)
+            assert len(found)<=1
+            return found[0] if found else ''
+        roots=[line.split()[0] for line in block('roots').splitlines()]
+        tree={row[0]:row[1:] for row in map(str.split,block('tree').splitlines())}
+        leaves=set(re.findall(r'^### Leaf ([A-Z0-9.mp]+)$',note,re.M))
+        assert len(roots)==nroot and len(tree)==nsplit and len(leaves)==npoly+ngeo
+        seen=set()
+        def walk(node):
+            assert node not in seen;seen.add(node)
+            if node in tree:
+                tri,neg,pos=tree[node];assert len(set(tri))==3
+                walk(neg);walk(pos)
+            else:assert node in leaves
+        for model in models:
+            for root in roots:walk(model+root)
+        assert seen==set(tree)|leaves
+        assert note.count('```'+prefix+'-sum\n')==npoly and note.count('```'+prefix+'-exclude\n')==ngeo
+        for i,value in enumerate([nroot*len(models),nsplit,npoly,ngeo]):totals[i]+=value
+    assert totals==[98,66,127,37]
+    print("PASS: C1 side-cap rational bounds and all four complete exterior trees; entire three-lower placement catalogue")
+
+
+def n7_cdgh_complete():
+    from pathlib import Path
+    from itertools import product
+    import re
+    c,d,g,h,z,x,y,u,v=sp.symbols("c d g h z x y u v")
+    C,D,G,H,O,P=[sp.Matrix(t) for t in [(c,0),(1,d),(g,z),(0,h),(x,y),(u,v)]]
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(C,G,O)-det(C,G,P)-z*(u-x)+(c-g)*(y-v))
+    zero(det(D,H,P)-det(D,H,O)-(y-v)+(h-d)*(u-x))
+    zero(det(C,D,G)+det(C,G,H)-z+(c-g)*(h-d))
+    aa,bb,cc,dd,ee,ff,gg,hh=sp.symbols("a0 b0 c0 d0 e0 f0 g0 h0")
+    cross=lambda U,V:U[0]*V[1]-U[1]*V[0]
+    A,B,C,D=[(aa,bb),(cc,dd),(ee,ff),(gg,hh)]
+    zero(cross(A,B)*cross(C,D)-cross(B,C)*cross(D,A)-cross(A,C)*cross(B,D))
+    note=Path(__file__).with_name('N7_CDGH_LINE.md').read_text()
+    rows={row:choices.split(', ') for row,choices in re.findall(r'^\| (R\d+[abc]?) \| ([A-Z+\-, ]+) \|$',note,re.M)}
+    assert len(rows)==18
+    for ss in product('+-',repeat=6):
+        known=dict(zip(['ADP','BGO','CFP','EHO','AFO','BEP'],ss))
+        assert sum(all(known[token[:3]]==token[-1] for token in choices) for choices in rows.values())==1
+    block=re.findall(r'```n7-cdgh-squares\n(.*?)\n```',note,re.S)
+    assert len(block)==1
+    square_rows=[line.split() for line in block[0].splitlines()]
+    assert len(square_rows)==24 and all(len(row)==16 and int(row[1])>0 for row in square_rows)
+    print("PASS: N7 complete CD/GH diagonal and one-interior identities, exhaustive eighteen-row catalogue, and explicit square definitions")
+
+
+def adjacent_232_complete():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);K=q(933,125);J=q(4427,500)
+    b,lam,p,y=sp.symbols("b lam p y")
+    D,C,E,B,P=[sp.Matrix(t) for t in [(0,1),(1,1),(0,lam),(b,0),(p,y)]]
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(det(D,E,C)+2*det(E,B,C)-1-2*b-lam*(1-2*b))
+    zero(det(E,P,B)+det(E,B,C)-b-lam*(1-p)+b*y)
+    assert q(433,250)**2<3 and K==4+2*q(433,250)
+    assert q(559,250)**2<5 and J==(11+3*q(559,250))/2
+    assert J*s-(1-3*s)==q(51211,500000)>0 and 3*K*s-2==q(10307,125000)>0
+    z,d,A,B0,ss=sp.symbols("z d A B0 s0")
+    F=d*A*B0-ss*(A*z/(1-z)+B0*(1-z)/z)
+    A0=1-ss/z;B1=1-ss*(2-b-z)/((1-z)*(1-z-(1-b)*d))
+    T=sp.factor(F.subs({A:A0,B0:B1}));half=T.subs(b,q(1,2))
+    assert sp.cancel(sp.diff(half,z)-ss*(d+1)*(d+3*ss-2)*(d+4*z-2)/(z*z*(d+2*z-2)**2))==0
+    maximum=sp.factor(half.subs({d:(2-4*ss)/3,z:(1+ss)/3}))
+    assert sp.cancel(maximum-ss+(2*ss-1)*(31*ss*ss-46*ss+4)/(6*(ss+1)**2))==0
+    assert (maximum-ss).subs(ss,s)==-q(4021567,3583947000)<0
+    note=Path(__file__).with_name('TYPE_II_232_LEFT_QUADRILATERAL.md').read_text()
+    leaves=set(re.findall(r'^### (R[1-4][mp]{2})$',note,re.M))
+    removed={'R1mm','R1pm','R3mm','R3pm','R4pm'}
+    assert leaves.isdisjoint(removed) and leaves|removed=={f'R{i}{u}{v}' for i in range(1,5) for u in 'mp' for v in 'mp'}
+    print("PASS: entire Type-II (2,3,2) count identities, analytic envelope gap, and exhaustive left-hull sign catalogue")
+
+
+def n6_two_lower_two_exterior():
+    from pathlib import Path
+    from itertools import product
+    import re
+    import n6_exterior_geometry as geometry
+    q=sp.Rational;s=q(93,1000)
+    c,e,f,h,x,y=sp.symbols("c e f h x y")
+    C,E,F,H,U=[sp.Matrix(t) for t in [(c,0),(1,e),(f,1),(0,h),(x,y)]]
+    det=lambda A,B,C:2*area(A,B,C)
+    zero(-det(C,E,U)-e*(x-c)+(1-c)*y)
+    zero(-det(C,E,U)-e*(x-1)-(1-c)*(e-y))
+    zero(-det(E,F,U)-(1-e)*(x-f)+(1-f)*(1-y))
+    zero(-det(E,F,U)-(1-f)*(y-e)+(1-e)*(1-x))
+    zero(-det(F,H,U)-(1-h)*(f-x)+f*(1-y))
+    zero(-det(F,H,U)-f*(y-h)+(1-h)*x)
+    assert 1-9*s<3*s and 9*s>q(823,1000)
+    words={''.join('+' if sg>0 else '-' for sg in ss) for ss in product((-1,1),repeat=6)
+        if ss[0]==-1 and ss[4]==-ss[5] and sum(a!=b for a,b in zip(ss,ss[1:]+ss[:1]))==2}
+    assert words=={'-++++-','--+++-','---++-','----+-','-----+'}
+    geometry.set_locations('TT');known=geometry.initial('central')
+    assert (-1,)*6 in geometry.line_patterns(known,'ABCEFH','RS')
+    assert (1,)*6 in geometry.line_patterns(known,'ABCEFH','RS')
+    assert (-1,)*6 not in geometry.line_patterns(known,'ABCEFH','PQ')
+    note=Path(__file__).with_name('N6_TWO_LOWER_CAPS.md').read_text()
+    records=re.findall(r'^\| ((?:TT|RT|LT|RL)/[^ |]+) \| X\d{4} \| (\d+) \| (\d+) \| (\d+) \| (\d+) \| (\d+) \|$',note,re.M)
+    assert len(records)==32 and [sum(int(row[i]) for row in records) for i in range(1,6)]==[65,54,2,5434,1251]
+    print("PASS: complete N6 two-lower/two-exterior cap identities, TT catalogue, exterior line rule, and full printed inventory")
+
+
+def n7_heptagon_two_upper_ear():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);K=q(149,20);eta=q(93,790);ell=q(7347,69700)
+    assert q(77,100)*(1-ell)<K*s and (1-s)*(1-q(237,1000))<K*s
+    assert (1-q(647,1000))*(1-s-eta)<3*s
+    assert q(17,100)*(q(647,1000)-ell)<s
+    assert (1-4*s)*(1-s-q(463,1000))<3*s
+    assert q(237,1000)*(1-q(76,125))<s
+    assert q(14,125)*(1-q(17,100))<s
+    assert (1-q(883,1000))*(1-s-eta)<s
+    note=Path(__file__).with_name('N7_HEPTAGON_TWO_UPPER_EAR.md').read_text()
+    rows=re.findall(r'^\| (R\d+) \| ([WTG]) \| ([A-Z+\-, ]+) \|$',note,re.M)
+    assert len(rows)==64 and sum(kind=='G' for _,kind,_ in rows)==6
+    def complete(paths):
+        if paths==[[]]:return 1
+        assert paths and all(paths) and len({pp[0][:3] for pp in paths})==1
+        return sum(complete([pp[1:] for pp in paths if pp[0][-1]==sg]) for sg in '-+')
+    assert complete([path.split(', ') for _,_,path in rows])==64
+    traces=re.findall(r'^```n7-h2-R\d+-trace\n(.*?)^```$',note,re.M|re.S)
+    assert len(traces)==64 and sum(len(z.strip().splitlines()) for z in traces)==2166
+    sums=re.findall(r'^```n7-h2-R\d+-sum\n(.*?)^```$',note,re.M|re.S)
+    assert len(sums)==58 and sum(len(z.strip().splitlines()) for z in sums)==13979
+    print("PASS: complete N7 two-upper/occupied-ear rational boxes and exhaustive sixty-four-leaf inventory")
+
+
+def adjacent_133_triangular_right():
+    from pathlib import Path
+    import re
+    from check_type_ii_133_triangular_right import scalar_checks
+    scalar_checks()
+    q=sp.Rational;s=q(93,1000);K=q(933,125)
+    b,lam,h,k,r,j=sp.symbols('b lam h k r j')
+    P={name:sp.Matrix(pair) for name,pair in zip('DEBHCR',[(0,1),(0,lam),(b,0),(h,k),(1,1),(r,j)])}
+    D=lambda word:2*area(*(P[ch] for ch in word))
+    zero(D('BHC')-h+b+(1-b)*k)
+    zero(D('EBH')-b*k-lam*(h-b))
+    zero(D('HCR')-(1-k)*(1-r)+(1-h)*(1-j))
+    a=K*s
+    assert q(273,100)**2<K and q(833,1000)**2<a
+    note=Path(__file__).with_name('TYPE_II_133_TRIANGULAR_RIGHT_TABLES.md').read_text()
+    assert len(re.findall(r'^## Leaf E[123]H[0-3][mp]+$',note,re.M))==52
+    assert len(re.findall(r'^P [A-Z]{5} [+-][A-Z]{3}$',note,re.M))==877
+    assert len(re.findall(r'^M [A-Z]{3} [A-Z]{3} [+-][A-Z]{3}$',note,re.M))==56
+    sums=re.findall(r'^### Fixed polynomial\n\n```text\n(.*?)^```$',note,re.M|re.S)
+    assert len(sums)==44 and sum(len(z.strip().splitlines()) for z in sums)==2194
+    assert len(re.findall(r'^Exclusion:',note,re.M))==8
+    print("PASS: entire Type-II133 triangular-right point-selection identities, scalar boxes and complete printed inventory")
+
+
+def n7_ah_de_and_single_exterior():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);eta=q(93,790);ell=q(7347,69700)
+    a,d,e,h,x,y,u,v=sp.symbols('a d e h x y u v')
+    P={name:sp.Matrix(pair) for name,pair in zip('ADEHOP',[(0,a),(1,d),(1,e),(0,h),(x,y),(u,v)])}
+    D=lambda word:2*area(*(P[ch] for ch in word))
+    zero(D('EOP')-D('AOP')-(e-a)*(u-x)+(v-y))
+    zero(D('HOP')-D('DOP')-(h-d)*(u-x)-(v-y))
+    z=sp.symbols('z');Q=(1-ell)*(z-eta)*(1-z)-3*s*(1-z)-s*(z-eta)
+    assert sp.diff(Q,z,2)<0
+    assert Q.subs(z,q(257,500))<0<sp.diff(Q,z).subs(z,q(257,500))
+    assert Q.subs(z,q(203,250))<0 and sp.diff(Q,z).subs(z,q(203,250))<0
+    note=Path(__file__).with_name('N7_SIDE_AH_DE.md').read_text()
+    rows=re.findall(r'^\| (R\d+) \| (\d+) \| (-[0-9/]+) \|$',note,re.M)
+    assert len(rows)==56 and sum(int(n) for _,n,_ in rows)==19348
+    assert all(q(bound)<0 for _,_,bound in rows)
+    paths=[path.split(', ') for _,path in re.findall(r'^\| (R\d+) \| ([A-Z+\-, ]+) \|$',note,re.M)]
+    def complete(paths):
+        if paths==[[]]:return 1
+        assert paths and all(paths) and len({pp[0][:3] for pp in paths})==1
+        return sum(complete([pp[1:] for pp in paths if pp[0][-1]==sg]) for sg in '-+')
+    assert complete(paths)==56
+    edges=[('ABCDEFGH'[i],'ABCDEFGH'[(i+1)%8]) for i in range(8)]
+    pairs={frozenset((''.join(edges[i]),''.join(edges[i+4]))) for i in range(4)}
+    assert pairs=={frozenset(p) for p in [('AB','EF'),('BC','FG'),('CD','GH'),('DE','HA')]}
+    print("PASS: complete N7 AH/DE identity/box/tree audit and exhaustive single-exterior line assembly")
+
+
+def n7_heptagon_occupied_ear():
+    from pathlib import Path
+    from itertools import product
+    import re
+    q=sp.Rational;s=q(93,1000)
+    assert q(4427,500)*s-(1-s)**2==q(773,1000000)>0
+    assert 1-9*s<3*s
+    counts={(k,j,r) for k,j,r in product(range(3),range(3),range(2)) if k+j+r==3}
+    assert counts=={(1,2,0),(2,1,0),(0,2,1),(1,1,1),(2,0,1)}
+    c,d,e,h=sp.symbols('c d e h')
+    det=2*area(sp.Matrix([c,0]),sp.Matrix([1,d]),sp.Matrix([1,e]))
+    zero(det-(1-c)*(e-d))
+    note=Path(__file__).with_name('N7_HEPTAGON_ONE_EAR.md').read_text()
+    steps=re.findall(r'^plu [A-Z]{5} [A-Z]{3} -?1$',note,re.M)
+    assert len(steps)==52
+    blocks=re.findall(r'^```n7-ear-R[12]-sum\n(.*?)^```$',note,re.M|re.S)
+    assert len(blocks)==2 and sum(len(block.strip().splitlines()) for block in blocks)==349
+    bounds=re.findall(r'^Exact upper bound: `([^`]+)`\.$',note,re.M)
+    assert len(bounds)==2 and all(q(bound)<0 for bound in bounds)
+    print("PASS: exhaustive all-interior N7 five-count catalogue and complete occupied-ear/lower exclusions")
+
+
+def n7_bc_fg_complete():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000)
+    a,b,c,d,e,f,g,h,z,x,y=sp.symbols('a b c d e f g h z x y')
+    P={name:sp.Matrix(pair) for name,pair in zip('ABCDEFGHOT',[(0,a),(b,0),(c,0),(1,d),(1,e),(f,1),(g,z),(0,h),(x,y),(x,y)])}
+    D=lambda word:2*area(*(P[ch] for ch in word))
+    zero(f*D('AGT')-g*D('AFT')+x*D('AFG'))
+    zero((1-b)*D('CET')-(1-c)*D('BET')-(c-b)*e*(1-x))
+    note=Path(__file__).with_name('N7_SIDE_BC_FG.md').read_text()
+    rows=re.findall(r'^\| (R\d+) \| (\d+) \| (-[0-9/]+) \|$',note,re.M)
+    assert len(rows)==49 and sum(int(n) for _,n,_ in rows)==15159
+    assert all(q(bound)<0 for _,_,bound in rows)
+    paths=[path.split(', ') for _,path in re.findall(r'^\| (R\d+) \| ([A-Z+\-, ]+) \|$',note,re.M)]
+    def complete(paths):
+        if paths==[[]]:return 1
+        assert paths and all(paths) and len({pp[0][:3] for pp in paths})==1
+        return sum(complete([pp[1:] for pp in paths if pp[0][-1]==sg]) for sg in '-+')
+    assert complete(paths)==49
+    five=re.findall(r'^\| (F5_[A-H]{5}_[XY]) \| ([A-H]{3}) \| ([0-9/]+) \|$',note,re.M)
+    assert len(five)==75
+    print("PASS: complete N7 BC/FG identities, forty-nine-leaf exhaustive tree, all printed inventories and strict bounds")
+
+
+def n6_two_lower_upper_side():
+    from pathlib import Path
+    from itertools import product
+    import re
+    import n6_exterior_geometry as geometry
+    q=sp.Rational;s=q(93,1000)
+    for location in ('IR','IL'):
+        geometry.set_locations(location);known=geometry.initial('central')
+        assert geometry.inside(known,'HCEF','R')
+        assert not geometry.inside(known,'ABCEFH','S')
+        words=geometry.line_patterns(known,'HCEF','RS')
+        assert len(words)==12 and all(sum(x!=y for x,y in zip(vv,vv[1:]+vv[:1]))==2 for vv in words)
+    assert 2*(1+sp.sqrt(2))*s>q(24,5)*s
+    note=Path(__file__).with_name('N6_TWO_LOWER_SIDE.md').read_text()
+    records=re.findall(r'^\| ((?:IR|IL)/[^ |]+) \| X\d{4} \| (\d+) \| (\d+) \| (\d+) \| (\d+) \| (\d+) \|$',note,re.M)
+    assert len(records)==16 and [sum(int(row[i]) for row in records) for i in range(1,6)]==[107,56,26,5741,654]
+    c,d,e=sp.symbols('c d e')
+    zero(2*area(sp.Matrix([c,0]),sp.Matrix([1,e]),sp.Matrix([1,d]))-(1-c)*(d-e))
+    print("PASS: complete N6 two-lower/upper/side-cap catalogue and boundary transfer to all-interior N7")
+
+
+def c1_two_lower_three_caps():
+    q=sp.Rational;s=q(93,1000);rho=q(347,500)
+    z=sp.symbols('z')
+    P=23250000*z**4-180614500*z**3+268737713*z**2-125346463*z+11198037
+    zero(P/q(250000000)-(z*(1-z)-s)*(rho*(z-rho)-s*z*z)+s*rho*z*(1-z)*(z-rho))
+    assert sp.diff(P,z,3).subs(z,q(177,200))<0
+    assert sp.diff(P,z,2).subs(z,rho)<0
+    assert P.subs(z,q(807,1000))<0<sp.diff(P,z).subs(z,q(807,1000))
+    assert P.subs(z,q(86,100))<0 and sp.diff(P,z).subs(z,q(86,100))<0
+    assert q(53,1000)*q(403,1000)+q(663,1000)*q(108,1000)==s-q(37,1000000)
+    assert 2*q(403,1000)*q(892,1000)-1+q(597,1000)**2==s-q(17639,1000000)
+    print("PASS: complete C1 two-lower/three-cap quartic box and both strict determinant gaps")
+
+
+def c1_side_top_pair_complete():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);rho=q(347,500)
+    c,d,t=sp.symbols('c d t')
+    E=(1-d)*(1-s-s/(d-s/c)+(1-d)*(1-c-s/(c*d))/(d-s/c))
+    zero(sp.diff(E,c)-(1-d)*(s*s-c*(1-d)*(c*d-2*s))/(c*d-s)**2)
+    B=(417094*d**3-2455*d*d-284067*d+93000)/1000000
+    zero((4*s-E.subs(c,rho))*d*(rho*d-s)-B)
+    nums=[4802739945873,266106562641,4648189333265,20573116806609,50665017531537]
+    zero(B.subs(d,q(437,1000)+q(32,125)*t)-sum(n*sp.binomial(4,i)*t**i*(1-t)**(4-i) for i,n in enumerate(nums))/1500000000000000)
+    assert min(nums)>0
+    note=Path(__file__).with_name('C1_TWO_LOWER_SIDE_TOP_COMPLETE.md').read_text()
+    blocks=re.findall(r'^```c1st-sum\n(.*?)^```$',note,re.M|re.S)
+    assert len(blocks)==4
+    assert sum(len(re.split(r';\s*|\n',block.strip())) for block in blocks)==764
+    traces=re.findall(r'^```c1st-geometry\n(.*?)^```$',note,re.M|re.S)
+    assert len(traces)==4 and sum(len(block.strip().splitlines()) for block in traces)==60
+    bounds=re.findall(r'^Upper bound: `([^`]+)`\.$',note,re.M)
+    assert len(bounds)==4 and all(q(bound)<0 for bound in bounds)
+    print('PASS: complete C1 side/top-pair hull reduction, five positive Bernstein coefficients and four printed cubic rows')
+
+
+def c1_three_top_no_side():
+    q=sp.Rational;s=q(93,1000);G=q(1457,250)
+    assert q(707,500)**2<2 and G==3+2*q(707,500)
+    assert 1-G*s/(1-s)<q(403,1000)
+    assert q(403,1000)*q(360,1000)*q(640,1000)<s
+    assert q(480,1000)**2*q(403,1000)<s
+    assert q(403,1000)-s/q(640,1000)<q(258,1000)
+    assert q(40,1000)*q(628,1000)+q(258,1000)*q(263,1000)==s-q(26,1000000)
+    assert G*s-q(628,1000)*q(644,1000)==q(137572,1000000)>0
+    d,x,y,u,v=sp.symbols('d x y u v')
+    zero(-2*area(sp.Matrix([1,d]),sp.Matrix([x,y]),sp.Matrix([u,v]))-(1-x)*(v-d)-(d-y)*(1-u))
+    print('PASS: complete C1 three-top/no-side exclusion and both strict endpoint-container gaps')
+
+
+def n6_two_lower_complete():
+    from pathlib import Path
+    import re
+    import n6_exterior_geometry as geometry
+    geometry.set_locations('IT');known=geometry.initial('central')
+    assert geometry.inside(known,'HCEF','R')
+    assert not geometry.inside(known,'ABCEFH','S')
+    assert geometry.get(known,'EFS')==-1 and geometry.get(known,'HES')==1 and geometry.get(known,'CFS')==-1
+    e,f,j,k=sp.symbols('e f j k')
+    cap=-2*area(sp.Matrix([1,e]),sp.Matrix([f,1]),sp.Matrix([j,k]))
+    zero(cap-(1-e)*(j-f)+(1-f)*(1-k))
+    zero(cap-(1-f)*(k-e)+(1-e)*(1-j))
+    note=Path(__file__).with_name('N6_TWO_LOWER_TOP.md').read_text()
+    rows=re.findall(r'^\| IT/[^ |]+ \| X\d{4} \| (\d+) \| (\d+) \| (\d+) \| (\d+) \| (\d+) \|$',note,re.M)
+    assert len(rows)==8 and [sum(int(row[i]) for row in rows) for i in range(5)]==[267,113,65,27514,821]
+    tables=Path(__file__).with_name('N6_TWO_LOWER_TOP_TABLES.md').read_text()
+    squares=re.findall(r'^```n6x-squares\n(.*?)^```$',tables,re.M|re.S)
+    assert sum(len(block.strip().splitlines()) for block in squares)==572
+    for block in squares:
+        for line in block.strip().splitlines():
+            values=line.split();assert values[0].startswith('SOS') and len(values)==16
+            assert all(re.fullmatch(r'-?\d+',value) for value in values[1:])
+    assert sp.Rational(-20132663439404959,174570000000000000)<0
+    print('PASS: complete N6 upper/top-cap identities, eight-root inventory, explicit squares and entire two-lower assembly')
+
+
+def adjacent_133_nontriangular_cell_i():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);K=q(933,125);J=q(4427,500)
+    b,a,k,c,d,r,j=sp.symbols('b a k c d r j')
+    pts={'B':sp.Matrix([b,0]),'H':sp.Matrix([a,k]),'F':sp.Matrix([c,d]),'C':sp.Matrix([1,1]),'R':sp.Matrix([r,j])}
+    D=lambda word:2*area(*(pts[ch] for ch in word))
+    zero((1-k)*D('CBR')+D('HCR')-D('BHC')*(1-j))
+    zero(-D('BFR')-d*(r-b)+(c-b)*j)
+    zero(D('BHR')-(a-b)*j+k*(r-b))
+    assert q(833,1000)**2<K*s and q(736,1000)**2<q(542,1000)
+    method=Path(__file__).with_name('TYPE_II_133_NONTRIANGULAR.md').read_text()
+    assert len(re.findall(r'^Box I{1,3}[0-3]:$',method,re.M))==10
+    text=Path(__file__).with_name('TYPE_II_133_CELL_I.md').read_text()
+    assert len(re.findall(r'^## Leaf I_E[123]H[0-3]F[0-3][mp]m$',text,re.M))==60
+    traces=re.findall(r'^### Sign trace\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(traces)==60 and sum(len(block.strip().splitlines()) for block in traces)==1899
+    sums=re.findall(r'^### Fixed polynomial\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==24 and sum(len(block.strip().splitlines()) for block in sums)==932
+    assert len(re.findall(r'^Exclusion:',text,re.M))==36
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==24 and max(bounds)==q(-318882482113,15625000000000)<0
+    print('PASS: Type-II133 nontriangular support identities and complete sixty-root cell-I inventory')
+
+
+def n6_side_pair_reduction():
+    q=sp.Rational;s=q(93,1000);K=q(149,20)
+    b,c,e,f,x,y=sp.symbols('b c e f x y')
+    v=(e*x-y)/(e-y)
+    zero(v-c-(e*(x-c)-(1-c)*y)/(e-y))
+    zero(1-v-e*(1-x)/(e-y))
+    zero((c-b)*(e*(x-c)-(1-c)*y)+(1-c)*(c-b)*y-e*(c-b)*(x-c))
+    zero(e*(1-b)+(1-e)*(1-f)-(1-b-(1-e)*(f-b)))
+    assert (K+4)*s-1==q(1297,20000)>0
+    print('PASS: N6 side-pair support identities and complete side-pair/top-pair exclusion')
+
+
+def one_lower_point():
+    q=sp.Rational;s=q(93,1000)
+    a,b,c,h,g,w=sp.symbols('a b c h g w')
+    G=sp.Matrix([g,h*(1-g/c-w)])
+    zero(2*area(sp.Matrix([0,h]),sp.Matrix([b,0]),G)-h*g*(c-b)/c+b*h*w)
+    zero(2*area(sp.Matrix([0,a]),sp.Matrix([b,0]),G)-b*(h-a)+(b*h-a*c)*g/c+b*h*w)
+    zero(s+b*s/c+(b*h-a*c)*s*(c+b)/(c*h*(c-b))-s*(c+b)*(h-a)/(h*(c-b)))
+    assert 12*s>1
+    z,M=sp.symbols('z M');gap=h*c-h*g-c*z-s
+    zero(c*(h*g+b*z-b*h-s)+b*gap-(h*(c-b)*g-s*(c+b)))
+    zero(h*(c*z+a*g-a*c-s)+a*gap-(c*(h-a)*z-s*(h+a)))
+    P=(h-a)*(c-b);W=3*h*c-a*c-b*h-a*b
+    zero((c+b)*(h-a)+(h+a)*(c-b)+P-W)
+    quartic=h*c*P-s*W
+    zero(c*P-s*W-quartic-c*(1-h)*P)
+    zero(h*P-s*W-quartic-h*(1-c)*P)
+    zero(M*P-s*W-quartic-(M-h*c)*P)
+    zero(h*c*(1-g-z)-(h*c-h*g-c*z)-h*(1-c)*g-c*(1-h)*z)
+    zero(sp.diff((c+b)/(c-b),c)+2*b/(c-b)**2)
+    zero(sp.diff((c+b)/(c-b),b)-2*c/(c-b)**2)
+    zero(sp.diff((h+a)/(h-a),h)+2*a/(h-a)**2)
+    zero(sp.diff((h+a)/(h-a),a)-2*h/(h-a)**2)
+    print('PASS: exhaustive one-lower catalogue, central strip, coordinate sum and monotone coordinate minima')
+
+
+def c1_side_pair_opposite_top():
+    q=sp.Rational;s=q(93,1000);rho=q(347,500)
+    c,d=sp.symbols('c d');poly=1000*d**3-1000*d*d-186*d+279
+    g=d*c*(1-c)-s*(1+2*c)
+    zero(g.subs(c,s/(d*(1-d)))+93*poly/(1000000*d*(1-d)**2))
+    assert sp.diff(poly,d,2).subs(d,rho)>0
+    assert poly.subs(d,q(71,100))==q(751,1000)>0 and sp.diff(poly,d).subs(d,q(71,100))<0
+    assert poly.subs(d,q(79,100))==q(999,1000)>0 and sp.diff(poly,d).subs(d,q(79,100))>0
+    assert g.subs({d:q(79,100),c:q(56,100)})<0
+    assert q(53,1000)*q(29,100)+q(624,1000)*q(124,1000)==q(92746,1000000)<s
+    assert q(57,1000)*q(55,100)+q(443,1000)*q(139,1000)==q(92927,1000000)<s
+    assert q(29,100)*q(876,1000)+q(55,100)*q(861,1000)-1+q(71,100)*q(45,100)==q(4709,100000)<s
+    print('PASS: C1 side-pair/opposite/top cubic box and complete two-row determinant exclusion')
+
+
+def adjacent_133_nontriangular_cell_iii():
+    from pathlib import Path
+    import re
+    q=sp.Rational
+    b,a,k,c,d,r,j=sp.symbols('b a k c d r j')
+    pts={'B':sp.Matrix([b,0]),'H':sp.Matrix([a,k]),'F':sp.Matrix([c,d]),'C':sp.Matrix([1,1]),'R':sp.Matrix([r,j])}
+    D=lambda word:2*area(*(pts[ch] for ch in word))
+    zero((1-k)*D('FCR')+(1-d)*D('CHR')-D('HFC')*(1-j))
+    zero((1-a)*(2-d-k)-2*D('HFC')-(1-a)*(d-k)-2*(1-c)*(1-k))
+    zero((c-b)*D('CBR')+(1-b)*D('BFR')-D('BFC')*(r-b))
+    text=Path(__file__).with_name('TYPE_II_133_CELL_III.md').read_text()
+    assert len(re.findall(r'^## Leaf III_',text,re.M))==65
+    prefix=text.split('## Leaf ',1)[0]
+    splits=re.search(r'```text\n(.*?)```',prefix,re.S)[1].strip().splitlines()
+    assert len(splits)==5
+    traces=re.findall(r'^### Sign trace\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(traces)==65 and sum(len(block.strip().splitlines()) for block in traces)==2012
+    sums=re.findall(r'^### Fixed polynomial\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==38 and sum(len(block.strip().splitlines()) for block in sums)==1117
+    assert len(re.findall(r'^Exclusion:',text,re.M))==27
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==38 and max(bounds)==q(-693228701,25000000000)<0
+    print('PASS: Type-II133 third-support-cell identities and complete sixty-five-leaf inventory')
+
+
+def c1_two_lower_both_sides():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);B=q(22,25);rho=q(347,500);b0=rho/B;a0=s/B
+    assert B*B*(1-B)<s and b0>q(1,2) and B-s/(1-b0)==q(11,25)
+    assert (b0-a0)*q(11,25)+(B-2*a0)*(1-b0)==q(427687,968000)<rho
+    assert (1-a0)*(B-a0)==q(2681309,3872000)<rho
+    assert B-2*a0-a0*a0==q(509143,774400)<rho
+    text=Path(__file__).with_name('C1_TWO_LOWER_BOTH_SIDES.md').read_text()
+    assert len(re.findall(r'^### Leaf ',text,re.M))==22
+    trace=re.findall(r'^```c1bs-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) for t in trace)==379
+    terms=re.findall(r'^```c1bs-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(terms)==20 and sum(len(re.split(r';\s*|\n',t.strip())) for t in terms)==5473
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==20 and max(bounds)==q(-337185459,22000000000)<0
+    print('PASS: complete C1 two-lower/both-side base caps, twenty fixed cubics and exhaustive leaf inventory')
+
+
+def n6_side_pair_opposite():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);alpha=q(1037,10000);K=q(149,20)
+    assert alpha*(1-alpha)<s
+    assert K*s/(1-alpha)==q(13857,17926) and 4*s/(1-alpha)==q(3720,8963)
+    b,c,e,f,h,u,v,j,k=sp.symbols('b c e f h u v j k')
+    zero(2*area(sp.Matrix([b,0]),sp.Matrix([u,v]),sp.Matrix([1,e]))-e*(u-b)+(1-b)*v)
+    zero(2*area(sp.Matrix([b,0]),sp.Matrix([u,v]),sp.Matrix([j,k]))-(u-b)*(k-v)-v*(u-j))
+    zero(2*area(sp.Matrix([u,v]),sp.Matrix([1,e]),sp.Matrix([j,k]))-(1-u)*(k-v)-(e-v)*(u-j))
+    text=Path(__file__).with_name('N6_SIDE_PAIR_OPPOSITE.md').read_text()
+    rows=re.search(r'```n6-pair-opposite-sum\n(.*?)```',text,re.S)[1].strip().splitlines()
+    assert len(rows)==71 and max(int(row.split()[0]) for row in rows)==660
+    assert q(-15204842926825328247858740588434993,5372569601199369131210000000000000)<0
+    print('PASS: nine-point N6 side-pair/opposite-cap box, pentagon identities and complete fixed-sum inventory')
+
+
+def quadrilateral_support():
+    q=sp.Rational
+    cx,cy,dx,dy=sp.symbols('cx cy dx dy')
+    A=sp.Matrix([0,0]);B=sp.Matrix([1,0]);C=sp.Matrix([cx,cy]);D=sp.Matrix([dx,dy])
+    X=2*area(A,B,C);Y=2*area(A,B,D);Z=2*area(A,C,D);delta=Y-Z
+    zero(delta-X+2*area(B,C,D))
+    for expr in A+X/delta*(D-A)-B-Y/delta*(C-B):zero(expr)
+    zero(2*area(A,B,A+X/delta*(D-A))-X*Y/delta)
+    assert q(69,40)**2<3 and q(299,31)>9
+    assert q(139,10)==7+4*q(69,40) and q(199,10)==13+4*q(69,40) and q(149,5)==16+8*q(69,40)
+    print('PASS: universal occupied-quadrilateral support rays, exact area quotient and all rational occupancy costs')
+
+
+def n7_bottom_span_cap():
+    q=sp.Rational;s=q(93,1000);T0=q(13857,20000)
+    T,Q,M,z=sp.symbols('T Q M z');D=T/(1-s);M0=s*D/(T-s)
+    F=T*(Q*(1+M)-1)*(1-Q*(D+M))-s*Q*M*(1-Q*M)
+    zero(sp.diff(F,M)-Q*((2*T-s)-Q*(T*(1+D)+2*(T-s)*M)))
+    A=T*T*(T+s*s)/((T-s)*(1-s)**2);B=T*(T*T+T-s)/((T-s)*(1-s))
+    zero(F.subs(M,M0)+A*Q*Q-B*Q+T)
+    N=-T**4+2*T**3+(4*s*s-2*s-1)*T*T+(2*s-4*s**3)*T-s*s
+    zero(4*A*T-B*B-T*T*N/((1-s)**2*(T-s)**2))
+    p=sp.Poly(N.subs(T,T0+z),z)
+    assert p.coeff_monomial(1)>0 and p.coeff_monomial(z*z)>0
+    assert p.coeff_monomial(z)+p.coeff_monomial(z**3)/16+p.coeff_monomial(z**4)/64==q(146610634607,2000000000000)>0
+    assert 0<1-s-T0<q(1,4)
+    print('PASS: uniform N7 bottom-span capacity-one contact triangle and exact positive quartic discriminant')
+
+
+def adjacent_complete():
+    from pathlib import Path
+    import re
+    q=sp.Rational
+    x,y,y0,t=sp.symbols('x y y0 t')
+    expansion=sp.Matrix([x,(y-y0)/(1-y0)])
+    shear=sp.Matrix([x-t*(1-y),y])
+    zero(expansion.jacobian([x,y]).det()-1/(1-y0))
+    zero(shear.jacobian([x,y]).det()-1)
+    text=Path(__file__).with_name('TYPE_II_133_CELL_II.md').read_text()
+    assert len(re.findall(r'^## Leaf II_',text,re.M))==133
+    prefix=text.split('## Leaf ',1)[0]
+    splits=re.search(r'```text\n(.*?)```',prefix,re.S)[1].strip().splitlines()
+    assert len(splits)==13
+    traces=re.findall(r'^### Sign trace\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(traces)==133 and sum(len(block.strip().splitlines()) for block in traces)==4185
+    sums=re.findall(r'^### Fixed polynomial\n\n```text\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==44 and sum(len(block.strip().splitlines()) for block in sums)==2219
+    assert len(re.findall(r'^Exclusion:',text,re.M))==89
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==44 and max(bounds)==q(-17114036920911,16937500000000000)<0
+    assert 24+60+120+60==264 and 28+0+13+5==46
+    assert 44+24+44+38==150 and 8+36+89+27==160
+    assert 2194+932+2219+1117==6462 and 264+46==150+160
+    print('PASS: complete Type-II cell-II inventory, count assembly and area-preserving normalization identities')
+
+
+def c1_side_pair_opposite_central():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000)
+    c,d,f,h,x,y=sp.symbols('c d f h x y')
+    P={'C':sp.Matrix([c,0]),'D':sp.Matrix([1,d]),'F':sp.Matrix([f,1]),'H':sp.Matrix([0,h]),'T':sp.Matrix([x,y])}
+    D=lambda w:2*area(*(P[ch] for ch in w))
+    zero((1-f)*D('CDT')+(1-c)*D('DFT')-D('CDF')*(1-x))
+    zero((1-d)*(-D('HFT'))+(1-h)*D('DFT')-D('HDF')*(1-y))
+    assert q(55,100)*q(624,1000)<4*s
+    assert q(79,100)-3*s/q(55,100)<q(283,1000)
+    assert q(56,100)-s/q(29,100)<q(24,100)
+    text=Path(__file__).with_name('C1_SIDE_PAIR_OPPOSITE_CENTRAL.md').read_text()
+    assert re.findall(r'^### Row (\w+)$',text,re.M)==['C0','C1m','C1p']
+    traces=re.findall(r'^```c1pc-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) for t in traces)==58
+    upper=re.search(r'^```c1pc-upper\n(.*?)^```$',text,re.M|re.S)[1]
+    assert len(upper.strip().splitlines())==27
+    sums=re.findall(r'^```c1pc-sum\n(.*?)^```$',text,re.M|re.S)
+    assert [len(re.split(r';\s*|\n',t.strip())) for t in sums]==[224,143,87]
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==3 and max(bounds)==q(-460361485207,5000000000000)<0
+    print('PASS: complete C1 side-pair/opposite-cap central counts, three-row inventory and exact contact identities')
+
+
+def n7_right_span_cap():
+    b,c,d,e,f,a=sp.symbols('b c d e f a')
+    X=d*(c-b);Y=(1-c)*(e-d);cp=1-d*(1-b)/e
+    zero(e*(c-b)-(1-b)*(e-d)-X+Y)
+    zero(cp-c-(Y-X)/e)
+    zero(d*(cp-b)-(1-cp)*(e-d))
+    zero(e*(cp-b)-(1-b)*(e-d))
+    zero((1-b)*(e-d)-(1-f)*(e-d)-(f-b)*(e-d))
+    zero(a*(cp-b)-a*(c-b)-a*(cp-c))
+    zero(d*(cp-b)-d*(c-b)-d*(cp-c))
+    print('PASS: N7 right-span capacity-one triangle and scalar balancing with exactly five preserved premises')
+
+
+def n6_one_lower_side_pair_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);K=q(149,20);alpha=q(1037,10000)
+    assert K*s-(1-3*s/(1-s))==q(8299,18140000)>0
+    assert alpha*(1-alpha)<s and q(707,500)**2<2
+    U=1-s/(1-alpha);E0=K*s/(1-alpha);C1=1-3*s/U
+    assert U==q(8033,8963) and E0==q(13857,17926) and C1==q(5532323,8033000)
+    text=Path(__file__).with_name('N6_ONE_LOWER_SIDE_PAIR_TOP.md').read_text()
+    trace=re.search(r'^```n6-lpt-geometry\n(.*?)^```$',text,re.M|re.S)[1]
+    assert len(trace.strip().splitlines())==38
+    assert re.findall(r'^### Row (\w+)$',text,re.M)==['AC','BH']
+    sums=re.findall(r'^```n6-lpt-sum\n(.*?)^```$',text,re.M|re.S)
+    assert [len(t.strip().splitlines()) for t in sums]==[109,75]
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==2 and all(bound<0 for bound in bounds)
+    print('PASS: complete N6 lower/side-pair/top count, exact ear gap and both fixed cubic inventories')
+
+
+def c1_two_top_both_sides():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000)
+    h,c,d,f,p,r,t,u,v,y=sp.symbols('h c d f p r t u v y')
+    pts={'D':sp.Matrix([1,d]),'F':sp.Matrix([f,1]),'P':sp.Matrix([p,y]),'T':sp.Matrix([u,v]),'R':sp.Matrix([r,t])}
+    D=lambda word:2*area(*(pts[ch] for ch in word))
+    zero(-D('DPT')-(1-p)*(v-d)-(d-y)*(1-u))
+    zero(-D('FTR')-(1-t)*(u-f)-(f-r)*(1-v))
+    zero(D('DTF')-(1-d)*u-(1-f)*v+1-d*f)
+    assert 1-4*s/(1-4*s)<q(408,1000)
+    assert q(408,1000)*q(65,100)*q(35,100)==q(9282,100000)<s
+    assert q(408,1000)*(q(954,2000))**2<s and s/q(65,100)>q(143,1000)
+    assert q(46,1000)*q(628,1000)+q(265,1000)*q(241,1000)==q(92753,1000000)<s
+    assert 2*q(628,1000)*q(759,1000)-1+q(372,1000)**2==q(91688,1000000)<s
+    assert 1-3*s/(1-4*s)<q(556,1000)
+    assert q(556,1000)*q(79,100)*q(21,100)<s and q(556,1000)*(q(817,2000))**2<s
+    assert q(372,1000)+3*s/q(628,1000)>q(816,1000)
+    text=Path(__file__).with_name('C1_TOP_PAIR_BOTH_SIDES.md').read_text()
+    terms=re.search(r'^```c1-top-pair-sum\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(terms)==158 and all(int(line.split()[0])>0 for line in terms)
+    assert q(-63250709,250000000)<0
+    print('PASS: complete C1 top-pair/both-side theorem, both hull boxes and 158-term inventory')
+
+
+def n6_two_top_both_sides():
+    a,b,c,e,f,h,p,q,r,t=sp.symbols('a b c e f h p q r t')
+    pts={'O':sp.Matrix([0,0]),'A':sp.Matrix([0,a]),'B':sp.Matrix([b,0]),'C':sp.Matrix([c,0]),'E':sp.Matrix([1,e]),'F':sp.Matrix([f,1]),'H':sp.Matrix([0,h]),'P':sp.Matrix([p,q]),'R':sp.Matrix([r,t])}
+    D=lambda word:2*area(*(pts[ch] for ch in word))
+    for lhs,rhs,gap in [('OCP','BCP',b*q),('ORH','ARH',a*r),('OCF','BCF',b),('OEH','AEH',a)]:zero(D(lhs)-D(rhs)-gap)
+    zero(c*(-D('CEP'))+(1-c)*D('OCP')-e*c*(p-c))
+    zero(h*(-D('FHR'))+(1-h)*D('ORH')-f*h*(t-h))
+    print('PASS: entire N6 two-top/both-side count by four actual-area transfer identities')
+
+
+def c1_two_lower_three_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);rho=q(347,500)
+    h,c,u,v,z,w=sp.symbols('h c u v z w')
+    zero(h*c*(1-u-v)-(h*c-h*u-c*v)-h*(1-c)*u-c*(1-h)*v)
+    assert q(707,500)**2<2 and q(1457,250)==3+2*q(707,500)
+    assert 1-3*s/(1-s)==q(628,907)<rho
+    text=Path(__file__).with_name('C1_TWO_LOWER_THREE_TOP.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==202 and len(re.findall(r'^### Leaf ',text,re.M))==203
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==3644
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==1636
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==183 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==45644
+    assert len(re.findall(r'^Exclusion:',text,re.M))==20
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==183 and max(bounds)==q(-6314102933,1000000000000)<0
+    print('PASS: complete C1 two-lower/three-top catalogue, exact coarse-box identities and 203-leaf inventory')
+
+
+def c1_two_lower_central_two_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational
+    text=Path(__file__).with_name('C1_TWO_LOWER_CENTRAL_TWO_TOP.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==372 and len(re.findall(r'^### Leaf ',text,re.M))==375
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==9416
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==2504
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==343 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==88384
+    assert len(re.findall(r'^Exclusion:',text,re.M))==32
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==343 and max(bounds)==q(-3941929,500000000)<0
+    print('PASS: complete C1 two-lower/central/two-top count, three exhaustive roots and 375-leaf inventory')
+
+
+def c1_one_lower_side_pair_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational
+    text=Path(__file__).with_name('C1_ONE_LOWER_SIDE_PAIR_TOP.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==34 and len(re.findall(r'^### Leaf ',text,re.M))==35
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==908
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==114
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==31 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==7430
+    assert len(re.findall(r'^Exclusion:',text,re.M))==4
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==31 and max(bounds)==q(-74919879,1000000000)<0
+    print('PASS: complete C1 one-lower/central/side-pair/top count and 35-leaf inventory')
+
+
+def c1_two_central_side_pair_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational
+    text=Path(__file__).with_name('C1_TWO_CENTRAL_SIDE_PAIR_TOP.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==76 and len(re.findall(r'^### Leaf ',text,re.M))==77
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==2528
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==274
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==61 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==9344
+    assert len(re.findall(r'^Exclusion:',text,re.M))==16
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==61 and max(bounds)==q(-11636437,1000000000)<0
+    print('PASS: complete C1 two-central/side-pair/top count and 77-leaf inventory')
+
+
+def side_cap_base_triangles():
+    from pathlib import Path
+    from runpy import run_path
+    c,y,z,h,d,f,x=sp.symbols('c y z h d f x')
+    q=sp.Rational;s=q(93,1000);a=1-s
+    zero((1-d)-(1-h+f*(h-d))-(1-f)*(h-d))
+    zero((1-c)*(d-y)-(d*(x-c)-(1-c)*y)-d*(1-x))
+    zero((1-c)*(1-c*y-a*(1-c))-s-c*((1-c)*(a-y)-s))
+    run_path(str(Path(__file__).with_name('check_side_cap_base_triangles.py')))
+
+
+def c1_two_lower_central_side_top():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000)
+    d,f,h=sp.symbols('d f h')
+    hdf=(1-h)-d*f+h*f
+    zero(f-d*f*f-s-f*(hdf-s)-(1-f)*(h*f-s))
+    assert q(299,31)*s==q(897,1000)
+    assert q(10,103)-q(897,1000)*q(10,103)**2-s==q(-46337,10609000)<0
+    text=Path(__file__).with_name('C1_TWO_LOWER_CENTRAL_SIDE_TOP.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==205 and len(re.findall(r'^### Leaf ',text,re.M))==211
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==5961
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==905
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==193 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==51388
+    assert len(re.findall(r'^Exclusion:',text,re.M))==18
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==193 and max(bounds)==q(-36973318349,18200000000000)<0
+    print('PASS: complete C1 two-lower/central/side/top count, six roots and shared-central endpoint terminal')
+
+
+def c1_one_lower_three_caps():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);d0=4*s;a=q(213,250);b=q(219,250)
+    assert s-(1-a)*(1-d0)==q(7,125000)>0
+    assert s-a*b*(1-b)==q(1767,3906250)>0
+    assert 3*s-q(66,125)**2==q(27,125000)>0
+    assert a*d0*d0-s==q(48639,1953125)>0
+    assert d0+s/(a*d0)-q(133,200)==q(91,213000)>0
+    text=Path(__file__).with_name('C1_ONE_LOWER_THREE_CAPS.md').read_text()
+    splits=re.search(r'^```c1top-tree\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    assert len(splits)==37 and len(re.findall(r'^### Leaf ',text,re.M))==38
+    traces=re.findall(r'^```c1top-geometry\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in traces)==1053
+    steps=re.findall(r'^```c1top-bounds\n(.*?)^```$',text,re.M|re.S)
+    assert sum(len(t.strip().splitlines()) if t.strip() else 0 for t in steps)==250
+    sums=re.findall(r'^```c1top-sum\n(.*?)^```$',text,re.M|re.S)
+    assert len(sums)==37 and sum(len(re.split(r';\s*|\n',t.strip())) for t in sums)==7280
+    assert len(re.findall(r'^Exclusion:',text,re.M))==1
+    bounds=list(map(q,re.findall(r'^Upper bound: `([^`]+)`\.$',text,re.M)))
+    assert len(bounds)==37 and max(bounds)==q(-385707,20000000)<0
+    print('PASS: complete C1 one-lower/central/all-three-caps count, rational contact box and 38-leaf inventory')
+
+
+def n6_corner_containers():
+    q=sp.Rational;s=q(93,1000);J=q(4427,500)
+    a,b,c,e,f,h,x,y=sp.symbols('a b c e f h x y')
+    pts={'A':sp.Matrix([0,a]),'B':sp.Matrix([b,0]),'C':sp.Matrix([c,0]),
+         'E':sp.Matrix([1,e]),'F':sp.Matrix([f,1]),'H':sp.Matrix([0,h]),'T':sp.Matrix([x,y])}
+    D=lambda word:2*area(*(pts[ch] for ch in word))
+    zero(D('BET')-(1-b)*y+e*(x-b))
+    zero(D('AFT')-f*(y-a)+(1-a)*x)
+    zero(1-f-D('CEF')-(1-e)*(c-f))
+    zero(1-e-D('EFH')-(1-f)*(h-e))
+    assert J*s-(1-s)**2==q(773,1000000)>0
+    rx,ry,tx,ty,lx,ly=sp.symbols('rx ry tx ty lx ly')
+    pts.update(X=sp.Matrix([rx,ry]),Y=sp.Matrix([tx,ty]),Z=sp.Matrix([lx,ly]))
+    for word,expression in {
+        'EXY':-(1-rx)*(ty-e)-(e-ry)*(1-tx),
+        'FYZ':-(tx-f)*(1-ly)-(1-ty)*(f-lx),
+        'EXZ':-(1-rx)*(ly-e)-(e-ry)*(1-lx),
+        'FXZ':-(rx-f)*(1-ly)-(1-ry)*(f-lx),
+        'CXZ':(rx-c)*ly+ry*(c-lx),
+        'HXZ':rx*(ly-h)+(h-ry)*lx}.items():zero(D(word)-expression)
+    print('PASS: N6 endpoint-container capacities, six-point gap, top-pair hull and six cross-cap signs')
+
+
+def n6_projected_count_terminals():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_n6_projected_count_terminals.py')))
+
+
+def multiaffine_box_bounds():
+    from fractions import Fraction as F
+    from multiaffine_box import refine_box,replay_trace
+    x,y,z=sp.symbols('x y z')
+    coefficients=sp.symbols('c0:8')
+    poly=sum(co*x**i*y**j*z**k for co,(i,j,k) in zip(coefficients,
+             [(i,j,k) for i in (0,1) for j in (0,1) for k in (0,1)]))
+    interpolated=sum((y if j else 1-y)*(z if k else 1-z)*poly.subs({y:j,z:k})
+                     for j in (0,1) for k in (0,1))
+    zero(poly-interpolated)
+    example=x*y+x/10-2*y/5-sp.Rational(1,5)
+    factors={'F':{ex:F(int(co.p),int(co.q)) for ex,co in sp.Poly(example,x,y).terms()}}
+    for scale in (None,1000):
+        result=refine_box(factors,[F(0),F(0)],[F(1),F(1)],scale=scale)
+        assert replay_trace(factors,[F(0),F(0)],[F(1),F(1)],result['trace'])==(result['low'],result['high'])
+        expected=[F(6,11),F(1,6)] if scale is None else [F(109,200),F(83,500)]
+        assert result['low']==expected and result['high']==[F(1),F(1)]
+    print('PASS: multiaffine interpolation identity, exact endpoint-line hulls and outward rational replay')
+
+
+def side_pair_top_bounds():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_c1_side_pair_top_bounds.py')))
+
+
+def n7_one_lower_setup():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_n7_one_lower_setup.py')))
+
+
+def n7_one_lower_abh():
+    from pathlib import Path
+    import re
+    text=Path(__file__).with_name('N7_ONE_LOWER_ABH.md').read_text()
+    def block(name):
+        return re.search(r'^```'+re.escape(name)+r'\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    rows=[line.split() for line in block('n7-l2u-rows')]
+    assert len(rows)==59 and sum(row[1]=='P' for row in rows)==55
+    tree={}
+    for row in rows:
+        node=tree
+        for token in row[4].split(','):
+            assert 'leaf' not in node
+            node=node.setdefault(token,{})
+        assert not node;node['leaf']=True
+    splits=0
+    def walk(node):
+        nonlocal splits
+        if 'leaf' in node:
+            assert len(node)==1;return
+        assert len(node)==2
+        left,right=sorted(node)
+        assert left[:3]==right[:3] and {left[3:],right[3:]}=={'+','-'}
+        splits+=1
+        for child in node.values():walk(child)
+    walk(tree);assert splits==58
+    sums=[block('n7-l2u-'+row[0]+'-sum') for row in rows if row[1]=='P']
+    assert sum(map(len,sums))==21373
+    traces=[block('n7-l2u-'+row[0]+'-trace') for row in rows]
+    assert sum(len(t) if t!=['none'] else 0 for t in traces)==1993
+    assert len(block('n7-l2u-squares'))==41
+    bounds=[sp.Rational(block('n7-l2u-'+row[0]+'-bound')[0]) for row in rows if row[1]=='P']
+    assert max(bounds)==sp.Rational(-95283035268326478889140529,57385526293000000000000000)<0
+    print('PASS: complete N7 ABH lower-ear child, exhaustive59-leaf trie, all printed sums and41 squares')
+
+
+def n7_one_lower_abc():
+    from pathlib import Path
+    import re
+    text=Path(__file__).with_name('N7_ONE_LOWER_ABC.md').read_text()
+    def block(name):
+        return re.search(r'^```'+re.escape(name)+r'\n(.*?)^```$',text,re.M|re.S)[1].strip().splitlines()
+    rows=[line.split() for line in block('n7-l2u-rows')]
+    assert len(rows)==94 and sum(row[1]=='P' for row in rows)==84
+    tree={}
+    for row in rows:
+        node=tree
+        for token in row[4].split(','):
+            assert 'leaf' not in node
+            node=node.setdefault(token,{})
+        assert not node;node['leaf']=True
+    splits=0
+    def walk(node):
+        nonlocal splits
+        if 'leaf' in node:
+            assert len(node)==1;return
+        assert len(node)==2
+        left,right=sorted(node)
+        assert left[:3]==right[:3] and {left[3:],right[3:]}=={'+','-'}
+        splits+=1
+        for child in node.values():walk(child)
+    walk(tree);assert splits==93
+    sums=[block('n7-l2u-'+row[0]+'-sum') for row in rows if row[1]=='P']
+    assert sum(map(len,sums))==37612
+    traces=[block('n7-l2u-'+row[0]+'-trace') for row in rows]
+    assert sum(len(t) if t!=['none'] else 0 for t in traces)==3411
+    assert len(block('n7-l2u-squares'))==41
+    bounds=[sp.Rational(block('n7-l2u-'+row[0]+'-bound')[0]) for row in rows if row[1]=='P']
+    assert max(bounds)==sp.Rational(-994624990470585513980867681904031135317,9791312602874290448399495750000000000000)<0
+    print('PASS: complete N7 ABC lower-ear child, exhaustive94-leaf trie, all printed sums and41 squares')
+
+
+def n6_top_affine_caps():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_n6_top_affine_caps.py')))
+
+def n6_top_pair_barycentric_bounds():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_n6_top_pair_barycentric_bounds.py')))
+
+def six_point_endpoint_refined():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_six_point_endpoint_refined.py')))
+
+def n6_bttt_top_ears():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000)
+    assert q(149,20)*s-(1-q(21,125))**2==q(313,500000)>0
+    assert q(1457,250)*s-(1-q(33,125))**2==q(77,250000)>0
+    text=Path(__file__).with_name('N6_BTTT_TOP_EARS.md').read_text()
+    def block(tag):
+        found=re.findall(r'^```n6-top-'+re.escape(tag)+r'\n(.*?)^```$',text,re.M|re.S)
+        assert len(found)==1
+        rows=found[0].strip().splitlines()
+        return [] if rows==['none'] else rows
+    roots=[tuple(row.split()) for row in block('roots')]
+    assert set(roots)=={('BTTT','-++-'),('BTTT','++-+')}
+    leaves=[row.split() for row in block('leaves')]
+    assert len(leaves)==22 and all(row[3]=='P' for row in leaves)
+    trees={root:{} for root in roots}
+    for name,loc,word,kind,path in leaves:
+        node=trees[(loc,word)]
+        for token in path.split(','):node=node.setdefault(token,{})
+        assert not node;node['leaf']=True
+    splits=0
+    def walk(node):
+        nonlocal splits
+        if 'leaf' in node:assert len(node)==1;return
+        assert len(node)==2
+        left,right=sorted(node)
+        assert left[:-1]==right[:-1] and {left[-1],right[-1]}=={'+','-'}
+        splits+=1
+        for child in node.values():walk(child)
+    for tree in trees.values():walk(tree)
+    assert splits==20
+    assert sum(len(block(row[0]+'-sum')) for row in leaves)==9860
+    assert sum(len(block(row[0]+'-trace')) for row in leaves)==923
+    assert sum(len(block(row[0]+'-squares')) for row in leaves)==549
+    assert all(not block(row[0]+'-intervals') for row in leaves)
+    bounds=[q(block(row[0]+'-bound')[0]) for row in leaves]
+    assert max(bounds)==q(-616458368142560988211155430921350313,1661222737115243959638000000000000000)<0
+    print('PASS: complete N6 BTTT single-ear top words, both exhaustive trees and exact transposition ceilings')
+
+
+def n6_top_transpose():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_n6_top_triple_transpose.py')))
+
+
+def n6_one_lower_three_caps():
+    from pathlib import Path
+    import re
+    q=sp.Rational;s=q(93,1000);alpha=q(1037,10000)
+    assert alpha*(1-alpha)==q(9294631,100000000)<s
+    U=1-s/(1-alpha);V=1-s/U;L=4*s/(1-alpha)
+    assert (U,V,L)==(q(8033,8963),q(7199441,8033000),q(3720,8963))
+    text=Path(__file__).with_name('N6_ONE_LOWER_THREE_CAPS.md').read_text()
+    def block(name):
+        matches=re.findall(r'^```n6-three-caps-'+re.escape(name)+r'\n(.*?)^```$',text,re.M|re.S)
+        assert len(matches)==1
+        rows=matches[0].strip().splitlines()
+        return [] if rows==['none'] else rows
+    assert [len(block(case+'-geometry')) for case in ('ear','central')]==[47,42]
+    assert [len(block(case+'-intervals')) for case in ('ear','central')]==[0,158]
+    assert [len(block(case+'-sum')) for case in ('ear','central')]==[324,418]
+    assert [len(block(case+'-caps')) for case in ('ear','central')]==[0,40]
+    bounds=[q(block(case+'-bound')[0]) for case in ('ear','central')]
+    assert max(bounds)==q(-22627498297744780901726036135497732552483099,13792133092661446489657248328000000000000000)<0
+    print('PASS: complete N6 one-lower/all-three-caps count, both reflected rows and742 printed terms')
+
+
+def quadrilateral_area_support():
+    from pathlib import Path
+    from runpy import run_path
+    run_path(str(Path(__file__).with_name('check_quadrilateral_area_support.py')))
+
+
+if __name__ == "__main__":
+    triangle_occupancy()
+    endpoint_cells()
+    seven_point_endpoint()
+    clustered_triangle()
+    opposite_corners()
+    noncentral_corners()
+    mixed_corners()
+    mixed_cross_corners()
+    universal_mixed_corner()
+    mixed_central_placement()
+    opposite_mixed_complete()
+    symmetric_opposite_orientation()
+    asymmetric_sign_chamber()
+    six_point_endpoint()
+    adjacent_corners()
+    n8_line_caps()
+    n8_triangle_caps()
+    adjacent_four_right()
+    n8_ranges_and_quad_spread()
+    adjacent_triangular_right()
+    adjacent_upper_pair()
+    lower_contact_projection_and_caps()
+    adjacent_upper_p_and_two_upper()
+    adjacent_one_upper()
+    adjacent_lower_p()
+    adjacent_nontriangular_right()
+    exterior_count_budgets()
+    central_support_pair()
+    n7_same_upper_cap()
+    adjacent_mixed_i()
+    n7_small_arcs()
+    adjacent_mixed_iii()
+    n6_exact_hull_reduction()
+    n7_top_three_five()
+    c1_exact_pentagon()
+    n7_height_three_five()
+    adjacent_223_core()
+    c1_exterior_reduction()
+    n7_long_triangle_caps()
+    n7_corner_line()
+    adjacent_223_complete()
+    n6_exact_hull_complete()
+    n7_all_three_five()
+    c1_convex_top_pair()
+    c1_three_lower_exteriors()
+    n7_cdgh_complete()
+    adjacent_232_complete()
+    n6_two_lower_two_exterior()
+    c1_two_lower_three_caps()
+    n6_two_lower_upper_side()
+    n7_bc_fg_complete()
+    n7_heptagon_occupied_ear()
+    n7_ah_de_and_single_exterior()
+    adjacent_133_triangular_right()
+    n7_heptagon_two_upper_ear()
+    c1_side_top_pair_complete()
+    c1_three_top_no_side()
+    n6_two_lower_complete()
+    adjacent_133_nontriangular_cell_i()
+    n6_side_pair_reduction()
+    one_lower_point()
+    c1_side_pair_opposite_top()
+    adjacent_133_nontriangular_cell_iii()
+    c1_two_lower_both_sides()
+    n6_side_pair_opposite()
+    quadrilateral_support()
+    n7_bottom_span_cap()
+    adjacent_complete()
+    c1_side_pair_opposite_central()
+    n7_right_span_cap()
+    n6_one_lower_side_pair_top()
+    c1_two_top_both_sides()
+    n6_two_top_both_sides()
+    c1_two_lower_three_top()
+    c1_two_lower_central_two_top()
+    n6_corner_containers()
+    n6_projected_count_terminals()
+    multiaffine_box_bounds()
+    side_pair_top_bounds()
+    n7_one_lower_setup()
+    n7_one_lower_abh()
+    c1_one_lower_side_pair_top()
+    c1_two_lower_central_side_top()
+    c1_one_lower_three_caps()
+    n6_bttt_top_ears()
+    n6_top_transpose()
+
+    n7_one_lower_abc()
+    n6_top_affine_caps()
+    n6_top_pair_barycentric_bounds()
+    six_point_endpoint_refined()
+
+    c1_two_central_side_pair_top()
+    side_cap_base_triangles()
+
+    n6_one_lower_three_caps()
+    quadrilateral_area_support()
