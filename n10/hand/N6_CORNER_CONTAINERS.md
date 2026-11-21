@@ -115,3 +115,34 @@ three points are actual and have positive unsigned minimum area.
 This also covers permitted outer square faces. The signs may be
 used as initial facts in a finite placement table; they require no
 additional sign split or coordinate subdivision.
+
+## 6. A three-point cut through the contact hexagon
+
+Suppose three free points lie inside \(ABCEFH\), as in BIIT or BIIR.
+At least one has \([BET]<0\) or \([AFT]>0\).
+
+Indeed the actual convex quadrilateral \(ABEF\) has doubled area
+\[
+ \det(E-A,F-B)=1-(e-a)(f-b)\le1.
+\]
+For a point strictly inside the contact hexagon, membership in
+\(ABEF\) is equivalent to \([BET]>0\) and \([AFT]<0\).
+The other two edge tests, at \(AB\) and \(EF\), hold throughout the
+hexagon. None of these actual edge tests vanishes. If all three
+free points satisfied both tests, the quadrilateral would have
+three interior points at doubled minimum \(s\), contrary to the
+[quadrilateral capacity theorem](QUADRILATERAL_THREE.md).
+
+The two exterior tests are disjoint in the square. The first
+requires \(x>b\) and \(y<e(x-b)/(1-b)\). The second requires
+\(y>a+(1-a)x/f\). At \(x=b\) the second line is above the first,
+and at \(x=1\) its height is at least \(1>e\). Their affine
+difference is positive on \([b,1]\).
+
+Inside the hexagon, the two resulting side regions are exactly
+the triangles \(BCE\) and \(AFH\), respectively. In BIIR the
+right-cap point itself already occupies a right container slot,
+so only one of the three free points inside the hexagon can
+occupy \(BCE\). In BIIT the top-cap point belongs to neither
+side container: its ordinate is greater than \(e\) and its
+abscissa is greater than \(f\).

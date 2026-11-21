@@ -60,6 +60,18 @@ def gp(word):
 
 
 class Geometry:
+    labels = LABELS
+    key = staticmethod(key)
+    sign = staticmethod(sign)
+    put = staticmethod(put)
+    inside = staticmethod(inside)
+    convex = staticmethod(convex)
+    determinant = staticmethod(determinant)
+    canonical = staticmethod(canonical)
+
+    def extra_sign_rule(self, known, row):
+        return False
+
     def __init__(self, metadata):
         self.meta = metadata
         assert metadata['labels'] == LABELS and metadata['vars'] == VARIABLES
@@ -145,22 +157,22 @@ class Geometry:
             assert len(witness) == 2 and self.side_bases[witness[1]] == triangle
             return F('21/50')
         assert witness[0] == 'box'
-        return corners(scale(determinant(triangle), orientation), self.box, witness)
+        return corners(scale(self.determinant(triangle), orientation), self.box, witness)
 
     def quad_cap(self, known, hull, witness):
-        assert convex(known, hull)
+        assert self.convex(known, hull)
         if witness[0] == 'container_quad':
             assert witness[1] in self.quad_containers and set(hull) <= set(witness[1])
             return F(1)
         assert witness[0] == 'quad_box'
-        return corners(add(determinant(hull[:3]), determinant(hull[0]+hull[2:])), self.box, witness)
+        return corners(add(self.determinant(hull[:3]), self.determinant(hull[0]+hull[2:])), self.box, witness)
 
     def mesh_signs(self, known, word, orientation):
         assert len(word) == len(set(word)) == 6
         a, b, c, y, z, x = word
-        assert all(inside(known, a+b+c, p) for p in (x, y, z))
-        assert inside(known, a+b+y, z) and inside(known, a+c+y, x)
-        assert orientation == -sign(known, a+b+c)
+        assert all(self.inside(known, a+b+c, p) for p in (x, y, z))
+        assert self.inside(known, a+b+y, z) and self.inside(known, a+c+y, x)
+        assert orientation == -self.sign(known, a+b+c)
         mapping = dict(zip('OHCYZX', word))
         tokens = '-OHC -OHY -OHZ -OHX +OCY +OCZ +OCX +OYZ -OYX -OZX -HCY -HCZ -HCX -HYZ -HYX +HZX +CYZ +CYX +CZX +YZX'.split()
         return [(''.join(mapping[p] for p in t[1:]), orientation*(1 if t[0] == '+' else -1)) for t in tokens]
@@ -172,17 +184,17 @@ class Geometry:
         assert len(base) == len(set(base)) == 2 and self.has_container(point, container)
         vertices = [v for v in container if v not in base]
         if vertex is None:
-            sg = sign(known, base+vertices[0])
-            assert sg and all(sign(known, base+v) == sg for v in vertices)
-            assert point in base or sign(known, base+point) == -sg
+            sg = self.sign(known, base+vertices[0])
+            assert sg and all(self.sign(known, base+v) == sg for v in vertices)
+            assert point in base or self.sign(known, base+point) == -sg
         elif vertex == point:
-            assert point not in base and all(sign(known, base+v) == orientation for v in vertices)
-            put(known, base+point, orientation)
+            assert point not in base and all(self.sign(known, base+v) == orientation for v in vertices)
+            self.put(known, base+point, orientation)
         else:
             assert vertex in vertices and len(vertices) > 1
-            assert all(sign(known, base+v) == -orientation for v in vertices if v != vertex)
-            assert point in base or sign(known, base+point) == orientation
-            put(known, base+vertex, orientation)
+            assert all(self.sign(known, base+v) == -orientation for v in vertices if v != vertex)
+            assert point in base or self.sign(known, base+point) == orientation
+            self.put(known, base+vertex, orientation)
 
     def geometry(self, steps, final):
         known = self.derive_signs(steps)
@@ -192,37 +204,39 @@ class Geometry:
     def derive_signs(self, steps):
         known = self.base()
         for t, sg in self.meta['assign'].items():
-            put(known, t, sg)
+            self.put(known, t, sg)
         meshes = []
         for row in steps:
             kind, *r = row
             if kind in ('box_sign', 'clearance_sign'):
                 t, sg, value, witness = r
-                assert not sign(known, t) and self.cap_value(t, -sg, witness) == F(value) < S
-                put(known, t, sg)
+                assert not self.sign(known, t) and self.cap_value(t, -sg, witness) == F(value) < S
+                self.put(known, t, sg)
+            elif self.extra_sign_rule(known, row):
+                continue
             elif kind in ('capacity', 'quad_capacity'):
                 hull, pts, p, target, sg, value, witness = r
-                assert len(pts) == len(set(pts)) and all(inside(known, hull, x) for x in pts)
-                assert p not in hull and p not in pts and not sign(known, target)
+                assert len(pts) == len(set(pts)) and all(self.inside(known, hull, x) for x in pts)
+                assert p not in hull and p not in pts and not self.sign(known, target)
                 if kind == 'capacity':
-                    hsg = sign(known, hull)
+                    hsg = self.sign(known, hull)
                     assert hsg and self.cap_value(hull, hsg, witness) == F(value)
                     assert len(pts) == 3 or F(value) < triangle_cost(len(pts)+1)
                 else:
                     hsg = 1
                     assert self.quad_cap(known, hull, witness) == F(value) < quad_cost(len(pts)+1)
                 tests = [a+hull[(i+1) % len(hull)]+p for i, a in enumerate(hull)]
-                assert target in tests and all(sign(known, t) == hsg for t in tests if t != target)
+                assert target in tests and all(self.sign(known, t) == hsg for t in tests if t != target)
                 assert sg == -hsg
-                put(known, target, sg)
+                self.put(known, target, sg)
             elif kind == 'extreme':
                 hull, p, target, sg = r
-                assert p in self.outer and p not in hull and sign(known, hull)
+                assert p in self.outer and p not in hull and self.sign(known, hull)
                 tests = [a+hull[(i+1) % 3]+p for i, a in enumerate(hull)]
-                assert target in tests and not sign(known, target)
-                assert all(sign(known, t) == sign(known, hull) for t in tests if t != target)
-                assert sg == -sign(known, hull)
-                put(known, target, sg)
+                assert target in tests and not self.sign(known, target)
+                assert all(self.sign(known, t) == self.sign(known, hull) for t in tests if t != target)
+                assert sg == -self.sign(known, hull)
+                self.put(known, target, sg)
             elif kind in ('interior_line', 'central_line'):
                 if kind == 'interior_line':
                     base, p, container, vertex, sg = r
@@ -233,21 +247,21 @@ class Geometry:
             elif kind == 'plu':
                 word, target, sg = r
                 terms = gp(word)
-                values = [c*sign(known, a)*sign(known, b) for a, b, c in terms]
+                values = [c*self.sign(known, a)*self.sign(known, b) for a, b, c in terms]
                 assert values.count(0) == 1 and len(set(v for v in values if v)) == 1
                 a, b, c = terms[values.index(0)]
-                assert not sign(known, target)
-                if key(a) == key(target):
-                    expected = -next(v for v in values if v)*c*sign(known, b)*canonical(a)[1]*canonical(target)[1]
+                assert not self.sign(known, target)
+                if self.key(a) == self.key(target):
+                    expected = -next(v for v in values if v)*c*self.sign(known, b)*self.canonical(a)[1]*self.canonical(target)[1]
                 else:
-                    assert key(b) == key(target)
-                    expected = -next(v for v in values if v)*c*sign(known, a)*canonical(b)[1]*canonical(target)[1]
+                    assert self.key(b) == self.key(target)
+                    expected = -next(v for v in values if v)*c*self.sign(known, a)*self.canonical(b)[1]*self.canonical(target)[1]
                 assert sg == expected
-                put(known, target, sg)
+                self.put(known, target, sg)
             elif kind == 'mesh':
                 word, orientation = r
                 for t, sg in self.mesh_signs(known, word, orientation):
-                    put(known, t, sg)
+                    self.put(known, t, sg)
                 meshes.append([word, orientation])
             else:
                 raise AssertionError(kind)
@@ -261,117 +275,118 @@ class Geometry:
             assert self.cap_value(t, 1, wa) == F(a) < S and self.cap_value(t, -1, wb) == F(b) < S
         elif kind == 'four':
             t, pts = r
-            assert len(pts) == len(set(pts)) == 4 and all(inside(known, t, p) for p in pts)
+            assert len(pts) == len(set(pts)) == 4 and all(self.inside(known, t, p) for p in pts)
         elif kind == 'area_cap':
             t, pts, value, witness = r
-            assert len(pts) == len(set(pts)) and all(inside(known, t, p) for p in pts)
-            assert self.cap_value(t, sign(known, t), witness) == F(value) < triangle_cost(len(pts))
+            assert len(pts) == len(set(pts)) and all(self.inside(known, t, p) for p in pts)
+            assert self.cap_value(t, self.sign(known, t), witness) == F(value) < triangle_cost(len(pts))
         elif kind == 'quad_area_cap':
             hull, pts, value, witness = r
-            assert pts and len(pts) == len(set(pts)) and all(inside(known, hull, p) for p in pts)
+            assert pts and len(pts) == len(set(pts)) and all(self.inside(known, hull, p) for p in pts)
             assert self.quad_cap(known, hull, witness) == F(value) < quad_cost(len(pts))
         elif kind == 'extreme':
             t, p = r
-            assert p in self.outer and inside(known, t, p)
+            assert p in self.outer and self.inside(known, t, p)
         elif kind in ('interior_line', 'central_line'):
             base, p = r[:2]
             container = r[2] if kind == 'interior_line' else self.containers[p]
             self.line_rule(known, base, p, container)
         elif kind == 'gp':
-            values = [c*sign(known, a)*sign(known, b) for a, b, c in gp(r[0])]
+            values = [c*self.sign(known, a)*self.sign(known, b) for a, b, c in gp(r[0])]
             assert all(values) and len(set(values)) == 1
         elif kind == 'mesh':
             word, orientation, target, sg = r
-            assert sign(known, target) == -sg
-            assert any(key(t) == key(target) and v*canonical(t)[1] == sg*canonical(target)[1]
+            assert self.sign(known, target) == -sg
+            assert any(self.key(t) == self.key(target) and v*self.canonical(t)[1] == sg*self.canonical(target)[1]
                        for t, v in self.mesh_signs(known, word, orientation))
         elif kind == 'cluster':
             t, pivot, fan, others = r
-            assert inside(known, t, pivot) and len(others) == len(set(others)) == 2
+            assert self.inside(known, t, pivot) and len(others) == len(set(others)) == 2
             assert pivot in fan and set(fan)-{pivot} <= set(t)
-            assert all(inside(known, t, p) and inside(known, fan, p) for p in others)
+            assert all(self.inside(known, t, p) and self.inside(known, fan, p) for p in others)
         else:
             raise AssertionError(kind)
 
     def initial_value(self, known, triangle, side, witness, ancestor):
-        assert side in ('lo', 'hi') and sign(known, triangle)
+        assert side in ('lo', 'hi') and self.sign(known, triangle)
         if witness[0] in ('ancestor_area', 'earlier_area'):
             return ancestor(triangle, side, witness)
         if side == 'hi':
-            return self.cap_value(triangle, sign(known, triangle), witness)
+            return self.cap_value(triangle, self.sign(known, triangle), witness)
         if witness[0] == 'cost':
             pts = witness[1]
-            assert len(pts) == len(set(pts)) and all(inside(known, triangle, p) for p in pts)
+            assert len(pts) == len(set(pts)) and all(self.inside(known, triangle, p) for p in pts)
             return triangle_cost(len(pts))
         assert witness[0] in ('box_lower', 'box_min')
-        return -corners(scale(determinant(triangle), -sign(known, triangle)), self.box, witness)
+        return -corners(scale(self.determinant(triangle), -self.sign(known, triangle)), self.box, witness)
 
     def relation(self, known, relation, witness):
         kind, *r = relation
         tag, *w = witness
         if kind == 'fan':
             outer, *fans = r
-            assert tag == 'fan' and w[0] == outer and inside(known, outer, w[1])
-            assert fans == sorted(key(a+outer[(i+1) % 3]+w[1]) for i, a in enumerate(outer))
+            assert tag == 'fan' and w[0] == outer and self.inside(known, outer, w[1])
+            assert fans == sorted(self.key(a+outer[(i+1) % 3]+w[1]) for i, a in enumerate(outer))
         elif kind == 'plu':
             assert tag == 'plu'
-            terms = gp(w[0]); values = [c*sign(known, a)*sign(known, b) for a, b, c in terms]
+            terms = gp(w[0]); values = [c*self.sign(known, a)*self.sign(known, b) for a, b, c in terms]
             assert all(values) and len(set(values)) == 2
             odd = next(i for i, v in enumerate(values) if values.count(v) == 1)
-            lhs = sorted(key(t) for t in terms[odd][:2])
-            rhs = sorted(sorted(key(t) for t in term[:2]) for i, term in enumerate(terms) if i != odd)
+            lhs = sorted(self.key(t) for t in terms[odd][:2])
+            rhs = sorted(sorted(self.key(t) for t in term[:2]) for i, term in enumerate(terms) if i != odd)
             assert r == lhs+sum(rhs, [])
         elif kind == 'balance':
             assert tag == 'six' and len(w[0]) == len(set(w[0])) == 6
             i, j, a, b, c, p = w[0]
             terms = [(a+b+c, i+j+p, 1), (p+b+c, i+j+a, -1), (a+p+c, i+j+b, -1), (a+b+p, i+j+c, -1)]
-            expected = [[co*sign(known, x)*sign(known, y), key(x), key(y)] for x, y, co in terms]
+            expected = [[co*self.sign(known, x)*self.sign(known, y), self.key(x), self.key(y)] for x, y, co in terms]
             assert all(t[0] for t in expected) and r == [expected]
-            assert not add(*(scale(multiply(determinant(x), determinant(y)), co) for x, y, co in terms))
+            assert not add(*(scale(multiply(self.determinant(x), self.determinant(y)), co) for x, y, co in terms))
         elif kind == 'quad':
             a, b, cost = r
             assert tag == 'quad'
             hull, pts = w
-            assert convex(known, hull) and pts and len(pts) == len(set(pts))
-            assert all(inside(known, hull, p) for p in pts) and F(cost) == quad_cost(len(pts))
+            assert self.convex(known, hull) and pts and len(pts) == len(set(pts))
+            assert all(self.inside(known, hull, p) for p in pts) and F(cost) == quad_cost(len(pts))
             x, y, z, v = hull
-            assert [a, b] in [sorted(map(key, pair)) for pair in [(x+y+z, x+z+v), (x+y+v, y+z+v)]]
+            assert [a, b] in [sorted(map(self.key, pair)) for pair in [(x+y+z, x+z+v), (x+y+v, y+z+v)]]
         elif kind == 'support':
             if tag == 'support_quad':
                 hull, pts, rate = w
                 assert len(pts) == len(set(pts)) and 1 <= len(pts) <= 2
-                assert all(inside(known, hull, p) for p in pts)
+                assert all(self.inside(known, hull, p) for p in pts)
                 a, b, c, d = hull
-                counts = tuple(sorted(sum(inside(known, tri, p) for p in pts) for tri in (a+c+d, b+c+d)))
+                counts = tuple(sorted(sum(self.inside(known, tri, p) for p in pts) for tri in (a+c+d, b+c+d)))
                 table = ({(0, 0): F('29/5'), (0, 1): F('149/20'), (1, 1): F(12)} if len(pts) == 1 else
                          {(0, 0): F(9), (0, 1): F(9), (0, 2): F('139/10'), (1, 1): F(12), (1, 2): F('199/10'), (2, 2): F('149/5')})
                 maximum = max(F('29/5') if len(pts) == 1 else F('1142/125'), table[counts])
-                if len(pts) == 2 and all(inside(known, a+b+c, p) and inside(known, a+b+d, p) for p in pts):
+                if len(pts) == 2 and all(self.inside(known, a+b+c, p) and self.inside(known, a+b+d, p) for p in pts):
                     maximum = max(maximum, F('299/31'))
                 assert 0 < F(rate) <= maximum
-                expected = [key(a+b+d), key(a+b+c), key(a+c+d), str(F(rate)*S)]
+                expected = [self.key(a+b+d), self.key(a+b+c), self.key(a+c+d), str(F(rate)*S)]
             else:
                 assert tag == 'support_pent'
                 hull = w[0]; assert len(hull) == len(set(hull)) == 5
-                assert set(hull) <= set(LABELS)
+                assert set(hull) <= set(self.labels)
                 a, b, c, d, e = hull
-                expected = [key(a+b+e), key(a+d+e), key(a+b+d), str(11*S)]
-            assert convex(known, hull, sign(known, hull[:3])) and r == expected
+                expected = [self.key(a+b+e), self.key(a+d+e), self.key(a+b+d), str(11*S)]
+            direction = self.sign(known, hull[:3])
+            assert direction and self.convex(known, hull, direction) and r == expected
         elif kind == 'bary':
             target, vertices, outer, fans = r
             assert tag == 'bary'
             hull, inner, line = w
-            assert outer == hull and inside(known, hull, inner) and len(line) == len(set(line)) == 2
-            assert fans == [key(hull[1]+hull[2]+inner), key(hull[0]+hull[2]+inner), key(hull[0]+hull[1]+inner)]
-            assert vertices == [None if v in line else [key(line+v), sign(known, line+v)] for v in hull]
+            assert outer == hull and self.inside(known, hull, inner) and len(line) == len(set(line)) == 2
+            assert fans == [self.key(hull[1]+hull[2]+inner), self.key(hull[0]+hull[2]+inner), self.key(hull[0]+hull[1]+inner)]
+            assert vertices == [None if v in line else [self.key(line+v), self.sign(known, line+v)] for v in hull]
             assert all(v is None or v[1] for v in vertices)
-            assert target == (None if inner in line else [key(line+inner), sign(known, line+inner)])
+            assert target == (None if inner in line else [self.key(line+inner), self.sign(known, line+inner)])
             assert target is None or target[1]
         else:
             assert kind == 'linear'
             expected = {}; rhs = F(0)
             def acc(word, coefficient):
-                t = key(word); expected[t] = expected.get(t, F(0))+coefficient
+                t = self.key(word); expected[t] = expected.get(t, F(0))+coefficient
                 if not expected[t]:
                     del expected[t]
             if tag == 'affine_quad':
@@ -379,8 +394,8 @@ class Geometry:
                 assert len(word) == len(set(word)) == 4 and orientation in (-1, 1)
                 a, b, c, d = word
                 for t, co in [(a+b+c, 1), (a+c+d, 1), (a+b+d, -1), (b+c+d, -1)]:
-                    assert sign(known, t)
-                    acc(t, co*orientation*sign(known, t))
+                    assert self.sign(known, t)
+                    acc(t, co*orientation*self.sign(known, t))
             elif tag == 'c1_norm':
                 if w[0] == 'h_ge_c':
                     assert self.biirl or self.box[0][0] >= self.box[1][1]
@@ -401,7 +416,7 @@ class Geometry:
                 assert [word, orientation] in self.meta['meshes']
                 a, b, c, y, z, x = word
                 if tag == 'mesh_ear':
-                    assert w[2] in map(key, [a+b+z, a+c+x, b+c+y])
+                    assert w[2] in map(self.key, [a+b+z, a+c+x, b+c+y])
                     acc(a+b+c, 1); acc(w[2], -1); rhs = S*F('3927/500')
                 elif tag == 'mesh_inner':
                     acc(y+z+x, -1); rhs = -S*F('8/5')

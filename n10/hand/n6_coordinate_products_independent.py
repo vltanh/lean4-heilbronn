@@ -47,7 +47,7 @@ def polynomial(text, variables):
     return p
 
 
-def audit_coordinate_certificate(cert, stage, box, physical, endpoint, area, variables):
+def audit_coordinate_certificate(cert, stage, box, physical, endpoint, area, variables, prior_physical=None):
     lower, upper = box
     assert len(lower) == len(upper) == len(variables)
     assert all(l <= u for l, u in zip(lower, upper))
@@ -70,8 +70,11 @@ def audit_coordinate_certificate(cert, stage, box, physical, endpoint, area, var
             assert F(w['value']) == v
             p = add({(i,): F(1)}, {(): -v}) if w['direction'] == 'lo' else add({(): v}, {(i,): F(-1)})
         elif kind == 'physical':
-            assert set(w) == {'factor'}
-            p = physical[str(w['factor'])]
+            if set(w) == {'factor'}:
+                p = physical[str(w['factor'])]
+            else:
+                assert set(w) == {'factor', 'stage'} and prior_physical
+                p = prior_physical(w)
         else:
             raise AssertionError(kind)
         p = {m: c for m, c in p.items() if c}

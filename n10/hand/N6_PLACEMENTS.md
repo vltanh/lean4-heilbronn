@@ -91,7 +91,7 @@ The middle gap is 773/1000000>0. Thus r,t,l<=3 in (1).
 Transposition exchanges r and l while preserving the normalized
 domain, so r>=l may be chosen if useful in a later case catalogue.
 
-## 4. Scope of the remaining N6 task
+## 4. Coverage after the first reduction
 
 N6_EXTERIOR_CUTS.md strengthens this first catalogue: r,l<=2,
 (r,l)!=(2,2), and t=3 forces r=l=0 with exactly one free point in K.
@@ -105,7 +105,6 @@ including the exact-hull case (2), one upper point with any cap point,
 and both remaining points in arbitrary exterior caps. Its four
 complete child theorems include all signs and outer square faces.
 N6_PROJECTED_CHAMBERS.md supplies strict sharp bounds for two broad
-candidate-like assignments of the four free points. A complete global
-N6 proof must still force one of those assignments or exclude every
-other placement with k=0 or k=1. Neither this first count reduction nor the projected
-chambers alone close HP12-N6.
+candidate-like assignments of the four free points. The
+[six-contact exclusion](N6_ASSEMBLY.md) gives the exhaustive
+count argument for \(k=0\) and \(k=1\).

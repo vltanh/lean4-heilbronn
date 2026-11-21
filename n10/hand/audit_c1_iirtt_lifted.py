@@ -83,10 +83,10 @@ POINTS = {
 }
 
 
-def determinant(word):
+def determinant(word, points=POINTS):
     need(len(word) == 3 and len(set(word)) == 3
-         and all(x in POINTS for x in word), "bad actual triangle")
-    a, b, c = [POINTS[x] for x in word]
+         and all(x in points for x in word), "bad actual triangle")
+    a, b, c = [points[x] for x in word]
     bx = add(b[0], scale(a[0], -1))
     by = add(b[1], scale(a[1], -1))
     cx = add(c[0], scale(a[0], -1))
@@ -98,17 +98,32 @@ ACTUAL = {"".join(t): determinant("".join(t))
           for t in combinations(LABELS, 3)}
 
 
-def canonical(word):
-    return "".join(sorted(word, key=LABELS.index))
+SIX_LABELS = "ABCEFHPQRS"
+SIX_VARIABLES = "a b c e f h p q u v r w j k".split()
+SIX_POINTS = {
+    "A": ({}, V[0]), "B": (V[1], {}), "C": (V[2], {}),
+    "E": (const(1), V[3]), "F": (V[4], const(1)), "H": ({}, V[5]),
+    **{p: (V[6+2*i], V[7+2*i]) for i,p in enumerate("PQRS")},
+}
+SIX_AREAS = {"".join(t): determinant("".join(t), SIX_POINTS)
+             for t in combinations(SIX_LABELS, 3)}
 
 
-def orientation(signs, word):
+def physical_areas(stage):
+    return SIX_AREAS if stage["labels"] == SIX_LABELS else ACTUAL
+
+
+def canonical(word, labels=LABELS):
+    return "".join(sorted(word, key=labels.index))
+
+
+def orientation(signs, word, labels=LABELS):
     if len(set(word)) != 3:
         return 0
     parity = (-1) ** sum(
-        LABELS.index(word[i]) > LABELS.index(word[j])
+        labels.index(word[i]) > labels.index(word[j])
         for i in range(3) for j in range(i + 1, 3))
-    return parity * signs.get(canonical(word), 0)
+    return parity * signs.get(canonical(word, labels), 0)
 
 
 def inside(signs, hull, point):
@@ -131,16 +146,18 @@ def supplied_polynomial(poly):
     return clean(out)
 
 
-def metadata(stage):
-    need(stage["labels"] == LABELS and stage["vars"] == VARIABLES,
+def metadata(stage, labels=LABELS):
+    variables = SIX_VARIABLES if labels == SIX_LABELS else VARIABLES
+    actual = physical_areas(stage)
+    need(stage["labels"] == labels and stage["vars"] == variables,
          "wrong actual-point/coordinate dictionary")
-    need(set(stage["polynomials"]) == set(ACTUAL),
+    need(set(stage["polynomials"]) == {"".join(t) for t in combinations(labels, 3)},
          "incomplete actual determinant table")
     for name, poly in stage["polynomials"].items():
-        need(supplied_polynomial(poly) == ACTUAL[name],
+        need(supplied_polynomial(poly) == actual[name],
              "wrong actual determinant polynomial: " + name)
     for name, sign in stage["signs"].items():
-        need(name in ACTUAL and type(sign) is int and sign in (-1, 1),
+        need(name in stage["polynomials"] and type(sign) is int and sign in (-1, 1),
              "invalid actual sign")
     box = [(q(a), q(b)) for a, b in stage["box"]]
     need(len(box) == N and all(0 <= a <= b <= 1 for a, b in box),
@@ -149,9 +166,10 @@ def metadata(stage):
 
 
 def area(stage, name):
-    need(name in ACTUAL and stage["signs"].get(name) in (-1, 1),
+    actual = physical_areas(stage)
+    need(name in actual and stage["signs"].get(name) in (-1, 1),
          "unproved signed actual area: " + name)
-    return scale(ACTUAL[name], stage["signs"][name])
+    return scale(actual[name], stage["signs"][name])
 
 
 def area_bounds(stage):
@@ -194,17 +212,19 @@ def pentagon(stage, index, bounds):
     need(witness[0] == "support_pent" and len(witness) == 2,
          "pentagon strengthening has wrong source witness")
     hull = witness[1]
+    labels = stage["labels"]
     need(len(hull) == 5 and len(set(hull)) == 5
-         and all(orientation(stage["signs"], "".join(t)) == 1
+         and orientation(stage["signs"], hull[:3], labels) != 0
+         and all(orientation(stage["signs"], "".join(t), labels) == orientation(stage["signs"], hull[:3], labels)
                  for t in combinations(hull, 3)),
-         "unproved positive convex pentagon")
+         "unproved cyclic convex pentagon")
     a, b, c, d, e = hull
-    x, y, z = map(canonical, (a + b + e, a + d + e, a + b + d))
+    x, y, z = [canonical(t, labels) for t in (a+b+e, a+d+e, a+b+d)]
     rel = entry["rel"]
     need(rel[0] == "support" and tuple(rel[1:4]) == (x, y, z),
          "wrong pentagon support areas")
-    ears = [canonical(t) for t in (a + b + c, b + c + d, c + d + e)]
-    bde = canonical(b + d + e)
+    ears = [canonical(t, labels) for t in (a + b + c, b + c + d, c + d + e)]
+    bde = canonical(b + d + e, labels)
     # This proves that either scalar difference bounds the same denominator.
     need(add(area(stage, y), scale(area(stage, bde), -1))
          == add(area(stage, x), scale(area(stage, z), -1)),
@@ -217,13 +237,17 @@ def pentagon(stage, index, bounds):
 
 
 class Sources:
-    def __init__(self, stage, top_count=3):
+    def __init__(self, stage, top_count=3, labels=LABELS):
         self.stage = stage
-        self.box = metadata(stage)
+        self.box = metadata(stage, labels)
         self.bounds = area_bounds(stage)
         self.top_count = top_count
         self.cache = {}
         self.pentagons = {}
+
+    def contact(self, name):
+        need(name in ("h_ge_d", "c_ge_f"), "unsupported contact-order premise")
+        return (0, 2) if name == "h_ge_d" else (1, 3)
 
     def pent(self, index):
         if index not in self.pentagons:
@@ -342,12 +366,12 @@ def feasible_hull(lines, left, right):
     return (min(lo for lo, hi in intervals), max(hi for lo, hi in intervals)) if intervals else None
 
 
-def check_coordinate(stage):
+def check_coordinate(stage, source_factory=Sources):
     """Verify every printed step and coordinate terminal in one parsed stage."""
     record = stage.get("coordinate")
     if record is None:
         return {"steps": 0, "sources": 0, "closed": False}
-    src = Sources(stage)
+    src = source_factory(stage)
     lows = [a for a, b in src.box]
     highs = [b for a, b in src.box]
     for number, row in enumerate(record["trace"]):
@@ -412,9 +436,9 @@ def lin_scale(form, value):
 
 
 class Lift:
-    def __init__(self, stage):
+    def __init__(self, stage, source_factory=Sources):
         self.stage = stage
-        self.source = Sources(stage)
+        self.source = source_factory(stage)
         self.bounds = dict(self.source.bounds)
         self.bounds.update({"v" + str(i): ends for i, ends in enumerate(self.source.box)})
         self.singles = set(self.bounds)
@@ -522,6 +546,26 @@ class Lift:
     def factor(self, descriptor, mode, roll):
         need(isinstance(descriptor, list) and descriptor, "invalid lifted factor descriptor")
         tag = descriptor[0]
+        if tag in ("physical_bound", "physical_endpoint"):
+            need(hasattr(self.source, "lifted_physical"), "physical factor outside its proved domain")
+            need(len(descriptor) == (2 if tag == "physical_bound" else 4), "physical descriptor arity")
+            poly = self.source.lifted_physical(descriptor[1])
+            if tag == "physical_endpoint":
+                _, _, j, side = descriptor
+                need(type(j) is int and 0 <= j < len(self.source.box) and side in ("lo","hi"),
+                     "invalid endpoint multiplier")
+                a,b = self.source.box[j]
+                delta = add(V[j],const(-a)) if side == "lo" else add(const(b),scale(V[j],-1))
+                poly = mul(poly,delta)
+            co = {}
+            for mon, value in poly.items():
+                if not mon:continue
+                need(len(mon) <= 2, "physical factor above quadratic degree")
+                name = "v" + str(mon[0]) if len(mon)==1 else self.product_name(*("v"+str(i) for i in mon))
+                co[name] = value
+            form = co,poly.get((),F(0))
+            need(self.expand(form)==poly, "incorrect lifting of physical inequality")
+            return form,False
         if tag == "rectangle":
             need(len(descriptor) == 4, "rectangle descriptor arity")
             _, a, b, choice = descriptor
@@ -564,9 +608,10 @@ class Lift:
             form, equality, _ = self.relation(descriptor[1], mode)
             return form, equality
         if tag == "contact":
-            need(len(descriptor) == 2 and descriptor[1] in ("h_ge_d", "c_ge_f"),
+            need(len(descriptor) == 2,
                  "unsupported contact-order premise")
-            a, b = ("v0", "v2") if descriptor[1] == "h_ge_d" else ("v1", "v3")
+            i, j = self.source.contact(descriptor[1])
+            a, b = "v"+str(i), "v"+str(j)
             return ({a: F(1), b: F(-1)}, F(0)), False
         if tag == "pentagon_strength":
             need(len(descriptor) == 3, "pentagon descriptor arity")
@@ -603,7 +648,7 @@ class Lift:
         raise AuditError("unlisted lifted source descriptor " + str(descriptor))
 
 
-def check_lift(stage, lift):
+def check_lift(stage, lift, source_factory=Sources):
     """Reconstruct and bound one literal lifted positive sum exactly.
 
     Scalar endpoints and the relation geometry are premises checked separately.
@@ -613,7 +658,7 @@ def check_lift(stage, lift):
          "unsupported lifted certificate mode")
     need(type(lift["roll"]) is int and lift["roll"] in (0, 1, 2),
          "unsupported equality multiplication mode")
-    model = Lift(stage)
+    model = Lift(stage, source_factory)
     summands, seen = [], set()
     kinds = Counter()
     for weight, descriptor in lift["weights"]:

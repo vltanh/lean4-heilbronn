@@ -1,4 +1,8 @@
-# Heilbronn n=10: complete exact computer-assisted proof
+# Heilbronn n=10
+
+The [hand proof](hand/ASSEMBLY.md) gives the unrestricted bound,
+exact attainment and equality classification. Its geometric
+arguments and finite rational tables cover every normalized case.
 
 The unrestricted ten-point upper bound and exact attainment are complete in
 this proof package. Both independent global implementations have finished all
@@ -17,11 +21,8 @@ not a Lean-kernel formalization. All computation was local, with no CI.
 
 ## Start here
 
-- [hand/ROADMAP.md](hand/ROADMAP.md): the active hand-proof checklist, including
-  the completed U0, U1, U2 and U4 three-corner cases, clustered U3, and the
-  entire two-opposite-corner family C2.
-  The unrestricted hand proof remains open; the computational completion below
-  does not check those boxes.
+- [hand/ASSEMBLY.md](hand/ASSEMBLY.md) gives the complete hand proof.
+- [hand/ROADMAP.md](hand/ROADMAP.md) indexes its component proofs and exact checks.
 - [PROOF.md](PROOF.md): theorem, exhaustive reduction, proof assembly, equality.
 - [STATUS.md](STATUS.md): completed gates and exact counts.
 - [REPRODUCE.md](REPRODUCE.md): stored-package audit and both full recomputations.

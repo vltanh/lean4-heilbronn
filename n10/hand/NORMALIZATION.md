@@ -225,6 +225,6 @@ line, impossible when m>0. Therefore no nonconstant shear occurred. The
 original maximizer was itself a square-symmetry image and relabeling of the
 candidate.
 
-This proves the reversal lemma conditionally. The global equality theorem
-still requires the unproved II, C1, N6 and N7 exclusions. The complete
-N8 argument is now supplied by N8_COMPLETE.md.
+The [global proof](ASSEMBLY.md) applies the reversal lemma after the
+[six-contact exclusion](N6_ASSEMBLY.md) and the
+[sharp eight-contact theorem](N8_COMPLETE.md).

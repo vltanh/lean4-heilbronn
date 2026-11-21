@@ -54,8 +54,9 @@ def coarse_domain(tables):
     return coarse
 
 
-def audit(tables, scalar_audit, coord_audit, lift_audit):
-    coarse = coarse_domain(tables)
+def audit(tables, scalar_audit, coord_audit, lift_audit, domain_check=coarse_domain,
+          point_domain=None, global_stages=2):
+    coarse = domain_check(tables)
     counts = Counter()
     def replay(stages, assigned, initial_box, first_ref):
         current = initial_box
@@ -90,12 +91,20 @@ def audit(tables, scalar_audit, coord_audit, lift_audit):
                 assert "coordinate" in st
         return current, terminal, known
 
-    globals_, no_lift = tables.node("global")
-    assert len(globals_) == 2 and no_lift is None
-    narrowed, term, _ = replay(globals_, {}, coarse, None)
-    assert term is None
+    if global_stages:
+        globals_, no_lift = tables.node("global")
+        assert len(globals_) == global_stages and no_lift is None
+        narrowed, term, _ = replay(globals_, {}, coarse, None)
+        assert term is None
+    else:
+        assert not (tables.folder / "global.md").exists()
+        narrowed = coarse
+    put_sign = point_domain.put if point_domain else put
+    canonical_word = point_domain.canonical if point_domain else canonical
+    read_sign = point_domain.sign if point_domain else sign
     states = [("r", {}, None, coarse)]
     visited = set()
+    cut_children = set()
     while states:
         name, assigned, parent, parent_box = states.pop()
         assert name not in visited
@@ -105,13 +114,15 @@ def audit(tables, scalar_audit, coord_audit, lift_audit):
         counts[kind] += 1
         known = dict(tables.domain["base"])
         for tri, sg in assigned.items():
-            put(known,tri,sg)
+            put_sign(known,tri,sg)
         if domain == "coarse" and kind == "split":
             endpoint, terminal = coarse, None
             assert not (tables.folder/(name+".md")).exists()
         else:
             stages, lift = tables.node(name)
             ref = stages[0]["boxRef"]
+            if name in cut_children:
+                assert domain == "refined" and ref == parent
             if domain == "coarse":
                 assert ref == "coarse" and len(stages) == 1
                 initial = coarse
@@ -128,14 +139,27 @@ def audit(tables, scalar_audit, coord_audit, lift_audit):
                 counts["weighted terms"] += len(lift["weights"])
                 terminal = "lift"
         if kind == "split":
-            assert terminal is None and canonical(split)[0] in tables.polynomials
-            assert not sign(known,split)
+            assert terminal is None and canonical_word(split)[0] in tables.polynomials
+            assert not read_sign(known,split)
             for suffix,sg in [("m",-1),("p",1)]:
                 states.append((name+suffix,{**assigned,split:sg},name,endpoint))
+        elif kind == "coordinate_split":
+            assert terminal is None and domain == "refined"
+            index, cut = split
+            assert type(index) is int and 0 <= index < len(endpoint)
+            low, high = endpoint[index]
+            cut = F(cut)
+            assert low < cut < high
+            for suffix, part in [("L", (low, cut)), ("H", (cut, high))]:
+                child_box = endpoint.copy()
+                child_box[index] = part
+                child = name + suffix
+                cut_children.add(child)
+                states.append((child, assigned.copy(), name, child_box))
         else:
             assert split is None and terminal == kind and kind in ("geometry","area","coordinate","lift")
     assert visited == set(tables.tree)
-    assert counts["split"]+1 == sum(counts[k] for k in ("geometry","area","coordinate","lift"))
+    assert counts["split"]+counts["coordinate_split"]+1 == sum(counts[k] for k in ("geometry","area","coordinate","lift"))
     return dict(counts)
 
 

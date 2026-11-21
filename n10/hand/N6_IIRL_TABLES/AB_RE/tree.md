@@ -1,0 +1,27 @@
+# Sign and coordinate divisions of the AB/RE arc
+
+```jsonl
+["r","split","APR","refined"]
+["rm","split","BEP","refined"]
+["rp","split","BEP","refined"]
+["rmm","geometry",null,"refined"]
+["rmp","split","BFP","refined"]
+["rpm","geometry",null,"refined"]
+["rpp","split","BFP","refined"]
+["rmpm","split","CFP","refined"]
+["rmpp","split","BPS","refined"]
+["rppm","split","CFP","refined"]
+["rppp","area",null,"refined"]
+["rmpmm","geometry",null,"refined"]
+["rmpmp","split","CFQ","refined"]
+["rmppm","area",null,"refined"]
+["rmppp","split","CFQ","refined"]
+["rppmm","geometry",null,"refined"]
+["rppmp","split","CFQ","refined"]
+["rmpmpm","coordinate",null,"refined"]
+["rmpmpp","area",null,"refined"]
+["rmpppm","area",null,"refined"]
+["rmpppp","area",null,"refined"]
+["rppmpm","coordinate",null,"refined"]
+["rppmpp","area",null,"refined"]
+```

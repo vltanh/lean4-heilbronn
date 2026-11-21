@@ -168,9 +168,10 @@ no remaining numerical or sign case by itself.
 
 ## Verification status
 
-Independent mathematical review accepts this setup: it checked the
+Independent mathematical review checked the
 actual transposition and label choices in both top-hull alternatives,
 expanded all eight displayed determinant identities independently,
 and verified both rational square gaps and every remainder sign,
-including the closed top-side faces. This is acceptance of the setup;
-a whole BITT exclusion still requires its complete literal case cover.
+including the closed top-side faces. The
+[complete BITT proof](N6_BTTT_REMAINING_BITT_COMPLETE.md) uses this
+setup to exclude both top-pair alternatives.

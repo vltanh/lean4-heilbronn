@@ -161,6 +161,34 @@ occupied ear and its actual point, whose three inward signs must
 already be proved. No endpoint estimate or bound produced by the
 factor is used to prove its own geometric premise.
 
+## Affine contact ratios from an occupied side ear
+
+Put \(U=248858189/10^9\). If an actual point \(X\in\{P,Q\}\)
+lies inside \(BCE\), then \([BCE]\ge3s\), whereas the distinct
+ear \(ABC\) satisfies \([ABC]\le U\). The exact positive identity
+
+\[
+ e\bigl(U-[ABC]\bigr)+a\bigl([BCE]-3s\bigr)
+                   = Ue-3sa
+\]
+
+therefore proves \(Ue-3sa\ge0\). Here the cancellation is exactly
+\(a[BCE]=e[ABC]=ae(c-b)\).
+
+If \(X\) lies inside \(FHA\), use its positive area \([AFH]\).
+The same argument and \(b[AFH]=f[ABH]=bf(h-a)\) give
+
+\[
+ f\bigl(U-[ABH]\bigr)+b\bigl([AFH]-3s\bigr)
+                   = Uf-3sb\ge0.
+\]
+
+These are affine physical factors. Their witnesses state the convex
+octagon, the occupied ear \(BCE\) or \(FHA\), and the actual point
+with its three proved inward signs. The multipliers \(a,b,e,f\)
+are positive by the original contact bounds. The factors require no
+box-dependent source or newly chosen contact order.
+
 ## Verification status
 
 Independent mathematical review accepted the octagon consequences and

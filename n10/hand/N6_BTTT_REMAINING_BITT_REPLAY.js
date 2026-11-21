@@ -2,7 +2,7 @@
 /* Literal Markdown replay for N6_BTTT_REMAINING_BITT.md.
  * Standard-library only; imports no discovery implementation.
  */
-function createN6RemainingBITTReader(WORD="+",CONCLUSION="contradiction"){
+function createN6RemainingBITTReader(WORD="+",CONCLUSION="contradiction",additionalSigns=[]){
 if(!["-","+"].includes(WORD))throw Error("unknown BITT top-pair word");
 const LABELS="ABCEFHPQRS", ANCHORS="ABCEFH", VARS="a b c e f h p q u v r w j k".split(" ");
 function need(ok,msg){if(!ok)throw Error(msg);}
@@ -132,13 +132,24 @@ function octagonCap(kn,hull,ear,source){
  if(source)need(Array.isArray(source)&&source.length===2&&ears.includes(source[0])&&'PQ'.includes(source[1])&&inside(kn,source[0],source[1]),'unproved occupied-ear cap source');
  return Q(source&&source[0]!==ear?'248858189/1000000000':'569722789/1000000000');
 }
+function priorSquareRoot(x){
+ need(le(Z,x),'negative root source');const den=10000n;let low=0n,high=den+1n;
+ while(high*high*x.d<=x.n*den*den)high*=2n;
+ while(low+1n<high){const mid=(low+high)/2n;if(mid*mid*x.d<=x.n*den*den)low=mid;else high=mid;}
+ return Q(String(low)+'/'+String(den));
+}
 function physicalFactor(f,kn,stage,state){
  const why=f.why,type=why[0];let expected;
  if(type==="actual-area"){
   const t=why[1],occ=why[2];need(equalSet(occ,occupied(kn,t)),"actual occupants differ");
   expected=minus(signedAreaPoly(kn,t),qpoly(mul(cost(occ.length),S)));
+ }else if(type==='quad-area'){
+  const r=why[1];need(r&&r.kind==='quad','wrong materialized quadrilateral source');relationGeometry(r,kn);expected=plus(...r.parts.map(t=>signedAreaPoly(kn,t)),qpoly(neg(Q(r.floor))));
  }else if(type==="anchor-cap"){
   const[t,h,i,occ]=why.slice(1);need(capContains(kn,t,h)&&equalSet(occ,occupied(kn,t)),"unproved anchor area cap");expected=minus(anchorPoly(h,i),qpoly(mul(cost(occ.length),S)));
+ }else if(type==='octagon-ear-ratio'){
+  const[hull,ear,p]=why.slice(1);need((ear==='BCE'||ear==='FHA')&&'PQ'.includes(p)&&inside(kn,ear,p),'unproved octagon ratio occupant');
+  const U=octagonCap(kn,hull,ear==='BCE'?'ABC':'HAB',[ear,p]);expected=minus(timesConstant(V[ear==='BCE'?3:4],U),timesConstant(V[ear==='BCE'?0:1],mul(Q(3),S)));
  }else if(type==='octagon-ear-cap'){
   const[hull,ear,source]=why.slice(1);expected=minus(qpoly(octagonCap(kn,hull,ear,source)),determinant(ear));
  }else if(type==='octagon-ear-sum'){
@@ -181,6 +192,18 @@ function physicalFactor(f,kn,stage,state){
  }else if(type==="support-envelope"){
   const[src,X,Y,T,N0]=why.slice(1),rate=src[0]==="pentagon"?Q(11):Q(src[3]),constant=mul(rate,S),r={kind:"support",source:src,X,Y,Z:T,constant:str(constant)};relationGeometry(r,kn);
   const L=stage.box.initial.low.map(Q),H=stage.box.initial.high.map(Q),N=min(ONE,vertexMaximum(signedAreaPoly(kn,X),L,H));need(eq(N,Q(N0))&&lt(Z,N),"incorrect fixed support ceiling");expected=plus(timesConstant(signedAreaPoly(kn,Y),N),timesConstant(signedAreaPoly(kn,X),neg(constant)),timesConstant(signedAreaPoly(kn,T),constant));
+ }else if(type==='support-prior'){
+  const[r,rows,value,axis]=why.slice(1);need(r&&r.kind==='support'&&(axis===0||axis===1),'wrong prior support witness');relationGeometry(r,kn);
+  let expectedRows=[[r.X,'hi'],[r.Y,'hi']],rate=Q(r.constant);
+  if(rows.length===9){
+   need(['pentagon','pentagon-ears'].includes(r.source[0]),'root-strengthened source is not a pentagon');
+   const[a,b,c,d,e]=r.source[1],key=w=>canonical(w)[0];expectedRows.push(...[a+b+c,b+c+d,c+d+e].map(t=>[key(t),'lo']),[r.X,'lo'],[r.Z,'hi'],[r.Y,'lo'],[key(b+d+e),'hi']);
+  }else need(rows.length===2,'wrong prior support endpoint arity');
+  const values=rows.map((row,i)=>{const b=state.crossBound(row.ref,stage);need(row.triangle===expectedRows[i][0]&&row.direction===expectedRows[i][1]&&b.triangle===row.triangle&&b.direction===row.direction&&eq(b.value,Q(row.value)),'wrong immutable prior support endpoint');return b.value;});
+  if(rows.length===9){const roots=sum(values.slice(2,5).map(priorSquareRoot)),candidate=add(mul(roots,roots),max(Z,sub(values[5],values[6]),sub(values[7],values[8])));need(lt(rate,candidate),'unimproved pentagon prior rate');rate=candidate;}
+  need(eq(rate,Q(value))&&lt(Z,values[0])&&lt(Z,values[1]),'wrong prior support coefficient');
+  const X=signedAreaPoly(kn,r.X),Y=signedAreaPoly(kn,r.Y),T=signedAreaPoly(kn,r.Z);
+  expected=axis===0?plus(timesConstant(Y,values[0]),timesConstant(X,neg(rate)),timesConstant(T,rate)):plus(timesConstant(X,sub(values[1],rate)),timesConstant(T,rate));
  }else if(type==="earlier-area"){
   const row=why[1],bound=state.crossBound(row.ref,stage);need(bound.triangle===row.triangle&&bound.direction===row.direction&&eq(bound.value,Q(row.value)),"wrong previous bound");
   const p=signedAreaPoly(kn,row.triangle);expected=row.direction==="lo"?minus(p,qpoly(bound.value)):minus(qpoly(bound.value),p);
@@ -247,6 +270,10 @@ function relationGeometry(r,kn){
   let expected,rate;
   if(src[0]==="pentagon"){
    need(h.length===5,"wrong five-chain length");const[a,b,c,d,e]=h;expected=[key(a+b+e),key(a+d+e),key(a+b+d)];rate=Q(11);
+  }else if(src[0]==="pentagon-ears"){
+   need(h.length===5,"wrong five-chain length");const[a,b,c,d,e]=h,ears=[a+b+c,b+c+d,c+d+e],occs=src[2];
+   need(Array.isArray(occs)&&occs.length===3&&occs.every((ps,i)=>equalSet(ps,occupied(kn,ears[i]))),"unproved pentagon ear occupants");
+   rate=Q(["11","139/10","199/10","27"][occs.filter(ps=>ps.length).length]);need(eq(rate,Q(src[3])),"wrong pentagon ear support rate");expected=[key(a+b+e),key(a+d+e),key(a+b+d)];
   }else if(src[0]==="quad"){
    need(h.length===4,"wrong quad support length");const[a,b,c,d]=h,occ=src[2];need(occ.length>=1&&occ.length<=2&&new Set(occ).size===occ.length&&occ.every(p=>inside(kn,h,p)),"unproved support occupants");
    const n1=occ.filter(p=>inside(kn,a+c+d,p)).length,n2=occ.filter(p=>inside(kn,b+c+d,p)).length,shape=[n1,n2].sort().join("");
@@ -349,6 +376,12 @@ function verifyAreas(stage,kn,state){
 function verifyGeometricTerminal(reason,kn,allowed){
  const [kind,h,p,fan,others]=reason;
  if(kind==="sign"){need((p===1||p===-1)&&sign(kn,h)===-p&&allowed.has(h+(p>0?"+":"-")),"unproved conflicting actual-sign premise");return;}
+ if(kind==="plubad"){
+  need(h.length===5&&new Set(h).size===5&&[...h].every(x=>LABELS.includes(x)),"invalid Pluecker circuit");
+  const vals=circuit(h).map(([a,b,c])=>c*sign(kn,a)*sign(kn,b));
+  need(vals[0]!==0&&vals.every(v=>v===vals[0]),"no Pluecker sign contradiction");
+  return;
+ }
  if(kind==='octagon-ears'){
   need(WORD==='+'&&h==='ABCERSFH'&&convex(kn,h)&&Array.isArray(p)&&p.length===2,'unproved octagon terminal');
   const ears=[...h].map((_,i)=>h[(i+7)%8]+h[i]+h[(i+1)%8]);
@@ -428,7 +461,10 @@ function verifyCoordinateCertificate(cert,stage,kn,state){
    const endpoint=box[w.direction][i];need(eq(endpoint,Q(w.value)),"wrong coordinate source endpoint");
    expected=w.direction==="lo"?minus(V[i],qpoly(endpoint)):minus(qpoly(endpoint),V[i]);
   }else if(row.kind==="physical"){
-   need(Number.isInteger(w.factor)&&w.factor>=0,"invalid physical source index");expected=box.polys.get(String(w.factor));need(expected,"coordinate source missing from preceding Physical factors");
+   need(Number.isInteger(w.factor)&&w.factor>=0,"invalid physical source index");
+   let factorBox=box;
+   if(w.stage!==undefined){state.checkScope(w.stage,stage.id);factorBox=state.boxes.get(w.stage);need(factorBox,"unproved physical source stage");}
+   expected=factorBox.polys.get(String(w.factor));need(expected,"coordinate source missing from preceding Physical factors");
   }else throw Error("unknown coordinate source kind");
   const actual=termsPoly(row.terms);need(samePoly(actual,expected),"incorrect coordinate source polynomial");polys.set(row.index,actual);
  }
@@ -456,6 +492,8 @@ function buildPlan(packet){
  need(!(packet.frontiers||[]).length,"unfinished proof frontier");
  need(packet.format==="n6-bitt-proof-v1","wrong packet format");
  const h=packet.hypotheses;need(h.conclusion===CONCLUSION&&(["contradiction","lower-central"].includes(CONCLUSION))&&(CONCLUSION!=="lower-central"||WORD==="-"),"wrong proof conclusion");need(sameQ(h.s,S)&&h.locations==="BITT"&&h.word===WORD&&h.normalized===true&&h.labels===LABELS&&JSON.stringify(h.variables)===JSON.stringify(VARS),"wrong hypotheses");
+ need(equalSet(h.additionalSigns||[],additionalSigns),"unexpected additional actual signs");
+ additionalSigns.forEach(tokenSign);
  const nodes=new Map(packet.signTree.map(x=>[x.id,x]));need(nodes.size===packet.signTree.length&&nodes.has("root"),"sign tree IDs");
  const plans=[],visited=new Set(),terminalStages=new Set(),forceByStage=new Map(),metricsSeen=new Set();let signSplits=0,coordinateSplits=0;
  const claim=(sid,info)=>{need(Number.isInteger(sid)&&sid>=0&&sid<packet.stages.length&&!plans[sid],"duplicate/invalid stage");plans[sid]=info;};
@@ -487,13 +525,13 @@ function buildPlan(packet){
    canonical(n.split);need(n.split.length===3&&n.children?.length===2,"bad sign split");signSplits++;
    for(let i=0;i<2;i++){const sign=i===0?"-":"+",child=id+"/"+n.split+sign;need(n.children[i]===child,"wrong signed child");const next=new Set(current);next.add(n.split+sign);visit(child,next,depth+1,n.stages.at(-1));}
   }else if(n.metric){
-   need(n.metric===id&&packet.metrics[id],"missing metric closure");metricsSeen.add(id);metric(packet.metrics[id],id,current,[],null,null);
+   need(n.metric===id&&packet.metrics[id],"missing metric closure");metricsSeen.add(id);metric(packet.metrics[id],id,current,[],n.stages.at(-1),null);
   }else{
    need(n.terminal===n.stages.at(-1),"nonfinal sign terminal");addTerminal(n.terminal);
   }
  }
  need(typeof h.lowerCentral==='boolean',"unstated lower-central domain");
- visit("root",new Set(h.lowerCentral?['ACP+','HBP+']:[]),0);
+ visit("root",new Set([...(h.lowerCentral?['ACP+','HBP+']:[]),...additionalSigns]),0);
  need(visited.size===nodes.size&&metricsSeen.size===Object.keys(packet.metrics).length,"uncovered sign/metric node");
  need(plans.length===packet.stages.length&&plans.every(Boolean),"unassigned numeric stages");
  const terminals=new Map(packet.terminals.map(t=>[t.stage,t]));need(terminals.size===packet.terminals.length&&equalSet([...terminals.keys()],[...terminalStages]),"terminal coverage differs");
@@ -641,7 +679,8 @@ function mdRelation(kind,eqn,w){
  if(kind==="quad"){const p=eqn.split(" >= "),m=/^quadrilateral ([A-Z]{4}); occupants (.*)$/.exec(w);need(p.length===2&&m,"printed quadrilateral shape");return{kind,parts:p[0].split(" + "),floor:mdFractionPair(p[1]),hull:m[1],occupants:mdList(m[2])};}
  if(kind==="support"){
   const m=/^([A-Z]{3}) \* ([A-Z]{3}) >= ([^ ]+) \* \(([A-Z]{3}) - ([A-Z]{3})\)$/.exec(eqn);need(m&&m[1]===m[4],"printed support shape");let source;
-  if(w.startsWith("pentagon "))source=["pentagon",w.slice(9)];
+  if(w.startsWith("pentagon ears ")){const a=JSON.parse(w.slice(14));need(Array.isArray(a)&&a.length===3,"bad pentagon ear witness");source=["pentagon-ears",...a];}
+  else if(w.startsWith("pentagon "))source=["pentagon",w.slice(9)];
   else{const t=/^quadrilateral ([A-Z]{4}); occupants (.*); rate ([^ ]+)$/.exec(w);need(t,"printed support witness");source=["quad",t[1],mdList(t[2]),t[3]];}
   return{kind,X:m[1],Y:m[2],Z:m[5],constant:mdFractionPair(m[3]),source};
  }
@@ -656,7 +695,7 @@ function printedFiles(indexText){
 }
 function parsePrinted(indexText,files){
  const meta=mdEntries(mdSection(indexText,"Hypotheses and format",2)),info=printedFiles(indexText);need(info.filter(x=>x.kind==="contexts").length===1,"context file count");
- const p={format:meta.Format,status:meta.Status,hypotheses:{s:meta.Threshold,locations:meta.Locations,word:meta["Top word"],conclusion:meta["Proof conclusion"],normalized:meta["Normalized e <= f"]==="yes",lowerCentral:meta["Lower-central residual"]==="yes",variables:mdList(meta.Variables),labels:meta["Actual labels"]},contexts:[],signTree:[],metrics:{},stages:[],terminals:[],totals:{}};
+ const p={format:meta.Format,status:meta.Status,hypotheses:{s:meta.Threshold,locations:meta.Locations,word:meta["Top word"],conclusion:meta["Proof conclusion"],normalized:meta["Normalized e <= f"]==="yes",lowerCentral:meta["Lower-central residual"]==="yes",additionalSigns:mdList(meta["Additional actual signs"]||"none"),variables:mdList(meta.Variables),labels:meta["Actual labels"]},contexts:[],signTree:[],metrics:{},stages:[],terminals:[],totals:{}};
  const contextText=files[info.find(x=>x.kind==="contexts").file];need(typeof contextText==="string","missing printed contexts");
  for(const b of mdBlocks(contextText,"Context")){
   need(b.id===p.contexts.length,"context order");const m=mdEntries(b.text.split("\n### ")[0]),c={locations:m.Locations,word:m["Top word"],given:mdList(m["Given actual signs"]),trace:[],known:{}};
@@ -726,6 +765,7 @@ function parsePrinted(indexText,files){
    }
    if(mdOptional(b.text,"Clustered-triple contradiction")){need(!terminals.has(s.id),"duplicate cluster terminal");const rows=markdownRows(mdSection(b.text,"Clustered-triple contradiction"),["Outer triangle","Pivot","Fan triangle","Other interior points"]);need(rows.length===1,"cluster terminal count");const[h,p0,fan,others]=rows[0];terminals.set(s.id,{stage:s.id,kind:"geometry",reason:["cluster",h,p0,fan,mdList(others)]});}
    if(mdOptional(b.text,"Distributed-mesh contradiction")){need(!terminals.has(s.id),"duplicate nomesh terminal");const rows=markdownRows(mdSection(b.text,"Distributed-mesh contradiction"),["Outer triangle","Three interior points"]);need(rows.length===1,"nomesh terminal count");terminals.set(s.id,{stage:s.id,kind:"geometry",reason:["nomesh",rows[0][0],mdList(rows[0][1])]});}
+   if(mdOptional(b.text,"Pluecker sign contradiction")){need(!terminals.has(s.id),"duplicate Pluecker terminal");const rows=markdownRows(mdSection(b.text,"Pluecker sign contradiction"),["Pivot and four endpoints"]);need(rows.length===1,"Pluecker terminal count");terminals.set(s.id,{stage:s.id,kind:"geometry",reason:["plubad",rows[0][0]]});}
    if(mdOptional(b.text,"Octagon-ear contradiction")){need(!terminals.has(s.id),"duplicate octagon terminal");const rows=markdownRows(mdSection(b.text,"Octagon-ear contradiction"),["Octagon","Two occupied ear-point pairs"]);need(rows.length===1,"octagon terminal row count");terminals.set(s.id,{stage:s.id,kind:"geometry",reason:["octagon-ears",rows[0][0],JSON.parse(rows[0][1])]});}
    if(mdOptional(b.text,"Conflicting actual-sign contradiction")){need(!terminals.has(s.id),"duplicate sign terminal");const rows=markdownRows(mdSection(b.text,"Conflicting actual-sign contradiction"),["Triple","Known sign","Inherited opposite premise"]);need(rows.length===1,"sign terminal count");const[w,known,premise]=rows[0];need(premise.slice(0,3)===w&&["+","-"].includes(known)&&known!==premise[3],"malformed sign contradiction");terminals.set(s.id,{stage:s.id,kind:"geometry",reason:["sign",w,tokenSign(premise)]});}
    s.affineBounds=[];if(mdOptional(b.text,"Affine certificates")){const a=mdAffines(b.text,s.id);s.affineBounds=a.outputs;if(a.terminal){need(!terminals.has(s.id),"duplicate affine terminal");terminals.set(s.id,a.terminal);}}
@@ -743,6 +783,9 @@ return {verify,parsePrinted,printedFiles};
 if(typeof module!=="undefined"&&module.exports){
  module.exports={createN6RemainingBITTReader};
  if(typeof require!=="undefined"&&require.main===module){
-  const fs=require("fs"),path=require("path"),word=process.argv[2]||"+",conclusion=process.argv[3]||"contradiction",api=createN6RemainingBITTReader(word,conclusion),root=path.join(__dirname,"N6_BTTT_REMAINING_BITT_"+(word==="+"?"CONVEX":"TRIANGULAR")+(conclusion==="lower-central"?"_CENTRAL_REDUCTION":"")+"_TABLES"),index=fs.readFileSync(path.join(root,"INDEX.md"),"utf8"),files={};for(const{file}of api.printedFiles(index))files[file]=fs.readFileSync(path.join(root,file),"utf8");process.stdout.write(JSON.stringify(api.verify(api.parsePrinted(index,files)),null,2)+"\n");
+  const fs=require("fs"),path=require("path"),word=process.argv[2]||"+",conclusion=process.argv[3]||"contradiction";
+  const signs=process.argv[4]?process.argv[4].split(","):[],api=createN6RemainingBITTReader(word,conclusion,signs);
+  const suffix=conclusion==="lower-central"?"_CENTRAL_REDUCTION":signs.length?"_CHAMBER":"";
+  const root=process.argv[5]||path.join(__dirname,"N6_BTTT_REMAINING_BITT_"+(word==="+"?"CONVEX":"TRIANGULAR")+suffix+"_TABLES"),index=fs.readFileSync(path.join(root,"INDEX.md"),"utf8"),files={};for(const{file}of api.printedFiles(index))files[file]=fs.readFileSync(path.join(root,file),"utf8");process.stdout.write(JSON.stringify(api.verify(api.parsePrinted(index,files)),null,2)+"\n");
  }
 }

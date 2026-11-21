@@ -1,6 +1,6 @@
 # Heilbronn n=10: itemized hand-proof roadmap
 
-Checkpoint 101.
+Checkpoint 110. [Complete theorem and equality proof](ASSEMBLY.md)
 
 The computer-assisted proof package reviewed at commit
 `6677298653e118e446d5cd089f5ecdce1fc5fc0f` is a discovery aid, not a premise
@@ -23,8 +23,8 @@ ordinary unsigned triangle area at most A*, where
     a=1-3g+2g^2,
     A*=5g^2/8-g^3/2.
 
-The equality target is the candidate in ATTAINMENT.md, up to square symmetry
-and relabeling. The unrestricted hand upper bound is NOT yet complete.
+The equality statement identifies the candidate in ATTAINMENT.md up to
+square symmetry and relabeling.
 
 ## Gate I — exact attainment and exhaustive analytic reduction
 
@@ -254,7 +254,9 @@ four-corner alternative and all zero-area faces.
         occupancy, rational box, derivative and sum has independent audits.
         TYPE_II_232_COMPLETE.md assembles both hull alternatives without
         a reflection that could violate the normalized b<=1/2 condition.
-- [ ] HP11-C1. Exclude normalized maximizers with exactly one corner.
+- [x] HP11-C1. Exclude normalized maximizers with exactly one corner.
+      C1_COMPLETE.md assembles the exact pentagon and all 32 exterior
+      counts, including their transposes and the full closed-square domain.
   - [x] C1-EXACT-PENTAGON. The actual hull is exactly the five selected
         anchors O,C,D,F,H. The lower distributed triple and upper pair
         reduce to nine anchor-line roots and 33 binary refinements.
@@ -391,29 +393,45 @@ four-corner alternative and all zero-area faces.
         products and 5,680 immutable final endpoints. Eight corrupted
         records are rejected, including an omitted leaf with altered
         totals. Proof: C1_TWO_CENTRAL_THREE_CAPS.md and its tables.
-        The C1 parent stays open.
-  - [ ] C1-EXTERIOR. Exclude the remaining six exterior count rows
-        from the exhaustive C1-EXTERIOR-CATALOGUE. Counts are
-        (k,j,r,t,l), up to exchange of the two side caps:
-    - [ ] C1-IITTT: (0,2,0,3,0).
+  - [x] C1-EXTERIOR. The entire exterior catalogue is excluded.
+        Counts are (k,j,r,t,l), up to exchange of the two side caps:
+    - [x] C1-IITTT: (0,2,0,3,0). The nine-point reduction below
+          leaves one top word. Its ten-point domain is excluded by
+          140 actual-sign splits and 141 contradictions, including
+          15 weighted sums with 2,044 printed multipliers.
+          [Proof](C1_TOP_TRIPLE_COMPLETION.md).
+    - [x] C1 top triple with a central point. In IITTT and BITTT, the three
+          top points have a quadrilateral hull with the inner point in both
+          triangles on the top chord. Three sign trees and transposition
+          exclude the other five top words on nine points. The surviving
+          word admits nine points of clearance \(1088/108^2>93/1000\).
+          [Nine-point proof and example](C1_TOP_TRIPLE_CORE.md).
     - [x] C1-IIRTT: (0,2,1,2,0) and its transpose. The convex
           top pair is excluded by the chain theorem. For the triangular
           pair, 240 sign splits give 46 geometric, 153 scalar,
           28 coordinate and 14 weighted contradictions. The full
           replay checks 492 stages and all 312,954 scalar updates.
           [Proof](C1_IIRTT.md) and [tables](C1_IIRTT_TABLES/INDEX.md).
-    - [ ] C1-BITTT: (1,1,0,3,0).
-    - [ ] C1-BIRTT: (1,1,1,2,0).
+    - [x] C1-BITTT: (1,1,0,3,0). The same nine-point proposition
+          leaves one top word. Including the lower point gives
+          156 actual-sign splits, six closed coordinate cuts and
+          163 contradictions. [Proof](C1_BITTT.md).
+    - [x] C1-BIRTT. The whole count (1,1,1,2,0) and its transpose.
+          After the chain reduction, 350 determinant splits and three
+          closed coordinate cuts give 354 contradictory leaves.
+          [Proof](C1_BIRTT.md) and [tables](C1_BIRTT_TABLES/INDEX.md).
     - [x] C1-IIRTT and C1-BIRTT top-pair reduction. In both counts
           the outer top point P puts the inner one strictly inside
           DPF. A convex pair would form a seven-point monotone chain
           whose smallest consecutive doubled area is at most
           (5√5−11)/2. The remaining six-point chain gives DPF<.462
-          and proves that QDP, CQD and OCQ are empty. The triangular
-          alternative remains open in BIRTT.
+          and proves that QDP, CQD and OCQ are empty.
           [Seven-point proof](SEVEN_POINT_MONOTONE_CHAIN.md) and
           [six-point proof](SIX_POINT_MONOTONE_CHAIN.md).
-    - [ ] C1-BIITT: (1,2,0,2,0).
+    - [x] C1-BIITT: (1,2,0,2,0). The triangular and convex top
+          hulls give 435 actual-sign splits and 437 contradictions,
+          including 7,597 terms in the weighted sums.
+          [Proof](C1_BIITT.md).
     - [x] C1-BIIRL: (1,2,1,0,1). The entire count and transpose:
           152 actual-sign splits and 153 contradictions, with no
           coordinate-case restriction. Independent actual-source,
@@ -423,14 +441,20 @@ four-corner alternative and all zero-area faces.
           21,354 positive products. A separate manuscript/dependency
           review passes; 29 corrupted records are rejected.
           Proof: C1_ONE_LOWER_TWO_CENTRAL_SIDES.md and its tables.
-    - [ ] C1-BIIRT: (1,2,1,1,0).
+    - [x] C1-BIIRT: (1,2,1,1,0) and its transpose. The 634
+          determinant splits give 635 contradictions. The exact
+          reader checks 1,229 stages and 27,575 weighted terms.
+          [Proof](C1_BIIRT_SETUP.md).
     - [x] C1-BIIRR: (1,2,2,0,0). The side-pair theorem fixes the
           outer point. The contact and occupancy inequalities give
           a single coordinate box. All 107 determinant splits and
           108 contradictory leaves cover this count and its transpose.
           Independent review checks 4,973 geometric deductions and
           14,125 arithmetic steps. [Proof and tables](C1_BIIRR.md)
-    - [ ] C1-BBIIT: (2,2,0,1,0).
+    - [x] C1-BBIIT: (2,2,0,1,0). All five ear and contact
+          alternatives give 509 sign splits and 514 contradictions.
+          Exact replay checks 1,702 proof stages, including
+          6,057 weighted terms. [Proof](C1_BBIIT_TWO_EARS.md).
     - [x] C1-BBIIR: (2,2,1,0,0). The entire count and transpose:
           24 exhaustive angular roots, 185 actual-sign splits and
           209 contradictions. Independent actual-source, ancestry,
@@ -440,8 +464,8 @@ four-corner alternative and all zero-area faces.
           45 affine-area terminals and one unsigned-clearance quartic
           leaf. Twenty-nine corrupted records are rejected.
           Proof: C1_TWO_LOWER_TWO_CENTRAL_RIGHT.md and its tables.
-- [ ] HP12-N6. Exclude corner-free normalized maximizers with six boundary
-      points and four strictly interior points.
+- [x] HP12-N6. Exclude corner-free normalized maximizers with six boundary
+      points and four strictly interior points. [Complete exclusion](N6_ASSEMBLY.md).
   - [x] N6-PLACEMENTS. The lower-left cap is empty; both anchor regions
         have capacity two; each exterior cap has at most three free points.
         The exact six-anchor hull must split its free points 2/2.
@@ -795,8 +819,7 @@ four-corner alternative and all zero-area faces.
         closed coordinate box. Independent geometry and determinant
         expansion pass; the exact reader checks thirteen identities
         and twelve rational comparisons.
-        Proof: THREE_CAP_CONTACT_BOUNDS.md. The containing C1 and N6
-        count rows remain open.
+        Proof: THREE_CAP_CONTACT_BOUNDS.md.
   - [x] SIGNED-AREA-RELATIONS. The unconditional four-point linear
         identity and six-label four-product identity give exact scalar
         bounds with all signs, numerator cases and positive denominators
@@ -805,22 +828,29 @@ four-corner alternative and all zero-area faces.
         fourteen polynomial identities, all 256 six-label sign conversions
         and three positive square gaps are checked.
         Proof: AREA_RELATIONS.md and check_area_relations.js.
-  - [ ] Complete the remaining nine exterior-cap counts with k=0
-        or k=1, outside the stated projection chambers. The ledger also
-        retains the completed IIRR, IRRT, BTTT, ITTT and BRTT rows. Counts are (k,j,r,t,l), up to
-        exchange of the two side caps:
+  - [x] Exhaust the exterior-cap counts with \(k\le1\).
+        The rows give \((k,j,r,t,l)\), up to exchange of
+        the two side caps.
     - [x] N6-IRTL: (0,1,1,1,1). The six contacts and three cap
           points form a convex nonagon. NINE_CONVEX_POINTS.md proves
           that one of its consecutive doubled areas is at most 64/729,
           strictly below 93/1000. The proof uses finite Hölder twice.
-    - [ ] N6-IRTT: (0,1,1,2,0). The convex top-pair alternative
-          is excluded. In the triangular alternative the bottom
-          coordinate satisfies `1037/10000 < b < 19/100`, and each
-          barycentric weight of S in ERF exceeds 2325/8963.
-          The line RS exits the octagon through HA, AB, BC or CQ.
-          The tenth point P lies in triangle HCE.
-          [Width bounds](N6_IRTT_CORE_CAPS.md) and
-          [four radial cuts](N6_IRTT_CORE_GAPS.md).
+    - [x] N6-IRTT: (0,1,1,2,0) and its transpose. The convex top
+          pair contradicts the monotone-chain bound. For the triangular
+          pair the line RS exits the octagon through HA, AB, BC or CQ.
+          The two edges at C are excluded by the right-cap width and
+          the horizontal order of the top pair. The opposite edge AB
+          is excluded by comparing the two triangles containing S.
+          The HA case has
+          19 exhaustive coordinate splits, 19 interval contradictions
+          and one exact sum of 279 positive products. Both readers check
+          the proof on the nine points comprising the six contacts and
+          the three cap points. [Complete proof](N6_IRTT_CORE_COMPLETE.md),
+          [edges at C](N6_IRTT_RIGHT_RADIAL.md),
+          [opposite edge AB](N6_IRTT_AB_RADIAL.md),
+          [width bounds](N6_IRTT_CORE_CAPS.md),
+          [initial domain](N6_IRTT_CORE_DOMAIN.md) and
+          [radial cuts](N6_IRTT_CORE_GAPS.md).
     - [x] N6-IRRT: (0,1,2,1,0), including its left-side reflection.
           N6_IRRT.md and thirteen complete case tables give twelve
           exhaustive sign splits and thirteen contradictions: seven
@@ -830,8 +860,20 @@ four-corner alternative and all zero-area faces.
           30,608 endpoint lines, 144 immutable scalar updates and
           182 affine factors with their positive integer multipliers.
           All initial-domain and refined-box premises are reviewed.
-    - [ ] N6-IIRT: (0,2,1,1,0).
-    - [ ] N6-IITT: (0,2,0,2,0).
+    - [x] N6-IIRT: (0,2,1,1,0). Two triangle capacities and ten
+          case trees exclude all twelve crossings. The trees give
+          892 determinant splits, seven closed coordinate cuts and
+          909 exactly replayed contradictions. [Proof](N6_IIRT.md).
+    - [x] N6-IIRT/BIRT line reduction. For both adjacent-cap counts,
+          the line through the two interior points has at least
+          three hull vertices on each side. The lower point in
+          BIRT cannot occupy HAB. The twelve IIRT crossings and
+          nine BIRT crossings exhaust the remaining arcs.
+          [Area bounds and coverage](N6_ADJACENT_CAPS_LINE.md).
+    - [x] N6-IITT: (0,2,0,2,0). Both top hulls are excluded.
+          The 481 determinant splits and 19 coordinate cuts
+          have 502 leaves, including six sharp projection terminals.
+          Both exact manuscript readers pass. [Proof](N6_IITT.md).
     - [x] N6-IIRR: (0,2,2,0,0), including its left-side reflection.
           N6_IIRR.md and its two complete printed table files give
           127 exhaustive sign splits, 45 geometric contradictions and
@@ -839,7 +881,11 @@ four-corner alternative and all zero-area faces.
           verify all 3,281 geometry steps, 13,957 rational updates,
           65 caps and 1,000 endpoint values; a fresh implementation
           also expands 4,321 physical determinant identities.
-    - [ ] N6-IIRL: (0,2,1,0,1).
+    - [x] N6-IIRL: (0,2,1,0,1). Ten exhaustive crossing pairs
+          give 345 determinant splits, 15 coordinate cuts and
+          370 contradictions. The exact readers check 1,093
+          stages, including 1,024 printed weighted terms.
+          [Proof](N6_IIRL.md).
     - [x] N6-BRTT: (1,0,1,2,0). Both top-hull alternatives and
           both side-cap reflections are excluded. Forty-five binary
           determinant splits cover 46 leaves, with no coordinate cuts:
@@ -851,22 +897,33 @@ four-corner alternative and all zero-area faces.
           terminal sums have 6,095 products and exact negative ceilings.
           Thirty corruptions are rejected in each alternative.
           Proof: N6_BTTT_REMAINING_BRTT.md, setup and two indexed tables.
-    - [ ] N6-BITT: (1,1,0,2,0). Only the lower-central position
-          remains in either top-pair alternative. In the convex
-          alternative an occupied lower ear would force a distinct
-          octagon ear above its ceiling. In the triangular alternative
-          all 50 noncentral branches are contradictory, and the last
-          leaf gives both required positive signs. [Convex proof](N6_BTTT_REMAINING_BITT_OCTAGON.md)
-          and [triangular proof](N6_BTTT_REMAINING_BITT_TRIANGULAR_REDUCTION.md).
-    - [ ] N6-BIRL: (1,1,1,0,1).
-    - [ ] N6-BIRT: (1,1,1,1,0).
+    - [x] N6-BITT: (1,1,0,2,0). Both lower ears are excluded.
+          The four convex lower-central sectors have 1,405
+          contradictions. In the triangular lower-central case
+          the two AEP signs have 61 and 795 contradictions.
+          Both literal readers pass. [Complete proof](N6_BTTT_REMAINING_BITT_COMPLETE.md).
+    - [x] N6-BIRL: (1,1,1,0,1). The nine crossing pairs and three
+          \(AB,EF\) coordinate regions have 512 sign splits, 15
+          coordinate cuts and 538 terminal leaves. This includes
+          one sharp projected exclusion. All exact replays pass.
+          [Proof](N6_BIRL.md).
+    - [x] N6-BIRT: (1,1,1,1,0). Nine exhaustive crossings have
+          658 contradictions, all exactly replayed.
+          [Complete proof](N6_BIRT.md).
     - [x] N6-BIRR: (1,1,2,0,0), including its transpose. The side
           pair puts the lower point in the central cell and the upper
           point in HCE. N6_BIRR.md gives 60 splits and 61 contradictions.
           Independent review checks all 77 initial signs, 1,771 deductions,
           1,272 box corners, 7,948 updates and 38 final scalar gaps.
-    - [ ] N6-BIIT: (1,2,0,1,0).
-    - [ ] N6-BIIR: (1,2,1,0,0).
+    - [x] N6-BIIT: (1,2,0,1,0). After excluding all singleton
+          arcs and the short arc AB, nine trees exclude all thirteen
+          short arcs with 700 exactly replayed contradictions.
+          [Complete proof](N6_BIIT_ARCS.md).
+    - [x] N6-BIIR: (1,2,1,0,0). Eleven crossing pairs have
+          696 determinant splits, 55 closed coordinate cuts and
+          762 exactly replayed contradictions. Seven proofs use
+          nine points throughout. The other four retain the lower
+          point in some descendant boxes. [Complete proof](N6_BIIR.md).
     - [x] N6-BTTT: (1,0,0,3,0). The whole count is excluded by
           N6_BTTT_REMAINING_COUNT.md, assembling all six normalized
           top words and every lower-central child. All actual sign,
@@ -1197,7 +1254,7 @@ four-corner alternative and all zero-area faces.
         edge-pair classes, five interior counts, the boundary-valid
         N6 side-point transfer, four lower cells, all eight central
         words and every permitted equality face. This closes N7 only;
-        the current counts are listed under C1 and N6 above.
+        the remaining counts are listed under N6 above.
 - [x] HP12-N8. Sharp bound and candidate equality classification for the
       complete asymmetric eight-boundary domain, including every orientation
       of the two interior points. N8_COMPLETE.md assembles the exhaustive
@@ -1233,9 +1290,8 @@ four-corner alternative and all zero-area faces.
         are reduced by explicit symmetries to seven exhaustive rows, with
         all 1,442 integer entries printed. Proof: N8_CORNER_OBLIQUE.md.
 
-There are now THREE named unresolved global obligations: C1, N6 and N7.
-These are continuous-domain obligations, not three small arithmetic checks. Each must
-admit a uniform argument or an explicitly exhaustive further subdivision.
+N6 is the unresolved global family. Its remaining counts require a
+uniform argument or exhaustive subdivisions.
 New subdivisions must retain their parent until all children close. No bound
 on the eventual number of smaller subcases is claimed.
 
@@ -1251,12 +1307,15 @@ strictly interior points in N6 and N7 requires a separate argument.
 
 - [x] HP13. Prove the conditional shear-reversal lemma: strict local isolation
       of a normalized equality case rules out a last nonconstant shear.
-      Proof: NORMALIZATION.md, Section 8. Its global premise remains open.
-- [ ] HP14. Assemble the global exclusions and N8 theorem into the
+      Proof: NORMALIZATION.md, Section 8.
+- [x] HP14. Assemble the global exclusions and N8 theorem into the
       unrestricted upper bound, then classify equality using HP13.
-- [ ] HP15. Audit the complete hand manuscript line by line, including zero
+      [Complete assembly](ASSEMBLY.md).
+- [x] HP15. Audit the complete hand manuscript line by line, including zero
       determinants, coincidences, sign changes, closure faces and equality.
-      Remove every dependence on machine enumeration.
+      The final audit checked the exhaustive placements, the successive
+      sign and coordinate scopes, the printed rational contradictions
+      and the normalization reversal.
 
 ## Completed proof files
 
@@ -1276,7 +1335,7 @@ strictly interior points in N6 and N7 requires a separate argument.
 | U3_TWO_TWO.md | Complete balanced 2/2 split; exhaustive seventeen-row cubic proof with all 1,463 integer entries printed |
 | U3_THREE_ONE.md | Complete 3/1 and 1/3 splits; twelve geometric cases and twenty printed cubic rows, 1,392 integer entries |
 | THREE_CORNERS_COMPLETE.md | Complete at-least-three-corner exclusion, assembling all counts and fan splits |
-| TYPE_II.md | Four-row adjacent-corner reduction and complete stated side-hull exclusions; full II remains open |
+| TYPE_II.md | Four-row adjacent-corner reduction and side-hull exclusions, assembled in TYPE_II_COMPLETE.md |
 | TYPE_II_R4.md | Complete both-below-CE exclusion in (1,2,4), and uniform empty bottom fan in its both-above cut |
 | TYPE_II_R4_TRIANGLE.md | Unique middle fan placement for every triangular-right hull in (1,2,4), with fixed central-pair D/B signs |
 | TYPE_II_R4_UPPER_P.md | Upper-P containments and signs; the unique nested chamber when both central points are above CE |
@@ -1442,8 +1501,8 @@ strictly interior points in N6 and N7 requires a separate argument.
 
 ## Next attack and stopping rules
 
-The next targets are the one-corner family C1, together with the N6 and
-N7 boundary counts. The adjacent-corner family II is complete.
+The remaining target is the six-contact family N6. The normalized corner
+families and the seven- and eight-contact families are complete.
 The stronger occupancy,
 clustered-triangle and complete opposite-corner theorems also apply
 in the other families. The exact diagnostic in

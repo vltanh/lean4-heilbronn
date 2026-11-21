@@ -80,3 +80,50 @@ For arbitrary rational ear floors, choose a rational lower bound
 for each square root by squaring it, then square their sum. Each
 application uses the actual pentagon, the named three ears and
 bounds established before that application.
+
+## Two actual points inside the pentagon
+
+Suppose the actual convex pentagon \(ABCDE\) also contains two
+further actual points \(P,Q\), and all unsigned doubled triangle
+areas of these seven points are at least \(s>0\). Its own doubled
+area is at least \(9s\). To see this, the two ears centered at
+nonadjacent vertices have disjoint interiors. For instance the
+diagonal \(BE\) separates the ears \(EAB\) and \(BCD\). The other
+nonadjacent pairs follow by cyclic relabeling. Any three vertices
+of a five-cycle include a nonadjacent pair, so an interior point
+belongs to at most two ears. At least one of the five ears is
+therefore empty of both points. The complementary actual
+quadrilateral contains both and has doubled area at least \(8s\),
+by the [two-point quadrilateral bound](N8_OP_LINE_CAPS.md).
+Add the empty ear, of area at least \(s\).
+
+The support triangle defined above now obeys
+\[
+         \Omega > \frac{1137}{100}s
+              \quad\text{whenever }\Delta>0.                   \tag{3}
+\]
+Use its normalized coordinates from the proof of (1). Its part
+outside the pentagon is the union of the triangles \(OBC,OCD\),
+where \(O\) is the support vertex. Their original areas sum to
+\[
+     \frac{b}{1-b}U+\frac{d}{1-d}W.
+\]
+Indeed their normalized areas are \(bdv,bdu\) respectively,
+using the \(u,v\) of that proof. Put \(z=\sqrt{(1-b)(1-d)}\in(0,1)\).
+By \(U,W\ge s\) and the arithmetic–geometric mean inequality,
+the complement has doubled area at least \(s(2/z-2)\).
+The actual pentagon therefore gives \(\Omega/s\ge7+2/z\).
+Equation (1) also gives \(\Omega/s\ge9/(1-z^2)\), since
+\(\Delta=\Omega z^2\) and \(U,V,W\ge s\). If \(z\le457/1000\)
+use the first bound. If \(z\ge457/1000\) use the second. Both
+values at the splitting point exceed \(1137/100\), proving (3).
+
+Equivalently, the nonnegative expression
+\[
+               XY-\frac{1137}{100}s(X-Z)
+\]
+is available whenever both actual interior points are in the
+pentagon. For \(\Delta\le0\) it is nonnegative directly. In a
+3/5 line split of an actual octagon, the shorter arc and its two
+neighbors form just such a pentagon, containing the full chord
+and both interior points.

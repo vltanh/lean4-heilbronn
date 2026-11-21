@@ -1,4 +1,9 @@
-# Status: complete unrestricted n=10 computer-assisted proof
+# Status of the unrestricted n=10 proof
+
+The [hand proof](hand/ASSEMBLY.md) establishes the bound,
+attainment and equality classification. The
+[six-contact exclusion](hand/N6_ASSEMBLY.md) closes the final
+normalized family.
 
 **All five exhaustive families are closed, with zero unresolved roots.** Both
 independently implemented global checkers completed, and the final acceptance
@@ -110,9 +115,9 @@ orientations. One violates a reciprocal-product bound; the other forces two
 opposed scalar inequalities whose minimum is strictly negative. Thus the
 entire C2 family is now closed, with boundary degeneracies covered explicitly.
 
-Three global obligations remain: C1, N6 and N7. HP14
-(assembly) and HP15 (final manuscript audit) depend on those obligations and remain unchecked. The
-computer-assisted completion above is not a substitute for these hand proofs.
+The current hand-proof frontier is recorded in the
+[roadmap](hand/ROADMAP.md) and the latest checkpoint below.
+HP14 and HP15 depend on closing the remaining six-contact cases.
 
 The balanced U3 2/2 fan split is now
 excluded in full by seventeen printed cubic inequalities, and the entire
@@ -1296,6 +1301,151 @@ box and all endpoints of the closed intervals.
 [Proof](hand/C1_IIRTT.md) and [tables](hand/C1_IIRTT_TABLES/INDEX.md).
 
 Six one-corner counts and nine six-contact counts remain open.
+
+## Hand checkpoint 102 — a nine-point exclusion for six-contact IRTT
+
+Six normalized boundary contacts cannot coexist with a right-cap
+point and two top-cap points while all nine-point triangles have
+doubled area at least 93/1000. The convex top pair contradicts the
+sharp monotone-chain theorem. For the triangular pair, the line
+through the outer and inner top points leaves the octagon through
+one of four edges. Three exits have short area proofs. At \(C\) the
+right-cap point bounds the width on each side of the contact. At
+\(AB\) two triangles with a common apex must both contain the inner
+point, which would force the clearance down to \((5\sqrt5-11)/2\).
+The \(HA\) exit has an exact table with 19 coordinate splits and one
+sum of 279 positive products. Two independent arithmetic implementations
+previously checked a finite exclusion of all four exits. This excludes the entire IRTT count and
+its transpose. [Complete proof](hand/N6_IRTT_CORE_COMPLETE.md)
+with the [edges at C](hand/N6_IRTT_RIGHT_RADIAL.md),
+[opposite edge AB](hand/N6_IRTT_AB_RADIAL.md) and
+[nine-point domain](hand/N6_IRTT_CORE_DOMAIN.md).
+
+Six one-corner counts and eight six-contact counts remain open.
+
+## Hand checkpoint 103 — three top points and a central point
+
+Five of the six top words in the one-corner counts IITTT and BITTT are
+excluded on a common set of nine actual points. Among the three checked
+representatives the 142 sign splits yield 145 contradictory leaves.
+The exact reader verifies 384 stages, 9,757 sign deductions, 60,282
+area updates, 6,836 coordinate updates and 601 terms in weighted sums.
+The remaining word puts the inner point in both triangles on the top
+chord. Its explicit nine-point example has least doubled area
+\(1088/108^2>93/1000\). Each count still needs its tenth point.
+[Nine-point proof](hand/C1_TOP_TRIPLE_CORE.md)
+
+## Hand checkpoint 104 — the one-corner BIRTT count
+
+With a lower point, a central point and a right-cap point, a convex
+top pair violates the seven-point monotone-chain bound. For a nested
+pair the 350 determinant splits and three closed coordinate cuts
+give 354 contradictions. The exact reader checks 703 stages,
+25,221 sign deductions, 211,996 area updates, 12,549 coordinate
+updates and 1,452 terms across sixteen weighted sums. This excludes
+the whole count and its transpose. Five one-corner counts and eight
+six-contact counts remain open.
+[Proof](hand/C1_BIRTT.md) and [tables](hand/C1_BIRTT_TABLES/INDEX.md)
+
+## Hand checkpoint 105 — one-corner top triples and pairs
+
+IITTT and BITTT are excluded at doubled minimum \(93/1000\).
+The common nine-point argument leaves only the top word \(+--+\).
+Adding the remaining central point in IITTT gives 141 contradictory
+leaves. Adding the lower point in BITTT gives 163 leaves.
+[IITTT](hand/C1_TOP_TRIPLE_COMPLETION.md) and [BITTT](hand/C1_BITTT.md)
+
+BIITT is also excluded. Its triangular and convex hull proofs have
+437 leaves in total, including 57 weighted sums with 7,597 printed
+terms. The exact manuscript reader verifies all branches.
+[BIITT](hand/C1_BIITT.md)
+
+In six-contact IIRT and BIRT, the line through the two interior
+points now has at least three hull vertices on each side. The
+adjacent-cap inequalities exclude all eight two-vertex cuts.
+They also exclude the \(BC,FH\) crossing in IIRT and the lower
+\(HAB\) ear in BIRT. For the last two-vertex cut, two rectangles
+violate an ear bound and the other 175 have exact area ceilings
+below \(787/1000\).
+[Adjacent-cap proof](hand/N6_ADJACENT_CAPS_LINE.md)
+
+The six-contact IIRL count is complete. The interior line has ten
+possible crossing pairs, excluded by 345 determinant splits,
+15 coordinate cuts and 370 contradictions. All ten exact table
+replays passed. [IIRL proof](hand/N6_IIRL.md)
+
+The BIRL count with two occupied side caps is also complete.
+Its nine crossing pairs have 538 leaves, including one sharp
+projection. All exact table replays passed. [BIRL proof](hand/N6_BIRL.md)
+
+BITT is complete for both top hulls and every lower-point position.
+The four convex lower-central sectors give 1,405 contradictions.
+The two triangular lower-central signs give 61 and 795.
+[BITT assembly](hand/N6_BTTT_REMAINING_BITT_COMPLETE.md)
+
+BIIRT and its transpose are excluded by 634 determinant splits
+and 635 contradictions. Its exact replay checks 1,229 proof stages.
+[BIIRT proof](hand/C1_BIIRT_SETUP.md)
+
+BBIIT is excluded across all five ear and contact alternatives.
+Its 514 contradictions have passed exact replay. This finishes
+the entire normalized one-corner family, including the exact
+pentagon and all 32 exterior counts.
+[BBIIT proof](hand/C1_BBIIT_TWO_EARS.md) and
+[one-corner assembly](hand/C1_COMPLETE.md)
+
+## Hand checkpoint 106 — the six-contact IITT count
+
+Both IITT top hulls are excluded. Across the two proofs, 481
+determinant splits and 19 closed coordinate cuts give 502 leaves.
+The convex hull uses six strict projection terminals. The two exact
+readers verified every leaf and all 21,138 weighted terms.
+[IITT proof](hand/N6_IITT.md)
+
+The six-contact family is the remaining global obligation.
+The open counts are IIRT, BIRT, BIIT and BIIR.
+[Hand-proof roadmap](hand/ROADMAP.md)
+
+## Hand checkpoint 107 — the six-contact BIRT count
+
+All nine BIRT crossings are excluded by 658 independently
+replayed contradictions. The adjacent-cap reductions now
+exclude nine of IIRT's twelve crossings.
+[BIRT proof](hand/N6_BIRT.md) and
+[adjacent-cap crossings](hand/N6_ADJACENT_CAPS_LINE.md)
+
+The exterior-count reductions leave seventeen rows after
+excluding \(k=2\). The remaining whole counts are IIRT, BIIT
+and BIIR. Nine of BIIT's thirteen short arcs and seven of
+BIIR's eleven crossing pairs are excluded.
+[Six-contact coverage](hand/N6_ASSEMBLY.md)
+
+## Hand checkpoint 108 — the six-contact BIIT count
+
+The BIIT line reduction and nine exact trees exclude all thirteen
+short arcs. Their 700 terminal contradictions have passed replay.
+The open counts are now IIRT and BIIR.
+[BIIT proof](hand/N6_BIIT_ARCS.md) and
+[six-contact coverage](hand/N6_ASSEMBLY.md)
+
+## Hand checkpoint 109 — the six-contact IIRT count
+
+All twelve IIRT crossings are excluded. Two follow from triangle
+capacity, and ten exact trees give 909 terminal contradictions.
+BIIR is the only remaining count in the hand proof.
+[IIRT proof](hand/N6_IIRT.md) and
+[six-contact coverage](hand/N6_ASSEMBLY.md)
+
+## Hand checkpoint 110 — unrestricted bound and equality
+
+All eleven BIIR crossings are excluded. The exact readers
+verified 696 determinant splits, 55 closed coordinate cuts
+and 762 contradictions. This completes the six-contact family.
+The global assembly applies the six strict exclusions, the sharp
+eight-contact theorem and strict local rigidity to classify every
+maximizer.
+[BIIR proof](hand/N6_BIIR.md) and
+[complete hand theorem](hand/ASSEMBLY.md)
 
 ## Publication and verification correction
 

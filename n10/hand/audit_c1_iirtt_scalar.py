@@ -22,6 +22,8 @@ class SignReads:
 
 
 class ScalarAudit:
+    geometry = IIRTT
+
     def __init__(self):
         self.proved_relations = {}
 
@@ -41,7 +43,7 @@ class ScalarAudit:
         previous.append(tuple(queried.reads.items()))
 
     def stage(self, st):
-        geo = IIRTT(st)
+        geo = self.geometry(st)
         known = geo.derive_signs(st["steps"])
         if "signs" in st:
             assert st["signs"] == known

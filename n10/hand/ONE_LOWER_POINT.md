@@ -170,3 +170,50 @@ by the same argument with the pairs (h,a) and (c,b) interchanged.
 Combining (9) with either bound in (10) gives the corresponding
 upper bound for the other coordinate. These deductions do not use
 a contact-order choice and introduce no new configuration assumption.
+
+## 5. Compatibility of the four lower clearances
+
+Write \(G=(p,q)\) here. The actual tests at \(AH,BC,HC,AB\) give
+\[
+ p\ge p_0=\frac{s}{h-a},\qquad q\ge q_0=\frac{s}{c-b},\qquad
+ hp+cq\le hc-s,\qquad ap+bq\ge ab+s.
+\]
+Thus the available remainder \(R=hc-s-hp_0-cq_0\) is nonnegative.
+Put \(\lambda=\max(a/h,b/c)\). Applying \(a\le\lambda h\)
+and \(b\le\lambda c\) to the nonnegative remainders
+\(p-p_0,q-q_0\) gives
+\[
+        a p_0+bq_0+\lambda R\ge ab+s.                 \tag{11}
+\]
+In particular, if \(ac\ge bh\), then
+\[
+ a h(c-b)^2\ge s\bigl((h+a)(c-b)+ac-bh\bigr).
+\]
+This is (11) after canceling the term with \(p_0\) and clearing
+the positive denominators. The weak order \(ac\le bh\)
+gives the transposed inequality. Both derivations apply at
+equality.
+
+A fixed box for the contacts gives a multiaffine necessary
+condition without splitting the contact order. Choose fixed
+numbers \(\Lambda\ge\max(a/h,b/c)\), \(P_0\le p_0\) and
+\(Q_0\le q_0\) using the already proved box. Then
+\[
+ \Lambda(hc-s)-ab-s
+            -(\Lambda h-a)P_0-(\Lambda c-b)Q_0\ge0.    \tag{12}
+\]
+Indeed \(\Lambda h-a,\Lambda c-b\ge0\), and
+\[
+ ap+bq=\Lambda(hp+cq)-(\Lambda h-a)p-(\Lambda c-b)q
+\]
+is at least \(ab+s\) and at most the corresponding expression
+with \(hp+cq\) replaced by \(hc-s\) and \(p,q\) by
+\(P_0,Q_0\). For example the fixed source values
+\[
+ \Lambda=\max(a_{\max}/h_{\min},b_{\max}/c_{\min}),\quad
+ P_0=\frac{s}{h_{\max}-a_{\min}},\quad
+ Q_0=\frac{s}{c_{\max}-b_{\min}}
+\]
+are valid when the denominators are positive. These conditions
+retain consequences of an actual lower point even in an
+argument involving just the other nine points.

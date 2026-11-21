@@ -1,4 +1,4 @@
-"""Author's exact arithmetic replay of literal C1 BBIIR Markdown.
+"""Author's exact arithmetic replay of literal C1 two-lower/two-central Markdown.
 
 Reads only the hand tables and imports no discovery code.  This checks
 immutable endpoint references, polynomial expansions, every coordinate
@@ -75,6 +75,37 @@ def context(file):
  for row in updates:
   check(row['id'] not in records and all(s in records for s in row['sources']),'future/reused scalar version')
   records[row['id']]=row;currentRefs[row['triangle'],row['side']]=row['id']
+ for row in [x for tag,rows in bb if tag=='c1-affine-bounds' for x in rows]:
+  target,side=row['triangle'],row['side'];check(side in ('lo','hi'),'affine bound side')
+  check(row['oldRef']==currentRefs[target,side],'stale affine old reference')
+  check(F(row['old'])==F(records[row['oldRef']]['value']),'changed affine old value')
+  factors={factor['index']:factor for factor in row['factors']}
+  check(len(factors)==len(row['factors']),'duplicate affine source index')
+  constant=F();coefficients={};seen=set()
+  for i,weight in row['weights']:
+   w=int(weight);check(str(w)==weight and w>0 and i not in seen,'invalid affine positive weight');seen.add(i)
+   factor=factors[i];constant+=w*F(factor['constant'])
+   for t,a in factor['coefficients'].items():coefficients[t]=coefficients.get(t,F())+w*F(a)
+  coefficients={t:a for t,a in coefficients.items() if a}
+  check(seen==set(factors),'unused affine source')
+  check(constant==F(row['sum']['constant']) and coefficients=={t:F(a) for t,a in row['sum']['coefficients'].items()},'changed affine sum')
+  coefficient=coefficients[target];check((coefficient>0) if side=='lo' else (coefficient<0),'affine isolated coefficient')
+  check(set(row['box'])==set(coefficients)-{target},'incomplete affine bound box')
+  ceiling=constant
+  for t,a in coefficients.items():
+   if t==target:continue
+   bounds=row['box'][t]
+   for ss in ('lo','hi'):
+    endpoint=bounds[ss];source=records[endpoint['ref']]
+    check((source['triangle'],source['side'],F(source['value']))==(t,ss,F(endpoint['value'])),'unproved affine bound endpoint')
+   check(F(bounds['lo']['value'])<=F(bounds['hi']['value']),'reversed affine bound box')
+   ceiling+=a*F(bounds['hi' if a>0 else 'lo']['value'])
+  check(ceiling==F(row['otherCeiling']),'wrong affine other ceiling')
+  raw=-ceiling/coefficient;value=down(raw) if side=='lo' else up(raw)
+  gain=value-F(row['old']) if side=='lo' else F(row['old'])-value
+  check(raw==F(row['raw']) and value==F(row['value']) and gain==F(row['gain'])>0,'wrong affine outward endpoint')
+  check(row['id'] not in records,'reused affine endpoint')
+  records[row['id']]=row;currentRefs[target,side]=row['id'];stats['affineBounds']+=1
  finalRefs={};signs=dict(one(bb,'c1-final-signs'))
  for t,b,refs in [x for tag,rows in bb if tag=='c1-area-final' for x in rows]:
   finalRefs[t]=refs
@@ -86,9 +117,12 @@ def context(file):
  ref=one(bb,'c1-refinement-metadata')[0] if any(tag=='c1-refinement-metadata' for tag,_ in bb) else None
  for rid,row in initial:
   witness=row['witness']
-  if witness[0]!='ancestor_area':continue
-  _,node,source=witness;check(meta.get('parentAreaRef')=={'node':node},'unstated scalar ancestor')
-  parent=context(node+'.md');t=row['triangle'];side=row['side'];ancestor=parent['records'][source]
+  if witness[0] not in ('ancestor_area','earlier_area'):continue
+  if witness[0]=='ancestor_area':
+   _,node,source=witness;check(meta.get('parentAreaRef')=={'node':node},'unstated scalar ancestor');ancestorFile=node+'.md'
+  else:
+   _,node,source,t,side,value=witness;check((t,side,F(value))==(row['triangle'],row['side'],F(row['value'])),'changed earlier scalar endpoint');ancestorFile=meta['areaAncestors'][node]
+  parent=context(ancestorFile);t=row['triangle'];side=row['side'];ancestor=parent['records'][source]
   check(parent['meta']['id']==node and all(meta[k]==parent['meta'][k] for k in ('cap','fan','labels')),'incompatible scalar ancestor')
   retained_premises(meta,parent['meta'])
   check(signs[t]==parent['signs'][t],'changed inherited area orientation')

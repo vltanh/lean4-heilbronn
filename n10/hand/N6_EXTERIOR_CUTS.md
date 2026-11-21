@@ -125,6 +125,6 @@ cubic contradictions.
 N6_TWO_TOP_BOTH_SIDES.md excludes (0,0,1,2,1): four actual-area
 comparisons transfer both hull arguments of C1_TOP_PAIR_BOTH_SIDES.md,
 including its unchanged 158-term cubic.
-The entire k=2 family is now closed in N6_TWO_LOWER_COMPLETE.md.
-Surviving exterior placements with k=0 or k=1 remain separate
-obligations in ROADMAP.md.
+The [two-lower proof](N6_TWO_LOWER_COMPLETE.md) closes \(k=2\).
+The [six-contact exclusion](N6_ASSEMBLY.md) lists and excludes
+the remaining exterior placements with \(k=0\) or \(k=1\).

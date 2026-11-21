@@ -86,3 +86,37 @@ factor and inherit proved boxes and scalar bounds in actual-sign
 descendants. Their separate theorem notes and literal tables supply
 complete binary coverage and exact contradictions for every leaf.
 The present auxiliary inequalities introduce no additional closure.
+
+## Eliminating a coordinate between the opposite upper edges
+
+For an upper point \(X=(x,y)\) the inward tests include
+\[
+ [HCX]=hx+cy-hc,\qquad
+ [EFX]=(1-e)(1-x)-(1-f)(y-e).
+\]
+Put \(D=h(1-f)-c(1-e)\). Multiplication by the edge
+coefficients and addition give
+\[
+\begin{aligned}
+ (1-f)[HCX]+c[EFX]&=Dx+c[EFH],\\
+ (1-e)[HCX]+h[EFX]&=-Dy+h[CEF].
+\end{aligned}
+\]
+For example the ordinates cancel in the first row, leaving
+\(c((1-e)-(1-f)(h-e))=c[EFH]\) as its constant.
+In the second row the abscissas cancel.
+
+If \(M_F,M_C\) are fixed upper bounds for \([EFH],[CEF]\)
+and \(L_H,L_E\) are fixed lower bounds for the two actual
+tests at \(X\), this gives the multiaffine inequalities
+\[
+\begin{aligned}
+ Dx+cM_F-(1-f)L_H-cL_E &\ge0,\\
+ -Dy+hM_C-(1-e)L_H-hL_E &\ge0.
+\end{aligned}
+\]
+All the area multipliers in the identities are nonnegative.
+The conclusions apply anywhere in \(HCEF\). They can use
+the actual bounds from a completed scalar stage, or the floors
+\(L_H=L_E=s\). In a coordinate refinement, keep the chosen
+area endpoints fixed throughout the application.
